@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) Open Source Strategies, Inc.
+ * 
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<!-- @author Leon Torres (leon@opensourcestrategies.com) -->
+
+<!-- This file contains merge party screens for merging two contacts, accounts or leads. They are here because they are all nearly the same. -->
+
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/widget-screen.xsd">
+
+    <screen name="mergeAccountsForm">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmMergeAccounts"/>
+                <set field="sectionHeaderUiLabel" value="CrmMergeAccounts"/>
+                <set field="mergeFormTarget" value="mergeAccounts"/> <!-- URI target of the merge form -->
+                <property-to-field field="fromPartyTitle" resource="CRMSFAUiLabels" property="CrmFromAccount"/>
+                <property-to-field field="toPartyTitle" resource="CRMSFAUiLabels" property="CrmToAccount"/>
+                <set field="lookupTarget" value="LookupAccounts"/>
+                <set field="remoteService" value="getAutoCompleteAccountPartyIds"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="component://crmsfa/widget/crmsfa/screens/accounts/AccountsScreens.xml">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://opentaps-common/webapp/common/party/MergePartyForm.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="mergeContactsForm">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmMergeContacts"/>
+                <set field="sectionHeaderUiLabel" value="CrmMergeContacts"/>
+                <set field="mergeFormTarget" value="mergeContacts"/> <!-- URI target of the merge form -->
+                <property-to-field field="fromPartyTitle" resource="CRMSFAUiLabels" property="CrmFromContact"/>
+                <property-to-field field="toPartyTitle" resource="CRMSFAUiLabels" property="CrmToContact"/>
+                <set field="lookupTarget" value="LookupContacts"/>
+                <set field="remoteService" value="getAutoCompleteClientPartyIds"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="component://crmsfa/widget/crmsfa/screens/contacts/ContactsScreens.xml">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://opentaps-common/webapp/common/party/MergePartyForm.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="mergeLeadsForm">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmMergeLeads"/>
+                <set field="sectionHeaderUiLabel" value="CrmMergeLeads"/>
+                <set field="mergeFormTarget" value="mergeLeads"/> <!-- URI target of the merge form -->
+                <property-to-field field="fromPartyTitle" resource="CRMSFAUiLabels" property="CrmFromLead"/>
+                <property-to-field field="toPartyTitle" resource="CRMSFAUiLabels" property="CrmToLead"/>
+                <set field="lookupTarget" value="LookupLeads"/>
+                <set field="remoteService" value="getAutoCompleteClientPartyIds"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="component://crmsfa/widget/crmsfa/screens/leads/LeadsScreens.xml">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://opentaps-common/webapp/common/party/MergePartyForm.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+</screens>
+

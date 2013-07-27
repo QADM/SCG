@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * Copyright (c) Open Source Strategies, Inc.
+ *
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/services.xsd">
+    <description>Services for Managing Returns</description>
+    <vendor>Open Source Strategies</vendor>
+    <version>1.0</version>
+
+    <service name="setOrderUndeliverableFromReturn" engine="java"
+        location="com.opensourcestrategies.crmsfa.returns.ReturnServices" invoke="setOrderUndeliverableFromReturn" auth="true">
+        <description>Set the order item and order status to Undeliverable if any item is returned for reason of COD payment
+        reject or undeliverable.</description>
+        <attribute name="returnId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="crmsfa.createReturnFromOrder" engine="java"
+         location="com.opensourcestrategies.crmsfa.returns.ReturnServices" invoke="createReturnFromOrder" auth="true">
+        <description>Creates a Return Header with basic information from the order.</description>
+        <attribute name="orderId" type="String" mode="IN" optional="false"/>
+        <attribute name="comments" type="String" mode="IN" optional="true"/>
+        <attribute name="returnId" type="String" mode="OUT" optional="false"/>
+    </service>
+
+    <service name="crmsfa.updateReturnHeader" engine="java"
+         location="com.opensourcestrategies.crmsfa.returns.ReturnServices" invoke="updateReturnHeader" auth="true">
+        <description>Updates a return header.  This version also creates a billing account if NEW_ACCOUNT is specified.</description>
+        <implements service="updateReturnHeader"/>
+        <attribute name="carrierReturnServiceId" type="String" mode="IN" optional="true"/>
+    </service>
+
+    <service name="crmsfa.acceptReturn" engine="java"
+         location="com.opensourcestrategies.crmsfa.returns.ReturnServices" invoke="acceptReturn" auth="true">
+        <description>Accepts a return and receives inventory, creating a shipment if necessary</description>
+        <attribute name="returnId" type="String" mode="IN" optional="false"/>
+        <attribute name="shipmentId" type="String" mode="IN" optional="true"/>
+    </service>
+
+    <service name="getReturnableItems" engine="java"
+            location="com.opensourcestrategies.crmsfa.returns.OrderReturnServices" invoke="getReturnableItems">
+        <description>Get a map of returnable items orderItem => quantity available to return</description>
+        <attribute name="orderId" type="String" mode="IN" optional="false"/>
+        <attribute name="returnableItems" type="Map" mode="OUT" optional="false"/>
+    </service>
+
+</services>

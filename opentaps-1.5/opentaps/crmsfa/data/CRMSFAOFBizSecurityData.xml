@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) Open Source Strategies, Inc.
+ * 
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<!-- These are some sample security definitions for integrating CRM/SFA into OFBiz.  There are other ways to do this, of course, and
+	this file is meant only as an example.  If you intend to use CRM/SFA on its own, you do not need this file.  -->
+
+<entity-engine-xml>
+   <!-- access to order manager to create and manage quotes and orders -->
+   <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="ORDERMGR_ADMIN"/>
+   <SecurityGroupPermission groupId="SALES_REP" permissionId="ORDERMGR_ADMIN"/>
+   <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="ORDERMGR_ADMIN"/>
+   <SecurityGroupPermission groupId="SALES_REP_TRAINEE" permissionId="ORDERMGR_ADMIN"/>
+
+   <!-- access to accounting manager to create and manage invoices and payments -->
+   <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="ACCOUNTING_ADMIN"/>
+   <SecurityGroupPermission groupId="SALES_REP" permissionId="ACCOUNTING_ADMIN"/>
+   <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="ACCOUNTING_ADMIN"/>
+   <SecurityGroupPermission groupId="SALES_REP_TRAINEE" permissionId="ACCOUNTING_ADMIN"/>
+   
+   <!-- access to content manager for creating, viewing, and managing surveys and responses to surveys -->
+   <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CONTENTMGR_ADMIN"/>
+   <SecurityGroupPermission groupId="SALES_REP" permissionId="CONTENTMGR_ADMIN"/>
+   <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="CONTENTMGR_ADMIN"/>
+   <SecurityGroupPermission groupId="SALES_REP_TRAINEE" permissionId="CONTENTMGR_ADMIN"/>
+
+   <!-- these OFBTOOLS_VIEW permissions are required to gain access to any of the OFBiz back end applications -->
+   <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="OFBTOOLS_VIEW"/>
+   <SecurityGroupPermission groupId="SALES_REP" permissionId="OFBTOOLS_VIEW"/>
+   <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="OFBTOOLS_VIEW"/>
+   <SecurityGroupPermission groupId="SALES_REP_TRAINEE" permissionId="OFBTOOLS_VIEW"/>
+
+   <!-- Make the admin user a CRMSFA sales manager -->
+   <UserLoginSecurityGroup userLoginId="admin" groupId="SALES_MANAGER" fromDate="2005-12-01 00:00:00"/>
+   <PartyRole partyId="admin" roleTypeId="ACCOUNT_MANAGER"/>
+
+</entity-engine-xml>

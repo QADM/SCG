@@ -1,0 +1,84 @@
+/*
+ * Copyright (c) Open Source Strategies, Inc.
+ * 
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+ */
+ 
+ /*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+/* This file has been modified by Open Source Strategies, Inc. */
+
+
+import org.ofbiz.entity.GenericValue;
+import org.ofbiz.entity.Delegator;
+import org.ofbiz.entity.GenericEntityException;
+import org.ofbiz.entity.transaction.TransactionUtil;
+import org.ofbiz.entity.condition.EntityOperator;
+import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityConditionList;
+import org.ofbiz.marketing.report.ReportHelper;
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.UtilDateTime;
+
+trackingCodeIdStr = request.getParameter("trackingCodeId");
+fromDateStr = request.getParameter("fromDate_c_date");
+thruDateStr = request.getParameter("thruDate_c_date");
+
+// query for both number of visits and number of orders
+
+visitConditionList = new LinkedList();
+orderConditionList = new LinkedList();
+
+if ((fromDateStr != null) && !(fromDateStr.equals(""))) {
+    fromDate = UtilDateTime.getDayStart(UtilDateTime.stringToTimeStamp(fromDateStr, UtilDateTime.getDateFormat(locale), timeZone, locale), timeZone, locale);
+    visitConditionList.add(new EntityExpr("fromDate", EntityOperator.GREATER_THAN_EQUAL_TO, fromDate));
+    orderConditionList.add(new EntityExpr("orderDate",EntityOperator.GREATER_THAN_EQUAL_TO, fromDate));
+}
+if ((thruDateStr != null) && !(thruDateStr.equals(""))) {
+    thruDate = UtilDateTime.getDayEnd(UtilDateTime.stringToTimeStamp(thruDateStr, UtilDateTime.getDateFormat(locale), timeZone, locale), timeZone, locale);
+    visitConditionList.add(new EntityExpr("fromDate",EntityOperator.LESS_THAN_EQUAL_TO,thruDate));
+    orderConditionList.add(new EntityExpr("orderDate",EntityOperator.LESS_THAN_EQUAL_TO,thruDate));
+}
+if ((trackingCodeIdStr != null) && !(trackingCodeIdStr.equals(""))) {
+    visitConditionList.add(new EntityExpr("trackingCodeId", EntityOperator.EQUALS, trackingCodeIdStr));
+    orderConditionList.add(new EntityExpr("trackingCodeId", EntityOperator.EQUALS, trackingCodeIdStr));
+}
+
+visitConditions = new EntityConditionList(visitConditionList, EntityOperator.AND);
+orderConditions = new EntityConditionList(orderConditionList, EntityOperator.AND);
+
+visits = delegator.findByCondition("TrackingCodeAndVisit", visitConditions, UtilMisc.toList("trackingCodeId", "visitId"),UtilMisc.toList("trackingCodeId"));
+orders = delegator.findByCondition("TrackingCodeAndOrderHeader", orderConditions, UtilMisc.toList("trackingCodeId", "orderId", "grandTotal"), UtilMisc.toList("trackingCodeId"));
+
+// use this helper to build a List of visits, orders, order totals, and conversion rates
+trackingCodeVisitAndOrders = ReportHelper.calcConversionRates(visits, orders, "trackingCodeId");
+context.put("trackingCodeVisitAndOrders", trackingCodeVisitAndOrders);

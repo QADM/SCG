@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) Open Source Strategies, Inc.
+ * 
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<service-eca xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/service-eca.xsd">
+
+    <!-- Add or remove records to the OrderShipGroupPriority entity on various order status changes -->
+    <eca service="changeOrderStatus" event="commit" run-on-error="false">
+        <condition field-name="statusId" operator="equals" value="ORDER_APPROVED"/>
+        <action service="crmsfa.createOrderShipGroupPriority" mode="sync"/>
+    </eca>
+    <eca service="changeOrderStatus" event="commit" run-on-error="false">
+        <condition field-name="statusId" operator="equals" value="ORDER_COMPLETED"/>
+        <action service="crmsfa.deleteOrderShipGroupPriority" mode="sync"/>
+    </eca>
+    <eca service="changeOrderStatus" event="commit" run-on-error="false">
+        <condition field-name="statusId" operator="equals" value="ORDER_CANCELLED"/>
+        <action service="crmsfa.deleteOrderShipGroupPriority" mode="sync"/>
+    </eca>
+    <eca service="changeOrderStatus" event="commit" run-on-error="false">
+        <condition field-name="statusId" operator="equals" value="ORDER_HOLD"/>
+        <action service="crmsfa.deleteOrderShipGroupPriority" mode="sync"/>
+    </eca>
+
+    <!-- Reallocate inventory when order priorities are changed -->
+    <eca service="crmsfa.resequenceOrderShipGroupPriorities" event="commit" run-on-error="false">
+        <action service="crmsfa.reReserveInventoryByOrderPriority" mode="sync"/>
+    </eca>
+
+    <!-- Reallocate inventory when an order is held -->
+    <eca service="changeOrderStatus" event="commit" run-on-error="false">
+        <condition field-name="statusId" operator="equals" value="ORDER_HOLD"/>
+        <action service="crmsfa.reReserveInventoryOnSalesOrderStatusChange" mode="sync"/>
+    </eca>
+
+</service-eca>

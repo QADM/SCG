@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+Copyright (c) Open Source Strategies, Inc.
+
+ Opentaps is free software: you can redistribute it and/or modify it
+ under the terms of the GNU Affero General Public License as published
+ by the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ Opentaps is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU Affero General Public License for more details.
+
+ You should have received a copy of the GNU Affero General Public License
+ along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.-->
+<!-- 
+@author     Leon Torres (leon@opensourcestrategies.org)
+-->
+
+<simple-methods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/simple-methods.xsd">
+
+    <!-- only the userLogin can create or modify his own UserLoginViewPrefs, but the admin can update anyone's -->
+
+    <simple-method method-name="createViewPreference" short-description="Create a ViewPreference">
+        <log level="info" message="Use of crmsfa.createViewPreference is deprecated.  Please use opentaps.createViewPreference instead."/>
+        <call-simple-method method-name="checkViewPreferenceSecurity"/>
+        <make-value value-field="newEntity" entity-name="ViewPreference"/>
+        <set field="newEntity.viewPrefTypeId" from-field="parameters.viewPrefTypeId"/>
+        <set field="newEntity.userLoginId" from-field="parameters.userLoginId"/>
+        <set-nonpk-fields map="parameters" value-field="newEntity"/>
+        <create-value value-field="newEntity"/>    
+    </simple-method>
+    <simple-method method-name="updateViewPreference" short-description="Update a ViewPreference">
+        <log level="info" message="Use of crmsfa.updateViewPreference is deprecated.  Please use opentaps.updateViewPreference instead."/>
+        <call-simple-method method-name="checkViewPreferenceSecurity"/>
+        <entity-one entity-name="ViewPreference" value-field="viewPreference"/>
+        <set-nonpk-fields map="parameters" value-field="viewPreference"/>
+        <store-value value-field="viewPreference"/>
+    </simple-method>
+    <simple-method method-name="checkViewPreferenceSecurity" short-description="Check whether a userLogin can create/modify a preference.">
+        <if>
+            <condition>
+                <if-compare-field field="parameters.userLoginId" operator="not-equals" to-field="userLogin.userLoginId"/>
+            </condition>
+            <then>
+                <check-permission permission="PARTYMGR" action="_VPREF_UPDATE">
+                    <fail-property resource="PartyUiLabels" property="PartyCreateUserLoginViewPrefPermissionError"/>
+                </check-permission>
+            </then>
+        </if>
+    </simple-method>
+
+</simple-methods>

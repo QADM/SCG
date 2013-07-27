@@ -1,0 +1,65 @@
+/*
+ * Copyright (c) Open Source Strategies, Inc.
+ * 
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+ */
+/* Copyright (c) Open Source Strategies, Inc. */
+
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.entity.condition.EntityConditionList;
+import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityOperator;
+import org.ofbiz.entity.util.EntityFindOptions;
+import org.ofbiz.entity.util.EntityUtil;
+
+// sometimes we're passed a partyId from another page to avoid parameter collision with form
+internalPartyId = parameters.get("partyId");
+
+// possible fields we're searching by
+if (parameters.get("internalPartyId") != null) internalPartyId = parameters.get("internalPartyId"); // override the partyId input
+customTimePeriodId = parameters.get("customTimePeriodId");
+
+// put the correct partyId back into the context
+context.put("internalPartyId", internalPartyId);
+
+// construct search conditions
+searchConditions = new ArrayList();
+if (customTimePeriodId != null && !customTimePeriodId.equals("")) {
+    searchConditions.add(new EntityExpr("customTimePeriodId", EntityOperator.EQUALS, customTimePeriodId));
+}
+if (internalPartyId != null && !internalPartyId.equals("")) {
+    searchConditions.add(new EntityExpr("internalPartyId", EntityOperator.EQUALS, internalPartyId));
+}
+if (searchConditions.size() == 0 && !"Y".equals(parameters.get("performFind"))) {
+    return;
+}
+
+// make sure no null forecasts come out
+searchConditions.add(new EntityExpr("salesForecastId", EntityOperator.NOT_EQUAL, null));
+
+// we only want quarters
+searchConditions.add(new EntityExpr("periodTypeId", EntityOperator.EQUALS, "FISCAL_QUARTER"));
+
+searchConditionList = new EntityConditionList(searchConditions, EntityOperator.AND);
+
+listIt = delegator.findListIteratorByCondition("SalesForecastAndCustomTimePeriod", searchConditionList, null, 
+        null, // get all fields
+        UtilMisc.toList("-thruDate", "fromDate"), // fields to order by, reverse chronological order
+        // the first true here is for "specifyTypeAndConcur"
+        // the second true is for a distinct select.  Apparently this is the only way the entity engine can do a distinct query
+        new EntityFindOptions(true, EntityFindOptions.TYPE_SCROLL_INSENSITIVE, EntityFindOptions.CONCUR_READ_ONLY, true));
+
+// for now juts get the complete list, becaues the forecast list form doesn't use an iterator
+context.put("forecasts", listIt.getCompleteList());
+listIt.close();

@@ -1,0 +1,42 @@
+/*
+ * Copyright (c) Open Source Strategies, Inc.
+ * 
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.UtilProperties;
+import org.ofbiz.base.util.UtilValidate;
+import org.opentaps.common.util.UtilConfig;
+
+// mapping for screens brought in from ofbiz - depending on their headerItems, we set the sections in our CRM application
+if (context.get("headerItem") != null) {
+    headerItemSections = UtilProperties.getProperties("headerItemSections.properties");
+    item = "headerItem." + context.get("headerItem");
+    sectionName = headerItemSections.get(item);
+    if (UtilValidate.isEmpty(sectionName)) {
+        Debug.logError("No sectionName found for headerItem: [" + context.get("headerItem") + "]", "");
+    }
+
+    context.put("sectionName", sectionName);
+    context.put("pageTitleLabel", headerItemSections.get(item + ".pageTitleLabel"));
+    context.put("sectionHeaderUiLabel", headerItemSections.get(item + ".sectionHeaderUiLabel"));
+    context.put("sectionDecoratorLocation", headerItemSections.get(item + ".sectionDecoratorLocation"));
+}
+
+// provide a default decorator, else some error messages won't be able to render
+if (UtilValidate.isEmpty(context.get("sectionDecoratorLocation"))) {
+    context.put("sectionDecoratorLocation", "component://opentaps-common/widget/screens/common/CommonScreens.xml");
+}
+

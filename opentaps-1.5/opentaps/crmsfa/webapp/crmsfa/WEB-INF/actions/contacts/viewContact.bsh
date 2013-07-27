@@ -1,0 +1,200 @@
+/*
+ * Copyright (c) Open Source Strategies, Inc.
+ * 
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+ */
+/* Copyright (c) Open Source Strategies, Inc. */
+
+import javolution.util.FastList;
+import javolution.util.FastMap;
+
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.condition.EntityConditionList;
+import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityOperator;
+import org.ofbiz.entity.util.EntityFindOptions;
+import org.ofbiz.entity.util.EntityUtil;
+import org.ofbiz.entity.GenericValue;
+import org.ofbiz.order.shoppingcart.ShoppingCart;
+
+import org.opentaps.common.util.UtilView;
+import com.opensourcestrategies.crmsfa.security.CrmsfaSecurity;
+import com.opensourcestrategies.crmsfa.party.PartyHelper;
+import com.opensourcestrategies.crmsfa.opportunities.UtilOpportunity;
+import com.opensourcestrategies.crmsfa.content.ContentHelper;
+import org.opentaps.common.util.UtilCommon;
+
+/* finds all the information relevant to this contact and puts them in the context, so the various forms
+and FTLs of this screen can display them correctly */
+
+partyId = parameters.get("partyId");
+
+//make sure that the partyId is actually an CONTACT before trying to display it as once
+delegator = request.getAttribute("delegator");
+validRoleTypeId = PartyHelper.getFirstValidRoleTypeId(partyId, UtilMisc.toList("CONTACT"), delegator);
+
+// if not, return right away (otherwise we get spaghetti code)
+if ((validRoleTypeId == null) || (!validRoleTypeId.equals("CONTACT"))) {
+    context.put("validView", false);  // other pages will know this page shouldn't be viewed
+    return;
+}
+
+// is the contact still active?
+contactActive = PartyHelper.isActive(partyId, delegator);
+
+if (!contactActive) { 
+    contactDeactivationDate = PartyHelper.getDeactivationDate(partyId, delegator);
+    context.put("contactDeactivated", true);
+    context.put("contactDeactivatedDate", contactDeactivationDate);
+    context.put("validView", true);  // can still view history of deactivated contacts
+} else {
+    context.put("isActiveContactView", true);
+}
+
+dispatcher = request.getAttribute("dispatcher");
+
+// contact summary data
+partySummary = delegator.findByPrimaryKey("PartySummaryCRMView", UtilMisc.toMap("partyId", partyId));
+context.put("partySummary", partySummary);
+
+//put to history
+context{"history"} = UtilCommon.makeHistoryEntry(partySummary.get("firstName") + " " + partySummary.get("lastName"), "viewContact", UtilMisc.toList("partyId"));
+
+// gather data that should only be available for active accounts
+responsibleParty = PartyHelper.getCurrentResponsibleParty(partyId, "CONTACT", delegator);
+
+if (contactActive) {
+
+    // who is currently responsible for contact
+    context.put("responsibleParty", responsibleParty);
+
+
+    // contact notes
+    results = delegator.findByAnd("PartyNoteView", UtilMisc.toMap("targetPartyId", partyId), UtilMisc.toList("noteDateTime DESC"));
+    context.put("notesList", results);
+
+    // permission to update contact information, for generic view profile screen
+    if (CrmsfaSecurity.hasPartyRelationSecurity(request.getAttribute("security"), "CRMSFA_CONTACT", "_UPDATE", request.getAttribute("userLogin"), partyId)) {
+        context.put("hasUpdatePermission", true);
+        
+        // this implies ability to remove contacts too
+        context.put("hasAccountsRemoveAbility", true);
+ 
+        // this also means activiites may be created, but only if user has CRMSFA_ACT_CREATE
+        if (security.hasEntityPermission("CRMSFA_ACT", "_CREATE", userLogin)) {
+            context.put("hasNewActivityPermission", true);
+        }
+    }
+
+    // permission to update password
+    if (CrmsfaSecurity.hasPartyRelationSecurity(request.getAttribute("security"), "CRMSFA_PASS", "_UPDATE", request.getAttribute("userLogin"), partyId)) {
+        context.put("hasPassPermission", true);
+    }
+
+    // permission to reassign contact
+    isReassignAllowed = CrmsfaSecurity.hasPartyRelationSecurity(request.getAttribute("security"), "CRMSFA_CONTACT", "_REASSIGN", request.getAttribute("userLogin"), partyId);
+    if (isReassignAllowed) {
+        context.put("hasReassignPermission", true);
+    }
+
+    // permission to deactivate contact
+    isDeactivateAllowed = CrmsfaSecurity.hasPartyRelationSecurity(request.getAttribute("security"), "CRMSFA_CONTACT", "_DEACTIVATE", request.getAttribute("userLogin"), partyId);
+    if (isDeactivateAllowed) {
+        context.put("hasDeactivatePermission", true);
+    }
+
+    // permission to create cases for account
+    if (CrmsfaSecurity.hasPartyRelationSecurity(request.getAttribute("security"), "CRMSFA_CASE", "_CREATE", request.getAttribute("userLogin"), partyId)) {
+        context.put("hasCreateCasePermission", true);
+    }
+
+    // permission to create new account
+    if (security.hasEntityPermission("CRMSFA_ACCOUNT", "_CREATE", userLogin)) {
+        context.put("hasCreateAccountPermission", true);
+    }
+
+    //  permission to create orders
+    if (CrmsfaSecurity.hasPartyRelationSecurity(request.getAttribute("security"), "CRMSFA_ORDER", "_CREATE", request.getAttribute("userLogin"), partyId)) 
+        context.put("hasCreateOrderPermission", true);
+    
+    if (CrmsfaSecurity.hasPartyRelationSecurity(request.getAttribute("security"), "CRMSFA_ORDER", "_VIEW", request.getAttribute("userLogin"), partyId)) 
+        context.put("hasViewOrderPermission", true);
+
+    // get the generic content metadata for account
+    context.put("content", ContentHelper.getContentInfoForParty(partyId, "CONTACT", delegator));
+
+    // set this flag to allow contact mechs to be shown
+    request.setAttribute("displayContactMechs", "Y");
+    
+    // whether we should display [Create Order] which destroys any existing cart or [Resume Order] to continue an order
+    cart = (ShoppingCart) session.getAttribute("shoppingCart");
+    if (cart != null) {
+        context.put("continueOrder", true);
+    } else {
+        context.put("continueOrder", false);
+    }
+
+    // contact marketing campaigns TODO: create MarketingCampaignAndRole entity, then use peformFind service so that we can paginate
+    campaignRoles = delegator.findByAnd("MarketingCampaignRole", UtilMisc.toMap("partyId", partyId, "roleTypeId", "CONTACT"));
+    campaigns = EntityUtil.getRelated("MarketingCampaign", campaignRoles);
+    context.put("marketingCampaigns", campaigns);
+    if ((campaignsList = EntityUtil.getFieldListFromEntityList(campaigns, "campaignName", false)) != null) {
+        marketingCampaignsAsString = StringUtil.join(campaignsList, ", ");
+        if (marketingCampaignsAsString != null && marketingCampaignsAsString.length() > 2)
+            context{"marketingCampaignsAsString"} = marketingCampaignsAsString;
+    }
+
+    // set this flag to tell other scripts this page can be viewed
+    context.put("validView", true);
+    
+    // Provide current PartyClassificationGroups as a list and a string
+    groups = org.opentaps.common.party.PartyHelper.getClassificationGroupsForParty(partyId, delegator);
+    context.put("partyClassificationGroups", groups);
+    descriptions = EntityUtil.getFieldListFromEntityList(groups, "description", false);
+    context.put("partyClassificationGroupsDisplay", StringUtil.join(descriptions, ", "));
+    
+    // deactivate link should be rendered only if, 1)the user got the right, 2)contact is active
+    isDeactivateLinkRendered = contactActive && isDeactivateAllowed;
+    context.put("isDeactivateLinkRendered", isDeactivateLinkRendered);
+    
+    isAssignOrUnassignContactAllowed = CrmsfaSecurity.hasPartyRelationSecurity(request.getAttribute("security"), "CRMSFA_CONTACT", "_VIEW", request.getAttribute("userLogin"), partyId);
+    isContactAssignedToUserLogin = PartyHelper.isAssignedToUserLogin(partyId, "CONTACT", request.getAttribute("userLogin"));
+    isContactNotAssignedToUserLogin = !isContactAssignedToUserLogin;
+    
+    isUserLoginContactOwner = false;
+    if (responsibleParty != null && request.getAttribute("userLogin") != null) {
+    	isUserLoginContactOwner = request.getAttribute("userLogin").getString("partyId").equals(responsibleParty.getString("partyId"));
+    }    
+    isUserLoginNotContactOwner = !isUserLoginContactOwner;
+    
+    // assign to me link should be rendered only if, 1)the user got the right, 2)the contact party is not currently disabled,
+    // 3)the contact is not already assigned to me, 4)the user is not the contact owner.
+    isAssignedToMeLinkRendered = isAssignOrUnassignContactAllowed && contactActive && isContactNotAssignedToUserLogin && isUserLoginNotContactOwner;
+    context.put("isAssignedToMeLinkRendered", isAssignedToMeLinkRendered);
+ 
+    // unassign contact link should be rendered only if, 1)the user got the right, 2)the contact party is not currently disabled,
+    // 3)the contact has been already assigned to me, 4)the user is not the contact owner.
+    isUnassignLinkRendered = isAssignOrUnassignContactAllowed && contactActive && isContactAssignedToUserLogin && isUserLoginNotContactOwner;
+    context.put("isUnassignLinkRendered", isUnassignLinkRendered);
+    
+    // Reassign RESPONSIBLE_FOR should be rendered only if, 1)the user got the right, 2)the contact party is not currently disabled,
+    // 3)the user is the contact owner.
+    isReassignRendered = isReassignAllowed && contactActive && isUserLoginContactOwner;
+    context.put("isReassignRendered", isReassignRendered);
+}
+
+// permission to use form letters
+if (security.hasEntityPermission("CRMSFA_FORMLTR", "_VIEW", userLogin)) {
+     context.put("hasFormLetterViewPermission", true);
+}

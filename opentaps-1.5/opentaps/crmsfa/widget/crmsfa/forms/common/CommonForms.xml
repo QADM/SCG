@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) Open Source Strategies, Inc.
+ * 
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/widget-form.xsd">
+
+    <form name="createNoteForm" type="single" target="${createNoteFormTarget}" title=""
+        default-title-style="tableheadtext" default-widget-style="tabletext" default-tooltip-style="tabletext">
+        <field name="note" title="${uiLabelMap.CommonNote}" widget-style="inputBox"><textarea/></field>
+        <field name="partyId"><hidden/></field>
+        <field name="custRequestId"><hidden/></field> <!-- this is here because Cases can also have notes -->
+        <field name="submitButton" title="${uiLabelMap.CrmCreateNote}" widget-style="smallSubmit"><submit button-type="button"/></field>
+        <field name="doneScreen"><hidden value="${doneScreen}"/></field>
+        <field name="doneScreenLocation"><hidden value="${doneScreenLocation}"/></field>
+    </form>
+
+    <form name="listNotes" type="list" separate-columns="true" 
+        title="" default-title-style="tableheadtext" target=""
+        default-widget-style="tabletext" default-tooltip-style="tabletext"
+        default-table-style="crmsfaListTable" header-row-style="crmsfaListTableHeader" even-row-style="rowWhite" odd-row-style="rowLightGray"
+        list-name="notesListIt" >
+        <field name="noteInfo" widget-area-style="fieldWidth50pct"><display/></field>
+        <field name="noteParty" title="${uiLabelMap.CommonCreatedBy}">
+            <display-entity entity-name="PartyNameView" key-field-name="partyId" description="${firstName} ${middleName} ${lastName} ${groupName}"/>
+        </field>
+        <field name="noteDateTime"><display/></field>
+    </form>   
+
+    <!-- parameterized data sources list -->
+    <form name="listDataSources" type="list" separate-columns="true" 
+        default-title-style="tableheadtext" target=""
+        default-widget-style="tabletext" default-tooltip-style="tabletext"
+        default-table-style="crmsfaListTable" header-row-style="crmsfaListTableHeader" even-row-style="rowWhite" odd-row-style="rowLightGray"
+        list-name="dataSources">
+        <field name="dataSourceId" title="${uiLabelMap.CrmDataSource}" widget-area-style="fieldWidth300">
+            <display-entity entity-name="DataSource"/>
+        </field>
+        <field name="fromDate" title="${uiLabelMap.CommonFromDate}" widget-area-style="fieldWidth200"><display/></field>
+        <!-- TODO: need a way to check complex security here (maybe use-when?) also for marketing campaigns below
+        <field name="Remove" widget-style="buttontext" title=" ">
+            <hyperlink description="${uiLabelMap.CommonRemove}" target="${removeDataSourceFormTarget}?partyId=${parameters.partyId}&amp;dataSourceId=${dataSourceId}"/>
+        </field>
+        -->
+    </form>
+
+    <!-- parameterized add data source form -->
+    <form name="addDataSourceForm" type="single" target="${addDataSourceFormTarget}"
+        default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
+        <field name="partyId"><hidden value="${parameters.partyId}"/></field>
+        <field name="dataSourceId" title="${uiLabelMap.CrmNewDataSource}">
+            <drop-down allow-empty="false">
+                <entity-options entity-name="DataSource" description="${description}">
+                    <entity-constraint name="dataSourceTypeId" value="LEAD_GENERATION"/>
+                    <entity-order-by field-name="description"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="submitButton" title="${uiLabelMap.CommonAdd}" widget-style="smallSubmit"><submit/></field>
+    </form>
+
+    <!-- simple, parameterized marketing campaigns list (the full one is in MarketingForms.xml) -->
+    <form name="listMarketingCampaigns" type="list" separate-columns="true" 
+        default-title-style="tableheadtext" target=""
+        default-widget-style="tabletext" default-tooltip-style="tabletext"
+        default-table-style="crmsfaListTable" header-row-style="crmsfaListTableHeader" even-row-style="rowWhite" odd-row-style="rowLightGray"
+        list-name="marketingCampaigns">
+        <field name="campaignName" title="${uiLabelMap.CrmMarketingCampaign}" widget-style="linktext">
+            <hyperlink description="${campaignName} (${marketingCampaignId})" target="viewMarketingCampaign">
+                <parameter param-name="marketingCampaignId"/>
+            </hyperlink>
+        </field>
+        <field name="Remove" widget-style="buttontext" widget-area-style="tabletextright" title=" " 
+            use-when="hasUpdatePermission!=void&amp;&amp;hasUpdatePermission==true">
+            <hyperlink description="${uiLabelMap.CommonRemove}" target="${removeMarketingCampaignFormTarget}">
+                <parameter param-name="partyId" value="${parameters.partyId}"/>
+                <parameter param-name="marketingCampaignId"/>
+            </hyperlink>
+        </field>
+    </form>
+
+    <!-- parameterized add marketing campaign form -->
+    <form name="addMarketingCampaignForm" type="single" target="${addMarketingCampaignFormTarget}"
+        default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
+        <field name="partyId"><hidden value="${parameters.partyId}"/></field>
+        <field name="marketingCampaignId" title="${uiLabelMap.CrmNewMarketingCampaign}">
+            <drop-down allow-empty="false">
+                <entity-options entity-name="MarketingCampaign" description="${campaignName}">
+                    <entity-order-by field-name="campaignName"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="submitButton" title="${uiLabelMap.CommonAdd}" widget-style="smallSubmit"><submit/></field>
+    </form>
+
+    <form name="testDateTime" type="single" title="Test form" target="testDateTimeInput" 
+        default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext" >
+        <field name="sampleTimestamp" title="Timestamp" encode-output="false"><date-time default-value="${testTimestampValue}" type="date"/></field>
+        <field name="submitButton" title="Submit" widget-style="smallSubmit"><submit/></field>
+    </form>   
+
+</forms>

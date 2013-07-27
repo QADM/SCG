@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) Open Source Strategies, Inc.
+ * 
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<!-- Catalog request survey seed data -->
+
+<entity-engine-xml>
+
+    <!-- Define a Party and Person that will take the catalog requests. This party has permission to do everything a Customer Service Rep can
+         and will be the Assigned to party for any Leads created by the catalog request. -->
+    <Party partyId="AUTO_REQ_TAKER" partyTypeId="PERSON"/>
+    <Person partyId="AUTO_REQ_TAKER" firstName="Auto Request" lastName="Taker"/>
+    <UserLogin partyId="AUTO_REQ_TAKER" userLoginId="autorqtaker" enabled="N"/>
+    <UserLoginSecurityGroup userLoginId="autorqtaker" groupId="CSR" fromDate="2006-01-01 00:00:00"/>
+    <PartyRole partyId="AUTO_REQ_TAKER" roleTypeId="CUST_SERVICE_REP"/>
+
+</entity-engine-xml>

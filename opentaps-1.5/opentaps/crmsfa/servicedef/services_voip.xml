@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * Copyright (c) Open Source Strategies, Inc.
+ * 
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/services.xsd">
+    <description>CRM SFA VoIP Services</description>
+    <vendor>Open Source Strategies, Inc.</vendor>
+
+    <service name="retrieveLatestCallFromFacetPhoneServer" engine="java" location="com.opensourcestrategies.crmsfa.voip.VoIPServices" invoke="retrieveLatestCallFromFacetPhoneServer">
+        <description>Retrieves the latest call for the user from the FacetPhone server. Returns an error only if VoIP.properties is misconfigured -
+            otherwise returns failure if something goes wrong. Assumes FacetPhone userId is equal to OFBiz userLoginId.</description>
+        <attribute name="latestCallData" type="String" mode="OUT" optional="true"/>
+    </service>
+    
+    <service name="getCurrentIncomingNumberFromFacetPhoneServer" engine="java" location="com.opensourcestrategies.crmsfa.voip.VoIPServices" invoke="getCurrentIncomingNumberFromFacetPhoneServer">
+        <description>Retrieves and parses the incoming number of the latest call for the user from the FacetPhone server, using the retrieveLatestCallFromFacetPhoneServer service.</description>
+        <attribute name="countryCode" type="String" mode="OUT" optional="true"/>
+        <attribute name="areaCode" type="String" mode="OUT" optional="true"/>
+        <attribute name="contactNumber" type="String" mode="OUT" optional="true"/>
+    </service>
+    
+</services>
+

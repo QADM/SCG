@@ -1,0 +1,47 @@
+/*
+ * Copyright (c) Open Source Strategies, Inc.
+ * 
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+ */
+/* Copyright (c) Open Source Strategies, Inc. */
+
+/*
+ * Given a customTimePeriodId, gets the immediate children of the time period for the form
+ */
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.entity.util.EntityUtil;
+import org.opentaps.common.util.UtilMessage;
+
+customTimePeriodId = parameters.get("customTimePeriodId");
+if (customTimePeriodId == null) return;
+
+periods = delegator.findByAndCache("CustomTimePeriod", UtilMisc.toMap("parentPeriodId", customTimePeriodId), UtilMisc.toList("thruDate"));
+
+// get those from the first matched period (they are the same for the whole list)
+firstPeriod = EntityUtil.getFirst(periods);
+if (firstPeriod == null) {
+    UtilMessage.addError(request, "No Custom Time Period found with parent [" + customTimePeriodId + "]");
+    return;
+}
+
+context.put("periods", periods);
+context.put("parentPeriodId", firstPeriod.get("parentPeriodId"));
+context.put("organizationPartyId", firstPeriod.get("organizationPartyId"));
+
+// for checking if this time period already has forecasts
+userLogin = request.getAttribute("userLogin");
+context.put("internalPartyId", userLogin.getString("partyId"));

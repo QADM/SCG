@@ -1,0 +1,45 @@
+/*
+ * Copyright (c) Open Source Strategies, Inc.
+ * 
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.entity.*;
+import org.ofbiz.content.survey.SurveyWrapper;
+import org.opentaps.common.util.UtilCommon;
+
+// get the delegator, which allows you to access the database, create GenericValues and GenericEntities, etc.
+delegator = request.getAttribute("delegator");
+
+// create a new survey wrapper.  This wrapper basically generates the survey.  See Javadocs for more info.
+// Normally you would use the ProductStoreSurveyWrapper to access surveys which have been applied to a ProductStore.
+surveyId = parameters.get("surveyId");
+surveyWrapper = parameters.get("surveyWrapper");
+// used to change the form action url, setup in the screen definition
+surveyAction = UtilCommon.getParameter(context, "surveyAction");
+if (UtilValidate.isNotEmpty(surveyAction)) {
+    context.put("surveyAction", surveyAction);
+}
+if (surveyWrapper != null) {
+    context.put("surveyWrapper", surveyWrapper);
+} else if (surveyId != null) {
+    surveyWrapper = new SurveyWrapper(delegator, surveyId);
+    // Now put it into the context, which means that the FTL template can use it
+    context.put("surveyWrapper", surveyWrapper);
+} else {
+    Debug.logError("No surveyId or surveyWrapper.", "");
+}
+

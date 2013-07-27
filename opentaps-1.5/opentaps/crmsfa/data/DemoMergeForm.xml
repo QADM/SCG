@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-engine-xml>    
+<!--
+ * Copyright (c) Open Source Strategies, Inc.
+ *
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+ *
+-->
+    <MergeFormCategory mergeFormCategoryId="GENERAL" mergeFormCategoryName="General" lastUpdatedStamp="2007-08-16 13:59:01.963" lastUpdatedTxStamp="2007-08-16 13:59:01.958" createdStamp="2007-08-16 13:08:18.423" createdTxStamp="2007-08-16 13:08:18.031" />
+    <MergeForm mergeFormId="FORM1" partyId="" mergeFormName="New User Welcome" description="Welcome to our new users." lastUpdatedStamp="2007-08-16 13:59:01.963" lastUpdatedTxStamp="2007-08-16 13:59:01.958" createdStamp="2007-08-16 13:08:18.423" createdTxStamp="2007-08-16 13:08:18.031">
+        <mergeFormText><![CDATA[<p>${mmddyyyy}</p>
+<p>Dear ${fullName}:</p>
+<p>Welcome to <strong>opentaps</strong>!  You are not just a faceless user to us but a part of our community for making business software better.&nbsp; We hope you will join us in this effort and discover the open source difference.</p>
+<p>Thank you again for using <strong>opentaps</strong>.</p>
+<p>Sincerely,</p>
+<p><em>The opentaps Team</em></p>]]></mergeFormText>
+    </MergeForm>
+    <MergeFormToCategory mergeFormId="FORM1" mergeFormCategoryId="GENERAL" lastUpdatedStamp="2007-08-16 13:59:01.963" lastUpdatedTxStamp="2007-08-16 13:59:01.958" createdStamp="2007-08-16 13:08:18.423" createdTxStamp="2007-08-16 13:08:18.031" />
+</entity-engine-xml>

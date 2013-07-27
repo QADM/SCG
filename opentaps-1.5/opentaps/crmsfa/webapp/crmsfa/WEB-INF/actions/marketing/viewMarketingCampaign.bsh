@@ -1,0 +1,58 @@
+/*
+ * Copyright (c) Open Source Strategies, Inc.
+ * 
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.entity.util.EntityUtil;
+import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilValidate;
+import org.opentaps.common.util.UtilCommon;
+
+marketingCampaignId = UtilCommon.getParameter(request, "marketingCampaignId");
+marketingCampaign = delegator.findByPrimaryKey("MarketingCampaign", UtilMisc.toMap("marketingCampaignId", marketingCampaignId));
+if (marketingCampaign == null) {
+    context.put("validView", false);
+    return;
+}
+
+context.put("marketingCampaign", marketingCampaign);
+
+//put to history
+context{"history"} = UtilCommon.makeHistoryEntry(marketingCampaign.get("campaignName"), "viewMarketingCampaign", UtilMisc.toList("marketingCampaignId"));
+
+security = request.getAttribute("security");
+userLogin = request.getAttribute("userLogin");
+
+if (security.hasEntityPermission("CRMSFA_CAMP", "_UPDATE", userLogin)) {
+    context.put("hasUpdatePermission", true);
+}
+
+// get the associated contact lists
+conditions = new EntityConditionList( UtilMisc.toList(
+            new EntityExpr("marketingCampaignId", EntityOperator.EQUALS, marketingCampaignId),
+            EntityUtil.getFilterByDateExpr()
+        ), EntityOperator.AND);
+marketingCampaignContactLists = delegator.findListIteratorByCondition("TrackingCodeAndContactListAndMarketingCampaign", conditions, null, null, UtilMisc.toList("fromDate"), UtilCommon.DISTINCT_READ_OPTIONS);
+context.put("marketingCampaignContactLists", marketingCampaignContactLists);
+
+// get tracking codes
+conditions = new EntityConditionList( UtilMisc.toList(
+            new EntityExpr("marketingCampaignId", EntityOperator.EQUALS, marketingCampaignId),
+            EntityUtil.getFilterByDateExpr()
+        ), EntityOperator.AND);
+trackingCodes = delegator.findListIteratorByCondition("TrackingCode", conditions, null, null, UtilMisc.toList("fromDate"), UtilCommon.DISTINCT_READ_OPTIONS);
+context.put("trackingCodes", trackingCodes);

@@ -1,0 +1,63 @@
+/*
+ * Copyright (c) Open Source Strategies, Inc.
+ * 
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+ */
+/* Copyright (c) Open Source Strategies, Inc. */
+
+// finds all opportunities for all accounts that the userLogin is a member of
+
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilProperties;
+import org.ofbiz.entity.condition.EntityConditionList;
+import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityOperator;
+import com.opensourcestrategies.crmsfa.opportunities.UtilOpportunity;
+import org.opentaps.common.party.ViewPrefWorker;
+import org.opentaps.common.util.UtilConfig;
+
+// get orderBy from the parameters
+opportunitiesOrderBy = parameters.get("opportunitiesOrderBy");
+if (opportunitiesOrderBy==null) opportunitiesOrderBy = "salesOpportunityId DESC";
+
+// get the user preferences for this section
+userLogin = request.getAttribute("userLogin");
+showPartyPref = ViewPrefWorker.getViewPreferenceString(userLogin, "MY_OR_TEAM_OPPS");
+
+// no closed opportunities for this page (watch out for null values, which are allowed and not testable by a simple != closed)
+notClosedCondition = new EntityConditionList( UtilMisc.toList(
+            new EntityExpr("opportunityStageId", EntityOperator.EQUALS, null),
+            new EntityConditionList( UtilMisc.toList(
+                    new EntityExpr("opportunityStageId", EntityOperator.NOT_EQUAL, null),
+                    new EntityExpr("opportunityStageId", EntityOperator.NOT_EQUAL, "SOSTG_CLOSED"),
+                    new EntityExpr("opportunityStageId", EntityOperator.NOT_EQUAL, "SOSTG_LOST")
+                    ), EntityOperator.AND)
+            ), EntityOperator.OR);
+
+// get the configured organizationPartyId
+organizationPartyId = UtilConfig.getPropertyValue("opentaps", "organizationPartyId");
+
+// decide which find to use based on preferences (default is team)
+myOpportunities = null;
+if ("MY_VALUES".equals(showPartyPref)) {
+    myOpportunities = UtilOpportunity.getOpportunitiesForMyAccounts(organizationPartyId, userLogin.getString("partyId"), null,
+            notClosedCondition, UtilMisc.toList(opportunitiesOrderBy), delegator);
+    context.put("MY_OR_TEAM_CASES", "MY_VALUES");
+} else {
+    myOpportunities = UtilOpportunity.getOpportunitiesForMyTeams(organizationPartyId, userLogin.getString("partyId"), null, 
+            notClosedCondition, UtilMisc.toList(opportunitiesOrderBy), delegator);
+    context.put("MY_OR_TEAM_CASES", "TEAM_VALUES");
+}
+
+context.put("opportunitiesListIt", myOpportunities);

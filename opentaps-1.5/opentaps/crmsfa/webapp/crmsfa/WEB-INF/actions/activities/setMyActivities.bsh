@@ -1,0 +1,36 @@
+/*
+ * Copyright (c) Open Source Strategies, Inc.
+ * 
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+ */
+/* Copyright (c) Open Source Strategies, Inc. */
+
+/* Basically a helper script to set parameters for findActivites.bsh to get the activities of the
+   current logged in user */
+
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.condition.*;
+
+userLogin = request.getAttribute("userLogin");
+
+context.put("findActivitiesKey", "partyId");
+parameters.put("partyId", userLogin.get("partyId"));
+context.put("validView", true);
+
+// this will filter out emails from pending activities - note that we must explicitly allow null values and wrap the OR into a List for the service call
+context.put("pendingActsAddConditions", UtilMisc.toList(new EntityConditionList(UtilMisc.toList(
+    new EntityExpr("workEffortPurposeTypeId", EntityOperator.NOT_EQUAL, "WEPT_TASK_EMAIL"),
+    new EntityExpr("workEffortPurposeTypeId", EntityOperator.EQUALS, null)),
+    EntityOperator.OR)));
+

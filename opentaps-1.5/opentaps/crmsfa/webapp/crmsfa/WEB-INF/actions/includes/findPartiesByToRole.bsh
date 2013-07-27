@@ -1,0 +1,123 @@
+/*
+ * Copyright (c) Open Source Strategies, Inc.
+ * 
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+ */
+/* Copyright (c) Open Source Strategies, Inc. */
+
+/*
+ * Provides a way to find ACCOUNT_MANAGERS, ACCOUNT_REPS, etc. by lastName, firstName, (TODO: add more).
+ * The to roles that are looked up come from PartyHelper.TEAM_MEMBER_ROLES. If a specific role is
+ * desired, pass it in as roleTypeIdTo in the parameters.
+ * The result is a list iterator named which should be used in the form widget.  The name of the list iterator
+ * is passed in as a parameter (listIteratorNameToUse) because the forms use different list iterators, which
+ * allows those forms to be reused on their own or inside other screens
+ */
+ 
+import java.util.ArrayList;
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.entity.condition.EntityConditionList;
+import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityOperator;
+import org.ofbiz.entity.util.EntityFindOptions;
+import com.opensourcestrategies.crmsfa.party.PartyHelper;
+import javolution.util.FastList;
+import javolution.util.FastMap;
+
+listIteratorNameToUse = parameters.get("listIteratorNameToUse");
+if (listIteratorNameToUse == null) return;
+
+// possible fields we're searching by
+lastName = parameters.get("lastName");
+firstName = parameters.get("firstName");
+
+// optional specific role type to
+roleTypeIdTo = parameters.get("roleTypeIdTo");
+
+// construct role conditions
+roleConditions = new ArrayList();
+if (roleTypeIdTo != null) {
+    roleConditions.add(new EntityExpr("roleTypeId", EntityOperator.EQUALS, roleTypeIdTo));
+} else {
+    // construct from the default party role to list
+    for (iter = PartyHelper.TEAM_MEMBER_ROLES.iterator(); iter.hasNext(); ) {
+        roleConditions.add(new EntityExpr("roleTypeId", EntityOperator.EQUALS, iter.next()));
+    }
+}
+roleConditionList = new EntityConditionList(roleConditions, EntityOperator.OR);
+
+// construct search conditions
+searchConditions = new ArrayList();
+if (lastName != null && !lastName.equals("")) {
+    searchConditions.add(new EntityExpr("lastName", true, EntityOperator.LIKE, "%" + lastName + "%", true));
+}
+if (firstName != null && !firstName.equals("")) {
+    searchConditions.add(new EntityExpr("firstName", true, EntityOperator.LIKE, "%" + firstName + "%", true));
+}
+
+// remove disabled parties
+searchConditions.add(new EntityConditionList(UtilMisc.toList(
+                         new EntityExpr("statusId", EntityOperator.NOT_EQUAL, "PARTY_DISABLED"),
+                         new EntityExpr("statusId", EntityOperator.EQUALS, null))
+                         , EntityOperator.OR));
+
+searchConditionList = new EntityConditionList(searchConditions, EntityOperator.AND);
+
+// these conditions are specified to negate certain results
+negateConditions = new ArrayList();
+
+// combine roles, searches, and possibly negate conditions with AND
+combinedConditions = UtilMisc.toList(roleConditionList, searchConditionList);
+if (negateConditions.size() > 0) {
+    negateConditionsList = new EntityConditionList(negateConditions, EntityOperator.AND);
+    combinedConditions.add(negateConditionsList);
+}
+conditionList = new EntityConditionList(combinedConditions, EntityOperator.AND);
+
+// use a page builder to fetch the crm party list, because we need some extra data
+buildCrmPartyList(delegator, conditions) {
+    entityName = "PartyToSummaryByRole";
+    fieldsToSelect = UtilMisc.toList("firstName", "lastName", "partyId");
+    orderBy = UtilMisc.toList("lastName", "firstName");
+    where = conditions;
+
+    build(page) {
+        newPage = FastList.newInstance();
+        for (iter = page.iterator(); iter.hasNext(); ) {
+            crmParty = iter.next();
+            // TODO: check view permission for this party first
+            row = FastMap.newInstance();
+            row.putAll(crmParty.getAllFields());
+            newPage.add(row);
+        }
+        return newPage;
+    }
+    return this; // remember this, very important
+}
+context.put("crmPartyListBuilder", buildCrmPartyList(delegator, conditionList));
+
+
+// this debugging code is kind of helpful so I'll keep it around for now 
+
+/*
+listIt = context.get(listIteratorNameToUse);
+print("******* list iterator values: ***********");
+if (listIt != null) { while ((next = listIt.next()) != null) { print(next); } }
+else { print("No list iterator found"); }
+print("*****************************************");
+*/
+
+// Provide current SalesTeamRoleSecurity to the search options
+securityGroupsList = delegator.findAll("SalesTeamRoleSecurity");
+context.put("securityGroupsList", securityGroupsList);

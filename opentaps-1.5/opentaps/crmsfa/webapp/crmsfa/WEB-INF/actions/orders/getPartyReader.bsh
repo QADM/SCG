@@ -1,0 +1,55 @@
+/*
+ * Copyright (c) Open Source Strategies, Inc.
+ *
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilValidate;
+import org.opentaps.common.party.PartyReader;
+
+// party data
+partyIsDoNotShip = false;
+partyCannotOrder = false;
+
+context.put("partyIsDoNotShip", partyIsDoNotShip);
+context.put("partyCannotOrder", partyCannotOrder);
+
+partyId = parameters.get("partyId");
+
+shoppingCart = context.get("shoppingCart");
+if (shoppingCart != null && shoppingCart.getPartyId() != null) {
+    partyId = shoppingCart.getPartyId();
+}
+
+if (partyId != null) {
+    partyReader = null;
+    try {
+        partyReader = new PartyReader(partyId.trim(), delegator);
+    } catch (Exception e) {
+        return;
+    }
+    context.put("partyReader", partyReader);
+    if (partyReader.hasClassification("DONOTSHIP_CUSTOMERS")) {
+        customerIsDoNotShip = true;
+        productStoreId = shoppingCart.getProductStoreId();
+        if (UtilValidate.isNotEmpty(productStoreId)) {
+            productStore = delegator.findByPrimaryKey("ProductStore", UtilMisc.toMap("productStoreId", productStoreId));
+            partyCannotOrder = "N".equals(productStore.getString("allowDoNotShipOrders"));
+        }
+    }
+}
+
+context.put("partyIsDoNotShip", partyIsDoNotShip);
+context.put("partyCannotOrder", partyCannotOrder);

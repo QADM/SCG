@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) Open Source Strategies, Inc.
+ * 
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+<!-- This file has been modified by Open Source Strategies, Inc. -->
+<!-- 
+This file is partly based on the Apache OFBIZ file applications/order/widget/ordermgr/OrderEntryCatalogScreens.xml 
+and has been modified by Open Source Strategies, Inc. 
+-->
+
+<!-- This file contains screens for browsing, searching and displaying the catalog within the create order main screen.  -->
+
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/widget-screen.xsd">
+
+    <screen name="browseCatalog">
+        <section>
+            <actions>
+                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/catalog/ChooseCatalog.groovy"/>
+                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/catalog/KeywordSearchOptions.groovy"/>
+                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/catalog/SideDeepCategory.groovy"/>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html><html-template location="component://crmsfa/webapp/crmsfa/orders/entry/browseCatalog.ftl"/></html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="keywordsearch">
+        <section>
+            <actions>
+                <set field="productsummaryScreen" value="component://order/widget/ordermgr/OrderEntryCatalogScreens.xml#productsummary"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/createOrderInitialization.bsh"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/listTrackingCodes.bsh"/>
+                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/catalog/KeywordSearch.groovy"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="order-entry-header-decorator" location="component://crmsfa/widget/crmsfa/screens/orders/CreateOrderScreens.xml">
+                    <decorator-section name="order-entry-header-body">
+                        <container style="subMenuBar">
+                            <link style="subMenuButton" target="createOrderMainScreen" text="${uiLabelMap.OrderViewOrder}"/>
+                        </container>
+                        <platform-specific>
+                            <html><html-template location="component://order/webapp/ordermgr/entry/catalog/keywordsearch.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="advancedsearch">
+        <section>
+            <actions>
+                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/catalog/AdvancedSearchOptions.groovy"/>
+
+                <entity-condition entity-name="PartyRoleAndPartyDetail" list="supplerPartyRoleAndPartyDetails">
+                    <condition-expr field-name="roleTypeId" value="SUPPLIER"/>
+                    <order-by field-name="groupName"/>
+                    <order-by field-name="lastName"/>
+                    <order-by field-name="firstName"/>
+                </entity-condition>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/createOrderInitialization.bsh"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/listTrackingCodes.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="order-entry-header-decorator" location="component://crmsfa/widget/crmsfa/screens/orders/CreateOrderScreens.xml">
+                    <decorator-section name="order-entry-header-body">
+                    <container style="subMenuBar">
+                        <link style="subMenuButton" target="createOrderMainScreen" text="${uiLabelMap.CrmViewOrder}"/>
+                    </container>
+                        <platform-specific>
+                            <html><html-template location="component://order/webapp/ordermgr/entry/catalog/advancedsearch.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="breadcrumbs">
+        <section>
+            <actions>
+                <set field="breadCrumbMainPage" value="createOrderMainScreen"/>
+                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/catalog/SideDeepCategory.groovy"/>
+            </actions>
+            <widgets>
+                <platform-specific><html><html-template location="component://opentaps-common/webapp/common/order/catalog/breadcrumbs.ftl"/></html></platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="category">
+        <section>
+            <actions>
+                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/catalog/Category.groovy"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/createOrderInitialization.bsh"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/listTrackingCodes.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="order-entry-header-decorator" location="component://crmsfa/widget/crmsfa/screens/orders/CreateOrderScreens.xml">
+                    <decorator-section name="order-entry-header-body">
+                      <container style="screenlet">
+                        <container style="subSectionBlock">
+                            <container style="subSectionHeader">
+                                <label style="subSectionTitle">${uiLabelMap.ProductBrowseCategories}</label>
+                                <container style="subMenuBar">
+                                    <link style="subMenuButton" target="createOrderMainScreen" text="${uiLabelMap.CrmViewOrder}"/>
+                                </container>
+                            </container>
+                            <include-screen name="breadcrumbs"/>
+                        </container>
+                        <container style="subSectionBlock">
+                            <section>
+                                <condition>
+                                    <not><if-empty field="productCategory"/></not>
+                                </condition>
+                                <widgets>
+                                    <include-screen name="${detailScreen}"/>
+                                </widgets>
+                                <fail-widgets>
+                                    <label style="head2">${uiLabelMap.ProductCategoryNotFoundforCategoryID} ${productCategoryId}!</label>
+                                </fail-widgets>
+                            </section>
+                        </container>
+                      </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="categorydetail">
+        <section>
+            <actions>
+                <set field="productsummaryScreen" value="component://crmsfa/widget/crmsfa/screens/orders/CatalogBrowseScreens.xml#productsummary"/>
+                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/catalog/CategoryDetail.groovy"/>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html><html-template location="component://opentaps-common/webapp/common/order/catalog/categorydetail.ftl"/></html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="productsummary">
+        <section>
+            <actions>
+                <set field="showPriceDetails" value="Y"/>
+                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/catalog/ProductSummary.groovy"/>
+            </actions>
+            <widgets>
+                <platform-specific><html><html-template location="component://opentaps-common/webapp/common/order/catalog/productsummary.ftl"/></html></platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="product">
+        <section>
+            <actions>
+                <set field="configproductdetailScreen" value="component://order/widget/ordermgr/OrderEntryCatalogScreens.xml#configproductdetail"/>
+                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/catalog/Product.groovy"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/createOrderInitialization.bsh"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/listTrackingCodes.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="order-entry-header-decorator" location="component://crmsfa/widget/crmsfa/screens/orders/CreateOrderScreens.xml">
+                    <decorator-section name="order-entry-header-body">
+                        <container style="subSectionBlock">
+                            <container style="subSectionHeader">
+                                <label style="subSectionTitle">${uiLabelMap.ProductProduct}</label>
+                                <container style="subMenuBar">
+                                    <link style="subMenuButton" target="createOrderMainScreen" text="${uiLabelMap.CrmViewOrder}"/>
+                                </container>
+                            </container>
+                            <include-screen name="breadcrumbs"/>
+                        </container>
+                        <container style="subSectionBlock">
+                            <section>
+                                <condition>
+                                    <not><if-empty field="product"/></not>
+                                </condition>
+                                <widgets>
+                                    <include-screen name="${detailScreen}"/>
+                                </widgets>
+                                <fail-widgets>
+                                    <label style="head2">${uiLabelMap.ProductProductNotFound} ${productId}!</label>
+                                </fail-widgets>
+                            </section>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="productdetail">
+        <section>
+            <actions>
+                <set field="productsummaryScreen" value="component://crmsfa/widget/crmsfa/screens/orders/CatalogBrowseScreens.xml#productsummary"/>
+                <set field="showPriceDetails" value="Y"/>
+                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/catalog/ProductDetail.groovy"/>
+            </actions>
+            <widgets>
+                <platform-specific><html><html-template location="component://order/webapp/ordermgr/entry/catalog/editProduct.ftl"/></html></platform-specific>
+                <platform-specific><html><html-template location="component://opentaps-common/webapp/common/order/catalog/productdetail.ftl"/></html></platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="configproductdetail">
+        <section>
+            <actions>
+                <set field="productsummaryScreen" value="component://order/widget/ordermgr/OrderEntryCatalogScreens.xml#productsummary"/>
+                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/catalog/ProductDetail.groovy"/>
+                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/catalog/PrepareConfigForm.groovy"/>
+            </actions>
+            <widgets>
+                <include-screen name="breadcrumbs"/>
+                <platform-specific><html><html-template location="component://order/webapp/ordermgr/entry/catalog/editProduct.ftl"/></html></platform-specific>
+                <platform-specific><html><html-template location="component://order/webapp/ordermgr/entry/catalog/configproductdetail.ftl"/></html></platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+</screens>

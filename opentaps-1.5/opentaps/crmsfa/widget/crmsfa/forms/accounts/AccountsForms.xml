@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) Open Source Strategies, Inc.
+ * 
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/widget-form.xsd">
+
+    <!-- update account form -->
+    <form name="updateAccountForm" type="single" target="updateAccount" title="" default-map-name="partySummary"
+        default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
+        <field name="partyId"><hidden/></field>
+        <field name="groupName" title="${uiLabelMap.CrmAccountName}" position="1" title-style="requiredField"><text size="30" maxlength="60"/></field>
+        <field name="parentPartyId" title="${uiLabelMap.CrmParentParty}" position="2">
+            <lookup target-form-name="LookupAccounts" size="20" maxlength="20"/>
+        </field>
+        <field name="groupNameLocal" title="${uiLabelMap.CrmLocalName}" position="1"><text size="30" maxlength="100"/></field>
+        <field name="officeSiteName" title="${uiLabelMap.CrmSiteName}" position="2"><text size="30" maxlength="100"/></field>
+        <field name="annualRevenue" title="${uiLabelMap.CrmAnnualRevenue}" position="1"><text size="15" maxlength="15"/></field>
+        <field name="currencyUomId" title="${uiLabelMap.CrmPreferredCurrency}" position="2">
+            <drop-down allow-empty="true" current="selected" no-current-selected-key="${configProperties.defaultCurrencyUomId}">
+                <option key="USD" description="USD - American Dollar"/>
+                <entity-options description="${uomId} - ${description}" entity-name="Uom" key-field-name="uomId">
+                    <entity-constraint name="uomTypeId" operator="equals" value="CURRENCY_MEASURE"/>
+                    <entity-order-by field-name="description"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="industryEnumId" title="${uiLabelMap.CrmIndustry}" position="1">
+            <drop-down allow-empty="true">
+                <entity-options description="${description}" entity-name="Enumeration" key-field-name="enumId">
+                    <entity-constraint name="enumTypeId" operator="equals" value="PARTY_INDUSTRY"/>
+                    <entity-order-by field-name="sequenceId"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="numberEmployees" title="${uiLabelMap.CrmNumberOfEmployees}" position="2"><text size="30" maxlength="60"/></field>
+        <field name="ownershipEnumId" title="${uiLabelMap.CrmOwnership}" position="1">
+            <drop-down allow-empty="true">
+                <entity-options description="${description}" entity-name="Enumeration" key-field-name="enumId">
+                    <entity-constraint name="enumTypeId" operator="equals" value="PARTY_OWNERSHIP"/>
+                    <entity-order-by field-name="sequenceId"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="sicCode" title="${uiLabelMap.CrmSICCode}" position="1"><text size="30" maxlength="60"/></field>
+        <field name="tickerSymbol" title="${uiLabelMap.CrmTickerSymbol}" position="2"><text size="30" maxlength="60"/></field>
+        <field name="description" title="${uiLabelMap.CommonDescription}"><textarea/></field>
+        <field name="importantNote" title="${uiLabelMap.CrmImportantNote}"><textarea/></field>
+        <field name="submitButton" title="${uiLabelMap.CommonUpdate}" widget-style="smallSubmit"><submit button-type="button"/></field>
+    </form>
+
+</forms>
