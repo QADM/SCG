@@ -1,0 +1,46 @@
+/*
+ * Copyright (c) Open Source Strategies, Inc.
+ *
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.entity.condition.*;
+import org.opentaps.common.util.UtilCommon;
+import org.opentaps.common.product.UtilProduct;
+import org.opentaps.purchasing.mrp.UtilMrp;
+
+organizationPartyId = UtilCommon.getOrganizationPartyId(request);
+
+facilities = UtilCommon.getOrganizationReceivingFacilities(organizationPartyId, delegator);
+facilityGroups = delegator.findAllCache("FacilityGroup");
+
+context.put("facilities", facilities);
+context.put("facilityGroups", facilityGroups);
+context.put("bufferTimeUoms", delegator.findByAnd("Uom", UtilMisc.toList(new EntityExpr("uomId", EntityOperator.IN, UtilMisc.toList("TF_hr", "TF_mon", "TF_day")))));
+
+// get list of productStores to allow the user the option to do a product store specific MRP
+productStores = UtilProduct.getProductStoresFromPayToPartyId(organizationPartyId, delegator);
+context.put("productStores", productStores);                            
+
+// get list of productStoreGroups to allow the user the option to do a product store group specific MRP
+searchConditions = UtilMisc.toList( new EntityExpr( "payToPartyId" , EntityOperator.EQUALS , organizationPartyId ) ) ;
+fieldsToSelect = UtilMisc.toList( "productStoreGroupId", "productStoreGroupName" ); 
+productStoreGroups = delegator.findByCondition("MrpProductStoreGroupAndProductStore",
+                            new EntityConditionList(searchConditions, EntityOperator.AND),
+                            null,
+                            fieldsToSelect,
+                            UtilMisc.toList( "productStoreGroupName" ),
+                            UtilCommon.DISTINCT_READ_OPTIONS);   
+context.put("productStoreGroups", productStoreGroups);

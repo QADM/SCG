@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * Copyright (c) Open Source Strategies, Inc.
+ *
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<service-eca xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/service-eca.xsd">
+    <eca service="changePurchasingOrderItemStatus" event="commit">
+        <condition field-name="statusId" operator="equals" value="ITEM_CANCELLED"/>
+        <action service="cancelOrderInventoryReservation" mode="sync"/>
+        <action service="recalcShippingTotal" mode="sync"/>
+        <action service="recalcTaxTotal" mode="sync"/>
+        <action service="resetGrandTotal" mode="sync"/>
+        <action service="checkOrderItemStatus" mode="sync"/>
+    </eca>
+    <eca service="changePurchasingOrderItemStatus" event="commit">
+        <condition field-name="statusId" operator="equals" value="ITEM_COMPLETED"/>
+        <action service="checkOrderItemStatus" mode="sync"/>
+    </eca>
+    <eca service="changePurchasingOrderItemStatus" event="commit">
+        <condition field-name="statusId" operator="equals" value="ITEM_APPROVED"/>
+        <action service="checkOrderItemStatus" mode="sync"/>
+    </eca>
+    <eca service="changePurchasingOrderItemStatus" event="commit">
+        <condition field-name="statusId" operator="equals" value="ITEM_APPROVED"/>
+        <action service="checkDigitalItemFulfillment" mode="sync"/>
+    </eca>
+
+    <!-- order status changes -->
+    <eca service="changePurchasingOrderStatus" event="commit" run-on-error="false">
+        <condition field-name="statusId" operator="equals" value="ORDER_CANCELLED"/>
+        <action service="releaseOrderPayments" mode="sync"/>
+    </eca>
+    <eca service="changePurchasingOrderStatus" event="commit" run-on-error="false">
+        <condition field-name="statusId" operator="equals" value="ORDER_COMPLETED"/>
+        <condition-field field-name="statusId" operator="not-equals" to-field-name="oldStatusId"/>
+        <action service="resetGrandTotal" mode="sync"/>
+        <action service="sendOrderCompleteNotification" mode="async" persist="true"/>
+    </eca>
+</service-eca>    

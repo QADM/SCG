@@ -1,0 +1,43 @@
+/*
+ * Copyright (c) Open Source Strategies, Inc.
+ * 
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+import java.util.ArrayList;
+
+import org.ofbiz.base.util.UtilMisc;
+import org.opentaps.common.util.UtilCommon;
+
+// forward the consolidate requirements flag from the previous screen
+consolidateFlag = "Y".equals(UtilCommon.getParameter(request, "consolidateFlag"));
+if (consolidateFlag) {
+    consolidateParam = "?consolidateFlag=Y";
+} else {
+    consolidateParam = "";
+}
+
+// gets the approved requirement list for a supplier so a purchase order can be made
+results = dispatcher.runSync("getRequirementsForSupplier", UtilMisc.toMap("partyId", parameters.get("partyId")));
+context.put("requirementsForSupplier", results.get("requirementsForSupplier"));
+context.put("quantityReport", UtilMisc.toMap("distinctProductCount", results.get("distinctProductCount"), "quantityTotal", results.get("quantityTotal"), "amountTotal", results.get("amountTotal")));
+
+// Prepare buttons
+massUpdatePane = new ArrayList();
+massUpdatePane.add(UtilMisc.toMap("title", "OrderInputQuickPurchaseOrder", "action", "quickPurchaseOrderEntry" + consolidateParam));
+massUpdatePane.add(UtilMisc.toMap("title", "PurchOrderAll", "action", "createCartForAllSupplierRequirements" + consolidateParam, "confirm", "Y"));
+massUpdatePane.add(UtilMisc.toMap("title", "CommonCancel", "action", "cancelOrderingRequirements" + consolidateParam, "confirm", "Y"));
+massUpdateForm = "ApprovedProductRequirements";
+context.put("massUpdatePane", massUpdatePane);
+context.put("massUpdateForm", massUpdateForm);

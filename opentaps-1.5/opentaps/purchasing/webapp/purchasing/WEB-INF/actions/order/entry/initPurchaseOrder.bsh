@@ -1,0 +1,57 @@
+/*
+ * Copyright (c) Open Source Strategies, Inc.
+ * 
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+ */
+ import org.ofbiz.entity.Delegator;
+ import org.ofbiz.base.util.UtilMisc;
+ import org.ofbiz.base.util.UtilValidate;
+ import org.ofbiz.entity.condition.EntityOperator;
+ import org.ofbiz.entity.condition.EntityExpr;
+ import org.ofbiz.entity.util.EntityUtil;
+ import org.opentaps.common.util.UtilCommon;
+ import org.opentaps.purchasing.order.PurchasingOrderEvents;
+ 
+ //get the cart from our special get/initialize method
+ hasParty = false;
+ orderPartySupplementalData = null;
+ cart = PurchasingOrderEvents.getCartObject(request);
+ if (cart != null) {
+     context.put("shoppingcart", cart);
+     if (UtilValidate.isNotEmpty(cart.getOrderPartyId())) {
+         hasParty = true;
+     }
+
+     // put to context selected agreement
+     agreementId = cart.agreementId;
+     if (UtilValidate.isNotEmpty(agreementId)) {
+         agreement = delegator.findByPrimaryKey("Agreement", UtilMisc.toMap("agreementId", agreementId));
+         if (agreement != null) {
+             context.put("cartAgreement", agreement);
+         }
+     }
+ }
+ context.put("hasParty", hasParty);
+
+ organizationPartyId = UtilCommon.getOrganizationPartyId(request);
+ context.put("organizationPartyId", organizationPartyId);
+ 
+ // get the produt store that's presently set and put in context
+ productStoreId = session.getAttribute("productStoreId");
+ productStore = delegator.findByPrimaryKeyCache("ProductStore", UtilMisc.toMap("productStoreId", productStoreId));
+ context.put("productStore", productStore);
+ 
+ // list of currencies and default currency for PO
+ context.put("currencies", delegator.findByAndCache("Uom", UtilMisc.toMap("uomTypeId", "CURRENCY_MEASURE")));
+ context.put("defaultCurrencyUomId", UtilCommon.getOrgBaseCurrency(organizationPartyId, delegator));
