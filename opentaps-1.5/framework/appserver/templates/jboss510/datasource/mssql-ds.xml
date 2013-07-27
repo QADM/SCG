@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<datasources>
+  <xa-datasource>
+    <jndi-name>OFBizDS</jndi-name>
+    <track-connection-by-tx></track-connection-by-tx>
+    <isSameRM-override-value>false</isSameRM-override-value>
+    <xa-datasource-class>com.microsoft.sqlserver.jdbc.SQLServerXADataSource</xa-datasource-class>
+    <xa-datasource-property name="ServerName">vostro-dd65449d</xa-datasource-property>
+    <xa-datasource-property name="PortNumber">1433</xa-datasource-property>
+    <xa-datasource-property name="DatabaseName">ofbiz</xa-datasource-property>
+    <xa-datasource-property name="SelectMethod">cursor</xa-datasource-property>
+    <xa-datasource-property name="User">ofbiz</xa-datasource-property>
+ <xa-datasource-property name="Password">ofbiz</xa-datasource-property>
+  
+      <!-- corresponding type-mapping in the standardjbosscmp-jdbc.xml (optional) -->
+      <metadata>
+         <type-mapping>MS SQLSERVER2005</type-mapping>
+      </metadata>
+  </xa-datasource>
+</datasources>
+

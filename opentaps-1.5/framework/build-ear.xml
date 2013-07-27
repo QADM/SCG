@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<project name="ofbiz framework deploymemt" default="package-framework-jboss" basedir=".">
+
+  <!-- ================================================================== -->
+  <!-- set the framework properties                                       -->
+  <!-- ================================================================== -->
+
+  <property name="framework.dir" value="${basedir}/framework"/>
+
+  <!-- ================================================================== -->
+  <!-- copy the framework libs into the ear directory                     -->
+  <!-- ================================================================== -->
+
+  <target name="copy-framework-libs">
+    <copy todir="${ear.lib.dir}" flatten="true" overwrite="true">
+      <!-- base -->
+      <fileset dir="${framework.dir}/base/lib/">
+        <include name="**/*.jar"/>
+        <exclude name="**/avalon-framework*.jar"/>
+        <exclude name="**/commons-io-*.jar"/>
+      </fileset>
+      <fileset dir="${framework.dir}/base/build/lib/">
+        <include name="**/*.jar"/>
+      </fileset>
+      <fileset dir="${framework.dir}/start/build/lib/">
+        <include name="**/*.jar"/>
+      </fileset>
+
+      <!-- entity -->
+      <fileset dir="${framework.dir}/entity/lib/" includes="commons-dbcp-1.3-20080708-r674758.jar"/>
+      <fileset dir="${framework.dir}/entity/lib/" includes="ofbiz-minerva.jar"/>
+      <fileset dir="${framework.dir}/entity/build/lib/" includes="ofbiz-entity.jar"/>
+
+      <!-- security -->
+      <fileset dir="${framework.dir}/security/build/lib/" includes="ofbiz-security.jar"/>
+
+      <!-- datafile -->
+      <fileset dir="${framework.dir}/datafile/build/lib/" includes="ofbiz-datafile.jar"/>
+
+      <!-- minilang -->
+      <fileset dir="${framework.dir}/minilang/build/lib/" includes="ofbiz-minilang.jar"/>
+
+      <!-- common -->
+      <fileset dir="${framework.dir}/common/build/lib/" includes="ofbiz-common.jar"/>
+
+      <!-- service -->
+      <fileset dir="${framework.dir}/service/lib/">
+        <include name="**/*.jar"/>
+      </fileset>
+      <fileset dir="${framework.dir}/service/build/lib/" includes="ofbiz-service.jar"/>
+
+      <!-- entityext -->
+      <fileset dir="${framework.dir}/entityext/build/lib/" includes="ofbiz-entityext.jar"/>
+
+      <!-- webapp -->
+      <fileset dir="${framework.dir}/webapp/lib/">
+        <include name="**/*.jar"/>
+        <exclude name="**/xalan*.jar"/>
+        <exclude name="**/serializer-*.jar"/>
+      </fileset>
+      <fileset dir="${framework.dir}/webapp/build/lib/" includes="ofbiz-webapp.jar"/>
+
+      <!-- guiapp -->
+      <fileset dir="${framework.dir}/guiapp/lib/" includes="XuiCoreSwing-v2_0_6_jdk1_4.jar"/>
+      <fileset dir="${framework.dir}/guiapp/build/lib/" includes="ofbiz-guiapp.jar"/>
+
+      <!-- widget -->
+      <fileset dir="${framework.dir}/widget/build/lib/" includes="ofbiz-widget.jar"/>
+
+      <!-- appserver -->
+      <fileset dir="${framework.dir}/appserver/build/lib/" includes="ofbiz-appsvrs.jar"/>
+
+      <!-- testtools -->
+      <fileset dir="${framework.dir}/testtools/build/lib/" includes="ofbiz-testtools.jar"/>
+
+      <!-- webtools -->
+      <fileset dir="${framework.dir}/webtools/build/lib/" includes="ofbiz-webtools.jar"/>
+    </copy>
+  </target>
+
+  <!-- ================================================================== -->
+  <!-- prepare to package the framework config files                      -->
+  <!-- ================================================================== -->
+
+  <target name="pre-package-framework-config">
+    <move file="${framework.dir}/entity/config/entityengine.xml" tofile="${framework.dir}/entity/config/_entityengine.xml.bak"/>
+
+    <copy file="${framework.dir}/appserver/templates/jboss510/entityengine-jboss510.xml" tofile="${framework.dir}/entity/config/entityengine.xml"/>
+
+    <!--
+        <patch patchfile="${framework.dir}/appserver/templates/jboss510/patches/jboss-ee-cfg.patch"
+        dir="${basedir}"/>
+    -->
+
+    <move file="${framework.dir}/base/config/jndi.properties" tofile="${framework.dir}/base/config/_jndi.properties.bak"/>
+
+    <!-- META-INF -->
+    <mkdir dir="${ear.dir}/META-INF"/>
+
+    <copy file="${framework.dir}/appserver/templates/jboss510/application.xml" todir="${ear.dir}/META-INF"/>
+  </target>
+
+  <!-- ================================================================== -->
+  <!-- restore the framework config files                                 -->
+  <!-- ================================================================== -->
+
+  <target name="post-package-framework-config">
+    <move file="${framework.dir}/entity/config/entityengine.xml" tofile="${framework.dir}/entity/config/entityengine-jboss510.xml"/>
+    <move file="${framework.dir}/entity/config/_entityengine.xml.bak" tofile="${framework.dir}/entity/config/entityengine.xml"/>
+    <move file="${framework.dir}/base/config/_jndi.properties.bak" tofile="${framework.dir}/base/config/jndi.properties"/>
+  </target>
+
+  <!-- ================================================================== -->
+  <!-- package the framework config jars in the ear directory             -->
+  <!-- ================================================================== -->
+
+  <target name="package-framework-config">
+    <jar destfile="${ear.lib.dir}/framework.base.dtd.jar">
+      <fileset dir="${framework.dir}/base/dtd"/>
+    </jar>
+
+    <jar destfile="${ear.lib.dir}/framework.base.config.jar">
+      <fileset dir="${framework.dir}/base/config"/>
+    </jar>
+
+    <jar destfile="${ear.lib.dir}/framework.entity.dtd.jar">
+      <fileset dir="${framework.dir}/entity/dtd"/>
+    </jar>
+
+    <jar destfile="${ear.lib.dir}/framework.entity.config.jar">
+      <fileset dir="${framework.dir}/entity/config"/>
+    </jar>
+
+    <jar destfile="${ear.lib.dir}/framework.catalina.config.jar">
+      <fileset dir="${framework.dir}/catalina/config"/>
+    </jar>
+
+    <jar destfile="${ear.lib.dir}/framework.security.config.jar">
+      <fileset dir="${framework.dir}/security/config"/>
+    </jar>
+
+    <jar destfile="${ear.lib.dir}/framework.security.dtd.jar">
+      <fileset dir="${framework.dir}/security/dtd"/>
+    </jar>
+
+    <jar destfile="${ear.lib.dir}/framework.datafile.dtd.jar">
+      <fileset dir="${framework.dir}/datafile/dtd"/>
+    </jar>
+
+    <jar destfile="${ear.lib.dir}/framework.minilang.config.jar">
+      <fileset dir="${framework.dir}/minilang/config"/>
+    </jar>
+
+    <jar destfile="${ear.lib.dir}/framework.minilang.dtd.jar">
+      <fileset dir="${framework.dir}/minilang/dtd"/>
+    </jar>
+
+    <jar destfile="${ear.lib.dir}/framework.common.config.jar">
+      <fileset dir="${framework.dir}/common/config"/>
+    </jar>
+
+    <jar destfile="${ear.lib.dir}/framework.common.script.jar">
+      <fileset dir="${framework.dir}/common/script"/>
+    </jar>
+
+    <jar destfile="${ear.lib.dir}/framework.service.config.jar">
+      <fileset dir="${framework.dir}/service/config"/>
+    </jar>
+
+    <jar destfile="${ear.lib.dir}/framework.service.dtd.jar">
+      <fileset dir="${framework.dir}/service/dtd"/>
+    </jar>
+
+    <jar destfile="${ear.lib.dir}/framework.entityext.script.jar">
+      <fileset dir="${framework.dir}/entityext/script"/>
+    </jar>
+
+    <jar destfile="${ear.lib.dir}/framework.webapp.config.jar">
+      <fileset dir="${framework.dir}/webapp/config"/>
+    </jar>
+
+    <jar destfile="${ear.lib.dir}/framework.webapp.dtd.jar">
+      <fileset dir="${framework.dir}/webapp/dtd"/>
+    </jar>
+
+    <jar destfile="${ear.lib.dir}/framework.widget.config.jar">
+      <fileset dir="${framework.dir}/widget/config"/>
+    </jar>
+
+    <jar destfile="${ear.lib.dir}/framework.widget.dtd.jar">
+      <fileset dir="${framework.dir}/widget/dtd"/>
+    </jar>
+
+    <jar destfile="${ear.lib.dir}/framework.appserver.config.jar">
+      <fileset dir="${framework.dir}/appserver/config"/>
+    </jar>
+
+    <jar destfile="${ear.lib.dir}/framework.testtools.dtd.jar">
+      <fileset dir="${framework.dir}/testtools/dtd"/>
+    </jar>
+
+    <jar destfile="${ear.lib.dir}/framework.webtools.config.jar">
+      <fileset dir="${framework.dir}/webtools/config"/>
+    </jar>
+  </target>
+
+  <!-- ================================================================== -->
+  <!-- copy the framework webapps into the ear directory                  -->
+  <!-- ================================================================== -->
+
+  <target name="package-framework-webapp">
+    <!-- webtools -->
+    <mkdir dir="${ear.dir}/webtools.war"/>
+
+    <copy todir="${ear.dir}/webtools.war">
+      <fileset dir="${framework.dir}/webtools/webapp/webtools"/>
+    </copy>
+
+    <!-- images -->
+    <mkdir dir="${ear.dir}/images.war"/>
+
+    <copy todir="${ear.dir}/images.war">
+      <fileset dir="${framework.dir}/images/webapp/images"/>
+    </copy>
+  </target>
+
+  <!-- ================================================================== -->
+  <!-- package ofbiz framework                                            -->
+  <!-- ================================================================== -->
+
+  <target name="package-framework-jboss" depends="">
+
+    <echo message="[package-framework-jboss] =========== start =========="/>
+
+    <antcall target="copy-framework-libs"/>
+
+    <antcall target="pre-package-framework-config"/>
+
+    <antcall target="package-framework-config"/>
+
+    <antcall target="post-package-framework-config"/>
+
+    <antcall target="package-framework-webapp"/>
+
+    <echo message="[package-framework-jboss] ============ end ==========="/>
+
+  </target>
+
+  <!-- ================================================================== -->
+  <!-- configure jboss with resources from ofbiz framework                -->
+  <!-- ================================================================== -->
+
+  <target name="setup-framework-jboss" depends="">
+
+    <echo message="[setup-framework-jboss] =========== start ==========="/>
+
+    <!-- bsh.jar -->
+    <!--<move file="${JBOSS_HOME}/server/default/lib/bsh.jar" tofile="${JBOSS_HOME}/server/default/lib/_bsh.jar.bak"/>
+        <copy file="${framework.dir}/base/lib/scripting/bsh-2.0b4.jar" tofile="${JBOSS_HOME}/server/default/lib/bsh.jar"/>-->
+
+    <!-- server.xml -->
+    <move file="${jboss.deploy.dir}/jbossweb.sar/server.xml" tofile="${jboss.deploy.dir}/jbossweb.sar/_server.xml.bak"/>
+    <copy file="${framework.dir}/appserver/templates/jboss510/misc/server.xml" todir="${jboss.deploy.dir}/jbossweb.sar/"/>
+
+    <!-- keystore -->
+    <copy file="${framework.dir}/appserver/templates/jboss510/misc/keystore" tofile="C:\jboss-5.1.0.GA\server\default\conf\.keystore"/>
+
+    <!-- MSSQL -->
+    <copy file="${framework.dir}/appserver/templates/jboss510/datasource/mssql-ds.xml" todir="${jboss.deploy.dir}"/>
+    <copy file="${framework.dir}/entity/lib/jdbc/sqljdbc4.jar" todir="C:\jboss-5.1.0.GA\server\default\lib"/>
+    <!-- this jar conflict with %JBOSS_HOME%\common\lib\bsh.jar, so need copy it to default/lib -->
+    <copy file="${framework.dir}/base/lib/scripting/bsh-2.0b4.jar" todir="C:\jboss-5.1.0.GA\server\default\lib"/>
+    
+    <!-- copy run.conf and replace ofbiz home token -->
+    <move file="C:\jboss-5.1.0.GA\bin\run.conf" tofile="C:\jboss-5.1.0.GA\bin\run.conf.obak"/>
+    <copy file="${framework.dir}/appserver/templates/jboss510/run.conf" toFile="C:\jboss-5.1.0.GA\bin\run.conf">
+      <filterset>
+        <filter token="ofbizHome" value="${basedir}"/>
+      </filterset> 
+    </copy>
+
+    <!-- copy run.conf.bat and replace ofbiz home token -->
+    <move file="C:\jboss-5.1.0.GA\bin\run.conf.bat" tofile="C:\jboss-5.1.0.GA\bin\run.conf.bat.obak"/>
+    <copy file="${framework.dir}/appserver/templates/jboss510/run.conf.bat" toFile="C:\jboss-5.1.0.GA\bin\run.conf.bat">
+      <filterset>
+        <filter token="ofbizHome" value="${basedir}"/>
+      </filterset> 
+    </copy>
+    <echo message="[setup-framework-jboss] ============ end ============="/>
+
+  </target>
+
+</project>
