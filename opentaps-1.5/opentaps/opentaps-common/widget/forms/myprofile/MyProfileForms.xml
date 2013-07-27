@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) Open Source Strategies, Inc.
+ * 
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/widget-form.xsd">
+
+    <!-- list of visits for the userLogin -->
+    <form name="ListVisits" type="list"
+        title="List of Visits"  default-title-style="tableheadtext" target=""
+        default-widget-style="tabletext" default-tooltip-style="tabletext"
+        default-table-style="crmsfaListTable" header-row-style="crmsfaListTableHeader" even-row-style="rowWhite" odd-row-style="rowLightGray"
+        paginate-target="myProfile"  list-name="visitListIt">
+        <field name="visitId" title="${uiLabelMap.PartyVisitId}" widget-style="buttontext">
+            <hyperlink target="visitdetail" description="${visitId}">
+                <parameter param-name="visitId" from-field="visitId"/>
+            </hyperlink>
+        </field>
+        <field name="partyId" title="${uiLabelMap.CommonUsername}">
+            <display-entity entity-name="PartyNameView" key-field-name="partyId" description="${firstName} ${middleName} ${lastName} ${groupName}"/>
+        </field>
+        <field name="userLoginId"><display/></field>
+        <field name="clientIpAddress"><display/></field>
+        <field name="fromDate" title="${uiLabelMap.CommonFromDate}" red-when="never" use-when="fromDate!=void&amp;&amp;fromDate!=null">
+            <display description="${groovy:fromDate.toString().substring(0,19)}"/>
+        </field>
+        <field name="thruDate" title="${uiLabelMap.CommonThruDate}" red-when="never" use-when="thruDate!=void&amp;&amp;thruDate!=null">
+            <display description="${groovy:thruDate.toString().substring(0,19)}"/>
+        </field>
+    </form>
+
+</forms>

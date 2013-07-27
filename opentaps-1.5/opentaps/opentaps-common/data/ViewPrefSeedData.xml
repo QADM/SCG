@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) Open Source Strategies, Inc.
+ *
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+ *  
+-->
+
+<!-- Seed data for user view preferences. -->
+<entity-engine-xml>
+
+    <!-- Define view preference enumeration type. -->
+    <EnumerationType enumTypeId="VIEW_PREFERENCE" description="View preference choices" hasTable="N" parentEnumTypeId=""/>
+
+    <!-- Two kinds of prefrences, enumerations and strings -->
+    <ViewPrefValueType viewPrefValueTypeId="VPREF_VALTYPE_ENUM" description="View preference value is an Enumeration"/>
+    <ViewPrefValueType viewPrefValueTypeId="VPREF_VALTYPE_STRING" description="View preference value is a String"/>
+
+    <ViewPrefType viewPrefTypeId="PENDING_EMAILS_IN" application="crmsfa" description="Pending Inbound Emails View" />
+    <Enumeration description="Only Emails Owned by Me" enumCode="ONLY OWNED" enumId="EMAILS_MINE_OWNED" sequenceId="01" enumTypeId="VIEW_PREFERENCE"/>
+    <Enumeration description="All Emails Assigned to Me" enumCode="ALL ASSIGNED" enumId="EMAILS_MINE_ALL" sequenceId="02" enumTypeId="VIEW_PREFERENCE"/>
+
+
+</entity-engine-xml>

@@ -1,0 +1,73 @@
+/*
+ * Copyright (c) Open Source Strategies, Inc.
+ * 
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+ */
+import com.opensourcestrategies.crmsfa.party.PartyHelper;
+import org.ofbiz.base.util.*;
+import org.opentaps.common.util.UtilCommon;
+import org.opentaps.common.util.UtilMessage;
+import com.opensourcestrategies.crmsfa.content.ContentHelper;
+
+if (security.hasEntityPermission("CRMSFA_QUOTE", "_UPDATE", session)) {
+    context.put("hasUpdatePermission", Boolean.TRUE);
+}
+
+quoteId = parameters.get("quoteId");
+quote = delegator.findByPrimaryKey("Quote", UtilMisc.toMap("quoteId", quoteId));
+context.put("quote", quote);
+context.put("quoteId", quoteId);
+if (UtilValidate.isEmpty(quote)) {
+    return;
+}
+
+//put to history
+if ((title = quote.get("quoteName")) != null) {
+    context{"history"} = UtilCommon.makeHistoryEntry(title, "ViewQuote", UtilMisc.toList("quoteId"));
+} else {
+    uiLabelMap = UtilMessage.getUiLabels(locale);
+    context{"history"} = UtilCommon.makeHistoryEntry(uiLabelMap.get("OrderOrderQuote") + " " + quote.get("quoteId"), "ViewQuote", UtilMisc.toList("quoteId"));
+}
+
+quoteItems = quote.getRelated("QuoteItem", UtilMisc.toList("quoteItemSeqId"));
+context.put("quoteItems", quoteItems);
+
+context.put("store", quote.getRelatedOne("ProductStore"));
+context.put("quoteAdjustments", quote.getRelated("QuoteAdjustment"));
+context.put("quoteRoles", quote.getRelated("QuoteRole"));
+context.put("quoteType", quote.getRelatedOne("QuoteType"));
+context.put("statusItem", quote.getRelatedOne("StatusItem"));
+context.put("currency", quote.getRelatedOne("Uom"));
+context.put("salesChannel", quote.getRelatedOne("SalesChannelEnumeration"));
+
+createdByPartyId = quote.getString("createdByPartyId");
+if (UtilValidate.isNotEmpty(createdByPartyId)) {
+    createdByName = PartyHelper.getCrmsfaPartyName(delegator, createdByPartyId);
+    context.put("createdByName", createdByName);
+}
+
+context.put("validChanges", UtilCommon.getValidChanges(quote.getString("statusId"), delegator));
+finalStatuses = UtilMisc.toList("QUO_CANCELLED", "QUO_REJECTED", "QUO_FINALIZED", "QUO_ORDERED");
+if (finalStatuses.contains(quote.get("statusId"))) {
+    context.put("canEditQuote", false);
+} else {
+    context.put("canEditQuote", true);
+}
+
+// find notes
+notes = delegator.getMultiRelation(quote, "QuoteNote", "NoteData", UtilMisc.toList("-noteDateTime"));
+context.put("quoteNotes", notes);
+
+//and also view any attached content
+context.put("content", ContentHelper.getContentInfoForQuote(quoteId, delegator));

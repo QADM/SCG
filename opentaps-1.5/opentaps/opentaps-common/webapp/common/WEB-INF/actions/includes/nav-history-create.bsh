@@ -1,0 +1,98 @@
+/*
+ * Copyright (c) Open Source Strategies, Inc.
+ * 
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilHttp;
+import org.ofbiz.base.crypto.HashCrypt;
+import javolution.util.FastList;
+import javolution.util.FastMap;
+import org.opentaps.common.util.UtilConfig;
+import org.opentaps.common.util.UtilCommon;
+import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.base.util.UtilDateTime;
+import javax.servlet.ServletContext;
+import org.ofbiz.base.component.ComponentConfig;
+
+application = parameters.get("componentName");
+
+if (UtilConfig.getPropertyBoolean(application, "opentaps.history.show", true)) {
+
+    userLogin = parameters.get("userLogin");
+    if (userLogin == null) {
+        return;
+    }
+
+    servletContext = request.getAttribute("servletContext");
+    serverId = servletContext.getAttribute("_serverId");
+    contextPath = request.getContextPath();
+    info = ComponentConfig.getWebAppInfo(serverId, contextPath);
+    webAppName = info.getName();
+
+    //store current view in history
+    historyEntry = context.get("history");
+    historyTitle = null;
+    if (historyEntry != null && (historyTitle = historyEntry.get("text")) != null) {
+        currentView = historyEntry.get("view");
+        if (UtilValidate.isEmpty(currentView)) {
+            currentView = UtilCommon.getParameter(context, "_CURRENT_VIEW_");            
+        };
+        String uri = UtilHttp.getFullRequestUrl(request).toString();
+        if (uri.indexOf(currentView) != -1) {
+            if (request.QueryString != null) {
+                uri = uri.substring(0, uri.lastIndexOf("?"));
+                // check for cookie token that may be at the end of URL like view;jsessionid=XXXX
+                int jsessionidIndex = uri.indexOf(";");
+                if (jsessionidIndex != -1) {
+                    uri = uri.substring(0, jsessionidIndex);
+                }
+            }
+            override = historyEntry.get("override");
+            if (!(override != null && override.size() == 0)) {
+            	String queryString = UtilCommon.makeHistoryQueryString(parameters, historyEntry.get("override"));
+            	uri += ("?" + queryString);
+            }
+            uri = uri.substring((uri.indexOf(controlPath) + controlPath.length()) + 1);
+
+            // Quick fix: skips uri if its format differs from appname/conrol/currentView
+            int questionMarkIndex = uri.lastIndexOf("?");
+            if (questionMarkIndex == -1) {
+            	if (!currentView.equalsIgnoreCase(uri.substring(0))) return;
+            } else {
+            	if (!currentView.equalsIgnoreCase(uri.substring(0, uri.lastIndexOf("?")))) return;
+            }
+
+            entry = delegator.makeValue("ViewHistory", null);
+            controlPath = parameters.get("_CONTROL_PATH_");
+            entry.set("uri", uri);
+            userLoginId = userLogin.get("userLoginId");
+            entry.set("userLoginId", userLoginId);
+            entry.set("applicationName", application);
+            entry.set("contextInfo", historyTitle);
+            entry.set("webAppName", webAppName);
+            
+            digest = HashCrypt.getDigestHash(uri.toString() + userLoginId + application + historyTitle, "MD5");
+            entry.set("digest", digest);
+            
+            // Delete any identical previous history entries
+            delegator.removeByAnd("ViewHistory", UtilMisc.toMap("digest", digest));
+
+            entry.set("expireAt", UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DATE, UtilConfig.getPropertyInt(application, "opentaps.history.expire", 90), UtilCommon.getTimeZone(request), locale));
+            entry.set("viewHistoryId", delegator.getNextSeqId("ViewHistory"));
+            entry.create();
+        }
+    }
+}

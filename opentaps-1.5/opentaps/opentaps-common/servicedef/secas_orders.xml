@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) Open Source Strategies, Inc.
+ *
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<service-eca xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/service-eca.xsd">
+
+    <eca service="storeOrder" event="commit">
+        <condition field-name="orderTypeId" operator="equals" value="SALES_ORDER"/>
+        <condition field-name="statusId" operator="equals" value="ORDER_CREATED"/>
+        <action service="autoApproveThirdPartyOrder" mode="sync" run-as-user="system"/>
+    </eca>
+    <eca service="createSalesOrderWithOneItem" event="commit">
+        <action service="autoApproveThirdPartyOrder" mode="sync" run-as-user="system"/>
+    </eca>
+
+    <!-- cancel order items -->
+    <!-- Note: this redefines the similar secas from Ofbiz which must then be commented out -->
+    <eca service="cancelOrderItem" event="commit">
+        <action service="recreateOrderAdjustments" mode="sync"/>
+        <action service="recalcShippingTotal" mode="sync"/>
+        <action service="recalcTaxTotal" mode="sync"/>
+        <action service="resetGrandTotal" mode="sync"/>
+        <action service="sendOrderChangeNotification" mode="async" persist="true"/>
+    </eca>
+
+    <eca service="crmsfa.createShipGroup" event="commit">
+        <action service="recreateOrderAdjustments" mode="sync"/>
+        <action service="recalcShippingTotal" mode="sync"/>
+        <action service="recalcTaxTotal" mode="sync"/>
+        <action service="resetGrandTotal" mode="sync"/>
+    </eca>
+
+    <eca service="updateOrderItemShipGroup" event="commit">
+        <action service="recreateOrderAdjustments" mode="sync"/>
+        <action service="recalcShippingTotal" mode="sync"/>
+        <action service="recalcTaxTotal" mode="sync"/>
+        <action service="resetGrandTotal" mode="sync"/>
+    </eca>
+
+    <!-- Each receipt of cash, check, money order. and disbursement of cash
+            should be recorded in a CashDrawer transaction -->
+    <eca service="createPayment" event="commit">
+        <action service="opentaps.recordCashDrawerTransaction" mode="sync"/>
+    </eca>
+
+    <!-- Check if items added to a created order should be approved -->
+    <eca service="appendOrderItem" event="commit">
+        <action service="opentaps.approveAppendedOrderItems" mode="sync"/>
+    </eca>
+    
+    <!-- Set the quantity on all order item billing records of the invoice to zero when invoice is canceled or voided. -->
+    <eca service="setInvoiceStatus" event="commit">
+        <condition field-name="invoiceId" operator="is-not-empty"/>
+        <condition field-name="statusId" operator="equals" value="INVOICE_CANCELLED"/>
+        <action service="opentaps.cancelOrderItemBilling" mode="sync"/>
+    </eca>
+
+    <!-- keep ProductStoreFacilityByAddress updated whenever a postal address is updated -->
+    <eca service="updatePostalAddress" event="commit">
+        <action service="opentaps.updatePostalAddressForProductStoreFacilityByAddress" mode="sync"/>
+    </eca>
+
+	<!-- move from ofbiz applications/order/servicedef/secas.xml, we move it here because it missing action node -->
+    <!--eca service="receiveInventoryProduct" event="commit">
+        <condition field-name="facilityId" operator="is-not-empty"/>
+        <condition field-name="orderId" operator="is-not-empty"/>
+        <action service="updatePoOnReceiveInventory" mode="sync"/>
+    </eca-->
+
+    <!-- Copies all the accounting tags from the return order item to the payment application. -->
+    <eca service="createPaymentApplicationsFromReturnItemResponse" event="commit">
+        <action service="updatePaymentApplicationAccountTagsByReturnOrder" mode="sync" run-as-user="system"/>
+    </eca>
+
+    <!-- Copies all the accounting tags from the return order items to the invoice items. -->
+    <eca service="createInvoiceFromReturn" event="commit">
+        <action service="updateInvoiceItemsAccountingTagsForReturn" mode="sync" run-as-user="system"/>
+    </eca>
+
+</service-eca>

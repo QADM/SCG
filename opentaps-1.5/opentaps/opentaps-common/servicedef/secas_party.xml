@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) Open Source Strategies, Inc.
+ *
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<service-eca xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/service-eca.xsd">
+
+    <!-- Update PartySupplementalData contact mech id on update postal address, email address or phone number -->
+    <eca service="updatePartyContactMech" event="commit">
+        <condition operator="equals" field-name="contactMechTypeId" value="POSTAL_ADDRESS"/>
+        <condition operator="is-not-empty" field-name="partyId"/>
+        <action mode="sync" service="opentaps.updatePartySupplementalData"/>
+    </eca>
+    <eca service="updatePartyContactMech" event="commit">
+        <condition operator="equals" field-name="contactMechTypeId" value="TELECOM_NUMBER"/>
+        <condition operator="is-not-empty" field-name="partyId"/>
+        <action mode="sync" service="opentaps.updatePartySupplementalData"/>
+    </eca>
+    <eca service="updatePartyContactMech" event="commit">
+        <condition operator="equals" field-name="contactMechTypeId" value="EMAIL_ADDRESS"/>
+        <condition operator="is-not-empty" field-name="partyId"/>
+        <action mode="sync" service="opentaps.updatePartySupplementalData"/>
+    </eca>
+
+   <!-- Clear PartySupplementalData contact mech on delete PartyContactMech -->
+    <eca service="deletePartyContactMech" event="commit">
+        <condition operator="is-not-empty" field-name="partyId"/>
+        <action mode="sync" service="opentaps.clearPartySupplementalData"/>
+    </eca>
+
+</service-eca>

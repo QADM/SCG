@@ -1,0 +1,48 @@
+/* 
+ * Copyright (c) Open Source Strategies, Inc.
+ *
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+import java.util.ArrayList;
+
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.entity.util.EntityUtil;
+import org.opentaps.common.util.UtilMessage;
+import org.opentaps.common.util.UtilCommon;
+import com.opensourcestrategies.crmsfa.security.CrmsfaSecurity;
+import java.sql.Timestamp;
+
+security = request.getAttribute("security");
+userLogin = request.getAttribute("userLogin");
+
+if (!(hasPaymentUpdatePermission = CrmsfaSecurity.hasPartyRelationSecurity(security, "CRMSFA_PAY", "_UPDATE", userLogin, partyId))) {
+    context.put("allowed", false);
+    return;
+}
+context.put("hasPaymentUpdatePermission", hasPaymentUpdatePermission);
+
+partyId = parameters.get("partyId");
+taxAuthGeoId = parameters.get("taxAuthGeoId");
+taxAuthPartyId = parameters.get("taxAuthPartyId");
+fromDate = parameters.get("fromDate");
+if ((partyId != null) && (taxAuthGeoId != null) && (taxAuthPartyId != null) && (fromDate != null)) {
+    taxAuthPartyInfo = delegator.findByPrimaryKey("PartyTaxAuthInfoAndDetail", UtilMisc.toMap("partyId", partyId, "geoId", taxAuthGeoId, "taxAuthGeoId", taxAuthGeoId, "taxAuthPartyId", taxAuthPartyId, "fromDate", Timestamp.valueOf(fromDate)));
+    context.put("taxAuthPartyInfo", taxAuthPartyInfo);
+}
+
+// available tax authorities
+taxAuthorities = delegator.findAllCache("TaxAuthorityAndDetail", UtilMisc.toList("abbreviation", "groupName"));
+context.put("taxAuthorities", taxAuthorities);

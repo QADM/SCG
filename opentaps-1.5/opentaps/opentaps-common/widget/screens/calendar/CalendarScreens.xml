@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) Open Source Strategies, Inc.
+ *
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/widget-screen.xsd">
+
+    <screen name="CalendarDayWidget">
+        <section>
+            <actions>
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/calendar/day.bsh"/>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html><html-template location="component://opentaps-common/webapp/common/calendar/day.ftl"/></html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="CalendarWeekWidget">
+        <section>
+            <actions>
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/calendar/week.bsh"/>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html><html-template location="component://opentaps-common/webapp/common/calendar/week.ftl"/></html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="CalendarMonthWidget">
+        <section>
+            <actions>
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/calendar/month.bsh"/>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html><html-template location="component://opentaps-common/webapp/common/calendar/month.ftl"/></html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+</screens>

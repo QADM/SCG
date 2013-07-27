@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) Open Source Strategies, Inc.
+ * 
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<!-- Direct the FedEx shipment methods for productStoreId 9000 to use the opentaps.fedexRateRequest service -->
+        
+<entity-engine-xml>
+    
+    <ProductStoreShipmentMeth productStoreId="9000" productStoreShipMethId="9010" serviceName="opentaps.fedexRateRequest"/>
+    <ProductStoreShipmentMeth productStoreId="9000" productStoreShipMethId="9011" serviceName="opentaps.fedexRateRequest"/>
+    <ProductStoreShipmentMeth productStoreId="9000" productStoreShipMethId="9012" serviceName="opentaps.fedexRateRequest"/>
+    <ProductStoreShipmentMeth productStoreId="9000" productStoreShipMethId="9013" serviceName="opentaps.fedexRateRequest"/>
+    <ProductStoreShipmentMeth productStoreId="9000" productStoreShipMethId="9014" serviceName="opentaps.fedexRateRequest"/>
+    <ProductStoreShipmentMeth productStoreId="9000" productStoreShipMethId="9015" serviceName="opentaps.fedexRateRequest"/>
+    <ProductStoreShipmentMeth productStoreId="9000" productStoreShipMethId="9016" serviceName="opentaps.fedexRateRequest"/>
+
+</entity-engine-xml>

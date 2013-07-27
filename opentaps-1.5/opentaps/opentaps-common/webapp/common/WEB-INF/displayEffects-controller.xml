@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * Copyright (c) Open Source Strategies, Inc.
+ * 
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<!-- 
+  This file contains requests to communicate with the server and retrieve
+  or persist dynamic effects in the display tier.
+-->
+        
+<site-conf xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/site-conf.xsd">
+    <description>Display Effects Controller</description>
+    <owner>Open Source Strategies, Inc.</owner>
+    
+    <request-map uri="persistViewExpansionState">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.common.event.CommonEvents" invoke="persistViewExpansionState"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+
+</site-conf>

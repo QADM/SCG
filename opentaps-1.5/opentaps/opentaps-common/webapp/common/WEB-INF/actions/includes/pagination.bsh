@@ -1,0 +1,38 @@
+/*
+ * Copyright (c) Open Source Strategies, Inc.
+ * 
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+ */
+/* Copyright (c) Open Source Strategies, Inc. */
+
+/*
+ * Pagination helper script. 
+ * This is designed to handle all pagination, we just call it when the screen does any kind of pagination.
+ */
+
+defaultSize = 20;
+
+// get the configured pagination size for all lists
+configProperties = org.ofbiz.base.util.UtilProperties.getProperties("opentaps.properties");
+sizeString = configProperties.get("opentaps.pagination.size.default");
+if (sizeString != null) try {
+    defaultSize = Integer.parseInt(sizeString);
+} catch (NumberFormatException e) {
+    // use defaultSize = 20;
+}
+
+lotsIndex = parameters.get("lotsIndex");
+lotsSize = parameters.get("lotsSize");
+context.put("lotsIndex", (lotsIndex == null ? 0 : lotsIndex));
+context.put("lotsSize", (lotsSize == null ? defaultSize : lotsSize));
