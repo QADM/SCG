@@ -1,0 +1,71 @@
+/*
+ * Copyright (c) Open Source Strategies, Inc.
+ *
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+ *  
+ *  @author Leon Torres (leon@opensourcestrategies.com
+ */
+
+import org.ofbiz.entity.util.*;
+import org.ofbiz.base.util.*;
+import org.ofbiz.service.*;
+import org.opentaps.common.util.UtilMessage;
+import org.opentaps.common.util.UtilCommon;
+import org.opentaps.common.util.UtilAccountingTags;
+import javolution.util.FastList;
+
+timeZone = UtilCommon.getTimeZone(request);
+
+//put to history
+context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.getUiLabels(locale).get("FinancialsComparativeBalance"), null, FastList.newInstance());
+organizationPartyId = context.get("organizationPartyId");
+glFiscalTypeId1 = context.get("glFiscalTypeId1");
+glFiscalTypeId2 = context.get("glFiscalTypeId2");
+fromDate = context.get("fromDate");
+thruDate = context.get("thruDate");
+if (fromDate == null || thruDate == null) return;
+
+// Make sure the asOfDate is the end-of-day for the two dates
+fromDate = UtilDateTime.getDayEnd(fromDate, timeZone, locale);
+thruDate = UtilDateTime.getDayEnd(thruDate, timeZone, locale);
+
+input = UtilMisc.toMap("organizationPartyId", organizationPartyId, "glFiscalTypeId1", glFiscalTypeId1, "glFiscalTypeId2", glFiscalTypeId2);
+input.put("userLogin", userLogin);
+input.put("fromDate", fromDate);
+input.put("thruDate", thruDate);
+
+// add tags from the request to the service parameters
+UtilAccountingTags.addTagParameters(request, input);
+
+result = dispatcher.runSync("getComparativeBalanceSheet", input);
+if (ServiceUtil.isError(result)) return;
+
+// put everything into the context
+context.put("assetAccounts", EntityUtil.orderBy(result.get("assetAccountBalances").keySet(), UtilMisc.toList("glAccountId")));
+context.put("assetAccountBalances", result.get("assetAccountBalances"));
+context.put("liabilityAccounts", EntityUtil.orderBy(result.get("liabilityAccountBalances").keySet(), UtilMisc.toList("glAccountId")));
+context.put("liabilityAccountBalances", result.get("liabilityAccountBalances"));
+context.put("equityAccounts", EntityUtil.orderBy(result.get("equityAccountBalances").keySet(), UtilMisc.toList("glAccountId")));
+context.put("equityAccountBalances", result.get("equityAccountBalances"));
+
+context.put("fromDateAccountBalances", result.get("fromDateAccountBalances"));
+context.put("thruDateAccountBalances", result.get("thruDateAccountBalances"));
+context.put("fromDate", fromDate);
+context.put("thruDate", thruDate);
+
+// put the correct GlFiscalTypes into the context for the display tier
+fromGlFiscalType = delegator.findByPrimaryKey("GlFiscalType", UtilMisc.toMap("glFiscalTypeId", glFiscalTypeId1));
+toGlFiscalType = delegator.findByPrimaryKey("GlFiscalType", UtilMisc.toMap("glFiscalTypeId", glFiscalTypeId2));
+context.put("fromGlFiscalType", fromGlFiscalType);
+context.put("toGlFiscalType", toGlFiscalType);

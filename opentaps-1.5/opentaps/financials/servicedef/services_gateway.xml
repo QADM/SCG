@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * Copyright (c) Open Source Strategies, Inc.
+ *
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/services.xsd">
+    <description>Thirdparty Gateway Services for Financials</description>
+    <vendor>Open Source Strategies, Inc.</vendor>
+    <version>1.0</version>
+
+    <service name="eftRefundInterface" engine="interface" location="" invoke="">
+        <description>EFT Refund Interface</description>
+        <implements service="paymentRefundInterface"/>
+        <attribute name="eftAccount" type="GenericValue" mode="IN" optional="false"/>
+    </service>
+    
+    <service name="eCheckNetAuthCapture" engine="java"
+        location="com.opensourcestrategies.financials.payment.gateway.AimEcheckServices" invoke="authorizeAndCaptureEft">
+        <description>EFT Authorize and Capture service for eCheck.NET using the Authorize.NET credentials.</description>
+        <implements service="eftProcessInterface"/>
+    </service>
+
+    <service name="eCheckNetRefund" engine="java"
+        location="com.opensourcestrategies.financials.payment.gateway.AimEcheckServices" invoke="refundEft">
+        <description>EFT Refund service for eCheck.NET using the Authorize.NET credentials.</description>
+        <implements service="eftRefundInterface"/>
+    </service>
+
+</services>

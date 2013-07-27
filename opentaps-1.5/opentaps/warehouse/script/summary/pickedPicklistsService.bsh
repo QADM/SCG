@@ -1,0 +1,47 @@
+/*
+ * Copyright (c) Open Source Strategies, Inc.
+ *
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+// @author Fabien Carrion
+
+import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.entity.util.EntityUtil;
+import org.ofbiz.service.ServiceUtil;
+
+if ( !context.containsKey("facilityId") ) {
+    Debug.logError("pickedPicklistsService.bsh: no facilityId set", "");
+    return;
+}
+
+// bshService.bsh
+delegator = dctx.getDelegator();
+
+// Picked Picklists
+conditions = new ArrayList();
+conditions.add( new EntityExpr("pFacilityId", EntityOperator.EQUALS, context.get("facilityId")) );
+conditions.add( new EntityExpr("pStatusId", EntityOperator.EQUALS, "PICKLIST_PICKED") );
+conditions.add( new EntityExpr("piItemStatusId", EntityOperator.EQUALS, "PICKITEM_PENDING") );
+conditions.add(new EntityConditionList(UtilMisc.toList(new EntityExpr("oisgStatusId", EntityOperator.NOT_EQUAL, "OISG_PACKED"), new EntityExpr("oisgStatusId", EntityOperator.EQUALS, null)), EntityOperator.OR));
+picklistItems = delegator.findByCondition("PicklistItemAndOdrItmShipGrp", new EntityConditionList(conditions, EntityOperator.AND), null, UtilMisc.toList("piOrderId", "piShipGroupSeqId", "oiProductId"));
+picklistIds = EntityUtil.getFieldListFromEntityList(picklistItems, "pPicklistId", true);
+context.put("pickedPicklistIds", picklistIds);
+
+result = ServiceUtil.returnSuccess();
+result.put("pickedPicklistIds", picklistIds);
+return result;

@@ -1,0 +1,43 @@
+/*
+ * Copyright (c) Open Source Strategies, Inc.
+ * 
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/*
+    Assumptions:
+    - The logic of whether an order is ready to ship is governed by the OISGIR
+    - Any shipGroup ready to ship will have an OISGIR
+    - shipGroups ready to ship are those where:
+        - if maySplit: Total readyToShipQty (OISGIR.quantity - OISGIR.quantityNotAvailable) for all OISGIRs relating to the shipGroup and facility is > 0
+        - if !maySplit: Total shortfall (OISGIR.quantityNotAvailable) for all OISGIRs relating to the shipGroup and facility == 0
+    - A given shipGroup will not be split across more than one facility
+    
+*/
+
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilValidate;
+
+import org.opentaps.warehouse.shipment.ShippingHelper;
+
+facilityId = parameters.get("facilityId");
+
+if (UtilValidate.isEmpty(facilityId)) {
+    return;
+}
+
+shippinghelper = new ShippingHelper(delegator, facilityId);
+
+context.put("orders", shippinghelper.findOrdersReadyToShip(viewIndex.intValue(), viewSize.intValue()));
+context.put("ordersTotalSize", shippinghelper.getOrdersTotalSize());

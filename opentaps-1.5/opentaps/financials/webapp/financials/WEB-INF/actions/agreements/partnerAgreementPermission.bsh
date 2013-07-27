@@ -1,0 +1,42 @@
+/*
+ * Copyright (c) Open Source Strategies, Inc.
+ *
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+import org.ofbiz.base.util.UtilMisc;
+import com.opensourcestrategies.financials.security.FinancialsSecurity;
+import org.opentaps.common.util.UtilCommon;
+
+if (security == null || security == null) return;
+
+partyId = UtilCommon.getOrganizationPartyId(request);
+agreementId = parameters.get("agreementId");
+if (agreementId != null) {
+    agreement = delegator.findByPrimaryKey("Agreement", UtilMisc.toMap("agreementId", agreementId));
+    partyId = agreement.get("partyIdFrom");
+}
+
+fsecurity = new FinancialsSecurity(security, userLogin, partyId);
+hasViewAgreementPermission = fsecurity.hasViewPartnerAgreementPermission();
+hasCreateAgreementPermission = fsecurity.hasCreatePartnerAgreementPermission();
+hasUpdateAgreementPermission = fsecurity.hasUpdatePartnerAgreementPermission();
+
+context.put("hasViewAgreementPermission", hasViewAgreementPermission);
+context.put("hasCreateAgreementPermission", hasCreateAgreementPermission);
+context.put("hasUpdateAgreementPermission", hasUpdateAgreementPermission);
+
+parameters.put("hasViewAgreementPermission", hasViewAgreementPermission);
+parameters.put("hasCreateAgreementPermission", hasCreateAgreementPermission);
+parameters.put("hasUpdateAgreementPermission", hasUpdateAgreementPermission);

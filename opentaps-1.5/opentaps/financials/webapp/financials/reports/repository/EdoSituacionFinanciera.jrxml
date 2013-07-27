@@ -1,0 +1,487 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Estado de Situación Financiera" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="721" leftMargin="43" rightMargin="28" topMargin="28" bottomMargin="28" whenResourceMissingType="Empty">
+	<property name="net.sf.jasperreports.export.xls.exclude.origin.band.1" value="pageFooter"/>
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<style name="table" lineSpacing="Single">
+		<box>
+			<pen lineWidth="1.0" lineColor="#FFFFFF"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#006400" lineSpacing="Single">
+		<box>
+			<topPen lineWidth="0.5" lineColor="#FFFFFF"/>
+			<bottomPen lineWidth="0.5" lineColor="#FFFFFF"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#E6FFE6" lineSpacing="Single">
+		<box>
+			<topPen lineWidth="0.5" lineColor="#FFFFFF"/>
+			<bottomPen lineWidth="0.5" lineColor="#FFFFFF"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF" lineSpacing="Single">
+		<box>
+			<topPen lineWidth="0.5" lineColor="#FFFFFF"/>
+			<bottomPen lineWidth="0.5" lineColor="#FFFFFF"/>
+		</box>
+	</style>
+	<style name="table 1" lineSpacing="Single">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TH" mode="Opaque" backcolor="#556B2F" lineSpacing="Single">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_CH" mode="Opaque" backcolor="#E8FFBF" lineSpacing="Single">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TD" mode="Opaque" backcolor="#FFFFFF" lineSpacing="Single">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="Table Dataset 1"/>
+	<subDataset name="Table Dataset 2"/>
+	<parameter name="glFiscalTypeId" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="organizationPartyId" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="organizationName" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="asOfDate" class="java.sql.Timestamp" isForPrompting="false"/>
+	<parameter name="accountingTags" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\Salvador\\Documents\\wsOpenTabs\\opentaps-1.5\\opentaps\\financials\\webapp\\financials\\reports\\repository\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="totalActivos" class="java.math.BigDecimal"/>
+	<parameter name="totalActivosPasado" class="java.math.BigDecimal"/>
+	<parameter name="totalNoActivos" class="java.math.BigDecimal"/>
+	<parameter name="totalNoActivosPasado" class="java.math.BigDecimal"/>
+	<field name="accountCode" class="java.lang.String"/>
+	<field name="accountName" class="java.lang.String"/>
+	<field name="accountType" class="java.lang.String"/>
+	<field name="accountBalance" class="java.math.BigDecimal"/>
+	<field name="accountBalanceYear" class="java.math.BigDecimal"/>
+	<field name="accountClass" class="java.lang.String"/>
+	<variable name="sumaTotal" class="java.math.BigDecimal" calculation="Sum"/>
+	<variable name="accountCode2" class="java.lang.String">
+		<variableExpression><![CDATA[$F{accountCode}]]></variableExpression>
+	</variable>
+	<variable name="accountBalance_1" class="java.math.BigDecimal" resetType="Group" resetGroup="clases" calculation="Sum">
+		<variableExpression><![CDATA[$F{accountBalance}]]></variableExpression>
+	</variable>
+	<variable name="accountBalance_3" class="java.math.BigDecimal" resetType="Group" resetGroup="clases" calculation="Sum">
+		<variableExpression><![CDATA[$F{accountBalance}]]></variableExpression>
+	</variable>
+	<variable name="sumaNoActivos" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$V{accountBalance_3}]]></variableExpression>
+	</variable>
+	<variable name="accountBalanceYear_1" class="java.math.BigDecimal" resetType="Group" resetGroup="clases" calculation="Sum">
+		<variableExpression><![CDATA[$F{accountBalanceYear}]]></variableExpression>
+	</variable>
+	<variable name="accountBalanceYear_2" class="java.math.BigDecimal" resetType="Group" resetGroup="clases" calculation="Sum">
+		<variableExpression><![CDATA[$F{accountBalanceYear}]]></variableExpression>
+	</variable>
+	<group name="clases">
+		<groupExpression><![CDATA[$F{accountType}]]></groupExpression>
+		<groupHeader>
+			<band height="32">
+				<printWhenExpression><![CDATA[Boolean.valueOf($F{accountType}.equals( "Activos" ))]]></printWhenExpression>
+				<rectangle>
+					<reportElement x="0" y="0" width="719" height="31"/>
+				</rectangle>
+				<staticText>
+					<reportElement x="251" y="0" width="83" height="16"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
+						<font size="10" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Año]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="251" y="16" width="54" height="16"/>
+					<textElement lineSpacing="Single">
+						<font size="10" isBold="true" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.Integer"><![CDATA[new Integer($P{asOfDate}.getYear()+1900)]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="305" y="16" width="48" height="16"/>
+					<textElement lineSpacing="Single">
+						<font size="10" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.Integer"><![CDATA[new Integer($P{asOfDate}.getYear()+1899)]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="0" y="0" width="68" height="20"/>
+					<textElement lineSpacing="Single">
+						<font size="10" isBold="true" isUnderline="false" isStrikeThrough="false"/>
+					</textElement>
+					<text><![CDATA[Cuenta]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="68" y="0" width="183" height="20"/>
+					<textElement lineSpacing="Single">
+						<font size="10" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Concepto]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="354" y="0" width="68" height="20" printWhenGroupChanges="clases"/>
+					<textElement lineSpacing="Single">
+						<font size="10" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Cuenta]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="422" y="0" width="183" height="20" printWhenGroupChanges="clases"/>
+					<textElement lineSpacing="Single">
+						<font size="10" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Concepto]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="605" y="0" width="92" height="16" printWhenGroupChanges="clases"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
+						<font size="10" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Año]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="605" y="15" width="54" height="17" printWhenGroupChanges="clases"/>
+					<textElement lineSpacing="Single">
+						<font size="10" isBold="true" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.Integer"><![CDATA[new Integer($P{asOfDate}.getYear()+1900)]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="659" y="15" width="60" height="17" printWhenGroupChanges="clases"/>
+					<textElement lineSpacing="Single">
+						<font size="10" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.Integer"><![CDATA[new Integer($P{asOfDate}.getYear()+1899)]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="20">
+				<line>
+					<reportElement x="1" y="0" width="353" height="1">
+						<printWhenExpression><![CDATA[Boolean.valueOf($F{accountType}.equals( "Activos" ))]]></printWhenExpression>
+					</reportElement>
+				</line>
+				<line>
+					<reportElement x="355" y="0" width="366" height="1">
+						<printWhenExpression><![CDATA[Boolean.valueOf(!$F{accountType}.equals( "Activos" ))]]></printWhenExpression>
+					</reportElement>
+				</line>
+				<textField>
+					<reportElement x="353" y="0" width="252" height="20">
+						<printWhenExpression><![CDATA[Boolean.valueOf(!$F{accountType}.equals( "Activos" ))]]></printWhenExpression>
+					</reportElement>
+					<textElement lineSpacing="Single"/>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{accountType}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="305" y="0" width="48" height="20">
+						<printWhenExpression><![CDATA[Boolean.valueOf($F{accountType}.equals( "Activos" ))]]></printWhenExpression>
+					</reportElement>
+					<textElement lineSpacing="Single">
+						<font size="6" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{accountBalanceYear_1}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="251" y="0" width="54" height="20">
+						<printWhenExpression><![CDATA[Boolean.valueOf($F{accountType}.equals( "Activos" ))]]></printWhenExpression>
+					</reportElement>
+					<textElement lineSpacing="Single">
+						<font size="6"/>
+					</textElement>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{accountBalance_1}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="605" y="0" width="54" height="20">
+						<printWhenExpression><![CDATA[Boolean.valueOf(!$F{accountType}.equals( "Activos" ))]]></printWhenExpression>
+					</reportElement>
+					<textElement lineSpacing="Single">
+						<font size="6"/>
+					</textElement>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{accountBalance_3}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="-1" y="0" width="251" height="20">
+						<printWhenExpression><![CDATA[Boolean.valueOf($F{accountType}.equals( "Activos" ))]]></printWhenExpression>
+					</reportElement>
+					<textElement lineSpacing="Single"/>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{accountType}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="659" y="0" width="60" height="20">
+						<printWhenExpression><![CDATA[Boolean.valueOf(!$F{accountType}.equals( "Activos" ))]]></printWhenExpression>
+					</reportElement>
+					<textElement lineSpacing="Single">
+						<font size="6"/>
+					</textElement>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{accountBalanceYear_2}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band height="88">
+			<textField isBlankWhenNull="true">
+				<reportElement key="textField" x="0" y="28" width="719" height="20"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
+					<font pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[($P{organizationName} + " (" + $P{organizationPartyId} +")")]]></textFieldExpression>
+			</textField>
+			<elementGroup>
+				<textField pattern="MMM dd, yyyy" isBlankWhenNull="true">
+					<reportElement key="textField" x="319" y="48" width="75" height="20"/>
+					<box>
+						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+						<font pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression class="java.sql.Timestamp"><![CDATA[$P{asOfDate}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="false">
+					<reportElement key="textField" x="280" y="48" width="39" height="20"/>
+					<box>
+						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle" lineSpacing="Single">
+						<font pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$R{AsOf}]]></textFieldExpression>
+				</textField>
+			</elementGroup>
+			<textField isBlankWhenNull="true">
+				<reportElement key="textField" x="0" y="0" width="721" height="28"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" lineSpacing="Single">
+					<font isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$R{SituacionFinanciera}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement key="textField" x="0" y="68" width="719" height="20"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
+					<font pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{accountingTags}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement key="textField-1" x="394" y="48" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["(" + $P{glFiscalTypeId} + ")"]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band/>
+	</pageHeader>
+	<columnHeader>
+		<band/>
+	</columnHeader>
+	<detail>
+		<band height="20">
+			<textField>
+				<reportElement x="-1" y="-1" width="69" height="20">
+					<printWhenExpression><![CDATA[Boolean.valueOf($F{accountType}.equals( "Activos" ))]]></printWhenExpression>
+				</reportElement>
+				<textElement lineSpacing="Single">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{accountCode}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="305" y="1" width="49" height="18">
+					<printWhenExpression><![CDATA[Boolean.valueOf($F{accountType}.equals( "Activos" ))]]></printWhenExpression>
+				</reportElement>
+				<textElement lineSpacing="Single">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{accountBalanceYear}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="251" y="0" width="54" height="19">
+					<printWhenExpression><![CDATA[Boolean.valueOf($F{accountType}.equals( "Activos" ))]]></printWhenExpression>
+				</reportElement>
+				<textElement lineSpacing="Single">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{accountBalance}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="68" y="0" width="183" height="19">
+					<printWhenExpression><![CDATA[Boolean.valueOf($F{accountType}.equals( "Activos" ))]]></printWhenExpression>
+				</reportElement>
+				<textElement lineSpacing="Single">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{accountName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="353" y="1" width="69" height="18">
+					<printWhenExpression><![CDATA[Boolean.valueOf(!$F{accountType}.equals( "Activos" ))]]></printWhenExpression>
+				</reportElement>
+				<textElement lineSpacing="Single">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{accountCode}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="659" y="1" width="60" height="19">
+					<printWhenExpression><![CDATA[Boolean.valueOf(!$F{accountType}.equals( "Activos" ))]]></printWhenExpression>
+				</reportElement>
+				<textElement lineSpacing="Single">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{accountBalanceYear}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="605" y="1" width="54" height="19">
+					<printWhenExpression><![CDATA[Boolean.valueOf(!$F{accountType}.equals( "Activos" ))]]></printWhenExpression>
+				</reportElement>
+				<textElement lineSpacing="Single">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{accountBalance}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="422" y="1" width="183" height="18">
+					<printWhenExpression><![CDATA[Boolean.valueOf(!$F{accountType}.equals( "Activos" ))]]></printWhenExpression>
+				</reportElement>
+				<textElement lineSpacing="Single">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{accountName}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="18">
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="273" y="0" width="80" height="16"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" lineSpacing="Single">
+					<font size="9" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$R{CommonPage}+" "+$V{PAGE_NUMBER}+" "+$R{OpentapsOf}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report" isBlankWhenNull="false">
+				<reportElement key="textField" x="354" y="0" width="40" height="16"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement lineSpacing="Single">
+					<font size="9" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="25">
+			<rectangle>
+				<reportElement x="1" y="1" width="720" height="20"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="199" y="1" width="52" height="21"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single"/>
+				<text><![CDATA[Total :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="555" y="1" width="50" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single"/>
+				<text><![CDATA[Total :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="250" y="1" width="54" height="20"/>
+				<textElement verticalAlignment="Middle" lineSpacing="Single">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$P{totalActivos}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="304" y="1" width="51" height="20"/>
+				<textElement verticalAlignment="Middle" lineSpacing="Single">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$P{totalActivosPasado}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="605" y="1" width="54" height="17"/>
+				<textElement verticalAlignment="Middle" lineSpacing="Single">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$P{totalNoActivos}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="659" y="1" width="60" height="17"/>
+				<textElement verticalAlignment="Middle" lineSpacing="Single">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$P{totalNoActivosPasado}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

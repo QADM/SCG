@@ -1,0 +1,63 @@
+/*
+ * Copyright (c) Open Source Strategies, Inc.
+ *
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+// @author Fabien Carrion
+
+import java.math.BigDecimal;
+
+import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.entity.util.EntityUtil;
+import org.ofbiz.service.ServiceUtil;
+
+if ( !context.containsKey("facilityId") ) {
+    Debug.logError("backOrderedOrders.bsh: no facilityId set", "");
+    return;
+}
+
+// bshService.bsh
+delegator = dctx.getDelegator();
+
+// Back orders
+conditions = new EntityConditionList( UtilMisc.toList(
+    new EntityExpr("facilityId", EntityOperator.EQUALS, context.get("facilityId")),
+    new EntityExpr("orderTypeId", EntityOperator.EQUALS, "SALES_ORDER"),
+    new EntityExpr("quantityNotAvailable", EntityOperator.GREATER_THAN, BigDecimal.ZERO),
+    new EntityExpr("orderStatusId", EntityOperator.IN, UtilMisc.toList("ORDER_APPROVED", "ORDER_ON_HOLD", "ORDER_CREATED")),
+    new EntityExpr("orderItemStatusId", EntityOperator.IN, UtilMisc.toList("ITEM_APPROVED", "ITEM_CREATED"))
+), EntityOperator.AND);
+fields = UtilMisc.toList("orderId");
+backOrderedOrders = EntityUtil.getFirst( delegator.findByCondition("ReservedItemOrderCount", conditions, fields, null) );
+Debug.logInfo("backOrderedOrders = " + backOrderedOrders, "");
+orderCountLong = (backOrderedOrders == null ? null : backOrderedOrders.getLong("orderId"));
+orderCount = (orderCountLong == null ? 0 : Math.max(orderCountLong, 0));
+context.put("backOrderedOrders", orderCount);
+
+// Back ordered products
+fields = UtilMisc.toList("productId");
+backOrderedProducts = EntityUtil.getFirst( delegator.findByCondition("ReservedItemProductCount", conditions, fields, null) );
+Debug.logInfo("backOrderedProducts = " + backOrderedProducts, "");
+productCountLong = (backOrderedProducts == null ? null : backOrderedProducts.getLong("productId"));
+productCount = (productCountLong == null ? 0 : Math.max(productCountLong, 0));
+context.put("backOrderedProducts", productCount);
+
+result = ServiceUtil.returnSuccess();
+result.put("backOrderedProducts", productCount);
+result.put("backOrderedOrders", orderCount);
+return result;

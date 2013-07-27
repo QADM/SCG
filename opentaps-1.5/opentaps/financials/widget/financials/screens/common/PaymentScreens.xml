@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) Open Source Strategies, Inc.
+ *
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  @author Leon Torres (leon@opensourcestrategies.com)
+-->
+
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/widget-screen.xsd">
+
+    <!-- common payment decorator, use this as the decorator for all payment screens -->
+    <screen name="main-section-decorator">
+        <section>
+            <actions>
+                <set field="sectionName" value="none" global="true"/>
+                <set field="sectionStyle" value="singleColumn"/>
+                <!-- TODO: AR or AP view -->
+            </actions>
+            <widgets>
+                <include-screen name="main-section-template" location="component://opentaps-common/widget/screens/common/CommonScreens.xml"/>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="EditPayment">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="AccountingPayment"/>
+                <set field="organizationPartyId" from-field="parameters.organizationPartyId"/> <!-- for the ftl -->
+                <set field="paymentId" from-field="parameters.paymentId"/>
+                <entity-one entity-name="Payment" value-field="payment">
+                    <field-map field-name="paymentId" from-field="parameters.paymentId"/>
+                </entity-one>
+                <property-to-field field="defaultCurrencyUomId" resource="general" property="currency.uom.id.default" default="USD" />
+                <script location="component://financials/webapp/financials/WEB-INF/actions/includes/editPayment.bsh"/>
+                <set field="headerItem" from-field="parameters.headerItem"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="${decoratorLocation}">
+                    <decorator-section name="section-body">
+                        <section>
+                            <condition>
+                                <or>
+                                    <if-has-permission permission="FINANCIALS_AP" action="_PUPDT"/>
+                                    <if-has-permission permission="FINANCIALS_AR" action="_PUPDT"/>
+                                </or>
+                            </condition>
+                            <widgets>
+                                    <platform-specific><html>
+                                        <html-template location="component://financials/webapp/financials/includes/editPayment.ftl"/></html>
+                                    </platform-specific>
+                                    <!--include-screen name="EditPaymentApplications"/-->
+                            </widgets>
+                            <fail-widgets>
+                                <include-screen name="PermissionErrorScreen" location="component://financials/widget/financials/screens/common/CommonScreens.xml"/>
+                            </fail-widgets>
+                        </section>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>       
+    </screen>
+    <screen name="ViewPayment">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="AccountingPayment"/>
+                <set field="organizationPartyId" from-field="parameters.organizationPartyId"/> <!-- for the ftl -->
+                <property-to-field field="defaultCurrencyUomId" resource="general" property="currency.uom.id.default" default="USD" />
+                <script location="component://financials/webapp/financials/WEB-INF/actions/includes/viewPayment.bsh"/>
+                <set field="headerItem" from-field="parameters.headerItem"/>
+                <set field="partyId" from-field="parameters.headerItem"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="${decoratorLocation}">
+                    <decorator-section name="section-body">
+                        <platform-specific><html>
+                            <html-template location="component://financials/webapp/financials/includes/viewPayment.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>       
+    </screen>
+    <screen name="FindPayment">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="FinancialsFindPayment"/>
+                <java location="com.opensourcestrategies.financials.payment.PaymentActions" invoke="findPayments"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="${decoratorLocation}">
+                    <decorator-section name="section-body">
+                      <platform-specific><html>
+                        <html-template location="component://financials/webapp/financials/includes/findPayment.ftl"/></html>
+                      </platform-specific>
+                      <platform-specific><html>
+                        <html-template location="component://financials/webapp/financials/includes/listPayments.ftl"/></html>
+                      </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>       
+    </screen>
+    <screen name="EditPaymentApplications">
+        <section>
+            <widgets>
+               <container>
+                    <platform-specific><html>
+                        <html-template location="component://financials/webapp/financials/includes/editPaymentApplications.ftl"/></html>
+                    </platform-specific>
+               </container>
+            </widgets>
+        </section>       
+    </screen>
+    <screen name="ViewPaymentApplications">
+        <section>
+            <widgets>
+               <container>
+                    <platform-specific><html>
+                        <html-template location="component://financials/webapp/financials/includes/viewPaymentApplications.ftl"/></html>
+                    </platform-specific>               
+               </container>
+            </widgets>
+        </section>       
+    </screen>
+    <screen name="InvoicePaymentApplicationList">
+        <section>
+            <widgets>
+                <container>
+                    <platform-specific><html>
+                        <html-template location="component://financials/webapp/financials/includes/invoicePaymentApplicationList.ftl"/></html>
+                    </platform-specific>
+                </container>
+            </widgets>
+        </section>       
+    </screen>
+    <screen name="AddPaymentApplicationTax">
+        <section>
+            <widgets>
+                <container >
+                    <include-form name="addPaymentApplicationTax" location="component://financials/widget/financials/forms/common/PaymentForms.xml"/>
+                </container>
+            </widgets>
+        </section>       
+    </screen>
+    <screen name="EditPaymentApplicationsTax">
+        <section>
+            <widgets>
+                <container>
+                    <platform-specific><html>
+                        <html-template location="component://financials/webapp/financials/includes/editPaymentApplicationsTax.ftl"/></html>
+                    </platform-specific>                          
+                </container>
+            </widgets>
+        </section>       
+    </screen>
+    <screen name="ViewPaymentApplicationsTax">
+        <section>
+            <widgets>
+                <container>
+                    <platform-specific><html>
+                        <html-template location="component://financials/webapp/financials/includes/viewPaymentApplicationsTax.ftl"/></html>
+                    </platform-specific>                
+                </container>
+            </widgets>
+        </section>       
+    </screen>
+    <screen name="AddPaymentApplicationGl">
+        <section>
+            <widgets>
+                <container>
+                    <platform-specific><html>
+                        <html-template location="component://financials/webapp/financials/includes/addPaymentApplicationGl.ftl"/></html>
+                    </platform-specific>
+                </container>
+            </widgets>
+        </section>       
+    </screen>
+    <screen name="EditPaymentApplicationsGl">
+        <section>
+            <widgets>
+               <container>
+                    <platform-specific><html>
+                        <html-template location="component://financials/webapp/financials/includes/editPaymentApplicationsGl.ftl"/></html>
+                    </platform-specific>                   
+               </container>
+            </widgets>
+        </section>       
+    </screen>
+    <screen name="ViewPaymentApplicationsGl">
+        <section>
+            <widgets>
+               <container>
+                    <platform-specific><html>
+                        <html-template location="component://financials/webapp/financials/includes/viewPaymentApplicationsGl.ftl"/></html>
+                    </platform-specific>                   
+               </container>
+            </widgets>
+        </section>       
+    </screen>
+    
+</screens>
+

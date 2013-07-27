@@ -1,0 +1,44 @@
+/*
+ * Copyright (c) Open Source Strategies, Inc.
+ *
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/*
+ * Pagination helper script.
+ * This is designed to handle all pagination, we just call it when the screen does any kind of pagination.
+ */
+
+defaultSize = 20;
+
+// Get the configured pagination size for all lists
+configProperties = org.ofbiz.base.util.UtilProperties.getProperties("warehouse.properties");
+sizeString = configProperties.get("warehouse.pagination.size.default");
+if (sizeString != null) {
+    try {
+        defaultSize = Integer.parseInt(sizeString);
+    } catch (NumberFormatException e) {
+        // Use defaultSize
+    }
+}
+
+productionRunsIndex = parameters.get("productionRunsIndex");
+productionRunsSize = parameters.get("productionRunsSize");
+context.put("productionRunsIndex", (productionRunsIndex == null)? 0 : productionRunsIndex);
+context.put("productionRunsSize", (productionRunsSize == null)? defaultSize : productionRunsSize);
+
+disassemblyIndex = parameters.get("disassemblyIndex");
+disassemblySize = parameters.get("disassemblySize");
+context.put("disassemblyIndex", (disassemblyIndex == null)? 0 : disassemblyIndex);
+context.put("disassemblySize", (disassemblySize == null)? defaultSize : disassemblySize);

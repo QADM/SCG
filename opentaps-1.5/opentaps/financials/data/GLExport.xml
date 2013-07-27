@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) Open Source Strategies, Inc.
+ *
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+ *  
+-->
+
+<entity-engine-xml>
+	<DataResource dataResourceId="QBXML.JournalEntry" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
+	<ElectronicText dataResourceId="QBXML.JournalEntry">
+		<textData>
+<![CDATA[
+<JournalEntryAddRq requestID="${acctgTrans.acctgTransId?if_exists}">
+<JournalEntryAdd>
+<TxnDate>${acctgTrans.transactionDate?string("yyyy-MM-dd")}</TxnDate>
+<Memo>${acctgTrans.acctgTransId}</Memo>
+<#list acctgTransEntries as acctgTransEntry>
+<#if acctgTransEntry.debitCreditFlag == "D"><JournalDebitLine><#else><JournalCreditLine></#if><#assign mappedGlAccountId = glAccountMapping.get(acctgTransEntry.getString("glAccountId"))>
+<AccountRef><ListID>${mappedGlAccountId}</ListID></AccountRef>
+<Amount>${acctgTransEntry.amount?string("0.00")}</Amount>
+<Memo>${acctgTransEntry.acctgTransId} - ${acctgTransEntry.acctgTransEntrySeqId}</Memo>
+<#if externalAccountParties.get(mappedGlAccountId)?has_content><EntityRef><FullName>${externalAccountParties.get(mappedGlAccountId)}</FullName></EntityRef></#if>
+<#if acctgTransEntry.debitCreditFlag == "D"></JournalDebitLine><#else></JournalCreditLine></#if>
+</#list>
+</JournalEntryAdd>
+</JournalEntryAddRq>
+]]>
+		</textData>
+	</ElectronicText>
+	<Content contentId="QBXML.JournalEntry" contentTypeId="DOCUMENT" dataResourceId="QBXML.JournalEntry"/>
+	
+    <EntitySync entitySyncId="exportGL" runStatusId="ESR_NOT_STARTED" syncSplitMillis="31536000000" targetServiceName="exportGLToFile" keepRemoveInfoHours="24"
+        lastSuccessfulSynchTime="2005-01-01 00:00:00.000"/>
+    <EntitySyncInclude entitySyncId="exportGL" entityOrPackage="AcctgTrans" applEnumId="ESIA_INCLUDE"/>
+</entity-engine-xml>

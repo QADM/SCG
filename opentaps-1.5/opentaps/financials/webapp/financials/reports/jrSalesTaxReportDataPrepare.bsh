@@ -1,0 +1,109 @@
+/*
+ * Copyright (c) Open Source Strategies, Inc.
+ *
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
+import javolution.util.FastList;
+import javolution.util.FastMap;
+import org.ofbiz.base.util.UtilDateTime;
+import org.ofbiz.base.util.UtilHttp;
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.content.report.*;
+import org.ofbiz.entity.Delegator;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.entity.model.DynamicViewEntity;
+import org.ofbiz.entity.model.ModelKeyMap;
+import org.ofbiz.entity.util.*;
+import org.opentaps.common.reporting.etl.UtilEtl;
+import org.opentaps.common.util.UtilCommon;
+import org.opentaps.common.util.UtilMessage;
+
+ Delegator delegator = (Delegator) request.getAttribute("delegator");
+ locale = UtilHttp.getLocale(request.getSession());
+ timeZone = UtilCommon.getTimeZone(request);
+ uiLabelMap = UtilMessage.getUiLabels(locale);
+
+ organizationPartyId = UtilCommon.getOrganizationPartyId(request);
+ fromDateString = UtilCommon.getParameter(request, "fromDate");
+ thruDateString = UtilCommon.getParameter(request, "thruDate");
+ currencyUomId = UtilCommon.getParameter(request, "currencyUomId");
+ fromDate = null;
+ thruDate = null;
+
+ DateFormat dayOfMonthFmt = new SimpleDateFormat("dd");
+ DateFormat monthOfYearFmt = new SimpleDateFormat("MM");
+ DateFormat yearNumberFmt = new SimpleDateFormat("yyyy");
+
+ // start and end date dimension id of a period
+ periodStart = null;
+ periodEnd = null;
+
+ try {
+     fromDate = UtilDateTime.getDayStart(UtilDateTime.stringToTimeStamp(fromDateString, UtilDateTime.getDateFormat(locale), timeZone, locale), timeZone, locale);
+     dayOfMonth = dayOfMonthFmt.format(fromDate);
+     monthOfYear = monthOfYearFmt.format(fromDate);
+     yearNumber = yearNumberFmt.format(fromDate);
+
+     dateDimConditions = new EntityConditionList(UtilMisc.toList(
+             new EntityExpr("dayOfMonth", EntityOperator.EQUALS, dayOfMonth),
+             new EntityExpr("monthOfYear", EntityOperator.EQUALS, monthOfYear),
+             new EntityExpr("yearNumber", EntityOperator.EQUALS, yearNumber)
+             ), EntityOperator.AND);
+     periodStart = UtilEtl.lookupDimension("DateDim", "dateDimId", dateDimConditions, delegator);
+
+ } catch (ParseException) {
+     if (UtilValidate.isNotEmpty(fromDateString)) {
+         UtilMessage.addError(request, "FinancialsError_IllegalDateFormat", UtilMisc.toMap("fieldName", uiLabelMap.get("CommonFromDate")));
+         return "error";
+     }
+ }
+
+ try {
+     thruDate = UtilDateTime.getDayEnd(UtilDateTime.stringToTimeStamp(thruDateString, UtilDateTime.getDateFormat(locale), timeZone, locale), timeZone, locale);
+
+     dayOfMonth = dayOfMonthFmt.format(thruDate);
+     monthOfYear = monthOfYearFmt.format(thruDate);
+     yearNumber = yearNumberFmt.format(thruDate);
+
+     dateDimConditions = new EntityConditionList(UtilMisc.toList(
+             new EntityExpr("dayOfMonth", EntityOperator.EQUALS, dayOfMonth),
+             new EntityExpr("monthOfYear", EntityOperator.EQUALS, monthOfYear),
+             new EntityExpr("yearNumber", EntityOperator.EQUALS, yearNumber)
+             ), EntityOperator.AND);
+     periodEnd = UtilEtl.lookupDimension("DateDim", "dateDimId", dateDimConditions, delegator);
+
+ } catch (ParseException) {
+     if (UtilValidate.isNotEmpty(thruDateString)) {
+         UtilMessage.addError(request, "FinancialsError_IllegalDateFormat", UtilMisc.toMap("fieldName", uiLabelMap.get("CommonThruDate")));
+         return "error";
+     }
+ }
+
+ HashMap jrParameters = new HashMap();
+ jrParameters.put("organizationPartyId", organizationPartyId);
+ jrParameters.put("fromDate", fromDate);
+ jrParameters.put("thruDate", thruDate);
+ jrParameters.put("periodStart", periodStart);
+ jrParameters.put("periodEnd", periodEnd);
+ jrParameters.put("currencyUomId", currencyUomId);
+ request.setAttribute("jrParameters", jrParameters);
+ return "success";
+

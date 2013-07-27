@@ -1,0 +1,31 @@
+/*
+ * Copyright (c) Open Source Strategies, Inc.
+ * 
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+ */
+ 
+ import org.ofbiz.base.util.*;
+ import org.ofbiz.entity.condition.*;
+ import org.opentaps.common.util.UtilCommon;
+ 
+ timeZone = UtilCommon.getTimeZone(request);
+ 
+ // the inventory transfers will always be transferred from other facilities to the current facility
+transferFromFacilities = delegator.findByAnd("Facility", UtilMisc.toList(new EntityExpr("facilityId", EntityOperator.NOT_EQUAL, parameters.get("facilityId"))));
+context.put("facilities", transferFromFacilities);
+context.put("productionFacilityId", parameters.get("facilityId"));
+ 
+ // default is over the next week
+context.put("fromDate", UtilDateTime.getDayStart(UtilDateTime.nowTimestamp(), timeZone, locale));
+context.put("thruDate", UtilDateTime.getDayEnd(UtilDateTime.nowTimestamp(), 7, timeZone, locale));

@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Estado de Situacion Financiera" pageWidth="792" pageHeight="612" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="721" leftMargin="43" rightMargin="28" topMargin="28" bottomMargin="28" whenResourceMissingType="Empty">
+	<property name="net.sf.jasperreports.export.xls.exclude.origin.band.1" value="pageFooter"/>
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="38"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="organizationPartyId" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="organizationName" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="fromDate" class="java.sql.Timestamp" isForPrompting="false"/>
+	<parameter name="thruDate" class="java.sql.Timestamp" isForPrompting="false"/>
+	<parameter name="fiscalTypeLeft" class="java.lang.String"/>
+	<parameter name="fiscalTypeRight" class="java.lang.String"/>
+	<parameter name="accountingTags" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="totalActivosTo" class="java.math.BigDecimal"/>
+	<parameter name="totalActivosFrom" class="java.math.BigDecimal"/>
+	<parameter name="totalActivosComp" class="java.math.BigDecimal"/>
+	<parameter name="totalNoActivosTo" class="java.math.BigDecimal"/>
+	<parameter name="totalNoActivosFrom" class="java.math.BigDecimal"/>
+	<parameter name="totalNoActivosComp" class="java.math.BigDecimal"/>
+	<field name="accountCode" class="java.lang.String"/>
+	<field name="accountName" class="java.lang.String"/>
+	<field name="accountType" class="java.lang.String"/>
+	<field name="accountBalance" class="java.lang.Number"/>
+	<field name="accountBalanceRight" class="java.lang.Number"/>
+	<field name="accountBalanceLeft" class="java.lang.Number"/>
+	<variable name="AccountTypeTotal" class="java.math.BigDecimal" resetType="Group" resetGroup="AccountType" calculation="Sum">
+		<variableExpression><![CDATA[$F{accountBalance}]]></variableExpression>
+		<initialValueExpression><![CDATA[BigDecimal.ZERO]]></initialValueExpression>
+	</variable>
+	<variable name="accountBalanceLeft_1" class="java.math.BigDecimal" resetType="Group" resetGroup="AccountType" calculation="Sum">
+		<variableExpression><![CDATA[$F{accountBalanceLeft}]]></variableExpression>
+	</variable>
+	<variable name="accountBalanceRight_1" class="java.math.BigDecimal" resetType="Group" resetGroup="AccountType" calculation="Sum">
+		<variableExpression><![CDATA[$F{accountBalanceRight}]]></variableExpression>
+	</variable>
+	<group name="AccountType">
+		<groupExpression><![CDATA[$F{accountType}]]></groupExpression>
+		<groupHeader>
+			<band/>
+		</groupHeader>
+		<groupFooter>
+			<band height="18">
+				<textField isBlankWhenNull="true">
+					<reportElement x="0" y="2" width="391" height="16"/>
+					<textElement lineSpacing="Single">
+						<font size="9" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="false"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{accountType}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.000;-#,##0.000" isBlankWhenNull="true">
+					<reportElement x="611" y="2" width="110" height="16"/>
+					<textElement textAlignment="Right" lineSpacing="Single">
+						<font size="9" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{AccountTypeTotal}]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement x="0" y="0" width="721" height="1"/>
+				</line>
+				<textField pattern="#,##0.000;-#,##0.000" isBlankWhenNull="true">
+					<reportElement x="401" y="2" width="100" height="16"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle" lineSpacing="Single">
+						<font size="9" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{accountBalanceLeft_1}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.000;-#,##0.000" isBlankWhenNull="true">
+					<reportElement x="501" y="1" width="110" height="17"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle" lineSpacing="Single">
+						<font isBold="true" pdfFontName="DejaVuSans-Bold.ttf" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{accountBalanceRight_1}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band height="104">
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="721" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
+					<font size="11" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[($P{organizationName} + " (" + $P{organizationPartyId} +")")]]></textFieldExpression>
+			</textField>
+			<elementGroup/>
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="20" width="721" height="16"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" lineSpacing="Single">
+					<font isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsComparativeBalanceSheet}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="0" y="76" width="721" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
+					<font pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{accountingTags}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="56" width="721" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single"/>
+				<text><![CDATA[(En miles de pesos)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="252" y="36" width="29" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single"/>
+				<text><![CDATA[Del]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="281" y="36" width="80" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single"/>
+				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$P{fromDate}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="361" y="36" width="30" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single"/>
+				<text><![CDATA[Al]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="391" y="36" width="100" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single"/>
+				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$P{thruDate}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band/>
+	</pageHeader>
+	<columnHeader>
+		<band height="33">
+			<textField pattern="M/d/yy" isBlankWhenNull="true">
+				<reportElement x="391" y="1" width="110" height="16"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" lineSpacing="Single">
+					<font size="9" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$P{fromDate}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="391" y="17" width="110" height="16"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" lineSpacing="Single">
+					<font isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{fiscalTypeLeft}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="501" y="17" width="110" height="16"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" lineSpacing="Single">
+					<font isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{fiscalTypeRight}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="611" y="17" width="110" height="16"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" lineSpacing="Single">
+					<font isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$R{OpentapsDifference}]]></textFieldExpression>
+			</textField>
+			<textField pattern="M/d/yy" isBlankWhenNull="true">
+				<reportElement x="501" y="1" width="110" height="16"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" lineSpacing="Single">
+					<font size="9" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$P{thruDate}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="17" width="391" height="16"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$R{AccountingAccount}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="16">
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="75" height="16"/>
+				<textElement verticalAlignment="Middle" lineSpacing="Single">
+					<font size="9" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{accountCode}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.000;-#,##0.000" isBlankWhenNull="true">
+				<reportElement x="611" y="0" width="110" height="16"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" lineSpacing="Single">
+					<font size="9" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[($F{accountBalance} == null ? BigDecimal.ZERO : $F{accountBalance})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.000;-#,##0.000" isBlankWhenNull="true">
+				<reportElement x="501" y="0" width="110" height="16"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" lineSpacing="Single">
+					<font size="9" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[($F{accountBalanceRight} == null ? BigDecimal.ZERO : $F{accountBalanceRight})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.000;-#,##0.000" isBlankWhenNull="true">
+				<reportElement x="391" y="0" width="110" height="16"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" lineSpacing="Single">
+					<font size="9" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[($F{accountBalanceLeft} == null ? BigDecimal.ZERO : $F{accountBalanceLeft})]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="75" y="0" width="316" height="16"/>
+				<textElement verticalAlignment="Middle" lineSpacing="Single">
+					<font size="9" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{accountName}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band height="23">
+			<textField>
+				<reportElement x="281" y="0" width="80" height="16"/>
+				<textElement textAlignment="Right" lineSpacing="Single">
+					<font size="9" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$R{CommonPage}+" "+$V{PAGE_NUMBER}+" "+$R{OpentapsOf}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="361" y="0" width="40" height="16"/>
+				<textElement lineSpacing="Single">
+					<font size="9" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="40">
+			<rectangle>
+				<reportElement x="0" y="0" width="721" height="40"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="107" y="20" width="81" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
+					<font size="9" isBold="true" isItalic="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Total Activos]]></text>
+			</staticText>
+			<textField pattern="M/d/yy">
+				<reportElement x="188" y="0" width="100" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single"/>
+				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$P{fromDate}]]></textFieldExpression>
+			</textField>
+			<textField pattern="M/d/yy">
+				<reportElement x="288" y="0" width="100" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single"/>
+				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$P{thruDate}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="388" y="20" width="133" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
+					<font size="9" isBold="true" isItalic="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Total Pasivo y Patrimonio]]></text>
+			</staticText>
+			<textField pattern="#,##0.000;(-#,##0.000)">
+				<reportElement x="288" y="20" width="97" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" lineSpacing="Single">
+					<font size="9" pdfFontName="DejaVuSans-Bold.ttf" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$P{totalActivosTo}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.000;(-#,##0.000)">
+				<reportElement x="188" y="20" width="97" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" lineSpacing="Single">
+					<font isBold="true" pdfFontName="DejaVuSans-Bold.ttf" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$P{totalActivosFrom}]]></textFieldExpression>
+			</textField>
+			<textField pattern="M/d/yy">
+				<reportElement x="521" y="0" width="100" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single"/>
+				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$P{fromDate}]]></textFieldExpression>
+			</textField>
+			<textField pattern="M/d/yy">
+				<reportElement x="621" y="0" width="100" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single"/>
+				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$P{thruDate}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.000;(-#,##0.000)">
+				<reportElement x="621" y="20" width="97" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" lineSpacing="Single">
+					<font size="9" pdfFontName="DejaVuSans-Bold.ttf" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$P{totalNoActivosTo}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.000;(-#,##0.000)">
+				<reportElement x="521" y="20" width="97" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" lineSpacing="Single">
+					<font pdfFontName="DejaVuSans-Bold.ttf" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$P{totalNoActivosFrom}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

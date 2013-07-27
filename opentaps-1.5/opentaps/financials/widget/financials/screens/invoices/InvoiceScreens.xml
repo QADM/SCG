@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) Open Source Strategies, Inc.
+ *
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  @author Leon Torres (leon@opensourcestrategies.com)
+-->
+
+<!-- This file contains all the invoice specific screens for the various types of invoices, such as find and view invoice. -->
+
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/widget-screen.xsd">
+
+    <!-- This screen captures the common layout of the find and list invoices screens. -->
+    <screen name="findAndListInvoices">
+        <section>
+            <actions>
+                <java location="com.opensourcestrategies.financials.invoice.InvoiceActions" invoke="findInvoices"/>
+            </actions>
+            <widgets>
+                <frame-container title="${findFormTitle}">
+                  <platform-specific><html>
+                    <html-template location="component://financials/webapp/financials/invoices/findInvoices.ftl"/>
+                  </html></platform-specific>
+                </frame-container>
+                <platform-specific>
+                    <html><html-template location="component://financials/webapp/financials/invoices/listInvoices.ftl"/></html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="findSalesInvoices">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="FinancialsFindSalesInvoices"/>
+                <set field="invoiceTypeId" value="SALES_INVOICE"/>
+                <set field="formTarget" value="findSalesInvoices"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="component://financials/widget/financials/screens/receivables/ReceivablesScreens.xml">
+                    <decorator-section name="section-body">
+                        <include-screen name="findAndListInvoices"/>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="findFinanceCharges">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="FinancialsFindFinanceCharges"/>
+                <set field="invoiceTypeId" value="INTEREST_INVOICE"/>
+                <set field="formTarget" value="findFinanceCharges"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="component://financials/widget/financials/screens/receivables/ReceivablesScreens.xml">
+                    <decorator-section name="section-body">
+                        <include-screen name="findAndListInvoices"/>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="findPurchaseInvoices">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="FinancialsFindPurchaseInvoices"/>
+                <set field="invoiceTypeId" value="PURCHASE_INVOICE"/>
+                <set field="formTarget" value="findPurchaseInvoices"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="component://financials/widget/financials/screens/payables/PayablesScreens.xml">
+                    <decorator-section name="section-body">
+                        <include-screen name="findAndListInvoices"/>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="findCustomerReturnInvoices">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="FinancialsFindCustomerReturnInvoices"/>
+                <set field="invoiceTypeId" value="CUST_RTN_INVOICE"/>
+                <set field="formTarget" value="findCustomerReturnInvoices"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="component://financials/widget/financials/screens/payables/PayablesScreens.xml">
+                    <decorator-section name="section-body">
+                        <include-screen name="findAndListInvoices"/>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="findCommissionInvoices">
+        <section>
+            <actions>
+                <set field="invoiceTypeId" value="COMMISSION_INVOICE"/>
+                <set field="formTarget" value="findCommissionInvoices"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="component://financials/widget/financials/screens/payables/PayablesScreens.xml">
+                    <decorator-section name="section-body">
+                        <include-screen name="findAndListInvoices"/>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+     <screen name="findPartnerInvoices">
+        <section>
+            <actions>
+                <set field="invoiceTypeId" value="PARTNER_INVOICE"/>
+                <set field="formTarget" value="findPartnerInvoices"/>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/partners/getPartnersForOrganization.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="component://financials/widget/financials/screens/partners/PartnerScreens.xml">
+                    <decorator-section name="section-body">
+                        <include-screen name="findAndListInvoices"/>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- This is probably the best way to create a view screen that is common across several tabs.  One weakness with this approachs is that the Invoice not found error page is generic, because we don't know what tab unless the invoice exists. -->
+    <screen name="viewInvoice">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="AccountingInvoice"/>
+                <set field="invoiceId" from-field="parameters.invoiceId"/>
+                <set field="gwtScripts[]" value="financialsgwt/org.opentaps.gwt.financials.invoices.invoices" global="true"/>
+                <java location="com.opensourcestrategies.financials.invoice.InvoiceActions" invoke="viewInvoice"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="${decoratorLocation}">
+                    <decorator-section name="section-body">
+                        <platform-specific><html>
+                            <html-template location="component://financials/webapp/financials/invoices/viewInvoice.ftl"/>
+                        </html></platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="createInvoiceForm">
+        <section>
+            <actions>
+                <set field="invoiceTypeId" from-field="parameters.invoiceTypeId"/>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/invoices/createInvoiceForm.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="${decoratorLocation}">
+                    <decorator-section name="section-body">
+                        <section>
+                            <condition>
+                                <or>
+                                    <if-has-permission permission="FINANCIALS_AP" action="_INCRTE"/>
+                                    <if-has-permission permission="FINANCIALS_AR" action="_INCRTE"/>
+                                </or>
+                            </condition>
+                            <widgets>
+                                <platform-specific><html>
+                                    <html-template location="component://financials/webapp/financials/invoices/createInvoiceForm.ftl"/>
+                                </html></platform-specific>
+                            </widgets>
+                            <fail-widgets>
+                                <include-screen name="PermissionErrorScreen" location="component://financials/widget/financials/screens/common/CommonScreens.xml"/>
+                            </fail-widgets>
+                        </section>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="updateInvoiceItemForm">
+        <section>
+            <actions>
+                <set field="invoiceId" from-field="parameters.invoiceId"/>
+                <java location="com.opensourcestrategies.financials.invoice.InvoiceActions" invoke="viewInvoice"/>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/invoices/updateInvoiceItem.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="${decoratorLocation}">
+                    <decorator-section name="section-body">
+                        <section>
+                            <condition>
+                                <or>
+                                    <if-has-permission permission="FINANCIALS_AP" action="_INUPDT"/>
+                                    <if-has-permission permission="FINANCIALS_AR" action="_INUPDT"/>
+                                </or>
+                            </condition>
+                            <widgets>
+                                <platform-specific><html>
+                                    <html-template location="component://financials/webapp/financials/invoices/createOrUpdateInvoiceItem.ftl"/>
+                                </html></platform-specific>
+                            </widgets>
+                            <fail-widgets>
+                                <include-screen name="PermissionErrorScreen" location="component://financials/widget/financials/screens/common/CommonScreens.xml"/>
+                            </fail-widgets>
+                        </section>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="emailInvoice">
+        <section>
+            <actions>
+                <set field="invoiceId" from-field="parameters.invoiceId"/>
+                <java location="com.opensourcestrategies.financials.invoice.InvoiceActions" invoke="viewInvoice"/>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/invoices/emailInvoice.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="${decoratorLocation}">
+                    <decorator-section name="section-body">
+                        <platform-specific><html>
+                            <html-template location="component://financials/webapp/financials/invoices/emailInvoice.ftl"/>
+                        </html></platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="SampleInvoicePDF">
+        <section>
+            <actions>
+                <!-- 
+                <set field="defaultFontFamily" value="DejaVuSans"/>
+                -->
+                <set field="organizationPartyId" from-field="parameters.organizationPartyId"/>
+                <set field="invoiceId" from-field="parameters.invoiceId"/>
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/includes/macro-setup.bsh"/>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/invoices/viewInvoicePDF.bsh"/>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html><html-template location="component://financials/webapp/financials/invoices/sampleInvoice.fo.ftl"/></html>
+                </platform-specific>                
+            </widgets>
+        </section>
+    </screen>
+
+</screens>

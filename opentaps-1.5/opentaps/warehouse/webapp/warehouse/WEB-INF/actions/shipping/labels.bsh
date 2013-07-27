@@ -1,0 +1,52 @@
+/*
+ * Copyright (c) Open Source Strategies, Inc.
+ * 
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.entity.condition.*;
+import javolution.util.FastList;
+import javolution.util.FastMap;
+import org.ofbiz.base.util.UtilValidate;
+import org.opentaps.warehouse.shipment.ShippingHelper;
+
+// make a list builder of segments to be printed
+
+labelsListBuilder() {
+  entityName = "ShipmentPackageRouteDetail";
+  where = ShippingHelper.printLabelsConditions();
+  orderBy = UtilMisc.toList("shipmentId", "shipmentRouteSegmentId", "shipmentPackageSeqId");
+
+  build(page) {
+      newPage = FastList.newInstance();
+      for (row : page) {
+          newRow = FastMap.newInstance();
+          newRow.putAll(row.getAllFields());
+          carrier = delegator.findByPrimaryKeyCache("PartyGroup", UtilMisc.toMap("partyId", row{"carrierPartyId"}));
+          if (UtilValidate.isNotEmpty(carrier)) {
+            newRow{"carrierName"} = carrier{"groupName"};
+            shipmethod = delegator.findByPrimaryKeyCache("ShipmentMethodType", UtilMisc.toMap("shipmentMethodTypeId", row{"shipmentMethodTypeId"}));
+            if (shipmethod != null) {
+                newRow{"shipmentMethod"} = shipmethod{"description"};
+            }
+          newPage.add(newRow);
+          }
+      }
+      return newPage;
+  }
+  
+  return this;
+}
+context{"labelsListBuilder"} = labelsListBuilder();

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * Copyright (c) Open Source Strategies, Inc.
+ *
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<simple-methods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/simple-methods.xsd">    
+    <!-- create a new GlAccountTypeDefault -->
+    <simple-method method-name="createGlAccountTypeDefault" short-description="Create an GlAccountTypeDefault">
+        <make-value value-field="newEntity" entity-name="GlAccountTypeDefault"/>
+        <set-pk-fields map="parameters" value-field="newEntity"/>
+        <set-nonpk-fields map="parameters" value-field="newEntity"/>
+        <create-value value-field="newEntity"/>
+        <check-errors/>
+    </simple-method>
+
+    <!-- update an existing GlAccountTypeDefault -->
+    <simple-method method-name="updateGlAccountTypeDefault" short-description="Update an existing GlAccountTypeDefault">
+        <entity-one entity-name="GlAccountTypeDefault" value-field="glAccountTypeDefault" auto-field-map="true"/>
+        <check-errors/>
+        <set-nonpk-fields map="parameters" value-field="glAccountTypeDefault"/>
+        <store-value value-field="glAccountTypeDefault"/>
+        <check-errors/>
+    </simple-method>
+
+    <!-- update an existing PaymentMethod -->
+    <simple-method method-name="updatePaymentMethod" short-description="Update an existing PaymentMethod's">
+        <entity-one entity-name="PaymentMethod" value-field="paymentMethod" auto-field-map="true"/>
+        <check-errors/>
+        <set-nonpk-fields map="parameters" value-field="paymentMethod"/>
+        <if-not-empty field="parameters.expirePaymentMethod">
+           <now-timestamp field="paymentMethod.thruDate"/>
+        </if-not-empty>
+        <store-value value-field="paymentMethod"/>
+        <check-errors/>
+    </simple-method>
+
+    <!-- create a new PaymentMethod -->
+    <simple-method method-name="createPaymentMethod" short-description="Create new PaymentMethod">
+        <make-value value-field="newEntity" entity-name="PaymentMethod"/>
+        <set-nonpk-fields map="parameters" value-field="newEntity"/>
+        <sequenced-id sequence-name="PaymentMethod" field="paymentMethodId"/>
+        <set from-field="paymentMethodId" field="newEntity.paymentMethodId"/>
+        <field-to-result field="paymentMethodId" result-name="paymentMethodId"/>
+        <if-empty field="newEntity.fromDate">
+            <now-timestamp field="newEntity.fromDate"/>
+        </if-empty>
+        <create-value value-field="newEntity"/>
+        <check-errors/>
+    </simple-method>
+</simple-methods>

@@ -1,0 +1,146 @@
+/*
+ * Copyright (c) Open Source Strategies, Inc.
+ *
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+ *  
+ *  @author Leon Torres (leon@opensourcestrategies.com
+ */
+
+import org.ofbiz.entity.util.*;
+import org.ofbiz.base.util.*;
+import org.ofbiz.service.*;
+import org.opentaps.common.util.UtilMessage;
+import org.opentaps.common.util.UtilCommon;
+import org.opentaps.common.util.UtilAccountingTags;
+import javolution.util.FastList;
+
+timeZone = UtilCommon.getTimeZone(request);
+
+//put to history
+context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.getUiLabels(locale).get("EdoAnaliticoActivo"), null, FastList.newInstance());
+
+//Datos Principales
+dateOption = UtilCommon.getParameter(request, "reportDateOption");
+customTimePeriodId = UtilCommon.getParameter(request,"customTimePeriodId");
+organizationPartyId = UtilCommon.getParameter(request,"organizationPartyId");
+glFiscalTypeId = context.get("glFiscalTypeId");
+asOfDate = context.get("asOfDate");
+organizationPartyId = context.get("organizationPartyId");
+locale = UtilHttp.getLocale(request);
+timeZone = UtilHttp.getTimeZone(request);
+
+if (dateOption == null) {
+    return;
+}
+
+input = UtilMisc.toMap("organizationPartyId", organizationPartyId);
+input.put("userLogin", userLogin);
+
+if (dateOption.equals("byDate")) {
+
+	if(asOfDate == null)
+	return;
+
+    asOfDateTime = UtilDateTime.getDayEnd(asOfDate, timeZone, locale);
+    asOfDateBeforeTime = UtilDateTime.addDaysToTimestamp(asOfDateTime, -365);
+    asOfDateBeforeTime = UtilDateTime.getYearEnd(asOfDateBeforeTime, timeZone, locale);
+    request.setAttribute("fromDate", asOfDateBeforeTime);
+    request.setAttribute("thruDate", asOfDateTime);        
+    
+    /**
+     * Estos datos se enviaran al servicio qeu buscar las transacciones (debito y credito) de cada cuenta
+     */
+    asOfDateInicioAnio = UtilDateTime.getYearStart(asOfDate, timeZone, locale);
+    context.put("fecIni", asOfDateInicioAnio);
+    context.put("fecFin", asOfDateTime);	
+    
+    fromDate = asOfDateBeforeTime;
+    thruDate = asOfDateTime;
+
+} else if(dateOption.equals("byTimePeriod")){
+	
+	input.put("thruCustomTimePeriodId", customTimePeriodId);
+	
+	resultPeriod = dispatcher.runSync("obtenPeriodoAnterior", dispatcher.getDispatchContext().makeValidContext("obtenPeriodoAnterior", ModelService.IN_PARAM, context));
+	input.put("fromCustomTimePeriodId", resultPeriod.get("customPeriodFromId")); 
+	
+	/**
+	 * Estos datos se enviaran al servicio qeu busca las transacciones (debito y credito) de cada cuenta
+	 */
+	 
+	 print("Periodo resultado "+resultPeriod);
+	
+	if(resultPeriod.get("thruDate") != null){
+	
+		fecIni = UtilDateTime.getTimestamp(((Date) resultPeriod.get("thruDate")).getTime());
+	
+	} else {
+	
+		fecIni = UtilDateTime.toTimestamp(1, 1, 1980, 0, 0, 0);
+	
+	}
+	
+	GenericValue periodoFinal = delegator.findByPrimaryKey("CustomTimePeriod", UtilMisc.toMap("customTimePeriodId", customTimePeriodId));
+	fecFin = periodoFinal.getDate("thruDate");
+	 
+	fecFinTimeSt = UtilDateTime.getTimestamp(fecFin.getTime());
+	 
+	context.put("fecIni", fecIni);
+	context.put("fecFin", fecFinTimeSt);
+	
+	//Se setean las fechas 
+	context.put("fromDate", fecIni);
+	context.put("thruDate", fecFinTimeSt); 
+	
+	fromDate = fecIni;
+    thruDate = fecFinTimeSt;
+
+}
+
+// Make sure the asOfDate is the end-of-day for the two dates
+fromDate = UtilDateTime.getDayEnd(fromDate, timeZone, locale);
+thruDate = UtilDateTime.getDayEnd(thruDate, timeZone, locale);
+
+input.put("fromDate", fromDate);
+input.put("thruDate", thruDate);
+input.put("opcionBusca","BUSCAACTIVO");
+
+// add tags from the request to the service parameters
+UtilAccountingTags.addTagParameters(request, input);
+
+result = dispatcher.runSync("getComparativeSituacionFinanciera", input);
+if (ServiceUtil.isError(result)) return;
+
+// put everything into the context
+context.put("assetAccounts", EntityUtil.orderBy(result.get("assetAccountBalances").keySet(), UtilMisc.toList("glAccountId")));
+context.put("assetAccountBalances", result.get("assetAccountBalances"));
+
+context.put("fromDateAccountBalances", result.get("fromDateAccountBalances"));
+context.put("thruDateAccountBalances", result.get("thruDateAccountBalances"));
+context.put("fromDate", fromDate);
+context.put("thruDate", thruDate);
+
+
+//Buscamos las transacciones para obtener creditos y debitos
+input1 = UtilMisc.toMap("organizationPartyId", organizationPartyId,"glFiscalTypeId",glFiscalTypeId,"fecIni",fromDate,"fecFin",thruDate,
+							"assetAccountBalances",result.get("assetAccountBalances"),"userLogin", userLogin);
+resultsTrans = dispatcher.runSync("agregarTransacciones", dispatcher.getDispatchContext().makeValidContext("agregarTransacciones", ModelService.IN_PARAM, input1));
+context.put("cuentasDebito",resultsTrans.get("cuentasDebito"));
+context.put("cuentasCredito",resultsTrans.get("cuentasCredito"));
+
+// put the correct GlFiscalTypes into the context for the display tier
+fromGlFiscalType = delegator.findByPrimaryKey("GlFiscalType", UtilMisc.toMap("glFiscalTypeId", glFiscalTypeId));
+toGlFiscalType = delegator.findByPrimaryKey("GlFiscalType", UtilMisc.toMap("glFiscalTypeId", glFiscalTypeId));
+context.put("fromGlFiscalType", fromGlFiscalType);
+context.put("toGlFiscalType", toGlFiscalType);

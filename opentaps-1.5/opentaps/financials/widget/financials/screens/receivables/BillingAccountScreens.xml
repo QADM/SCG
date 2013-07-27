@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) Open Source Strategies, Inc.
+ *
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  @author Leon Torres (leon@opensourcestrategies.com)
+-->
+
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/widget-screen.xsd">
+
+    <!-- This is no longer used but left here for backward compatibility in case somebody has a customized version that points to it.  It may be removed at some future date.  -->
+    <screen name="createCustomerBillAcctForm">
+        <section>
+            <actions>
+                <set field="organizationPartyId" from-field="parameters.organizationPartyId"/> <!-- for the ftl -->
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="component://financials/widget/financials/screens/receivables/ReceivablesScreens.xml">
+                    <decorator-section name="section-body">
+                        <container style="screenlet">
+                            <container style="screenlet-header">
+                                <label style="boxhead" text="${uiLabelMap.FinancialsCreateCustomerBillingAccount}"/>
+                            </container>
+                            <container style="screenlet-body">
+                                <include-form name="createCustomerBillingAccount" location="component://financials/widget/financials/forms/receivables/BillingAccountForms.xml"/>
+                            </container>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>       
+    </screen>
+
+    <screen name="findCustomerBillAcct">
+        <section>
+            <actions>
+            	<set field="viewIndex" from-field="parameters.VIEW_INDEX" type="Integer" default-value="0"/>
+                <set field="viewSize" from-field="parameters.VIEW_SIZE" type="Integer" default-value="20"/>
+            	
+                <script location="component://financials/webapp/financials/WEB-INF/actions/receivables/findCustomerBillAcct.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="component://financials/widget/financials/screens/receivables/ReceivablesScreens.xml">
+                    <decorator-section name="section-body">
+                        <container style="screenlet">
+                            <container style="screenlet-header">
+                                <label style="boxhead" text="${uiLabelMap.FinancialsFindCustomerBillingAccount}"/>
+                            </container>
+                            <container style="screenlet-body">
+                                <include-form name="findCustomerBillingAccount" location="component://financials/widget/financials/forms/receivables/BillingAccountForms.xml"/>
+                            </container>
+                        </container>
+                        <include-form name="listCustomerBillingAccounts" location="component://financials/widget/financials/forms/receivables/BillingAccountForms.xml"/>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>       
+    </screen>
+
+    <screen name="viewCustomerBillAcct">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="FinancialsCustomerBillingAccount"/>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/receivables/viewCustomerBillAcct.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="component://financials/widget/financials/screens/receivables/ReceivablesScreens.xml">
+                    <decorator-section name="section-body">
+                        <container style="screenlet">
+                            <platform-specific><html>
+                                    <html-template location="component://financials/webapp/financials/receivables/viewBillingAccountMenu.ftl"/>
+                            </html></platform-specific>
+                            <container style="screenlet-body">
+                                <include-form name="EditBillingAccount" location="component://financials/widget/financials/forms/receivables/BillingAccountForms.xml"/>
+                            </container>
+                        </container>
+                        <container style="screenlet">
+                            <container style="screenlet-header">
+                                <label style="boxhead" text="${uiLabelMap.FinancialsCustomerBillingAccountTransactions}"/>
+                            </container>
+                            <container style="screenlet-body">
+                                <platform-specific>
+                                	<html>
+                                		<html-template location="component://financials/webapp/financials/receivables/billingAccountTransactions.ftl"/>
+                                	</html>
+                                </platform-specific>
+                            </container>
+                        </container>
+                        <container style="screenlet">
+                            <container style="screenlet-header">
+                                <label style="boxhead" text="${uiLabelMap.FinancialsCustomerBillingAccountApplyToInvoices}"/>
+                            </container>
+                            <container style="screenlet-body">
+                                <platform-specific>
+                                	<html>
+                                		<html-template location="component://financials/webapp/financials/receivables/billingAccountApplyToInvoices.ftl"/>
+                                	</html>
+                                </platform-specific>
+                            </container>
+                        </container>
+                        <container style="screenlet">
+                            <container style="screenlet-header">
+                                <label style="boxhead" text="${uiLabelMap.FinancialsCustomerBillingAccountOpenOrders}"/>
+                            </container>
+                            <container style="screenlet-body">
+                                <platform-specific>
+                                	<html>
+                                		<html-template location="component://financials/webapp/financials/receivables/billingAccountOpenOrders.ftl"/>
+                                	</html>
+                                </platform-specific>
+                            </container>
+                   
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>       
+    </screen>
+
+    <!-- This is no longer used but left here for backward compatibility in case somebody has a customized version that points to it.  It may be removed at some future date.  -->
+    <screen name="receiveBillingAccountPaymentForm">
+        <section>
+            <actions>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/receivables/receiveBillingAccountPaymentForm.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="component://financials/widget/financials/screens/receivables/ReceivablesScreens.xml">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html>
+                                <html-template location="component://financials/webapp/financials/receivables/receiveBillingAccountPaymentForm.ftl"/>
+                            </html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+</screens>
+

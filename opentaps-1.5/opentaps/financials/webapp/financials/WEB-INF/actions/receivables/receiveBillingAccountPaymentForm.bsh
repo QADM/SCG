@@ -1,0 +1,42 @@
+/*
+ * Copyright (c) Open Source Strategies, Inc.
+ *
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+import java.util.*;
+import org.ofbiz.entity.*;
+import org.ofbiz.entity.util.*;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.base.util.*;
+
+import com.opensourcestrategies.financials.util.UtilFinancial;
+
+billingAccountId = parameters.get("billingAccountId");
+billingAccount = delegator.findByPrimaryKey("BillingAccount", UtilMisc.toMap("billingAccountId", billingAccountId));
+context.put("billingAccount", billingAccount);
+
+// get the bill to customer party
+conditions = new EntityConditionList( UtilMisc.toList(
+      EntityUtil.getFilterByDateExpr(),
+      new EntityExpr("billingAccountId", EntityOperator.EQUALS, billingAccountId),
+      new EntityExpr("roleTypeId", EntityOperator.EQUALS, "BILL_TO_CUSTOMER")
+      ), EntityOperator.AND);
+context.put("defaultBillToParty", EntityUtil.getFirst(delegator.findByCondition("BillingAccountRole", conditions, null, null)));
+
+// currencies
+context.put("currencies", delegator.findByAndCache("Uom", UtilMisc.toMap("uomTypeId", "CURRENCY_MEASURE")));
+
+// payment methods
+context.put("paymentMethodTypes", UtilFinancial.getSimpleCustomerPaymentMethodTypes(delegator));

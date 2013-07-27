@@ -1,0 +1,57 @@
+/*
+ * Copyright (c) Open Source Strategies, Inc.
+ *
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+ *  
+ */
+
+ import java.util.Calendar;
+ import java.util.Date;
+ import org.ofbiz.base.util.UtilMisc;
+ import org.ofbiz.base.util.UtilDateTime;
+ import org.ofbiz.base.util.UtilHttp;
+ import javolution.util.FastList;
+ import org.opentaps.common.util.UtilMessage;
+ import org.opentaps.common.util.UtilCommon;
+ import org.opentaps.common.product.UtilProduct;
+ import org.opentaps.common.reporting.UtilReports;
+ 
+ locale = UtilHttp.getLocale(request);
+ timeZone = UtilCommon.getTimeZone(request);
+ 
+ organizationPartyId = UtilCommon.getOrganizationPartyId(request);
+ if (organizationPartyId == null) {
+     return;
+ }
+ 
+ //put to history
+ context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.getUiLabels(locale).get("FinancialsSalesByStoreByDayReport"), null, FastList.newInstance());
+ 
+ printers = UtilReports.enumeratePrinters();
+ if (printers != null && printers.size() > 0) {
+     context{"printers"} = printers;
+ }
+ 
+ context{"reportTypes"} = UtilReports.getJRSupportedMimeType(delegator);
+ 
+ productStores = UtilProduct.getProductStoresFromPayToPartyId(organizationPartyId, delegator);
+ context{"productStores"} = productStores;
+ 
+ context{"today"} = UtilDateTime.getDayEnd(UtilDateTime.nowTimestamp(), timeZone, locale);       
+ context{"thirtyDaysAgo"} = UtilDateTime.getDayStart(
+                                                        UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(),Calendar.DAY_OF_MONTH, -30, timeZone, locale), 
+                                                        timeZone,
+                                                        locale
+                                                    );
+         

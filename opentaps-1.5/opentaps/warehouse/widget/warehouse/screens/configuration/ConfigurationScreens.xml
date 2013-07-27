@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) Open Source Strategies, Inc.
+ *
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/widget-screen.xsd">
+
+    <screen name="main-section-decorator">
+        <section>
+            <actions>
+                <set field="sectionName" value="configuration" global="true"/>
+                <set field="sectionStyle" value="twoColumn"/>
+                <set field="requiredPermission" value="WRHS_CONFIG"/>
+            </actions>
+            <widgets>
+                <include-screen name="main-section-template" location="component://opentaps-common/widget/screens/common/CommonScreens.xml"/>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="createWarehouseForm">
+        <section>
+            <actions>
+                <!-- override the select facility screen with a form to create a warehouse -->
+                <set field="applicationSetupScreen" value="component://warehouse/widget/warehouse/screens/configuration/ConfigurationScreens.xml#createOrEditWarehouse"/>
+                <set field="pageTitleLabel" value="WarehouseCreateNewWarehouse"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <!-- No content necessary, because the main decorator will trigger createOrEditWarehouse to render instead. -->
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- combination view/edit warehouse screen -->
+    <screen name="viewWarehouse">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="WarehouseViewWarehouse"/>
+                <script location="component://product/webapp/facility/WEB-INF/actions/facility/ViewContactMechs.groovy"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="subSectionBlock">
+                            <include-screen name="createOrEditWarehouse"/>
+                        </container>
+                        <container style="subSectionBlock">
+                            <!-- TODO: use the new style as done in myProfile. -->
+                            <platform-specific>
+                                <html><html-template location="component://warehouse/webapp/warehouse/configuration/ViewContactMechs.ftl"/></html>
+                            </platform-specific>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="createOrEditWarehouse">
+        <section>
+            <actions>
+                <script location="component://warehouse/webapp/warehouse/WEB-INF/actions/configuration/createOrEditWarehouse.bsh"/>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html><html-template location="component://warehouse/webapp/warehouse/configuration/createOrEditWarehouse.ftl"/></html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="EditContactMech">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="PartyEditContactInformation"/>  
+                <script location="component://product/webapp/facility/WEB-INF/actions/facility/EditContactMech.groovy"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://warehouse/webapp/warehouse/configuration/EditContactMech.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="FindFacilityLocation">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="ProductFindLocation"/>  
+                <script location="component://product/webapp/facility/WEB-INF/actions/facility/FindFacilityLocation.groovy"/>
+                <entity-one entity-name="Facility" value-field="facility"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://warehouse/webapp/warehouse/configuration/FindFacilityLocation.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="EditFacilityLocation">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="ProductFacilityLocation"/>  
+                <script location="component://product/webapp/facility/WEB-INF/actions/facility/EditFacilityLocation.groovy"/>
+                <entity-one entity-name="Facility" value-field="facility"/> 
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://warehouse/webapp/warehouse/configuration/EditFacilityLocation.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="viewTeamMembers">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="OpentapsTeamMembers"/>  
+                <set field="sectionHeaderUiLabel" value="OpentapsTeamMembers"/>  
+                <script location="component://warehouse/webapp/warehouse/WEB-INF/actions/configuration/viewTeamMembers.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="subSectionBlock">
+                            <include-form name="ListTeamMembers" location="component://warehouse/widget/warehouse/forms/configuration/ConfigurationForms.xml"/>
+                        </container>
+                        <container style="subSectionBlock">
+                            <platform-specific>
+                                <html><html-template location="component://warehouse/webapp/warehouse/configuration/viewTeamMembers.ftl"/></html>
+                            </platform-specific>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+</screens>
