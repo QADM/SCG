@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) Open Source Strategies, Inc.
+ * 
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<entitygroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/entitygroup.xsd">
+
+    <!-- org.opentaps.amazon.order -->
+    <entity-group group="org.ofbiz" entity="AmazonOrderDocument"/>
+    <entity-group group="org.ofbiz" entity="AmazonOrder"/>
+    <entity-group group="org.ofbiz" entity="AmazonOrderItem"/>
+    <entity-group group="org.ofbiz" entity="AmazonOrderItemPriceComp"/>
+    <entity-group group="org.ofbiz" entity="AmazonOrderItemFee"/>
+    <entity-group group="org.ofbiz" entity="AmazonOrderItemFulfillment"/>
+    <entity-group group="org.ofbiz" entity="AmazonOrderItemTaxJurisdtn"/>
+    <entity-group group="org.ofbiz" entity="AmazonOrderItemTaxAmount"/>
+    <entity-group group="org.ofbiz" entity="AmazonOrderItemTaxRate"/>
+    <entity-group group="org.ofbiz" entity="AmazonOrderItemPromo"/>
+    <entity-group group="org.ofbiz" entity="AmazonOrderImport"/>
+    <entity-group group="org.ofbiz" entity="AmazonOrderItemImport"/>
+    <entity-group group="org.ofbiz" entity="AmazonOrderTaxJurisToAuth"/>
+    <entity-group group="org.ofbiz" entity="AmazonParty"/>
+
+    <!-- org.opentaps.amazon.product -->
+    <entity-group group="org.ofbiz" entity="AmazonProduct"/>
+    <entity-group group="org.ofbiz" entity="AmazonProductSearchTerms"/>
+    <entity-group group="org.ofbiz" entity="AmazonProductUsedFor"/>
+    <entity-group group="org.ofbiz" entity="AmazonProductTargetAudience"/>
+    <entity-group group="org.ofbiz" entity="AmazonProductBulletPoint"/>
+    <entity-group group="org.ofbiz" entity="ViewAmazonProducts"/>
+    <entity-group group="org.ofbiz" entity="AmazonProductPrice"/>
+    <entity-group group="org.ofbiz" entity="AmazonProductImage"/>
+    <entity-group group="org.ofbiz" entity="AmazonProductImageAck"/>
+    <entity-group group="org.ofbiz" entity="AmazonProductImageAndAck"/>
+    <entity-group group="org.ofbiz" entity="AmazonProductInventory"/>
+    <entity-group group="org.ofbiz" entity="AmazonProductFeedProcessing"/>
+    <entity-group group="org.ofbiz" entity="AmazonProductBrowseNode"/>
+    <entity-group group="org.ofbiz" entity="AmazonProductItemType"/>
+    <entity-group group="org.ofbiz" entity="AmazonProductOtherItemAttr"/>
+    <entity-group group="org.ofbiz" entity="AmazonNodeMappingType"/>
+    <entity-group group="org.ofbiz" entity="AmazonNodeValidAttribute"/>
+    <entity-group group="org.ofbiz" entity="AmazonUsedForValue"/>
+    <entity-group group="org.ofbiz" entity="AmazonTargetAudienceValue"/>
+    <entity-group group="org.ofbiz" entity="AmazonOtherItemAttrValue"/>
+
+    <!-- org.opentaps.amazon.sync -->
+    <entity-group group="org.ofbiz" entity="AmazonBatchUpdateHistory"/>
+
+</entitygroup>  

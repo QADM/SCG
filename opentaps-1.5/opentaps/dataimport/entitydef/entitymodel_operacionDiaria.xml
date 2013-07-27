@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<entitymodel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/entitymodel.xsd">
+	<!-- ========================================================= -->
+	<!-- ======================== Defaults ======================= -->
+	<!-- ========================================================= -->
+	<title>Operacion Diaria Import Entities</title>
+	<description>Defines intermediate entities for importing presupuesto data</description>
+	<copyright>Copyright (c) Open Source Strategies, Inc.</copyright>
+	<author>Jesus Rodrigo Ruiz Merlin</author>
+	<version>1.0</version>
+
+	<!-- =========================== -->
+	<!-- org.opentaps.dataimport -->
+	<!-- =========================== -->
+
+	<entity entity-name="DataImportIngresoDiario" package-name="org.opentaps.dataimport"
+		title="Intermediate import entity (i.e., the bridge table) for Ingreso Diario data.">
+		<field name="fechaRegistro" type="date"/>
+		<field name="fechaContable" type="date"/>
+		<field name="monto" type="currency-amount"></field>
+		<field name="organizationPartyId" type="id-ne"></field>
+		<field name="idTipoDoc" type="id-ne"></field>
+		<field name="refDoc" type="id-ne"></field>
+		<field name="secuencia" type="id-ne"></field>
+		<field name="usuario" type="id-ne"></field>
+		<field name="lote" type="id-ne"></field>
+		<field name="idTipoCatalogo" type="id-ne"></field>
+		<field name="idPago" type="id-ne"></field>
+		<field name="idProducto" type="id-ne"></field>
+		<field name="ciclo" type="id-ne"></field>
+		<field name="ur" type="id-ne"></field>
+		<field name="uo" type="id-ne"></field>
+		<field name="ue" type="id-ne"></field>
+		<field name="rub" type="id-ne"></field>
+		<field name="tip" type="id-ne"></field>
+		<field name="cla" type="id-ne"></field>
+		<field name="con" type="id-ne"></field>
+		<field name="n5" type="id-ne"></field>
+		<field name="f" type="id-ne"></field>
+		<field name="sf" type="id-ne"></field>
+		<field name="sfe" type="id-ne"></field>
+		<field name="ef" type="id-ne"></field>
+		<field name="reg" type="id-ne"></field>
+		<field name="mun" type="id-ne"></field>
+		<field name="loc" type="id-ne"></field>
+		<field name="clavePres" type="name"></field>
+		<field name="importStatusId" type="id-ne">
+			<description>Status of record import.  Null is the same as DATAIMP_NOT_PROC.</description>
+		</field>
+		<field name="importError" type="very-long">
+			<description>Error report for failed imports.</description>
+		</field>
+		<field name="lastModifiedDate" type="date-time" />
+		<field name="processedTimestamp" type="date-time">
+			<description>Special field for system to record when entry was successfully imported.  
+                Do not use for any other purpose.</description>
+		</field>
+		<prim-key field="refDoc" />
+		<prim-key field="secuencia" />
+	</entity>
+
+	<entity entity-name="DataImportEgresoDiario" package-name="org.opentaps.dataimport"
+		title="Intermediate import entity (i.e., the bridge table) for Egreso Diario data.">	
+		<field name="fechaRegistro" type="date"/>
+		<field name="fechaContable" type="date"/>
+		<field name="monto" type="currency-amount"></field>
+		<field name="organizationPartyId" type="id-ne"></field>
+		<field name="idTipoDoc" type="id-ne"></field>
+		<field name="refDoc" type="id-ne"></field>
+		<field name="secuencia" type="id-ne"></field>
+		<field name="usuario" type="id-ne"></field>
+		<field name="lote" type="id-ne"></field>
+		<field name="idTipoCatalogo" type="id-ne"></field>
+		<field name="idPago" type="id-ne"></field>
+		<field name="idProducto" type="id-ne"></field>
+		<field name="ciclo" type="id-ne"></field>
+		<field name="ur" type="id-ne"></field>
+		<field name="uo" type="id-ne"></field>
+		<field name="ue" type="id-ne"></field>
+		<field name="fin" type="id-ne"></field>
+		<field name="fun" type="id-ne"></field>
+		<field name="subf" type="id-ne"></field>
+		<field name="eje" type="name"></field>
+		<field name="pp" type="name"></field>
+		<field name="spp" type="name"></field>
+		<field name="act" type="name"></field>
+		<field name="tg" type="id-ne"></field>
+		<field name="cap" type="id-ne"></field>
+		<field name="con" type="id-ne"></field>
+		<field name="pg" type="id-ne"></field>
+		<field name="pe" type="id-ne"></field>
+		<field name="f" type="id-ne"></field>
+		<field name="sf" type="id-ne"></field>
+		<field name="sfe" type="id-ne"></field>
+		<field name="ef" type="id-ne"></field>
+		<field name="reg" type="id-ne"></field>
+		<field name="mun" type="id-ne"></field>
+		<field name="loc" type="id-ne"></field>
+		<field name="sec" type="id-ne"></field>
+		<field name="subsec" type="id-ne"></field>
+		<field name="area" type="id-ne"></field>
+		<field name="clavePres" type="name"></field>
+		<field name="importStatusId" type="id-ne">
+			<description>Status of record import.  Null is the same as DATAIMP_NOT_PROC.</description>
+		</field>
+		<field name="importError" type="very-long">
+			<description>Error report for failed imports.</description>
+		</field>
+		<field name="lastModifiedDate" type="date-time" />
+		<field name="processedTimestamp" type="date-time">
+			<description>Special field for system to record when entry was successfully imported.  
+                Do not use for any other purpose.</description>
+		</field>
+		<prim-key field="refDoc" />
+		<prim-key field="secuencia" />
+	</entity>
+	
+	<entity entity-name="DataImportOperacionDiaria" package-name="org.opentaps.dataimport"
+		title="Intermediate import entity (i.e., the bridge table) for Operacion Diaria data.">
+		<field name="fechaRegistro" type="date"/>
+		<field name="fechaContable" type="date"/>
+		<field name="monto" type="currency-amount"></field>
+		<field name="organizationPartyId" type="id-ne"></field>
+		<field name="organizacionEjecutora" type="id-ne"></field>
+		<field name="idTipoDoc" type="id-ne"></field>
+		<field name="refDoc" type="id-ne"></field>
+		<field name="secuencia" type="id-ne"></field>
+		<field name="usuario" type="id-ne"></field>
+		<field name="lote" type="id-ne"></field>
+		<field name="concepto" type="id-long"/>
+        <field name="subconcepto" type="id-long"/>
+        <field name="idTipoCatalogoC" type="id-ne"></field>
+		<field name="idC" type="id-ne"></field>
+		<field name="idTipoCatalogoD" type="id-ne"></field>
+		<field name="idD" type="id-ne"></field>
+		<field name="importStatusId" type="id-ne">
+			<description>Status of record import.  Null is the same as DATAIMP_NOT_PROC.</description>
+		</field>
+		<field name="importError" type="very-long">
+			<description>Error report for failed imports.</description>
+		</field>
+		<field name="lastModifiedDate" type="date-time" />
+		<field name="processedTimestamp" type="date-time">
+			<description>Special field for system to record when entry was successfully imported.  
+                Do not use for any other purpose.</description>
+		</field>
+		<prim-key field="refDoc" />
+		<prim-key field="secuencia" />
+	</entity>
+</entitymodel>

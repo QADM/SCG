@@ -1,0 +1,45 @@
+/*
+ * Copyright (c) Open Source Strategies, Inc.
+ * 
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.entity.util.*;
+import org.ofbiz.party.party.PartyHelper;
+import org.opentaps.amazon.AmazonConstants;
+
+// List Amazon orders which haven't yet been imported or for which import has failed
+
+conditions = UtilMisc.toList(new EntityExpr("statusId", EntityOperator.IN, UtilMisc.toList(AmazonConstants.statusOrderCreated, AmazonConstants.statusOrderImportedError)));        
+
+builder() {
+    entityName = "AmazonOrder";
+    orderBy = UtilMisc.toList("orderDate");
+    where = conditions;
+
+    build(page) {
+        newPage = new ArrayList();
+        for (row : page) {
+            amazonOrder = row.getAllFields();
+            amazonOrder.put("statusDescription", row.getRelatedOne("StatusItem").getString("description"));
+            amazonOrder.put("orderItems", row.getRelated("AmazonOrderItem"));
+            newPage.add(amazonOrder);
+        }
+        return newPage;
+    }
+    return this;
+}
+context.put("amazonOrders", builder());

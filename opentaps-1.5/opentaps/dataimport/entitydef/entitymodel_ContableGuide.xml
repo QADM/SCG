@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<entitymodel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/entitymodel.xsd">
+
+    <title>Contable_Guide Entities</title>
+    <!-- ================================= -->
+    <!-- org.opentaps.dataimport.contableGuide -->  
+    <!-- ================================= -->
+
+    <entity entity-name="DataImportContableGuide"
+        package-name="org.opentaps.dataimport.ContableGuide"
+        title="Entity which defines the structure of contable guide ">
+        <field name="c_guide_id" type="id-ne"/>
+        <field name="id_concepto" type="id-long"/>
+        <field name="id_subconcepto" type="id-long"/>
+        <field name="desc_period" type="id-long"/>
+        <field name="rc_cargo" type="id-long"/>
+        <field name="rc_abono" type="id-long"/>
+		<field name="rp_cargo" type="id-long"/>
+        <field name="rp_abono" type="id-long"/>
+        <prim-key field="c_guide_id"/>
+    </entity>
+
+     <entity entity-name="DataimportCatalogoConceptos"
+        package-name="org.opentaps.dataimport.CatalogoConceptos"
+        title="Entity which defines the structure of contable guide ">
+        <field name="id_concepto" type="id-ne"/>
+        <field name="desc_concept" type="name_long"/>
+        <prim-key field="id_concepto"/>
+        <relation type="one" fk-name="IDCP" title="IDCP"
+			rel-entity-name="DataImportContableGuide">
+			<key-map field-name="id_concepto" rel-field-name="id_concepto" />
+		</relation>
+    </entity>
+
+     <entity entity-name="DataimportCatalogoSubconceptos"
+        package-name="org.opentaps.dataimport.CatalogoSubConceptos"
+        title="Entity which defines the structure of contable guide ">
+        <field name="id_subconcepto" type="id-ne"/>
+        <field name="desc_subconcept" type="name_long"/>
+        <prim-key field="id_subconcepto"/>
+        <relation type="one" fk-name="IDSCP" title="IDSCP"
+			rel-entity-name="DataImportContableGuide">
+			<key-map field-name="id_subconcepto" rel-field-name="id_subconcepto" />
+		</relation>
+    </entity>
+ </entitymodel>
+ 

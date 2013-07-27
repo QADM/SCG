@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) Open Source Strategies, Inc.
+ *
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<entitymodel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/entitymodel.xsd">
+  <!-- ========================================================= -->
+  <!-- ======================== Defaults ======================= -->
+  <!-- ========================================================= -->
+    <title>Product Data Import Entities</title>
+    <description>Defines intermediate entities for importing customer data</description>
+    <copyright>Copyright (c) Open Source Strategies, Inc.</copyright>
+    <author>Leon Torres (leon@opensourcestrategies.com)</author>
+    <version>1.0</version>
+
+    <!-- ================================= -->
+    <!-- org.opentaps.dataimport.products -->  
+    <!-- ================================= -->
+
+    <!-- for precise definitions of the field types see the file framework/entity/fieldtype/fieldtypeXXX.xml for your database XXX -->
+
+    <entity entity-name="DataImportProduct"
+        package-name="org.opentaps.dataimport.products"
+        title="Intermediate import entity for product data.">
+        <field name="productId" type="id-ne"/>
+        <field name="productTypeId" type="id-ne"/>
+        <field name="isInactive" type="indicator"><description>If set to Y or y, the product is set to discontinued at time of import</description></field>
+        <field name="customId1" type="id"><description>Custom ID fields are used to import SKUs, UPCs, etc.  Enter the IDs here and specify the GoodIdentificationType when you run the service.</description></field>
+        <field name="customId2" type="id"/>
+        <field name="internalName" type="description" />
+        <field name="brandName" type="name" />
+        <field name="comments" type="comment" />
+        <field name="productName" type="name" />
+        <field name="description" type="very-long"/>
+        <field name="longDescription" type="very-long" />
+        <field name="weight" type="fixed-point"/>
+        <field name="weightUomId" type="id"/>
+        <field name="productLength" type="fixed-point"/>
+        <field name="productLengthUomId" type="id"/>
+        <field name="width" type="fixed-point"/>
+        <field name="widthUomId" type="id"/>
+        <field name="height" type="fixed-point"/>
+        <field name="heightUomId" type="id"/>
+        <field name="price" type="currency-precise"/>
+        <field name="priceCurrencyUomId" type="id"/>
+        <field name="productFeature1" type="description"><description>This can be used to associate a productFeatureId with this product and is used to import brand, size, etc.</description></field>
+        <field name="supplierPartyId" type="id-ne"/>
+        <field name="smallImageUrl" type="url" />
+        <field name="mediumImageUrl" type="url" />
+        <field name="largeImageUrl" type="url" />
+        <field name="purchasePrice" type="currency-precise"/>
+        <field name="taxable" type="indicator" />
+        <field name="category" type="id" />
+        <field name="glAccountId" type="id" />
+        <field name="organization" type="id" />
+        <field name="node" type="indicator"/>  
+        <!--todo storeId should be moved into opentaps-magento integration module-->
+        <field name="storeId" type="id" />
+        <field name="createdDate" type="date-time" />
+         <field name="importStatusId" type="id-ne"><description>Status of record import.  Null is the same as DATAIMP_NOT_PROC.</description></field>
+        <field name="importError" type="very-long"><description>Error report for failed imports.</description></field>
+        <field name="lastModifiedDate" type="date-time" />
+        <field name="processedTimestamp" type="date-time" >
+            <description>Special field for system to record when entry was successfully imported.  
+                Do not use for any other purpose.</description>
+        </field>
+        <prim-key field="productId"/>
+    </entity>
+
+    <entity entity-name="DataImportInventory"
+        package-name="org.opentaps.dataimport.products"
+        title="Intermediate import entity for inventory data.">
+        <field name="itemId" type="id"/>
+        <field name="productId" type="id"/>
+        <!--<field name="productName" type="description"/>-->
+        <field name="facilityId" type="id"/>
+        <field name="availableToPromise" type="fixed-point"/>
+        <field name="onHand" type="fixed-point"/>
+        <field name="minimumStock" type="fixed-point"/>
+        <field name="reorderQuantity" type="fixed-point"/>
+        <field name="daysToShip" type="fixed-point"/>
+        <field name="inventoryValue" type="currency-amount"/>
+        <field name="importStatusId" type="id-ne"><description>Status of record import.  Null is the same as DATAIMP_NOT_PROC.</description></field>
+        <field name="importError" type="very-long"><description>Error report for failed imports.</description></field>
+        <field name="processedTimestamp" type="date-time"/>
+        <prim-key field="itemId"/>
+
+        <relation type="one-nofk" rel-entity-name="Product">
+          <key-map field-name="productId"/>
+        </relation>
+        <relation type="one-nofk" rel-entity-name="Facility">
+          <key-map field-name="facilityId"/>
+        </relation>
+    </entity>
+
+</entitymodel>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<entitymodel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/entitymodel.xsd">
+    <!-- ========================================================= -->
+    <!-- ======================== Defaults ======================= -->
+    <!-- ========================================================= -->
+    <title>Accounting Import Entities</title>
+    <description>Defines intermediate entities for importing accounting data</description>
+    <copyright>Copyright (c) Open Source Strategies, Inc.</copyright>
+    <author>Gintarė Ragaišienė (gintare@ginsoftware.com)</author>
+    <version>1.0</version>
+    
+    <!-- =========================== -->
+    <!-- org.opentaps.dataimport -->  
+    <!-- =========================== -->
+    
+    <entity entity-name="DataImportParty"
+        package-name="org.opentaps.dataimport"
+        title="Intermediate import entity (i.e., the bridge table) for Party data.">                 
+        <field name="groupName" type="custom-vlong"/>   
+        <field name="groupNameLocal" type="custom-vlong"></field>        
+        <field name="externalId" type="id-ne"/>  
+        <field name="parentExternalId" type="id"/>
+        <field name="nivel" type="id"/> 
+        <field name="rol" type="description"/>
+        <field name="rfc" type="very-long"/>
+        <field name="moneda" type="id"/>
+        <field name="node" type="indicator"/>    
+        <field name="importStatusId" type="id-ne"><description>Status of record import.  Null is the same as DATAIMP_NOT_PROC.</description></field>
+        <field name="importError" type="very-long"><description>Error report for failed imports.</description></field>
+        <field name="lastModifiedDate" type="date-time" />
+        <field name="processedTimestamp" type="date-time" >
+            <description>Special field for system to record when entry was successfully imported.  
+                Do not use for any other purpose.</description>
+        </field>        
+        <prim-key field="externalId"/>
+    </entity>  
+    
+</entitymodel>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) Open Source Strategies, Inc.
+ *
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ -->
+
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+
+<!-- This file has been modified by Open Source Strategies, Inc. -->
+
+<!-- This XML file defines some initial users.  Follow the examples in the applications to define additional users, such as sales teams,
+sales managers, CSR's, warehouse, and financials users. -->
+
+<!-- VERY VERY IMPORTANT SECURITY NOTE: MAKE SURE YOU EDIT
+        applications/securityext/ofbiz-component.xml
+
+        AND COMMENT OUT THE FILE
+        PasswordSecurityData.xml -->
+
+<entity-engine-xml>
+
+    <!-- The all purpose admin user -->
+    <Party partyId="admin" partyTypeId="PERSON"/>
+    <Person firstName="THE" lastName="ADMINISTRATOR" partyId="admin" personalTitle="Mr."/>
+    <PartyRole partyId="admin" roleTypeId="BUYER"/>
+    <PartyRole partyId="admin" roleTypeId="MANAGER"/>
+    <PartyRole partyId="admin" roleTypeId="ORDER_CLERK"/>
+    <PartyRole partyId="admin" roleTypeId="SHIPMENT_CLERK"/>
+    <PartyRole partyId="admin" roleTypeId="SALES_REP"/>
+    <PartyRole partyId="admin" roleTypeId="_NA_"/>
+    <ContactMech contactMechId="admin" contactMechTypeId="EMAIL_ADDRESS" infoString="admin@mycompany.com"/>
+    <PartyContactMech partyId="admin" contactMechId="admin" fromDate="2000-01-01 00:00:00.0"/>
+    <PartyContactMechPurpose partyId="admin" contactMechId="admin" contactMechPurposeTypeId="PRIMARY_EMAIL" fromDate="2000-01-01 00:00:00"/>
+    <UserLogin userLoginId="admin" partyId="admin" currentPassword="a8c323ed5c6d3c9b5ba5fa13e75939de954de085" passwordHint="o p e n t a p s"/>
+    <PartySupplementalData partyId="admin" primaryEmailId="admin" />
+
+    <UserLogin userLoginId="system" currentPassword="47ca69ebb4bdc9ae0adec130880165d2cc05db1a" passwordHint="Do Not Enable This Account"/>
+                                    
+	<!--For accessing CRMSFA -->
+    <PartyRole partyId="admin" roleTypeId="ACCOUNT_MANAGER"/>
+	<UserLoginSecurityGroup groupId="SALES_MANAGER" userLoginId="admin" fromDate="2000-01-01 00:00:00"/>
+	
+	<!-- access all functionality in financials
+		 this does not seem to be necessary
+	<UserLoginSecurityGroup groupId="FINANCIALS_ADMIN" userLoginId="admin" fromDate="2000-01-01 00:00:00"/>
+	 -->
+	
+	<!-- access all functionality in Purchasing -->
+	<UserLoginSecurityGroup groupId="PRCH_MANAGER" userLoginId="admin" fromDate="2000-01-01 00:00:00"/>
+
+	<!-- access all functionality in warehouse -->
+	<UserLoginSecurityGroup groupId="WRHS_ADMIN" userLoginId="admin" fromDate="2000-01-01 00:00:00"/>
+	
+	<!-- access all functionality in data import module -->
+	<UserLoginSecurityGroup groupId="DATAIMPORT_MANAGER" userLoginId="admin" fromDate="2000-01-01 00:00:00"/>
+	
+	 
+</entity-engine-xml>

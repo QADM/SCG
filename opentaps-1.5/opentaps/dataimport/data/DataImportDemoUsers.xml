@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) Open Source Strategies, Inc.
+ * 
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<entity-engine-xml>
+
+    <Party partyId="DemoImportManager" partyTypeId="PERSON"/>
+    <Person partyId="DemoImportManager" firstName="Demo" lastName="DataImport Manager"/>
+    <!-- password is opentaps -->
+    <UserLogin partyId="DemoImportManager" userLoginId="demoimportmgr" currentPassword="a8c323ed5c6d3c9b5ba5fa13e75939de954de085" passwordHint="o p e n t a p s"/>
+    <UserLoginSecurityGroup userLoginId="demoimportmgr" groupId="DATAIMPORT_MANAGER" fromDate="2007-01-01 00:00:00"/>
+    
+    <!-- grant full access to some administrators -->
+    <UserLoginSecurityGroup userLoginId="admin" groupId="DATAIMPORT_MANAGER" fromDate="2007-01-01 00:00:00"/>
+    <UserLoginSecurityGroup userLoginId="flexadmin" groupId="DATAIMPORT_MANAGER" fromDate="2007-01-01 00:00:00"/>
+    
+
+</entity-engine-xml>

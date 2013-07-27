@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<entitymodel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/entitymodel.xsd">
+    <!-- ========================================================= -->
+    <!-- ======================== Defaults ======================= -->
+    <!-- ========================================================= -->
+    <title>Category Import Entities</title>
+    <description>Defines intermediate entities for importing category data</description>
+    <copyright>Copyright (c) Open Source Strategies, Inc.</copyright>
+    <author>Jesus Rodrigo Ruiz Merlin</author>
+    <version>1.0</version>
+    
+    <!-- =========================== -->
+    <!-- org.opentaps.dataimport -->  
+    <!-- =========================== -->
+    
+    <entity entity-name="DataImportCategory"
+        package-name="org.opentaps.dataimport"
+        title="Intermediate import entity (i.e., the bridge table) for Category data.">
+        <field name="productCategoryId" type="id-ne"><description>Product Category Id</description></field>         
+        <field name="productCategoryTypeId" type="id"><description>Product Category Type</description></field>   
+        <field name="categoryName" type="name"><description>Product Category Name</description></field>
+        <field name="primaryParentCategoryId" type="id"><description>Primary Parent Category</description></field>
+        <field name="code" type="id"><description>Product Category Type</description></field>
+        <field name="node" type="indicator"/>
+        <field name="importStatusId" type="id-ne"><description>Status of record import.  Null is the same as DATAIMP_NOT_PROC.</description></field>
+        <field name="importError" type="very-long"><description>Error report for failed imports.</description></field>
+        <field name="lastModifiedDate" type="date-time" />
+        <field name="processedTimestamp" type="date-time" >
+            <description>Special field for system to record when entry was successfully imported.  
+                Do not use for any other purpose.</description>
+        </field>          
+        <prim-key field="productCategoryId"/>
+    </entity>      
+</entitymodel>

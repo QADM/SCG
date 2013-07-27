@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<entitymodel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/entitymodel.xsd">
+    <!-- ========================================================= -->
+    <!-- ======================== Defaults ======================= -->
+    <!-- ========================================================= -->
+    <title>Geographic Import Entities</title>
+    <description>Defines intermediate entities for importing geographic data</description>
+    <copyright>Copyright (c) Open Source Strategies, Inc.</copyright>
+    <author>Jesus Rodrigo Ruiz Merlin</author>
+    <version>1.0</version>
+    
+    <!-- =========================== -->
+    <!-- org.opentaps.dataimport -->  
+    <!-- =========================== -->
+    
+    <entity entity-name="DataImportGeo"
+        package-name="org.opentaps.dataimport"
+        title="Intermediate import entity (i.e., the bridge table) for Geographic data.">
+        <field name="geoId" type="id-ne"><description>Geo Id</description></field>         
+        <field name="geoTypeId" type="id"><description>Geo Type Id</description></field>   
+        <field name="geoName" type="name"><description>Geo Name</description></field>
+        <field name="geoCode" type="short-varchar"><description>Geo Code</description></field>
+        <field name="abbreviation" type="short-varchar"><description>Abbrevation</description></field> 
+        <field name="node" type="indicator"/>       
+        <field name="importStatusId" type="id-ne"><description>Status of record import.  Null is the same as DATAIMP_NOT_PROC.</description></field>
+        <field name="importError" type="very-long"><description>Error report for failed imports.</description></field>
+        <field name="lastModifiedDate" type="date-time" />
+        <field name="processedTimestamp" type="date-time" >
+            <description>Special field for system to record when entry was successfully imported.  
+                Do not use for any other purpose.</description>
+        </field>          
+        <prim-key field="geoId"/>
+    </entity>      
+</entitymodel>

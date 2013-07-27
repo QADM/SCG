@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<entitymodel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/entitymodel.xsd">
+	<!-- ========================================================= -->
+	<!-- ======================== Defaults ======================= -->
+	<!-- ========================================================= -->
+	<title>Entidad Mini Guia Contable</title>
+	<description>Define la entidad para los datos de la mini guia contable</description>
+	<copyright>Copyright (c) Open Source Strategies, Inc.</copyright>
+	<author>Jesus Rodrigo Ruiz Merlin</author>
+	<version>1.0</version>
+
+	<!-- =========================== -->
+	<!-- org.opentaps.dataimport -->
+	<!-- =========================== -->
+
+	<entity entity-name="MiniGuiaContable" package-name="org.opentaps.dataimport"
+		title="Entidad para los datos de la Mini Guia Contable">
+		<field name="acctgTransTypeId" type="id-ne"></field>
+		<field name="cuentaCargo" type="id-ne"></field>
+		<field name="cuentaAbono" type="id-ne"></field>
+		<field name="glFiscalTypeId" type="id-ne"></field>
+		<field name="referencia" type="indicator"></field>
+		<field name="tipoMatriz" type="id-ne"></field>
+		<prim-key field="acctgTransTypeId" />
+		<relation type="one" fk-name="ACCTT" rel-entity-name="AcctgTransType">
+			<key-map field-name="acctgTransTypeId" />
+		</relation>
+		<relation type="one" fk-name="MGCC" title="cargo"
+			rel-entity-name="GlAccount">
+			<key-map field-name="cuentaCargo" rel-field-name="glAccountId" />
+		</relation>
+		<relation type="one" fk-name="MGCA" title="abono"
+			rel-entity-name="GlAccount">
+			<key-map field-name="cuentaAbono" rel-field-name="glAccountId" />
+		</relation>
+		<relation type="one" fk-name="GLFT" rel-entity-name="GlFiscalType">
+			<key-map field-name="glFiscalTypeId" />
+		</relation>
+	</entity>
+</entitymodel>

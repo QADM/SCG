@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<entitymodel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/entitymodel.xsd">
+    <!-- ========================================================= -->
+    <!-- ======================== Defaults ======================= -->
+    <!-- ========================================================= -->
+    <title>Project Import Entities</title>
+    <description>Defines intermediate entities for importing project data</description>
+    <copyright>Copyright (c) Open Source Strategies, Inc.</copyright>
+    <author>Jesus Rodrigo Ruiz Merlin</author>
+    <version>1.0</version>
+    
+    <!-- =========================== -->
+    <!-- org.opentaps.dataimport -->  
+    <!-- =========================== -->
+    
+    <entity entity-name="DataImportProject"
+        package-name="org.opentaps.dataimport"
+        title="Intermediate import entity (i.e., the bridge table) for Project data.">
+        <field name="workEffortName" type="name"><description>Project Name</description></field>
+        <field name="workEffortTypeId" type="id"><description>Type</description></field>         
+        <field name="description" type="description"><description>Description</description></field>
+        <field name="groupName" type="name"><description>Organization Party Id</description></field>        
+        <field name="workEffortParentId" type="id"><description>Parent Project Name</description></field>
+        <field name="nivelId" type="id"><description>Nivel</description></field>
+        <field name="externalId" type="id"><description>Code</description></field>
+        <field name="node" type="indicator"/>
+        <field name="importStatusId" type="id-ne"><description>Status of record import.  Null is the same as DATAIMP_NOT_PROC.</description></field>
+        <field name="importError" type="very-long"><description>Error report for failed imports.</description></field>
+        <field name="lastModifiedDate" type="date-time" />
+        <field name="processedTimestamp" type="date-time" >
+            <description>Special field for system to record when entry was successfully imported.  
+                Do not use for any other purpose.</description>
+        </field>          
+        <prim-key field="workEffortName"/>
+    </entity>      
+</entitymodel>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) Open Source Strategies, Inc.
+ * 
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<entity-engine-xml>
+
+    <Party partyId="AMAZON" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="AMAZON" groupName="Amazon.com"/>
+
+    <ProductStore productStoreId="AMAZON" storeName="Amazon.com Integration Store" payToPartyId="Company" daysToCancelNonPay="30" inventoryFacilityId="WebStoreWarehouse" 
+            oneInventoryFacility="Y" checkInventory="Y" reserveInventory="Y" reserveOrderEnumId="INVRO_FIFO_REC" requireInventory="N" defaultLocaleString="en_US" 
+            defaultCurrencyUomId="USD" defaultSalesChannelEnumId="AMAZON_SALES_CHANNEL" orderNumberPrefix="AM" autoApproveInvoice="Y" shipIfCaptureFails="Y" billToThirdPartyId="AMAZON"
+            prorateShipping="N"/>
+    <ProductStorePaymentSetting productStoreId="AMAZON" paymentMethodTypeId="EXT_BILL_3RDPTY" paymentServiceTypeEnumId="PRDS_PAY_EXTERNAL"/>
+
+    <GlAccount glAccountId="126000" parentGlAccountId="120000" accountCode="126000" glAccountClassId="CURRENT_ASSET" glAccountTypeId="" accountName="UNINVOICED THIRD PARTY BILLINGS" postedBalance="0.0"/>
+    <GlAccountOrganization glAccountId="126000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <InvoiceItemTypeGlAccount invoiceItemTypeId="ITM_BILL_FROM_CUST" organizationPartyId="Company" glAccountId="126000"/>
+    <PaymentMethodTypeGlAccount paymentMethodTypeId="EXT_BILL_3RDPTY" organizationPartyId="Company" glAccountId="126000"/>
+</entity-engine-xml>

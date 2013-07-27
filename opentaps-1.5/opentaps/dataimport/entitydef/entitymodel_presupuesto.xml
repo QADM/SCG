@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<entitymodel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/entitymodel.xsd">
+	<!-- ========================================================= -->
+	<!-- ======================== Defaults ======================= -->
+	<!-- ========================================================= -->
+	<title>Presupuesto Import Entities</title>
+	<description>Defines intermediate entities for importing presupuesto data</description>
+	<copyright>Copyright (c) Open Source Strategies, Inc.</copyright>
+	<author>Jesus Rodrigo Ruiz Merlin</author>
+	<version>1.0</version>
+
+	<!-- =========================== -->
+	<!-- org.opentaps.dataimport -->
+	<!-- =========================== -->
+
+	<entity entity-name="DataImportPresupuestoIngreso" package-name="org.opentaps.dataimport"
+		title="Intermediate import entity (i.e., the bridge table) for Presupuesto Ingreso data.">
+		<field name="ciclo" type="id-ne"></field>
+		<field name="ur" type="id-ne"></field>
+		<field name="uo" type="id-ne"></field>
+		<field name="ue" type="id-ne"></field>
+		<field name="rub" type="id-ne"></field>
+		<field name="tip" type="id-ne"></field>
+		<field name="cla" type="id-ne"></field>
+		<field name="con" type="id-ne"></field>
+		<field name="n5" type="id-ne"></field>
+		<field name="f" type="id-ne"></field>
+		<field name="sf" type="id-ne"></field>
+		<field name="sfe" type="id-ne"></field>
+		<field name="ef" type="id-ne"></field>
+		<field name="reg" type="id-ne"></field>
+		<field name="mun" type="id-ne"></field>
+		<field name="loc" type="id-ne"></field>
+		<field name="clavePres" type="name"></field>
+		<field name="usuario" type="id-ne"></field>
+		<field name="enero" type="currency-amount"></field>
+		<field name="febrero" type="currency-amount"></field>
+		<field name="marzo" type="currency-amount"></field>
+		<field name="abril" type="currency-amount"></field>
+		<field name="mayo" type="currency-amount"></field>
+		<field name="junio" type="currency-amount"></field>
+		<field name="julio" type="currency-amount"></field>
+		<field name="agosto" type="currency-amount"></field>
+		<field name="septiembre" type="currency-amount"></field>
+		<field name="octubre" type="currency-amount"></field>
+		<field name="noviembre" type="currency-amount"></field>
+		<field name="diciembre" type="currency-amount"></field>
+		<field name="agrupador" type="id-ne"></field>
+		<field name="importStatusId" type="id-ne">
+			<description>Status of record import.  Null is the same as DATAIMP_NOT_PROC.</description>
+		</field>
+		<field name="importError" type="very-long">
+			<description>Error report for failed imports.</description>
+		</field>
+		<field name="lastModifiedDate" type="date-time" />
+		<field name="processedTimestamp" type="date-time">
+			<description>Special field for system to record when entry was successfully imported.  
+                Do not use for any other purpose.</description>
+		</field>
+		<prim-key field="clavePres" />
+		<prim-key field="agrupador" />
+	</entity>
+
+	<entity entity-name="DataImportPresupuestoEgreso" package-name="org.opentaps.dataimport"
+		title="Intermediate import entity (i.e., the bridge table) for Presupuesto Egreso data.">
+		<field name="ciclo" type="id-ne"></field>
+		<field name="ur" type="id-ne"></field>
+		<field name="uo" type="id-ne"></field>
+		<field name="ue" type="id-ne"></field>
+		<field name="fin" type="id-ne"></field>
+		<field name="fun" type="id-ne"></field>
+		<field name="subf" type="id-ne"></field>
+		<field name="eje" type="name"></field>
+		<field name="pp" type="name"></field>
+		<field name="spp" type="name"></field>
+		<field name="act" type="name"></field>
+		<field name="tg" type="id-ne"></field>
+		<field name="cap" type="id-ne"></field>
+		<field name="con" type="id-ne"></field>
+		<field name="pg" type="id-ne"></field>
+		<field name="pe" type="id-ne"></field>
+		<field name="f" type="id-ne"></field>
+		<field name="sf" type="id-ne"></field>
+		<field name="sfe" type="id-ne"></field>
+		<field name="ef" type="id-ne"></field>
+		<field name="reg" type="id-ne"></field>
+		<field name="mun" type="id-ne"></field>
+		<field name="loc" type="id-ne"></field>
+		<field name="sec" type="id-ne"></field>
+		<field name="subsec" type="id-ne"></field>
+		<field name="area" type="id-ne"></field>
+		<field name="clavePres" type="name"></field>
+		<field name="usuario" type="id-ne"></field>
+		<field name="enero" type="currency-amount"></field>
+		<field name="febrero" type="currency-amount"></field>
+		<field name="marzo" type="currency-amount"></field>
+		<field name="abril" type="currency-amount"></field>
+		<field name="mayo" type="currency-amount"></field>
+		<field name="junio" type="currency-amount"></field>
+		<field name="julio" type="currency-amount"></field>
+		<field name="agosto" type="currency-amount"></field>
+		<field name="septiembre" type="currency-amount"></field>
+		<field name="octubre" type="currency-amount"></field>
+		<field name="noviembre" type="currency-amount"></field>
+		<field name="diciembre" type="currency-amount"></field>
+		<field name="agrupador" type="id-ne"></field>
+		<field name="importStatusId" type="id-ne">
+			<description>Status of record import.  Null is the same as DATAIMP_NOT_PROC.</description>
+		</field>
+		<field name="importError" type="very-long">
+			<description>Error report for failed imports.</description>
+		</field>
+		<field name="lastModifiedDate" type="date-time" />
+		<field name="processedTimestamp" type="date-time">
+			<description>Special field for system to record when entry was successfully imported.  
+                Do not use for any other purpose.</description>
+		</field>
+		<prim-key field="clavePres" />
+		<prim-key field="agrupador" />
+	</entity>
+
+	<entity entity-name="AcctgTransPresupuestal" package-name="org.opentaps.dataimport"
+		title="Accounting Transaction Presupuestal Entity.">
+		<field name="acctgTransId" type="id-ne"></field>
+		<field name="clavePres" type="name"></field>
+		<field name="ciclo" type="id-ne"></field>
+		<field name="unidadResponsable" type="id-ne"></field>
+		<field name="descripcionUr" type="very-long"></field>
+		<field name="unidadOrganizacional" type="id-ne"></field>
+		<field name="descripcionUo" type="very-long"></field>
+		<field name="unidadEjecutora" type="id-ne"></field>
+		<field name="descripcionUe" type="very-long"></field>
+		<field name="rubro" type="id-ne"></field>
+		<field name="descripcionRubro" type="description"></field>
+		<field name="tipo" type="id-ne"></field>
+		<field name="descripcionTipo" type="description"></field>
+		<field name="clase" type="id-ne"></field>
+		<field name="descripcionClase" type="description"></field>
+		<field name="conceptoRub" type="id-ne"></field>
+		<field name="descripcionConceptoRubro" type="description"></field>
+		<field name="nivel5" type="id-ne"></field>
+		<field name="descripcionN5" type="description"></field>
+		<field name="fuente" type="id-ne"></field>
+		<field name="descripcionFuente" type="description"></field>
+		<field name="subFuente" type="id-ne"></field>
+		<field name="descripcionSubfuente" type="description"></field>
+		<field name="subFuenteEspecifica" type="id-ne"></field>
+		<field name="descripcionSubfuenteEspecifica" type="description"></field>
+		<field name="entidadFederativa" type="id-ne"></field>
+		<field name="descripcionEntFed" type="name"></field>
+		<field name="region" type="id-ne"></field>
+		<field name="descripcionRegion" type="name"></field>
+		<field name="municipio" type="id-ne"></field>
+		<field name="descripcionMunicipio" type="name"></field>
+		<field name="localidad" type="id-ne"></field>
+		<field name="descripcionLocalidad" type="name"></field>
+		<field name="finalidad" type="id-ne"></field>
+		<field name="descripcionFinalidad" type="description"></field>
+		<field name="funcion" type="id-ne"></field>
+		<field name="descripcionFuncion" type="description"></field>
+		<field name="subFuncion" type="id-ne"></field>
+		<field name="descripcionSubFuncion" type="description"></field>
+		<field name="programaPlan" type="name"></field>
+		<field name="descripcionProgramaPlan" type="description"></field>
+		<field name="programaPresupuestario" type="name"></field>
+		<field name="descripcionProgramaPres" type="description"></field>
+		<field name="subProgramaPresupuestario" type="name"></field>
+		<field name="descripcionSubProgramaPres" type="description"></field>
+		<field name="actividad" type="name"></field>
+		<field name="descripcionActividad" type="description"></field>
+		<field name="tipoGasto" type="id-ne"></field>
+		<field name="descripcionTg" type="description"></field>
+		<field name="capitulo" type="id-ne"></field>
+		<field name="descripcionCapitulo" type="description"></field>
+		<field name="concepto" type="id-ne"></field>
+		<field name="descripcionConcepto" type="description"></field>
+		<field name="partidaGenerica" type="id-ne"></field>
+		<field name="descripcionPg" type="description"></field>
+		<field name="partidaEspecifica" type="id-ne"></field>
+		<field name="descripcionPe" type="description"></field>
+		<field name="sector" type="id-ne"></field>
+		<field name="descripcionSector" type="description"></field>
+		<field name="subSector" type="id-ne"></field>
+		<field name="descripcionSubsector" type="description"></field>
+		<field name="area" type="id-ne"></field>
+		<field name="descripcionArea" type="description"></field>
+		<field name="agrupador" type="id-ne"></field>
+		<field name="idTipoDoc" type="id-ne"></field>
+		<field name="descripcionTipoDoc" type="id-vlong"></field>
+		<field name="secuencia" type="id-ne"></field>
+		<field name="lote" type="id-ne"></field>
+		<prim-key field="acctgTransId" />
+		<relation type="one" fk-name="ACCTP" rel-entity-name="AcctgTrans">
+			<key-map field-name="acctgTransId" />
+		</relation>
+		<relation type="one" fk-name="URREL" title="urrel"
+			rel-entity-name="Party">
+			<key-map field-name="unidadResponsable" rel-field-name="partyId" />
+		</relation>
+		<relation type="one" fk-name="UOREL" title="uorel"
+			rel-entity-name="Party">
+			<key-map field-name="unidadOrganizacional" rel-field-name="partyId" />
+		</relation>
+		<relation type="one" fk-name="UEREL" title="uerel"
+			rel-entity-name="Party">
+			<key-map field-name="unidadEjecutora" rel-field-name="partyId" />
+		</relation>
+		<relation type="one" fk-name="RUBREL" title="rubrel"
+			rel-entity-name="ProductCategory">
+			<key-map field-name="rubro" rel-field-name="productCategoryId" />
+		</relation>
+		<relation type="one" fk-name="TIPOREL" title="tiporel"
+			rel-entity-name="ProductCategory">
+			<key-map field-name="tipo" rel-field-name="productCategoryId" />
+		</relation>
+		<relation type="one" fk-name="CLREL" title="clrel"
+			rel-entity-name="ProductCategory">
+			<key-map field-name="clase" rel-field-name="productCategoryId" />
+		</relation>
+		<relation type="one" fk-name="CONRREL" title="corel"
+			rel-entity-name="ProductCategory">
+			<key-map field-name="conceptoRub" rel-field-name="productCategoryId" />
+		</relation>
+		<relation type="one" fk-name="N5REL" title="n5rel"
+			rel-entity-name="ProductCategory">
+			<key-map field-name="nivel5" rel-field-name="productCategoryId" />
+		</relation>
+		<relation type="one" fk-name="FREL" title="frrel"
+			rel-entity-name="Enumeration">
+			<key-map field-name="fuente" rel-field-name="enumId" />
+		</relation>
+		<relation type="one" fk-name="SFREL" title="sfrel"
+			rel-entity-name="Enumeration">
+			<key-map field-name="subFuente" rel-field-name="enumId" />
+		</relation>
+		<relation type="one" fk-name="SFEREL" title="sfrerel"
+			rel-entity-name="Enumeration">
+			<key-map field-name="subFuenteEspecifica" rel-field-name="enumId" />
+		</relation>
+		<relation type="one" fk-name="EFREL" title="efrel"
+			rel-entity-name="Geo">
+			<key-map field-name="entidadFederativa" rel-field-name="geoId" />
+		</relation>
+		<relation type="one" fk-name="REGREL" title="regrel"
+			rel-entity-name="Geo">
+			<key-map field-name="region" rel-field-name="geoId" />
+		</relation>
+		<relation type="one" fk-name="MUNREL" title="munrel"
+			rel-entity-name="Geo">
+			<key-map field-name="municipio" rel-field-name="geoId" />
+		</relation>
+		<relation type="one" fk-name="LOCREL" title="locrel"
+			rel-entity-name="Geo">
+			<key-map field-name="localidad" rel-field-name="geoId" />
+		</relation>
+		<relation type="one" fk-name="FINFREL" title="finrel"
+			rel-entity-name="Enumeration">
+			<key-map field-name="finalidad" rel-field-name="enumId" />
+		</relation>
+		<relation type="one" fk-name="FUNFREL" title="funrel"
+			rel-entity-name="Enumeration">
+			<key-map field-name="funcion" rel-field-name="enumId" />
+		</relation>
+		<relation type="one" fk-name="SUBFREL" title="subrel"
+			rel-entity-name="Enumeration">
+			<key-map field-name="subFuncion" rel-field-name="enumId" />
+		</relation>
+		<relation type="one" fk-name="EJEREL" title="ejerel"
+			rel-entity-name="WorkEffort">
+			<key-map field-name="programaPlan" rel-field-name="workEffortId" />
+		</relation>
+		<relation type="one" fk-name="PPREL" title="pprel"
+			rel-entity-name="WorkEffort">
+			<key-map field-name="programaPresupuestario" rel-field-name="workEffortId" />
+		</relation>
+		<relation type="one" fk-name="SPPREL" title="spprel"
+			rel-entity-name="WorkEffort">
+			<key-map field-name="subProgramaPresupuestario"
+				rel-field-name="workEffortId" />
+		</relation>
+		<relation type="one" fk-name="ACTREL" title="actrel"
+			rel-entity-name="WorkEffort">
+			<key-map field-name="actividad" rel-field-name="workEffortId" />
+		</relation>
+		<relation type="one" fk-name="TGREL" title="tgrel"
+			rel-entity-name="Enumeration">
+			<key-map field-name="tipoGasto" rel-field-name="enumId" />
+		</relation>
+		<relation type="one" fk-name="CAPREL" title="caprel"
+			rel-entity-name="ProductCategory">
+			<key-map field-name="capitulo" rel-field-name="productCategoryId" />
+		</relation>
+		<relation type="one" fk-name="CONCREL" title="concrel"
+			rel-entity-name="ProductCategory">
+			<key-map field-name="concepto" rel-field-name="productCategoryId" />
+		</relation>
+		<relation type="one" fk-name="PGREL" title="pgrel"
+			rel-entity-name="ProductCategory">
+			<key-map field-name="partidaGenerica" rel-field-name="productCategoryId" />
+		</relation>
+		<relation type="one" fk-name="PEREL" title="perel"
+			rel-entity-name="ProductCategory">
+			<key-map field-name="partidaEspecifica" rel-field-name="productCategoryId" />
+		</relation>
+		<relation type="one" fk-name="SECREL" title="secrel"
+			rel-entity-name="Enumeration">
+			<key-map field-name="sector" rel-field-name="enumId" />
+		</relation>
+		<relation type="one" fk-name="SUBSREL" title="subsrel"
+			rel-entity-name="Enumeration">
+			<key-map field-name="subSector" rel-field-name="enumId" />
+		</relation>
+		<relation type="one" fk-name="AREAREL" title="arearel"
+			rel-entity-name="Enumeration">
+			<key-map field-name="area" rel-field-name="enumId" />
+		</relation>
+		<relation type="one" fk-name="TDREL" rel-entity-name="TipoDocumento">
+			<key-map field-name="idTipoDoc" />
+		</relation>
+	</entity>
+</entitymodel>

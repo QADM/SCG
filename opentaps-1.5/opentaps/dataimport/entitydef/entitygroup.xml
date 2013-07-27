@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) Open Source Strategies, Inc.
+ *
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<entitygroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/entitygroup.xsd">
+
+  <!-- =================================== -->
+  <!-- org.opentaps.dataimport.customers   -->
+  <!-- =================================== -->
+
+  <entity-group group="org.ofbiz" entity="DataImportCustomer"/>
+  <entity-group group="org.ofbiz" entity="DataImportCustomerPassword"/>
+  <entity-group group="org.ofbiz" entity="DataImportCommissionRates"/>
+  <entity-group group="org.ofbiz" entity="DataImportCommissionCustomers"/>
+
+  <!-- =================================== -->
+  <!-- org.opentaps.dataimport.suppliers   -->
+  <!-- =================================== -->
+
+  <entity-group group="org.ofbiz" entity="DataImportSupplier"/>
+ 
+  <!-- =================================== -->
+  <!-- org.opentaps.dataimport.products    -->
+  <!-- =================================== -->
+
+  <entity-group group="org.ofbiz" entity="DataImportProduct"/>
+  <entity-group group="org.ofbiz" entity="DataImportInventory"/>
+
+  <!-- =================================== -->
+  <!-- org.opentaps.dataimport.shoppinglists    -->
+  <!-- =================================== -->
+
+  <entity-group group="org.ofbiz" entity="DataImportShoppingList"/>
+  <entity-group group="org.ofbiz" entity="DataImportShoppingListItem"/>
+
+  <!-- =================================== -->
+  <!-- org.opentaps.dataimport.orders      -->
+  <!-- =================================== -->
+
+  <entity-group group="org.ofbiz" entity="DataImportOrderHeader"/>
+  <entity-group group="org.ofbiz" entity="DataImportOrderItem"/>
+  <entity-group group="org.ofbiz" entity="DataImportOrderPayment"/>
+
+  <!-- =================================== -->
+  <!-- org.opentaps.dataimport.tax         -->
+  <!-- =================================== -->
+
+  <entity-group group="org.ofbiz" entity="DataImportUSZipCodes"/>
+  <entity-group group="org.ofbiz" entity="DataImportUSCountyTax"/>
+
+  <!-- =================================== -->
+  <!-- org.opentaps.dataimport.mscrm       -->
+  <!-- =================================== -->
+<!--
+  <entity-group group="org.ofbiz" entity="MsAccountBase"/>
+  <entity-group group="org.ofbiz" entity="MsContactBase"/>
+  <entity-group group="org.ofbiz" entity="MsLeadBase"/>
+  <entity-group group="org.ofbiz" entity="MsCustomerAddress"/>
+-->
+
+  <!-- =================================== -->
+  <!-- org.opentaps.dataimport.netsuite    -->
+  <!-- =================================== -->
+  <entity-group group="org.ofbiz" entity="NetSuiteItem"/>
+  <entity-group group="org.ofbiz" entity="NetSuiteCustomer"/>
+  <entity-group group="org.ofbiz" entity="NetSuiteAddressBook"/>
+  <entity-group group="org.ofbiz" entity="NetSuiteCustomerType"/>
+  <entity-group group="org.ofbiz" entity="NetSuiteSalesOrderType"/>
+  <entity-group group="org.ofbiz" entity="NetSuitePaymentTerm"/>
+  <entity-group group="org.ofbiz" entity="NetSuitePriceList"/>
+  <entity-group group="org.ofbiz" entity="NetSuiteItemPrice"/>
+  
+  <!-- =================================== -->
+  <!-- org.opentaps.dataimport.accounting.ledger    -->
+  <!-- =================================== -->
+  <entity-group group="org.ofbiz" entity="DataImportGlAccount"/>
+
+  <!-- =================================== -->
+  <!-- org.opentaps.dataimport    -->
+  <!-- =================================== -->
+
+  
+  <!-- =================================== -->
+  <!-- org.opentaps.dataimport    -->
+  <!-- =================================== -->
+  <entity-group group="org.ofbiz" entity="DataImportTag"/>	
+  
+  <!-- =================================== -->
+  <!-- org.opentaps.dataimport    -->
+  <!-- =================================== -->
+  <entity-group group="org.ofbiz" entity="DataImportParty"/>	
+  <entity-group group="org.ofbiz" entity="DataImportProject"/>
+  <entity-group group="org.ofbiz" entity="DataImportGeo"/>
+  <entity-group group="org.ofbiz" entity="DataImportCategory"/>	
+  <entity-group group="org.ofbiz" entity="ClasifPresupuestal"/>
+  <entity-group group="org.ofbiz" entity="NivelPresupuestal"/>
+  <entity-group group="org.ofbiz" entity="DataImportPresupuestoIngreso"/>
+  <entity-group group="org.ofbiz" entity="DataImportPresupuestoEgreso"/>
+  <entity-group group="org.ofbiz" entity="AcctgTransPresupuestal"/>
+  <entity-group group="org.ofbiz" entity="TipoDocumento"/>
+  <entity-group group="org.ofbiz" entity="DataImportMatrizEgr"/>
+  <entity-group group="org.ofbiz" entity="DataImportMatrizIng"/>
+  <entity-group group="org.ofbiz" entity="DataImportContableGuide"/>
+  <entity-group group="org.ofbiz" entity="DataimportCatalogoConceptos"/>
+  <entity-group group="org.ofbiz" entity="DataimportCatalogoSubconceptos"/>
+  <entity-group group="org.ofbiz" entity="MiniGuiaContable"/>
+  <entity-group group="org.ofbiz" entity="DataImportIngresoDiario"/>
+  <entity-group group="org.ofbiz" entity="DataImportEgresoDiario"/>
+  <entity-group group="org.ofbiz" entity="DataImportOperacionDiaria"/>
+</entitygroup>
+

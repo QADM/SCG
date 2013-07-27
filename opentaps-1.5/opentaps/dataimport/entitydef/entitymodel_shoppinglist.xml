@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) Open Source Strategies, Inc.
+ *
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<entitymodel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/entitymodel.xsd">
+  <!-- ========================================================= -->
+  <!-- ======================== Defaults ======================= -->
+  <!-- ========================================================= -->
+    <title>Product Data Import Entities</title>
+    <description>Defines intermediate entities for importing customer data</description>
+    <copyright>Copyright (c) Open Source Strategies, Inc.</copyright>
+    <author>Jeremy Wickersheimer (jwickers@opensourcestrategies.com)</author>
+    <version>1.0</version>
+
+    <!-- ================================= -->
+    <!-- org.opentaps.dataimport.shoppinglists -->  
+    <!-- ================================= -->
+    <entity entity-name="DataImportShoppingList"
+        package-name="org.opentaps.dataimport.shoppinglists"
+        title="Intermediate import entity for product data.">
+      <field name="partyId" type="id-ne"/>
+      <field name="processedTimestamp" type="date-time">
+        <description>Special field for system to record when entry was successfully imported.  
+            Do not use for any other purpose.</description>
+      </field>
+      <prim-key field="partyId"/>
+      <relation type="one-nofk" rel-entity-name="Party">
+        <key-map field-name="partyId"/>
+      </relation>
+    </entity>
+
+    <entity entity-name="DataImportShoppingListItem"
+        package-name="org.opentaps.dataimport.shoppinglists"
+        title="Intermediate import entity for product data.">
+      <field name="partyId" type="id-ne"/>
+      <field name="productId" type="id-ne"/>
+      <field name="quantity" type="id-ne"/>
+      <field name="processedTimestamp" type="date-time"/>
+      <prim-key field="productId"/>
+      <prim-key field="partyId"/>
+      <relation type="one-nofk" rel-entity-name="Product">
+        <key-map field-name="productId"/>
+      </relation>
+      <relation type="one-nofk" rel-entity-name="Party">
+        <key-map field-name="partyId"/>
+      </relation>
+    </entity>
+</entitymodel>

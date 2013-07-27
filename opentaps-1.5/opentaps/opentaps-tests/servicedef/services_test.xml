@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * Copyright (c) Open Source Strategies, Inc.
+ * 
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/services.xsd">
+    <description>Opentaps Services for testing</description>
+    <vendor>Open Source Strategies, Inc.</vendor>
+
+    <service name="testShipOrder" engine="java" auth="true" use-transaction="true" transaction-timeout="72000"
+        location="org.opentaps.tests.warehouse.TestShippingServices" invoke="testShipOrder">
+        <description>
+            Packs all ship groups in an order and triggers the creation of invoices
+            and packing slips for them.  Uses the packing session object to accomplish
+            these goals.
+            Functionally emulates the role of the legacy quickShipEntireOrder, but using
+            a process that is standard to opentaps.
+        </description>
+        <attribute name="orderId" mode="IN" type="String" optional="false"/>
+        <attribute name="shipGroupSeqId" mode="IN" type="String" optional="true"/>
+        <attribute name="facilityId" mode="IN" type="String" optional="false"/>
+        <attribute name="shipmentIds" mode="OUT" type="java.util.List" optional="false"/>
+    </service>
+
+    <service name="testShipOrderManual" engine="java" auth="true" use-transaction="true" transaction-timeout="72000"
+        location="org.opentaps.tests.warehouse.TestShippingServices" invoke="testShipOrderManual">
+        <description>
+            Packs items from the given map of shipGroup=>itemSeqId=>quantity and triggers the creation of invoices
+            and packing slips for them.  Uses the packing session object to accomplish
+            these goals.
+            Functionally emulates the role of the legacy quickShipEntireOrder, but using
+            a process that is standard to opentaps.
+        </description>
+        <attribute name="orderId" mode="IN" type="String" optional="false"/>
+        <attribute name="items" mode="IN" type="Map" optional="false"/>
+        <attribute name="facilityId" mode="IN" type="String" optional="false"/>
+        <attribute name="shipmentIds" mode="OUT" type="java.util.List" optional="false"/>
+    </service>
+
+</services>
