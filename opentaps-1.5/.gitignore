@@ -63,6 +63,8 @@ opentaps/financials/webapp/financialsgwt/
 opentaps/funambol/build/
 opentaps/opentaps-common/build/
 opentaps/opentaps-common/lib/opentaps-common-aspect.jar
+opentaps/opentaps-common/lib/opentaps-common-entities.jar
+opentaps/opentaps-common/lib/opentaps-common-services.jar
 opentaps/opentaps-common/webapp/commongwt/
 opentaps/opentaps-common/config/*.cfg.xml
 opentaps/purchasing/build/
