@@ -240,10 +240,14 @@ public class PresupuestoIngresoImportService extends DomainService implements
 							Debug.log("Trans Nueva");
 							presupuestoIngreso.setAcctgTransId(id + " I"
 									+ rowdata.getCiclo() + "-" + mes);
+							presupuestoIngreso.setCreatedByUserLogin(rowdata
+									.getUsuario());
 						} else {
 							Debug.log("Trans Modif");
 							presupuestoIngreso.setAcctgTransId(trans.get(0)
 									.getAcctgTransId());
+							presupuestoIngreso.setCreatedByUserLogin(trans.get(
+									0).getCreatedByUserLogin());
 
 						}
 
@@ -263,8 +267,8 @@ public class PresupuestoIngresoImportService extends DomainService implements
 						presupuestoIngreso.setGlFiscalTypeId("BUDGET");
 						presupuestoIngreso
 								.setAcctgTransTypeId("TINGRESOESTIMADO");
-						presupuestoIngreso.setCreatedByUserLogin("admin");
-						presupuestoIngreso.setLastModifiedByUserLogin("admin");
+						presupuestoIngreso.setLastModifiedByUserLogin(rowdata
+								.getUsuario());
 						presupuestoIngreso.setPartyId(ue.getPartyId());
 						switch (mes) {
 						case 1:

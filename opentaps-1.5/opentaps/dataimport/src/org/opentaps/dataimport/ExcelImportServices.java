@@ -1435,7 +1435,7 @@ public final class ExcelImportServices extends DomainService {
 				ingreso.setMun(this.readStringCell(row, rowCount++));
 				ingreso.setLoc(this.readStringCell(row, rowCount++));
 				ingreso.setClavePres(this.readStringCell(row, rowCount++));
-				// ingreso.setUsuario(this.readStringCell(row, rowCount++));
+				ingreso.setUsuario(this.readStringCell(row, rowCount++));
 				ingreso.setEnero(this.readBigDecimalCell(row, rowCount++));
 				ingreso.setFebrero(this.readBigDecimalCell(row, rowCount++));
 				ingreso.setMarzo(this.readBigDecimalCell(row, rowCount++));
@@ -1518,7 +1518,7 @@ public final class ExcelImportServices extends DomainService {
 				egreso.setSubsec(this.readStringCell(row, rowCount++));
 				egreso.setArea(this.readStringCell(row, rowCount++));
 				egreso.setClavePres(this.readStringCell(row, rowCount++));
-				// egreso.setUsuario(this.readStringCell(row, rowCount++));
+				egreso.setUsuario(this.readStringCell(row, rowCount++));
 				egreso.setEnero(this.readBigDecimalCell(row, rowCount++));
 				egreso.setFebrero(this.readBigDecimalCell(row, rowCount++));
 				egreso.setMarzo(this.readBigDecimalCell(row, rowCount++));
