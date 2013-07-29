@@ -278,10 +278,13 @@ public class PresupuestoEgresoImportService extends DomainService implements
 							Debug.log("Trans Nueva");
 							presupuestoEgreso.setAcctgTransId(id + " E"
 									+ rowdata.getCiclo() + "-" + mes);
+							presupuestoEgreso.setCreatedByUserLogin(rowdata.getUsuario());
 						} else {
 							Debug.log("Trans Modif");
 							presupuestoEgreso.setAcctgTransId(trans.get(0)
 									.getAcctgTransId());
+							presupuestoEgreso.setCreatedByUserLogin(trans.get(0)
+									.getCreatedByUserLogin());
 
 						}
 
@@ -307,8 +310,7 @@ public class PresupuestoEgresoImportService extends DomainService implements
 						presupuestoEgreso.setGlFiscalTypeId("BUDGET");
 						presupuestoEgreso
 								.setAcctgTransTypeId("TPRESUPAPROBADO");
-						presupuestoEgreso.setCreatedByUserLogin("admin");
-						presupuestoEgreso.setLastModifiedByUserLogin("admin");
+						presupuestoEgreso.setLastModifiedByUserLogin(rowdata.getUsuario());
 						presupuestoEgreso.setPartyId(ue.getPartyId());
 						switch (mes) {
 						case 1:
