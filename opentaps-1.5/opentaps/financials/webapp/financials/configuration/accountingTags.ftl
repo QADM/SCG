@@ -30,7 +30,6 @@
         <table class="listTable" style="border:0">
           <tr class="listTableHeader">
             <@displayCell text=uiLabelMap.CommonSequenceNum />
-            <@displayCell text=uiLabelMap.CommonId />
             <@displayCell text=uiLabelMap.CommonName />
             <@displayCell text=uiLabelMap.CommonDescription />
       		<@displayCell text=uiLabelMap.Nivel />
@@ -47,7 +46,7 @@
             <tr class="${tableRowClass(tag_index)}">
               <@inputHidden name="enumId" value=tag.enumId index=tag_index />
               <@inputTextCell name="sequenceId" default=tag.sequenceId! size=3 maxlength=3 index=tag_index />
-              <@displayCell text=tag.enumId />
+
               <@inputTextCell name="enumCode" default=tag.enumCode! maxlength=30 index=tag_index />
               <@inputTextCell name="description" default=tag.description! maxlength=30 index=tag_index />
 
