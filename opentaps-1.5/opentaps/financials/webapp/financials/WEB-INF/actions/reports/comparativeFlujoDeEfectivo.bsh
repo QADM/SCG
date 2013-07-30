@@ -155,7 +155,6 @@ cuentasOtrosGastosAgre.putAll(context.get("cuentasOtrosGastosTr"));
 cuentasOtrosGastosList = EntityUtil.orderBy(cuentasOtrosGastosAgre.keySet(), UtilMisc.toList("glAccountId"));
 context.put("cuentasOtrosGastosList", cuentasOtrosGastosList);
 
-
 // put the correct GlFiscalTypes into the context for the display tier
 glFiscalType1 = delegator.findByPrimaryKey("GlFiscalType", UtilMisc.toMap("glFiscalTypeId", glFiscalTypeId1));
 glFiscalType2 = delegator.findByPrimaryKey("GlFiscalType", UtilMisc.toMap("glFiscalTypeId", glFiscalTypeId2));
