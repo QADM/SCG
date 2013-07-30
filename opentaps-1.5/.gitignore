@@ -10,6 +10,7 @@ applications/product/build/
 applications/securityext/build/
 applications/workeffort/build/
 bin/
+doc/
 framework/appserver/build/
 framework/base/build/
 framework/bi/build/
