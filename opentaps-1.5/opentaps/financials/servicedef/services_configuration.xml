@@ -128,6 +128,7 @@
         <auto-attributes include="nonpk" mode="IN" optional="true"/>
         <attribute name="enumTypeId" type="String" mode="IN" optional="false"/>
         <attribute name="enumCode" type="String" mode="IN" optional="false"/>
+        <attribute name="sequenceId" type="String" mode="IN" optional="false"/>
         <attribute name="description" type="String" mode="IN" optional="false"/>
         <attribute name="nivelId" type="String" mode="IN" optional="false"/>
         <attribute name="parentEnumId" type="String" mode="IN" optional="true"/>

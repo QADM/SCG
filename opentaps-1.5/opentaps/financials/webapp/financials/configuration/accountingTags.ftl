@@ -29,8 +29,8 @@
         <@inputHiddenRowCount list=tagsByType.get(type) />
         <table class="listTable" style="border:0">
           <tr class="listTableHeader">
-            <@displayCell text=uiLabelMap.CommonSequenceNum />
-            <@displayCell text=uiLabelMap.CommonName />
+            <@displayCell text=uiLabelMap.Codigo />
+            <@displayCell text=uiLabelMap.Id />
             <@displayCell text=uiLabelMap.CommonDescription />
       		<@displayCell text=uiLabelMap.Nivel />
       		<@displayCell text=uiLabelMap.ParentId />
@@ -44,8 +44,10 @@
           </tr>
           <#list tagsByType.get(type) as tag>
             <tr class="${tableRowClass(tag_index)}">
-              <@inputHidden name="enumId" value=tag.enumId index=tag_index />              
-			  <@displayCell text=tag.sequenceId />
+              <@inputHidden name="enumId" value=tag.enumId index=tag_index />
+              <@inputTextCell name="sequenceId" default=tag.sequenceId! size=3 maxlength=3 index=tag_index />
+              <@displayCell text=tag.enumId />
+
               <@inputTextCell name="enumCode" default=tag.enumCode! maxlength=30 index=tag_index />
               <@inputTextCell name="description" default=tag.description! maxlength=30 index=tag_index />
 
@@ -56,6 +58,9 @@
               <@inputSelectHashCell name="disabled" default=tag.disabled!"N" index=tag_index hash=disableSelectValues />
               <@inputHiddenRowSubmit submit=false index=tag_index/>
               <@inputSubmitIndexedCell title="${uiLabelMap.CommonUpdate}" index=tag_index/>
+              <td>
+              <@submitFormLink form="deleteAccountingTagForm" text=uiLabelMap.CommonRemove class="smallSubmit" enumId=tag.enumId/>
+              </td>
             </tr>
           </#list>
         </table>
