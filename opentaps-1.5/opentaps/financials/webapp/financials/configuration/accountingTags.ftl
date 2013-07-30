@@ -44,9 +44,8 @@
           </tr>
           <#list tagsByType.get(type) as tag>
             <tr class="${tableRowClass(tag_index)}">
-              <@inputHidden name="enumId" value=tag.enumId index=tag_index />
-              <@inputTextCell name="sequenceId" default=tag.sequenceId! size=3 maxlength=3 index=tag_index />
-
+              <@inputHidden name="enumId" value=tag.enumId index=tag_index />              
+			  <@displayCell text=tag.sequenceId />
               <@inputTextCell name="enumCode" default=tag.enumCode! maxlength=30 index=tag_index />
               <@inputTextCell name="description" default=tag.description! maxlength=30 index=tag_index />
 
@@ -57,9 +56,6 @@
               <@inputSelectHashCell name="disabled" default=tag.disabled!"N" index=tag_index hash=disableSelectValues />
               <@inputHiddenRowSubmit submit=false index=tag_index/>
               <@inputSubmitIndexedCell title="${uiLabelMap.CommonUpdate}" index=tag_index/>
-              <td>
-              <@submitFormLink form="deleteAccountingTagForm" text=uiLabelMap.CommonRemove class="smallSubmit" enumId=tag.enumId/>
-              </td>
             </tr>
           </#list>
         </table>

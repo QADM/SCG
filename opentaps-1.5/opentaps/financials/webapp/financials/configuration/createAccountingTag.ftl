@@ -31,13 +31,13 @@
      
      
       
-        <@inputSelectRow title=uiLabelMap.Nivel required=false list=nivelLists  displayField="descripcion" name="nivelId"  />     
+        <@inputSelectRow title=uiLabelMap.Nivel required=false list=nivelLists  displayField="descripcion" name="nivelId" titleClass="requiredField" />     
            
 
       
       <@inputTextRow title=uiLabelMap.ParentId  size=10 name="parentEnumId" size=10  />
-      <@inputDateRow title="Fecha inicio"  name="fechaInicio" size=12 default="" />
-      <@inputDateRow title="Fecha fin" name="fechaFin"   size=12 default="" />
+      <@inputDateRow title="Fecha inicio"  name="fechaInicio" size=12 default="" titleClass="requiredField" />
+      <@inputDateRow title="Fecha fin" name="fechaFin"   size=12 default="" titleClass="requiredField" />
       <@inputSubmitRow title=uiLabelMap.CommonCreate />
     </table>
   </form>

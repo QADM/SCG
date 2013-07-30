@@ -34,14 +34,15 @@
         <section>
             <actions>
                 <set field="pageTitleLabel" value="OpentapsMyHome"/>  
-                <script location="component://financials/webapp/financials/WEB-INF/actions/dashboard/dashboard.bsh"/>
+               <!-- <script location="component://financials/webapp/financials/WEB-INF/actions/dashboard/dashboard.bsh"/> -->
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator">
                     <decorator-section name="section-body">
-                        <platform-specific><html>
+                        <platform-specific>
+                        <!-- <html>
                                 <html-template location="component://financials/webapp/financials/dashboard/dashboard.ftl"/>
-                        </html></platform-specific>
+                        </html> --></platform-specific>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
