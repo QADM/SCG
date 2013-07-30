@@ -1404,6 +1404,7 @@ under the License.
                  title="Arroja el detalle de las pólizas contables">
        <member-entity entity-alias="ATR" entity-name="AcctgTrans"/>
        <member-entity entity-alias="ATP" entity-name="AcctgTransPresupuestal"/>
+       <member-entity entity-alias="TDC" entity-name="TipoDocumento"/>
 
 	   <alias name="acctgTransId" entity-alias="ATR"/>
        <alias name="descripcionUr" entity-alias="ATP"/>
@@ -1422,10 +1423,12 @@ under the License.
        <alias name="descripcionMunicipio" entity-alias="ATP"/>
        <alias name="descripcionLocalidad" entity-alias="ATP"/>
        <alias name="descripcionFinalidad" entity-alias="ATP"/>
+       <alias name="descripcionFuncion" entity-alias="ATP"/>
        <alias name="descripcionSubFuncion" entity-alias="ATP"/>
        <alias name="descripcionProgramaPlan" entity-alias="ATP"/>
        <alias name="descripcionProgramaPres" entity-alias="ATP"/>
        <alias name="descripcionSubProgramaPres" entity-alias="ATP"/>
+       <alias name="descripcionActividad" entity-alias="ATP"/>
        <alias name="descripcionTg" entity-alias="ATP"/>
        <alias name="descripcionCapitulo" entity-alias="ATP"/>
        <alias name="descripcionConcepto" entity-alias="ATP"/>
@@ -1435,10 +1438,13 @@ under the License.
        <alias name="descripcionSubsector" entity-alias="ATP"/>
        <alias name="descripcionArea" entity-alias="ATP"/>
        <alias name="descripcionTipoDoc" entity-alias="ATP"/>
-       <alias name="descripcionActividad" entity-alias="ATP"/>
+       <alias name="tipoPoliza" entity-alias="TDC" />
 
        <view-link entity-alias="ATR" rel-entity-alias="ATP" rel-optional="true">
            <key-map field-name="acctgTransId"/>
+       </view-link>
+       <view-link entity-alias="ATP" rel-entity-alias="TDC" rel-optional="true">
+           <key-map field-name="idTipoDoc"/>
        </view-link>
     </view-entity>
     

@@ -186,7 +186,7 @@
                   linkUrl="Ingresos" securityModule="" securityAction=""/>
 <OpentapsShortcut shortcutId="Egresos" groupId="financialsTransactions" sequenceNum="110" uiLabel="Egresos"
                   linkUrl="Egresos" securityModule="" securityAction=""/>
-<OpentapsShortcut shortcutId="Polizas" groupId="financialsTransactions" sequenceNum="120" uiLabel="Pólizas"
+<OpentapsShortcut shortcutId="Polizas" groupId="financialsTransactions" sequenceNum="120" uiLabel="Buscar Pólizas"
                   linkUrl="Polizas" securityModule="" securityAction=""/>
 
 
