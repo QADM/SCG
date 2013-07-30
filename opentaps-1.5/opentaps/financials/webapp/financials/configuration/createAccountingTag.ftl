@@ -23,10 +23,12 @@
       <@inputSelectRow title=uiLabelMap.CommonType name="enumTypeId" list=tagTypes key="enumTypeId" ; tag>
         ${tag.description}
       </@inputSelectRow>
-      <@inputTextRow title=uiLabelMap.CommonSequenceNum name="sequenceId" size=3 maxlength=3 />
-      <@inputTextRow title=uiLabelMap.CommonId name="enumId" />
+      <@inputTextRow title=uiLabelMap.Codigo name="sequenceId" size=3 maxlength=3 titleClass="requiredField"/>
+
       <@inputTextRow title=uiLabelMap.CommonName name="enumCode" titleClass="requiredField" />
       <@inputTextRow title=uiLabelMap.CommonDescription name="description" size=60  titleClass="requiredField"/>
+     
+     
      
      
      
