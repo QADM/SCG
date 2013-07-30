@@ -110,7 +110,7 @@ public class IngresoDiarioImportService extends DomainService implements
 			DataImportIngresoDiario rowdata, String id, String campo)
 			throws RepositoryException {
 		Geo loc = ledger_repo.findOne(Geo.class,
-				ledger_repo.map(Geo.Fields.geoId, rowdata.getLoc()));
+				ledger_repo.map(Geo.Fields.geoId, id));
 		if (loc == null) {
 			Debug.log("Error, " + campo + " no existe");
 			String message = "Failed to import Ingreso Diario ["
