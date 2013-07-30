@@ -97,6 +97,8 @@ public class ProjectImportService extends DomainService implements
 					project.setExternalId(rowdata.getExternalId());
 					project.setWorkEffortParentId(rowdata.getWorkEffortParentId());
 					project.setNode(rowdata.getNode());
+					project.setCurrentStatusId("PRJ_ACTIVE");
+					project.setScopeEnumId("WES_PRIVATE");
 					
 					imp_tx1 = this.session.beginTransaction();
 					ledger_repo.createOrUpdate(project);
