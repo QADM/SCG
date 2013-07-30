@@ -19,7 +19,10 @@
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
 <#macro listBalances type accounts balances1 balances2 balances3>
-   <#list accounts as account>
+	<#assign totIni = 0.0>
+	<#assign totFin = 0.0>
+	<#assign totDif = 0.0>   
+   <#list accounts as account>   
      <#if account?has_content>
        <tr>
          <td class="tabletext">${account.accountCode?if_exists}: ${account.accountName?if_exists} (<a href="<@ofbizUrl>AccountActivitiesDetail?glAccountId=${account.glAccountId?if_exists}&organizationPartyId=${organizationPartyId}</@ofbizUrl>" class="buttontext">${account.glAccountId?if_exists}</a>)</td>
@@ -27,6 +30,15 @@
          <td class="tabletext" align="right"><@ofbizCurrency amount=balances2.get(account) isoCode=currencyUomId/></td>
          <td class="tabletext" align="right"><@ofbizCurrency amount=balances3.get(account) isoCode=currencyUomId/></td>
        </tr>
+		<#if balances1.get(account)?exists>
+			<#assign totIni = totIni + balances1.get(account)>
+		</#if>
+		<#if balances2.get(account)?exists>
+			<#assign totFin = totFin + balances2.get(account)>
+		</#if>   
+		<#if balances3.get(account)?exists>
+			<#assign totDif = totDif + balances3.get(account)>
+		</#if>         
      </#if>
    </#list>
    <tr><td colspan="4"><hr/></td></tr>
@@ -35,11 +47,14 @@
 <#macro displaySummary summary >
       <tr>
         <td class="tableheadtext" align="left">${summary?if_exists}</td>
+        <td class="tabletext" align="right"><@ofbizCurrency amount=totIni isoCode=currencyUomId/></td>
+        <td class="tabletext" align="right"><@ofbizCurrency amount=totFin isoCode=currencyUomId/></td>
+        <td class="tabletext" align="right"><@ofbizCurrency amount=totDif isoCode=currencyUomId/></td>        
       </tr>
       <tr><td>&nbsp;</td></tr>
 </#macro>
     
-<#if set1FlujoDeEfectivo?exists || set2FlujoDeEfectivo?exists>
+<#if set1FlujoDeEfectivo?has_content || set2FlujoDeEfectivo?has_content>
   <#assign currencyUomId = parameters.orgCurrencyUomId>  <!-- for some reason, putting this in context in main-decorator.bsh does not work -->
   <div style="border: 1px solid #999999; margin-top: 20px; margin-bottom: 20px;"></div>
   <table>
@@ -48,7 +63,7 @@
     </tr>
     <tr><td>&nbsp;</td></tr>
     <tr>
-      <td class="tableheadtext" align="left">${uiLabelMap.Account}</td>
+      <td class="tableheadtext" align="left">${uiLabelMap.AccountingAccount}</td>
       <td class="tableheadtext" align="right" style="white-space:nowrap">
         ${getLocalizedDate(fromDate1, "DATE")} - ${getLocalizedDate(thruDate1, "DATE")}<br/>
         (${glFiscalType1.description})
