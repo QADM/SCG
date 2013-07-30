@@ -26,7 +26,7 @@ import org.opentaps.common.util.UtilAccountingTags;
 import javolution.util.FastList;
 
 //put to history
-context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.getUiLabels(locale).get("FinancialsComparativeCashFlowStatement"), null, FastList.newInstance());
+context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.getUiLabels(locale).get("EdoFlujoEfect"), null, FastList.newInstance());
 
 organizationPartyId = context.get("organizationPartyId");
 glFiscalTypeId1 = context.get("glFiscalTypeId1");
@@ -49,12 +49,15 @@ UtilAccountingTags.addTagParameters(request, input);
 
 context.put("input",input);
 
-result = dispatcher.runSync("getComparativeCashFlowStatement", input);
+result = dispatcher.runSync("getComparativeEstadoFlujoEfectivo", input);
 if (ServiceUtil.isError(result)) return;
 
 //Se obtienen las listas principales 
-set1FlujoDeEfectivo = (Map<String, Object>) results.get("set1FlujoDeEfectivo");
-set2FlujoDeEfectivo = (Map<String, Object>) results.get("set2FlujoDeEfectivo");
+set1FlujoDeEfectivo = result.get("set1FlujoDeEfectivo");
+set2FlujoDeEfectivo = result.get("set2FlujoDeEfectivo");
+
+context.put("set1FlujoDeEfectivo", set1FlujoDeEfectivo);
+context.put("set2FlujoDeEfectivo", set2FlujoDeEfectivo);
 
 //Se mandan al contexto las primeras listas (From)
 context.put("cuentasImpuestoFr", set1FlujoDeEfectivo.get("cuentasImpuesto"));
@@ -83,70 +86,70 @@ context.put("cuentaInteComisTr", set2FlujoDeEfectivo.get("cuentaInteComis"));
 context.put("cuentasOtrosGastosTr", set2FlujoDeEfectivo.get("cuentasOtrosGastos"));
 
 //Ahora se mandan las diferencias de las fechas
-context.put("difCuentasImpuesto", results.get("difCuentasImpuesto"));
-context.put("difCuentasContribu", results.get("difCuentasContribu"));
-context.put("difCuentasParticipa", results.get("difCuentasParticipa"));
-context.put("difCuentasTransfe", results.get("difCuentasTransfe"));
-context.put("difCuentasOtrosIng", results.get("difCuentasOtrosIng"));
-context.put("difCuentasIcreVaria", results.get("difCuentasIcreVaria"));
-context.put("difCuentasGastosFun", results.get("difCuentasGastosFun"));
-context.put("difCuentasTransGastos", results.get("difCuentasTransGastos"));
-context.put("difCuentaPartiAporta", results.get("difCuentaPartiAporta"));
-context.put("difCuentaInteComis", results.get("difCuentaInteComis"));
-context.put("difCuentasOtrosGastos", results.get("difCuentasOtrosGastos"));
+context.put("difCuentasImpuesto", result.get("difCuentasImpuesto"));
+context.put("difCuentasContribu", result.get("difCuentasContribu"));
+context.put("difCuentasParticipa", result.get("difCuentasParticipa"));
+context.put("difCuentasTransfe", result.get("difCuentasTransfe"));
+context.put("difCuentasOtrosIng", result.get("difCuentasOtrosIng"));
+context.put("difCuentasIcreVaria", result.get("difCuentasIcreVaria"));
+context.put("difCuentasGastosFun", result.get("difCuentasGastosFun"));
+context.put("difCuentasTransGastos", result.get("difCuentasTransGastos"));
+context.put("difCuentaPartiAporta", result.get("difCuentaPartiAporta"));
+context.put("difCuentaInteComis", result.get("difCuentaInteComis"));
+context.put("difCuentasOtrosGastos", result.get("difCuentasOtrosGastos"));
 
 //Creamos las listas a iterar con las cuentas que se encontraron en la fecha incial y en la fecha final y las enviamos al contexto
-cuentasImpuestoAgre = FastMap.newInstance(); 
-cuentasImpuestoAgre.putAll(context.get("cuentasImpuestoFr");
+cuentasImpuestoAgre = javolution.util.FastMap.newInstance(); 
+cuentasImpuestoAgre.putAll(context.get("cuentasImpuestoFr"));
 cuentasImpuestoAgre.putAll(context.get("cuentasImpuestoTr")); 
 cuentasImpuestoList = EntityUtil.orderBy(cuentasImpuestoAgre.keySet(), UtilMisc.toList("glAccountId"));
 context.put("cuentasImpuestoList", cuentasImpuestoList);
-cuentasContribuAgre = FastMap.newInstance(); 
+cuentasContribuAgre = javolution.util.FastMap.newInstance(); 
 cuentasContribuAgre.putAll(context.get("cuentasContribuFr"));
 cuentasContribuAgre.putAll(context.get("cuentasContribuTr")); 
 cuentasContribuList = EntityUtil.orderBy(cuentasContribuAgre.keySet(), UtilMisc.toList("glAccountId"));  
 context.put("cuentasContribuList", cuentasContribuList);
-cuentasParticipaAgre = FastMap.newInstance(); 
+cuentasParticipaAgre = javolution.util.FastMap.newInstance(); 
 cuentasParticipaAgre.putAll(context.get("cuentasParticipaFr"));
 cuentasParticipaAgre.putAll(context.get("cuentasParticipaTr")); 
 cuentasParticipaList = EntityUtil.orderBy(cuentasParticipaAgre.keySet(), UtilMisc.toList("glAccountId"));  
 context.put("cuentasParticipaList", cuentasParticipaList);
-cuentasTransfeAgre = FastMap.newInstance(); 
+cuentasTransfeAgre = javolution.util.FastMap.newInstance(); 
 cuentasTransfeAgre.putAll(context.get("cuentasTransfeFr"));
 cuentasTransfeAgre.putAll(context.get("cuentasTransfeTr")); 
 cuentasTransfeList = EntityUtil.orderBy(cuentasTransfeAgre.keySet(), UtilMisc.toList("glAccountId"));  
 context.put("cuentasTransfeList", cuentasTransfeList);        
-cuentasOtrosIngAgre = FastMap.newInstance(); 
+cuentasOtrosIngAgre = javolution.util.FastMap.newInstance(); 
 cuentasOtrosIngAgre.putAll(context.get("cuentasOtrosIngFr"));
 cuentasOtrosIngAgre.putAll(context.get("cuentasOtrosIngTr")); 
 cuentasOtrosIngList = EntityUtil.orderBy(cuentasOtrosIngAgre.keySet(), UtilMisc.toList("glAccountId"));   
 context.put("cuentasOtrosIngList", cuentasOtrosIngList);       
-cuentasIcreVariaAgre = FastMap.newInstance(); 
+cuentasIcreVariaAgre = javolution.util.FastMap.newInstance(); 
 cuentasIcreVariaAgre.putAll(context.get("cuentasIcreVariaFr"));
 cuentasIcreVariaAgre.putAll(context.get("cuentasIcreVariaTr")); 
 cuentasIcreVariaList = EntityUtil.orderBy(cuentasIcreVariaAgre.keySet(), UtilMisc.toList("glAccountId"));    
 context.put("cuentasIcreVariaList", cuentasIcreVariaList);  
-cuentasGastosFunAgre = FastMap.newInstance(); 
+cuentasGastosFunAgre = javolution.util.FastMap.newInstance(); 
 cuentasGastosFunAgre.putAll(context.get("cuentasGastosFunFr"));
 cuentasGastosFunAgre.putAll(context.get("cuentasGastosFunTr")); 
 cuentasGastosFunList = EntityUtil.orderBy(cuentasGastosFunAgre.keySet(), UtilMisc.toList("glAccountId"));
 context.put("cuentasGastosFunList", cuentasGastosFunList);  
-cuentasTransGastosAgre = FastMap.newInstance(); 
+cuentasTransGastosAgre = javolution.util.FastMap.newInstance(); 
 cuentasTransGastosAgre.putAll(context.get("cuentasTransGastosFr"));
 cuentasTransGastosAgre.putAll(context.get("cuentasTransGastosTr")); 
 cuentasTransGastosList = EntityUtil.orderBy(cuentasTransGastosAgre.keySet(), UtilMisc.toList("glAccountId"));
 context.put("cuentasTransGastosList", cuentasTransGastosList);          
-cuentaPartiAportaAgre = FastMap.newInstance(); 
+cuentaPartiAportaAgre = javolution.util.FastMap.newInstance(); 
 cuentaPartiAportaAgre.putAll(context.get("cuentaPartiAportaFr"));
 cuentaPartiAportaAgre.putAll(context.get("cuentaPartiAportaTr")); 
 cuentaPartiAportaList = EntityUtil.orderBy(cuentaPartiAportaAgre.keySet(), UtilMisc.toList("glAccountId")); 
 context.put("cuentaPartiAportaList", cuentaPartiAportaList);
-cuentaInteComisAgre = FastMap.newInstance(); 
+cuentaInteComisAgre = javolution.util.FastMap.newInstance(); 
 cuentaInteComisAgre.putAll(context.get("cuentaInteComisFr"));
 cuentaInteComisAgre.putAll(context.get("cuentaInteComisTr")); 
 cuentaInteComisList = EntityUtil.orderBy(cuentaInteComisAgre.keySet(), UtilMisc.toList("glAccountId"));  
 context.put("cuentaInteComisList", cuentaInteComisList);  
-cuentasOtrosGastosAgre = FastMap.newInstance(); 
+cuentasOtrosGastosAgre = javolution.util.FastMap.newInstance(); 
 cuentasOtrosGastosAgre.putAll(context.get("cuentasOtrosGastosFr"));
 cuentasOtrosGastosAgre.putAll(context.get("cuentasOtrosGastosTr")); 
 cuentasOtrosGastosList = EntityUtil.orderBy(cuentasOtrosGastosAgre.keySet(), UtilMisc.toList("glAccountId"));
