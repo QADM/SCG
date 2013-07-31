@@ -53,6 +53,41 @@ under the License.
         <auto-attributes include="pk" mode="IN" optional="false"/>
     </service>
 
+
+<!-- ============================Creación y actualizacion de campos en tabla updateGlAccountCategoryRelation====== -->
+
+
+
+    <service name="createGlAccountCategoryRelation" default-entity-name="GlAccountCategoryRelation" engine="simple"
+            location="component://accounting/script/org/ofbiz/accounting/ledger/GeneralLedgerServices.xml" invoke="createGlAccountCategoryRelation" auth="true">
+        <description>Create a GlAccount record</description>
+        <permission-service service-name="basicGeneralLedgerPermissionCheck" main-action="CREATE"/>
+        <auto-attributes include="pk" mode="IN" optional="false"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+    </service>
+
+
+ <service name="updateGlAccountCategoryRelation" default-entity-name="GlAccountCategoryRelation" engine="simple"
+            location="component://accounting/script/org/ofbiz/accounting/ledger/GeneralLedgerServices.xml" invoke="updateGlAccountCategoryRelation" auth="false">
+        <description>Update a GlAccount record</description>
+        <permission-service service-name="basicGeneralLedgerPermissionCheck" main-action="UPDATE"/>
+        <auto-attributes include="pk" mode="IN" optional="true"/>
+        
+    
+    </service>
+    
+    <!-- ============================Creación y actualizacion de campos en tabla updateGlAccountCategoryRelation====== -->
+    
+
+
+
+
+
+
+
+
+
+
     <service name="createGlAccountOrganization" default-entity-name="GlAccountOrganization" engine="simple"
             location="component://accounting/script/org/ofbiz/accounting/ledger/GeneralLedgerServices.xml" invoke="createGlAccountOrganization" auth="true">
         <description>Create a GlAccount record</description>
@@ -60,6 +95,9 @@ under the License.
         <auto-attributes include="pk" mode="IN" optional="false"/>
         <auto-attributes include="nonpk" mode="IN" optional="true"/>
     </service>
+    
+    
+    
     <service name="updateGlAccountOrganization" default-entity-name="GlAccountOrganization" engine="simple"
             location="component://accounting/script/org/ofbiz/accounting/ledger/GeneralLedgerServices.xml" invoke="updateGlAccountOrganization" auth="true">
         <description>Update a GlAccount record</description>
@@ -67,6 +105,12 @@ under the License.
         <auto-attributes include="pk" mode="IN" optional="false"/>
         <auto-attributes include="nonpk" mode="IN" optional="true"/>
     </service>
+    
+    
+    
+    
+    
+    
     <service name="deleteGlAccountOrganization" default-entity-name="GlAccountOrganization" engine="simple"
             location="component://accounting/script/org/ofbiz/accounting/ledger/GeneralLedgerServices.xml" invoke="deleteGlAccountOrganization" auth="true">
         <description>Delete a GlAccount record</description>
