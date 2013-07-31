@@ -78,6 +78,9 @@
 	    <attribute name="codificacion" type="String" mode="IN" optional="true"/>
 	    <attribute name="naturaleza" type="String" mode="IN" optional="true"/>
 	    <attribute name="tipoCuenta" type="String" mode="IN" optional="true"/>
+	    <attribute name="node" type="String" mode="IN" optional="true"/>
+	    <attribute name="majorGlAccount" type="String" mode="IN" optional="true"/>
+	    <attribute name="productCategoryId" type="String" mode="IN" optional="true"/>
 
     </service>
     
@@ -92,6 +95,10 @@
 	    <attribute name="codificacion" type="String" mode="IN" optional="true"/>
 	    <attribute name="naturaleza" type="String" mode="IN" optional="true"/>
 	    <attribute name="tipoCuenta" type="String" mode="IN" optional="true"/>
+	    <attribute name="node" type="String" mode="IN" optional="true"/>
+	    <attribute name="majorGlAccount" type="String" mode="IN" optional="true"/>
+	    <attribute name="productCategoryId" type="String" mode="IN" optional="true"/>
+	 
 	</service>
 
     <service name="financials.createPaymentMethod" engine="simple" default-entity-name="PaymentMethod"
@@ -128,12 +135,9 @@
         <auto-attributes include="nonpk" mode="IN" optional="true"/>
         <attribute name="enumTypeId" type="String" mode="IN" optional="false"/>
         <attribute name="enumCode" type="String" mode="IN" optional="false"/>
-        <attribute name="sequenceId" type="String" mode="IN" optional="false"/>
         <attribute name="description" type="String" mode="IN" optional="false"/>
         <attribute name="nivelId" type="String" mode="IN" optional="false"/>
         <attribute name="parentEnumId" type="String" mode="IN" optional="true"/>
-        <attribute name="fechaInicio" type="String" mode="IN" optional="false"/>
-        <attribute name="fechaFin" type="String" mode="IN" optional="false"/>
     </service>
 
     <service name="updateAccountingTag" default-entity-name="Enumeration" engine="java"

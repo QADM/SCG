@@ -20,7 +20,7 @@ package com.opensourcestrategies.financials.configuration;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
+import java.util.Date;
 import org.ofbiz.base.util.*;
 import org.ofbiz.entity.GenericDataSourceException;
 import org.ofbiz.entity.Delegator;
@@ -148,7 +148,11 @@ public final class ConfigurationServices {
         String codificacion = (String) context.get("codificacion");
         String naturaleza = (String) context.get("naturaleza");
         String tipoCuenta = (String) context.get("tipoCuenta");
+        String nodo = (String) context.get("node");
+        String cuentaMayor = (String) context.get("majorGlAccount");
+        String categoria =(String) context.get("productCategoryId");
 
+        Date fecha = new Date();
         List value = null;
 
         Map fields = UtilMisc.toMap("accountCode", accountCode);
@@ -172,7 +176,7 @@ public final class ConfigurationServices {
             context.put("glAccountClassId", glAccountClassId);
 
             //Add a new Gl Account
-            Map addNewGlAccountContext = UtilMisc.toMap("glAccountId", glAccountId, "accountCode", accountCode, "accountName", accountName, "description", description, "glAccountTypeId", glAccountTypeId, "glAccountClassId", glAccountClassId,"codificacion",codificacion,"naturaleza",naturaleza,"tipoCuenta",tipoCuenta);
+            Map addNewGlAccountContext = UtilMisc.toMap("glAccountId", glAccountId, "accountCode", accountCode, "accountName", accountName, "description", description, "glAccountTypeId", glAccountTypeId, "glAccountClassId", glAccountClassId,"codificacion",codificacion,"naturaleza",naturaleza,"tipoCuenta",tipoCuenta,"node",nodo,"majorGlAccount",cuentaMayor);
             addNewGlAccountContext.put("glResourceTypeId", glResourceTypeId);
             addNewGlAccountContext.put("parentGlAccountId", parentGlAccountId);
             addNewGlAccountContext.put("postedBalance", postedBalance);
@@ -182,7 +186,14 @@ public final class ConfigurationServices {
             if (ServiceUtil.isError(addNewGlAccountResult)) {
                 return addNewGlAccountResult;
             }
-
+           
+            
+            Map addNewRelationContext= UtilMisc.toMap("productCategoryId",categoria,"glAccountId",glAccountId,"fromDate",fecha,"userLogin", userLogin);
+            Map addNewRelationResult = dispatcher.runSync("createGlAccountCategoryRelation",addNewRelationContext, -1, false);
+            if (ServiceUtil.isError(addNewRelationResult)) {
+                return addNewRelationResult;
+            }
+            
             // associate it with the organization
             Map addNewGlAccountOrganizationContext = UtilMisc.toMap("glAccountId", glAccountId, "organizationPartyId", organizationPartyId, "postedBalance", postedBalance, "userLogin", userLogin);
             Map addNewGlAccountOrganizationResult = dispatcher.runSync("createGlAccountOrganization", addNewGlAccountOrganizationContext, -1, false);

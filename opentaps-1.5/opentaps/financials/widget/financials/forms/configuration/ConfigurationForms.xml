@@ -165,7 +165,7 @@
     <!-- update an existing Gl Account -->
     <form  name="updateGlAccount" type="single" title="Update an existing Gl Account" target="updateExistingGlAccount" default-map-name="glAccount"
         default-widget-style="tabletext" default-title-style="tableheadtext">
-        <field name="glAccountId"><display/></field>
+<field name="glAccountId"><display/></field>
         <field name="glAccountClassTypeKey" map-name="glAccountClassTypeMap">            
             <drop-down allow-empty="true">
                 <entity-options entity-name="GlAccountClassTypeMap" description="${description}">
@@ -191,34 +191,56 @@
             <textarea rows="2" cols="60"/>
         </field>        
         <field name="codificacion" title="${uiLabelMap.Codificacion}" >            
+            <drop-down>
+				<option key="Cuenta" description="Cuenta"/>
+				<option key="Génereo" description="Génereo"/>
+				<option key="Grupo" description="Grupo"/>
+				<option key="N6" description="N6"/>
+				<option key="N7" description="N7"/>
+				<option key="N8" description="N8"/>
+				<option key="N9" description="N9"/>
+				<option key="Rubro" description="Rubro"/>
+            </drop-down>  
+        </field> 
+       <field name="naturaleza" title="${uiLabelMap.Naturaleza}" >            
+            <drop-down>
+                <option key="A" description="Acredora"/>
+                <option key="D" description="Deudora"/>
+            </drop-down>  
+        </field> 
+       <field name="tipoCuenta" title="${uiLabelMap.TipoCuenta}" >            
+            <drop-down>
+                <option key="A" description="Acredora"/>
+                <option key="D" description="Deudora"/>
+                <option key="T" description="Totalizadora"/>
+            </drop-down>  
+        </field> 
+     <!--    <field name="node" title="${uiLabelMap.Nodo}" >            
             <text size="10"/>
-        </field>
-        <field name="naturaleza" title="${uiLabelMap.Naturaleza}" >            
-            <text size="10"/>
-        </field>
-        <field name="tipoCuenta" title="${uiLabelMap.TipoCuenta}" >            
-            <text size="10"/>
+        </field>-->
+        <field name="node" title="${uiLabelMap.Nodo}" >            
+            <drop-down>
+                <option key="R" description="Rama"/>
+                <option key="H" description="Hoja"/>
+            </drop-down>  
+        </field> 
+       <field name="majorGlAccount" title="${uiLabelMap.CuentaMayor}" >            
+            <drop-down>
+                <option key="N" description="No"/>
+                <option key="Y" description="Si"/>
+            </drop-down>  
+        </field>   
+       <field name="productCategoryId" title="Categoria" >
+           	 <drop-down allow-empty="false" current="selected">
+                <entity-options description="${description}" entity-name="ProductCategory" key-field-name="productCategoryId">
+                    <entity-order-by field-name="description"/>
+                </entity-options>
+           	 </drop-down>
         </field>
         <field name="submitButton" title="Update"><submit/></field>
     </form>
     
     <!-- add an existing Gl Account to an Organization -->
-    <form name="addExistingGlAccount" type="single" title="Add an existing Gl Account" target="addExistingGlAccount"
-        default-widget-style="tabletext" default-title-style="tableheadtext">
-        <field name="organizationPartyId"><hidden value="${organizationPartyId}"/></field>
-        <field name="roleTypeId"><hidden value=""/></field>    
-        <field name="glAccountId" title="${uiLabelMap.AccountingGlAccount}">            
-            <drop-down>
-                <entity-options entity-name="GlAccount" description="${accountCode}: ${accountName} (${glAccountId})">
-                    <entity-order-by field-name="accountCode"/>
-                </entity-options>
-            </drop-down>  
-        </field>
-        <field name="submitButton" title="Add"><submit/></field>
-    </form>
-    
-    <!-- add a new Gl Account to an Organization -->
-    <!-- add a new Gl Account to an Organization -->
     <form name="addNewGlAccount" type="single" title="Add a new Gl Account" target="addNewGlAccount"
         default-widget-style="tabletext" default-title-style="tableheadtext">    
         <field name="glAccountId"><hidden value=""/></field>
@@ -252,17 +274,56 @@
             <textarea rows="2" cols="60"/>
         </field>      
         <field name="codificacion" title="${uiLabelMap.Codificacion}" >            
+            <drop-down>
+				<option key="Cuenta" description="Cuenta"/>
+				<option key="Génereo" description="Génereo"/>
+				<option key="Grupo" description="Grupo"/>
+				<option key="N6" description="N6"/>
+				<option key="N7" description="N7"/>
+				<option key="N8" description="N8"/>
+				<option key="N9" description="N9"/>
+				<option key="Rubro" description="Rubro"/>
+            </drop-down>  
+        </field> 
+       <field name="naturaleza" title="${uiLabelMap.Naturaleza}" >            
+            <drop-down>
+                <option key="A" description="Acredora"/>
+                <option key="D" description="Deudora"/>
+            </drop-down>  
+        </field> 
+       <field name="tipoCuenta" title="${uiLabelMap.TipoCuenta}" >            
+            <drop-down>
+                <option key="A" description="Acredora"/>
+                <option key="D" description="Deudora"/>
+                <option key="T" description="Totalizadora"/>
+            </drop-down>  
+        </field> 
+     <!--    <field name="node" title="${uiLabelMap.Nodo}" >            
             <text size="10"/>
-        </field>
-        <field name="naturaleza" title="${uiLabelMap.Naturaleza}" >            
-            <text size="10"/>
-        </field>
-        <field name="tipoCuenta" title="${uiLabelMap.TipoCuenta}" >            
-            <text size="10"/>
+        </field>-->
+        <field name="node" title="${uiLabelMap.Nodo}" >            
+            <drop-down>
+                <option key="R" description="Rama"/>
+                <option key="H" description="Hoja"/>
+            </drop-down>  
+        </field> 
+       <field name="majorGlAccount" title="${uiLabelMap.CuentaMayor}" >            
+            <drop-down>
+                <option key="N" description="No"/>
+                <option key="Y" description="Si"/>
+            </drop-down>  
+        </field>   
+       <field name="productCategoryId" title="Categoria" >
+           	 <drop-down allow-empty="false" current="selected">
+                <entity-options description="${description}" entity-name="ProductCategory" key-field-name="productCategoryId">
+                    <entity-order-by field-name="description"/>
+                </entity-options>
+           	 </drop-down>
         </field>
         <field name="submitButton" title="Add"><submit/></field>
         
     </form>
+    
     
     <!-- add a Sub Account to a Gl Account -->
     <form name="addSubAccount" type="single" title="Add a Sub Account" target="addSubAccount"
