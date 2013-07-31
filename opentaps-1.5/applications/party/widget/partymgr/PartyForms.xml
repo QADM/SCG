@@ -123,15 +123,7 @@ under the License.
            	 </drop-down>
         </field>
         
-        
-        <field name="statusId" use-when="partyGroup!=null">
-            <drop-down allow-empty="false">
-                <entity-options description="${description}" entity-name="Status_Item">
-                    <entity-constraint name="statusTypeId" value="PARTY_STATUS"/>
-                    <entity-order-by field-name="sequenceId"/>
-                </entity-options>
-            </drop-down>
-        </field>
+
 
   <field name="submitButton" title="${uiLabelMap.CommonSave}"><submit button-type="button"/></field>
         <field name="cancelLink" title="${uiLabelMap.CommonEmptyHeader}" widget-style="smallSubmit">
