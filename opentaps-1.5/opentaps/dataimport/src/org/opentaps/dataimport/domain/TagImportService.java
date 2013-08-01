@@ -134,7 +134,7 @@ public class TagImportService extends DomainService implements
 			}
 
 			// / relacionar ParentId a enum
-			getParentEnumeration(ledger_repo, dataforimp);
+			getParentEnumeration(ledger_repo, dataforimp, imp_repo);
 			this.importedRecords = imported;
 
 		} catch (InfrastructureException ex) {
