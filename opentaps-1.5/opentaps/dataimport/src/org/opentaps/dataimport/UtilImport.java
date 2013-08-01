@@ -1,11 +1,22 @@
 package org.opentaps.dataimport;
 
 import javolution.util.FastList;
+
+import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
+import org.opentaps.base.entities.Enumeration;
+import org.opentaps.base.entities.Geo;
+import org.opentaps.base.entities.GeoType;
+import org.opentaps.base.entities.NivelPresupuestal;
+import org.opentaps.base.entities.Party;
+import org.opentaps.base.entities.ProductCategory;
+import org.opentaps.base.entities.ProductCategoryType;
+import org.opentaps.domain.ledger.LedgerRepositoryInterface;
+import org.opentaps.foundation.repository.RepositoryException;
 
 import java.sql.Timestamp;
 import java.util.Iterator;
@@ -125,6 +136,153 @@ public class UtilImport {
         expireDate.append(importDate.substring(2,4));
         return expireDate.toString();
     }
+    /**
+	 * Autor: Jesús Rodrigo Ruiz Merlin
+	 * 
+	 * @param ledger_repo
+	 * @param nivelHijo
+	 * @param idPadre
+	 * @return true = padre valido, false = padre no valido
+	 */
+	public static boolean validaPadreEnum(
+			LedgerRepositoryInterface ledger_repo, String nivelHijo,
+			String idPadre, String tipo) throws RepositoryException {
 
+		Debug.log("ValidandoPadreEnum: " + idPadre);
+		List<Enumeration> enumeration = ledger_repo.findList(Enumeration.class,
+				ledger_repo.map(Enumeration.Fields.sequenceId, idPadre,
+						Enumeration.Fields.enumTypeId, tipo));
+
+		if (enumeration.isEmpty()) {
+			Debug.log("Lista Vacia");
+			return false;
+		}		
+
+		Debug.log("BUscando Nivel: hijo_" + nivelHijo + " padre_"
+				+ enumeration.get(0).getNivelId());
+		List<NivelPresupuestal> nivelP = ledger_repo.findList(
+				NivelPresupuestal.class, ledger_repo.map(
+						NivelPresupuestal.Fields.nivelId, nivelHijo,
+						NivelPresupuestal.Fields.nivelPadreId,
+						enumeration.get(0).getNivelId()));
+
+		if (nivelP.isEmpty()) {
+			Debug.log("Lista Vacia");
+			return false;
+		} else {
+			Debug.log("Padre Valido");
+			return true;
+		}
+	}
+
+	/**
+	 * Autor: Jesús Rodrigo Ruiz Merlin
+	 * 
+	 * @param ledger_repo
+	 * @param nivelHijo
+	 * @param idPadre
+	 * @return true = padre valido, false = padre no valido
+	 */
+	public static boolean validaPadreParty(
+			LedgerRepositoryInterface ledger_repo, String nivelHijo,
+			String idPadre) throws RepositoryException {
+
+		Debug.log("ValidandoPadreParty");
+		List<Party> party = ledger_repo.findList(Party.class,
+				ledger_repo.map(Party.Fields.partyId, idPadre));
+
+		if (party.isEmpty()) {
+			Debug.log("Lista Vacia");
+			return false;
+		}
+
+		Debug.log("Buscando Nivel");
+		List<NivelPresupuestal> nivelP = ledger_repo.findList(
+				NivelPresupuestal.class, ledger_repo.map(
+						NivelPresupuestal.Fields.nivelId, nivelHijo,
+						NivelPresupuestal.Fields.nivelPadreId, party.get(0)
+								.getNivel_id()));
+
+		if (nivelP.isEmpty()) {
+			Debug.log("Lista Vacia");
+			return false;
+		} else {
+			Debug.log("Padre Valido");
+			return true;
+		}
+	}
+
+	/**
+	 * Autor: Jesús Rodrigo Ruiz Merlin
+	 * 
+	 * @param ledger_repo
+	 * @param nivelHijo
+	 * @param idPadre
+	 * @return true = padre valido, false = padre no valido
+	 */
+	public static boolean validaPadreGeo(LedgerRepositoryInterface ledger_repo,
+			String tipoHijo, String idPadre) throws RepositoryException {
+
+		Debug.log("ValidandoPadreGeo");
+		List<Geo> geo = ledger_repo.findList(Geo.class,
+				ledger_repo.map(Geo.Fields.geoId, idPadre));
+
+		if (geo.isEmpty()) {
+			Debug.log("Lista Vacia");
+			return false;
+		}
+
+		Debug.log("Validando Tipo");
+		List<GeoType> geoType = ledger_repo
+				.findList(GeoType.class, ledger_repo.map(
+						GeoType.Fields.geoTypeId, tipoHijo,
+						GeoType.Fields.parentTypeId, geo.get(0).getGeoTypeId()));
+
+		if (geoType.isEmpty()) {
+			Debug.log("Lista Vacia");
+			return false;
+		} else {
+			Debug.log("Padre Valido");
+			return true;
+		}
+	}
+
+	/**
+	 * Autor: Jesús Rodrigo Ruiz Merlin
+	 * 
+	 * @param ledger_repo
+	 * @param nivelHijo
+	 * @param idPadre
+	 * @return true = padre valido, false = padre no valido
+	 */
+	public static boolean validaPadreProductCategory(
+			LedgerRepositoryInterface ledger_repo, String tipoHijo,
+			String idPadre) throws RepositoryException {
+
+		Debug.log("ValidandoPadreProdCat");
+		List<ProductCategory> prodCat = ledger_repo.findList(
+				ProductCategory.class, ledger_repo.map(
+						ProductCategory.Fields.productCategoryId, idPadre));
+
+		if (prodCat.isEmpty()) {
+			Debug.log("Lista Vacia");
+			return false;
+		}
+
+		Debug.log("Validando Tipo");
+		List<ProductCategoryType> prodCatType = ledger_repo.findList(
+				ProductCategoryType.class, ledger_repo.map(
+						ProductCategoryType.Fields.productCategoryTypeId,
+						tipoHijo, ProductCategoryType.Fields.parentTypeId,
+						prodCat.get(0).getProductCategoryTypeId()));
+
+		if (prodCatType.isEmpty()) {
+			Debug.log("Lista Vacia");
+			return false;
+		} else {
+			Debug.log("Padre Valido");
+			return true;
+		}
+	}
 
 }
