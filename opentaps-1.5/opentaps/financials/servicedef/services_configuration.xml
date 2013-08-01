@@ -78,6 +78,9 @@
 	    <attribute name="codificacion" type="String" mode="IN" optional="true"/>
 	    <attribute name="naturaleza" type="String" mode="IN" optional="true"/>
 	    <attribute name="tipoCuenta" type="String" mode="IN" optional="true"/>
+	    <attribute name="node" type="String" mode="IN" optional="true"/>
+	    <attribute name="majorGlAccount" type="String" mode="IN" optional="true"/>
+	    <attribute name="productCategoryId" type="String" mode="IN" optional="true"/>
 
     </service>
     
@@ -92,6 +95,10 @@
 	    <attribute name="codificacion" type="String" mode="IN" optional="true"/>
 	    <attribute name="naturaleza" type="String" mode="IN" optional="true"/>
 	    <attribute name="tipoCuenta" type="String" mode="IN" optional="true"/>
+	    <attribute name="node" type="String" mode="IN" optional="true"/>
+	    <attribute name="majorGlAccount" type="String" mode="IN" optional="true"/>
+	    <attribute name="productCategoryId" type="String" mode="IN" optional="true"/>
+	 
 	</service>
 
     <service name="financials.createPaymentMethod" engine="simple" default-entity-name="PaymentMethod"

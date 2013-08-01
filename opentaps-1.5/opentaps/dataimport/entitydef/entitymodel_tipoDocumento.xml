@@ -20,6 +20,7 @@
 		<field name="idTipoDoc" type="id-ne"></field>
 		<field name="descripcion" type="id-vlong"></field>
 		<field name="acctgTransTypeId" type="id-ne"></field>
+		<field name="tipoPoliza" type="id-ne"></field>
 		<prim-key field="idTipoDoc" />
 		<relation type="one" fk-name="ACCTT" rel-entity-name="AcctgTransType">
 			<key-map field-name="acctgTransTypeId" />

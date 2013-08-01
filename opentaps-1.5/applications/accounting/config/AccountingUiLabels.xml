@@ -1877,6 +1877,10 @@
         <value xml:lang="fr">Solde de trésorerie</value>
         <value xml:lang="hi_IN">à¤°à¥‹à¤•à¤¡à¤¼ à¤¶à¥‡à¤·</value>
     </property>
+    <property key="AccountingCashFlow">
+        <value xml:lang="en">Cash Flow</value>
+        <value xml:lang="es">Flujo de Efectivo</value>
+    </property>    
     <property key="AccountingCashFlowStatement">
         <value xml:lang="en">Cash Flow Statement</value>
         <value xml:lang="fr">Tableau des flux de trésorerie</value>
@@ -3463,6 +3467,10 @@
     </property>
     <property key="AccountingFindArPaymentGroups">
         <value xml:lang="en">Find AR Payment Groups</value>
+    </property>
+    <property key="AccountingFinalBalance">
+    	<value xml:lang="es">Saldo Final</value>
+    	<value xml:lang="es">Final Balance</value>
     </property>
     <property key="AccountingFindArPayments">
         <value xml:lang="en">Find AR Payments</value>
@@ -6616,6 +6624,7 @@
     <property key="AccountingOpeningBalance">
         <value xml:lang="de">Eröffnungsbilanz</value>
         <value xml:lang="en">Opening Balance</value>
+        <value xml:lang="es">Saldo Inicial</value>
         <value xml:lang="hi_IN">प्रारंभिक शेष</value>
     </property>
     <property key="AccountingOpeningCashBalance">
@@ -10336,6 +10345,7 @@
     </property>
     <property key="FormFieldTitle_credit">
         <value xml:lang="en">Credit</value>
+        <value xml:lang="es">Crédito</value>
         <value xml:lang="fr">Crédit</value>
         <value xml:lang="hi_IN">जमा</value>
         <value xml:lang="it">Credito</value>
@@ -10452,6 +10462,7 @@
     </property>
     <property key="FormFieldTitle_debit">
         <value xml:lang="en">Debit</value>
+        <value xml:lang="es">Debito</value>
         <value xml:lang="fr">Débit</value>
         <value xml:lang="hi_IN">नामे</value>
         <value xml:lang="it">Debito</value>
@@ -14092,4 +14103,34 @@
     <property key="PolizasContables">
         <value xml:lang="es">Pólizas Contables</value>
     </property>
+    <property key="Impuestos">
+    	<value xml:lang="es">Impuestos</value>
+    </property>
+    <property key="ContribucionesMejoras">
+    	<value xml:lang="es">Contribuciones de Mejoras</value>
+    </property>  
+	<property key="ParticipacionesAportaciones">
+    	<value xml:lang="es">Participaciones y Aportaciones</value>
+    </property>    
+	<property key="TransferenciasAsignacionesSubsidiosOtras">
+    	<value xml:lang="es">Transferencias, Asignaciones, Subsidios y Otras</value>
+    </property>     
+	<property key="OtrosIngresosBeneficios">
+    	<value xml:lang="es">Otros Ingresos y Beneficios</value>
+    </property>     
+    <property key="IncrementoVariacionInventarios">
+    	<value xml:lang="es">Incremento por Variación de Inventarios</value>
+    </property> 
+    <property key="GastosFuncionamiento">
+    	<value xml:lang="es">Gastos de Funcionamiento</value>
+    </property>     
+    <property key="ParticipacionesAportacionesGastos">
+    	<value xml:lang="es">Participaciones y Aportaciones de Gastos</value>
+    </property>  
+    <property key="InteresesComisionesDeudaPublica">
+    	<value xml:lang="es">Intereses, Comisiones y Otros Gastos de la Deuda Pública</value>
+    </property>
+    <property key="OtrosGastosYPerdidasExtra">
+    	<value xml:lang="es">Otros gastos y pérdidas extraordinarias</value>
+    </property>     
 </resource>

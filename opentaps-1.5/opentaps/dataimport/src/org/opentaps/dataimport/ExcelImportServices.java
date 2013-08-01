@@ -1606,15 +1606,18 @@ public final class ExcelImportServices extends DomainService {
 						deleteEntities("DataImportProject");
 						entitiesToCreate.addAll(createDataImportProject(sheet));
 					} else if (EXCEL_GEO_TAB.equals(excelTab)) {
+						deleteEntities("DataImportGeo");
 						entitiesToCreate.addAll(createDataImportGeo(sheet));
 					} else if (EXCEL_CATEGORY_TAB.equals(excelTab)) {
 						deleteEntities("DataImportCategory");
 						entitiesToCreate
 								.addAll(createDataImportCategory(sheet));
 					} else if (EXCEL_PRESUPUESTO_INGRESO_TAB.equals(excelTab)) {
+						deleteEntities("DataImportPresupuestoIngreso");
 						entitiesToCreate
 								.addAll(createDataImportPresupuestoIngreso(sheet));
 					} else if (EXCEL_PRESUPUESTO_EGRESO_TAB.equals(excelTab)) {
+						deleteEntities("DataImportPresupuestoEgreso");
 						entitiesToCreate
 								.addAll(createDataImportPresupuestoEgreso(sheet));
 					} else if (EXCEL_CGUIDE_TAB.equals(excelTab)) {
@@ -1632,6 +1635,7 @@ public final class ExcelImportServices extends DomainService {
 								.addAll(createDataImportMatrizConversionIngresos(sheet));
 						// etc ...
 					} else if (EXCEL_EGRESO_DIARIO_TAB.equals(excelTab)) {
+						deleteEntities("DataImportEgresoDiario");
 						entitiesToCreate
 								.addAll(createDataImportEgresoDiario(sheet));
 					} else if (EXCEL_CGUIDE_TAB_CON.equals(excelTab)) {
@@ -1641,9 +1645,11 @@ public final class ExcelImportServices extends DomainService {
 						entitiesToCreate
 								.addAll(createDataImportSubConceptos(sheet));
 					} else if (EXCEL_INGRESO_DIARIO_TAB.equals(excelTab)) {
+						deleteEntities("DataImportIngresoDiario");
 						entitiesToCreate
 								.addAll(createDataImportIngresoDiario(sheet));
 					} else if (EXCEL_OPERACION_DIARIA_TAB.equals(excelTab)) {
+						deleteEntities("DataImportOperacionDiaria");
 						entitiesToCreate
 								.addAll(createDataImportOperacionDiaria(sheet));
 					}
