@@ -23,6 +23,7 @@ import org.ofbiz.base.util.UtilDateTime;
 import org.opentaps.base.constants.StatusItemConstants;
 import org.opentaps.base.entities.DataImportGeo;
 import org.opentaps.base.entities.Geo;
+import org.opentaps.dataimport.UtilImport;
 import org.opentaps.domain.DomainService;
 import org.opentaps.domain.dataimport.GeoDataImportRepositoryInterface;
 import org.opentaps.domain.dataimport.GeoImportServiceInterface;
@@ -35,11 +36,9 @@ import org.opentaps.foundation.infrastructure.User;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.service.ServiceException;
 
-
-
 /**
- * Import Geographics via intermediate DataImportGeo entity.
- * Author: Jesus Rodrigo Ruiz Merlin.
+ * Import Geographics via intermediate DataImportGeo entity. Author: Jesus
+ * Rodrigo Ruiz Merlin.
  */
 public class GeoImportService extends DomainService implements
 		GeoImportServiceInterface {
@@ -86,15 +85,15 @@ public class GeoImportService extends DomainService implements
 					imp_tx1 = null;
 
 					// begin importing row data item
-					
+
 					Geo geo = new Geo();
 					geo.setGeoId(rowdata.getGeoId());
 					geo.setGeoTypeId(rowdata.getGeoTypeId());
 					geo.setGeoName(rowdata.getGeoName());
-					//geo.setGeoCode(rowdata.getGeoCode());
+					// geo.setGeoCode(rowdata.getGeoCode());
 					geo.setAbbreviation(rowdata.getAbbreviation());
 					geo.setNode(rowdata.getNode());
-					
+
 					imp_tx1 = this.session.beginTransaction();
 					ledger_repo.createOrUpdate(geo);
 					imp_tx1.commit();
@@ -107,8 +106,7 @@ public class GeoImportService extends DomainService implements
 
 				} catch (Exception ex) {
 					String message = "Failed to import GEO ["
-							+ rowdata.getGeoId()
-							+ "], Error message : "
+							+ rowdata.getGeoId() + "], Error message : "
 							+ ex.getMessage();
 					storeImportGeoError(rowdata, message, imp_repo);
 
@@ -116,15 +114,15 @@ public class GeoImportService extends DomainService implements
 					if (imp_tx1 != null) {
 						imp_tx1.rollback();
 					}
-					
+
 					Debug.logError(ex, message, MODULE);
 					throw new ServiceException(ex.getMessage());
 				}
 			}
 
+			getParentGeo(ledger_repo, dataforimp, imp_repo);
+
 			this.importedRecords = imported;
-			
-			getParentGeo(ledger_repo, dataforimp);
 
 		} catch (InfrastructureException ex) {
 			Debug.logError(ex, MODULE);
@@ -140,56 +138,73 @@ public class GeoImportService extends DomainService implements
 	}
 
 	private void getParentGeo(LedgerRepositoryInterface ledger_repo,
-			List<DataImportGeo> dataforimp) {
+			List<DataImportGeo> dataforimp, GeoDataImportRepositoryInterface imp_repo) throws RepositoryException{
 		
+
 		Transaction imp_tx1 = null;
 		try {
-			
+
 			for (DataImportGeo dataImportGeo : dataforimp) {
-				
-				if(dataImportGeo.getGeoCode()!= null)
-				{
-					List<Geo> listGeo = ledger_repo.findList(
-							Geo.class, ledger_repo.map(
-									Geo.Fields.geoId,
+
+				if (dataImportGeo.getGeoCode() != null) {
+					List<Geo> listGeo = ledger_repo.findList(Geo.class,
+							ledger_repo.map(Geo.Fields.geoId,
 									dataImportGeo.getGeoId(),
-			       					Geo.Fields.geoName,
-			       					dataImportGeo.getGeoName()
-			       					));
+									Geo.Fields.geoName,
+									dataImportGeo.getGeoName()));
 					if (!listGeo.isEmpty()) {
-						
+
 						for (Geo geo : listGeo) {
-							
-							geo.setGeoCode(dataImportGeo.getGeoCode());
-							
-							 imp_tx1 = this.session.beginTransaction();
-					         ledger_repo.createOrUpdate(geo);
-					         imp_tx1.commit();
-					         
-					         String message = "Successfully to import Geo Code [" + geo.getGeoId() + "].";  
-				             Debug.logInfo(message, MODULE);
+
+							if (UtilImport.validaPadreGeo(ledger_repo,
+									dataImportGeo.getGeoTypeId(),
+									dataImportGeo.getGeoCode())) {
+								Debug.log("Padre valido");
+								geo.setGeoCode(dataImportGeo.getGeoCode());
+							} else {
+								Debug.log("Padre no valido");
+								String message = "Failed to import Geo ["
+										+ dataImportGeo.getGeoId() + "], Error message : "
+										+ "Padre no valido";
+								storeImportGeoError(dataImportGeo, message, imp_repo);
+
+								// rollback all if there was an error when importing item
+								if (imp_tx1 != null) {
+									imp_tx1.rollback();
+								}
+								// Debug.logError(ex, message, MODULE);
+								throw new ServiceException(message);
+							}
+
+							imp_tx1 = this.session.beginTransaction();
+							ledger_repo.createOrUpdate(geo);
+							imp_tx1.commit();
+
+							String message = "Successfully to import Geo Code ["
+									+ geo.getGeoId() + "].";
+							Debug.logInfo(message, MODULE);
 						}
-						
+
 					}
-					
-					
+
 				}
 			}
-			
+
 		} catch (Exception e) {
-			String message = "Failed to import Geo Code, Error message : " + e.getMessage();
-            
-            if(imp_tx1 != null){
-                imp_tx1.rollback();
-            }            
-            Debug.logError(e, message, MODULE);
+			String message = "Failed to import Geo Code, Error message : "
+					+ e.getMessage();
+
+			if (imp_tx1 != null) {
+				imp_tx1.rollback();
+			}
+			Debug.logError(e, message, MODULE);
 		}
-		
+
 	}
 
 	/**
-	 * Helper method to store Geo import success into
-	 * <code>DataImportGeo</code> entity row.
+	 * Helper method to store Geo import success into <code>DataImportGeo</code>
+	 * entity row.
 	 * 
 	 * @param rowdata
 	 *            item of <code>DataImportGlAccount</code> entity that was
@@ -209,8 +224,8 @@ public class GeoImportService extends DomainService implements
 	}
 
 	/**
-	 * Helper method to store Geo import error into
-	 * <code>DataImportGeo</code> entity row.
+	 * Helper method to store Geo import error into <code>DataImportGeo</code>
+	 * entity row.
 	 * 
 	 * @param rowdata
 	 *            item of <code>DataImportGeo</code> entity that was
@@ -221,8 +236,8 @@ public class GeoImportService extends DomainService implements
 	 *            repository of accounting
 	 * @throws org.opentaps.foundation.repository.RepositoryException
 	 */
-	private void storeImportGeoError(DataImportGeo rowdata,
-			String message, GeoDataImportRepositoryInterface imp_repo)
+	private void storeImportGeoError(DataImportGeo rowdata, String message,
+			GeoDataImportRepositoryInterface imp_repo)
 			throws RepositoryException {
 		// store the exception and mark as failed
 		rowdata.setImportStatusId(StatusItemConstants.Dataimport.DATAIMP_FAILED);

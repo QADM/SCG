@@ -23,6 +23,7 @@ import org.ofbiz.base.util.UtilDateTime;
 import org.opentaps.base.constants.StatusItemConstants;
 import org.opentaps.base.entities.DataImportCategory;
 import org.opentaps.base.entities.ProductCategory;
+import org.opentaps.dataimport.UtilImport;
 import org.opentaps.domain.DomainService;
 import org.opentaps.domain.dataimport.CategoryDataImportRepositoryInterface;
 import org.opentaps.domain.dataimport.CategoryImportServiceInterface;
@@ -34,9 +35,6 @@ import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.infrastructure.User;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.service.ServiceException;
-
-
-
 
 /**
  * Import Categories via intermediate DataImportCategory entity.
@@ -87,30 +85,30 @@ public class CategoryImportService extends DomainService implements
 
 					// begin importing row data item
 					ProductCategory category = new ProductCategory();
-					
-					//Buscar Parent Id del tag
-	               	   List<ProductCategory> listcategory = ledger_repo.findList(
-	               			ProductCategory.class, ledger_repo.map(
-	               					ProductCategory.Fields.productCategoryId,
-	               					rowdata.getProductCategoryId()
-	               					));
-						
-						 if(listcategory.isEmpty())
-	                	 {
-	                		 Debug.log("Registro Nuevo");
-	                		 category.setProductCategoryId(rowdata.getProductCategoryId());
-	                	 }
-	                	 else
-	                	 {
-	                		 category.setProductCategoryId(listcategory.get(0).getProductCategoryId());
-	                	 }
-					
-					category.setProductCategoryId(rowdata.getProductCategoryId());
-					category.setProductCategoryTypeId(rowdata.getProductCategoryTypeId());
+
+					// Buscar Parent Id del tag
+					List<ProductCategory> listcategory = ledger_repo.findList(
+							ProductCategory.class, ledger_repo.map(
+									ProductCategory.Fields.productCategoryId,
+									rowdata.getProductCategoryId()));
+
+					if (listcategory.isEmpty()) {
+						Debug.log("Registro Nuevo");
+						category.setProductCategoryId(rowdata
+								.getProductCategoryId());
+					} else {
+						category.setProductCategoryId(listcategory.get(0)
+								.getProductCategoryId());
+					}
+
+					category.setProductCategoryId(rowdata
+							.getProductCategoryId());
+					category.setProductCategoryTypeId(rowdata
+							.getProductCategoryTypeId());
 					category.setCategoryName(rowdata.getCode());
-					category.setDescription(rowdata.getCategoryName());					
+					category.setDescription(rowdata.getCategoryName());
 					category.setNode(rowdata.getNode());
-					
+
 					imp_tx1 = this.session.beginTransaction();
 					ledger_repo.createOrUpdate(category);
 					imp_tx1.commit();
@@ -124,24 +122,23 @@ public class CategoryImportService extends DomainService implements
 				} catch (Exception ex) {
 					String message = "Failed to import Category ["
 							+ rowdata.getProductCategoryId()
-							+ "], Error message : "
-							+ ex.getMessage();
+							+ "], Error message : " + ex.getMessage();
 					storeImportCategoryError(rowdata, message, imp_repo);
 
 					// rollback all if there was an error when importing item
 					if (imp_tx1 != null) {
 						imp_tx1.rollback();
 					}
-					
+
 					Debug.logError(ex, message, MODULE);
 					throw new ServiceException(ex.getMessage());
 				}
 			}
 
 			this.importedRecords = imported;
-			
-			//ingresar padre
-			getParentCategory(ledger_repo, dataforimp);
+
+			// ingresar padre
+			getParentCategory(ledger_repo, dataforimp, imp_repo);
 
 		} catch (InfrastructureException ex) {
 			Debug.logError(ex, MODULE);
@@ -155,55 +152,85 @@ public class CategoryImportService extends DomainService implements
 			}
 		}
 	}
-	
+
 	/*
 	 * Impactar Parent en ProductCategory
-	 * 
-	 * */
-private void getParentCategory(LedgerRepositoryInterface ledger_repo, List<DataImportCategory> dataforimp) {
-		
+	 */
+	private void getParentCategory(LedgerRepositoryInterface ledger_repo,
+			List<DataImportCategory> dataforimp,
+			CategoryDataImportRepositoryInterface imp_repo) throws RepositoryException{
+
 		Transaction imp_tx1 = null;
-		
+
 		try {
-			
+
 			for (DataImportCategory dataImportCategory : dataforimp) {
-				
-				if(dataImportCategory.getPrimaryParentCategoryId()!= null)
-				{
-					List<ProductCategory> listcategory = ledger_repo.findList(
-			       			ProductCategory.class, ledger_repo.map(
-			       					ProductCategory.Fields.productCategoryId,
-			       					dataImportCategory.getProductCategoryId(),
-			       					ProductCategory.Fields.productCategoryTypeId,
-			       					dataImportCategory.getProductCategoryTypeId()
-			       					));
-					
-					if(!listcategory.isEmpty())
-					{
+
+				if (dataImportCategory.getPrimaryParentCategoryId() != null) {
+					List<ProductCategory> listcategory = ledger_repo
+							.findList(
+									ProductCategory.class,
+									ledger_repo
+											.map(ProductCategory.Fields.productCategoryId,
+													dataImportCategory
+															.getProductCategoryId(),
+													ProductCategory.Fields.productCategoryTypeId,
+													dataImportCategory
+															.getProductCategoryTypeId()));
+
+					if (!listcategory.isEmpty()) {
 						for (ProductCategory productCategory : listcategory) {
-							
-							productCategory.setPrimaryParentCategoryId(dataImportCategory.getPrimaryParentCategoryId());
-						
-							 imp_tx1 = this.session.beginTransaction();
-					         ledger_repo.createOrUpdate(productCategory);
-					         imp_tx1.commit();
-					         
-					         String message = "Successfully to import Parent Category Id [" + productCategory.getProductCategoryId() + "].";  
-				             Debug.logInfo(message, MODULE);
+
+							if (UtilImport.validaPadreProductCategory(
+									ledger_repo, dataImportCategory
+											.getProductCategoryTypeId(),
+									dataImportCategory
+											.getPrimaryParentCategoryId())) {
+								Debug.log("Padre valido");
+								productCategory
+										.setPrimaryParentCategoryId(dataImportCategory
+												.getPrimaryParentCategoryId());
+							} else {
+								Debug.log("Padre no valido");
+								String message = "Failed to import Category ["
+										+ dataImportCategory
+												.getProductCategoryTypeId()
+										+ "], Error message : "
+										+ "Padre no valido";
+								storeImportCategoryError(dataImportCategory, message,
+										imp_repo);
+
+								// rollback all if there was an error when
+								// importing item
+								if (imp_tx1 != null) {
+									imp_tx1.rollback();
+								}
+								// Debug.logError(ex, message, MODULE);
+								throw new ServiceException(message);
+							}
+
+							imp_tx1 = this.session.beginTransaction();
+							ledger_repo.createOrUpdate(productCategory);
+							imp_tx1.commit();
+
+							String message = "Successfully to import Parent Category Id ["
+									+ productCategory.getProductCategoryId()
+									+ "].";
+							Debug.logInfo(message, MODULE);
 						}
-					}									
+					}
 				}
 			}
 		} catch (Exception e) {
-			String message = "Failed to import Parent Category Id, Error message : " + e.getMessage();
-            
-            if(imp_tx1 != null){
-                imp_tx1.rollback();
-            }            
-            Debug.logError(e, message, MODULE);
+			String message = "Failed to import Parent Category Id, Error message : "
+					+ e.getMessage();
+
+			if (imp_tx1 != null) {
+				imp_tx1.rollback();
+			}
+			Debug.logError(e, message, MODULE);
 		}
-		
-		
+
 	}
 
 	/**
