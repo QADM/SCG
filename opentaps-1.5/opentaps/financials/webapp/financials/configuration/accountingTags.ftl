@@ -18,6 +18,7 @@
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
 <#assign disableSelectValues = {"Y": uiLabelMap.CommonDisabled, "N": uiLabelMap.CommonEnabled} />
+<#assign Nodo = {"R": "Rama", "H": "Hoja"} />
 
 <@frameSection title=uiLabelMap.FinancialsAccountingTags>
   <#list tagsByType.keySet() as type>
@@ -34,10 +35,9 @@
             <@displayCell text=uiLabelMap.CommonDescription />
       		<@displayCell text=uiLabelMap.Nivel />
       		<@displayCell text=uiLabelMap.ParentId />
-
-	      		<@displayCell text="Fecha Inicio"/>
-	      		<@displayCell text="Fecha Fin"/>
-
+			<@displayCell text="Fecha Inicio"/>
+			<@displayCell text="Fecha Fin"/>
+			<@displayCell text="Nodo"/>
             <@displayCell text=uiLabelMap.CommonEnabled />
             <td/>
             <td/>
@@ -55,11 +55,12 @@
    			  <@inputTextCell name="parentEnumId" default=tag.parentEnumId!  size=10 maxlength=10 index=tag_index />
 	              <@inputTextCell name="fechaInicio"  default=tag.fechaInicio!    size=12 index=tag_index />
 	              <@inputTextCell name="fechaFin"  default=tag.fechaFin! size=12   index=tag_index />
+             
+              <@inputSelectHashCell name="node" default=tag.node! index=tag_index hash=Nodo />
               <@inputSelectHashCell name="disabled" default=tag.disabled!"N" index=tag_index hash=disableSelectValues />
               <@inputHiddenRowSubmit submit=false index=tag_index/>
               <@inputSubmitIndexedCell title="${uiLabelMap.CommonUpdate}" index=tag_index/>
               <td>
-              <@submitFormLink form="deleteAccountingTagForm" text=uiLabelMap.CommonRemove class="smallSubmit" enumId=tag.enumId/>
               </td>
             </tr>
           </#list>
