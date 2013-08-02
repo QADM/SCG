@@ -342,6 +342,7 @@
     <screen name="viewAcctgTransEntry">
         <section>
             <actions>
+         	    <set field="sectionHeaderUiLabel" value="Registro Contable"/>
                 <entity-one entity-name="AcctgTrans" value-field="acctgTrans"/>
                 <entity-one entity-name="AcctgTransEntry" value-field="acctgTransEntry"/>
             </actions>
