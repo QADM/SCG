@@ -16,7 +16,7 @@
 -->
 
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
-
+<#assign Nodo = {"R": "Rama", "H": "Rama"} />
 <@frameSection title=uiLabelMap.FinancialsCreateAccountingTag>
   <form method="post" action="<@ofbizUrl>createAccountingTag</@ofbizUrl>" name="createAccountingTag">
     <table class="twoColumnForm" style="border:0">
@@ -35,7 +35,8 @@
       
         <@inputSelectRow title=uiLabelMap.Nivel required=false list=nivelLists  displayField="descripcion" name="nivelId" titleClass="requiredField" />     
            
-
+        <@inputSelectHashRow  title="Nodo" name="node"  hash=Nodo />
+            
       
       <@inputTextRow title=uiLabelMap.ParentId  size=10 name="parentEnumId" size=10  />
       <@inputDateRow title="Fecha inicio"  name="fechaInicio" size=12 default="" titleClass="requiredField" />

@@ -157,7 +157,12 @@
                 </entity-options>
            	 </drop-down>
         </field>
-        
+        <field name="node" title="${uiLabelMap.Nodo}" >            
+            <drop-down>
+                <option key="R" description="Rama"/>
+                <option key="H" description="Hoja"/>
+            </drop-down>  
+        </field> 
         
         <field name="save" title="${uiLabelMap.CommonSave}"><submit/></field>
 

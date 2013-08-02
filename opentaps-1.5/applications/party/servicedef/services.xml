@@ -116,7 +116,8 @@ under the License.
         <attribute name="preferredCurrencyUomId" type="String" mode="IN" optional="true"/>
         <attribute name="externalId" type="String" mode="IN" optional="true"/>
         <attribute name="nivelId" type="String" mode="IN" optional="true"/>
-         <attribute name="statusId" type="String" mode="IN" optional="true"/>
+        <attribute name="node" type="String" mode="IN" optional="true"/>
+        <attribute name="statusId" type="String" mode="IN" optional="true"/>
         <override name="groupName" optional="false"/>
     </service>
     <service name="updatePartyGroup" engine="java" default-entity-name="PartyGroup"
@@ -129,7 +130,8 @@ under the License.
         <attribute name="partyTypeId" type="String" mode="IN" optional="true"/>
         <attribute name="preferredCurrencyUomId" type="String" mode="IN" optional="true"/>
         <attribute name="externalId" type="String" mode="IN" optional="true"/>
-          <attribute name="nivelId" type="String" mode="IN" optional="true"/>
+        <attribute name="nivelId" type="String" mode="IN" optional="true"/>
+        <attribute name="node" type="String" mode="IN" optional="true"/>
         <attribute name="statusId" type="String" mode="IN" optional="true"/>
     </service>
 
