@@ -8,17 +8,28 @@ import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
+import org.opentaps.base.entities.AcctgTrans;
+import org.opentaps.base.entities.AcctgTransEntry;
+import org.opentaps.base.entities.DataImportEgresoDiario;
 import org.opentaps.base.entities.Enumeration;
 import org.opentaps.base.entities.Geo;
 import org.opentaps.base.entities.GeoType;
+import org.opentaps.base.entities.GlAccountOrganization;
 import org.opentaps.base.entities.NivelPresupuestal;
 import org.opentaps.base.entities.Party;
+import org.opentaps.base.entities.PartyGroup;
+import org.opentaps.base.entities.PaymentMethod;
 import org.opentaps.base.entities.ProductCategory;
 import org.opentaps.base.entities.ProductCategoryType;
+import org.opentaps.base.entities.TipoDocumento;
+import org.opentaps.base.entities.WorkEffort;
+import org.opentaps.domain.dataimport.EgresoDiarioDataImportRepositoryInterface;
 import org.opentaps.domain.ledger.LedgerRepositoryInterface;
 import org.opentaps.foundation.repository.RepositoryException;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -31,112 +42,141 @@ import javolution.util.FastMap;
  */
 public class UtilImport {
 
-    public static final String module = UtilImport.class.getName();
+	public static final String module = UtilImport.class.getName();
 
-    /**
-     * For each role in the given list of roles, checks if it is already defined.  Otherwise, creates a new PartyRole
-     * value for it (but does not store it yet).  The resulting values can be stored at once in storeAll().
-     */
-    public static List<GenericValue> ensurePartyRoles(String partyId, List<String> roleTypeIds, Delegator delegator) throws GenericEntityException {
-        List<GenericValue> roles = FastList.newInstance();
-        Map input = UtilMisc.toMap("partyId", partyId);
-        for (String roleTypeId : roleTypeIds) {
-            input.put("roleTypeId", roleTypeId);
-            List<GenericValue> myRoles = delegator.findByAnd("PartyRole", input);
-            if (myRoles.size() == 0) {
-                roles.add(delegator.makeValue("PartyRole", input));
-            }
-        }
-        return roles;
-    }
+	/**
+	 * For each role in the given list of roles, checks if it is already
+	 * defined. Otherwise, creates a new PartyRole value for it (but does not
+	 * store it yet). The resulting values can be stored at once in storeAll().
+	 */
+	public static List<GenericValue> ensurePartyRoles(String partyId,
+			List<String> roleTypeIds, Delegator delegator)
+			throws GenericEntityException {
+		List<GenericValue> roles = FastList.newInstance();
+		Map input = UtilMisc.toMap("partyId", partyId);
+		for (String roleTypeId : roleTypeIds) {
+			input.put("roleTypeId", roleTypeId);
+			List<GenericValue> myRoles = delegator
+					.findByAnd("PartyRole", input);
+			if (myRoles.size() == 0) {
+				roles.add(delegator.makeValue("PartyRole", input));
+			}
+		}
+		return roles;
+	}
 
-    // makes a Map of format PostalAddress
-    @SuppressWarnings("unchecked")
-    public static GenericValue makePostalAddress(GenericValue contactMech, String companyName, String firstName, String lastName, String attnName, String address1, String address2, String city, String stateGeoCode, String postalCode, String postalCodeExt, String countryGeoCode, Delegator delegator) {
-        Map<String, Object> postalAddress = FastMap.newInstance();
+	// makes a Map of format PostalAddress
+	@SuppressWarnings("unchecked")
+	public static GenericValue makePostalAddress(GenericValue contactMech,
+			String companyName, String firstName, String lastName,
+			String attnName, String address1, String address2, String city,
+			String stateGeoCode, String postalCode, String postalCodeExt,
+			String countryGeoCode, Delegator delegator) {
+		Map<String, Object> postalAddress = FastMap.newInstance();
 
-        // full name of the person built from first and last name
-        String fullName = "";
-        if (!UtilValidate.isEmpty(firstName)) {
-            fullName = firstName + " " + lastName;
-        } else if (UtilValidate.isEmpty(lastName)) {
-            fullName = lastName;
-        }
+		// full name of the person built from first and last name
+		String fullName = "";
+		if (!UtilValidate.isEmpty(firstName)) {
+			fullName = firstName + " " + lastName;
+		} else if (UtilValidate.isEmpty(lastName)) {
+			fullName = lastName;
+		}
 
-        if (!UtilValidate.isEmpty(companyName)) {
-            postalAddress.put("toName", companyName);
-        } else {
-            postalAddress.put("toName", fullName);
-        }
+		if (!UtilValidate.isEmpty(companyName)) {
+			postalAddress.put("toName", companyName);
+		} else {
+			postalAddress.put("toName", fullName);
+		}
 
-        postalAddress.put("attnName", attnName);
-        postalAddress.put("contactMechId", contactMech.get("contactMechId"));
-        postalAddress.put("address1", address1);
-        postalAddress.put("address2", address2);
-        postalAddress.put("city", city);
-        postalAddress.put("stateProvinceGeoId", stateGeoCode); 
-        postalAddress.put("postalCode", postalCode);
-        postalAddress.put("postalCodeExt", postalCodeExt);
-        postalAddress.put("countryGeoId", countryGeoCode); 
+		postalAddress.put("attnName", attnName);
+		postalAddress.put("contactMechId", contactMech.get("contactMechId"));
+		postalAddress.put("address1", address1);
+		postalAddress.put("address2", address2);
+		postalAddress.put("city", city);
+		postalAddress.put("stateProvinceGeoId", stateGeoCode);
+		postalAddress.put("postalCode", postalCode);
+		postalAddress.put("postalCodeExt", postalCodeExt);
+		postalAddress.put("countryGeoId", countryGeoCode);
 
-        return delegator.makeValue("PostalAddress", postalAddress);
-    }
+		return delegator.makeValue("PostalAddress", postalAddress);
+	}
 
-    // make a TelecomNumber
-    @SuppressWarnings("unchecked")
-    public static GenericValue makeTelecomNumber(GenericValue contactMech, String countryCode, String areaCode, String contactNumber, Delegator delegator) {
-        Map<String, Object> telecomNumber = FastMap.newInstance();
-        telecomNumber.put("contactMechId", contactMech.get("contactMechId"));
-        telecomNumber.put("countryCode", countryCode);
-        telecomNumber.put("areaCode", areaCode);
-        telecomNumber.put("contactNumber", contactNumber);
-        return delegator.makeValue("TelecomNumber", telecomNumber);
-    }
+	// make a TelecomNumber
+	@SuppressWarnings("unchecked")
+	public static GenericValue makeTelecomNumber(GenericValue contactMech,
+			String countryCode, String areaCode, String contactNumber,
+			Delegator delegator) {
+		Map<String, Object> telecomNumber = FastMap.newInstance();
+		telecomNumber.put("contactMechId", contactMech.get("contactMechId"));
+		telecomNumber.put("countryCode", countryCode);
+		telecomNumber.put("areaCode", areaCode);
+		telecomNumber.put("contactNumber", contactNumber);
+		return delegator.makeValue("TelecomNumber", telecomNumber);
+	}
 
-    @SuppressWarnings("unchecked")
-    public static GenericValue makeContactMechPurpose(String contactMechPurposeTypeId, GenericValue contactMech, String partyId, Timestamp now, Delegator delegator) {
-        Map<String, Object> partyContactMechPurpose = FastMap.newInstance();
-        partyContactMechPurpose.put("partyId", partyId);
-        partyContactMechPurpose.put("fromDate", now);
-        partyContactMechPurpose.put("contactMechId", contactMech.get("contactMechId"));
-        partyContactMechPurpose.put("contactMechPurposeTypeId", contactMechPurposeTypeId);
-        return delegator.makeValue("PartyContactMechPurpose", partyContactMechPurpose);
-    }
+	@SuppressWarnings("unchecked")
+	public static GenericValue makeContactMechPurpose(
+			String contactMechPurposeTypeId, GenericValue contactMech,
+			String partyId, Timestamp now, Delegator delegator) {
+		Map<String, Object> partyContactMechPurpose = FastMap.newInstance();
+		partyContactMechPurpose.put("partyId", partyId);
+		partyContactMechPurpose.put("fromDate", now);
+		partyContactMechPurpose.put("contactMechId",
+				contactMech.get("contactMechId"));
+		partyContactMechPurpose.put("contactMechPurposeTypeId",
+				contactMechPurposeTypeId);
+		return delegator.makeValue("PartyContactMechPurpose",
+				partyContactMechPurpose);
+	}
 
-    @SuppressWarnings("unchecked")
-    public static List<GenericValue> makePartyWithRoles(String partyId, String partyTypeId, List<String> roleTypeIds, Delegator delegator) {
-        List<GenericValue> partyValues = FastList.newInstance();
-        partyValues.add(delegator.makeValue("Party", UtilMisc.toMap("partyId", partyId, "partyTypeId", partyTypeId)));
-        for (Iterator<String> rti = roleTypeIds.iterator(); rti.hasNext(); ) {
-            String nextRoleTypeId = (String) rti.next();        
-            partyValues.add(delegator.makeValue("PartyRole", UtilMisc.toMap("partyId", partyId, "roleTypeId", nextRoleTypeId)));
-        }
-        return partyValues;
-    }
+	@SuppressWarnings("unchecked")
+	public static List<GenericValue> makePartyWithRoles(String partyId,
+			String partyTypeId, List<String> roleTypeIds, Delegator delegator) {
+		List<GenericValue> partyValues = FastList.newInstance();
+		partyValues
+				.add(delegator.makeValue("Party", UtilMisc.toMap("partyId",
+						partyId, "partyTypeId", partyTypeId)));
+		for (Iterator<String> rti = roleTypeIds.iterator(); rti.hasNext();) {
+			String nextRoleTypeId = (String) rti.next();
+			partyValues.add(delegator.makeValue("PartyRole", UtilMisc.toMap(
+					"partyId", partyId, "roleTypeId", nextRoleTypeId)));
+		}
+		return partyValues;
+	}
 
-    @SuppressWarnings("unchecked")
-    public static GenericValue makePartySupplementalData(GenericValue partySupplementalData, String partyId, String fieldToUpdate, GenericValue contactMech, Delegator delegator) {
+	@SuppressWarnings("unchecked")
+	public static GenericValue makePartySupplementalData(
+			GenericValue partySupplementalData, String partyId,
+			String fieldToUpdate, GenericValue contactMech, Delegator delegator) {
 
-        if (partySupplementalData == null) {
-            // create a new partySupplementalData
-            Map<String, String> input = UtilMisc.toMap("partyId", partyId, fieldToUpdate, contactMech.getString("contactMechId"));
-            return delegator.makeValue("PartySupplementalData", input);
-        }
+		if (partySupplementalData == null) {
+			// create a new partySupplementalData
+			Map<String, String> input = UtilMisc.toMap("partyId", partyId,
+					fieldToUpdate, contactMech.getString("contactMechId"));
+			return delegator.makeValue("PartySupplementalData", input);
+		}
 
-        // create or update the field
-        partySupplementalData.set(fieldToUpdate, contactMech.get("contactMechId"));
-        return null;
-    }
+		// create or update the field
+		partySupplementalData.set(fieldToUpdate,
+				contactMech.get("contactMechId"));
+		return null;
+	}
 
-    /** Decodes "0211" to "02/2011". If the input data is bad, then this returns null. */
-    public static String decodeExpireDate(String importDate) {
-        if (importDate.length() != 4) return null;
-        StringBuffer expireDate = new StringBuffer(importDate.substring(0,2));
-        expireDate.append("/20");   // hopefully code will not survive into the 22nd century...
-        expireDate.append(importDate.substring(2,4));
-        return expireDate.toString();
-    }
-    /**
+	/**
+	 * Decodes "0211" to "02/2011". If the input data is bad, then this returns
+	 * null.
+	 */
+	public static String decodeExpireDate(String importDate) {
+		if (importDate.length() != 4)
+			return null;
+		StringBuffer expireDate = new StringBuffer(importDate.substring(0, 2));
+		expireDate.append("/20"); // hopefully code will not survive into the
+									// 22nd century...
+		expireDate.append(importDate.substring(2, 4));
+		return expireDate.toString();
+	}
+
+	/**
 	 * Autor: Jesús Rodrigo Ruiz Merlin
 	 * 
 	 * @param ledger_repo
@@ -156,7 +196,7 @@ public class UtilImport {
 		if (enumeration.isEmpty()) {
 			Debug.log("Lista Vacia");
 			return false;
-		}		
+		}
 
 		Debug.log("BUscando Nivel: hijo_" + nivelHijo + " padre_"
 				+ enumeration.get(0).getNivelId());
@@ -283,6 +323,212 @@ public class UtilImport {
 			Debug.log("Padre Valido");
 			return true;
 		}
+	}
+
+	public static String validaParty(String mensaje,
+			LedgerRepositoryInterface ledger_repo, String id, String campo)
+			throws RepositoryException {
+		List<Party> parties = ledger_repo.findList(Party.class,
+				ledger_repo.map(Party.Fields.externalId, id));
+		if (parties.isEmpty()) {
+			Debug.log("Error, " + campo + " no existe");
+			mensaje += campo + " no existe, ";
+			Debug.log(mensaje);
+		}
+		return mensaje;
+	}
+
+	public static Party obtenParty(LedgerRepositoryInterface ledger_repo,
+			String id) throws RepositoryException {
+		List<Party> parties = ledger_repo.findList(Party.class,
+				ledger_repo.map(Party.Fields.externalId, id));
+		return parties.get(0);
+	}
+
+	public static String validaWorkEffort(String mensaje,
+			LedgerRepositoryInterface ledger_repo, String id, String campo)
+			throws RepositoryException {
+		WorkEffort act = ledger_repo.findOne(WorkEffort.class,
+				ledger_repo.map(WorkEffort.Fields.workEffortId, id));
+		if (act == null) {
+			Debug.log("Error, " + campo + " no existe");
+			mensaje += campo + " no existe, ";
+		}
+		return mensaje;
+	}
+
+	public static WorkEffort obtenWorkEffort(
+			LedgerRepositoryInterface ledger_repo, String id)
+			throws RepositoryException {
+		WorkEffort workEffort = ledger_repo.findOne(WorkEffort.class,
+				ledger_repo.map(WorkEffort.Fields.workEffortId, id));
+		return workEffort;
+	}
+
+	public static String validaProductCategory(String mensaje,
+			LedgerRepositoryInterface ledger_repo, String id, String tipo,
+			String campo) throws RepositoryException {
+		List<ProductCategory> products = ledger_repo.findList(
+				ProductCategory.class, ledger_repo.map(
+						ProductCategory.Fields.categoryName, id,
+						ProductCategory.Fields.productCategoryTypeId, tipo));
+		if (products.isEmpty()) {
+			Debug.log("Error, " + campo + " no existe");
+			mensaje += campo + " no existe, ";
+		}
+
+		return mensaje;
+	}
+
+	public static ProductCategory obtenProductCategory(
+			LedgerRepositoryInterface ledger_repo, String id, String tipo)
+			throws RepositoryException {
+		List<ProductCategory> products = ledger_repo.findList(
+				ProductCategory.class, ledger_repo.map(
+						ProductCategory.Fields.categoryName, id,
+						ProductCategory.Fields.productCategoryTypeId, tipo));
+		return products.get(0);
+	}
+
+	public static String validaGeo(String mensaje,
+			LedgerRepositoryInterface ledger_repo, String id, String campo)
+			throws RepositoryException {
+		Geo loc = ledger_repo.findOne(Geo.class,
+				ledger_repo.map(Geo.Fields.geoId, id));
+		if (loc == null) {
+			Debug.log("Error, " + campo + " no existe");
+			mensaje += campo + " no existe, ";
+		}
+		return mensaje;
+	}
+
+	public static Geo obtenGeo(LedgerRepositoryInterface ledger_repo, String id)
+			throws RepositoryException {
+		Geo geo = ledger_repo.findOne(Geo.class,
+				ledger_repo.map(Geo.Fields.geoId, id));
+		return geo;
+	}
+
+	public static String validaEnumeration(String mensaje,
+			LedgerRepositoryInterface ledger_repo, String id, String tipo,
+			String campo) throws RepositoryException {
+		List<Enumeration> enums = ledger_repo.findList(Enumeration.class,
+				ledger_repo.map(Enumeration.Fields.sequenceId, id,
+						Enumeration.Fields.enumTypeId, tipo));
+
+		if (enums.isEmpty()) {
+			Debug.log("Error, " + campo + " no existe");
+			mensaje += campo + " no existe, ";
+		}
+		return mensaje;
+	}
+
+	public static Enumeration obtenEnumeration(
+			LedgerRepositoryInterface ledger_repo, String id, String tipo)
+			throws RepositoryException {
+		List<Enumeration> enums = ledger_repo.findList(Enumeration.class,
+				ledger_repo.map(Enumeration.Fields.sequenceId, id,
+						Enumeration.Fields.enumTypeId, tipo));
+		return enums.get(0);
+	}
+
+	public static String validaVigencia(String mensaje, String campo,
+			Enumeration enumeration, Date fechaTrans)
+			throws RepositoryException {
+
+		if (!enumeration.getFechaInicio().before(fechaTrans)
+				|| !enumeration.getFechaFin().after(fechaTrans)) {
+			Debug.log("Error, " + campo + " no vigente");
+			mensaje += campo + " no vigente";
+		}
+		return mensaje;
+	}
+
+	public static String validaTipoDoc(String mensaje,
+			LedgerRepositoryInterface ledger_repo, String tipo)
+			throws RepositoryException {
+		TipoDocumento type = ledger_repo.findOne(TipoDocumento.class,
+				ledger_repo.map(TipoDocumento.Fields.idTipoDoc, tipo));
+		if (type == null) {
+			Debug.log("Error, tipoDoc no existe");
+			mensaje += "tipo documento no existe, ";
+		}
+		return mensaje;
+	}
+
+	public static TipoDocumento obtenTipoDocumento(
+			LedgerRepositoryInterface ledger_repo, String tipo)
+			throws RepositoryException {
+		TipoDocumento tipoDocumento = ledger_repo.findOne(TipoDocumento.class,
+				ledger_repo.map(TipoDocumento.Fields.idTipoDoc, tipo));
+
+		return tipoDocumento;
+	}
+
+	public static String validaPago(String mensaje,
+			LedgerRepositoryInterface ledger_repo, String tipo)
+			throws RepositoryException {
+		PaymentMethod payment = ledger_repo.findOne(PaymentMethod.class,
+				ledger_repo.map(PaymentMethod.Fields.paymentMethodId, tipo));
+		if (payment == null) {
+			Debug.log("Error, idPago no existe");
+			mensaje += "idPago no existe, ";
+		}
+		return mensaje;
+	}
+
+	public static AcctgTransEntry generaAcctgTransEntry(AcctgTrans transaccion,
+			String organizacionPartyId, String seqId, String flag,
+			String cuenta, String sfeId) {
+		// C/D
+		Debug.log("Empieza AcctgTransEntry " + cuenta);
+
+		AcctgTransEntry acctgentry = new AcctgTransEntry();
+		acctgentry.setAcctgTransId(transaccion.getAcctgTransId());
+		acctgentry.setAcctgTransEntrySeqId(seqId);
+		acctgentry.setAcctgTransEntryTypeId("_NA_");
+		acctgentry.setDescription(transaccion.getDescription());
+		acctgentry.setGlAccountId(cuenta);
+		Debug.log("Organization.- " + organizacionPartyId);
+		acctgentry.setOrganizationPartyId(organizacionPartyId);
+		acctgentry.setAmount(transaccion.getPostedAmount());
+		acctgentry.setCurrencyUomId("MXN");
+		acctgentry.setDebitCreditFlag(flag);
+		acctgentry.setReconcileStatusId("AES_NOT_RECONCILED");
+		// Tags seteados.
+		if (sfeId != null) {
+			acctgentry.setAcctgTagEnumId3(sfeId);
+		}
+		return acctgentry;
+	}
+
+	public static GlAccountOrganization actualizaGlAccountOrganization(
+			LedgerRepositoryInterface ledger_repo, BigDecimal monto,
+			String cuenta, String organizacionPartyId) throws RepositoryException {
+
+		// GlAccountOrganization
+		Debug.log("Empieza GlAccountOrganization " + cuenta);
+		GlAccountOrganization glAccountOrganization = ledger_repo
+				.findOne(
+						GlAccountOrganization.class,
+						ledger_repo
+								.map(GlAccountOrganization.Fields.glAccountId,
+										cuenta,
+										GlAccountOrganization.Fields.organizationPartyId,
+										organizacionPartyId));
+
+		if (glAccountOrganization.getPostedBalance() == null) {
+			glAccountOrganization.setPostedBalance(monto);
+		} else {
+			glAccountOrganization.setPostedBalance(glAccountOrganization
+					.getPostedBalance().add(monto));
+		}
+		return glAccountOrganization;
+	}
+
+	public static String getAcctgTransIdDiario(String ref, String sec,
+			String tipo) {
+		return ref + "-" + sec + "-" + tipo;
 	}
 
 }
