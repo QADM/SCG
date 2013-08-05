@@ -139,6 +139,8 @@ public class IngresoDiarioImportService extends DomainService implements
 						rowdata.getSfe(), "CLAS_FR", "SFE");
 				mensaje = UtilImport.validaTipoDoc(mensaje, ledger_repo,
 						rowdata.getIdTipoDoc());
+				mensaje = UtilImport.validaCiclo(mensaje, rowdata.getCiclo(),
+						rowdata.getFechaContable());
 
 				if (mensaje == null) {
 					String message = "Failed to import Ingreso Diario ["
@@ -178,9 +180,8 @@ public class IngresoDiarioImportService extends DomainService implements
 
 				// Empieza bloque de vigencias
 				Debug.log("Empieza bloque de vigencias");
-				// Vigencias
 				mensaje = UtilImport.validaVigencia(mensaje, "SFE", sfe,
-						rowdata.getFechaRegistro());
+						rowdata.getFechaContable());
 
 				if (mensaje == null) {
 					String message = "Failed to import Ingreso Diario ["
@@ -324,9 +325,11 @@ public class IngresoDiarioImportService extends DomainService implements
 						imp_tx5.commit();
 
 						GlAccountOrganization glAccountOrganization = UtilImport
-								.actualizaGlAccountOrganization(ledger_repo,
+								.actualizaGlAccountOrganization(
+										ledger_repo,
 										rowdata.getMonto(),
-										cuentas.get("Cuenta Cargo Presupuesto"), rowdata.getOrganizationPartyId());
+										cuentas.get("Cuenta Cargo Presupuesto"),
+										rowdata.getOrganizationPartyId());
 						imp_tx7 = this.session.beginTransaction();
 						ledger_repo.createOrUpdate(glAccountOrganization);
 						imp_tx7.commit();
@@ -341,9 +344,11 @@ public class IngresoDiarioImportService extends DomainService implements
 						imp_tx9.commit();
 
 						glAccountOrganization = UtilImport
-								.actualizaGlAccountOrganization(ledger_repo,
+								.actualizaGlAccountOrganization(
+										ledger_repo,
 										rowdata.getMonto(),
-										cuentas.get("Cuenta Abono Presupuesto"), rowdata.getOrganizationPartyId());
+										cuentas.get("Cuenta Abono Presupuesto"),
+										rowdata.getOrganizationPartyId());
 						imp_tx11 = this.session.beginTransaction();
 						ledger_repo.createOrUpdate(glAccountOrganization);
 						imp_tx11.commit();
@@ -404,7 +409,8 @@ public class IngresoDiarioImportService extends DomainService implements
 						GlAccountOrganization glAccountOrganization = UtilImport
 								.actualizaGlAccountOrganization(ledger_repo,
 										rowdata.getMonto(),
-										cuentas.get("Cuenta Cargo Contable"), rowdata.getOrganizationPartyId());
+										cuentas.get("Cuenta Cargo Contable"),
+										rowdata.getOrganizationPartyId());
 						imp_tx8 = this.session.beginTransaction();
 						ledger_repo.createOrUpdate(glAccountOrganization);
 						imp_tx8.commit();
@@ -421,7 +427,8 @@ public class IngresoDiarioImportService extends DomainService implements
 						glAccountOrganization = UtilImport
 								.actualizaGlAccountOrganization(ledger_repo,
 										rowdata.getMonto(),
-										cuentas.get("Cuenta Abono Contable"), rowdata.getOrganizationPartyId());
+										cuentas.get("Cuenta Abono Contable"),
+										rowdata.getOrganizationPartyId());
 						imp_tx12 = this.session.beginTransaction();
 						ledger_repo.createOrUpdate(glAccountOrganization);
 						imp_tx12.commit();
