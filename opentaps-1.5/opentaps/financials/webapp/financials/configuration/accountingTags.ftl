@@ -21,6 +21,13 @@
 <#assign Nodo = {"R": "Rama", "H": "Hoja"} />
 
 <@frameSection title=uiLabelMap.FinancialsAccountingTags>
+
+<@paginate name="ExelTAGS" list=Enumlists >
+    <#noparse>
+        <@navigationHeader/>
+
+    </#noparse>
+</@paginate>
   <#list tagsByType.keySet() as type>
     <div class="screenlet">
       <div class="screenlet-header"><span class="boxhead">${type.description}</span></div>
@@ -32,6 +39,7 @@
           <tr class="listTableHeader">
             <@displayCell text=uiLabelMap.Codigo />
             <@displayCell text=uiLabelMap.Id />
+            <@displayCell text=uiLabelMap.Nombre />
             <@displayCell text=uiLabelMap.CommonDescription />
       		<@displayCell text=uiLabelMap.Nivel />
       		<@displayCell text=uiLabelMap.ParentId />
@@ -48,10 +56,10 @@
               <@inputTextCell name="sequenceId" default=tag.sequenceId! size=3 maxlength=3 index=tag_index />
               <@displayCell text=tag.enumId />
 
-              <@inputTextCell name="enumCode" default=tag.enumCode! maxlength=30 index=tag_index />
-              <@inputTextCell name="description" default=tag.description! maxlength=30 index=tag_index />
+              <@inputTextCell name="enumCode" default=tag.enumCode! size=12 maxlength=30 index=tag_index />
+              <@inputTextCell name="description" default=tag.description! size=12   maxlength=30 index=tag_index />
 
-             <@inputSelectCell name="diameter" list=nivelLists name="nivelId" default=tag.nivelId! displayField="descripcion" required=false index=tag_index  />
+             <@inputSelectCell name="nivelId" list=nivelLists name="nivelId" default=tag.nivelId! displayField="descripcion" required=false index=tag_index  />
    			  <@inputTextCell name="parentEnumId" default=tag.parentEnumId!  size=10 maxlength=10 index=tag_index />
 	              <@inputTextCell name="fechaInicio"  default=tag.fechaInicio!    size=12 index=tag_index />
 	              <@inputTextCell name="fechaFin"  default=tag.fechaFin! size=12   index=tag_index />
