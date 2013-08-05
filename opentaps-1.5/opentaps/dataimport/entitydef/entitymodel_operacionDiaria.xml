@@ -25,7 +25,6 @@
 		<field name="refDoc" type="id-ne"></field>
 		<field name="secuencia" type="id-ne"></field>
 		<field name="usuario" type="id-ne"></field>
-		<field name="lote" type="id-ne"></field>
 		<field name="idTipoCatalogo" type="id-ne"></field>
 		<field name="idPago" type="id-ne"></field>
 		<field name="idProducto" type="id-ne"></field>
@@ -71,7 +70,6 @@
 		<field name="refDoc" type="id-ne"></field>
 		<field name="secuencia" type="id-ne"></field>
 		<field name="usuario" type="id-ne"></field>
-		<field name="lote" type="id-ne"></field>
 		<field name="idTipoCatalogo" type="id-ne"></field>
 		<field name="idPago" type="id-ne"></field>
 		<field name="idProducto" type="id-ne"></field>
@@ -128,7 +126,6 @@
 		<field name="refDoc" type="id-ne"></field>
 		<field name="secuencia" type="id-ne"></field>
 		<field name="usuario" type="id-ne"></field>
-		<field name="lote" type="id-ne"></field>
 		<field name="concepto" type="id-long"/>
         <field name="subconcepto" type="id-long"/>
         <field name="idTipoCatalogoC" type="id-ne"></field>
