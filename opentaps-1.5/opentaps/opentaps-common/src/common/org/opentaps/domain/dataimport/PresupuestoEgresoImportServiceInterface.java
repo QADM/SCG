@@ -13,6 +13,15 @@ public interface PresupuestoEgresoImportServiceInterface extends
 	 *            the ID of the organization party
 	 */
 	public void setOrganizationPartyId(String organizationPartyId);
+	
+	/**
+	 * Sets the required input parameter for service
+	 * {@link #importPresupuestoEgreso}.
+	 * 
+	 * @param lote
+	 *            the ID of the organization party
+	 */
+	public void setLote(String lote);
 
 	/**
 	 * Gets imported records count by service {@link #importPresupuestoEgreso}.

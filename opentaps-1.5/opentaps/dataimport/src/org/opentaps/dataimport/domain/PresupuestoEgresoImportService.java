@@ -38,8 +38,9 @@ public class PresupuestoEgresoImportService extends DomainService implements
 			.getName();
 	// session object, using to store/search pojos.
 	private Session session;
-	public String organizationPartyId;
+	private String organizationPartyId;
 	public int importedRecords;
+	private String lote;
 
 	public PresupuestoEgresoImportService() {
 		super();
@@ -53,6 +54,11 @@ public class PresupuestoEgresoImportService extends DomainService implements
 	/** {@inheritDoc} */
 	public void setOrganizationPartyId(String organizationPartyId) {
 		this.organizationPartyId = organizationPartyId;
+	}
+	
+	/** {@inheritDoc} */
+	public void setLote(String lote) {
+		this.lote = lote;
 	}
 
 	/** {@inheritDoc} */
@@ -323,58 +329,33 @@ public class PresupuestoEgresoImportService extends DomainService implements
 						aux.setAcctgTransId(presupuestoEgreso.getAcctgTransId());
 						aux.setCiclo(rowdata.getCiclo());
 						aux.setUnidadResponsable(ur.getPartyId());
-						aux.setDescripcionUr(ur.getDescription());
 						aux.setUnidadOrganizacional(uo.getPartyId());
-						aux.setDescripcionUo(uo.getDescription());
 						aux.setUnidadEjecutora(ue.getPartyId());
-						aux.setDescripcionUe(ue.getDescription());
 						aux.setFinalidad(fin.getEnumId());
-						aux.setDescripcionFinalidad(fin.getDescription());
 						aux.setFuncion(fun.getEnumId());
-						aux.setDescripcionFuncion(fun.getDescription());
 						aux.setSubFuncion(subf.getEnumId());
-						aux.setDescripcionSubFuncion(subf.getDescription());
 						aux.setProgramaPlan(rowdata.getEje());
-						aux.setDescripcionProgramaPlan(eje.getDescription());
 						aux.setProgramaPresupuestario(rowdata.getPp());
-						aux.setDescripcionProgramaPres(pp.getDescription());
 						aux.setSubProgramaPresupuestario(rowdata.getSpp());
-						aux.setDescripcionSubProgramaPres(spp.getDescription());
 						aux.setActividad(rowdata.getAct());
-						aux.setDescripcionActividad(act.getDescription());
 						aux.setTipoGasto(tg.getEnumId());
-						aux.setDescripcionTg(tg.getDescription());
 						aux.setCapitulo(cap.getProductCategoryId());
-						aux.setDescripcionCapitulo(cap.getDescription());
 						aux.setConcepto(con.getProductCategoryId());
-						aux.setDescripcionConcepto(con.getDescription());
 						aux.setPartidaGenerica(pg.getProductCategoryId());
-						aux.setDescripcionPg(pg.getDescription());
 						aux.setPartidaEspecifica(pe.getProductCategoryId());
-						aux.setDescripcionPe(pe.getDescription());
 						aux.setFuente(f.getEnumId());
-						aux.setDescripcionFuente(f.getDescription());
 						aux.setSubFuente(sf.getEnumId());
-						aux.setDescripcionSubfuente(sf.getDescription());
 						aux.setSubFuenteEspecifica(sfe.getEnumId());
-						aux.setDescripcionSubfuenteEspecifica(sfe
-								.getDescription());
 						aux.setEntidadFederativa(rowdata.getEf());
-						aux.setDescripcionEntFed(ef.getGeoName());
 						aux.setRegion(rowdata.getReg());
-						aux.setDescripcionRegion(reg.getGeoName());
 						aux.setMunicipio(rowdata.getMun());
-						aux.setDescripcionMunicipio(mun.getGeoName());
 						aux.setLocalidad(rowdata.getLoc());
-						aux.setDescripcionLocalidad(loc.getGeoName());
 						aux.setSector(sec.getEnumId());
-						aux.setDescripcionSector(sec.getDescription());
 						aux.setSubSector(subsec.getEnumId());
-						aux.setDescripcionSubsector(subsec.getDescription());
 						aux.setArea(area.getEnumId());
-						aux.setDescripcionArea(area.getDescription());
 						aux.setAgrupador(rowdata.getAgrupador());
 						aux.setClavePres(rowdata.getClavePres());
+						aux.setLote(lote);
 						imp_tx2 = this.session.beginTransaction();
 						ledger_repo.createOrUpdate(aux);
 						imp_tx2.commit();
