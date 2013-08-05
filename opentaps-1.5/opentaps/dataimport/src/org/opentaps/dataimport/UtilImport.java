@@ -27,6 +27,8 @@ import org.opentaps.domain.dataimport.EgresoDiarioDataImportRepositoryInterface;
 import org.opentaps.domain.ledger.LedgerRepositoryInterface;
 import org.opentaps.foundation.repository.RepositoryException;
 
+import com.ibm.icu.util.Calendar;
+
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Date;
@@ -325,6 +327,17 @@ public class UtilImport {
 		}
 	}
 
+	public static String validaCiclo(String mensaje, String ciclo,
+			Date fechaTrans) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(fechaTrans);
+		if (cal.get(Calendar.YEAR) != Integer.parseInt(ciclo)) {
+			mensaje += "El ciclo no corresponde a la fecha contable de la transaccion, ";
+			Debug.log(mensaje);
+		}
+		return mensaje;
+	}
+
 	public static String validaParty(String mensaje,
 			LedgerRepositoryInterface ledger_repo, String id, String campo)
 			throws RepositoryException {
@@ -504,18 +517,16 @@ public class UtilImport {
 
 	public static GlAccountOrganization actualizaGlAccountOrganization(
 			LedgerRepositoryInterface ledger_repo, BigDecimal monto,
-			String cuenta, String organizacionPartyId) throws RepositoryException {
+			String cuenta, String organizacionPartyId)
+			throws RepositoryException {
 
 		// GlAccountOrganization
 		Debug.log("Empieza GlAccountOrganization " + cuenta);
-		GlAccountOrganization glAccountOrganization = ledger_repo
-				.findOne(
-						GlAccountOrganization.class,
-						ledger_repo
-								.map(GlAccountOrganization.Fields.glAccountId,
-										cuenta,
-										GlAccountOrganization.Fields.organizationPartyId,
-										organizacionPartyId));
+		GlAccountOrganization glAccountOrganization = ledger_repo.findOne(
+				GlAccountOrganization.class, ledger_repo.map(
+						GlAccountOrganization.Fields.glAccountId, cuenta,
+						GlAccountOrganization.Fields.organizationPartyId,
+						organizacionPartyId));
 
 		if (glAccountOrganization.getPostedBalance() == null) {
 			glAccountOrganization.setPostedBalance(monto);
