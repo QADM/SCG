@@ -39,6 +39,7 @@ public class IngresoDiarioImportService extends DomainService implements
 			.getName();
 	// session object, using to store/search pojos.
 	private Session session;
+	private String lote;
 	public int importedRecords;
 
 	public IngresoDiarioImportService() {
@@ -48,6 +49,11 @@ public class IngresoDiarioImportService extends DomainService implements
 	public IngresoDiarioImportService(Infrastructure infrastructure, User user,
 			Locale locale) throws ServiceException {
 		super(infrastructure, user, locale);
+	}
+	
+	/** {@inheritDoc} */
+	public void setLote(String lote) {
+		this.lote = lote;
 	}
 
 	/** {@inheritDoc} */
@@ -236,40 +242,24 @@ public class IngresoDiarioImportService extends DomainService implements
 					AcctgTransPresupuestal aux = new AcctgTransPresupuestal();
 					aux.setCiclo(rowdata.getCiclo());
 					aux.setUnidadResponsable(ur.getPartyId());
-					aux.setDescripcionUr(ur.getDescription());
 					aux.setUnidadOrganizacional(uo.getPartyId());
-					aux.setDescripcionUo(uo.getDescription());
 					aux.setUnidadEjecutora(ue.getPartyId());
-					aux.setDescripcionUe(ue.getDescription());
 					aux.setRubro(rub.getProductCategoryId());
-					aux.setDescripcionRubro(rub.getDescription());
 					aux.setTipo(tip.getProductCategoryId());
-					aux.setDescripcionTipo(tip.getDescription());
 					aux.setClase(cla.getProductCategoryId());
-					aux.setDescripcionClase(cla.getDescription());
 					aux.setConceptoRub(con.getProductCategoryId());
-					aux.setDescripcionConceptoRubro(con.getDescription());
 					aux.setNivel5(n5.getProductCategoryId());
-					aux.setDescripcionN5(n5.getDescription());
 					aux.setFuente(f.getEnumId());
-					aux.setDescripcionFuente(f.getDescription());
 					aux.setSubFuente(sf.getEnumId());
-					aux.setDescripcionSubfuente(sf.getDescription());
 					aux.setSubFuenteEspecifica(sfe.getEnumId());
-					aux.setDescripcionSubfuenteEspecifica(sfe.getDescription());
 					aux.setEntidadFederativa(rowdata.getEf());
-					aux.setDescripcionEntFed(ef.getGeoName());
 					aux.setRegion(rowdata.getReg());
-					aux.setDescripcionRegion(reg.getGeoName());
 					aux.setMunicipio(rowdata.getMun());
-					aux.setDescripcionMunicipio(mun.getGeoName());
 					aux.setLocalidad(rowdata.getLoc());
-					aux.setDescripcionLocalidad(loc.getGeoName());
 					aux.setAgrupador(rowdata.getRefDoc());
 					aux.setIdTipoDoc(rowdata.getIdTipoDoc());
-					aux.setDescripcionTipoDoc(tipoDoc.getDescripcion());
 					aux.setSecuencia(rowdata.getSecuencia());
-					aux.setLote(rowdata.getLote());
+					aux.setLote(lote);
 					aux.setClavePres(rowdata.getClavePres());
 
 					if (cuentas.get("Cuenta Cargo Presupuesto") != null) {

@@ -982,7 +982,6 @@ public final class ExcelImportServices extends DomainService {
 				ingreso.setSecuencia(this.readStringCell(row, rowCount++));
 				ingreso.setUsuario(this.readStringCell(row, rowCount++));
 				Debug.log("Usuario " + ingreso.getUsuario());
-				ingreso.setLote(this.readStringCell(row, rowCount++));
 				ingreso.setIdTipoCatalogo(this.readStringCell(row, rowCount++));
 				ingreso.setIdPago(this.readStringCell(row, rowCount++));
 				ingreso.setIdProducto(this.readStringCell(row, rowCount++));
@@ -1053,7 +1052,6 @@ public final class ExcelImportServices extends DomainService {
 				egreso.setRefDoc(this.readStringCell(row, rowCount++));
 				egreso.setSecuencia(this.readStringCell(row, rowCount++));
 				egreso.setUsuario(this.readStringCell(row, rowCount++));
-				egreso.setLote(this.readStringCell(row, rowCount++));
 				egreso.setIdTipoCatalogo(this.readStringCell(row, rowCount++));
 				egreso.setIdPago(this.readStringCell(row, rowCount++));
 				egreso.setIdProducto(this.readStringCell(row, rowCount++));
@@ -1142,7 +1140,6 @@ public final class ExcelImportServices extends DomainService {
 						rowCount++));
 				operacionDiaria
 						.setUsuario(this.readStringCell(row, rowCount++));
-				operacionDiaria.setLote(this.readStringCell(row, rowCount++));
 				operacionDiaria.setConcepto(this
 						.readStringCell(row, rowCount++));
 				operacionDiaria.setSubconcepto(this.readStringCell(row,

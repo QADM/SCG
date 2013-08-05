@@ -36,7 +36,8 @@ public class PresupuestoIngresoImportService extends DomainService implements
 			.getName();
 	// session object, using to store/search pojos.
 	private Session session;
-	public String organizationPartyId;
+	private String organizationPartyId;
+	private String lote;
 	public int importedRecords;
 
 	public PresupuestoIngresoImportService() {
@@ -51,6 +52,11 @@ public class PresupuestoIngresoImportService extends DomainService implements
 	/** {@inheritDoc} */
 	public void setOrganizationPartyId(String organizationPartyId) {
 		this.organizationPartyId = organizationPartyId;
+	}
+	
+	/** {@inheritDoc} */
+	public void setLote(String lote) {
+		this.lote = lote;
 	}
 
 	/** {@inheritDoc} */
@@ -278,38 +284,23 @@ public class PresupuestoIngresoImportService extends DomainService implements
 								.getAcctgTransId());
 						aux.setCiclo(rowdata.getCiclo());
 						aux.setUnidadResponsable(ur.getPartyId());
-						aux.setDescripcionUr(ur.getDescription());
 						aux.setUnidadOrganizacional(uo.getPartyId());
-						aux.setDescripcionUo(uo.getDescription());
 						aux.setUnidadEjecutora(ue.getPartyId());
-						aux.setDescripcionUe(ue.getDescription());
 						aux.setRubro(rub.getProductCategoryId());
-						aux.setDescripcionRubro(rub.getDescription());
 						aux.setTipo(tip.getProductCategoryId());
-						aux.setDescripcionTipo(tip.getDescription());
 						aux.setClase(cla.getProductCategoryId());
-						aux.setDescripcionClase(cla.getDescription());
 						aux.setConceptoRub(con.getProductCategoryId());
-						aux.setDescripcionConceptoRubro(con.getDescription());
 						aux.setNivel5(n5.getProductCategoryId());
-						aux.setDescripcionN5(n5.getDescription());
 						aux.setFuente(f.getEnumId());
-						aux.setDescripcionFuente(f.getDescription());
 						aux.setSubFuente(sf.getEnumId());
-						aux.setDescripcionSubfuente(sf.getDescription());
 						aux.setSubFuenteEspecifica(sfe.getEnumId());
-						aux.setDescripcionSubfuenteEspecifica(sfe
-								.getDescription());
 						aux.setEntidadFederativa(rowdata.getEf());
-						aux.setDescripcionEntFed(ef.getGeoName());
 						aux.setRegion(rowdata.getReg());
-						aux.setDescripcionRegion(reg.getGeoName());
 						aux.setMunicipio(rowdata.getMun());
-						aux.setDescripcionMunicipio(mun.getGeoName());
 						aux.setLocalidad(rowdata.getLoc());
-						aux.setDescripcionLocalidad(loc.getGeoName());
 						aux.setAgrupador(rowdata.getAgrupador());
 						aux.setClavePres(rowdata.getClavePres());
+						aux.setLote(lote);
 						imp_tx2 = this.session.beginTransaction();
 						ledger_repo.createOrUpdate(aux);
 						imp_tx2.commit();

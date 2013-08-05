@@ -40,6 +40,7 @@ public class EgresoDiarioImportService extends DomainService implements
 			.getName();
 	// session object, using to store/search pojos.
 	private Session session;
+	private String lote;
 	public int importedRecords;
 
 	public EgresoDiarioImportService() {
@@ -49,6 +50,11 @@ public class EgresoDiarioImportService extends DomainService implements
 	public EgresoDiarioImportService(Infrastructure infrastructure, User user,
 			Locale locale) throws ServiceException {
 		super(infrastructure, user, locale);
+	}
+	
+	/** {@inheritDoc} */
+	public void setLote(String lote) {
+		this.lote = lote;
 	}
 
 	/** {@inheritDoc} */
@@ -286,60 +292,34 @@ public class EgresoDiarioImportService extends DomainService implements
 					AcctgTransPresupuestal aux = new AcctgTransPresupuestal();
 					aux.setCiclo(rowdata.getCiclo());
 					aux.setUnidadResponsable(ur.getPartyId());
-					aux.setDescripcionUr(ur.getDescription());
 					aux.setUnidadOrganizacional(uo.getPartyId());
-					aux.setDescripcionUo(uo.getDescription());
 					aux.setUnidadEjecutora(ue.getPartyId());
-					aux.setDescripcionUe(ue.getDescription());
 					aux.setFinalidad(fin.getEnumId());
-					aux.setDescripcionFinalidad(fin.getDescription());
 					aux.setFuncion(fun.getEnumId());
-					aux.setDescripcionFuncion(fun.getDescription());
 					aux.setSubFuncion(subf.getEnumId());
-					aux.setDescripcionSubFuncion(subf.getDescription());
 					aux.setProgramaPlan(rowdata.getEje());
-					aux.setDescripcionProgramaPlan(eje.getDescription());
 					aux.setProgramaPresupuestario(rowdata.getPp());
-					aux.setDescripcionProgramaPres(pp.getDescription());
 					aux.setSubProgramaPresupuestario(rowdata.getSpp());
-					aux.setDescripcionSubProgramaPres(spp.getDescription());
 					aux.setActividad(rowdata.getAct());
-					aux.setDescripcionActividad(act.getDescription());
 					aux.setTipoGasto(tg.getEnumId());
-					aux.setDescripcionTg(tg.getDescription());
 					aux.setCapitulo(cap.getProductCategoryId());
-					aux.setDescripcionCapitulo(cap.getDescription());
 					aux.setConcepto(con.getProductCategoryId());
-					aux.setDescripcionConcepto(con.getDescription());
 					aux.setPartidaGenerica(pg.getProductCategoryId());
-					aux.setDescripcionPg(pg.getDescription());
 					aux.setPartidaEspecifica(pe.getProductCategoryId());
-					aux.setDescripcionPe(pe.getDescription());
 					aux.setFuente(f.getEnumId());
-					aux.setDescripcionFuente(f.getDescription());
 					aux.setSubFuente(sf.getEnumId());
-					aux.setDescripcionSubfuente(sf.getDescription());
 					aux.setSubFuenteEspecifica(sfe.getEnumId());
-					aux.setDescripcionSubfuenteEspecifica(sfe.getDescription());
 					aux.setEntidadFederativa(rowdata.getEf());
-					aux.setDescripcionEntFed(ef.getGeoName());
 					aux.setRegion(rowdata.getReg());
-					aux.setDescripcionRegion(reg.getGeoName());
 					aux.setMunicipio(rowdata.getMun());
-					aux.setDescripcionMunicipio(mun.getGeoName());
 					aux.setLocalidad(rowdata.getLoc());
-					aux.setDescripcionLocalidad(loc.getGeoName());
 					aux.setSector(sec.getEnumId());
-					aux.setDescripcionSector(sec.getDescription());
 					aux.setSubSector(subsec.getEnumId());
-					aux.setDescripcionSubsector(subsec.getDescription());
 					aux.setArea(area.getEnumId());
-					aux.setDescripcionArea(area.getDescription());
 					aux.setAgrupador(rowdata.getRefDoc());
 					aux.setIdTipoDoc(rowdata.getIdTipoDoc());
-					aux.setDescripcionTipoDoc(tipoDoc.getDescripcion());
 					aux.setSecuencia(rowdata.getSecuencia());
-					aux.setLote(rowdata.getLote());
+					aux.setLote(lote);
 					aux.setClavePres(rowdata.getClavePres());
 
 					if (cuentas.get("Cuenta Cargo Presupuesto") != null) {
@@ -403,9 +383,11 @@ public class EgresoDiarioImportService extends DomainService implements
 
 						Debug.log("commit GlAO");
 						GlAccountOrganization glAccountOrganization = UtilImport
-								.actualizaGlAccountOrganization(ledger_repo,
+								.actualizaGlAccountOrganization(
+										ledger_repo,
 										rowdata.getMonto(),
-										cuentas.get("Cuenta Cargo Presupuesto"), rowdata.getOrganizationPartyId());
+										cuentas.get("Cuenta Cargo Presupuesto"),
+										rowdata.getOrganizationPartyId());
 						imp_tx7 = this.session.beginTransaction();
 						ledger_repo.createOrUpdate(glAccountOrganization);
 						imp_tx7.commit();
@@ -427,9 +409,11 @@ public class EgresoDiarioImportService extends DomainService implements
 
 						Debug.log("commit GlAO");
 						glAccountOrganization = UtilImport
-								.actualizaGlAccountOrganization(ledger_repo,
+								.actualizaGlAccountOrganization(
+										ledger_repo,
 										rowdata.getMonto(),
-										cuentas.get("Cuenta Abono Presupuesto"), rowdata.getOrganizationPartyId());
+										cuentas.get("Cuenta Abono Presupuesto"),
+										rowdata.getOrganizationPartyId());
 						imp_tx11 = this.session.beginTransaction();
 						ledger_repo.createOrUpdate(glAccountOrganization);
 						imp_tx11.commit();
@@ -474,10 +458,12 @@ public class EgresoDiarioImportService extends DomainService implements
 						ledger_repo.createOrUpdate(aux);
 						imp_tx4.commit();
 
-						AcctgTransEntry acctgentry = UtilImport.generaAcctgTransEntry(
-								egresoDiario, rowdata.getOrganizationPartyId(), "00001", "D",
-								cuentas.get("Cuenta Cargo Contable"),
-								sfe.getEnumId());
+						AcctgTransEntry acctgentry = UtilImport
+								.generaAcctgTransEntry(egresoDiario,
+										rowdata.getOrganizationPartyId(),
+										"00001", "D",
+										cuentas.get("Cuenta Cargo Contable"),
+										sfe.getEnumId());
 						// Tags seteados.
 						acctgentry.setAcctgTagEnumId1(subf.getEnumId());
 						acctgentry.setAcctgTagEnumId2(tg.getEnumId());
@@ -487,15 +473,18 @@ public class EgresoDiarioImportService extends DomainService implements
 						ledger_repo.createOrUpdate(acctgentry);
 						imp_tx6.commit();
 
-						GlAccountOrganization glAccountOrganization = UtilImport.actualizaGlAccountOrganization(
-								ledger_repo, rowdata.getMonto(),
-								cuentas.get("Cuenta Cargo Contable"), rowdata.getOrganizationPartyId());
+						GlAccountOrganization glAccountOrganization = UtilImport
+								.actualizaGlAccountOrganization(ledger_repo,
+										rowdata.getMonto(),
+										cuentas.get("Cuenta Cargo Contable"),
+										rowdata.getOrganizationPartyId());
 						imp_tx8 = this.session.beginTransaction();
 						ledger_repo.createOrUpdate(glAccountOrganization);
 						imp_tx8.commit();
 
-						acctgentry = UtilImport.generaAcctgTransEntry(egresoDiario,
-								rowdata.getOrganizationPartyId(), "00002", "C",
+						acctgentry = UtilImport.generaAcctgTransEntry(
+								egresoDiario, rowdata.getOrganizationPartyId(),
+								"00002", "C",
 								cuentas.get("Cuenta Abono Contable"),
 								sfe.getEnumId());
 						// Tags seteados.
@@ -507,9 +496,11 @@ public class EgresoDiarioImportService extends DomainService implements
 						ledger_repo.createOrUpdate(acctgentry);
 						imp_tx10.commit();
 
-						glAccountOrganization = UtilImport.actualizaGlAccountOrganization(
-								ledger_repo, rowdata.getMonto(),
-								cuentas.get("Cuenta Abono Contable"), rowdata.getOrganizationPartyId());
+						glAccountOrganization = UtilImport
+								.actualizaGlAccountOrganization(ledger_repo,
+										rowdata.getMonto(),
+										cuentas.get("Cuenta Abono Contable"),
+										rowdata.getOrganizationPartyId());
 						imp_tx12 = this.session.beginTransaction();
 						ledger_repo.createOrUpdate(glAccountOrganization);
 						imp_tx12.commit();

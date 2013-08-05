@@ -36,10 +36,16 @@ public class OperacionDiariaImportService extends DomainService implements
 			.getName();
 	// session object, using to store/search pojos.
 	private Session session;
+	private String lote;
 	public int importedRecords;
 
 	public OperacionDiariaImportService() {
 		super();
+	}
+
+	/** {@inheritDoc} */
+	public void setLote(String lote) {
+		this.lote = lote;
 	}
 
 	public OperacionDiariaImportService(Infrastructure infrastructure,
@@ -172,9 +178,8 @@ public class OperacionDiariaImportService extends DomainService implements
 					aux.setUnidadEjecutora(ue.getPartyId());
 					aux.setAgrupador(rowdata.getRefDoc());
 					aux.setIdTipoDoc(rowdata.getIdTipoDoc());
-					aux.setDescripcionTipoDoc(tipoDoc.getDescripcion());
 					aux.setSecuencia(rowdata.getSecuencia());
-					aux.setLote(rowdata.getLote());
+					aux.setLote(lote);
 
 					if (cuentas.get("Cuenta Cargo Presupuesto") != null) {
 						Debug.log("Cuenta Presupuestal");
@@ -215,30 +220,42 @@ public class OperacionDiariaImportService extends DomainService implements
 						ledger_repo.createOrUpdate(aux);
 						imp_tx3.commit();
 
-						AcctgTransEntry acctgentry = UtilImport.generaAcctgTransEntry(
-								OperacionDiaria, rowdata.getOrganizationPartyId(), "00001", "D",
-								cuentas.get("Cuenta Cargo Presupuesto"),null);
+						AcctgTransEntry acctgentry = UtilImport
+								.generaAcctgTransEntry(
+										OperacionDiaria,
+										rowdata.getOrganizationPartyId(),
+										"00001",
+										"D",
+										cuentas.get("Cuenta Cargo Presupuesto"),
+										null);
 						imp_tx5 = this.session.beginTransaction();
 						ledger_repo.createOrUpdate(acctgentry);
 						imp_tx5.commit();
 
-						GlAccountOrganization glAccountOrganization = UtilImport.actualizaGlAccountOrganization(
-								ledger_repo, rowdata.getMonto(),
-								cuentas.get("Cuenta Cargo Presupuesto"), rowdata.getOrganizationPartyId());
+						GlAccountOrganization glAccountOrganization = UtilImport
+								.actualizaGlAccountOrganization(
+										ledger_repo,
+										rowdata.getMonto(),
+										cuentas.get("Cuenta Cargo Presupuesto"),
+										rowdata.getOrganizationPartyId());
 						imp_tx7 = this.session.beginTransaction();
 						ledger_repo.createOrUpdate(glAccountOrganization);
 						imp_tx7.commit();
 
-						acctgentry = UtilImport.generaAcctgTransEntry(OperacionDiaria,
+						acctgentry = UtilImport.generaAcctgTransEntry(
+								OperacionDiaria,
 								rowdata.getOrganizationPartyId(), "00002", "C",
-								cuentas.get("Cuenta Abono Presupuesto"),null);
+								cuentas.get("Cuenta Abono Presupuesto"), null);
 						imp_tx9 = this.session.beginTransaction();
 						ledger_repo.createOrUpdate(acctgentry);
 						imp_tx9.commit();
 
-						glAccountOrganization = UtilImport.actualizaGlAccountOrganization(
-								ledger_repo, rowdata.getMonto(),
-								cuentas.get("Cuenta Abono Presupuesto"), rowdata.getOrganizationPartyId());
+						glAccountOrganization = UtilImport
+								.actualizaGlAccountOrganization(
+										ledger_repo,
+										rowdata.getMonto(),
+										cuentas.get("Cuenta Abono Presupuesto"),
+										rowdata.getOrganizationPartyId());
 						imp_tx11 = this.session.beginTransaction();
 						ledger_repo.createOrUpdate(glAccountOrganization);
 						imp_tx11.commit();
@@ -285,30 +302,38 @@ public class OperacionDiariaImportService extends DomainService implements
 						ledger_repo.createOrUpdate(aux);
 						imp_tx4.commit();
 
-						AcctgTransEntry acctgentry = UtilImport.generaAcctgTransEntry(
-								OperacionDiaria, rowdata.getOrganizationPartyId(), "00001", "D",
-								cuentas.get("Cuenta Cargo Contable"),null);
+						AcctgTransEntry acctgentry = UtilImport
+								.generaAcctgTransEntry(OperacionDiaria,
+										rowdata.getOrganizationPartyId(),
+										"00001", "D",
+										cuentas.get("Cuenta Cargo Contable"),
+										null);
 						imp_tx6 = this.session.beginTransaction();
 						ledger_repo.createOrUpdate(acctgentry);
 						imp_tx6.commit();
 
-						GlAccountOrganization glAccountOrganization = UtilImport.actualizaGlAccountOrganization(
-								ledger_repo, rowdata.getMonto(),
-								cuentas.get("Cuenta Cargo Contable"), rowdata.getOrganizationPartyId());
+						GlAccountOrganization glAccountOrganization = UtilImport
+								.actualizaGlAccountOrganization(ledger_repo,
+										rowdata.getMonto(),
+										cuentas.get("Cuenta Cargo Contable"),
+										rowdata.getOrganizationPartyId());
 						imp_tx8 = this.session.beginTransaction();
 						ledger_repo.createOrUpdate(glAccountOrganization);
 						imp_tx8.commit();
 
-						acctgentry = UtilImport.generaAcctgTransEntry(OperacionDiaria,
+						acctgentry = UtilImport.generaAcctgTransEntry(
+								OperacionDiaria,
 								rowdata.getOrganizationPartyId(), "00002", "C",
-								cuentas.get("Cuenta Abono Contable"),null);
+								cuentas.get("Cuenta Abono Contable"), null);
 						imp_tx10 = this.session.beginTransaction();
 						ledger_repo.createOrUpdate(acctgentry);
 						imp_tx10.commit();
 
-						glAccountOrganization = UtilImport.actualizaGlAccountOrganization(
-								ledger_repo, rowdata.getMonto(),
-								cuentas.get("Cuenta Abono Contable"), rowdata.getOrganizationPartyId());
+						glAccountOrganization = UtilImport
+								.actualizaGlAccountOrganization(ledger_repo,
+										rowdata.getMonto(),
+										cuentas.get("Cuenta Abono Contable"),
+										rowdata.getOrganizationPartyId());
 						imp_tx12 = this.session.beginTransaction();
 						ledger_repo.createOrUpdate(glAccountOrganization);
 						imp_tx12.commit();
