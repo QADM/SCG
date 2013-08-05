@@ -239,6 +239,8 @@ public class PresupuestoEgresoImportService extends DomainService implements
 								sfe, cal.getTime());
 						mensaje = UtilImport.validaVigencia(mensaje, "AREA",
 								area, cal.getTime());
+						mensaje = UtilImport.validaCiclo(mensaje, rowdata.getCiclo(),
+								cal.getTime());
 
 						if (mensaje == null) {
 							String message = "Failed to import Presupuesto Egreso ["

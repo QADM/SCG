@@ -195,6 +195,8 @@ public class PresupuestoIngresoImportService extends DomainService implements
 						// Vigencias
 						mensaje = UtilImport.validaVigencia(mensaje, "sfe",
 								sfe, cal.getTime());
+						mensaje = UtilImport.validaCiclo(mensaje, rowdata.getCiclo(),
+								cal.getTime());
 
 						if (mensaje == null) {
 							String message = "Failed to import Presupuesto Ingreso ["

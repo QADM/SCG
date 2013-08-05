@@ -159,6 +159,8 @@ public class EgresoDiarioImportService extends DomainService implements
 						rowdata.getArea(), "CLAS_SECT", "AREA");
 				mensaje = UtilImport.validaTipoDoc(mensaje, ledger_repo,
 						rowdata.getIdTipoDoc());
+				mensaje = UtilImport.validaCiclo(mensaje, rowdata.getCiclo(),
+						rowdata.getFechaContable());
 
 				if (mensaje == null) {
 					String message = "Failed to import Egreso Diario ["
@@ -220,13 +222,13 @@ public class EgresoDiarioImportService extends DomainService implements
 				Debug.log("Empieza bloque de vigencias");
 				// Vigencias
 				mensaje = UtilImport.validaVigencia(mensaje, "SUBF", subf,
-						rowdata.getFechaRegistro());
+						rowdata.getFechaContable());
 				mensaje = UtilImport.validaVigencia(mensaje, "TG", tg,
-						rowdata.getFechaRegistro());
+						rowdata.getFechaContable());
 				mensaje = UtilImport.validaVigencia(mensaje, "SFE", sfe,
-						rowdata.getFechaRegistro());
+						rowdata.getFechaContable());
 				mensaje = UtilImport.validaVigencia(mensaje, "AREA", area,
-						rowdata.getFechaRegistro());
+						rowdata.getFechaContable());
 
 				if (mensaje == null) {
 					String message = "Failed to import Egreso Diario ["
