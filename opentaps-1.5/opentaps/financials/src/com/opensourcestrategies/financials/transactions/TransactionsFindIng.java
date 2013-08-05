@@ -33,7 +33,7 @@ import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.party.party.PartyHelper;
-import org.opentaps.base.entities.AcctgTransAndOrg;
+import org.opentaps.base.entities.Enumeration;
 import org.opentaps.base.entities.AcctgTransOrgPresupIng;
 import org.opentaps.base.entities.AcctgTransType;
 import org.opentaps.base.entities.AcctgTrans;
@@ -93,7 +93,6 @@ public class TransactionsFindIng {
 
         
         
-        
         // get the list of transactionTypes for the parametrized form ftl
         List<AcctgTransType> transactionTypes = ledgerRepository.findAll(AcctgTransType.class);
         List<Map<String, Object>> transactionTypesList = new FastList<Map<String, Object>>();
@@ -102,15 +101,7 @@ public class TransactionsFindIng {
             transactionTypesList.add(map);
         }
         ac.put("transactionTypes", transactionTypesList);
-//////////////////////////////////////////////////////////        ///
-        List<NivelPresupuestal> nivelList = ledgerRepository.findAll(NivelPresupuestal.class);
-        List<Map<String, Object>> nivelLists = new FastList<Map<String, Object>>();
-        for (NivelPresupuestal s : nivelList) {
-            Map<String, Object> map = s.toMap();
-            nivelLists.add(map);
-        }
-        ac.put("nivelLists", nivelLists);
-        
+
 
         // get the list of glFiscalTypes for the parametrized form ftl
         List<GlFiscalType> glFiscalTypes = ledgerRepository.findAll(GlFiscalType.class);
@@ -401,6 +392,28 @@ public class TransactionsFindIng {
             ac.put("acctgTransListBuilder", acctgTransListBuilder);
         //}
     }
-    
+//Metodo que devuelve la lista que  se  genera el mapa para la exportación a Excel    
+    public static void findExcelTag(Map<String, Object> context) throws GeneralException, ParseException {
+        final ActionContext ac = new ActionContext(context);
+        DomainsDirectory dd = DomainsDirectory.getDomainsDirectory(ac);
+        final LedgerRepositoryInterface ledgerRepository = dd.getLedgerDomain().getLedgerRepository();
+//////////////////////////////////////////////////////////        ///
+        List<NivelPresupuestal> nivelList = ledgerRepository.findAll(NivelPresupuestal.class);
+        List<Map<String, Object>> nivelLists = new FastList<Map<String, Object>>();
+        for (NivelPresupuestal s : nivelList) {
+            Map<String, Object> map = s.toMap();
+            nivelLists.add(map);
+        }
+        ac.put("nivelLists", nivelLists);
+        
+        List<Enumeration> enumList = ledgerRepository.findAll(Enumeration.class);
+        List<Map<String, Object>> Enumlists = new FastList<Map<String, Object>>();
+        for (Enumeration s : enumList) {
+            Map<String, Object> map = s.toMap();
+            Enumlists.add(map);
+        }
+        ac.put("Enumlists", Enumlists);
+        
+    }
     
 }
