@@ -27,17 +27,19 @@ requests, and similar things.
   <#if renderExcelButton?exists & renderExcelButton & (pageSize > 0)>
   <a class="exportExcelButton" href="renderPaginatedListAsExcel?paginatorName=${paginatorName}&amp;opentapsApplicationName=${opentapsApplicationName}" title="${uiLabelMap.OpentapsExportToExcel}"><img src="/opentaps_images/buttons/spreadsheet.png" alt="${uiLabelMap.OpentapsPaginationExportExcelButtonLabel}" />&#160;${uiLabelMap.OpentapsPaginationExportExcelButtonLabel}</a>
   </#if>
-  <span class="pageNumber">Page ${pageNumber}/${totalPages}</span>
-  <#assign args = "'${paginatorName}','${opentapsApplicationName}'" />
-  <#if !viewAll>
-    <input type="button" class="paginationButton paginationFirstPage" value="" title="${uiLabelMap.pagerFirstPage}" onClick="opentaps.getFirstPage(${args})"/>
-    <input type="button" class="paginationButton paginationPreviousPage" value="" title="${uiLabelMap.pagerPreviousPage}" onClick="opentaps.getPreviousPage(${args})"/>
-    <input type="button" class="paginationButton paginationShrinkPage" value="" title="${uiLabelMap.pagerShrinkPage}" onClick="opentaps.changePaginationViewSize(${args},-5)"/>
-    <input type="button" class="paginationButton paginationGrowPage" value="" title="${uiLabelMap.pagerGrowPage}" onClick="opentaps.changePaginationViewSize(${args},5)"/>
-    <input type="button" class="paginationButton paginationNextPage" value="" title="${uiLabelMap.pagerNextPage}" onClick="opentaps.getNextPage(${args})"/>
-    <input type="button" class="paginationButton paginationLastPage" value="" title="${uiLabelMap.pagerLastPage}" onClick="opentaps.getLastPage(${args})"/>
-  </#if>
-  <input type="button" class="paginationButton <#if viewAll>paginationUntoggleViewAll<#else>paginationToggleViewAll</#if>" value="" title="${uiLabelMap.pagerToggleViewAll}" onClick="opentaps.togglePaginationViewAll(${args})"/>
+  <#if paginatorName!="ExelTAGS">  
+	  <span class="pageNumber">Page ${pageNumber}/${totalPages}</span>
+	  <#assign args = "'${paginatorName}','${opentapsApplicationName}'" />
+	  <#if !viewAll>
+	    <input type="button" class="paginationButton paginationFirstPage" value="" title="${uiLabelMap.pagerFirstPage}" onClick="opentaps.getFirstPage(${args})"/>
+	    <input type="button" class="paginationButton paginationPreviousPage" value="" title="${uiLabelMap.pagerPreviousPage}" onClick="opentaps.getPreviousPage(${args})"/>
+	    <input type="button" class="paginationButton paginationShrinkPage" value="" title="${uiLabelMap.pagerShrinkPage}" onClick="opentaps.changePaginationViewSize(${args},-5)"/>
+	    <input type="button" class="paginationButton paginationGrowPage" value="" title="${uiLabelMap.pagerGrowPage}" onClick="opentaps.changePaginationViewSize(${args},5)"/>
+	    <input type="button" class="paginationButton paginationNextPage" value="" title="${uiLabelMap.pagerNextPage}" onClick="opentaps.getNextPage(${args})"/>
+	    <input type="button" class="paginationButton paginationLastPage" value="" title="${uiLabelMap.pagerLastPage}" onClick="opentaps.getLastPage(${args})"/>
+	  </#if>
+	  <input type="button" class="paginationButton <#if viewAll>paginationUntoggleViewAll<#else>paginationToggleViewAll</#if>" value="" title="${uiLabelMap.pagerToggleViewAll}" onClick="opentaps.togglePaginationViewAll(${args})"/>
+  </#if>  
 </#macro>
 
 <#macro headerLink title orderBy orderByReverse="" blockClass="" linkClass="orderByHeaderLink">

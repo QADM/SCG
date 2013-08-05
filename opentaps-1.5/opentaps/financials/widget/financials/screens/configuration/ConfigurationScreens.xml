@@ -289,7 +289,7 @@
             <actions>
                 <set field="pageTitleLabel" value="FinancialsAccountingTags"/>  
                 <script location="component://financials/webapp/financials/WEB-INF/actions/configuration/accountingTags.bsh"/>
-           		<java location="com.opensourcestrategies.financials.transactions.TransactionsFindIng" invoke="findTransactionsIngr"/>                
+           		<java location="com.opensourcestrategies.financials.transactions.TransactionsFindIng" invoke="findExcelTag"/>                
            
             </actions>            
             <widgets>
