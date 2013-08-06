@@ -352,7 +352,8 @@ public class EgresoDiarioImportService extends DomainService implements
 						egresoDiario
 								.setCreatedByUserLogin(rowdata.getUsuario());
 
-						egresoDiario.setGlFiscalTypeId("BUDGET");
+						egresoDiario.setGlFiscalTypeId(cuentas
+								.get("GlFiscalTypePresupuesto"));
 						imp_tx1 = this.session.beginTransaction();
 						ledger_repo.createOrUpdate(egresoDiario);
 						imp_tx1.commit();
@@ -448,7 +449,7 @@ public class EgresoDiarioImportService extends DomainService implements
 						}
 
 						egresoDiario.setGlFiscalTypeId(cuentas
-								.get("GlFiscalType"));
+								.get("GlFiscalTypeContable"));
 						imp_tx2 = this.session.beginTransaction();
 						ledger_repo.createOrUpdate(egresoDiario);
 						imp_tx2.commit();

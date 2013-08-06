@@ -210,7 +210,7 @@ public class OperacionDiariaImportService extends DomainService implements
 						Debug.log("Trans Nueva");
 						OperacionDiaria.setCreatedByUserLogin(rowdata
 								.getUsuario());
-						OperacionDiaria.setGlFiscalTypeId("BUDGET");
+						OperacionDiaria.setGlFiscalTypeId(cuentas.get("GlFiscalTypePresupuesto"));
 						imp_tx1 = this.session.beginTransaction();
 						ledger_repo.createOrUpdate(OperacionDiaria);
 						imp_tx1.commit();
@@ -292,7 +292,7 @@ public class OperacionDiariaImportService extends DomainService implements
 						OperacionDiaria.setCreatedByUserLogin(rowdata
 								.getUsuario());
 						OperacionDiaria.setGlFiscalTypeId(cuentas
-								.get("GlFiscalType"));
+								.get("GlFiscalTypeContable"));
 						imp_tx2 = this.session.beginTransaction();
 						ledger_repo.createOrUpdate(OperacionDiaria);
 						imp_tx2.commit();

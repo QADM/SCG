@@ -20,7 +20,8 @@
 		<field name="acctgTransTypeId" type="id-ne"></field>
 		<field name="cuentaCargo" type="id-ne"></field>
 		<field name="cuentaAbono" type="id-ne"></field>
-		<field name="glFiscalTypeId" type="id-ne"></field>
+		<field name="glFiscalTypeIdPres" type="id-ne"></field>
+		<field name="glFiscalTypeIdCont" type="id-ne"></field>
 		<field name="referencia" type="indicator"></field>
 		<field name="tipoMatriz" type="id-ne"></field>
 		<prim-key field="acctgTransTypeId" />
@@ -35,8 +36,13 @@
 			rel-entity-name="GlAccount">
 			<key-map field-name="cuentaAbono" rel-field-name="glAccountId" />
 		</relation>
-		<relation type="one" fk-name="GLFT" rel-entity-name="GlFiscalType">
-			<key-map field-name="glFiscalTypeId" />
+		<relation type="one" fk-name="GLFTPR" title='glftpr'
+			rel-entity-name="GlFiscalType">
+			<key-map field-name="glFiscalTypeIdPres" rel-field-name="glFiscalTypeId" />
+		</relation>
+		<relation type="one" fk-name="GLFTCT" title='glftct'
+			rel-entity-name="GlFiscalType">
+			<key-map field-name="glFiscalTypeIdCont" rel-field-name="glFiscalTypeId" />
 		</relation>
 	</entity>
 </entitymodel>
