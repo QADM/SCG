@@ -55,7 +55,7 @@ public class PresupuestoEgresoImportService extends DomainService implements
 	public void setOrganizationPartyId(String organizationPartyId) {
 		this.organizationPartyId = organizationPartyId;
 	}
-	
+
 	/** {@inheritDoc} */
 	public void setLote(String lote) {
 		this.lote = lote;
@@ -245,8 +245,8 @@ public class PresupuestoEgresoImportService extends DomainService implements
 								sfe, cal.getTime());
 						mensaje = UtilImport.validaVigencia(mensaje, "AREA",
 								area, cal.getTime());
-						mensaje = UtilImport.validaCiclo(mensaje, rowdata.getCiclo(),
-								cal.getTime());
+						mensaje = UtilImport.validaCiclo(mensaje,
+								rowdata.getCiclo(), cal.getTime());
 
 						if (mensaje == null) {
 							String message = "Failed to import Presupuesto Egreso ["
@@ -262,12 +262,12 @@ public class PresupuestoEgresoImportService extends DomainService implements
 						presupuestoEgreso.setIsPosted("Y");
 						presupuestoEgreso.setPostedDate(new Timestamp(cal
 								.getTimeInMillis()));
-						presupuestoEgreso.setGlFiscalTypeId("BUDGET");
 						presupuestoEgreso
 								.setAcctgTransTypeId("TPRESUPAPROBADO");
 						presupuestoEgreso.setLastModifiedByUserLogin(rowdata
 								.getUsuario());
-						presupuestoEgreso.setWorkEffortId(act.getWorkEffortId());
+						presupuestoEgreso
+								.setWorkEffortId(act.getWorkEffortId());
 						presupuestoEgreso.setPartyId(ue.getPartyId());
 						switch (mes) {
 						case 1:
@@ -319,6 +319,28 @@ public class PresupuestoEgresoImportService extends DomainService implements
 									.getDiciembre());
 							break;
 						}
+
+						Debug.log("Obtencion Dinamico FiscalType");
+						MiniGuiaContable miniguia = ledger_repo
+								.findOne(
+										MiniGuiaContable.class,
+										ledger_repo
+												.map(MiniGuiaContable.Fields.acctgTransTypeId,
+														presupuestoEgreso
+																.getAcctgTransTypeId()));
+
+						if (miniguia == null) {
+							String message = "Failed to import Presupuesto Egreso ["
+									+ rowdata.getClavePres()
+									+ "], Error message : "
+									+ "Tipo de transaccion no registrada en MiniGuia";
+							storeImportPresupuestoEgresoError(rowdata, message,
+									imp_repo);
+							continue;
+						}
+
+						presupuestoEgreso.setGlFiscalTypeId(miniguia
+								.getGlFiscalTypeIdPres());
 						imp_tx1 = this.session.beginTransaction();
 						ledger_repo.createOrUpdate(presupuestoEgreso);
 						imp_tx1.commit();
@@ -362,14 +384,6 @@ public class PresupuestoEgresoImportService extends DomainService implements
 
 						// C/D
 						Debug.log("Obtencion de Cuentas Dinamico");
-						MiniGuiaContable miniguia = ledger_repo
-								.findOne(
-										MiniGuiaContable.class,
-										ledger_repo
-												.map(MiniGuiaContable.Fields.acctgTransTypeId,
-														presupuestoEgreso
-																.getAcctgTransTypeId()));
-
 						String seqId = "00001", flag = "D", cuenta = miniguia
 								.getCuentaCargo();
 

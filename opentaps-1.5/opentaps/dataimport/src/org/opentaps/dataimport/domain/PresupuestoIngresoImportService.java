@@ -53,7 +53,7 @@ public class PresupuestoIngresoImportService extends DomainService implements
 	public void setOrganizationPartyId(String organizationPartyId) {
 		this.organizationPartyId = organizationPartyId;
 	}
-	
+
 	/** {@inheritDoc} */
 	public void setLote(String lote) {
 		this.lote = lote;
@@ -201,8 +201,8 @@ public class PresupuestoIngresoImportService extends DomainService implements
 						// Vigencias
 						mensaje = UtilImport.validaVigencia(mensaje, "sfe",
 								sfe, cal.getTime());
-						mensaje = UtilImport.validaCiclo(mensaje, rowdata.getCiclo(),
-								cal.getTime());
+						mensaje = UtilImport.validaCiclo(mensaje,
+								rowdata.getCiclo(), cal.getTime());
 
 						if (mensaje == null) {
 							String message = "Failed to import Presupuesto Ingreso ["
@@ -218,7 +218,6 @@ public class PresupuestoIngresoImportService extends DomainService implements
 						presupuestoIngreso.setIsPosted("Y");
 						presupuestoIngreso.setPostedDate(new Timestamp(cal
 								.getTimeInMillis()));
-						presupuestoIngreso.setGlFiscalTypeId("BUDGET");
 						presupuestoIngreso
 								.setAcctgTransTypeId("TINGRESOESTIMADO");
 						presupuestoIngreso.setLastModifiedByUserLogin(rowdata
@@ -274,6 +273,28 @@ public class PresupuestoIngresoImportService extends DomainService implements
 									.getDiciembre());
 							break;
 						}
+
+						Debug.log("Obtencion Dinamico FiscalType");
+						MiniGuiaContable miniguia = ledger_repo
+								.findOne(
+										MiniGuiaContable.class,
+										ledger_repo
+												.map(MiniGuiaContable.Fields.acctgTransTypeId,
+														presupuestoIngreso
+																.getAcctgTransTypeId()));
+
+						if (miniguia == null) {
+							String message = "Failed to import Presupuesto Ingreso ["
+									+ rowdata.getClavePres()
+									+ "], Error message : "
+									+ "Tipo de transaccion no registrada en MiniGuia";
+							storeImportPresupuestoIngresoError(rowdata,
+									message, imp_repo);
+							continue;
+						}
+
+						presupuestoIngreso.setGlFiscalTypeId(miniguia
+								.getGlFiscalTypeIdPres());
 						imp_tx1 = this.session.beginTransaction();
 						ledger_repo.createOrUpdate(presupuestoIngreso);
 						imp_tx1.commit();
@@ -308,14 +329,6 @@ public class PresupuestoIngresoImportService extends DomainService implements
 						// C/D
 
 						Debug.log("Obtencion de Cuentas Dinamico");
-						MiniGuiaContable miniguia = ledger_repo
-								.findOne(
-										MiniGuiaContable.class,
-										ledger_repo
-												.map(MiniGuiaContable.Fields.acctgTransTypeId,
-														presupuestoIngreso
-																.getAcctgTransTypeId()));
-
 						String seqId = "00001", flag = "D", cuenta = miniguia
 								.getCuentaCargo();
 

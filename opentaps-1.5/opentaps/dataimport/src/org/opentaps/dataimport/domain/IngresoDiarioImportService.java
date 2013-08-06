@@ -292,7 +292,8 @@ public class IngresoDiarioImportService extends DomainService implements
 						ingresoDiario.setCreatedByUserLogin(rowdata
 								.getUsuario());
 
-						ingresoDiario.setGlFiscalTypeId("BUDGET");
+						ingresoDiario.setGlFiscalTypeId(cuentas
+								.get("GlFiscalTypePresupuesto"));
 						imp_tx1 = this.session.beginTransaction();
 						ledger_repo.createOrUpdate(ingresoDiario);
 						imp_tx1.commit();
@@ -376,7 +377,7 @@ public class IngresoDiarioImportService extends DomainService implements
 								.getUsuario());
 
 						ingresoDiario.setGlFiscalTypeId(cuentas
-								.get("GlFiscalType"));
+								.get("GlFiscalTypeContable"));
 						imp_tx2 = this.session.beginTransaction();
 						ledger_repo.createOrUpdate(ingresoDiario);
 						imp_tx2.commit();
