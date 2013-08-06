@@ -113,7 +113,8 @@ public class MotorContable {
 		MiniGuiaContable miniGuia = ledger_repo.findOne(MiniGuiaContable.class,
 				ledger_repo.map(MiniGuiaContable.Fields.acctgTransTypeId,
 						tipoTransaccion));
-		cuentas.put("GlFiscalType", miniGuia.getGlFiscalTypeId());
+		cuentas.put("GlFiscalTypePresupuesto", miniGuia.getGlFiscalTypeIdPres());
+		cuentas.put("GlFiscalTypeContable", miniGuia.getGlFiscalTypeIdCont());
 		cuentas.put("Cuenta Cargo Presupuesto", miniGuia.getCuentaCargo());
 		cuentas.put("Cuenta Abono Presupuesto", miniGuia.getCuentaAbono());
 
