@@ -1266,7 +1266,7 @@
     </property> 
 	<property key="EdoVariaciones">
         <value xml:lang="en">Statement of Changes in Equity Public Finance</value>
-        <value xml:lang="es">Estado de Variaciones en la Hacienda Pública\Patrimonio</value>
+        <value xml:lang="es">Estado de Variaciones en la Hacienda Pública/Patrimonio</value>
     </property> 
 	<property key="EdoDeudaYOtrosPas">
         <value xml:lang="en">Analytical State Of The Debt and other liabilities</value>
@@ -1275,7 +1275,40 @@
 	<property key="EdoFlujoEfect">
         <value xml:lang="en">Cash Flow Statement</value>
         <value xml:lang="es">Estado de Flujos de Efectivo</value>
-    </property>         
+    </property>
+	<property key="VariacionHacienda">
+        <value xml:lang="es">Estado de Variación en la Hacienda Pública y Patrimonio</value>
+    </property>     
+	<property key="PatrimonioNetoAnterior">
+        <value xml:lang="es">Hacienda Pública/Patrimonio Neto al Final del Ejercicio Anterior</value>
+    </property> 
+	<property key="PatrimonioNeto">
+        <value xml:lang="es">Hacienda Pública/Patrimonio Neto al Final del Ejercicio</value>
+    </property>   
+	<property key="RectificacionesPatrimonio">
+        <value xml:lang="es">Rectificaciones de Resultados de Ejercicios Anteriores</value>
+    </property> 
+	<property key="PatrimonioNetoAjustado">
+        <value xml:lang="es">Patrimonio Neto Inicial Ajustado al Ejercicio</value>
+    </property> 
+	<property key="VariacionesNeto">
+        <value xml:lang="es">Variaciones en la Hacienda Pública/Patrimonio Neto del Ejercicio</value>
+    </property>
+	<property key="HaciendaContribuido">
+        <value xml:lang="es">Hacienda Pública/Patrimonio Contribuido</value>
+    </property>
+	<property key="HaciendaGeneradoAnterior">
+        <value xml:lang="es">Hacienda Pública/Patrimonio Generado en Ejercicios Anteriores</value>
+    </property> 
+	<property key="HaciendaGenerado">
+        <value xml:lang="es">Hacienda Pública/Patrimonio Generado del Ejercicio</value>
+    </property>
+	<property key="AjustesPorValor">
+        <value xml:lang="es">Ajustes por Cambios de Valor</value>
+    </property>                         
+	<property key="Concepto">
+        <value xml:lang="es">Concepto</value>
+    </property>                                             
      <!-- Etiquetas para Reportes CUSTOM @JSCF -->
     <property key="AccountingBalanceSheet">
         <value xml:lang="ar">مذكرة الميزانية</value>

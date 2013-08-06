@@ -186,72 +186,6 @@
         <attribute name="isClosed" mode="OUT" type="Boolean"/>        
     </service>
     <!-- @JSCF  -->
-    <service name="getEdoActividadesForDate" engine="java"
-            location="com.opensourcestrategies.financials.financials.FinancialServices" invoke="getEdoActividadesForDate" auth="true" use-transaction="false">
-        <description>Generates "estado de actividades" as of a particular date, by working forward from the last closed time period,
-            or, if none, from the beginning of the earliest time period.  Note that by putting in a glFiscalTypeId different 
-            than "ACTUAL", you can use this to generate pro-forma or budget balance sheets based on an initial actual balance 
-            sheet from a closed time period and other types of AcctgTrans and AcctgTransEntries.</description>
-        <implements service="accountingTagsInterface"/>
-        <attribute name="organizationPartyId" mode="IN" type="String" optional="false"/>
-        <attribute name="asOfDate" mode="IN" type="Timestamp" optional="false"/>
-        <attribute name="glFiscalTypeId" mode="IN" type="String" optional="true"/>
-        <attribute name="revenueAccountBalances" mode="OUT" type="java.util.Map"/>
-        <attribute name="expenseAccountBalances" mode="OUT" type="java.util.Map"/>
-        <attribute name="retainedEarningsGlAccount" mode="OUT" type="GenericValue" optional="true"/>
-        <attribute name="interimNetIncomeAmount" mode="OUT" type="java.math.BigDecimal" optional="true"/>
-        <attribute name="isClosed" mode="OUT" type="Boolean"/>        
-    </service>
-    <service name="getEdoActividadesForTimePeriod" engine="java"
-            location="com.opensourcestrategies.financials.financials.FinancialServices" invoke="getEdoActividadesForTimePeriod" auth="true" use-transaction="false">
-        <description>Generates balance sheet as of the end date of a time period.  Returns separate Maps of GlAccount:amount
-            for Assets, Liabilities, and Equities and a flag to indicate if this is time period is closed</description>
-        <implements service="accountingTagsInterface"/>
-        <attribute name="organizationPartyId" mode="IN" type="String" optional="false"/>
-        <attribute name="customTimePeriodId" mode="IN" type="String" optional="false"/>
-        <attribute name="glFiscalTypeId" mode="IN" type="String" optional="true"/>
-        <attribute name="revenueAccountBalances" mode="OUT" type="java.util.Map"/>
-        <attribute name="expenseAccountBalances" mode="OUT" type="java.util.Map"/>
-        <attribute name="retainedEarningsGlAccount" mode="OUT" type="GenericValue" optional="true"/>
-        <attribute name="interimNetIncomeAmount" mode="OUT" type="java.math.BigDecimal" optional="true"/>
-        <attribute name="isClosed" mode="OUT" type="Boolean"/>        
-    </service>  
-    <service name="getEdoAnaliticoForTimePeriod" engine="java"
-            location="com.opensourcestrategies.financials.financials.FinancialServices" invoke="getEdoAnaliticoForTimePeriod" auth="true" use-transaction="false">
-        <description>Generates "estado analitico del activo" as of a particular time period, by working forward from the last closed time period,
-            or, if none, from the beginning of the earliest time period.  Note that by putting in a glFiscalTypeId different 
-            than "ACTUAL", you can use this to generate pro-forma or budget balance sheets based on an initial actual balance 
-            sheet from a closed time period and other types of AcctgTrans and AcctgTransEntries.</description>
-        <implements service="accountingTagsInterface"/>
-        <attribute name="organizationPartyId" mode="IN" type="String" optional="false"/>
-        <attribute name="customTimePeriodId" mode="IN" type="String" optional="false"/>
-        <attribute name="glFiscalTypeId" mode="IN" type="String" optional="true"/>
-        <attribute name="assetAccountBalances" mode="OUT" type="java.util.Map"/>
-        <attribute name="isClosed" mode="OUT" type="Boolean"/>        
-    </service>    
-    <service name="getEdoAnaliticoForDate" engine="java"
-            location="com.opensourcestrategies.financials.financials.FinancialServices" invoke="getEdoAnaliticoForDate" auth="true" use-transaction="false">
-        <description>Generates "estado analitico de actvidades" as of a particular date, by working forward from the last closed time period,
-            or, if none, from the beginning of the earliest time period.  Note that by putting in a glFiscalTypeId different 
-            than "ACTUAL", you can use this to generate pro-forma or budget balance sheets based on an initial actual balance 
-            sheet from a closed time period and other types of AcctgTrans and AcctgTransEntries.</description>
-        <implements service="accountingTagsInterface"/>
-        <attribute name="organizationPartyId" mode="IN" type="String" optional="false"/>
-        <attribute name="asOfDate" mode="IN" type="Timestamp" optional="false"/>
-        <attribute name="glFiscalTypeId" mode="IN" type="String" optional="true"/>
-		<attribute name="datosReporte" mode="OUT" type="java.util.Map"/>
-        <attribute name="retainedEarningsGlAccount" mode="OUT" type="GenericValue" optional="true"/>
-        <attribute name="interimNetIncomeAmount" mode="OUT" type="java.math.BigDecimal" optional="true"/>
-        <attribute name="isClosed" mode="OUT" type="Boolean"/>        
-    </service>    
-    <service name="getEdoFlujoEfectivoForDate" engine="java"
-            location="com.opensourcestrategies.financials.financials.FinancialServices" invoke="getEdoFlujoEfectivoForDate" auth="true" use-transaction="false">
-        <description>Genera el Estado de Flujo de Efectivo</description>
-        <implements service="accountingTagsInterface"/>
-        <attribute name="organizationPartyId" mode="IN" type="String" optional="false"/>
-        <attribute name="asOfDate" mode="IN" type="Timestamp" optional="false"/>
-		<attribute name="datosReporte" mode="OUT" type="java.util.Map"/>     
-    </service>
     <service name="obtenPeriodoAnterior" engine="java"
             location="com.opensourcestrategies.financials.financials.FinancialServices" invoke="obtenPeriodoAnterior" auth="true" use-transaction="false">
         <description>Regresa el periodo anterior a uno dado</description>
@@ -288,8 +222,37 @@
             than "ACTUAL", you can use this to generate pro-forma or budget balance sheets based on an initial actual balance 
             sheet from a closed time period and other types of AcctgTrans and AcctgTransEntries.</description>	
             <implements service="getBalanceSheetForDate"/>
-            <attribute name="customTimePeriodId" mode="IN" type="String" optional="true"/>
-	</service>            
+	</service>   
+    <service name="getComparativeVariacionPatrimonio" engine="java"
+            location="com.opensourcestrategies.financials.financials.FinancialServices" invoke="getComparativeVariacionPatrimonio" auth="true" use-transaction="false">
+        <description>Generates Estado de variaciones en la hacienda/patrimonio for two dates and determines the balance difference between the two. The balances are in BigDecimal.
+            The output includes the result of getBalanceSheetForDate for the fromDate and thruDate and glFiscalTypeId1 and glFiscalTypeId2.
+        </description>
+        <attribute name="organizationPartyId" mode="IN" type="String" optional="false"/>
+        <attribute name="glFiscalTypeId" mode="IN" type="String" optional="true"/>
+        <attribute name="fromDate" mode="IN" type="Timestamp" optional="false"/>
+        <attribute name="thruDate" mode="IN" type="Timestamp" optional="false"/>
+        <attribute name="fromCustomTimePeriodId" mode="IN" type="String" optional="true"/>
+        <attribute name="thruCustomTimePeriodId" mode="IN" type="String" optional="true"/>
+        <attribute name="fromDateAccountBalances" mode="OUT" type="java.util.Map"/>
+        <attribute name="thruDateAccountBalances" mode="OUT" type="java.util.Map"/>
+	</service>	        
+    <service name="getEdoVariacionHaciendaForDate" engine="java"
+            location="com.opensourcestrategies.financials.financials.FinancialServices" invoke="getEdoVariacionHaciendaForDate" auth="true" use-transaction="false">
+        <description>Generates Estado de Variacion de Hacienda Publica / Patrimonio as of a particular date, by working forward from the last closed time period,
+            or, if none, from the beginning of the earliest time period.  Note that by putting in a glFiscalTypeId different 
+            than "ACTUAL", you can use this to generate pro-forma or budget balance sheets based on an initial actual balance 
+            sheet from a closed time period and other types of AcctgTrans and AcctgTransEntries.</description>	
+            <implements service="accountingTagsInterface"/>
+			<attribute name="organizationPartyId" mode="IN" type="String" optional="false"/>
+			<attribute name="asOfDate" mode="IN" type="Timestamp" optional="false"/>
+			<attribute name="glFiscalTypeId" mode="IN" type="String" optional="false"/>
+			<attribute name="customTimePeriodId" mode="IN" type="String" optional="true"></attribute>
+			<attribute name="cuentasPatrimonio" mode="OUT" type="java.util.Map"/>
+			<attribute name="cuentasPatContribuido" mode="OUT" type="java.util.Map"/>
+			<attribute name="cuentasPatGenAnterior" mode="OUT" type="java.util.Map"/>
+			<attribute name="cuentasPatGenerado" mode="OUT" type="java.util.Map"/>
+	</service> 		         
     <!-- @JSCF -->       
     <service name="getComparativeBalanceSheet" engine="java"
             location="com.opensourcestrategies.financials.financials.FinancialServices" invoke="getComparativeBalanceSheet" auth="true" use-transaction="false">
