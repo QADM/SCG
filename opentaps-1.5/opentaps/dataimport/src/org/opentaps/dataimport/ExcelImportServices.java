@@ -21,9 +21,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.sql.Date;
+
 import java.util.Arrays;
 import java.util.Collection;
+import java.sql.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -37,7 +38,6 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
-import org.hibernate.search.util.LoggerFactory;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilValidate;
 import org.opentaps.base.entities.DataImportCategory;
@@ -118,6 +118,7 @@ public final class ExcelImportServices extends DomainService {
 	private String uploadedFileName;
 
 	private Session session;
+
 	/**
 	 * Default constructor.
 	 */
@@ -713,16 +714,42 @@ public final class ExcelImportServices extends DomainService {
 		}
 	}
 
-	private Date getFecha(HSSFCell celda) {
+	private java.sql.Date getFecha(HSSFCell celda) {
 
 		SimpleDateFormat formatoDelTexto = new SimpleDateFormat("dd-MM-yyyy");
-		Date fecha = null;
+		java.sql.Date fecha = null;
 
 		try {
 			switch (celda.getCellType()) {
 			case HSSFCell.CELL_TYPE_BLANK:
 				Calendar c1 = GregorianCalendar.getInstance();
 				fecha = new java.sql.Date(c1.getTime().getTime());
+				break;
+
+			default:
+
+				String cadFecha = celda.toString().trim();
+				fecha = new java.sql.Date(formatoDelTexto.parse(cadFecha)
+						.getTime());
+				break;
+			}
+		} catch (Exception e) {
+			logger.debug("No se pudo hacer el parser de la fecha: " + e);
+		}
+
+		return fecha;
+
+	}
+
+	private Date getFechaHHMMSS(HSSFCell celda) {
+
+		SimpleDateFormat formatoDelTexto = new SimpleDateFormat(
+				"dd-MM-yyy hh:mm:ss");
+		Date fecha = null;
+
+		try {
+			switch (celda.getCellType()) {
+			case HSSFCell.CELL_TYPE_BLANK:
 				break;
 
 			default:
@@ -830,7 +857,7 @@ public final class ExcelImportServices extends DomainService {
 				project.setNivelId(this.readStringCell(row, rowCount++));
 				project.setExternalId(this.readStringCell(row, rowCount++));
 				project.setNode(this.readStringCell(row, rowCount++));
-				
+
 				projects.add(project);
 			}
 		}
@@ -973,8 +1000,8 @@ public final class ExcelImportServices extends DomainService {
 				DataImportIngresoDiario ingreso = new DataImportIngresoDiario();
 				ingreso.setIdTipoDoc(tipo);
 				int rowCount = 1; // keep track of the row
-				ingreso.setFechaRegistro(getFecha(row.getCell(rowCount++)));
-				ingreso.setFechaContable(getFecha(row.getCell(rowCount++)));
+				ingreso.setFechaRegistro(getFechaHHMMSS(row.getCell(rowCount++)));
+				ingreso.setFechaContable(getFechaHHMMSS(row.getCell(rowCount++)));
 				ingreso.setMonto(this.readBigDecimalCell(row, rowCount++));
 				ingreso.setOrganizationPartyId(this.readStringCell(row,
 						rowCount++));
@@ -1044,8 +1071,8 @@ public final class ExcelImportServices extends DomainService {
 				DataImportEgresoDiario egreso = new DataImportEgresoDiario();
 				egreso.setIdTipoDoc(tipo);
 				int rowCount = 1; // keep track of the row
-				egreso.setFechaRegistro(getFecha(row.getCell(rowCount++)));
-				egreso.setFechaContable(getFecha(row.getCell(rowCount++)));
+				egreso.setFechaRegistro(getFechaHHMMSS(row.getCell(rowCount++)));
+				egreso.setFechaContable(getFechaHHMMSS(row.getCell(rowCount++)));
 				egreso.setMonto(this.readBigDecimalCell(row, rowCount++));
 				egreso.setOrganizationPartyId(this.readStringCell(row,
 						rowCount++));
@@ -1125,9 +1152,9 @@ public final class ExcelImportServices extends DomainService {
 				DataImportOperacionDiaria operacionDiaria = new DataImportOperacionDiaria();
 				operacionDiaria.setIdTipoDoc(tipo);
 				int rowCount = 1; // keep track of the row
-				operacionDiaria.setFechaRegistro(getFecha(row
+				operacionDiaria.setFechaRegistro(getFechaHHMMSS(row
 						.getCell(rowCount++)));
-				operacionDiaria.setFechaContable(getFecha(row
+				operacionDiaria.setFechaContable(getFechaHHMMSS(row
 						.getCell(rowCount++)));
 				operacionDiaria.setMonto(this.readBigDecimalCell(row,
 						rowCount++));
@@ -1541,9 +1568,10 @@ public final class ExcelImportServices extends DomainService {
 	 * 
 	 * @exception ServiceException
 	 *                if an error occurs
-	 * @throws InfrastructureException 
+	 * @throws InfrastructureException
 	 */
-	public void parseFileForDataImport() throws ServiceException, InfrastructureException {
+	public void parseFileForDataImport() throws ServiceException,
+			InfrastructureException {
 
 		// Get the uploaded file
 		File file = getUploadedExcelFile(getUploadedFileName());
@@ -1673,30 +1701,31 @@ public final class ExcelImportServices extends DomainService {
 					MODULE);
 		}
 	}
-	
-	/*Delete Entities 
-	 * */
-private void deleteEntities(String entity) throws InfrastructureException {
-		
-		this.session = this.getInfrastructure().getSession();		
+
+	/*
+	 * Delete Entities
+	 */
+	private void deleteEntities(String entity) throws InfrastructureException {
+
+		this.session = this.getInfrastructure().getSession();
 		Transaction tx = null;
-		
+
 		try {
-				
-			tx = session.beginTransaction();		
-			//Query query = session.createQuery("delete from DataImportGlAccount");
+
+			tx = session.beginTransaction();
+			// Query query =
+			// session.createQuery("delete from DataImportGlAccount");
 			Query query = session.createQuery("delete from " + entity);
 			int rowCount = query.executeUpdate();
-	        logger.debug("Rows affected: " + rowCount + " ," + entity);
-			tx.commit();	
-			
+			logger.debug("Rows affected: " + rowCount + " ," + entity);
+			tx.commit();
+
 		} catch (Exception e) {
-			Debug.log("Error al borrar registros " + e); 
-			if (tx != null)  
-		        tx.rollback();  
+			Debug.log("Error al borrar registros " + e);
+			if (tx != null)
+				tx.rollback();
 		}
 	}
-
 
 	public void setUploadedFileName(String uploadedFileName) {
 		this.uploadedFileName = uploadedFileName;
