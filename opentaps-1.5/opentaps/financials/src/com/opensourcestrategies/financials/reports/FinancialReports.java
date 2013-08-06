@@ -98,7 +98,6 @@ import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.repository.RepositoryException;
 
 import com.opensourcestrategies.financials.accounts.AccountsHelper;
-import com.opensourcestrategies.financials.financials.AnaliticoActivo;
 import com.opensourcestrategies.financials.financials.FinancialServices;
 import com.opensourcestrategies.financials.util.UtilFinancial;
 
@@ -301,7 +300,7 @@ public final class FinancialReports {
 
             List<Map<String, Object>> rows = FastList.newInstance(); 
             
-            Map<Integer, BigDecimal> primeraBloque = FastMap.newInstance();
+            Map<Integer, BigDecimal> primerBloque = FastMap.newInstance();
             String nombre = null;
             
             //Estas cuentas se ordenan para mostrarse en la columna correspondiente
@@ -311,97 +310,56 @@ public final class FinancialReports {
         		BigDecimal monto = cuentasPatrimonioFr.get(account) == null ? null : cuentasPatrimonioFr.get(account).divide(MIL);
         		
         		if(cuenta.equals("3.1")){
-        			primeraBloque.put(Integer.valueOf(1), monto);
+        			primerBloque.put(Integer.valueOf(1), monto);
         		} else if(cuenta.equals("3.2.2")){
-        			primeraBloque.put(Integer.valueOf(2), monto);
+        			primerBloque.put(Integer.valueOf(2), monto);
         		} else if(cuenta.equals("3.2.1")){
-        			primeraBloque.put(Integer.valueOf(3), monto);
+        			primerBloque.put(Integer.valueOf(3), monto);
         		} else if(cuenta.equals("3.3")){
-        			primeraBloque.put(Integer.valueOf(4), monto);
+        			primerBloque.put(Integer.valueOf(4), monto);
         			nombre = account.getString("accountName");
         		}
-        		
 			}
         	
         	BigDecimal total = ZERO;
-        	total = (primeraBloque.get(Integer.valueOf(1)) == null ? ZERO : primeraBloque.get(Integer.valueOf(1))).add(
-        			(primeraBloque.get(Integer.valueOf(2)) == null ? ZERO : primeraBloque.get(Integer.valueOf(2)))).add(
-        			(primeraBloque.get(Integer.valueOf(3)) == null ? ZERO : primeraBloque.get(Integer.valueOf(3)))).add(
-        			(primeraBloque.get(Integer.valueOf(4)) == null ? ZERO : primeraBloque.get(Integer.valueOf(4))));
+        	total = (primerBloque.get(Integer.valueOf(1)) == null ? ZERO : primerBloque.get(Integer.valueOf(1))).add(
+        			(primerBloque.get(Integer.valueOf(2)) == null ? ZERO : primerBloque.get(Integer.valueOf(2)))).add(
+        			(primerBloque.get(Integer.valueOf(3)) == null ? ZERO : primerBloque.get(Integer.valueOf(3)))).add(
+        			(primerBloque.get(Integer.valueOf(4)) == null ? ZERO : primerBloque.get(Integer.valueOf(4))));
         	
         	//Agregamos la primer fila
         	Map<String, Object> row = FastMap.newInstance();
         	row.put("accountName", uiLabelMap.get("PatrimonioNetoAnterior"));
-        	row.put("contribuido", primeraBloque.get(Integer.valueOf(1)) == null ? null : primeraBloque.get(Integer.valueOf(1)).divide(MIL));
-        	row.put("ejercicio", primeraBloque.get(Integer.valueOf(2)) == null ? null : primeraBloque.get(Integer.valueOf(2)).divide(MIL));
-        	row.put("anteriores", primeraBloque.get(Integer.valueOf(3)) == null ? null : primeraBloque.get(Integer.valueOf(3)).divide(MIL));
-        	row.put("ajustes", primeraBloque.get(Integer.valueOf(4)) == null ? null : primeraBloque.get(Integer.valueOf(4)).divide(MIL));
+        	row.put("contribuido", primerBloque.get(Integer.valueOf(1)) == null ? null : primerBloque.get(Integer.valueOf(1)).divide(MIL));
+        	row.put("ejercicio", primerBloque.get(Integer.valueOf(2)) == null ? null : primerBloque.get(Integer.valueOf(2)).divide(MIL));
+        	row.put("anteriores", primerBloque.get(Integer.valueOf(3)) == null ? null : primerBloque.get(Integer.valueOf(3)).divide(MIL));
+        	row.put("ajustes", primerBloque.get(Integer.valueOf(4)) == null ? null : primerBloque.get(Integer.valueOf(4)).divide(MIL));
         	row.put("total", total == null ? null : total.divide(MIL));
         	row.put("accountTypeSeqNum", Integer.valueOf(1));
         	rows.add(row);
         	
-        	Debug.logWarning("rows 1  }"+rows, MODULE);
+        	Debug.logWarning("rows 1  }"+row, MODULE);
         	
         	//Agregamos las filas de ejecicios anteriores
-        	for (GenericValue account : cuentasPatGenAnteriorFrList) {
-        		row = FastMap.newInstance();
-            	row.put("accountName", account.getString("accountName"));
-            	row.put("contribuido", null);
-            	row.put("ejercicio", null);
-            	row.put("anteriores", cuentasPatGenAnteriorFr.get(account)  == null ? null : cuentasPatGenAnteriorFr.get(account).divide(MIL));
-            	row.put("ajustes", null);
-            	row.put("total", cuentasPatGenAnteriorFr.get(account)  == null ? null : cuentasPatGenAnteriorFr.get(account).divide(MIL));
-            	row.put("accountTypeSeqNum", Integer.valueOf(2));
-            	rows.add(row);
-        	}
-        	
-        	Debug.logWarning("rows 2  }"+rows, MODULE);
-        	
+        	armaVariacionPatri(rows, cuentasPatGenAnteriorFrList, null, null, cuentasPatGenAnteriorFr, null, Integer.valueOf(2));
         	//Agregamos las filas de patrimonio contribuido
-        	for (GenericValue account : cuentasPatContribuidoFrList) {
-        		row = FastMap.newInstance();
-            	row.put("accountName", account.getString("accountName"));
-            	row.put("contribuido", cuentasPatContribuidoFr.get(account)  == null ? null : cuentasPatContribuidoFr.get(account).divide(MIL));
-            	row.put("ejercicio", null);
-            	row.put("anteriores", null);
-            	row.put("ajustes", null);
-            	row.put("total", cuentasPatContribuidoFr.get(account)  == null ? null : cuentasPatContribuidoFr.get(account).divide(MIL));
-            	row.put("accountTypeSeqNum", Integer.valueOf(3));
-            	rows.add(row);
-        	}
-        	
-        	Debug.logWarning("rows 3  }"+rows, MODULE);
-        	
+        	armaVariacionPatri(rows, cuentasPatContribuidoFrList, cuentasPatContribuidoFr, null, null, null, Integer.valueOf(3));
         	//Agregamos las filas de patrimonio generado en el ejercicio
-        	for (GenericValue account : cuentasPatGeneradoFrList) {
-        		row = FastMap.newInstance();
-            	row.put("accountName", account.getString("accountName"));
-            	row.put("contribuido", null);
-            	row.put("ejercicio", cuentasPatGeneradoFr.get(account)  == null ? null : cuentasPatGeneradoFr.get(account).divide(MIL));
-            	row.put("anteriores", null);
-            	row.put("ajustes", null);
-            	row.put("total", cuentasPatGeneradoFr.get(account)  == null ? null : cuentasPatGeneradoFr.get(account).divide(MIL));
-            	row.put("accountTypeSeqNum", Integer.valueOf(4));
-            	rows.add(row);
-        	}
+        	armaVariacionPatri(rows, cuentasPatGeneradoFrList, null, cuentasPatGeneradoFr, null, null, Integer.valueOf(4));
         	
-        	Debug.logWarning("rows 4 }"+rows, MODULE);
         	
-        	//Agregamos las filas de patrimonio ajustes
-        		row = FastMap.newInstance();
-            	row.put("accountName", nombre);
-            	row.put("contribuido", null);
-            	row.put("ejercicio", null);
-            	row.put("anteriores", null);
-            	row.put("ajustes", primeraBloque.get(Integer.valueOf(4))  == null ? null : primeraBloque.get(Integer.valueOf(4)).divide(MIL));
-            	row.put("total", primeraBloque.get(Integer.valueOf(4))  == null ? null : primeraBloque.get(Integer.valueOf(4)).divide(MIL));
-            	row.put("accountTypeSeqNum", Integer.valueOf(5));
-            	rows.add(row);
-        	
-            Debug.logWarning("rows 5 }"+rows, MODULE);
-            /////////////
-            ///////////
-            Map<Integer, BigDecimal> segundoBloque = FastMap.newInstance();
+        	//Agregamos las filas de patrimonio ajustes (Ultimo registro de el primer bloque)
+    		row = FastMap.newInstance();
+        	row.put("accountName", nombre);
+        	row.put("contribuido", null);
+        	row.put("ejercicio", null);
+        	row.put("anteriores", null);
+        	row.put("ajustes", primerBloque.get(Integer.valueOf(4))  == null ? null : primerBloque.get(Integer.valueOf(4)).divide(MIL));
+        	row.put("total", primerBloque.get(Integer.valueOf(4))  == null ? null : primerBloque.get(Integer.valueOf(4)).divide(MIL));
+        	row.put("accountTypeSeqNum", Integer.valueOf(5));
+        	rows.add(row);
+
+        	Map<Integer, BigDecimal> segundoBloque = FastMap.newInstance();
             String nombre1 = null;
             
             //Estas cuentas se ordenan para mostrarse en la columna correspondiente
@@ -439,52 +397,14 @@ public final class FinancialReports {
         	row.put("accountTypeSeqNum", Integer.valueOf(6));
         	rows.add(row);
         	
-        	Debug.logWarning("rows 1  #"+rows, MODULE);
+        	Debug.logWarning("row 1  #"+row, MODULE);
         	
         	//Agregamos las filas de ejecicios anteriores
-        	for (GenericValue account : cuentasPatGenAnteriorTrList) {
-        		row = FastMap.newInstance();
-            	row.put("accountName", account.getString("accountName"));
-            	row.put("contribuido", null);
-            	row.put("ejercicio", null);
-            	row.put("anteriores", cuentasPatGenAnteriorTr.get(account) == null ? null : cuentasPatGenAnteriorTr.get(account).divide(MIL));
-            	row.put("ajustes", null);
-            	row.put("total", cuentasPatGenAnteriorTr.get(account) == null ? null : cuentasPatGenAnteriorTr.get(account).divide(MIL));
-            	row.put("accountTypeSeqNum", Integer.valueOf(7));
-            	rows.add(row);
-        	}
-        	
-        	Debug.logWarning("rows 2  #"+rows, MODULE);
-        	
+        	armaVariacionPatri(rows, cuentasPatGenAnteriorTrList, null, null, cuentasPatGenAnteriorTr, null, Integer.valueOf(7));
         	//Agregamos las filas de patrimonio contribuido
-        	for (GenericValue account : cuentasPatContribuidoTrList) {
-        		row = FastMap.newInstance();
-            	row.put("accountName", account.getString("accountName"));
-            	row.put("contribuido", cuentasPatContribuidoTr.get(account) == null ? null : cuentasPatContribuidoTr.get(account).divide(MIL));
-            	row.put("ejercicio", null);
-            	row.put("anteriores", null);
-            	row.put("ajustes", null);
-            	row.put("total", cuentasPatContribuidoTr.get(account) == null ? null : cuentasPatContribuidoTr.get(account).divide(MIL));
-            	row.put("accountTypeSeqNum", Integer.valueOf(8));
-            	rows.add(row);
-        	}
-        	
-        	Debug.logWarning("rows 3  #"+rows, MODULE);
-        	
+        	armaVariacionPatri(rows, cuentasPatContribuidoTrList, cuentasPatContribuidoTr, null, null, null, Integer.valueOf(8));
         	//Agregamos las filas de patrimonio generado en el ejercicio
-        	for (GenericValue account : cuentasPatGeneradoTrList) {
-        		row = FastMap.newInstance();
-            	row.put("accountName", account.getString("accountName"));
-            	row.put("contribuido", null);
-            	row.put("ejercicio", cuentasPatGeneradoTr.get(account) == null ? null : cuentasPatGeneradoTr.get(account).divide(MIL));
-            	row.put("anteriores", null);
-            	row.put("ajustes", null);
-            	row.put("total", cuentasPatGeneradoTr.get(account) == null ? null : cuentasPatGeneradoTr.get(account).divide(MIL));
-            	row.put("accountTypeSeqNum", Integer.valueOf(9));
-            	rows.add(row);
-        	}
-        	
-        	Debug.logWarning("rows 4 #"+rows, MODULE);
+        	armaVariacionPatri(rows, cuentasPatGeneradoTrList, null, cuentasPatGeneradoTr, null, null, Integer.valueOf(9));
         	
         	//Agregamos las filas de patrimonio ajustes
         		row = FastMap.newInstance();
@@ -498,7 +418,7 @@ public final class FinancialReports {
             	rows.add(row);
         	
             	
-            Debug.logWarning("rows 5 #"+rows, MODULE);            
+            Debug.logWarning("row 5 #"+row, MODULE);            
 
             // sort records by account code
             Collections.sort(rows, new Comparator<Map<String, Object>>() {
@@ -549,6 +469,49 @@ public final class FinancialReports {
 
         return reportType;
     } 
+    
+    /**
+     * Metodo que se utiliza para armar el reporte variaciones del patrimonio
+     * @param listaPrl
+     * @param listaItera
+     * @param contribuido
+     * @param ejercicio
+     * @param anteriores
+     * @param ajustes
+     * @param secuencia
+     */
+    public static void armaVariacionPatri(List<Map<String, Object>> listaPrl, 
+    					List<GenericValue> listaItera , Map<GenericValue, BigDecimal> contribuido ,
+    					Map<GenericValue, BigDecimal> ejercicio , Map<GenericValue, BigDecimal> anteriores,
+    					Map<GenericValue, BigDecimal> ajustes ,Integer secuencia){
+    	
+    	BigDecimal total = ZERO;
+    	
+    	for (GenericValue account : listaItera) {
+    		
+        	total = (contribuido == null || contribuido.get(account) == null ? ZERO : contribuido.get(account)).add(
+        			(ejercicio == null || ejercicio.get(account) == null ? ZERO : ejercicio.get(account))).add(
+        			(anteriores == null || anteriores.get(account) == null ? ZERO : anteriores.get(account))).add(
+        			(ajustes == null || ajustes.get(account) == null ? ZERO : ajustes.get(account)));
+    		
+    		Map<String,Object> row = FastMap.newInstance();
+        	row.put("accountName", account.getString("accountName"));
+        	row.put("contribuido", contribuido == null || contribuido.get(account) == null ? null : contribuido.get(account).divide(MIL));
+        	row.put("ejercicio", ejercicio == null || ejercicio.get(account) == null ? null : ejercicio.get(account).divide(MIL));
+        	row.put("anteriores", anteriores == null || anteriores.get(account) == null ? null : anteriores.get(account).divide(MIL));
+        	row.put("ajustes", ajustes == null || ajustes.get(account) == null ? null : ajustes.get(account).divide(MIL));
+        	row.put("total", total.divide(MIL));
+        	row.put("accountTypeSeqNum", secuencia);
+        	
+        	listaPrl.add(row);
+        	
+       	 	Debug.logWarning("row "+secuencia+"     % "+row, MODULE);
+       	 	
+    	}    	
+    	
+
+    	
+    }
     
     /**
      * Prepare query parameters for comparative state report.

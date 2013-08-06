@@ -440,7 +440,6 @@
                 <set field="doCsv" value="Y"/> <!-- PDF and XLS by default -->
 				<script location="component://financials/webapp/financials/WEB-INF/actions/includes/parseReportOptions.bsh"/>
 				<script location="component://financials/webapp/financials/WEB-INF/actions/reports/edoVariacionPatrimonio.bsh"/>  
-				<script location="component://financials/webapp/financials/WEB-INF/actions/reports/constructGlAccountBalanceTrees.bsh"/>            
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator">
@@ -450,7 +449,7 @@
                             <html-template location="component://financials/webapp/financials/includes/stateReportOptions.ftl"/>
                           </html></platform-specific>
                           <platform-specific><html>
-                            <html-template location="component://financials/webapp/financials/reports/analiticoActivo.ftl"/>
+                            <html-template location="component://financials/webapp/financials/reports/edoVariacionPatrimonio.ftl"/>
                           </html></platform-specific>
                         </frame-container>
                     </decorator-section>

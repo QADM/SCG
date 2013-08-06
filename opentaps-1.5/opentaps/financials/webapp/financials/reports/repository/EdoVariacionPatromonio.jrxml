@@ -17,12 +17,6 @@
 	<field name="total" class="java.math.BigDecimal"/>
 	<group name="subgrupo">
 		<groupExpression><![CDATA[$F{accountTypeSeqNum}]]></groupExpression>
-		<groupHeader>
-			<band height="2"/>
-		</groupHeader>
-		<groupFooter>
-			<band height="21"/>
-		</groupFooter>
 	</group>
 	<background>
 		<band/>
@@ -129,9 +123,6 @@
 			</staticText>
 		</band>
 	</pageHeader>
-	<columnHeader>
-		<band height="2"/>
-	</columnHeader>
 	<detail>
 		<band height="21">
 			<textField isBlankWhenNull="true">
@@ -168,9 +159,6 @@
 			</textField>
 		</band>
 	</detail>
-	<columnFooter>
-		<band height="25"/>
-	</columnFooter>
 	<pageFooter>
 		<band height="17">
 			<textField evaluationTime="Report" isBlankWhenNull="false">
@@ -201,7 +189,4 @@
 			</textField>
 		</band>
 	</pageFooter>
-	<summary>
-		<band height="1"/>
-	</summary>
 </jasperReport>
