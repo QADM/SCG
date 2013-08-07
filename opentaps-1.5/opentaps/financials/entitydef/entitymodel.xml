@@ -1319,6 +1319,23 @@ under the License.
        </view-link>
     </view-entity>
     
+     <view-entity entity-name="NivelPresup"
+                 package-name="com.opensourcestrategies.financials.transactions"
+                 title="Allows looking up AcctgTrans by organizationPartyId">
+       <member-entity entity-alias="NP" entity-name="NivelPresupuestal"/>
+       <member-entity entity-alias="ET" entity-name="EnumerationType"/>
+       <alias name="enumTypeId" entity-alias="ET"/>
+	    <alias name="parentTypeId" entity-alias="ET"  />
+	    <alias name="clasificacionId" entity-alias="NP"/>
+		<alias name="descripcion" entity-alias="NP"/>
+       <alias name="nivelId" entity-alias="NP"/>
+       <view-link entity-alias="NP" rel-entity-alias="ET" rel-optional="true">
+           <key-map field-name="clasificacionId"/>
+       </view-link>
+    </view-entity>
+    
+    
+    
 
  <view-entity entity-name="AcctgTransOrgPresupIng"
                  package-name="com.opensourcestrategies.financials.transactions"
