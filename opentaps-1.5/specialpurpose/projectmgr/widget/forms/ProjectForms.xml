@@ -68,10 +68,11 @@
         <field name="priority" title="${uiLabelMap.CommonPriority}"><display/></field>
         <field name="codificacion" title="${uiLabelMap.Codificacion}"><text/></field>
         
-	   <field name="nivelId" title="nivel">
-           	 <drop-down allow-empty="false" current="selected">
-                <entity-options description="${descripcion}" entity-name="NivelPresupuestal" key-field-name="nivelId">
-                    <entity-order-by field-name="nivelId"/>
+	   <field name="nivelId" title="Nivel" >
+           	 <drop-down allow-empty="false" current="selected" >
+                <entity-options description="${descripcion}" entity-name="NivelPresup" key-field-name="clasificacionId">
+                   <entity-constraint name="clasificacionId" operator="equals" value="1004"/>
+                    <entity-order-by field-name="descripcion"/>
                 </entity-options>
            	 </drop-down>
         </field>

@@ -284,13 +284,17 @@
     </screen>
 
     <!-- list the configured accounting tags -->
-    <screen name="accountingTags">
+ <screen name="accountingTags">
         <section>
             <actions>
                 <set field="pageTitleLabel" value="FinancialsAccountingTags"/>  
                 <script location="component://financials/webapp/financials/WEB-INF/actions/configuration/accountingTags.bsh"/>
            		<java location="com.opensourcestrategies.financials.transactions.TransactionsFindIng" invoke="findExcelTag"/>                
-           
+           		<entity-condition entity-name="NivelPresup" list="nivels">
+                   
+					<condition-expr field-name="parentTypeId" operator="equals" value="ACCOUNTING_TAG"/>
+					 <order-by field-name="nivelId"/>
+                </entity-condition>
             </actions>            
             <widgets>
                 <decorator-screen name="main-section-decorator">

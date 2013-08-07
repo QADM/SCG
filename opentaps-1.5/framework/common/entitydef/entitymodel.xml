@@ -112,6 +112,7 @@ under the License.
       </relation>
     </entity>
     
+    
     <entity entity-name="EnumerationType"
             package-name="org.ofbiz.common.enum"
             default-resource-name="CommonEntityLabels"
@@ -120,7 +121,11 @@ under the License.
       <field name="parentTypeId" type="id"></field>
       <field name="hasTable" type="indicator"></field>
       <field name="description" type="description"></field>
+      <field name="clasificacionId" type="id"/>
       <prim-key field="enumTypeId"/>
+     <relation type="one" fk-name="CLASIFNIVEL"  rel-entity-name="ClasifPresupuestal">
+        <key-map field-name="clasificacionId" rel-field-name="clasificacionId"/>
+      </relation>
       <relation type="one" fk-name="ENUM_TYPE_PARENT" title="Parent" rel-entity-name="EnumerationType">
         <key-map field-name="parentTypeId" rel-field-name="enumTypeId"/>
       </relation>
