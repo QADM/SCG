@@ -139,29 +139,34 @@ public class PartyImportService extends DomainService implements
 					PartyGroup partygroup = new PartyGroup();
 					partygroup.setGroupName(rowdata.getGroupName());
 					partygroup.setGroupNameLocal(rowdata.getGroupNameLocal());
-					if (UtilImport.validaPadreParty(ledger_repo,
-							rowdata.getNivel(), rowdata.getParentExternalId())) {
-						Debug.log("Padre valido");
-						partygroup.setParent_id(rowdata.getParentExternalId());
+					if (rowdata.getParentExternalId() != null) {
+						if (UtilImport.validaPadreParty(ledger_repo,
+								rowdata.getNivel(),
+								rowdata.getParentExternalId())) {
+							Debug.log("Padre valido");
+							partygroup.setParent_id(rowdata
+									.getParentExternalId());
 
-					} else {
-						Debug.log("Padre no valido");
-						String message = "Failed to import Party ["
-								+ rowdata.getExternalId()
-								+ "], Error message : " + "Padre no valido";
-						storeImportPartyError(rowdata, message, imp_repo);
+						} else {
+							Debug.log("Padre no valido");
+							String message = "Failed to import Party ["
+									+ rowdata.getExternalId()
+									+ "], Error message : " + "Padre no valido";
+							storeImportPartyError(rowdata, message, imp_repo);
 
-						// rollback all if there was an error when importing
-						// item
-						if (imp_tx1 != null) {
-							imp_tx1.rollback();
+							// rollback all if there was an error when importing
+							// item
+							if (imp_tx1 != null) {
+								imp_tx1.rollback();
+							}
+							if (imp_tx2 != null) {
+								imp_tx2.rollback();
+							}
+							// Debug.logError(ex, message, MODULE);
+							throw new ServiceException(message);
 						}
-						if (imp_tx2 != null) {
-							imp_tx2.rollback();
-						}
-						// Debug.logError(ex, message, MODULE);
-						throw new ServiceException(message);
 					}
+					
 					partygroup.setPartyId(rowdata.getExternalId());
 					partygroup.setFederalTaxId(rowdata.getRfc());
 
