@@ -59,17 +59,35 @@
               <@inputTextCell name="enumCode" default=tag.enumCode! size=12 maxlength=30 index=tag_index />
               <@inputTextCell name="description" default=tag.description! size=12   maxlength=30 index=tag_index />
 
-             <@inputSelectCell name="nivelId" list=nivelLists name="nivelId" default=tag.nivelId! displayField="descripcion" required=false index=tag_index  />
+   			 <td>
+	            <select name="niv" size="1" >
+		         <#list nivels as niveles>
+			            <#if tag.enumTypeId==niveles.enumTypeId>
+			            	<#assign nivel=niveles.nivelId />
+			           		 <option <#if (niveles?has_content&&tag.nivelId==niveles.nivelId) > selected="selected" </#if> value="${(nivel)?if_exists}" >${niveles.get("descripcion",locale)}</option>
+						</#if>	
+				 </#list>
+	            </select>
+            </td>
+
    			  <@inputTextCell name="parentEnumId" default=tag.parentEnumId!  size=10 maxlength=10 index=tag_index />
-	              <@inputTextCell name="fechaInicio"  default=tag.fechaInicio!    size=12 index=tag_index />
-	              <@inputTextCell name="fechaFin"  default=tag.fechaFin! size=12   index=tag_index />
+	              <@inputTextCell name="fechaIn"  default=tag.fechaInicio!    size=12 index=tag_index />
+	              <@inputTextCell name="fechaF"  default=tag.fechaFin! size=12   index=tag_index />
              
               <@inputSelectHashCell name="node" default=tag.node! index=tag_index hash=Nodo />
               <@inputSelectHashCell name="disabled" default=tag.disabled!"N" index=tag_index hash=disableSelectValues />
               <@inputHiddenRowSubmit submit=false index=tag_index/>
               <@inputSubmitIndexedCell title="${uiLabelMap.CommonUpdate}" index=tag_index/>
               <td>
-              </td>
+	            <select name="niv" size="1" style="visibility:hidden">
+		         <#list nivels as niveles>
+			            <#if tag.enumTypeId==niveles.enumTypeId>
+			            	<#assign nivel=niveles.nivelId />
+			           		 <option <#if (niveles?has_content&&tag.nivelId==niveles.nivelId) > selected="selected" </#if> value="${(nivel)?if_exists}" >${niveles.get("descripcion",locale)}</option>
+						</#if>	
+				 </#list>
+	            </select>
+            </td>
             </tr>
           </#list>
         </table>

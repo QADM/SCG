@@ -150,8 +150,10 @@
         <auto-attributes include="nonpk" mode="IN" optional="true"/>
         <attribute name="enumCode" type="String" mode="IN" optional="false"/>
         <attribute name="description" type="String" mode="IN" optional="false"/>
-        <attribute name="nivelId" type="String" mode="IN" optional="false"/>
-        <attribute name="parentEnumId" type="String" mode="IN"  optional="true"  />
+        <attribute name="niv" type="String" mode="IN" optional="false"/>
+        <attribute name="parentEnumId" type="String" mode="IN"  optional="true"/>
+        <attribute name="fechaIn" type="String" mode="IN" optional="true"/>
+        <attribute name="fechaF" type="String" mode="IN"  optional="true"/>
     </service>
     
     <service name="deleteAccountingTag" default-entity-name="Enumeration" engine="java"

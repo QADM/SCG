@@ -30,10 +30,11 @@
      
      
      
-     
-     
-      
-        <@inputSelectRow title=uiLabelMap.Nivel required=false list=nivelLists  displayField="descripcion" name="nivelId" titleClass="requiredField" />     
+   		
+        <@inputSelectRow title=uiLabelMap.Nivel required=false list=nivels  displayField="descripcion" name="nivelId" titleClass="requiredField" />     
+       
+       
+       
            
         <@inputSelectHashRow  title="Nodo" name="node"  hash=Nodo />
             

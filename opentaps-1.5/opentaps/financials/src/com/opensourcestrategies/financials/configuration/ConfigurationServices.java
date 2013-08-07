@@ -21,6 +21,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import org.ofbiz.base.util.*;
 import org.ofbiz.entity.GenericDataSourceException;
 import org.ofbiz.entity.Delegator;
@@ -475,22 +477,64 @@ public final class ConfigurationServices {
 	 * @param context
 	 *            a <code>Map</code> value
 	 * @return a service response <code>Map</code> value
+	 * @throws ParseException 
 	 */
 	@SuppressWarnings("unchecked")
-	public static Map updateAccountingTag(DispatchContext dctx, Map context) {
+	public static Map updateAccountingTag(DispatchContext dctx, Map context) throws ParseException {
 		Delegator delegator = dctx.getDelegator();
+		String nivelId = (String) context.get("niv");
+		String inicio = (String) context.get("fechaIn");
+		String fin = (String) context.get("fechaF");
+		String nivel="";
+		String  sCadenaSinBlancos="";
+		String cadena1="";
+		String cadena2="";
+		
+		
 
 		try {
+			 SimpleDateFormat formatoFecha = new SimpleDateFormat("dd-MM-yyyy");
+		        Date fecInicio;
+
+					fecInicio = formatoFecha.parse(inicio);
+					context.put("fechaInicio",fecInicio);
+		        Date fecFinal;
+					fecFinal = formatoFecha.parse(fin);
+					context.put("fechaFin", fecFinal);
+
 			GenericValue pk = delegator.makeValue("Enumeration");
 			pk.setPKFields(context);
 			GenericValue enumeration = delegator.findByPrimaryKey(
 					"Enumeration", pk);
+
+			for (int x=0; x < nivelId.length(); x++) {
+				  if ((nivelId.charAt(x) != ' ')&&(nivelId.charAt(x) != '[')&&(nivelId.charAt(x) != ']'))
+				    sCadenaSinBlancos += nivelId.charAt(x);
+				}
+			for (int x=0; x<sCadenaSinBlancos.length(); x++) {
+				cadena1="";
+				cadena2="";
+				if(sCadenaSinBlancos.charAt(x)!=',')
+				     cadena1+=sCadenaSinBlancos.charAt(x);
+				     cadena1+=sCadenaSinBlancos.charAt(x+1);
+				     cadena1+=sCadenaSinBlancos.charAt(x+2);
+				     cadena1+=sCadenaSinBlancos.charAt(x+3);
+				     cadena1+=sCadenaSinBlancos.charAt(x+4);
+				     cadena2+=sCadenaSinBlancos.charAt(x+6);
+				     cadena2+=sCadenaSinBlancos.charAt(x+7);
+				     cadena2+=sCadenaSinBlancos.charAt(x+8);
+				     cadena2+=sCadenaSinBlancos.charAt(x+9);
+				     cadena2+=sCadenaSinBlancos.charAt(x+10);	
+					 x+=11;
+				if(!(cadena1.equals(cadena2)))
+					nivel=cadena1;
+			}
+			context.put("nivelId", nivel);
 			if (enumeration == null) {
 				return UtilMessage.createAndLogServiceError(
 						"Did not find Accounting tag Enumeration value for PK ["
 								+ pk.getPrimaryKey() + "]", MODULE);
 			}
-
 			enumeration.setNonPKFields(context);
 			delegator.store(enumeration);
 			return ServiceUtil.returnSuccess();
