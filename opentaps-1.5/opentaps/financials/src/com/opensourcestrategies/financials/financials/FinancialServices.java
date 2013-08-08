@@ -112,6 +112,10 @@ public final class FinancialServices {
     /** Clases para buscar los datos del estado de flujo de efectivo. */
     public static final List<String> ESTADO_FLUJO_EFECTIVO = Arrays.asList("IMPUESTOS", "CONTRIBUCIONES M","PARTICIPACIONESyA",
 			"TASyOA","OTROS IyB","IVI","GASTO DE FUNCION","TASyOA DE GASTOS","PARTICIPyA DE GASTOS","ICyOGDP","OGPE");
+    
+    /** Clases para buscar los datos del estado de Variacion en la hacienda publica / patrimonio. */
+    public static final List<String> ESTADO_VARIACION_PATRIMONIO = Arrays.asList("HPP", "HPPC","HPPGE","HPPGEA");
+        
 
     /**
      * Generates an income statement over two CustomTimePeriod entries, returning a Map of GlAccount and amounts and a double.
@@ -328,168 +332,6 @@ public final class FinancialServices {
             return ServiceUtil.returnError(ex.getMessage());
         }
     }
-    
-    /**
-     * Generates estado de actividades for a time period and returns separate maps for balances of revenue and expenses accounts.
-     * @param dctx a <code>DispatchContext</code> value
-     * @param context a <code>Map</code> value
-     * @return a <code>Map</code> value
-     */
-    @SuppressWarnings("unchecked")
-    public static Map getEdoActividadesForTimePeriod(DispatchContext dctx, Map context) {
-        LocalDispatcher dispatcher = dctx.getDispatcher();
-        Delegator delegator = dctx.getDelegator();
-        String organizationPartyId = (String) context.get("organizationPartyId");
-        String customTimePeriodId = (String) context.get("customTimePeriodId");
-        String glFiscalTypeId = (String) context.get("glFiscalTypeId");
-        // default to generating "ACTUAL" balance sheets
-        if (UtilValidate.isEmpty(glFiscalTypeId)) {
-            glFiscalTypeId = "ACTUAL";
-            context.put("glFiscalTypeId", glFiscalTypeId);
-        }
-
-        try {
-            // get the current time period and first use it to assume whether this period has been closed or not
-            GenericValue currentTimePeriod = delegator.findByPrimaryKeyCache("CustomTimePeriod", UtilMisc.toMap("customTimePeriodId", customTimePeriodId));
-            boolean isClosed = false;
-            boolean accountingTagsUsed = UtilAccountingTags.areTagsSet(context);
-            if (currentTimePeriod.getString("isClosed").equals("Y")) {
-                isClosed = true;
-                if (accountingTagsUsed) {
-                    Debug.logWarning("getEdoActividadesForTimePeriod found a closed time period but we have accounting tag, considering the time period as NOT closed", MODULE);
-                    isClosed = false;
-                }
-            }
-
-            if (("ACTUAL".equals(glFiscalTypeId)) && (isClosed)) {
-                // if the time period is closed and we're doing ACTUAL balance sheet, then we can use the posted GlAccountHistory
-                // first, find all the gl accounts' GlAccountHistory record for this time period
-                EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
-                        EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, organizationPartyId),
-                        EntityCondition.makeCondition("customTimePeriodId", EntityOperator.EQUALS, customTimePeriodId),
-                        EntityCondition.makeCondition(EntityOperator.OR,
-                                UtilFinancial.getRevenueExpr(delegator),
-                                UtilFinancial.getExpenseExpr(delegator)));
-                List selectedFields = UtilMisc.toList("glAccountId", "glAccountTypeId", "glAccountClassId", "accountName", "postedDebits", "postedCredits");
-                selectedFields.add("endingBalance");
-                List<GenericValue> accounts = delegator.findByCondition("GlAccountAndHistory", conditions, selectedFields, UtilMisc.toList("glAccountId"));
-
-                // now, create the separate account balance Maps and see if this period has been closed.
-                // if the period has been closed, then just get the accounts' balances from the endingBalance
-                // otherwise, get it by calculating the net of posted debits and credits
-                Map<GenericValue, BigDecimal> revenueAccountBalances = new HashMap<GenericValue, BigDecimal>();
-                Map<GenericValue, BigDecimal> expenseAccountBalances = new HashMap<GenericValue, BigDecimal>();
-
-                for (Iterator<GenericValue> ai = accounts.iterator(); ai.hasNext();) {
-                    GenericValue account = ai.next();
-                    BigDecimal balance = BigDecimal.ZERO;
-                    if (account.get("endingBalance") != null) {
-                        balance = account.getBigDecimal("endingBalance");
-                    }
-                    // classify and put into the appropriate Map
-                    if (UtilAccounting.isRevenueAccount(account)) {
-                    	revenueAccountBalances.put(account.getRelatedOne("GlAccount"), balance);
-                    } else if (UtilAccounting.isExpenseAccount(account)) {
-                    	expenseAccountBalances.put(account.getRelatedOne("GlAccount"), balance);
-                    } 
-                }
-                Map result = ServiceUtil.returnSuccess();
-                result.put("revenueAccountBalances", revenueAccountBalances);
-                result.put("expenseAccountBalances", expenseAccountBalances);
-                result.put("isClosed", new Boolean(isClosed));
-                return result;
-            } else {
-                Map params = dctx.getModelService("getEdoActividadesForDate").makeValid(context, ModelService.IN_PARAM);
-                params.put("asOfDate", UtilDateTime.toTimestamp(currentTimePeriod.getDate("thruDate")));
-                return dispatcher.runSync("getEdoActividadesForDate", params);
-            }
-
-
-        } catch (GenericEntityException ex) {
-            return ServiceUtil.returnError(ex.getMessage());
-        } catch (GenericServiceException ex) {
-            return ServiceUtil.returnError(ex.getMessage());
-        }
-    }    
-    
-    /**
-     * Generates "estado analitico del activo" for a time period and returns balances of asset accounts.
-     * @param dctx a <code>DispatchContext</code> value
-     * @param context a <code>Map</code> value
-     * @return a <code>Map</code> value
-     */
-    @SuppressWarnings("unchecked")
-    public static Map getEdoAnaliticoForTimePeriod(DispatchContext dctx, Map context) {
-        LocalDispatcher dispatcher = dctx.getDispatcher();
-        Delegator delegator = dctx.getDelegator();
-        String organizationPartyId = (String) context.get("organizationPartyId");
-        String customTimePeriodId = (String) context.get("customTimePeriodId");
-        String glFiscalTypeId = (String) context.get("glFiscalTypeId");
-        // default to generating "ACTUAL" balance sheets
-        if (UtilValidate.isEmpty(glFiscalTypeId)) {
-            glFiscalTypeId = "ACTUAL";
-            context.put("glFiscalTypeId", glFiscalTypeId);
-        }
-
-        try {
-            // get the current time period and first use it to assume whether this period has been closed or not
-            GenericValue currentTimePeriod = delegator.findByPrimaryKeyCache("CustomTimePeriod", UtilMisc.toMap("customTimePeriodId", customTimePeriodId));
-            boolean isClosed = false;
-            boolean accountingTagsUsed = UtilAccountingTags.areTagsSet(context);
-            if (currentTimePeriod.getString("isClosed").equals("Y")) {
-                isClosed = true;
-                if (accountingTagsUsed) {
-                    Debug.logWarning("getBalanceSheetForTimePeriod found a closed time period but we have accounting tag, considering the time period as NOT closed", MODULE);
-                    isClosed = false;
-                }
-            }
-
-            if (("ACTUAL".equals(glFiscalTypeId)) && (isClosed)) {
-                // if the time period is closed and we're doing ACTUAL balance sheet, then we can use the posted GlAccountHistory
-                // first, find all the gl accounts' GlAccountHistory record for this time period
-                EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
-                        EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, organizationPartyId),
-                        EntityCondition.makeCondition("customTimePeriodId", EntityOperator.EQUALS, customTimePeriodId),
-                        EntityCondition.makeCondition(EntityOperator.OR,
-                                UtilFinancial.getAssetExpr(delegator)));
-                List selectedFields = UtilMisc.toList("glAccountId", "glAccountTypeId", "glAccountClassId", "accountName", "postedDebits", "postedCredits");
-                selectedFields.add("endingBalance");
-                List<GenericValue> accounts = delegator.findByCondition("GlAccountAndHistory", conditions, selectedFields, UtilMisc.toList("glAccountId"));
-
-                // now, create the separate account balance Maps and see if this period has been closed.
-                // if the period has been closed, then just get the accounts' balances from the endingBalance
-                // otherwise, get it by calculating the net of posted debits and credits
-                Map<GenericValue, BigDecimal> assetAccountBalances = new HashMap<GenericValue, BigDecimal>();
-
-                for (Iterator<GenericValue> ai = accounts.iterator(); ai.hasNext();) {
-                    GenericValue account = ai.next();
-                    BigDecimal balance = BigDecimal.ZERO;
-                    if (account.get("endingBalance") != null) {
-                        balance = account.getBigDecimal("endingBalance");
-                    }
-                    // classify and put into the appropriate Map
-                    if (UtilAccounting.isAssetAccount(account)) {
-                        assetAccountBalances.put(account.getRelatedOne("GlAccount"), balance);
-                    } 
-                }
-                Map result = ServiceUtil.returnSuccess();
-                result.put("assetAccountBalances", assetAccountBalances);
-                result.put("isClosed", new Boolean(isClosed));
-                return result;
-            } else {
-                Map params = dctx.getModelService("getBalanceSheetForDate").makeValid(context, ModelService.IN_PARAM);
-                params.put("asOfDate", UtilDateTime.toTimestamp(currentTimePeriod.getDate("thruDate")));
-                return dispatcher.runSync("getBalanceSheetForDate", params);
-            }
-
-
-        } catch (GenericEntityException ex) {
-            return ServiceUtil.returnError(ex.getMessage());
-        } catch (GenericServiceException ex) {
-            return ServiceUtil.returnError(ex.getMessage());
-        }
-    }    
-
 
     /**
      * Generates the trial balance for a time period and returns separate maps for balances of asset, liability, equity, revenue, expense, income and other accounts.
@@ -787,14 +629,6 @@ public final class FinancialServices {
 	            String periodTypeId = periodo.getString("periodTypeId");
 	            
 	            Debug.logWarning("periodTypeId  fromDate  [  "+periodTypeId+" ]", MODULE);
-	            
-//	            Calendar calDate = Calendar.getInstance();
-//	            calDate.setTimeInMillis(tsPeriodo.getTime());
-//	            calDate.add(Calendar.DAY_OF_MONTH, -1);
-//	            
-//	            java.sql.Date findDate = new java.sql.Date(calDate.getTimeInMillis());
-//	            
-//	            Debug.logWarning("findDate  [  "+findDate+" ]", MODULE);
 	            
 	            EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
 	                    EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, organizationPartyId),
@@ -1140,391 +974,6 @@ public final class FinancialServices {
     }
     
     /**
-     * Generates Estado analitico del activo as of a particular date, by working forward from the last closed time period,
-     *  or, if none, from the beginning of the earliest time period.
-     * @param dctx a <code>DispatchContext</code> value
-     * @param context a <code>Map</code> value
-     * @return a <code>Map</code> value
-     * @throws ParseException 
-     */
-    @SuppressWarnings("unchecked")
-    public static Map getEdoAnaliticoForDate(DispatchContext dctx, Map context) throws ParseException {
-        LocalDispatcher dispatcher = dctx.getDispatcher();
-        Delegator delegator = dctx.getDelegator();
-        String organizationPartyId = (String) context.get("organizationPartyId");
-        Timestamp asOfDate = (Timestamp) context.get("asOfDate");
-        GenericValue userLogin = (GenericValue) context.get("userLogin");
-        String glFiscalTypeId = (String) context.get("glFiscalTypeId");
-        // default to generating "ACTUAL" balance sheets
-        if (UtilValidate.isEmpty(glFiscalTypeId)) {
-            glFiscalTypeId = "ACTUAL";
-            context.put("glFiscalTypeId", glFiscalTypeId);
-        }
-
-        // balances of the asset, liability, and equity GL accounts, initially empty
-        Map<GenericValue, BigDecimal> assetAccountBalances = new HashMap<GenericValue, BigDecimal>();
-        Map<GenericValue, BigDecimal> assetAccountBalancesIni = new HashMap<GenericValue, BigDecimal>();
-        
-        Map<String,GenericValue> assetSaldoIniBalances = new HashMap<String,GenericValue>();
-        Map<String,GenericValue> assetDebitCredit = new HashMap<String,GenericValue>();
-        Map<String,AnaliticoActivo> datosReporte = new HashMap<String,AnaliticoActivo>();
-        
-        try {
-
-            // figure the date and the last closed time period
-            Timestamp lastClosedDate = null;
-            GenericValue lastClosedTimePeriod = null;
-            Map tmpResult;
-            boolean accountingTagsUsed = UtilAccountingTags.areTagsSet(context);
-            if (accountingTagsUsed) {
-                Debug.logWarning("getEdoAnaliticoForDate is using accounting tags, not looking for closed time periods", MODULE);
-                lastClosedTimePeriod = null;
-                List<GenericValue> timePeriods = delegator.findByAnd("CustomTimePeriod", UtilMisc.toMap("organizationPartyId", organizationPartyId), UtilMisc.toList("fromDate ASC"));
-                if ((timePeriods != null) && (timePeriods.size() > 0) && ((timePeriods.get(0)).get("fromDate") != null)) {
-                    lastClosedDate = UtilDateTime.toTimestamp((timePeriods.get(0)).getDate("fromDate"));
-                } else {
-                    return ServiceUtil.returnError("Cannot get a starting date for net income");
-                }
-            } else {
-                // find the last closed time period
-                tmpResult = dispatcher.runSync("findLastClosedDate", UtilMisc.toMap("organizationPartyId", organizationPartyId, "findDate", new Date(asOfDate.getTime()), "userLogin", userLogin));
-                if ((tmpResult == null) || (tmpResult.get("lastClosedDate") == null)) {
-                    return ServiceUtil.returnError("Cannot get a closed time period before " + asOfDate);
-                } else {
-                    lastClosedDate = (Timestamp) tmpResult.get("lastClosedDate");
-                }
-                if (tmpResult.get("lastClosedTimePeriod") != null) {
-                    lastClosedTimePeriod = (GenericValue) tmpResult.get("lastClosedTimePeriod");
-                }
-            }
-
-            Debug.logVerbose("Last closed time period [" + lastClosedTimePeriod + "] and last closed date [" + lastClosedDate + "]", MODULE);
-            Debug.logWarning("Last closed time period [" + lastClosedTimePeriod + "] and last closed date [" + lastClosedDate + "]", MODULE);
-
-            // if there was a previously closed time period, then get a balance sheet as of the end of that time period.  This balance sheet is our starting point
-            // but this only works for ACTUAL fiscal types.  For Budgets, Forecasts, etc., we should just aggregating transaction entries.
-            if ("ACTUAL".equals(glFiscalTypeId) && lastClosedTimePeriod != null) {
-                Map input = new HashMap(context);
-                input.put("customTimePeriodId", lastClosedTimePeriod.getString("customTimePeriodId"));
-                input = dctx.getModelService("getEdoAnaliticoForTimePeriod").makeValid(input, ModelService.IN_PARAM);
-                tmpResult = dispatcher.runSync("getEdoAnaliticoForTimePeriod", input);
-                if (tmpResult != null) {
-                    assetAccountBalances = (Map<GenericValue, BigDecimal>) tmpResult.get("assetAccountBalances");
-                }
-            }
-            
-            Debug.logWarning("assetAccountBalances   PRIMERO"+assetAccountBalances.toString(), MODULE);
-            
-            
-            Map tags = UtilAccountingTags.getTagParameters(context);
-            assetAccountBalances = getAcctgTransAndEntriesForClass(assetAccountBalances, organizationPartyId, lastClosedDate, asOfDate, glFiscalTypeId, "ASSET", tags, true, userLogin, dispatcher);
-                        
-            Debug.logWarning("assetAccountBalances   SEGUNDO"+assetAccountBalances.toString()+"  "+assetAccountBalances.size(), MODULE);
-            
-            
-            // now add the new asset transactions
-//            Map tags = UtilAccountingTags.getTagParameters(context);
-//            assetAccountBalances = getAcctgTransAndEntriesForClass(assetAccountBalances, organizationPartyId, lastClosedDate, asOfDate, glFiscalTypeId, "ASSET", tags, true, userLogin, dispatcher);
-  
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-            java.util.Date parsedDate = new java.util.Date();
-            java.util.Date parsedDate1 = new java.util.Date();
-				parsedDate = dateFormat.parse(Integer.valueOf(asOfDate.getYear()+1899).toString()+"-12-31 23:59:59");
-				parsedDate1 = dateFormat.parse(Integer.valueOf(asOfDate.getYear()+1900).toString()+"-12-31 23:59:59");
-            java.sql.Timestamp fechaIni = new java.sql.Timestamp(parsedDate.getTime());
-            java.sql.Timestamp fechaFin = new java.sql.Timestamp(parsedDate1.getTime());
- 
-            Debug.logWarning("fechaIni   "+fechaIni, MODULE);
-            Debug.logWarning("fechaFin   "+fechaFin, MODULE);
-            
-            List<String> accountIds = FastList.newInstance(); 
-            List<GenericValue> accountGen = FastList.newInstance(); 
-            
-            String accountCode = new String();
-            String nombreCta = new String();
-            BigDecimal saldoInicial = BigDecimal.ZERO;
-            BigDecimal debito = BigDecimal.ZERO;
-            BigDecimal credito = BigDecimal.ZERO;            
-            
-            for (Map.Entry<GenericValue, BigDecimal> assetAcc : assetAccountBalances.entrySet())
-            {
-            	
-            	GenericValue acc = assetAcc.getKey();
-            	Debug.logWarning("GenericValue   acc"+acc.toString(), MODULE);
-            	
-            	accountCode = acc.getString("glAccountId");
-            	nombreCta = acc.getString("accountName");
-            	
-            	//Llenamos el objeto para el reporte
-            	AnaliticoActivo anact = new AnaliticoActivo();
-            	anact.setCuentaId(accountCode);
-            	anact.setNombreCta(nombreCta);
-            	
-            	//Agregamos los ids de las cuentas para buscarlas despues
-            	accountIds.add(accountCode);
-            	//Agregamos los objetos para buscar los ids
-            	accountGen.add(acc);
-            	//Aqui se guardaran los objetos para el reporte
-            	datosReporte.put(accountCode, anact);
-            	
-            }
-            
-            //Se crea la lista con para buscar por ids
-            List<String> accList = EntityUtil.getFieldListFromEntityList(accountGen, "glAccountId", true);
-            
-            Debug.logWarning("accList    '4' "+accList.toString(), MODULE);
-            
-            //Buscamos los saldos iniciales guardados en la organizacion 
-            EntityCondition conditions1 = EntityCondition.makeCondition(EntityOperator.AND,
-                    EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, organizationPartyId),
-                    EntityCondition.makeCondition("glAccountId", EntityOperator.IN, accList));
-            List<String> selectedFields = UtilMisc.toList("glAccountId", "postedBalance");
-            List<GenericValue> accounts = delegator.findByCondition("GlAccountOrganization", conditions1, selectedFields, null);  
-            
-            Debug.logWarning("GlAccountOrganization    # "+accounts.toString(), MODULE);
-            
-            //Se itera la lista con los saldos inciales 
-            for (Iterator<GenericValue> ai = accounts.iterator(); ai.hasNext();) {
-                GenericValue account = ai.next();
-                accountCode = account.getString("glAccountId");
-                saldoInicial = account.getBigDecimal("postedBalance");
-                
-                GenericValue aaaa = account.getRelatedOne("GlAccount");
-                Debug.logWarning("aaaa    # "+aaaa.toString(), MODULE);
-                Debug.logWarning("account    # "+account.toString(), MODULE);
-                assetSaldoIniBalances.put(accountCode,account);
-                
-            	AnaliticoActivo anact = datosReporte.get(accountCode);
-            	anact.setSaldoInicial(saldoInicial==null?BigDecimal.ZERO:saldoInicial);
-            	
-            	datosReporte.put(accountCode, anact);
-                    
-            }
-            
-            
-            EntityCondition conditions11 = EntityCondition.makeCondition(EntityOperator.AND,
-                    EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, organizationPartyId),
-                    EntityCondition.makeCondition("glAccountId", EntityOperator.IN, accList));
-            List<String> selectedFields1 = UtilMisc.toList("glAccountId", "postedDebits","postedCredits","endingBalance");
-            List<GenericValue> accounts1 = delegator.findByCondition("GlAccountHistory", conditions11, selectedFields1, null);  
-            
-            Debug.logWarning("GlAccountHistory    ( "+accounts1.toString(), MODULE);
-            
-            for (Iterator<GenericValue> ai = accounts1.iterator(); ai.hasNext();) {
-            	
-                GenericValue account = ai.next();
-                accountCode = account.getString("glAccountId");
-                
-                debito = account.getBigDecimal("postedDebits");
-                credito = account.getBigDecimal("postedCredits");
-                GenericValue aaaa = account.getRelatedOne("GlAccount");
-                Debug.logWarning("aaaa    # "+aaaa.toString(), MODULE);
-                Debug.logWarning("account    # "+account.toString(), MODULE);
-                
-                assetDebitCredit.put(accountCode, account);
-                
-            	AnaliticoActivo anact = datosReporte.get(accountCode);
-            	
-            	Debug.logWarning("datosReporte Obtenido 3   "+anact.toString(), MODULE);
-            	
-            	anact.setCargo(debito==null?BigDecimal.ZERO:debito);
-            	anact.setAbono(credito==null?BigDecimal.ZERO:credito);
-            	anact.setSaldoFinal(anact.getSaldoInicial().add(anact.getCargo().subtract(anact.getAbono())));//SaldoInicial+Cargo-Abono
-            	anact.setFlujoEfectivo(anact.getSaldoFinal().subtract(anact.getSaldoInicial()));
-            	
-            	datosReporte.put(accountCode, anact);
-                    
-            }
-            Debug.logWarning("UTLIMA LISTA  --- "+assetDebitCredit.toString(), MODULE);
-            Debug.logWarning("datosReporte    MAP  "+datosReporte.toString(), MODULE);
-            
-            for (Map.Entry<String, AnaliticoActivo> datosRe : datosReporte.entrySet())
-            {
-            	
-            	Debug.logWarning("datosReporte    ::  "+datosRe.getKey()+"    "+datosRe.getValue(), MODULE);
-            	
-            }
-
-            
-            Debug.logWarning("BARRIENDO MAPA PARA AGREGAR MONTOS DE SALDO INICIAL   ... ", MODULE);
-            for (Map.Entry<GenericValue, BigDecimal> assetAcc : assetAccountBalances.entrySet())
-            {
-                
-            	GenericValue acc = assetAcc.getKey();
-            	
-            	if(assetSaldoIniBalances.get(acc.get("glAccountId")) != null){
-            		
-                	GenericValue accountOrgani = assetSaldoIniBalances.get(acc.get("glAccountId"));
-                	
-                	acc.set("postedBalance", accountOrgani.get("postedBalance"));
-                	Debug.logWarning("GenericValue SALDODES  acc"+acc.toString(), MODULE);
-            		
-            	}
-            	
-            }
-            
-            // calculate a net income since the last closed date and add it to our equity account balances
-            Map input = new HashMap(context);
-            input.put("fromDate", lastClosedDate);
-            input.put("thruDate", asOfDate);
-            input = dctx.getModelService("getIncomeStatementByDates").makeValid(input, ModelService.IN_PARAM);
-            tmpResult = dispatcher.runSync("getIncomeStatementByDates", input);
-            GenericValue retainedEarningsGlAccount = (GenericValue) tmpResult.get("retainedEarningsGlAccount");
-            BigDecimal interimNetIncome = (BigDecimal) tmpResult.get("netIncome");
-
-            // TODO: This is just copied over from getIncomeStatementByDates for now.  We should implement a good version at some point.
-            boolean isClosed = true;
-            EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
-                    EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, organizationPartyId),
-                    EntityCondition.makeCondition("isClosed", EntityOperator.NOT_EQUAL, "Y"),
-                    EntityCondition.makeCondition(EntityOperator.OR,
-                            EntityCondition.makeCondition("fromDate", EntityOperator.GREATER_THAN_EQUAL_TO, lastClosedDate),
-                            EntityCondition.makeCondition("thruDate", EntityOperator.LESS_THAN_EQUAL_TO, asOfDate)));
-            List timePeriods = delegator.findByCondition("CustomTimePeriod", conditions, UtilMisc.toList("customTimePeriodId"), UtilMisc.toList("customTimePeriodId"));
-            if (timePeriods.size() > 0) {
-                isClosed = false;
-            }
-
-            // all done
-            Map result = ServiceUtil.returnSuccess();
-            result.put("datosReporte", datosReporte);
-            result.put("isClosed", new Boolean(isClosed));
-            result.put("retainedEarningsGlAccount", retainedEarningsGlAccount);
-            result.put("interimNetIncomeAmount", interimNetIncome);
-            return result;
-        } catch (GenericEntityException ex) {
-            return ServiceUtil.returnError(ex.getMessage());
-        } catch (GenericServiceException ex) {
-            return ServiceUtil.returnError(ex.getMessage());
-        }
-
-    }    
-    
-    /**
-     * Generates Estado de actividaes as of a particular date, by working forward from the last closed time period,
-     *  or, if none, from the beginning of the earliest time period.
-     * @param dctx a <code>DispatchContext</code> value
-     * @param context a <code>Map</code> value
-     * @return a <code>Map</code> value
-     */
-    @SuppressWarnings("unchecked")
-    public static Map getEdoActividadesForDate(DispatchContext dctx, Map context) {
-        LocalDispatcher dispatcher = dctx.getDispatcher();
-        Delegator delegator = dctx.getDelegator();
-        String organizationPartyId = (String) context.get("organizationPartyId");
-        Timestamp asOfDate = (Timestamp) context.get("asOfDate");
-        GenericValue userLogin = (GenericValue) context.get("userLogin");
-        String glFiscalTypeId = (String) context.get("glFiscalTypeId");
-        // default to generating "ACTUAL" balance sheets
-        if (UtilValidate.isEmpty(glFiscalTypeId)) {
-            glFiscalTypeId = "ACTUAL";
-            context.put("glFiscalTypeId", glFiscalTypeId);
-        }
-
-        // balances of the revenue and expense GL accounts, initially empty
-        Map<GenericValue, BigDecimal> revenueAccountBalances = new HashMap<GenericValue, BigDecimal>();
-        Map<GenericValue, BigDecimal> expenseAccountBalances = new HashMap<GenericValue, BigDecimal>();
-        
-        try {
-
-            // figure the date and the last closed time period
-            Timestamp lastClosedDate = null;
-            GenericValue lastClosedTimePeriod = null;
-            Map tmpResult;
-            boolean accountingTagsUsed = UtilAccountingTags.areTagsSet(context);
-            Debug.logWarning("accountingTagsUsed    " + accountingTagsUsed, MODULE);  
-            if (accountingTagsUsed) {
-                Debug.logWarning("getBalanceSheetForDate is using accounting tags, not looking for closed time periods", MODULE);
-                lastClosedTimePeriod = null;
-                List<GenericValue> timePeriods = delegator.findByAnd("CustomTimePeriod", UtilMisc.toMap("organizationPartyId", organizationPartyId), UtilMisc.toList("fromDate ASC"));
-                if ((timePeriods != null) && (timePeriods.size() > 0) && ((timePeriods.get(0)).get("fromDate") != null)) {
-                    lastClosedDate = UtilDateTime.toTimestamp((timePeriods.get(0)).getDate("fromDate"));
-                } else {
-                    return ServiceUtil.returnError("Cannot get a starting date for net income");
-                }
-            } else {
-                // find the last closed time period
-            	Debug.logWarning("organizationPartyId    " + organizationPartyId+"   asOfDate"+asOfDate+"     userLogin  "+userLogin, MODULE); 
-                tmpResult = dispatcher.runSync("findLastClosedDate", UtilMisc.toMap("organizationPartyId", organizationPartyId, "findDate", new Date(asOfDate.getTime()), "userLogin", userLogin));
-                Debug.logWarning("tmpResult    " + tmpResult, MODULE);
-                if ((tmpResult == null) || (tmpResult.get("lastClosedDate") == null)) {
-                    return ServiceUtil.returnError("Cannot get a closed time period before " + asOfDate);
-                } else {
-                	Debug.logWarning("lastClosedDate    " + tmpResult.get("lastClosedDate"), MODULE); 
-                    lastClosedDate = (Timestamp) tmpResult.get("lastClosedDate");
-                }
-                if (tmpResult.get("lastClosedTimePeriod") != null) {
-                    lastClosedTimePeriod = (GenericValue) tmpResult.get("lastClosedTimePeriod");
-                }
-            }
-
-            Debug.logWarning("Last closed time period [" + lastClosedTimePeriod + "] and last closed date [" + lastClosedDate + "]", MODULE);  
-            Debug.logVerbose("Last closed time period [" + lastClosedTimePeriod + "] and last closed date [" + lastClosedDate + "]", MODULE);
-            
-            
-            Debug.logWarning("ACTUAL == " + glFiscalTypeId + "      " + lastClosedTimePeriod + "]", MODULE);
-
-            // if there was a previously closed time period, then get a balance sheet as of the end of that time period.  This balance sheet is our starting point
-            // but this only works for ACTUAL fiscal types.  For Budgets, Forecasts, etc., we should just aggregating transaction entries.
-            if ("ACTUAL".equals(glFiscalTypeId) && lastClosedTimePeriod != null) {
-                Map input = new HashMap(context);
-                input.put("customTimePeriodId", lastClosedTimePeriod.getString("customTimePeriodId"));
-                input = dctx.getModelService("getEdoActividadesForTimePeriod").makeValid(input, ModelService.IN_PARAM);
-                tmpResult = dispatcher.runSync("getEdoActividadesForTimePeriod", input);
-                if (tmpResult != null) {
-                    revenueAccountBalances = (Map<GenericValue, BigDecimal>) tmpResult.get("revenueAccountBalances");
-                    expenseAccountBalances = (Map<GenericValue, BigDecimal>) tmpResult.get("expenseAccountBalances");
-                }
-            }
-
-            // now add the new revenue and expense transactions
-            Map tags = UtilAccountingTags.getTagParameters(context);
-            revenueAccountBalances = getAcctgTransAndEntriesForClass(revenueAccountBalances, organizationPartyId, lastClosedDate, asOfDate, glFiscalTypeId, "REVENUE", tags, true, userLogin, dispatcher);
-            expenseAccountBalances = getAcctgTransAndEntriesForClass(expenseAccountBalances, organizationPartyId, lastClosedDate, asOfDate, glFiscalTypeId, "EXPENSE", tags, true, userLogin, dispatcher);
-
-            Debug.logWarning("revenueAccountBalances   =====>  "+(revenueAccountBalances),MODULE);    
-            Debug.logWarning("expenseAccountBalances   =====>  "+(expenseAccountBalances),MODULE);  
-            
-            // calculate a net income since the last closed date and add it to our equity account balances
-            Map input = new HashMap(context);
-            input.put("fromDate", lastClosedDate);
-            input.put("thruDate", asOfDate);
-            input = dctx.getModelService("getIncomeStatementByDates").makeValid(input, ModelService.IN_PARAM);
-            tmpResult = dispatcher.runSync("getIncomeStatementByDates", input);
-            GenericValue retainedEarningsGlAccount = (GenericValue) tmpResult.get("retainedEarningsGlAccount");
-            BigDecimal interimNetIncome = (BigDecimal) tmpResult.get("netIncome");
-
-
-            // TODO: This is just copied over from getIncomeStatementByDates for now.  We should implement a good version at some point.
-            boolean isClosed = true;
-            EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
-                    EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, organizationPartyId),
-                    EntityCondition.makeCondition("isClosed", EntityOperator.NOT_EQUAL, "Y"),
-                    EntityCondition.makeCondition(EntityOperator.OR,
-                            EntityCondition.makeCondition("fromDate", EntityOperator.GREATER_THAN_EQUAL_TO, lastClosedDate),
-                            EntityCondition.makeCondition("thruDate", EntityOperator.LESS_THAN_EQUAL_TO, asOfDate)));
-            List timePeriods = delegator.findByCondition("CustomTimePeriod", conditions, UtilMisc.toList("customTimePeriodId"), UtilMisc.toList("customTimePeriodId"));
-            if (timePeriods.size() > 0) {
-                isClosed = false;
-            }
-
-            // all done
-            Map result = ServiceUtil.returnSuccess();
-            result.put("revenueAccountBalances", revenueAccountBalances);
-            result.put("expenseAccountBalances", expenseAccountBalances);
-            result.put("isClosed", new Boolean(isClosed));
-            result.put("retainedEarningsGlAccount", retainedEarningsGlAccount);
-            result.put("interimNetIncomeAmount", interimNetIncome);
-            return result;
-        } catch (GenericEntityException ex) {
-            return ServiceUtil.returnError(ex.getMessage());
-        } catch (GenericServiceException ex) {
-            return ServiceUtil.returnError(ex.getMessage());
-        }
-
-    }    
-
-    /**
      * Finds and returns a List of AcctgTransAndEntries based on organizationPartyId, fromDate, thruDate, fiscalTypeId,
      *       subject to the glAccountClassIds in the glAccountClasses List.
      * @param dctx a <code>DispatchContext</code> value
@@ -1607,309 +1056,6 @@ public final class FinancialServices {
         }  catch (GeneralException ex) {
             return ServiceUtil.returnError(ex.getMessage());
         }
-    }
-    
-    /**
-     * Generates Estado de Flujo de Efectivo con una fecha dada 
-     * @param dctx a <code>DispatchContext</code> value
-     * @param context a <code>Map</code> value
-     * @return a <code>Map</code> value
-     * @throws ParseException 
-     */
-    @SuppressWarnings("unchecked")
-    public static Map getEdoFlujoEfectivoForDate(DispatchContext dctx, Map context) throws ParseException {
-        LocalDispatcher dispatcher = dctx.getDispatcher();
-        Delegator delegator = dctx.getDelegator();
-        String organizationPartyId = (String) context.get("organizationPartyId");
-        Timestamp asOfDate = (Timestamp) context.get("asOfDate");
-        
-        if(asOfDate == null)
-        	asOfDate = UtilDateTime.getTimestamp(Calendar.getInstance().getTimeInMillis());
-        
-        Timestamp asOfDateIni = UtilDateTime.getYearStart(asOfDate);
-        Timestamp asOfDateBef = UtilDateTime.addDaysToTimestamp(asOfDate, (int)-365);
-        Timestamp asOfDateBefIni = UtilDateTime.getYearStart(asOfDateBef);        
-        GenericValue userLogin = (GenericValue) context.get("userLogin");
-        String glFiscalTypeId = (String) context.get("glFiscalTypeId");
-        
-        
-        //Estas lista almacenaran las diferentes partes del reporte de flujo de efecivo
-        Map<String,GenericValue> transflujosEfectivo = new HashMap<String, GenericValue>();
-        Map<String,GenericValue> transEfectivo = new HashMap<String,GenericValue>();
-        Map<String,Object> flujosEfectivo = new HashMap<String, Object>();
-
-        Map<String,GenericValue> cuentasFlujoEfectivo = new HashMap<String,GenericValue>();
-        Map<String,GenericValue> cuentasEfectivo = new HashMap<String,GenericValue>();
-        Map<String,List<GenericValue>> listTranCtas = new HashMap<String,List<GenericValue>>();//Mapa con las transacciones asociadas a una cuenta
-
-        
-		try {
-			
-			/**
-			 * Se buscaran las transacciones que contengan las cuentas marcadas como EFECTIVO y FLJ_EFEC_OPERA_OR
-			 * para despues veificar que las cuentas que esten marcadas para mostrarse en el reporte tengan 
-			 * en su contraparte una cuenta de efectivo
-			 * 
-			 * Hay que sumar por cuenta los montos por debito y credito y sacar el saldo final dependiendo de la naturaleza de la cuenta
-			 * Se sumara con el servicio que regresa las cuenta sumadas AcctgTransEntrySums
-			 * 
-			 * 
-			 */
-			
-	        //Buscamos las cuentas que sean "FLUJO DE EFECTIVO" de la tabla de GL_ACCOUNT para identificar las cuentas que son efectivo
-	        EntityCondition conditions0 = EntityCondition.makeCondition(
-	                EntityCondition.makeCondition("glAccountTypeId", EntityOperator.LIKE,"FLJ_EFEC_%"));
-	        List<String> selectedFields0 = UtilMisc.toList("glAccountId","naturaleza");
-	        List<GenericValue> accountsFlujoEfe = delegator.findByCondition("GlAccount", conditions0, selectedFields0, null);
-	        
-	        List<String> idCuentasFlujEfec = new ArrayList<String>();
-	        
-	        for (GenericValue genericValue : accountsFlujoEfe) {
-				
-	        	String idCta = genericValue.getString("glAccountId");
-	        	idCuentasFlujEfec.add(idCta);
-	        	cuentasFlujoEfectivo.put(idCta, genericValue);
-	        	
-			}
-	        
-	        Debug.logWarning("CUENTAS FLUJO EFECTIVO    "+idCuentasFlujEfec.toString(), MODULE);
-	        
-	        //Buscamos las cuentas que sean "EFECTIVO" de la tabla de GL_ACCOUNT para identificar las cuentas que son efectivo
-	        EntityCondition conditionsi = EntityCondition.makeCondition(
-	                EntityCondition.makeCondition("glAccountTypeId", EntityOperator.EQUALS,"EFECTIVO"));
-	        List<String> selectedFieldsi = UtilMisc.toList("glAccountId","naturaleza");
-	        List<GenericValue> accountsEfe = delegator.findByCondition("GlAccount", conditionsi, selectedFieldsi, null);
-	        
-	        List<String> idCuentasEfec = new ArrayList<String>();
-	        
-	        for (GenericValue genericValue : accountsEfe) {
-				
-	        	String idCta = genericValue.getString("glAccountId");
-	        	idCuentasEfec.add(idCta);
-	        	cuentasEfectivo.put(idCta, genericValue);
-	        	
-			}
-	        
-	        Debug.logWarning("CUENTAS EFECTIVO    "+idCuentasEfec.toString(), MODULE);	        
-						
-			
-			Debug.logWarning("FEcha inicial   ¿¿¡ "+asOfDateIni.toString(), MODULE);
-			Debug.logWarning("Fecha Final      [+ "+asOfDate.toString(), MODULE);
-			
-			
-	        //Buscamos las transacciones que sean "FLUJO_EFECTIVO" todas las cuentas que se tienen que mostrar 
-	        EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
-	                EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, organizationPartyId),
-	                EntityCondition.makeCondition("createdStamp", EntityOperator.GREATER_THAN_EQUAL_TO, asOfDateIni),
-	                EntityCondition.makeCondition("createdStamp", EntityOperator.LESS_THAN_EQUAL_TO, asOfDate),
-	                EntityCondition.makeCondition("glAccountId", EntityOperator.IN,idCuentasFlujEfec));
-	        List<String> selectedFields = UtilMisc.toList("acctgTransId", "glAccountId","debitCreditFlag","amount");
-	        List<GenericValue> accountsFlujo = delegator.findByCondition("AcctgTransEntry", conditions, selectedFields, UtilMisc.toList("glAccountId"));
-	        
-	        Debug.logWarning("AcctgTransEntry  FLUJO_EFECTIVO  $ "+accountsFlujo.toString(), MODULE);			
-	        
-	        for (GenericValue genericValue : accountsFlujo) {
-				
-	        	String idTrans = genericValue.getString("acctgTransId");
-	        	transflujosEfectivo.put(idTrans, genericValue);
-	        	
-			}
-	        
-	        
-	        EntityCondition conditions1 = EntityCondition.makeCondition(EntityOperator.AND,
-	                EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, organizationPartyId),
-	                EntityCondition.makeCondition("createdStamp", EntityOperator.GREATER_THAN_EQUAL_TO, asOfDateIni),
-	                EntityCondition.makeCondition("createdStamp", EntityOperator.LESS_THAN_EQUAL_TO, asOfDate),
-	                EntityCondition.makeCondition("glAccountId", EntityOperator.IN,idCuentasEfec));
-	        List<String> selectedFields1 = UtilMisc.toList("acctgTransId", "glAccountId","debitCreditFlag","amount");
-	        List<GenericValue> accountsEfectivo = delegator.findByCondition("AcctgTransEntry", conditions1, selectedFields1, UtilMisc.toList("glAccountId"));
-	        
-	        Debug.logWarning("AcctgTransEntry  EFECTIVO  % "+accountsEfectivo.toString(), MODULE);			
-	        
-	        for (GenericValue genericValue : accountsEfectivo) {
-				
-	        	String idTrans = genericValue.getString("acctgTransId");
-	        	transEfectivo.put(idTrans, genericValue);
-	        	
-	        }
-	        
-	        Map<String,GenericValue> transflujosEfectivoCopy =  new HashMap<String, GenericValue>();
-	        transflujosEfectivoCopy.putAll(transflujosEfectivo);
-	        
-            for (Map.Entry<String, GenericValue> assetAcc : transflujosEfectivoCopy.entrySet())
-            {
-            	
-            	if(transEfectivo.get(assetAcc.getKey()) == null){
-            		
-            		transflujosEfectivo.remove(assetAcc.getKey());
-            		Debug.logWarning("Se elimino el siguiente objeto  :: "+assetAcc,MODULE);
-            		
-            	}
-            	
-            }
-            
-            
-            Debug.logWarning("DATOS FINALES    "+transflujosEfectivo,MODULE);
-            
-            List<String> idTransVali = new ArrayList<String>();
-            //Se obtienen solo las transacciones validas
-            for (Map.Entry<String, GenericValue> assetAcc : transflujosEfectivo.entrySet())
-            {
-            	idTransVali.add(assetAcc.getKey());
-            }
-            
-            Debug.logWarning("TRANSACCIONES VALIDAS ::::::: >> "+idTransVali,MODULE);
-            
-	        //Obtenemos las transacciones válidas para sumarlas posteriormente
-	        EntityCondition conditions2 = EntityCondition.makeCondition(EntityOperator.AND,
-	                EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, organizationPartyId),
-	                EntityCondition.makeCondition("acctgTransId", EntityOperator.IN,idTransVali));
-	        List<String> selectedFields2 = UtilMisc.toList("acctgTransId", "glAccountId","debitCreditFlag","amount");
-	        List<GenericValue> transacValidas = delegator.findByCondition("AcctgTransEntry", conditions2, selectedFields2, UtilMisc.toList("glAccountId"));
-	        
-	        Debug.logWarning("AcctgTransEntry  (((  "+transacValidas.toString(), MODULE);			
-	        
-	        Map<String,BigDecimal> mapTransSumaDeb = new HashMap<String,BigDecimal>();
-	        Map<String,BigDecimal> mapTransSumaCre = new HashMap<String,BigDecimal>();
-	        Map<String,BigDecimal> mapTransTotal = new HashMap<String,BigDecimal>();
-	        
-	        for (GenericValue transEntry : transacValidas) {
-	        	
-	        	String idCta = transEntry.getString("glAccountId");
-	        	String bandera = transEntry.getString("debitCreditFlag");
-	        	String transId = transEntry.getString("acctgTransId");
-	        	BigDecimal monto = transEntry.getBigDecimal("amount");
-	        	
-	        	if(bandera.equals("D")){
-	        		
-		        	if(mapTransSumaDeb.get(idCta) != null){
-		        		//Se suma al monto anterior
-		        		monto = monto.add(mapTransSumaDeb.get(idCta));
-		        		
-		        	} else {
-		        		//Se agrega el monto y si no hay monto se setea zero
-		        		mapTransSumaDeb.put(idCta,monto == null ? BigDecimal.ZERO : monto);
-		        		
-		        	}	        		
-	        		
-	        	} else {
-	        		
-		        	if(mapTransSumaCre.get(idCta) != null){
-		        		//Se suma al monto anterior
-		        		monto = monto.add(mapTransSumaCre.get(idCta));
-		        		
-		        	} else {
-		        		//Se agrega el monto y si no hay monto se setea zero
-		        		mapTransSumaCre.put(idCta,monto == null ? BigDecimal.ZERO : monto);
-		        		
-		        	}
-	        		
-	        	}
-	        	
-	        	if(listTranCtas.get(idCta) != null){
-	        		
-	        		List<GenericValue> ltTrans = listTranCtas.get(idCta);
-	        		ltTrans.add(transEntry);
-	        		
-	        		
-	        	} else {
-	        		
-	        		List<GenericValue> ltTrans = new ArrayList<GenericValue>();
-	        		ltTrans.add(transEntry);
-	        		listTranCtas.put(idCta, ltTrans);
-	        		
-	        	}
-				
-			}
-	        
-	        
-	        Debug.logWarning("mapTransSumaDeb  '¡  "+mapTransSumaDeb.toString(), MODULE);	
-	        Debug.logWarning("mapTransSumaCre  '¡  "+mapTransSumaCre.toString(), MODULE);	
-	        
-	        
-	        /**
-	         * Despues de sumar los cargos(debitos) y abonos(creditos) se hace el saldo final de cada cuenta
-	         * dependiendo de la naturaleza de la cuenta
-	         */
-	        
-	        
-            for (Map.Entry<String, BigDecimal> transDebito : mapTransSumaDeb.entrySet())
-            {
-            	
-            	String idCta = transDebito.getKey();
-            	//Se obtiene el objeto GL_ACCOUNT para saber la naturaleza de la cuenta y decidir como se hara la suma total
-            	GenericValue Account = cuentasFlujoEfectivo.get(idCta);
-            	
-            	if(Account == null)
-            		Account = cuentasEfectivo.get(idCta);
-            	
-            	String natu = Account.getString("naturaleza");
-            	BigDecimal saldoFin = BigDecimal.ZERO;
-            	BigDecimal cargo = mapTransSumaDeb.get(idCta);
-            	BigDecimal abono = mapTransSumaCre.get(idCta);
-            	
-            	if(natu.equals("D")){ //Naturaleza Deudora
-            		
-            		saldoFin = (cargo==null?BigDecimal.ZERO:cargo).subtract(abono==null?BigDecimal.ZERO:abono); //Cargo - Abono
-            		
-            	} else { //Naturaleza Acreedora o Mixta
-            		
-            		saldoFin = (abono==null?BigDecimal.ZERO:abono).subtract(cargo==null?BigDecimal.ZERO:cargo); //Abono - Cargo
-            		
-            	}
-            	
-            	mapTransTotal.put(idCta, saldoFin);
-            	
-            }
-	        
-            Debug.logWarning("mapTransTotal  (((  "+mapTransTotal.toString(), MODULE);
-	        
-	        
-	        
-	        
-	        //ARMADO DEL REPORTE
-	        //Agregamos el encabezado del reporte
-	        FlujoEfectivo flujoActiOperacion = new FlujoEfectivo();
-	        flujoActiOperacion.setGrupoReport("Flujos de Efectivo por Actividades de Operación");
-	        flujosEfectivo.put("Flujos de Efectivo por Actividades de Operación", flujoActiOperacion);
-	        
-	        BigDecimal totalActOpera = BigDecimal.ZERO;
-	        BigDecimal totalAportaYCon = BigDecimal.ZERO;
-	        
-	        for (GenericValue genericValue : accountsFlujo) {
-				
-	        	String idCta = genericValue.getString("glAccountId");
-	        	
-	        	List<GenericValue> transac = genericValue.getRelated("AcctgTrans"); 
-	        	
-	        	
-	        	 Debug.logWarning("TRANSACCIONES ENCONTRADAS    ---... "+transac.toString(),MODULE);
-	        	
-	        	FlujoEfectivo flEf = new FlujoEfectivo();
-	        	flEf.setGrupoReport("Origen");
-	        	flujosEfectivo.put(idCta, flEf);
-	        	
-	        	if(idCta.startsWith("4.1")){
-	        		
-	        	} else {
-	        		
-	        		
-	        		
-	        	}
-	        	
-			}
-	        
-	        flujoActiOperacion.setSaldo(totalActOpera);
-	        flujosEfectivo.put("Flujos de Efectivo por Actividades de Operación", flujoActiOperacion);
-
-	        
-	        Map result = ServiceUtil.returnSuccess();
-	        result.put("datosReporte", flujosEfectivo);
-	        return result;
-        
-		} catch (GenericEntityException ex) {
-			return ServiceUtil.returnError(ex.getMessage());
-		}          
     }
 
     /**
@@ -2144,6 +1290,128 @@ public final class FinancialServices {
             return UtilMessage.createAndLogServiceError(e, "FinancialsError_CannotCreateComparativeBalanceSheet", locale, MODULE);
         }
     }
+    
+    /**
+     * Genera es Estado de Variación de Hacienda Publica / Patrimonio for two dates and determines the balance difference between the two. The balances are in BigDecimal.
+     * The output includes the result of getBalanceSheetForDate for the fromDate and thruDate and glFiscalTypeId1 and glFiscalTypeId2.
+     *
+     * @param dctx a <code>DispatchContext</code> value
+     * @param context a <code>Map</code> value
+     * @return a <code>Map</code> value
+     */
+    @SuppressWarnings("unchecked")
+    public static Map getComparativeVariacionPatrimonio(DispatchContext dctx, Map context){
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Locale locale = UtilCommon.getLocale(context);
+
+        // input parameters
+        String organizationPartyId = (String) context.get("organizationPartyId");
+        Timestamp fromDate = (Timestamp) context.get("fromDate");
+        Timestamp thruDate = (Timestamp) context.get("thruDate");
+        String fromPeriodId = (String) context.get("fromCustomTimePeriodId");
+        String thruPeriodId = (String) context.get("thruCustomTimePeriodId");
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        String glFiscalTypeId = (String) context.get("glFiscalTypeId");
+        
+        Debug.logWarning("glFiscalTypeId  }"+glFiscalTypeId, MODULE);
+        Debug.logWarning("fromDate   getComparativeVariacionPatrimonio  "+fromDate, MODULE);
+        Debug.logWarning("thruDate   getComparativeVariacionPatrimonio  "+thruDate, MODULE);
+        Debug.logWarning("fromCustomTimePeriodId   getComparativeVariacionPatrimonio  "+fromPeriodId, MODULE);
+        Debug.logWarning("thruCustomTimePeriodId   getComparativeVariacionPatrimonio  "+thruPeriodId, MODULE);
+
+        try {
+            // create the balance sheet for the fromDate
+            Map input = UtilMisc.toMap("organizationPartyId", organizationPartyId, "glFiscalTypeId", glFiscalTypeId, "asOfDate", fromDate,
+            						"userLogin", userLogin,"customTimePeriodId",fromPeriodId);
+            UtilAccountingTags.addTagParameters(context, input);
+            Map fromDateResults = dispatcher.runSync("getEdoVariacionHaciendaForDate", input);
+            if (ServiceUtil.isError(fromDateResults)) {
+                return UtilMessage.createAndLogServiceError(fromDateResults, "FinancialsError_CannotCreateComparativeBalanceSheet", locale, MODULE);
+            }
+
+            // create the balance sheet for the thruDate
+            input = UtilMisc.toMap("organizationPartyId", organizationPartyId, "glFiscalTypeId", glFiscalTypeId, "asOfDate", thruDate,
+					"userLogin", userLogin,"customTimePeriodId",thruPeriodId);
+            UtilAccountingTags.addTagParameters(context, input);
+            Map thruDateResults = dispatcher.runSync("getEdoVariacionHaciendaForDate", input);
+            if (ServiceUtil.isError(thruDateResults)) {
+                return UtilMessage.createAndLogServiceError(thruDateResults, "FinancialsError_CannotCreateComparativeBalanceSheet", locale, MODULE);
+            }
+
+            Map results = ServiceUtil.returnSuccess();
+
+            // include the two balance sheets in the results
+            results.put("fromDateAccountBalances", fromDateResults);
+            results.put("thruDateAccountBalances", thruDateResults);
+            
+            Debug.logWarning("fromDateAccountBalances  === "+fromDateResults.toString(),MODULE);
+            Debug.logWarning("thruDateAccountBalances  === "+thruDateResults.toString(),MODULE);
+
+            return results;
+        } catch (GenericServiceException e) {
+            return UtilMessage.createAndLogServiceError(e, "FinancialsError_CannotCreateComparativeBalanceSheet", locale, MODULE);
+        }
+    }       
+    
+    /**
+     * Busca las transacciones por cuenta para el estado de variacion de la hacienda publica /patrimonio , regresa las transacciones por grupos 
+     *
+     * @param dctx a <code>DispatchContext</code> value
+     * @param context a <code>Map</code> value
+     * @return a <code>Map</code> value
+     * @throws GenericEntityException 
+     */
+    @SuppressWarnings("unchecked")
+    public static Map getEdoVariacionHaciendaForDate(DispatchContext dctx, Map context) throws GenericEntityException {
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        Delegator delegator = dctx.getDelegator();
+        Timestamp asOfDate = (Timestamp) context.get("asOfDate");
+        String organizationPartyId = (String) context.get("organizationPartyId");
+        String glFiscalTypeId = (String) context.get("glFiscalTypeId");
+        String customTimePeriodId = (String) context.get("customTimePeriodId");
+        
+        Debug.logWarning("glFiscalTypeId  [ "+glFiscalTypeId+"]", MODULE);
+        Debug.logWarning("customTimePeriodId  [ "+customTimePeriodId+"]", MODULE);
+        Debug.logWarning("asOfDate  [ "+asOfDate+"]", MODULE);
+        
+        Timestamp desdeFecha = null;
+        
+        if(customTimePeriodId != null && !customTimePeriodId.isEmpty()){
+        	
+        	GenericValue timePeriod = delegator.findByPrimaryKeyCache("CustomTimePeriod", UtilMisc.toMap("customTimePeriodId", customTimePeriodId));
+        		
+        	desdeFecha = UtilDateTime.getDayEnd(UtilDateTime.toTimestamp(timePeriod.getDate("fromDate")));
+        	asOfDate = UtilDateTime.getDayEnd(UtilDateTime.toTimestamp(timePeriod.getDate("thruDate")));
+        		
+        } else {
+        	
+        	desdeFecha = UtilDateTime.getYearStart(asOfDate);
+        	
+        }
+        
+        
+        Debug.logWarning("desdeFecha  [ "+desdeFecha+"]", MODULE);
+        Debug.logWarning("asOfDate  [ "+asOfDate+"]", MODULE);
+        
+        
+    	Map<GenericValue,BigDecimal> cuentasPatrimonio = FastMap.newInstance();
+    	Map<GenericValue,BigDecimal> cuentasPatContribuido = FastMap.newInstance();
+    	Map<GenericValue,BigDecimal> cuentasPatGenAnterior = FastMap.newInstance();
+    	Map<GenericValue,BigDecimal> cuentasPatGenerado = FastMap.newInstance();
+    	
+    	cuentasPatrimonio = getAcctgTransAndEntriesForClass(cuentasPatrimonio, organizationPartyId, desdeFecha, asOfDate, glFiscalTypeId, ESTADO_VARIACION_PATRIMONIO.get(0), null, true, userLogin, dispatcher);
+    	cuentasPatContribuido = getAcctgTransAndEntriesForClass(cuentasPatContribuido, organizationPartyId, desdeFecha, asOfDate, glFiscalTypeId, ESTADO_VARIACION_PATRIMONIO.get(1), null, true, userLogin, dispatcher);
+    	cuentasPatGenAnterior = getAcctgTransAndEntriesForClass(cuentasPatGenAnterior, organizationPartyId, desdeFecha, asOfDate, glFiscalTypeId, ESTADO_VARIACION_PATRIMONIO.get(2), null, true, userLogin, dispatcher);
+    	cuentasPatGenerado = getAcctgTransAndEntriesForClass(cuentasPatGenerado, organizationPartyId, desdeFecha, asOfDate, glFiscalTypeId, ESTADO_VARIACION_PATRIMONIO.get(3), null, true, userLogin, dispatcher);
+    	
+        Map results = ServiceUtil.returnSuccess();
+        results.put("cuentasPatrimonio",cuentasPatrimonio);
+        results.put("cuentasPatContribuido",cuentasPatContribuido);
+        results.put("cuentasPatGenAnterior",cuentasPatGenAnterior);
+        results.put("cuentasPatGenerado",cuentasPatGenerado);
+        return results;
+    }    
     
     /**
      * Generates balance sheet for two dates and determines the balance difference between the two. The balances are in BigDecimal.
@@ -2543,125 +1811,57 @@ public final class FinancialServices {
         Timestamp thruDate = (Timestamp) context.get("thruDate");
         String organizationPartyId = (String) context.get("organizationPartyId");
         String glFiscalTypeId = (String) context.get("glFiscalTypeId");
+        	
+    	Map<GenericValue,BigDecimal> cuentasImpuesto = FastMap.newInstance();
+    	Map<GenericValue,BigDecimal> cuentasContribu = FastMap.newInstance();
+    	Map<GenericValue,BigDecimal> cuentasParticipa = FastMap.newInstance();
+    	Map<GenericValue,BigDecimal> cuentasTransfe = FastMap.newInstance();
+    	Map<GenericValue,BigDecimal> cuentasOtrosIng = FastMap.newInstance();
+    	Map<GenericValue,BigDecimal> cuentasIcreVaria = FastMap.newInstance();
+    	Map<GenericValue,BigDecimal> cuentasGastosFun = FastMap.newInstance();
+    	Map<GenericValue,BigDecimal> cuentasTransGastos = FastMap.newInstance();
+    	Map<GenericValue,BigDecimal> cuentaPartiAporta = FastMap.newInstance();
+    	Map<GenericValue,BigDecimal> cuentaInteComis = FastMap.newInstance();
+    	Map<GenericValue,BigDecimal> cuentasOtrosGastos = FastMap.newInstance();        	
+        
+    	cuentasImpuesto = getAcctgTransAndEntriesForClass(cuentasImpuesto, organizationPartyId, fromDate, thruDate, glFiscalTypeId, ESTADO_FLUJO_EFECTIVO.get(0), null, true, userLogin, dispatcher);
+    	cuentasContribu = getAcctgTransAndEntriesForClass(cuentasContribu, organizationPartyId, fromDate, thruDate, glFiscalTypeId, ESTADO_FLUJO_EFECTIVO.get(1), null, true, userLogin, dispatcher);
+    	cuentasParticipa = getAcctgTransAndEntriesForClass(cuentasParticipa, organizationPartyId, fromDate, thruDate, glFiscalTypeId, ESTADO_FLUJO_EFECTIVO.get(2), null, true, userLogin, dispatcher);
+    	cuentasTransfe = getAcctgTransAndEntriesForClass(cuentasTransfe, organizationPartyId, fromDate, thruDate, glFiscalTypeId, ESTADO_FLUJO_EFECTIVO.get(3), null, true, userLogin, dispatcher);
+    	cuentasOtrosIng = getAcctgTransAndEntriesForClass(cuentasOtrosIng, organizationPartyId, fromDate, thruDate, glFiscalTypeId, ESTADO_FLUJO_EFECTIVO.get(4), null, true, userLogin, dispatcher);
+    	cuentasIcreVaria = getAcctgTransAndEntriesForClass(cuentasIcreVaria, organizationPartyId, fromDate, thruDate, glFiscalTypeId, ESTADO_FLUJO_EFECTIVO.get(5), null, true, userLogin, dispatcher);
+    	cuentasGastosFun = getAcctgTransAndEntriesForClass(cuentasGastosFun, organizationPartyId, fromDate, thruDate, glFiscalTypeId, ESTADO_FLUJO_EFECTIVO.get(6), null, true, userLogin, dispatcher);
+    	cuentasTransGastos = getAcctgTransAndEntriesForClass(cuentasTransGastos, organizationPartyId, fromDate, thruDate, glFiscalTypeId, ESTADO_FLUJO_EFECTIVO.get(7), null, true, userLogin, dispatcher);
+    	cuentaPartiAporta = getAcctgTransAndEntriesForClass(cuentaPartiAporta, organizationPartyId, fromDate, thruDate, glFiscalTypeId, ESTADO_FLUJO_EFECTIVO.get(8), null, true, userLogin, dispatcher);
+    	cuentaInteComis = getAcctgTransAndEntriesForClass(cuentaInteComis, organizationPartyId, fromDate, thruDate, glFiscalTypeId, ESTADO_FLUJO_EFECTIVO.get(9), null, true, userLogin, dispatcher);
+    	cuentasOtrosGastos = getAcctgTransAndEntriesForClass(cuentasOtrosGastos, organizationPartyId, fromDate, thruDate, glFiscalTypeId, ESTADO_FLUJO_EFECTIVO.get(10), null, true, userLogin, dispatcher);
+    	
+        Debug.logWarning("CUENTAS cuentasImpuestos "+cuentasImpuesto.toString(), MODULE);
+        Debug.logWarning("CUENTAS cuentasContribu "+cuentasContribu.toString(), MODULE);
+        Debug.logWarning("CUENTAS cuentasParticipa "+cuentasParticipa.toString(), MODULE);
+        Debug.logWarning("CUENTAS cuentasTransfe "+cuentasTransfe.toString(), MODULE);
+        Debug.logWarning("CUENTAS cuentasOtrosIng "+cuentasOtrosIng.toString(), MODULE);
+        Debug.logWarning("CUENTAS cuentasIcreVaria "+cuentasIcreVaria.toString(), MODULE);
+        Debug.logWarning("CUENTAS cuentasGastosFun "+cuentasGastosFun.toString(), MODULE);
+        Debug.logWarning("CUENTAS cuentasTransGastos "+cuentasTransGastos.toString(), MODULE);
+        Debug.logWarning("CUENTAS cuentaPartiAporta "+cuentaPartiAporta.toString(), MODULE);
+        Debug.logWarning("CUENTAS cuentaInteComis "+cuentaInteComis.toString(), MODULE);
+        Debug.logWarning("CUENTAS cuentasOtrosGastos "+cuentasOtrosGastos.toString(), MODULE);
+        
 
-        	
-//	        //Obtenemos las transacciones válidas para sumarlas posteriormente
-//	        EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
-//	                EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, organizationPartyId),
-//	                EntityCondition.makeCondition("glAccountClassId", EntityOperator.IN,ESTADO_FLUJO_EFECTIVO),
-//	                EntityCondition.makeCondition("transactionDate",EntityOperator.LESS_THAN_EQUAL_TO,thruDate),
-//	                EntityCondition.makeCondition("transactionDate",EntityOperator.GREATER_THAN_EQUAL_TO,fromDate),
-//	                EntityCondition.makeCondition("glFiscalTypeId",EntityOperator.EQUALS,glFiscalTypeId));
-//	        List<GenericValue> transacFlujoEfec = delegator.findByCondition("AcctgTransAndEntries", conditions, null, UtilMisc.toList("glAccountId"));
-//	        
-//            Debug.logWarning("TRANSACCIONES entre las fechas ["+fromDate+"]  -  ["+thruDate+"]  : "+transacFlujoEfec.toString(), MODULE);
-//            
-//	        //Obtenemos las transacciones válidas para sumarlas posteriormente
-//	        EntityCondition conditions1 = EntityCondition.makeCondition(
-//	                EntityCondition.makeCondition("glAccountClassId", EntityOperator.IN,ESTADO_FLUJO_EFECTIVO));
-//	        List<GenericValue> cuentasFlujoEfec = delegator.findByCondition("GlAccount", conditions1, null, UtilMisc.toList("glAccountId"));
-//            
-//	        Debug.logWarning("CUENTAS entre las fechas ["+fromDate+"]  -  ["+thruDate+"]  : "+cuentasFlujoEfec.toString(), MODULE);
-//	        
-//	        Map<GenericValue, BigDecimal> glAccountSums = FastMap.newInstance(); 
-//	        
-//	        for (GenericValue cuentasEfec : cuentasFlujoEfec) {
-//				
-//	        	glAccountSums.put(cuentasEfec, cuentasEfec.getBigDecimal("postedBalance"));
-//	        	
-//			}
-//	        
-//	        Map input = UtilMisc.toMap("glAccountSums",glAccountSums,"transactionEntries",transacFlujoEfec,"userLogin", userLogin);
-//	        
-//	        //Obtenemos las cuentas con sus sumas
-//	        Map tmpResult = dispatcher.runSync("addToAccountBalances", input);
-//	        
-//	        Map<GenericValue, BigDecimal> cuentasSumas = (Map<GenericValue, BigDecimal>) tmpResult.get("glAccountSums");
-//	        
-//	        Debug.logWarning(" Cuentas que contendran las sumas   "+cuentasSumas.toString(), MODULE);
-//        	
-//	        for (Iterator<GenericValue> iter = cuentasSumas.keySet().iterator(); iter.hasNext();) {
-//	        	
-//	        	GenericValue cuenta = iter.next();
-//	        	
-//	        	BigDecimal monto = (BigDecimal) cuentasSumas.get(cuenta);
-//	        	
-//	        	if (UtilAccounting.isAccountClass(cuenta, "IMPUESTOS")){
-//	        		cuentasImpuesto.put(cuenta, monto);
-//	        	} else if (UtilAccounting.isAccountClass(cuenta, "CONTRIBUCIONES M")){
-//	        		cuentasContribu.put(cuenta, monto);
-//	        	} else if (UtilAccounting.isAccountClass(cuenta, "PARTICIPACIONESyA")){
-//	        		cuentasParticipa.put(cuenta, monto);
-//	        	} else if (UtilAccounting.isAccountClass(cuenta, "TASyOA")){
-//	        		cuentasTransfe.put(cuenta, monto);
-//	        	} else if (UtilAccounting.isAccountClass(cuenta, "OTROS IyB")){
-//	        		cuentasOtrosIng.put(cuenta, monto);
-//	        	} else if (UtilAccounting.isAccountClass(cuenta, "IVI")){
-//	        		cuentasIcreVaria.put(cuenta, monto);
-//	        	} else if (UtilAccounting.isAccountClass(cuenta, "GASTO DE FUNCION")){
-//	        		cuentasGastosFun.put(cuenta, monto);
-//	        	} else if (UtilAccounting.isAccountClass(cuenta, "TASyOA DE GASTOS")){
-//	        		cuentasTransGastos.put(cuenta, monto);
-//	        	} else if (UtilAccounting.isAccountClass(cuenta, "PARTICIPyA DE GASTOS")){
-//	        		cuentaPartiAporta.put(cuenta, monto);
-//	        	} else if (UtilAccounting.isAccountClass(cuenta, "ICyOGDP")){
-//	        		cuentaInteComis.put(cuenta, monto);
-//	        	} else if (UtilAccounting.isAccountClass(cuenta, "OGPE")){
-//	        		cuentasOtrosGastos.put(cuenta, monto);
-//	        	} 
-//	        	
-//	        }
-        	
-        	Map<GenericValue,BigDecimal> cuentasImpuesto = FastMap.newInstance();
-        	Map<GenericValue,BigDecimal> cuentasContribu = FastMap.newInstance();
-        	Map<GenericValue,BigDecimal> cuentasParticipa = FastMap.newInstance();
-        	Map<GenericValue,BigDecimal> cuentasTransfe = FastMap.newInstance();
-        	Map<GenericValue,BigDecimal> cuentasOtrosIng = FastMap.newInstance();
-        	Map<GenericValue,BigDecimal> cuentasIcreVaria = FastMap.newInstance();
-        	Map<GenericValue,BigDecimal> cuentasGastosFun = FastMap.newInstance();
-        	Map<GenericValue,BigDecimal> cuentasTransGastos = FastMap.newInstance();
-        	Map<GenericValue,BigDecimal> cuentaPartiAporta = FastMap.newInstance();
-        	Map<GenericValue,BigDecimal> cuentaInteComis = FastMap.newInstance();
-        	Map<GenericValue,BigDecimal> cuentasOtrosGastos = FastMap.newInstance();        	
-	        
-        	cuentasImpuesto = getAcctgTransAndEntriesForClass(cuentasImpuesto, organizationPartyId, fromDate, thruDate, glFiscalTypeId, ESTADO_FLUJO_EFECTIVO.get(0), null, true, userLogin, dispatcher);
-        	cuentasContribu = getAcctgTransAndEntriesForClass(cuentasContribu, organizationPartyId, fromDate, thruDate, glFiscalTypeId, ESTADO_FLUJO_EFECTIVO.get(1), null, true, userLogin, dispatcher);
-        	cuentasParticipa = getAcctgTransAndEntriesForClass(cuentasParticipa, organizationPartyId, fromDate, thruDate, glFiscalTypeId, ESTADO_FLUJO_EFECTIVO.get(2), null, true, userLogin, dispatcher);
-        	cuentasTransfe = getAcctgTransAndEntriesForClass(cuentasTransfe, organizationPartyId, fromDate, thruDate, glFiscalTypeId, ESTADO_FLUJO_EFECTIVO.get(3), null, true, userLogin, dispatcher);
-        	cuentasOtrosIng = getAcctgTransAndEntriesForClass(cuentasOtrosIng, organizationPartyId, fromDate, thruDate, glFiscalTypeId, ESTADO_FLUJO_EFECTIVO.get(4), null, true, userLogin, dispatcher);
-        	cuentasIcreVaria = getAcctgTransAndEntriesForClass(cuentasIcreVaria, organizationPartyId, fromDate, thruDate, glFiscalTypeId, ESTADO_FLUJO_EFECTIVO.get(5), null, true, userLogin, dispatcher);
-        	cuentasGastosFun = getAcctgTransAndEntriesForClass(cuentasGastosFun, organizationPartyId, fromDate, thruDate, glFiscalTypeId, ESTADO_FLUJO_EFECTIVO.get(6), null, true, userLogin, dispatcher);
-        	cuentasTransGastos = getAcctgTransAndEntriesForClass(cuentasTransGastos, organizationPartyId, fromDate, thruDate, glFiscalTypeId, ESTADO_FLUJO_EFECTIVO.get(7), null, true, userLogin, dispatcher);
-        	cuentaPartiAporta = getAcctgTransAndEntriesForClass(cuentaPartiAporta, organizationPartyId, fromDate, thruDate, glFiscalTypeId, ESTADO_FLUJO_EFECTIVO.get(8), null, true, userLogin, dispatcher);
-        	cuentaInteComis = getAcctgTransAndEntriesForClass(cuentaInteComis, organizationPartyId, fromDate, thruDate, glFiscalTypeId, ESTADO_FLUJO_EFECTIVO.get(9), null, true, userLogin, dispatcher);
-        	cuentasOtrosGastos = getAcctgTransAndEntriesForClass(cuentasOtrosGastos, organizationPartyId, fromDate, thruDate, glFiscalTypeId, ESTADO_FLUJO_EFECTIVO.get(10), null, true, userLogin, dispatcher);
-        	
-	        Debug.logWarning("CUENTAS cuentasImpuestos "+cuentasImpuesto.toString(), MODULE);
-	        Debug.logWarning("CUENTAS cuentasContribu "+cuentasContribu.toString(), MODULE);
-	        Debug.logWarning("CUENTAS cuentasParticipa "+cuentasParticipa.toString(), MODULE);
-	        Debug.logWarning("CUENTAS cuentasTransfe "+cuentasTransfe.toString(), MODULE);
-	        Debug.logWarning("CUENTAS cuentasOtrosIng "+cuentasOtrosIng.toString(), MODULE);
-	        Debug.logWarning("CUENTAS cuentasIcreVaria "+cuentasIcreVaria.toString(), MODULE);
-	        Debug.logWarning("CUENTAS cuentasGastosFun "+cuentasGastosFun.toString(), MODULE);
-	        Debug.logWarning("CUENTAS cuentasTransGastos "+cuentasTransGastos.toString(), MODULE);
-	        Debug.logWarning("CUENTAS cuentaPartiAporta "+cuentaPartiAporta.toString(), MODULE);
-	        Debug.logWarning("CUENTAS cuentaInteComis "+cuentaInteComis.toString(), MODULE);
-	        Debug.logWarning("CUENTAS cuentasOtrosGastos "+cuentasOtrosGastos.toString(), MODULE);
-	        
-
-            Map results = ServiceUtil.returnSuccess();
-            results.put("cuentasImpuesto", cuentasImpuesto);
-            results.put("cuentasContribu", cuentasContribu);
-            results.put("cuentasParticipa", cuentasParticipa);
-            results.put("cuentasTransfe", cuentasTransfe);
-            results.put("cuentasOtrosIng", cuentasOtrosIng);
-            results.put("cuentasIcreVaria", cuentasIcreVaria);
-            results.put("cuentasGastosFun", cuentasGastosFun);
-            results.put("cuentasTransGastos", cuentasTransGastos);
-            results.put("cuentaPartiAporta", cuentaPartiAporta);
-            results.put("cuentaInteComis", cuentaInteComis);
-            results.put("cuentasOtrosGastos", cuentasOtrosGastos);
-            return results;
+        Map results = ServiceUtil.returnSuccess();
+        results.put("cuentasImpuesto", cuentasImpuesto);
+        results.put("cuentasContribu", cuentasContribu);
+        results.put("cuentasParticipa", cuentasParticipa);
+        results.put("cuentasTransfe", cuentasTransfe);
+        results.put("cuentasOtrosIng", cuentasOtrosIng);
+        results.put("cuentasIcreVaria", cuentasIcreVaria);
+        results.put("cuentasGastosFun", cuentasGastosFun);
+        results.put("cuentasTransGastos", cuentasTransGastos);
+        results.put("cuentaPartiAporta", cuentaPartiAporta);
+        results.put("cuentaInteComis", cuentaInteComis);
+        results.put("cuentasOtrosGastos", cuentasOtrosGastos);
+        return results;
     }    
     
     /**

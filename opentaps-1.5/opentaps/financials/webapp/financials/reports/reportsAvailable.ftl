@@ -47,12 +47,14 @@
     <li><a href="<@ofbizUrl>EstadoDeSituacionFinanciera</@ofbizUrl>">${uiLabelMap.SituacionFinanciera}</a></li>
     <li><a href="<@ofbizUrl>EstadoDeActividades</@ofbizUrl>">${uiLabelMap.EdoActividades}</a></li>
     <li><a href="<@ofbizUrl>EstadoAnaliticoActivo</@ofbizUrl>">${uiLabelMap.EdoAnaliticoActivo}</a></li>
-    <li><a href="<@ofbizUrl>EstadoFlujoEfectivo</@ofbizUrl>">${uiLabelMap.EdoFlujoEfect}</a></li> 
+    <li><a href="<@ofbizUrl>EstadoFlujoEfectivo</@ofbizUrl>">${uiLabelMap.EdoFlujoEfect}</a></li>
+    <li><a href="<@ofbizUrl>VariacionPatrimonio</@ofbizUrl>">${uiLabelMap.VariacionHacienda}</a></li> 
     </@displayReportGroup>
 
   </td>
   <td style="vertical-align: top;">
- 
+  
+ <#--
     <p><b>${uiLabelMap.ProductInventory}</b>
     <ul class="bulletList">
     <li><a href="<@ofbizUrl>InventoryValuationReport</@ofbizUrl>">${uiLabelMap.FinancialsInventoryValuationReport}</a></li>
@@ -77,6 +79,7 @@
     <li><a href="<@ofbizUrl>SalesByStoreByDayReportSetup</@ofbizUrl>">${uiLabelMap.FinancialsSalesByStoreByDayReport}</a></li>
     </ul>
     </p>
+-->
 
   </td>
 </tr>

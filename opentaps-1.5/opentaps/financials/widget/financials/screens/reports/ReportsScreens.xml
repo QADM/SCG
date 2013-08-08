@@ -426,7 +426,37 @@
                 </decorator-screen>
             </widgets>
         </section>
-    </screen>           
+    </screen>   
+    
+	<screen name="VariacionPat">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="VariacionHacienda"/>
+                <set field="organizationPartyId" from-field="parameters.organizationPartyId"/> <!-- for the ftl -->
+                <set field="returnPage" value="reports"/>
+                <set field="returnLabel" value="FinancialsReturnToReports"/>
+                <set field="screenRequest" value="VariacionPatrimonio"/>
+                <set field="reportRequest" value="JRVariacionPatr"/>
+                <set field="doCsv" value="Y"/> <!-- PDF and XLS by default -->
+				<script location="component://financials/webapp/financials/WEB-INF/actions/includes/parseReportOptions.bsh"/>
+				<script location="component://financials/webapp/financials/WEB-INF/actions/reports/edoVariacionPatrimonio.bsh"/>  
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <frame-container title="${uiLabelMap.VariacionHacienda}">
+                          <platform-specific><html>
+                            <html-template location="component://financials/webapp/financials/includes/stateReportOptions.ftl"/>
+                          </html></platform-specific>
+                          <platform-specific><html>
+                            <html-template location="component://financials/webapp/financials/reports/edoVariacionPatrimonio.ftl"/>
+                          </html></platform-specific>
+                        </frame-container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>                  
 
 	<!-- @JSCF -->
     <screen name="EquityStatement">
