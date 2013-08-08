@@ -118,7 +118,7 @@ under the License.
 	   <field name="nivelId" title="Nivel" >
            	 <drop-down allow-empty="false" current="selected" >
                 <entity-options description="${descripcion}" entity-name="NivelPresup" key-field-name="clasificacionId">
-                   <entity-constraint name="clasificacionId" operator="equals" value="1002"/>
+                   <entity-constraint name="clasificacionId" operator="equals" value="CL_ADMINISTRATIVA"/>
                     <entity-order-by field-name="descripcion"/>
                 </entity-options>
            	 </drop-down>
