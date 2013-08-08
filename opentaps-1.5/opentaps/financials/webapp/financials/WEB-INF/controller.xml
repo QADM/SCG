@@ -923,7 +923,11 @@
     <request-map uri="EstadoFlujoEfectivo">
         <security https="true" auth="true"/>
         <response name="success" type="view" value="EstadoFlujoEfectivo"/>
-    </request-map>    
+    </request-map>
+    <request-map uri="VariacionPatrimonio">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="VariacionPatrimonio"/>
+    </request-map>           
     <!-- @JSCF -->         
 
     <request-map uri="EquityStatement">
@@ -1163,7 +1167,29 @@
     <request-map uri="JREdoFlujosEfecCSV">
         <security https="true" auth="true"/>
         <response name="success" type="view" value="JREdoFlujosEfecCSV"/>
-    </request-map>                    
+    </request-map>     
+    
+	<!-- Variacion en la haciendo publica y patrimonio report  -->
+    <request-map uri="JRVariacionPatr">
+        <security https="true" auth="true"/>
+        <event type="java" path="com.opensourcestrategies.financials.reports.FinancialReports" invoke="prepareComparativeVariacionPatrimonio"/>
+        <response name="pdf" type="view" value="JRVariacionPatrPDF"/>
+        <response name="xls" type="view" value="JRVariacionPatrXLS"/>
+        <response name="csv" type="view" value="JRVariacionPatrCSV"/>
+        <response name="error" type="request-redirect-noparam" value="VariacionPatrimonio"/>
+    </request-map>
+    <request-map uri="JRVariacionPatrPDF">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="JRVariacionPatrPDF"/>
+    </request-map>
+    <request-map uri="JRVariacionPatrXLS">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="JRVariacionPatrXLS"/>
+    </request-map>
+    <request-map uri="JRVariacionPatrCSV">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="JRVariacionPatrCSV"/>
+    </request-map>                        
 
 	<!-- @JSCF -->
 	
@@ -2261,7 +2287,11 @@
 	<view-map name="JREdoFlujosEfecXLS" type="jasperreports" page="component://financials/webapp/financials/reports/repository/EdoFlujosEfect.jrxml" content-type="application/vnd.ms-excel" encoding="none"/>
 	<view-map name="JREdoFlujosEfecCSV" type="jasperreports" page="component://financials/webapp/financials/reports/repository/EdoFlujosEfect.jrxml" content-type="text/csv" encoding="none"/>
 		
-	    
+    <view-map name="VariacionPatrimonio" type="screen" page="component://financials/widget/financials/screens/reports/ReportsScreens.xml#VariacionPat"/>
+	<view-map name="JRVariacionPatrPDF" type="jasperreports" page="component://financials/webapp/financials/reports/repository/EdoVariacionPatromonio.jrxml" content-type="application/pdf" encoding="none"/>
+	<view-map name="JRVariacionPatrXLS" type="jasperreports" page="component://financials/webapp/financials/reports/repository/EdoVariacionPatromonio.jrxml" content-type="application/vnd.ms-excel" encoding="none"/>
+	<view-map name="JRVariacionPatrCSV" type="jasperreports" page="component://financials/webapp/financials/reports/repository/EdoVariacionPatromonio.jrxml" content-type="text/csv" encoding="none"/>
+		    
     <!-- Pantallas de reportes CUSTOM @JSCF -->
     
     <view-map name="ComparativeCashFlowStatement" type="screen" page="component://financials/widget/financials/screens/reports/ReportsScreens.xml#ComparativeCashFlowStatement"/>

@@ -23,7 +23,7 @@
 	<#assign totFin = 0.0>
 	<#assign totDif = 0.0>   
    <#list accounts as account>   
-     <#if account?has_content>
+     <#if account?has_content && (balances1.get(account)?has_content || balances2.get(account)?has_content)>
        <tr>
          <td class="tabletext">${account.accountCode?if_exists}: ${account.accountName?if_exists} (<a href="<@ofbizUrl>AccountActivitiesDetail?glAccountId=${account.glAccountId?if_exists}&organizationPartyId=${organizationPartyId}</@ofbizUrl>" class="buttontext">${account.glAccountId?if_exists}</a>)</td>
          <td class="tabletext" align="right"><@ofbizCurrency amount=balances1.get(account) isoCode=currencyUomId/></td>

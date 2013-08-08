@@ -98,7 +98,6 @@ import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.repository.RepositoryException;
 
 import com.opensourcestrategies.financials.accounts.AccountsHelper;
-import com.opensourcestrategies.financials.financials.AnaliticoActivo;
 import com.opensourcestrategies.financials.financials.FinancialServices;
 import com.opensourcestrategies.financials.util.UtilFinancial;
 
@@ -249,6 +248,271 @@ public final class FinancialReports {
         return ctxt;
     }
 
+    /**
+     * Prepare data source and parameters for comparative variacion de la hacienda publica / patrimonio report.
+     * @param request a <code>HttpServletRequest</code> value
+     * @param response a <code>HttpServletResponse</code> value
+     * @return the event response <code>String</code> value
+     */
+    @SuppressWarnings("unchecked")
+    public static String prepareComparativeVariacionPatrimonio(HttpServletRequest request, HttpServletResponse response) {
+        LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
+        Locale locale = UtilHttp.getLocale(request);
+        ResourceBundleMapWrapper uiLabelMap = UtilMessage.getUiLabels(locale);
+        String reportType = UtilCommon.getParameter(request, "type");
+
+        try {
+        	
+        	Map<String,Object> mapDatos = preparaDatosPreCompara(request);
+        	
+            if (mapDatos.get("fromDate") == null){
+            	mapDatos.put("fromDate", UtilDateTime.toTimestamp(1, 1, 1980, 0, 0, 0));//Se coloca una fecha antigua para no obtener resultados
+            }
+            if (mapDatos.get("thruDate") == null) {
+                return UtilMessage.createAndLogEventError(request, "FinancialsError_FromOrThruDateMissing", locale, MODULE);
+            }
+
+            UtilAccountingTags.addTagParameters(request, mapDatos);
+            Map<String, Object> results = dispatcher.runSync("getComparativeVariacionPatrimonio", dispatcher.getDispatchContext().makeValidContext("getComparativeVariacionPatrimonio", ModelService.IN_PARAM, mapDatos));
+
+            Map<String, Object> fromDateAccountBalances = (Map<String, Object>) results.get("fromDateAccountBalances");
+            Map<String, Object> thruDateAccountBalances = (Map<String, Object>) results.get("thruDateAccountBalances");
+            
+            
+        	Map<GenericValue,BigDecimal> cuentasPatrimonioFr = (Map<GenericValue, BigDecimal>) fromDateAccountBalances.get("cuentasPatrimonio");
+        	List<GenericValue> cuentasPatrimonioFrList = EntityUtil.orderBy(((Map<GenericValue, BigDecimal>) fromDateAccountBalances.get("cuentasPatrimonio")).keySet(), UtilMisc.toList("glAccountId"));
+        	Map<GenericValue,BigDecimal> cuentasPatContribuidoFr = (Map<GenericValue, BigDecimal>) fromDateAccountBalances.get("cuentasPatContribuido");
+        	List<GenericValue> cuentasPatContribuidoFrList = EntityUtil.orderBy(((Map<GenericValue, BigDecimal>) fromDateAccountBalances.get("cuentasPatContribuido")).keySet(), UtilMisc.toList("glAccountId"));
+        	Map<GenericValue,BigDecimal> cuentasPatGenAnteriorFr = (Map<GenericValue, BigDecimal>) fromDateAccountBalances.get("cuentasPatGenAnterior");
+        	List<GenericValue> cuentasPatGenAnteriorFrList = EntityUtil.orderBy(((Map<GenericValue, BigDecimal>) fromDateAccountBalances.get("cuentasPatGenAnterior")).keySet(), UtilMisc.toList("glAccountId"));        	
+        	Map<GenericValue,BigDecimal> cuentasPatGeneradoFr = (Map<GenericValue, BigDecimal>) fromDateAccountBalances.get("cuentasPatGenerado");
+        	List<GenericValue> cuentasPatGeneradoFrList = EntityUtil.orderBy(((Map<GenericValue, BigDecimal>) fromDateAccountBalances.get("cuentasPatGenerado")).keySet(), UtilMisc.toList("glAccountId"));        	
+        	
+        	Map<GenericValue,BigDecimal> cuentasPatrimonioTr = (Map<GenericValue, BigDecimal>) thruDateAccountBalances.get("cuentasPatrimonio");
+        	List<GenericValue> cuentasPatrimonioTrList = EntityUtil.orderBy(((Map<GenericValue, BigDecimal>) thruDateAccountBalances.get("cuentasPatrimonio")).keySet(), UtilMisc.toList("glAccountId"));
+        	Map<GenericValue,BigDecimal> cuentasPatContribuidoTr = (Map<GenericValue, BigDecimal>) thruDateAccountBalances.get("cuentasPatContribuido");
+        	List<GenericValue> cuentasPatContribuidoTrList = EntityUtil.orderBy(((Map<GenericValue, BigDecimal>) thruDateAccountBalances.get("cuentasPatContribuido")).keySet(), UtilMisc.toList("glAccountId"));
+        	Map<GenericValue,BigDecimal> cuentasPatGenAnteriorTr = (Map<GenericValue, BigDecimal>) thruDateAccountBalances.get("cuentasPatGenAnterior");
+        	List<GenericValue> cuentasPatGenAnteriorTrList = EntityUtil.orderBy(((Map<GenericValue, BigDecimal>) thruDateAccountBalances.get("cuentasPatGenAnterior")).keySet(), UtilMisc.toList("glAccountId"));        	
+        	Map<GenericValue,BigDecimal> cuentasPatGeneradoTr = (Map<GenericValue, BigDecimal>) thruDateAccountBalances.get("cuentasPatGenerado");
+        	List<GenericValue> cuentasPatGeneradoTrList = EntityUtil.orderBy(((Map<GenericValue, BigDecimal>) thruDateAccountBalances.get("cuentasPatGenerado")).keySet(), UtilMisc.toList("glAccountId"));        	
+
+            List<Map<String, Object>> rows = FastList.newInstance(); 
+            
+            Map<Integer, BigDecimal> primerBloque = FastMap.newInstance();
+            String nombre = null;
+            
+            //Estas cuentas se ordenan para mostrarse en la columna correspondiente
+        	for (GenericValue account : cuentasPatrimonioFrList) {
+        		
+        		String cuenta = account.getString("glAccountId");
+        		BigDecimal monto = cuentasPatrimonioFr.get(account) == null ? null : cuentasPatrimonioFr.get(account).divide(MIL);
+        		
+        		if(cuenta.equals("3.1")){
+        			primerBloque.put(Integer.valueOf(1), monto);
+        		} else if(cuenta.equals("3.2.2")){
+        			primerBloque.put(Integer.valueOf(2), monto);
+        		} else if(cuenta.equals("3.2.1")){
+        			primerBloque.put(Integer.valueOf(3), monto);
+        		} else if(cuenta.equals("3.3")){
+        			primerBloque.put(Integer.valueOf(4), monto);
+        			nombre = account.getString("accountName");
+        		}
+			}
+        	
+        	BigDecimal total = ZERO;
+        	total = (primerBloque.get(Integer.valueOf(1)) == null ? ZERO : primerBloque.get(Integer.valueOf(1))).add(
+        			(primerBloque.get(Integer.valueOf(2)) == null ? ZERO : primerBloque.get(Integer.valueOf(2)))).add(
+        			(primerBloque.get(Integer.valueOf(3)) == null ? ZERO : primerBloque.get(Integer.valueOf(3)))).add(
+        			(primerBloque.get(Integer.valueOf(4)) == null ? ZERO : primerBloque.get(Integer.valueOf(4))));
+        	
+        	//Agregamos la primer fila
+        	Map<String, Object> row = FastMap.newInstance();
+        	row.put("accountName", uiLabelMap.get("PatrimonioNetoAnterior"));
+        	row.put("contribuido", primerBloque.get(Integer.valueOf(1)) == null ? null : primerBloque.get(Integer.valueOf(1)).divide(MIL));
+        	row.put("ejercicio", primerBloque.get(Integer.valueOf(2)) == null ? null : primerBloque.get(Integer.valueOf(2)).divide(MIL));
+        	row.put("anteriores", primerBloque.get(Integer.valueOf(3)) == null ? null : primerBloque.get(Integer.valueOf(3)).divide(MIL));
+        	row.put("ajustes", primerBloque.get(Integer.valueOf(4)) == null ? null : primerBloque.get(Integer.valueOf(4)).divide(MIL));
+        	row.put("total", total == null ? null : total.divide(MIL));
+        	row.put("accountTypeSeqNum", Integer.valueOf(1));
+        	rows.add(row);
+        	
+        	Debug.logWarning("rows 1  }"+row, MODULE);
+        	
+        	//Agregamos las filas de ejecicios anteriores
+        	armaVariacionPatri(rows, cuentasPatGenAnteriorFrList, null, null, cuentasPatGenAnteriorFr, null, Integer.valueOf(2));
+        	//Agregamos las filas de patrimonio contribuido
+        	armaVariacionPatri(rows, cuentasPatContribuidoFrList, cuentasPatContribuidoFr, null, null, null, Integer.valueOf(3));
+        	//Agregamos las filas de patrimonio generado en el ejercicio
+        	armaVariacionPatri(rows, cuentasPatGeneradoFrList, null, cuentasPatGeneradoFr, null, null, Integer.valueOf(4));
+        	
+        	
+        	//Agregamos las filas de patrimonio ajustes (Ultimo registro de el primer bloque)
+    		row = FastMap.newInstance();
+        	row.put("accountName", nombre);
+        	row.put("contribuido", null);
+        	row.put("ejercicio", null);
+        	row.put("anteriores", null);
+        	row.put("ajustes", primerBloque.get(Integer.valueOf(4))  == null ? null : primerBloque.get(Integer.valueOf(4)).divide(MIL));
+        	row.put("total", primerBloque.get(Integer.valueOf(4))  == null ? null : primerBloque.get(Integer.valueOf(4)).divide(MIL));
+        	row.put("accountTypeSeqNum", Integer.valueOf(5));
+        	rows.add(row);
+
+        	Map<Integer, BigDecimal> segundoBloque = FastMap.newInstance();
+            String nombre1 = null;
+            
+            //Estas cuentas se ordenan para mostrarse en la columna correspondiente
+        	for (GenericValue account : cuentasPatrimonioTrList) {
+        		
+        		String cuenta = account.getString("glAccountId");
+        		BigDecimal monto = cuentasPatrimonioTr.get(account) == null ? null : cuentasPatrimonioTr.get(account).divide(MIL);
+        		if(cuenta.equals("3.1")){
+        			segundoBloque.put(Integer.valueOf(1), monto);
+        		} else if(cuenta.equals("3.2.2")){
+        			segundoBloque.put(Integer.valueOf(2), monto);
+        		} else if(cuenta.equals("3.2.1")){
+        			segundoBloque.put(Integer.valueOf(3), monto);
+        		} else if(cuenta.equals("3.3")){
+        			segundoBloque.put(Integer.valueOf(4), monto);
+        			nombre1 = account.getString("accountName");
+        		}
+        		
+			}
+        	
+        	total = ZERO;
+        	total = (segundoBloque.get(Integer.valueOf(1)) == null ? ZERO : segundoBloque.get(Integer.valueOf(1))).add(
+        			(segundoBloque.get(Integer.valueOf(2)) == null ? ZERO : segundoBloque.get(Integer.valueOf(2)))).add(
+        			(segundoBloque.get(Integer.valueOf(3)) == null ? ZERO : segundoBloque.get(Integer.valueOf(3)))).add(
+        			(segundoBloque.get(Integer.valueOf(4)) == null ? ZERO : segundoBloque.get(Integer.valueOf(4))));
+        	
+        	//Agregamos la primer fila
+        	row = FastMap.newInstance();
+        	row.put("accountName", uiLabelMap.get("PatrimonioNeto"));
+        	row.put("contribuido", segundoBloque.get(Integer.valueOf(1)) == null ? null : segundoBloque.get(Integer.valueOf(1)).divide(MIL));
+        	row.put("ejercicio", segundoBloque.get(Integer.valueOf(2)) == null ? null : segundoBloque.get(Integer.valueOf(2)).divide(MIL));
+        	row.put("anteriores", segundoBloque.get(Integer.valueOf(3)) == null ? null : segundoBloque.get(Integer.valueOf(3)).divide(MIL));
+        	row.put("ajustes", segundoBloque.get(Integer.valueOf(4)) == null ? null : segundoBloque.get(Integer.valueOf(4)).divide(MIL));
+        	row.put("total", total == null ? null : total.divide(MIL));
+        	row.put("accountTypeSeqNum", Integer.valueOf(6));
+        	rows.add(row);
+        	
+        	Debug.logWarning("row 1  #"+row, MODULE);
+        	
+        	//Agregamos las filas de ejecicios anteriores
+        	armaVariacionPatri(rows, cuentasPatGenAnteriorTrList, null, null, cuentasPatGenAnteriorTr, null, Integer.valueOf(7));
+        	//Agregamos las filas de patrimonio contribuido
+        	armaVariacionPatri(rows, cuentasPatContribuidoTrList, cuentasPatContribuidoTr, null, null, null, Integer.valueOf(8));
+        	//Agregamos las filas de patrimonio generado en el ejercicio
+        	armaVariacionPatri(rows, cuentasPatGeneradoTrList, null, cuentasPatGeneradoTr, null, null, Integer.valueOf(9));
+        	
+        	//Agregamos las filas de patrimonio ajustes
+        		row = FastMap.newInstance();
+            	row.put("accountName", nombre1);
+            	row.put("contribuido", null);
+            	row.put("ejercicio", null);
+            	row.put("anteriores", null);
+            	row.put("ajustes", segundoBloque.get(Integer.valueOf(4)) == null ? null : segundoBloque.get(Integer.valueOf(4)).divide(MIL));
+            	row.put("total", segundoBloque.get(Integer.valueOf(4)) == null ? null : segundoBloque.get(Integer.valueOf(4)).divide(MIL));
+            	row.put("accountTypeSeqNum", Integer.valueOf(10));
+            	rows.add(row);
+        	
+            	
+            Debug.logWarning("row 5 #"+row, MODULE);            
+
+            // sort records by account code
+            Collections.sort(rows, new Comparator<Map<String, Object>>() {
+                public int compare(Map<String, Object> o1, Map<String, Object> o2) {
+                    Integer accountTypeSeqNum1 = (Integer) o1.get("accountTypeSeqNum");
+                    Integer accountTypeSeqNum2 = (Integer) o2.get("accountTypeSeqNum");
+                    int c = accountTypeSeqNum1.compareTo(accountTypeSeqNum2);
+                    if (c == 0) {
+                        String accountCode1 = (String) o1.get("accountCode");
+                        String accountCode2 = (String) o2.get("accountCode");
+                        if (accountCode1 == null && accountCode2 == null) {
+                            return 0;
+                        }
+                        if (accountCode1 == null && accountCode2 != null) {
+                            return -1;
+                        }
+                        if (accountCode1 != null && accountCode2 == null) {
+                            return 1;
+                        }
+                        return accountCode1.compareTo(accountCode2);
+                    }
+                    return c;
+                }
+            });
+            request.setAttribute("jrDataSource", new JRMapCollectionDataSource(rows));
+
+            // prepare report parameters
+            Map<String, Object> jrParameters = FastMap.newInstance();
+            jrParameters.put("fromDate", mapDatos.get("fromDate"));
+            jrParameters.put("thruDate", mapDatos.get("thruDate"));
+            jrParameters.put("fiscalType", mapDatos.get("glFiscalTypeId"));
+            jrParameters.put("organizationPartyId", mapDatos.get("organizationPartyId"));
+            jrParameters.put("organizationName", PartyHelper.getPartyName(delegator, (String) mapDatos.get("organizationPartyId"), false));
+            jrParameters.put("accountingTags", UtilAccountingTags.formatTagsAsString(request, UtilAccountingTags.FINANCIALS_REPORTS_TAG, delegator));
+            
+            Debug.logWarning("accountingTags  [  "+UtilAccountingTags.formatTagsAsString(request, UtilAccountingTags.FINANCIALS_REPORTS_TAG, delegator)+" ]", MODULE);
+            
+            
+            request.setAttribute("jrParameters", jrParameters);
+
+        } catch (GenericServiceException e) {
+            return UtilMessage.createAndLogEventError(request, e, locale, MODULE);
+        } catch (GenericEntityException e) {
+            return UtilMessage.createAndLogEventError(request, e, locale, MODULE);
+        } catch (RepositoryException e) {
+            return UtilMessage.createAndLogEventError(request, e, locale, MODULE);
+        }
+
+        return reportType;
+    } 
+    
+    /**
+     * Metodo que se utiliza para armar el reporte variaciones del patrimonio
+     * @param listaPrl
+     * @param listaItera
+     * @param contribuido
+     * @param ejercicio
+     * @param anteriores
+     * @param ajustes
+     * @param secuencia
+     */
+    public static void armaVariacionPatri(List<Map<String, Object>> listaPrl, 
+    					List<GenericValue> listaItera , Map<GenericValue, BigDecimal> contribuido ,
+    					Map<GenericValue, BigDecimal> ejercicio , Map<GenericValue, BigDecimal> anteriores,
+    					Map<GenericValue, BigDecimal> ajustes ,Integer secuencia){
+    	
+    	BigDecimal total = ZERO;
+    	
+    	for (GenericValue account : listaItera) {
+    		
+        	total = (contribuido == null || contribuido.get(account) == null ? ZERO : contribuido.get(account)).add(
+        			(ejercicio == null || ejercicio.get(account) == null ? ZERO : ejercicio.get(account))).add(
+        			(anteriores == null || anteriores.get(account) == null ? ZERO : anteriores.get(account))).add(
+        			(ajustes == null || ajustes.get(account) == null ? ZERO : ajustes.get(account)));
+    		
+    		Map<String,Object> row = FastMap.newInstance();
+        	row.put("accountName", account.getString("accountName"));
+        	row.put("contribuido", contribuido == null || contribuido.get(account) == null ? null : contribuido.get(account).divide(MIL));
+        	row.put("ejercicio", ejercicio == null || ejercicio.get(account) == null ? null : ejercicio.get(account).divide(MIL));
+        	row.put("anteriores", anteriores == null || anteriores.get(account) == null ? null : anteriores.get(account).divide(MIL));
+        	row.put("ajustes", ajustes == null || ajustes.get(account) == null ? null : ajustes.get(account).divide(MIL));
+        	row.put("total", total.divide(MIL));
+        	row.put("accountTypeSeqNum", secuencia);
+        	
+        	listaPrl.add(row);
+        	
+       	 	Debug.logWarning("row "+secuencia+"     % "+row, MODULE);
+       	 	
+    	}    	
+    	
+
+    	
+    }
+    
     /**
      * Prepare query parameters for comparative state report.
      * @param request a <code>HttpServletRequest</code> value
@@ -961,112 +1225,6 @@ public final class FinancialReports {
     }    
 
     /**
-     * Prepare data source and parameters for estado analitico del activo report.
-     * @param request a <code>HttpServletRequest</code> value
-     * @param response a <code>HttpServletResponse</code> value
-     * @return the event response <code>String</code> value
-     */
-    @SuppressWarnings("unchecked")
-    public static String prepareEdoAnalitActivoReport(HttpServletRequest request, HttpServletResponse response) {
-        LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
-        Delegator delegator = (Delegator) request.getAttribute("delegator");
-        Locale locale = UtilHttp.getLocale(request);
-        ResourceBundleMapWrapper uiLabelMap = UtilMessage.getUiLabels(locale);
-        String reportType = UtilCommon.getParameter(request, "type");
-
-        try {
-
-            // retrieve financial data
-            Map ctxt = prepareFinancialReportParameters(request);
-            UtilAccountingTags.addTagParameters(request, ctxt);
-            Map<String, Object> results = dispatcher.runSync("getEdoAnaliticoForDate", dispatcher.getDispatchContext().makeValidContext("getEdoAnaliticoForDate", ModelService.IN_PARAM, ctxt));
-            
-            Debug.logWarning("results  =====>   "+results,MODULE);   
-            
-            BigDecimal totalIngresos = ZERO;
-            BigDecimal totalIngresosPasado = ZERO;
-            BigDecimal totalGastosActivos = ZERO;
-            BigDecimal totalGastosPasado = ZERO;
-            
-            Map<String, AnaliticoActivo> assetAccountBalances = (Map) results.get("datosReporte");
-            
-            Debug.logWarning("assetAccounts  =====>   "+assetAccountBalances.toString(),MODULE);   
-
-            List<Map<String, Object>> rows = FastList.newInstance();
-
-            BigDecimal monto = ZERO;
-            // create record set for report
-            if (UtilValidate.isNotEmpty(assetAccountBalances)) {
-                for (Map.Entry<String, AnaliticoActivo> datosRe : assetAccountBalances.entrySet())
-                {
-                	Debug.logWarning("account datos :   "+datosRe.getValue().toString(),MODULE);  
-                	AnaliticoActivo an = datosRe.getValue();
-	                  Map<String, Object> row = FastMap.newInstance();
-	                  row.put("accountCode", an.getCuentaId());
-	                  row.put("accountName", an.getNombreCta());
-	                  row.put("cargo", an.getCargo());
-	                  row.put("abono", an.getAbono());
-	                  row.put("saldoInicial", an.getSaldoInicial());
-	                  row.put("SaldoFinal", an.getSaldoFinal());
-	                  row.put("Flujo", an.getFlujoEfectivo());
-	                  
-	                  rows.add(row);                	
-                	
-                }
-            	
-            }
-
-            // sort records by account code
-            Collections.sort(rows, new Comparator<Map<String, Object>>() {
-                public int compare(Map<String, Object> o1, Map<String, Object> o2) {
-                    String accountCode1 = (String) o1.get("cuentaId");
-                    String accountCode2 = (String) o2.get("cuentaId");
-                    if (accountCode1 == null && accountCode2 == null) {
-                        return 0;
-                    }
-                    if (accountCode1 == null && accountCode2 != null) {
-                        return -1;
-                    }
-                    if (accountCode1 != null && accountCode2 == null) {
-                        return 1;
-                    }
-                    return accountCode1.compareTo(accountCode2);
-                }
-            });
-            
-            
-            request.setAttribute("jrDataSource", new JRMapCollectionDataSource(rows));
-
-            // prepare report parameters
-            Map<String, Object> jrParameters = FastMap.newInstance();
-            jrParameters.put("glFiscalTypeId", ctxt.get("glFiscalTypeId"));
-            jrParameters.put("asOfDate", ctxt.get("asOfDate"));
-            jrParameters.put("organizationPartyId", ctxt.get("organizationPartyId"));
-            jrParameters.put("organizationName", PartyHelper.getPartyName(delegator, (String) ctxt.get("organizationPartyId"), false));
-            jrParameters.put("accountingTags", UtilAccountingTags.formatTagsAsString(request, UtilAccountingTags.FINANCIALS_REPORTS_TAG, delegator));
-            
-            //Agregamos los totales
-            jrParameters.put("totalIngresos", totalIngresos);
-            jrParameters.put("totalIngresosPasado", totalIngresosPasado);
-            jrParameters.put("totalGastosActivos", totalGastosActivos);
-            jrParameters.put("totalGastosPasado", totalGastosPasado);
-            
-            request.setAttribute("jrParameters", jrParameters);
-            
-            Debug.logWarning("jrDataSource "+rows,MODULE);   
-
-        } catch (GenericServiceException e) {
-            return UtilMessage.createAndLogEventError(request, e, locale, MODULE);
-        } catch (GenericEntityException e) {
-            return UtilMessage.createAndLogEventError(request, e, locale, MODULE);
-        } catch (RepositoryException e) {
-            return UtilMessage.createAndLogEventError(request, e, locale, MODULE);
-        }
-
-        return reportType;
-    }      
-    
-    /**
      * Busca el monto en un map de la cuenta solicitada 
      * @param account
      * @param mapa
@@ -1541,8 +1699,11 @@ public final class FinancialReports {
 	                 */
 	                Timestamp asOfDateInicioAnio = UtilDateTime.getYearStart(UtilDate.toTimestamp(asOfDate, timeZone, locale), timeZone, locale);
 	                Debug.logWarning("asOfDateInicioAnio   [ " + asOfDateInicioAnio + "] ", MODULE);
-	                ctxt.put("fecIni", asOfDateInicioAnio);
+	                ctxt.put("fecIni", asOfDateBeforeTime);
 	                ctxt.put("fecFin", asOfDateTime);
+	                
+	                ctxt.put("fromDate", asOfDateBeforeTime);
+	                ctxt.put("thruDate", asOfDateTime);	                
 	            	
 	            } else if (dateOption.equals("byTimePeriod")) {
 	            	
@@ -1552,16 +1713,12 @@ public final class FinancialReports {
 	    	    	Map<String, Object> resultPeriod = dispatcher.runSync("obtenPeriodoAnterior", dispatcher.getDispatchContext().makeValidContext("obtenPeriodoAnterior", ModelService.IN_PARAM, ctxt));
 	    	    	
 	    	    	Debug.logWarning("resultPeriod   [ " + resultPeriod + "] ", MODULE);
-	    	    	
+	    	    		
 	    	    	request.setAttribute("fromCustomTimePeriodId", resultPeriod.get("customPeriodFromId")); 
 	    	    	
 	    	    	ctxt.put("fromCustomTimePeriodId", resultPeriod.get("customPeriodFromId"));
 	    	    	
-	                /**
-	                 * Estos datos se enviaran al servicio qeu busca las transacciones (debito y credito) de cada cuenta
-	                 */
-	    	    	
-	    	    	 GenericValue periodoFinal = delegator.findByPrimaryKey("CustomTimePeriod", UtilMisc.toMap("customTimePeriodId", customTimePeriodId));
+	    	    	GenericValue periodoFinal = delegator.findByPrimaryKey("CustomTimePeriod", UtilMisc.toMap("customTimePeriodId", customTimePeriodId));
 	    	    	 
 	    	    	 Debug.logWarning("periodoFinal   [ " + periodoFinal + "] ", MODULE);
 	    	    	 
@@ -1577,6 +1734,11 @@ public final class FinancialReports {
 	                //Se setean las fechas 
 	                request.setAttribute("fromDate", UtilDateTime.getTimestamp(fecIni.getTime()));
 	                request.setAttribute("thruDate", UtilDateTime.getTimestamp(fecFin.getTime())); 
+	                
+	                ctxt.put("fromDate", UtilDateTime.getTimestamp(fecIni.getTime()));
+	                ctxt.put("thruDate", UtilDateTime.getTimestamp(fecFin.getTime()));
+	                ctxt.put("fromCustomTimePeriodId", resultPeriod.get("customPeriodFromId"));
+	                ctxt.put("thruCustomTimePeriodId", customTimePeriodId);
 	    	    	 
 	            }
 	            
