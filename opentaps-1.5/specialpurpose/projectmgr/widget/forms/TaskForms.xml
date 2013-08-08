@@ -153,7 +153,7 @@
 	  	   <field name="nivelId" title="Nivel" >
            	 <drop-down allow-empty="false" current="selected" >
                 <entity-options description="${descripcion}" entity-name="NivelPresup" key-field-name="clasificacionId">
-                   <entity-constraint name="clasificacionId" operator="equals" value="1004"/>
+                   <entity-constraint name="clasificacionId" operator="equals" value="CL_PROGRAMATICA"/>
                     <entity-order-by field-name="descripcion"/>
                 </entity-options>
            	 </drop-down>
