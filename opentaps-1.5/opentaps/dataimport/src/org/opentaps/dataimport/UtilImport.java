@@ -10,7 +10,6 @@ import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.opentaps.base.entities.AcctgTrans;
 import org.opentaps.base.entities.AcctgTransEntry;
-import org.opentaps.base.entities.DataImportEgresoDiario;
 import org.opentaps.base.entities.Enumeration;
 import org.opentaps.base.entities.Geo;
 import org.opentaps.base.entities.GeoType;
@@ -23,7 +22,6 @@ import org.opentaps.base.entities.ProductCategory;
 import org.opentaps.base.entities.ProductCategoryType;
 import org.opentaps.base.entities.TipoDocumento;
 import org.opentaps.base.entities.WorkEffort;
-import org.opentaps.domain.dataimport.EgresoDiarioDataImportRepositoryInterface;
 import org.opentaps.domain.ledger.LedgerRepositoryInterface;
 import org.opentaps.foundation.repository.RepositoryException;
 
@@ -331,6 +329,8 @@ public class UtilImport {
 			Date fechaTrans) {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(fechaTrans);
+		ciclo = "20" + ciclo;
+
 		if (cal.get(Calendar.YEAR) != Integer.parseInt(ciclo)) {
 			mensaje += "El ciclo no corresponde a la fecha contable de la transaccion, ";
 			Debug.log(mensaje);
@@ -366,6 +366,7 @@ public class UtilImport {
 		if (act == null) {
 			Debug.log("Error, " + campo + " no existe");
 			mensaje += campo + " no existe, ";
+			Debug.log(mensaje);
 		}
 		return mensaje;
 	}
@@ -388,6 +389,7 @@ public class UtilImport {
 		if (products.isEmpty()) {
 			Debug.log("Error, " + campo + " no existe");
 			mensaje += campo + " no existe, ";
+			Debug.log(mensaje);
 		}
 
 		return mensaje;
@@ -411,6 +413,7 @@ public class UtilImport {
 		if (loc == null) {
 			Debug.log("Error, " + campo + " no existe");
 			mensaje += campo + " no existe, ";
+			Debug.log(mensaje);
 		}
 		return mensaje;
 	}
@@ -432,6 +435,7 @@ public class UtilImport {
 		if (enums.isEmpty()) {
 			Debug.log("Error, " + campo + " no existe");
 			mensaje += campo + " no existe, ";
+			Debug.log(mensaje);
 		}
 		return mensaje;
 	}
@@ -453,6 +457,7 @@ public class UtilImport {
 				|| !enumeration.getFechaFin().after(fechaTrans)) {
 			Debug.log("Error, " + campo + " no vigente");
 			mensaje += campo + " no vigente";
+			Debug.log(mensaje);
 		}
 		return mensaje;
 	}
@@ -465,6 +470,7 @@ public class UtilImport {
 		if (type == null) {
 			Debug.log("Error, tipoDoc no existe");
 			mensaje += "tipo documento no existe, ";
+			Debug.log(mensaje);
 		}
 		return mensaje;
 	}
@@ -486,6 +492,7 @@ public class UtilImport {
 		if (payment == null) {
 			Debug.log("Error, idPago no existe");
 			mensaje += "idPago no existe, ";
+			Debug.log(mensaje);
 		}
 		return mensaje;
 	}
@@ -540,6 +547,50 @@ public class UtilImport {
 	public static String getAcctgTransIdDiario(String ref, String sec,
 			String tipo) {
 		return ref + "-" + sec + "-" + tipo;
+	}
+
+	public static String obtenPadreParty(LedgerRepositoryInterface ledger_repo,
+			String idHijo) throws RepositoryException {
+		Debug.log("Busqueda de PadreParty");
+		PartyGroup partyGroup = ledger_repo.findOne(PartyGroup.class,
+				ledger_repo.map(PartyGroup.Fields.partyId, idHijo));
+		return partyGroup.getParent_id();
+	}
+
+	public static String obtenPadreProductCategory(
+			LedgerRepositoryInterface ledger_repo, String idHijo)
+			throws RepositoryException {
+		Debug.log("Busqueda de PadreProductCategory");
+		ProductCategory product = ledger_repo.findOne(ProductCategory.class,
+				ledger_repo.map(ProductCategory.Fields.productCategoryId,
+						idHijo));
+		return product.getPrimaryParentCategoryId();
+	}
+
+	public static String obtenPadreEnumeration(
+			LedgerRepositoryInterface ledger_repo, String idHijo)
+			throws RepositoryException {
+		Debug.log("Busqueda de PadreEnumeration");
+		Enumeration enumeration = ledger_repo.findOne(Enumeration.class,
+				ledger_repo.map(Enumeration.Fields.enumId, idHijo));
+		return enumeration.getParentEnumId();
+	}
+
+	public static String obtenPadreGeo(LedgerRepositoryInterface ledger_repo,
+			String idHijo) throws RepositoryException {
+		Debug.log("Busqueda de PadreGeo");
+		Geo geo = ledger_repo.findOne(Geo.class,
+				ledger_repo.map(Geo.Fields.geoId, idHijo));
+		return geo.getGeoCode();
+	}
+
+	public static String obtenPadreWorkEffort(
+			LedgerRepositoryInterface ledger_repo, String idHijo)
+			throws RepositoryException {
+		Debug.log("Busqueda de PadreWorkEffort");
+		WorkEffort work = ledger_repo.findOne(WorkEffort.class,
+				ledger_repo.map(WorkEffort.Fields.workEffortId, idHijo));
+		return work.getWorkEffortParentId();
 	}
 
 }

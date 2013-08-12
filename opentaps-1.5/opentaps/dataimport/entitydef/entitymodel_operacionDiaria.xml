@@ -29,20 +29,9 @@
 		<field name="idPago" type="id-ne"></field>
 		<field name="idProducto" type="id-ne"></field>
 		<field name="ciclo" type="id-ne"></field>
-		<field name="ur" type="id-ne"></field>
-		<field name="uo" type="id-ne"></field>
 		<field name="ue" type="id-ne"></field>
-		<field name="rub" type="id-ne"></field>
-		<field name="tip" type="id-ne"></field>
-		<field name="cla" type="id-ne"></field>
-		<field name="con" type="id-ne"></field>
 		<field name="n5" type="id-ne"></field>
-		<field name="f" type="id-ne"></field>
-		<field name="sf" type="id-ne"></field>
 		<field name="sfe" type="id-ne"></field>
-		<field name="ef" type="id-ne"></field>
-		<field name="reg" type="id-ne"></field>
-		<field name="mun" type="id-ne"></field>
 		<field name="loc" type="id-ne"></field>
 		<field name="clavePres" type="name"></field>
 		<field name="importStatusId" type="id-ne">
@@ -74,30 +63,13 @@
 		<field name="idPago" type="id-ne"></field>
 		<field name="idProducto" type="id-ne"></field>
 		<field name="ciclo" type="id-ne"></field>
-		<field name="ur" type="id-ne"></field>
-		<field name="uo" type="id-ne"></field>
 		<field name="ue" type="id-ne"></field>
-		<field name="fin" type="id-ne"></field>
-		<field name="fun" type="id-ne"></field>
 		<field name="subf" type="id-ne"></field>
-		<field name="eje" type="name"></field>
-		<field name="pp" type="name"></field>
-		<field name="spp" type="name"></field>
 		<field name="act" type="name"></field>
 		<field name="tg" type="id-ne"></field>
-		<field name="cap" type="id-ne"></field>
-		<field name="con" type="id-ne"></field>
-		<field name="pg" type="id-ne"></field>
 		<field name="pe" type="id-ne"></field>
-		<field name="f" type="id-ne"></field>
-		<field name="sf" type="id-ne"></field>
 		<field name="sfe" type="id-ne"></field>
-		<field name="ef" type="id-ne"></field>
-		<field name="reg" type="id-ne"></field>
-		<field name="mun" type="id-ne"></field>
 		<field name="loc" type="id-ne"></field>
-		<field name="sec" type="id-ne"></field>
-		<field name="subsec" type="id-ne"></field>
 		<field name="area" type="id-ne"></field>
 		<field name="clavePres" type="name"></field>
 		<field name="importStatusId" type="id-ne">
