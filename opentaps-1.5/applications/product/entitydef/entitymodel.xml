@@ -182,7 +182,7 @@ under the License.
       <field name="productCategoryId" type="id-ne"></field>
       <field name="productCategoryTypeId" type="id"></field>
       <field name="primaryParentCategoryId" type="id"></field>
-      <field name="categoryName" type="name"></field>
+      <field name="categoryName" type="description"></field>
       <field name="description" type="description"></field>
       <field name="longDescription" type="very-long"></field>
       <field name="categoryImageUrl" type="url"></field>
