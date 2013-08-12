@@ -23,22 +23,26 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 
 import javolution.util.FastList;
 import javolution.util.FastMap;
 
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
+import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
+import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.party.party.PartyHelper;
 import org.opentaps.base.entities.AcctgTransAndOrg;
 import org.opentaps.base.entities.AcctgTransType;
 import org.opentaps.base.entities.GlFiscalType;
 import org.opentaps.base.entities.AcctgPolizas;
+import org.opentaps.base.entities.PartyContactWithPurpose;
 import org.opentaps.common.builder.EntityListBuilder;
 import org.opentaps.common.builder.PageBuilder;
 import org.opentaps.common.util.UtilCommon;
@@ -66,7 +70,9 @@ public class BuscarPolizas {
 
     	final ActionContext ac = new ActionContext(context);
         final Locale locale = ac.getLocale();
+        final TimeZone timeZone = ac.getTimeZone();
         String organizationPartyId = UtilCommon.getOrganizationPartyId(ac.getRequest());
+        String dateFormat = UtilDateTime.getDateFormat(locale);
 
          String acctgTransId = ac.getParameter("findAcctgTransId");
          String acctgTransTypeId = ac.getParameter("acctgTransTypeId");
@@ -104,7 +110,7 @@ public class BuscarPolizas {
                  searchConditions.add(EntityCondition.makeCondition(AcctgPolizas.Fields.agrupador.name(), EntityOperator.EQUALS, agrupador));
              }
              if (UtilValidate.isNotEmpty(postedDate)) {
-                 searchConditions.add(EntityCondition.makeCondition(AcctgPolizas.Fields.postedDate.name(), EntityOperator.EQUALS, new Date(postedDate)));
+                 searchConditions.add(EntityCondition.makeCondition(AcctgPolizas.Fields.postedDate.name(), EntityOperator.LIKE, UtilDateTime.getDayStart(UtilDateTime.stringToTimeStamp(postedDate, dateFormat, timeZone, locale), timeZone, locale)));
              }
              if (UtilValidate.isNotEmpty(acctgTransTypeId)) {
             	 searchConditions.add(EntityCondition.makeCondition(AcctgPolizas.Fields.acctgTransTypeId.name(), EntityOperator.EQUALS, acctgTransTypeId));
