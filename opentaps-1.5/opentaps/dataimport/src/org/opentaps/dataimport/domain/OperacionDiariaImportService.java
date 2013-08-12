@@ -109,7 +109,7 @@ public class OperacionDiariaImportService extends DomainService implements
 
 			for (DataImportOperacionDiaria rowdata : dataforimp) {
 				// Empieza bloque de validaciones
-				String mensaje = null;
+				String mensaje = "";
 				Debug.log("Empieza bloque de validaciones");
 				mensaje = UtilImport.validaParty(mensaje, ledger_repo,
 						rowdata.getOrganizacionEjecutora(),
@@ -117,7 +117,7 @@ public class OperacionDiariaImportService extends DomainService implements
 				mensaje = UtilImport.validaTipoDoc(mensaje, ledger_repo,
 						rowdata.getIdTipoDoc());
 
-				if (mensaje == null) {
+				if (!mensaje.isEmpty()) {
 					String message = "Failed to import Operacion Diaria ["
 							+ rowdata.getRefDoc() + rowdata.getSecuencia()
 							+ "], Error message : " + mensaje;
@@ -210,7 +210,8 @@ public class OperacionDiariaImportService extends DomainService implements
 						Debug.log("Trans Nueva");
 						OperacionDiaria.setCreatedByUserLogin(rowdata
 								.getUsuario());
-						OperacionDiaria.setGlFiscalTypeId(cuentas.get("GlFiscalTypePresupuesto"));
+						OperacionDiaria.setGlFiscalTypeId(cuentas
+								.get("GlFiscalTypePresupuesto"));
 						imp_tx1 = this.session.beginTransaction();
 						ledger_repo.createOrUpdate(OperacionDiaria);
 						imp_tx1.commit();
@@ -339,12 +340,14 @@ public class OperacionDiariaImportService extends DomainService implements
 						imp_tx12.commit();
 					}
 
-					String message = "Successfully imported Operacion Diaria [";
-					// + rowdata.getClavePres() + "].";
-					this.storeImportOperacionDiariaSuccess(rowdata, imp_repo);
-					Debug.logInfo(message, MODULE);
-					imported = imported + 1;
-
+					if (mensaje.isEmpty()) {
+						String message = "Successfully imported Operacion Diaria [";
+						// + rowdata.getClavePres() + "].";
+						this.storeImportOperacionDiariaSuccess(rowdata,
+								imp_repo);
+						Debug.logInfo(message, MODULE);
+						imported = imported + 1;
+					}
 				} catch (Exception ex) {
 					String message = "Failed to import Operacion Diaria ["
 					// + rowdata.getClavePres() + "], Error message : "
