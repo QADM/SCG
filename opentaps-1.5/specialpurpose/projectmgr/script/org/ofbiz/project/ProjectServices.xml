@@ -692,10 +692,14 @@
         <if-not-empty field="parameters.partyId">
             <set field="parameters.hoursPartyId" from-field="parameters.partyId"/>
         </if-not-empty>
-        <entity-one entity-name="WorkEffort" value-field="project">
+        <entity-one entity-name="WorkEffort" value-field="project" >
             <field-map field-name="workEffortId" from-field="parameters.projectId"/>
         </entity-one>
+
         <set field="highInfo.projectId" from-field="project.workEffortId"/>
+        <set field="highInfo.nivelId" from-field="project.nivelId"/>
+        <set field="highInfo.node" from-field="project.node"/>
+         <set field="highInfo.enumId" from-field="project.scopeEnumId"/>
         <set field="highInfo.projectName" from-field="project.workEffortName"/>
         <set field="highInfo.projectDescription" from-field="project.description"/>
         <set field="highInfo.scopeEnumId" from-field="project.scopeEnumId"/>
@@ -734,6 +738,14 @@
             <first-from-list entry="emailAddress" list="emailAddresses"/>
             <set field="highInfo.emailAddress" from-field="emailAddress.infoString"/>
         </if-not-empty>
+
+
+	    <entity-and list="participantess" entity-name="PartyView">
+	            <field-map field-name="workEffortId" from-field="highInfo.projectId"/>
+	     </entity-and>
+	     <first-from-list entry="participantes" list="participantess"/>
+	     <set field="highInfo.workEffortParentId" from-field="participantes.groupName"/>
+
 
         <!-- translate squenceId back into statusId -->
         <entity-and entity-name="StatusItem" list="statusses">

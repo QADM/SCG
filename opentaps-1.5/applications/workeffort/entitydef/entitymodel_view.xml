@@ -944,5 +944,16 @@ under the License.
           <key-map field-name="contactMechId"/>
       </view-link>
     </view-entity>
+        <view-entity entity-name="PartyView"
+            package-name="org.ofbiz.workeffort.workeffort"
+            title="Vista que da el id del participante asociado">
+      <member-entity entity-alias="WEPA" entity-name="WorkEffortPartyAssignment"/>
+      <member-entity entity-alias="PG" entity-name="PartyGroup"/>
+      <alias-all entity-alias="WEPA"/>
+      <alias-all entity-alias="PG"/>
+      <view-link entity-alias="WEPA" rel-entity-alias="PG">
+          <key-map field-name="partyId"/>
+      </view-link>
+    </view-entity>
 
 </entitymodel>
