@@ -60,14 +60,15 @@
                 </sub-hyperlink>
             </lookup>
         </field>
-        <field name="partyId">
+        <!--<field name="partyId">
             <drop-down current="selected">
                 <entity-options entity-name="PartyGroup" description="${groupName}" key-field-name="partyId"/>
             </drop-down>
-        </field>
+        </field>-->
         <field name="priority" title="${uiLabelMap.CommonPriority}"><display/></field>
+       <!-- 
         <field name="codificacion" title="${uiLabelMap.Codificacion}"><text/></field>
-        
+        -->
 	   <field name="nivelId" title="Nivel" >
            	 <drop-down allow-empty="false" current="selected" >
                 <entity-options description="${descripcion}" entity-name="NivelPresup" key-field-name="clasificacionId">
@@ -90,7 +91,7 @@
                 </entity-options>
             </drop-down>
         </field>
-        <field name="parentProjectName" parameter-name="workEffortParentId">
+        <field name="workEffortParentId" parameter-name="workEffortParentId">
             <drop-down allow-empty="true">
                 <entity-options entity-name="WorkEffort" description="${workEffortName}" key-field-name="workEffortId">
                     <entity-constraint name="workEffortTypeId" value="PROJECT"/>
@@ -245,7 +246,17 @@
     </form>
     <form name="ProjectInfo" type="single" default-map-name="project" paginate-target="FindProject"
         header-row-style="header-row" default-table-style="basic-table">
+		<field name="nivelId" title="${uiLabelMap.Nivel}" ><display-entity entity-name="NivelPresupuestal" key-field-name="nivelId"  description="${descripcion}"/></field>
+	     <field name="node" title="Nodo"><display/></field>
+      	<field name="enumId" title="Scope"><display-entity entity-name="Enumeration" key-field-name="enumId"  description="${description}"/></field>
+      	<field name="workEffortParentId" title="Proyecto Padre" ><display-entity entity-name="WorkEffort" key-field-name="workEffortId"  description="${workEffortName}"/></field>
+      
+      <field name="workEffortParentId" title="Participante"><display/></field>        
+      
+
+      	
         <field name="projectName" title="${uiLabelMap.ProjectMgrProjectName}"><display/></field>
+        <field name="projectDescription" title="Descripcion"><display/></field>      
         <field name="currentStatusId" title="${uiLabelMap.CommonStatus}">
             <display-entity entity-name="StatusItem" key-field-name="statusId" description="${description}"/>
         </field>
@@ -265,8 +276,6 @@
         <field name="originalActualHours"><display/></field>
         <field name="actualHours"><display/></field>
         <field name="emailAddress" title="${uiLabelMap.FormFieldTitle_mailingListEmail}"><display/></field>        
-        <field name="codificacion" title="${uiLabelMap.Codificacion}"><display/></field>
-        <field name="NivelId" entity-name="WorkEffort" title="${uiLabelMap.Nivel}"><display/></field>
         
     </form>
     <form name="ListChildEfforts"  target="updateProjectAndAssoc" title="" list-name="projects" type="list" separate-columns="true" paginate-target="FindProject"

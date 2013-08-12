@@ -113,7 +113,8 @@ under the License.
 	   <field name="nivelId" title="Nivel" >
            	 <drop-down allow-empty="false" current="selected" >
                 <entity-options description="${descripcion}" entity-name="NivelPresup" key-field-name="clasificacionId">
-                   <entity-constraint name="clasificacionId" operator="equals" value="CL_ADMINISTRATIVA"/>
+                  <entity-constraint name="clasificacionId" operator="equals" value="CL_ADMINISTRATIVA"/>
+
                     <entity-order-by field-name="descripcion"/>
                 </entity-options>
            	 </drop-down>
@@ -150,7 +151,7 @@ under the License.
         <field name="preferredCurrencyUomId" title="${uiLabelMap.CommonCurrency}"><display-entity entity-name="Uom" key-field-name="uomId" description="${description}"/></field>
         <field name="externalId"><display/></field>
         <field name="node" title="${uiLabelMap.Nodo}"><display-entity entity-name="Party" key-field-name="partyId" description="${node}"/></field>
-        <field name="nivelId" title="${uiLabelMap.Nivel}" ><display-entity entity-name="WorkEffort" key-field-name="workEffortId"  description="${description}"/></field>
+        <field name="Nivel_id" title="${uiLabelMap.Nivel}" ><display-entity entity-name="WorkEffort" key-field-name="workEffortId"  description="${description}"/></field>
         <field name="statusId"><display-entity entity-name="StatusItem" key-field-name="statusId" description="${description}"/></field>
     </form>
 

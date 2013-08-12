@@ -586,6 +586,7 @@ public class PartyServices {
 		Delegator delegator = ctx.getDelegator();
 		LocalDispatcher dispatcher = ctx.getDispatcher();
 		Locale locale = (Locale) context.get("locale");
+		String nivel =(String) context.get("nivelId");
 
 		String partyId = getPartyId(context);
 		if (UtilValidate.isEmpty(partyId)) {
@@ -613,6 +614,7 @@ public class PartyServices {
 			return ServiceUtil.returnError(errMsg);
 		}
 
+
 		if (partyGroup == null || party == null) {
 			errMsg = UtilProperties
 					.getMessage(
@@ -622,9 +624,11 @@ public class PartyServices {
 			return ServiceUtil.returnError(errMsg);
 		}
 
+
 		// update status by separate service
 		String oldStatusId = party.getString("statusId");
 		partyGroup.setNonPKFields(context);
+		party.set("Nivel_id", nivel);
 		party.setNonPKFields(context);
 		party.set("statusId", oldStatusId);
 
