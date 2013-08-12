@@ -88,60 +88,78 @@ public class PresupuestoEgresoImportService extends DomainService implements
 			Transaction imp_tx4 = null;
 			for (DataImportPresupuestoEgreso rowdata : dataforimp) {
 				// Validaciones
-				String mensaje = null;
+				String mensaje = "";
 				Debug.log("Empieza bloque de validaciones");
-				mensaje = UtilImport.validaParty(mensaje, ledger_repo,
-						rowdata.getUr(), "UR");
-				mensaje = UtilImport.validaParty(mensaje, ledger_repo,
-						rowdata.getUo(), "UO");
-				mensaje = UtilImport.validaParty(mensaje, ledger_repo,
-						rowdata.getUe(), "UE");
-				mensaje = UtilImport.validaEnumeration(mensaje, ledger_repo,
-						rowdata.getFin(), "CLAS_FUN", "FIN");
-				mensaje = UtilImport.validaEnumeration(mensaje, ledger_repo,
-						rowdata.getFun(), "CLAS_FUN", "FUN");
-				mensaje = UtilImport.validaEnumeration(mensaje, ledger_repo,
-						rowdata.getSubf(), "CLAS_FUN", "SUBF");
-				mensaje = UtilImport.validaWorkEffort(mensaje, ledger_repo,
-						rowdata.getEje(), "EJE");
-				mensaje = UtilImport.validaWorkEffort(mensaje, ledger_repo,
-						rowdata.getPp(), "PP");
-				mensaje = UtilImport.validaWorkEffort(mensaje, ledger_repo,
-						rowdata.getSpp(), "SPP");
-				mensaje = UtilImport.validaWorkEffort(mensaje, ledger_repo,
-						rowdata.getAct(), "ACT");
-				mensaje = UtilImport.validaEnumeration(mensaje, ledger_repo,
-						rowdata.getTg(), "TIPO_GASTO", "tg");
-				mensaje = UtilImport.validaProductCategory(mensaje,
-						ledger_repo, rowdata.getCap(), "CA", "CAP");
-				mensaje = UtilImport.validaProductCategory(mensaje,
-						ledger_repo, rowdata.getCon(), "CON", "CON");
-				mensaje = UtilImport.validaProductCategory(mensaje,
-						ledger_repo, rowdata.getPg(), "PG", "PG");
-				mensaje = UtilImport.validaProductCategory(mensaje,
-						ledger_repo, rowdata.getPe(), "PE", "PE");
-				mensaje = UtilImport.validaGeo(mensaje, ledger_repo,
-						rowdata.getEf(), "EF");
-				mensaje = UtilImport.validaGeo(mensaje, ledger_repo,
-						rowdata.getReg(), "REG");
-				mensaje = UtilImport.validaGeo(mensaje, ledger_repo,
-						rowdata.getMun(), "MUN");
-				mensaje = UtilImport.validaGeo(mensaje, ledger_repo,
-						rowdata.getLoc(), "LOC");
-				mensaje = UtilImport.validaEnumeration(mensaje, ledger_repo,
-						rowdata.getF(), "CLAS_FR", "F");
-				mensaje = UtilImport.validaEnumeration(mensaje, ledger_repo,
-						rowdata.getSf(), "CLAS_FR", "SF");
-				mensaje = UtilImport.validaEnumeration(mensaje, ledger_repo,
-						rowdata.getSfe(), "CLAS_FR", "SFE");
-				mensaje = UtilImport.validaEnumeration(mensaje, ledger_repo,
-						rowdata.getSec(), "CLAS_SECT", "SEC");
-				mensaje = UtilImport.validaEnumeration(mensaje, ledger_repo,
-						rowdata.getSubsec(), "CLAS_SECT", "SUBSEC");
-				mensaje = UtilImport.validaEnumeration(mensaje, ledger_repo,
-						rowdata.getArea(), "CLAS_SECT", "AREA");
+				// mensaje = UtilImport.validaParty(mensaje, ledger_repo,
+				// rowdata.getUr(), "UR");
+				// mensaje = UtilImport.validaParty(mensaje, ledger_repo,
+				// rowdata.getUo(), "UO");
+				// mensaje = UtilImport.validaParty(mensaje, ledger_repo,
+				// rowdata.getUe(), "UE");
+				// mensaje = UtilImport.validaEnumeration(mensaje, ledger_repo,
+				// rowdata.getFin(), "CLAS_FUN", "FIN");
+				// mensaje = UtilImport.validaEnumeration(mensaje, ledger_repo,
+				// rowdata.getFun(), "CLAS_FUN", "FUN");
+				// mensaje = UtilImport.validaEnumeration(mensaje, ledger_repo,
+				// rowdata.getSubf(), "CLAS_FUN", "SUBF");
+				// mensaje = UtilImport.validaWorkEffort(mensaje, ledger_repo,
+				// rowdata.getEje(), "EJE");
+				// mensaje = UtilImport.validaWorkEffort(mensaje, ledger_repo,
+				// rowdata.getPp(), "PP");
+				// mensaje = UtilImport.validaWorkEffort(mensaje, ledger_repo,
+				// rowdata.getSpp(), "SPP");
+				// mensaje = UtilImport.validaWorkEffort(mensaje, ledger_repo,
+				// rowdata.getAct(), "ACT");
+				// mensaje = UtilImport.validaEnumeration(mensaje, ledger_repo,
+				// rowdata.getTg(), "TIPO_GASTO", "tg");
+				// mensaje = UtilImport.validaProductCategory(mensaje,
+				// ledger_repo, rowdata.getCap(), "CA", "CAP");
+				// mensaje = UtilImport.validaProductCategory(mensaje,
+				// ledger_repo, rowdata.getCon(), "CON", "CON");
+				// mensaje = UtilImport.validaProductCategory(mensaje,
+				// ledger_repo, rowdata.getPg(), "PG", "PG");
+				// mensaje = UtilImport.validaProductCategory(mensaje,
+				// ledger_repo, rowdata.getPe(), "PE", "PE");
+				// mensaje = UtilImport.validaGeo(mensaje, ledger_repo,
+				// rowdata.getEf(), "EF");
+				// mensaje = UtilImport.validaGeo(mensaje, ledger_repo,
+				// rowdata.getReg(), "REG");
+				// mensaje = UtilImport.validaGeo(mensaje, ledger_repo,
+				// rowdata.getMun(), "MUN");
+				// mensaje = UtilImport.validaGeo(mensaje, ledger_repo,
+				// rowdata.getLoc(), "LOC");
+				// mensaje = UtilImport.validaEnumeration(mensaje, ledger_repo,
+				// rowdata.getF(), "CLAS_FR", "F");
+				// mensaje = UtilImport.validaEnumeration(mensaje, ledger_repo,
+				// rowdata.getSf(), "CLAS_FR", "SF");
+				// mensaje = UtilImport.validaEnumeration(mensaje, ledger_repo,
+				// rowdata.getSfe(), "CLAS_FR", "SFE");
+				// mensaje = UtilImport.validaEnumeration(mensaje, ledger_repo,
+				// rowdata.getSec(), "CLAS_SECT", "SEC");
+				// mensaje = UtilImport.validaEnumeration(mensaje, ledger_repo,
+				// rowdata.getSubsec(), "CLAS_SECT", "SUBSEC");
+				// mensaje = UtilImport.validaEnumeration(mensaje, ledger_repo,
+				// rowdata.getArea(), "CLAS_SECT", "AREA");
 
-				if (mensaje == null) {
+				mensaje = UtilImport.validaParty(mensaje, ledger_repo,
+						rowdata.getUe(), "ADMINISTRATIVA");
+				mensaje = UtilImport.validaEnumeration(mensaje, ledger_repo,
+						rowdata.getSubf(), "CLAS_FUN", "FUNCIONAL");
+				mensaje = UtilImport.validaWorkEffort(mensaje, ledger_repo,
+						rowdata.getAct(), "ACTIVIDAD");
+				mensaje = UtilImport.validaEnumeration(mensaje, ledger_repo,
+						rowdata.getTg(), "TIPO_GASTO", "TIPO GASTO");
+				mensaje = UtilImport.validaProductCategory(mensaje,
+						ledger_repo, rowdata.getPe(), "PE",
+						"PRODUCTO ESPECIFICO");
+				mensaje = UtilImport.validaEnumeration(mensaje, ledger_repo,
+						rowdata.getSfe(), "CLAS_FR", "FUENTE DE LOS RECURSOS");
+				mensaje = UtilImport.validaGeo(mensaje, ledger_repo,
+						rowdata.getLoc(), "GEOGRAFICA");
+				mensaje = UtilImport.validaEnumeration(mensaje, ledger_repo,
+						rowdata.getArea(), "CLAS_SECT", "SECTORIAL");
+
+				if (!mensaje.isEmpty()) {
 					String message = "Failed to import Presupuesto Egreso ["
 							+ rowdata.getClavePres() + "], Error message : "
 							+ mensaje;
@@ -152,47 +170,65 @@ public class PresupuestoEgresoImportService extends DomainService implements
 
 				// Creacion de objetos
 				Debug.log("Empieza creacion de objetos");
-				Party ur = UtilImport.obtenParty(ledger_repo, rowdata.getUr());
-				Party uo = UtilImport.obtenParty(ledger_repo, rowdata.getUo());
+				// Party ur = UtilImport.obtenParty(ledger_repo,
+				// rowdata.getUr());
+				// Party uo = UtilImport.obtenParty(ledger_repo,
+				// rowdata.getUo());
+				// Party ue = UtilImport.obtenParty(ledger_repo,
+				// rowdata.getUe());
+				// Enumeration fin = UtilImport.obtenEnumeration(ledger_repo,
+				// rowdata.getFin(), "CLAS_FUN");
+				// Enumeration fun = UtilImport.obtenEnumeration(ledger_repo,
+				// rowdata.getFun(), "CLAS_FUN");
+				// Enumeration subf = UtilImport.obtenEnumeration(ledger_repo,
+				// rowdata.getSubf(), "CLAS_FUN");
+				// WorkEffort eje = UtilImport.obtenWorkEffort(ledger_repo,
+				// rowdata.getEje());
+				// WorkEffort pp = UtilImport.obtenWorkEffort(ledger_repo,
+				// rowdata.getPp());
+				// WorkEffort spp = UtilImport.obtenWorkEffort(ledger_repo,
+				// rowdata.getSpp());
+				// WorkEffort act = UtilImport.obtenWorkEffort(ledger_repo,
+				// rowdata.getAct());
+				// Enumeration tg = UtilImport.obtenEnumeration(ledger_repo,
+				// rowdata.getFin(), "TIPO_GASTO");
+				// ProductCategory cap = UtilImport.obtenProductCategory(
+				// ledger_repo, rowdata.getCap(), "CA");
+				// ProductCategory con = UtilImport.obtenProductCategory(
+				// ledger_repo, rowdata.getCon(), "CON");
+				// ProductCategory pg = UtilImport.obtenProductCategory(
+				// ledger_repo, rowdata.getPg(), "PG");
+				// ProductCategory pe = UtilImport.obtenProductCategory(
+				// ledger_repo, rowdata.getPe(), "PE");
+				// Geo ef = UtilImport.obtenGeo(ledger_repo, rowdata.getEf());
+				// Geo reg = UtilImport.obtenGeo(ledger_repo, rowdata.getReg());
+				// Geo mun = UtilImport.obtenGeo(ledger_repo, rowdata.getMun());
+				// Geo loc = UtilImport.obtenGeo(ledger_repo, rowdata.getLoc());
+				// Enumeration f = UtilImport.obtenEnumeration(ledger_repo,
+				// rowdata.getF(), "CLAS_FR");
+				// Enumeration sf = UtilImport.obtenEnumeration(ledger_repo,
+				// rowdata.getSf(), "CLAS_FR");
+				// Enumeration sfe = UtilImport.obtenEnumeration(ledger_repo,
+				// rowdata.getSfe(), "CLAS_FR");
+				// Enumeration sec = UtilImport.obtenEnumeration(ledger_repo,
+				// rowdata.getSec(), "CLAS_SECT");
+				// Enumeration subsec = UtilImport.obtenEnumeration(ledger_repo,
+				// rowdata.getSubsec(), "CLAS_SECT");
+				// Enumeration area = UtilImport.obtenEnumeration(ledger_repo,
+				// rowdata.getArea(), "CLAS_SECT");
+
 				Party ue = UtilImport.obtenParty(ledger_repo, rowdata.getUe());
-				Enumeration fin = UtilImport.obtenEnumeration(ledger_repo,
-						rowdata.getFin(), "CLAS_FUN");
-				Enumeration fun = UtilImport.obtenEnumeration(ledger_repo,
-						rowdata.getFun(), "CLAS_FUN");
 				Enumeration subf = UtilImport.obtenEnumeration(ledger_repo,
 						rowdata.getSubf(), "CLAS_FUN");
-				WorkEffort eje = UtilImport.obtenWorkEffort(ledger_repo,
-						rowdata.getEje());
-				WorkEffort pp = UtilImport.obtenWorkEffort(ledger_repo,
-						rowdata.getPp());
-				WorkEffort spp = UtilImport.obtenWorkEffort(ledger_repo,
-						rowdata.getSpp());
 				WorkEffort act = UtilImport.obtenWorkEffort(ledger_repo,
 						rowdata.getAct());
 				Enumeration tg = UtilImport.obtenEnumeration(ledger_repo,
-						rowdata.getFin(), "TIPO_GASTO");
-				ProductCategory cap = UtilImport.obtenProductCategory(
-						ledger_repo, rowdata.getCap(), "CA");
-				ProductCategory con = UtilImport.obtenProductCategory(
-						ledger_repo, rowdata.getCon(), "CON");
-				ProductCategory pg = UtilImport.obtenProductCategory(
-						ledger_repo, rowdata.getPg(), "PG");
+						rowdata.getTg(), "TIPO_GASTO");
 				ProductCategory pe = UtilImport.obtenProductCategory(
 						ledger_repo, rowdata.getPe(), "PE");
-				Geo ef = UtilImport.obtenGeo(ledger_repo, rowdata.getEf());
-				Geo reg = UtilImport.obtenGeo(ledger_repo, rowdata.getReg());
-				Geo mun = UtilImport.obtenGeo(ledger_repo, rowdata.getMun());
 				Geo loc = UtilImport.obtenGeo(ledger_repo, rowdata.getLoc());
-				Enumeration f = UtilImport.obtenEnumeration(ledger_repo,
-						rowdata.getF(), "CLAS_FR");
-				Enumeration sf = UtilImport.obtenEnumeration(ledger_repo,
-						rowdata.getSf(), "CLAS_FR");
 				Enumeration sfe = UtilImport.obtenEnumeration(ledger_repo,
 						rowdata.getSfe(), "CLAS_FR");
-				Enumeration sec = UtilImport.obtenEnumeration(ledger_repo,
-						rowdata.getSec(), "CLAS_SECT");
-				Enumeration subsec = UtilImport.obtenEnumeration(ledger_repo,
-						rowdata.getSubsec(), "CLAS_SECT");
 				Enumeration area = UtilImport.obtenEnumeration(ledger_repo,
 						rowdata.getArea(), "CLAS_SECT");
 
@@ -201,6 +237,11 @@ public class PresupuestoEgresoImportService extends DomainService implements
 					// id maximo
 					Debug.log("Busqueda idMax");
 					String id = ledger_repo.getNextSeqId("AcctgTrans");
+					Calendar cal = Calendar.getInstance();
+					cal.set(Calendar.DAY_OF_MONTH, 1);
+					String anio = "20" + rowdata.getCiclo();
+					cal.set(Calendar.YEAR, Integer.parseInt(anio));
+
 					for (int mes = 1; mes < 13; mes++) {
 						imp_tx1 = null;
 						imp_tx2 = null;
@@ -232,23 +273,19 @@ public class PresupuestoEgresoImportService extends DomainService implements
 							continue;
 						}
 
-						Calendar cal = Calendar.getInstance();
 						cal.set(Calendar.MONTH, mes - 1);
-						cal.set(Calendar.DAY_OF_MONTH, 1);
 
 						// Vigencias
-						mensaje = UtilImport.validaVigencia(mensaje, "SUBF",
+						mensaje = UtilImport.validaVigencia(mensaje, "FUNCIONAL",
 								subf, cal.getTime());
-						mensaje = UtilImport.validaVigencia(mensaje, "TG", tg,
+						mensaje = UtilImport.validaVigencia(mensaje, "TIPO GASTO", tg,
 								cal.getTime());
-						mensaje = UtilImport.validaVigencia(mensaje, "SFE",
+						mensaje = UtilImport.validaVigencia(mensaje, "FUENTE DE LOS RECURSOS",
 								sfe, cal.getTime());
-						mensaje = UtilImport.validaVigencia(mensaje, "AREA",
+						mensaje = UtilImport.validaVigencia(mensaje, "SECTORIAL",
 								area, cal.getTime());
-						mensaje = UtilImport.validaCiclo(mensaje,
-								rowdata.getCiclo(), cal.getTime());
 
-						if (mensaje == null) {
+						if (!mensaje.isEmpty()) {
 							String message = "Failed to import Presupuesto Egreso ["
 									+ rowdata.getClavePres()
 									+ "], Error message : " + mensaje;
@@ -345,35 +382,68 @@ public class PresupuestoEgresoImportService extends DomainService implements
 						ledger_repo.createOrUpdate(presupuestoEgreso);
 						imp_tx1.commit();
 
+						// Obtenemos los padres de cada nivel.
+						String uo = UtilImport.obtenPadreParty(ledger_repo,
+								ue.getPartyId());
+						String ur = UtilImport.obtenPadreParty(ledger_repo, uo);
+						String fun = UtilImport.obtenPadreEnumeration(
+								ledger_repo, subf.getEnumId());
+						String fin = UtilImport.obtenPadreEnumeration(
+								ledger_repo, fun);
+						String spp = UtilImport.obtenPadreWorkEffort(
+								ledger_repo, act.getWorkEffortId());
+						String pp = UtilImport.obtenPadreWorkEffort(
+								ledger_repo, spp);
+						String eje = UtilImport.obtenPadreWorkEffort(
+								ledger_repo, pp);
+						String pg = UtilImport.obtenPadreProductCategory(
+								ledger_repo, pe.getProductCategoryId());
+						String con = UtilImport.obtenPadreProductCategory(
+								ledger_repo, pg);
+						String cap = UtilImport.obtenPadreProductCategory(
+								ledger_repo, con);
+						String sf = UtilImport.obtenPadreEnumeration(
+								ledger_repo, sfe.getEnumId());
+						String f = UtilImport.obtenPadreEnumeration(
+								ledger_repo, sf);
+						String mun = UtilImport.obtenPadreGeo(ledger_repo,
+								loc.getGeoId());
+						String reg = UtilImport.obtenPadreGeo(ledger_repo, mun);
+						String ef = UtilImport.obtenPadreGeo(ledger_repo, reg);
+						String subsec = UtilImport.obtenPadreEnumeration(
+								ledger_repo, area.getEnumId());
+						String sec = UtilImport.obtenPadreEnumeration(
+								ledger_repo, subsec);
+
 						// ACCTG_TRANS_PRESUPUESTAL
 						Debug.log("ACCTG_TRANS_PRESUPUESTAL");
 						AcctgTransPresupuestal aux = new AcctgTransPresupuestal();
 						aux.setAcctgTransId(presupuestoEgreso.getAcctgTransId());
 						aux.setCiclo(rowdata.getCiclo());
-						aux.setUnidadResponsable(ur.getPartyId());
-						aux.setUnidadOrganizacional(uo.getPartyId());
+						aux.setUnidadResponsable(ur);
+						aux.setUnidadOrganizacional(uo);
 						aux.setUnidadEjecutora(ue.getPartyId());
-						aux.setFinalidad(fin.getEnumId());
-						aux.setFuncion(fun.getEnumId());
+						aux.setFinalidad(fin);
+						aux.setFuncion(fun);
 						aux.setSubFuncion(subf.getEnumId());
-						aux.setProgramaPlan(rowdata.getEje());
-						aux.setProgramaPresupuestario(rowdata.getPp());
-						aux.setSubProgramaPresupuestario(rowdata.getSpp());
-						aux.setActividad(rowdata.getAct());
+						aux.setProgramaPlan(eje);
+						aux.setProgramaPresupuestario(pp);
+						aux.setSubProgramaPresupuestario(spp);
+						aux.setActividad(act.getWorkEffortId());
 						aux.setTipoGasto(tg.getEnumId());
-						aux.setCapitulo(cap.getProductCategoryId());
-						aux.setConcepto(con.getProductCategoryId());
-						aux.setPartidaGenerica(pg.getProductCategoryId());
+						aux.setCapitulo(cap);
+						aux.setConcepto(con);
+						aux.setPartidaGenerica(pg);
 						aux.setPartidaEspecifica(pe.getProductCategoryId());
-						aux.setFuente(f.getEnumId());
-						aux.setSubFuente(sf.getEnumId());
+						aux.setFuente(f);
+						aux.setSubFuente(sf);
 						aux.setSubFuenteEspecifica(sfe.getEnumId());
-						aux.setEntidadFederativa(rowdata.getEf());
-						aux.setRegion(rowdata.getReg());
-						aux.setMunicipio(rowdata.getMun());
-						aux.setLocalidad(rowdata.getLoc());
-						aux.setSector(sec.getEnumId());
-						aux.setSubSector(subsec.getEnumId());
+						aux.setEntidadFederativa(ef);
+						aux.setRegion(reg);
+						aux.setMunicipio(mun);
+						aux.setLocalidad(loc.getGeoId());
+						aux.setSector(sec);
+						aux.setSubSector(subsec);
 						aux.setArea(area.getEnumId());
 						aux.setAgrupador(rowdata.getAgrupador());
 						aux.setClavePres(rowdata.getClavePres());
@@ -419,11 +489,14 @@ public class PresupuestoEgresoImportService extends DomainService implements
 						}
 					}
 
-					String message = "Successfully imported Presupuesto Egreso ["
-							+ rowdata.getClavePres() + "].";
-					this.storeImportPresupuestoEgresoSuccess(rowdata, imp_repo);
-					Debug.logInfo(message, MODULE);
-					imported = imported + 1;
+					if (mensaje.isEmpty()) {
+						String message = "Successfully imported Presupuesto Egreso ["
+								+ rowdata.getClavePres() + "].";
+						this.storeImportPresupuestoEgresoSuccess(rowdata,
+								imp_repo);
+						Debug.logInfo(message, MODULE);
+						imported = imported + 1;
+					}
 				} catch (Exception ex) {
 					String message = "Failed to import Presupuesto Egreso ["
 							+ rowdata.getClavePres() + "], Error message : "
