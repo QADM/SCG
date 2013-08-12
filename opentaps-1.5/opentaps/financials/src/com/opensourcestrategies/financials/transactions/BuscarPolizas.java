@@ -110,7 +110,7 @@ public class BuscarPolizas {
                  searchConditions.add(EntityCondition.makeCondition(AcctgPolizas.Fields.agrupador.name(), EntityOperator.EQUALS, agrupador));
              }
              if (UtilValidate.isNotEmpty(postedDate)) {
-                 searchConditions.add(EntityCondition.makeCondition(AcctgPolizas.Fields.postedDate.name(), EntityOperator.LIKE, UtilDateTime.getDayStart(UtilDateTime.stringToTimeStamp(postedDate, dateFormat, timeZone, locale), timeZone, locale)));
+                 searchConditions.add(EntityCondition.makeCondition(AcctgPolizas.Fields.postedDate.name(), EntityOperator.GREATER_THAN_EQUAL_TO, UtilDateTime.getDayStart(UtilDateTime.stringToTimeStamp(postedDate, dateFormat, timeZone, locale), timeZone, locale)));
              }
              if (UtilValidate.isNotEmpty(acctgTransTypeId)) {
             	 searchConditions.add(EntityCondition.makeCondition(AcctgPolizas.Fields.acctgTransTypeId.name(), EntityOperator.EQUALS, acctgTransTypeId));
