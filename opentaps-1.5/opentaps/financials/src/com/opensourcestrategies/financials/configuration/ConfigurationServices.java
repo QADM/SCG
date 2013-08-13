@@ -489,24 +489,21 @@ public final class ConfigurationServices {
 		String  sCadenaSinBlancos="";
 		String cadena1="";
 		String cadena2="";
-		
+
 		
 
 		try {
-			 SimpleDateFormat formatoFecha = new SimpleDateFormat("dd-MM-yyyy");
-		        Date fecInicio;
-
-					fecInicio = formatoFecha.parse(inicio);
-					context.put("fechaInicio",fecInicio);
-		        Date fecFinal;
-					fecFinal = formatoFecha.parse(fin);
-					context.put("fechaFin", fecFinal);
-
+			SimpleDateFormat formatoFecha = new SimpleDateFormat("dd-MMM-yyyy", new Locale("es","ES"));
+			Date fecInicio;
+			fecInicio = formatoFecha.parse(inicio);
+			context.put("fechaInicio",fecInicio);
+			Date fecFinal;
+			fecFinal = formatoFecha.parse(fin);
+			context.put("fechaFin", fecFinal);
 			GenericValue pk = delegator.makeValue("Enumeration");
 			pk.setPKFields(context);
 			GenericValue enumeration = delegator.findByPrimaryKey(
 					"Enumeration", pk);
-
 			for (int x=0; x < nivelId.length(); x++) {
 				  if ((nivelId.charAt(x) != ' ')&&(nivelId.charAt(x) != '[')&&(nivelId.charAt(x) != ']'))
 				    sCadenaSinBlancos += nivelId.charAt(x);
