@@ -18,26 +18,31 @@ package com.opensourcestrategies.financials.transactions;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 
 import javolution.util.FastList;
 import javolution.util.FastMap;
 
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
+import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.party.party.PartyHelper;
-import org.opentaps.base.entities.AcctgTransAndOrg;
+import org.opentaps.base.entities.Enumeration;
 import org.opentaps.base.entities.AcctgTransOrgPresupIng;
 import org.opentaps.base.entities.AcctgTransType;
 import org.opentaps.base.entities.AcctgTrans;
 import org.opentaps.base.entities.GlFiscalType;
+import org.opentaps.base.entities.InvoiceAndInvoiceItem;
 import org.opentaps.base.entities.NivelPresupuestal;
 import org.opentaps.common.builder.EntityListBuilder;
 import org.opentaps.common.builder.PageBuilder;
@@ -47,6 +52,7 @@ import org.opentaps.domain.ledger.LedgerRepositoryInterface;
 import org.opentaps.domain.organization.Organization;
 import org.opentaps.domain.organization.OrganizationRepositoryInterface;
 import org.opentaps.foundation.action.ActionContext;
+
 
 /**
  * TransactionActions - Java Actions for Transactions.
@@ -65,6 +71,8 @@ public class TransactionsFindIng {
 
         final ActionContext ac = new ActionContext(context);
         final Locale locale = ac.getLocale();
+        final TimeZone timeZone = ac.getTimeZone();
+
         String organizationPartyId = UtilCommon.getOrganizationPartyId(ac.getRequest());
 
         // possible fields we're searching by
@@ -77,8 +85,10 @@ public class TransactionsFindIng {
  
         ac.put("glFiscalTypeId", glFiscalTypeId);
 
-        String postedAmountFrom = ac.getParameter("postedAmountFrom");
-        String postedAmountThru = ac.getParameter("postedAmountThru");
+        String desde = ac.getParameter("desde");
+        String hasta = ac.getParameter("hasta");
+		
+
 
         DomainsDirectory dd = DomainsDirectory.getDomainsDirectory(ac);
         final LedgerRepositoryInterface ledgerRepository = dd.getLedgerDomain().getLedgerRepository();
@@ -93,7 +103,6 @@ public class TransactionsFindIng {
 
         
         
-        
         // get the list of transactionTypes for the parametrized form ftl
         List<AcctgTransType> transactionTypes = ledgerRepository.findAll(AcctgTransType.class);
         List<Map<String, Object>> transactionTypesList = new FastList<Map<String, Object>>();
@@ -102,15 +111,7 @@ public class TransactionsFindIng {
             transactionTypesList.add(map);
         }
         ac.put("transactionTypes", transactionTypesList);
-//////////////////////////////////////////////////////////        ///
-        List<NivelPresupuestal> nivelList = ledgerRepository.findAll(NivelPresupuestal.class);
-        List<Map<String, Object>> nivelLists = new FastList<Map<String, Object>>();
-        for (NivelPresupuestal s : nivelList) {
-            Map<String, Object> map = s.toMap();
-            nivelLists.add(map);
-        }
-        ac.put("nivelLists", nivelLists);
-        
+
 
         // get the list of glFiscalTypes for the parametrized form ftl
         List<GlFiscalType> glFiscalTypes = ledgerRepository.findAll(GlFiscalType.class);
@@ -147,12 +148,20 @@ public class TransactionsFindIng {
                 searchConditions.add(EntityCondition.makeCondition(AcctgTransOrgPresupIng.Fields.acctgTransTypeId.name(), EntityOperator.EQUALS, acctgTransTypeId));
             }*/
 
-            if (UtilValidate.isNotEmpty(postedAmountFrom)) {
-            	searchConditions.add(EntityCondition.makeCondition(AcctgTransOrgPresupIng.Fields.postedAmount.name(), EntityOperator.GREATER_THAN_EQUAL_TO, new BigDecimal(postedAmountFrom)));
+            String dateFormat = UtilDateTime.getDateFormat(locale);
+            if (desde != null) {
+            	searchConditions.add(EntityCondition.makeCondition(AcctgTransOrgPresupIng.Fields.postedDate.name(), EntityOperator.GREATER_THAN_EQUAL_TO, UtilDateTime.getDayStart(UtilDateTime.stringToTimeStamp(desde, dateFormat, timeZone, locale), timeZone, locale)));
             }
-            if (UtilValidate.isNotEmpty(postedAmountThru)) {
-            	searchConditions.add(EntityCondition.makeCondition(AcctgTransOrgPresupIng.Fields.postedAmount.name(), EntityOperator.LESS_THAN_EQUAL_TO, new BigDecimal(postedAmountThru)));
+            if (hasta != null) {
+            	searchConditions.add(EntityCondition.makeCondition(AcctgTransOrgPresupIng.Fields.postedDate.name(), EntityOperator.LESS_THAN_EQUAL_TO, UtilDateTime.getDayStart(UtilDateTime.stringToTimeStamp(hasta, dateFormat, timeZone, locale), timeZone, locale)));
             }
+           
+           
+           /*
+            
+            if (UtilValidate.isNotEmpty(hasta)) {
+            	searchConditions.add(EntityCondition.makeCondition(AcctgTransOrgPresupIng.Fields.postedDate.name(), EntityOperator.LESS_THAN_EQUAL_TO, new BigDecimal(hasta)));
+            }*/
             // fields to select
             
         
@@ -188,6 +197,7 @@ public class TransactionsFindIng {
 
         final ActionContext ac = new ActionContext(context);
         final Locale locale = ac.getLocale();
+        final TimeZone timeZone = ac.getTimeZone();
         String organizationPartyId = UtilCommon.getOrganizationPartyId(ac.getRequest());
 
         // possible fields we're searching by
@@ -200,8 +210,8 @@ public class TransactionsFindIng {
  
         ac.put("glFiscalTypeId", glFiscalTypeId);
 
-        String postedAmountFrom = ac.getParameter("postedAmountFrom");
-        String postedAmountThru = ac.getParameter("postedAmountThru");
+        String desde = ac.getParameter("desde");
+        String hasta = ac.getParameter("hasta");
 
         DomainsDirectory dd = DomainsDirectory.getDomainsDirectory(ac);
         final LedgerRepositoryInterface ledgerRepository = dd.getLedgerDomain().getLedgerRepository();
@@ -265,17 +275,26 @@ public class TransactionsFindIng {
             if (UtilValidate.isNotEmpty(glFiscalTypeId)) {
                 searchConditions.add(EntityCondition.makeCondition(AcctgTransOrgPresupIng.Fields.glFiscalTypeId.name(), EntityOperator.EQUALS, glFiscalTypeId));
             }
+            String dateFormat = UtilDateTime.getDateFormat(locale);
+            if (desde != null) {
+            	searchConditions.add(EntityCondition.makeCondition(AcctgTransOrgPresupIng.Fields.postedDate.name(), EntityOperator.GREATER_THAN_EQUAL_TO, UtilDateTime.getDayStart(UtilDateTime.stringToTimeStamp(desde, dateFormat, timeZone, locale), timeZone, locale)));
+            }
+            if (hasta != null) {
+            	searchConditions.add(EntityCondition.makeCondition(AcctgTransOrgPresupIng.Fields.postedDate.name(), EntityOperator.LESS_THAN_EQUAL_TO, UtilDateTime.getDayStart(UtilDateTime.stringToTimeStamp(hasta, dateFormat, timeZone, locale), timeZone, locale)));
+            }
+           
 
            /*  if (UtilValidate.isNotEmpty(acctgTransTypeId)) {
                 searchConditions.add(EntityCondition.makeCondition(AcctgTransOrgPresupIng.Fields.acctgTransTypeId.name(), EntityOperator.EQUALS, acctgTransTypeId));
             }*/
-
-            if (UtilValidate.isNotEmpty(postedAmountFrom)) {
-            	searchConditions.add(EntityCondition.makeCondition(AcctgTransOrgPresupIng.Fields.postedAmount.name(), EntityOperator.GREATER_THAN_EQUAL_TO, new BigDecimal(postedAmountFrom)));
+/*
+            if (UtilValidate.isNotEmpty(desde)) {
+            	searchConditions.add(EntityCondition.makeCondition(AcctgTransOrgPresupIng.Fields.postedDate.name(), EntityOperator.GREATER_THAN_EQUAL_TO, new BigDecimal(desde)));
             }
-            if (UtilValidate.isNotEmpty(postedAmountThru)) {
-            	searchConditions.add(EntityCondition.makeCondition(AcctgTransOrgPresupIng.Fields.postedAmount.name(), EntityOperator.LESS_THAN_EQUAL_TO, new BigDecimal(postedAmountThru)));
+            if (UtilValidate.isNotEmpty(hasta)) {
+            	searchConditions.add(EntityCondition.makeCondition(AcctgTransOrgPresupIng.Fields.postedDate.name(), EntityOperator.LESS_THAN_EQUAL_TO, new BigDecimal(hasta)));
             }
+            */
             // fields to select
             
         
@@ -319,8 +338,8 @@ public class TransactionsFindIng {
         String acctgTransId = ac.getParameter("findAcctgTransId");
        
 
-        String postedAmountFrom = ac.getParameter("postedAmountFrom");
-        String postedAmountThru = ac.getParameter("postedAmountThru");
+        String desde = ac.getParameter("desde");
+        String hasta = ac.getParameter("hasta");
 
         DomainsDirectory dd = DomainsDirectory.getDomainsDirectory(ac);
         final LedgerRepositoryInterface ledgerRepository = dd.getLedgerDomain().getLedgerRepository();
@@ -401,6 +420,28 @@ public class TransactionsFindIng {
             ac.put("acctgTransListBuilder", acctgTransListBuilder);
         //}
     }
-    
+//Metodo que devuelve la lista que  se  genera el mapa para la exportación a Excel    
+    public static void findExcelTag(Map<String, Object> context) throws GeneralException, ParseException {
+        final ActionContext ac = new ActionContext(context);
+        DomainsDirectory dd = DomainsDirectory.getDomainsDirectory(ac);
+        final LedgerRepositoryInterface ledgerRepository = dd.getLedgerDomain().getLedgerRepository();
+//////////////////////////////////////////////////////////        ///
+        List<NivelPresupuestal> nivelList = ledgerRepository.findAll(NivelPresupuestal.class);
+        List<Map<String, Object>> nivelLists = new FastList<Map<String, Object>>();
+        for (NivelPresupuestal s : nivelList) {
+            Map<String, Object> map = s.toMap();
+            nivelLists.add(map);
+        }
+        ac.put("nivelLists", nivelLists);
+        
+        List<Enumeration> enumList = ledgerRepository.findAll(Enumeration.class);
+        List<Map<String, Object>> Enumlists = new FastList<Map<String, Object>>();
+        for (Enumeration s : enumList) {
+            Map<String, Object> map = s.toMap();
+            Enumlists.add(map);
+        }
+        ac.put("Enumlists", Enumlists);
+        
+    }
     
 }

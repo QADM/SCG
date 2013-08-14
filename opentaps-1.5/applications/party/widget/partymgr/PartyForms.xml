@@ -115,23 +115,22 @@ under the License.
                 </entity-options>
             </drop-down>
         </field>
-	   <field name="nivelId" title="nivelId" >
-           	 <drop-down allow-empty="false" current="selected">
-                <entity-options description="${descripcion}" entity-name="NivelPresupuestal" key-field-name="nivelId">
+	   <field name="Nivel_id" title="Nivel" >
+           	 <drop-down allow-empty="false" current="selected" >
+               <entity-options description="${descripcion}" entity-name="NivelPresup" key-field-name="clasificacionId">
+                   <entity-constraint name="clasificacionId" operator="equals" value="CL_ADMINISTRATIVA"/>
+
                     <entity-order-by field-name="descripcion"/>
                 </entity-options>
            	 </drop-down>
         </field>
-        
-        
-        <field name="statusId" use-when="partyGroup!=null">
-            <drop-down allow-empty="false">
-                <entity-options description="${description}" entity-name="Status_Item">
-                    <entity-constraint name="statusTypeId" value="PARTY_STATUS"/>
-                    <entity-order-by field-name="sequenceId"/>
-                </entity-options>
-            </drop-down>
-        </field>
+        <field name="node" title="${uiLabelMap.Nodo}" >            
+            <drop-down>
+                <option key="R" description="Rama"/>
+                <option key="H" description="Hoja"/>
+            </drop-down>  
+        </field> 
+
 
   <field name="submitButton" title="${uiLabelMap.CommonSave}"><submit button-type="button"/></field>
         <field name="cancelLink" title="${uiLabelMap.CommonEmptyHeader}" widget-style="smallSubmit">
@@ -151,6 +150,8 @@ under the License.
         
         <field name="description" title="${uiLabelMap.CommonDescription}"><display/></field>
         <field name="preferredCurrencyUomId" title="${uiLabelMap.CommonCurrency}"><display-entity entity-name="Uom" key-field-name="uomId" description="${description}"/></field>
+	     <field name="node" title="${uiLabelMap.Nodo}"><display-entity entity-name="Party" key-field-name="partyId" description="${node}"/></field>
+	
 	     <field name="Nivel_id" title="${uiLabelMap.Nivel}" ><display-entity entity-name="NivelPresupuestal" key-field-name="nivelId"  description="${descripcion}"/></field>
         <field name="statusId"><display-entity entity-name="StatusItem" key-field-name="statusId" description="${description}"/></field>
     </form>

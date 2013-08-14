@@ -21,9 +21,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.sql.Date;
+
 import java.util.Arrays;
 import java.util.Collection;
+import java.sql.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -37,7 +38,6 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
-import org.hibernate.search.util.LoggerFactory;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilValidate;
 import org.opentaps.base.entities.DataImportCategory;
@@ -118,6 +118,7 @@ public final class ExcelImportServices extends DomainService {
 	private String uploadedFileName;
 
 	private Session session;
+
 	/**
 	 * Default constructor.
 	 */
@@ -713,16 +714,42 @@ public final class ExcelImportServices extends DomainService {
 		}
 	}
 
-	private Date getFecha(HSSFCell celda) {
+	private java.sql.Date getFecha(HSSFCell celda) {
 
 		SimpleDateFormat formatoDelTexto = new SimpleDateFormat("dd-MM-yyyy");
-		Date fecha = null;
+		java.sql.Date fecha = null;
 
 		try {
 			switch (celda.getCellType()) {
 			case HSSFCell.CELL_TYPE_BLANK:
 				Calendar c1 = GregorianCalendar.getInstance();
 				fecha = new java.sql.Date(c1.getTime().getTime());
+				break;
+
+			default:
+
+				String cadFecha = celda.toString().trim();
+				fecha = new java.sql.Date(formatoDelTexto.parse(cadFecha)
+						.getTime());
+				break;
+			}
+		} catch (Exception e) {
+			logger.debug("No se pudo hacer el parser de la fecha: " + e);
+		}
+
+		return fecha;
+
+	}
+
+	private Date getFechaHHMMSS(HSSFCell celda) {
+
+		SimpleDateFormat formatoDelTexto = new SimpleDateFormat(
+				"dd-MM-yyy hh:mm:ss");
+		Date fecha = null;
+
+		try {
+			switch (celda.getCellType()) {
+			case HSSFCell.CELL_TYPE_BLANK:
 				break;
 
 			default:
@@ -830,7 +857,7 @@ public final class ExcelImportServices extends DomainService {
 				project.setNivelId(this.readStringCell(row, rowCount++));
 				project.setExternalId(this.readStringCell(row, rowCount++));
 				project.setNode(this.readStringCell(row, rowCount++));
-				
+
 				projects.add(project);
 			}
 		}
@@ -973,34 +1000,21 @@ public final class ExcelImportServices extends DomainService {
 				DataImportIngresoDiario ingreso = new DataImportIngresoDiario();
 				ingreso.setIdTipoDoc(tipo);
 				int rowCount = 1; // keep track of the row
-				ingreso.setFechaRegistro(getFecha(row.getCell(rowCount++)));
-				ingreso.setFechaContable(getFecha(row.getCell(rowCount++)));
+				ingreso.setFechaRegistro(getFechaHHMMSS(row.getCell(rowCount++)));
+				ingreso.setFechaContable(getFechaHHMMSS(row.getCell(rowCount++)));
 				ingreso.setMonto(this.readBigDecimalCell(row, rowCount++));
 				ingreso.setOrganizationPartyId(this.readStringCell(row,
 						rowCount++));
 				ingreso.setRefDoc(this.readStringCell(row, rowCount++));
 				ingreso.setSecuencia(this.readStringCell(row, rowCount++));
 				ingreso.setUsuario(this.readStringCell(row, rowCount++));
-				Debug.log("Usuario " + ingreso.getUsuario());
-				ingreso.setLote(this.readStringCell(row, rowCount++));
 				ingreso.setIdTipoCatalogo(this.readStringCell(row, rowCount++));
 				ingreso.setIdPago(this.readStringCell(row, rowCount++));
 				ingreso.setIdProducto(this.readStringCell(row, rowCount++));
 				ingreso.setCiclo(this.readStringCell(row, rowCount++));
-				ingreso.setUr(this.readStringCell(row, rowCount++));
-				ingreso.setUo(this.readStringCell(row, rowCount++));
 				ingreso.setUe(this.readStringCell(row, rowCount++));
-				ingreso.setRub(this.readStringCell(row, rowCount++));
-				ingreso.setTip(this.readStringCell(row, rowCount++));
-				ingreso.setCla(this.readStringCell(row, rowCount++));
-				ingreso.setCon(this.readStringCell(row, rowCount++));
 				ingreso.setN5(this.readStringCell(row, rowCount++));
-				ingreso.setF(this.readStringCell(row, rowCount++));
-				ingreso.setSf(this.readStringCell(row, rowCount++));
 				ingreso.setSfe(this.readStringCell(row, rowCount++));
-				ingreso.setEf(this.readStringCell(row, rowCount++));
-				ingreso.setReg(this.readStringCell(row, rowCount++));
-				ingreso.setMun(this.readStringCell(row, rowCount++));
 				ingreso.setLoc(this.readStringCell(row, rowCount++));
 				ingreso.setClavePres(this.readStringCell(row, rowCount++));
 				ingresos.add(ingreso);
@@ -1045,43 +1059,25 @@ public final class ExcelImportServices extends DomainService {
 				DataImportEgresoDiario egreso = new DataImportEgresoDiario();
 				egreso.setIdTipoDoc(tipo);
 				int rowCount = 1; // keep track of the row
-				egreso.setFechaRegistro(getFecha(row.getCell(rowCount++)));
-				egreso.setFechaContable(getFecha(row.getCell(rowCount++)));
+				egreso.setFechaRegistro(getFechaHHMMSS(row.getCell(rowCount++)));
+				egreso.setFechaContable(getFechaHHMMSS(row.getCell(rowCount++)));
 				egreso.setMonto(this.readBigDecimalCell(row, rowCount++));
 				egreso.setOrganizationPartyId(this.readStringCell(row,
 						rowCount++));
 				egreso.setRefDoc(this.readStringCell(row, rowCount++));
 				egreso.setSecuencia(this.readStringCell(row, rowCount++));
 				egreso.setUsuario(this.readStringCell(row, rowCount++));
-				egreso.setLote(this.readStringCell(row, rowCount++));
 				egreso.setIdTipoCatalogo(this.readStringCell(row, rowCount++));
 				egreso.setIdPago(this.readStringCell(row, rowCount++));
 				egreso.setIdProducto(this.readStringCell(row, rowCount++));
 				egreso.setCiclo(this.readStringCell(row, rowCount++));
-				egreso.setUr(this.readStringCell(row, rowCount++));
-				egreso.setUo(this.readStringCell(row, rowCount++));
 				egreso.setUe(this.readStringCell(row, rowCount++));
-				egreso.setFin(this.readStringCell(row, rowCount++));
-				egreso.setFun(this.readStringCell(row, rowCount++));
 				egreso.setSubf(this.readStringCell(row, rowCount++));
-				egreso.setEje(this.readStringCell(row, rowCount++));
-				egreso.setPp(this.readStringCell(row, rowCount++));
-				egreso.setSpp(this.readStringCell(row, rowCount++));
 				egreso.setAct(this.readStringCell(row, rowCount++));
 				egreso.setTg(this.readStringCell(row, rowCount++));
-				egreso.setCap(this.readStringCell(row, rowCount++));
-				egreso.setCon(this.readStringCell(row, rowCount++));
-				egreso.setPg(this.readStringCell(row, rowCount++));
 				egreso.setPe(this.readStringCell(row, rowCount++));
-				egreso.setF(this.readStringCell(row, rowCount++));
-				egreso.setSf(this.readStringCell(row, rowCount++));
 				egreso.setSfe(this.readStringCell(row, rowCount++));
-				egreso.setEf(this.readStringCell(row, rowCount++));
-				egreso.setReg(this.readStringCell(row, rowCount++));
-				egreso.setMun(this.readStringCell(row, rowCount++));
 				egreso.setLoc(this.readStringCell(row, rowCount++));
-				egreso.setSec(this.readStringCell(row, rowCount++));
-				egreso.setSubsec(this.readStringCell(row, rowCount++));
 				egreso.setArea(this.readStringCell(row, rowCount++));
 				egreso.setClavePres(this.readStringCell(row, rowCount++));
 				egresos.add(egreso);
@@ -1127,9 +1123,9 @@ public final class ExcelImportServices extends DomainService {
 				DataImportOperacionDiaria operacionDiaria = new DataImportOperacionDiaria();
 				operacionDiaria.setIdTipoDoc(tipo);
 				int rowCount = 1; // keep track of the row
-				operacionDiaria.setFechaRegistro(getFecha(row
+				operacionDiaria.setFechaRegistro(getFechaHHMMSS(row
 						.getCell(rowCount++)));
-				operacionDiaria.setFechaContable(getFecha(row
+				operacionDiaria.setFechaContable(getFechaHHMMSS(row
 						.getCell(rowCount++)));
 				operacionDiaria.setMonto(this.readBigDecimalCell(row,
 						rowCount++));
@@ -1142,7 +1138,6 @@ public final class ExcelImportServices extends DomainService {
 						rowCount++));
 				operacionDiaria
 						.setUsuario(this.readStringCell(row, rowCount++));
-				operacionDiaria.setLote(this.readStringCell(row, rowCount++));
 				operacionDiaria.setConcepto(this
 						.readStringCell(row, rowCount++));
 				operacionDiaria.setSubconcepto(this.readStringCell(row,
@@ -1419,23 +1414,12 @@ public final class ExcelImportServices extends DomainService {
 				DataImportPresupuestoIngreso ingreso = new DataImportPresupuestoIngreso();
 				ingreso.setCiclo(ciclo);
 				int rowCount = 1; // keep track of the row
-				ingreso.setUr(this.readStringCell(row, rowCount++));
-				ingreso.setUo(this.readStringCell(row, rowCount++));
 				ingreso.setUe(this.readStringCell(row, rowCount++));
-				ingreso.setRub(this.readStringCell(row, rowCount++));
-				ingreso.setTip(this.readStringCell(row, rowCount++));
-				ingreso.setCla(this.readStringCell(row, rowCount++));
-				ingreso.setCon(this.readStringCell(row, rowCount++));
 				ingreso.setN5(this.readStringCell(row, rowCount++));
-				ingreso.setF(this.readStringCell(row, rowCount++));
-				ingreso.setSf(this.readStringCell(row, rowCount++));
 				ingreso.setSfe(this.readStringCell(row, rowCount++));
-				ingreso.setEf(this.readStringCell(row, rowCount++));
-				ingreso.setReg(this.readStringCell(row, rowCount++));
-				ingreso.setMun(this.readStringCell(row, rowCount++));
 				ingreso.setLoc(this.readStringCell(row, rowCount++));
 				ingreso.setClavePres(this.readStringCell(row, rowCount++));
-				// ingreso.setUsuario(this.readStringCell(row, rowCount++));
+				ingreso.setUsuario(this.readStringCell(row, rowCount++));
 				ingreso.setEnero(this.readBigDecimalCell(row, rowCount++));
 				ingreso.setFebrero(this.readBigDecimalCell(row, rowCount++));
 				ingreso.setMarzo(this.readBigDecimalCell(row, rowCount++));
@@ -1492,33 +1476,16 @@ public final class ExcelImportServices extends DomainService {
 				DataImportPresupuestoEgreso egreso = new DataImportPresupuestoEgreso();
 				egreso.setCiclo(ciclo);
 				int rowCount = 1; // keep track of the row
-				egreso.setUr(this.readStringCell(row, rowCount++));
-				egreso.setUo(this.readStringCell(row, rowCount++));
 				egreso.setUe(this.readStringCell(row, rowCount++));
-				egreso.setFin(this.readStringCell(row, rowCount++));
-				egreso.setFun(this.readStringCell(row, rowCount++));
 				egreso.setSubf(this.readStringCell(row, rowCount++));
-				egreso.setEje(this.readStringCell(row, rowCount++));
-				egreso.setPp(this.readStringCell(row, rowCount++));
-				egreso.setSpp(this.readStringCell(row, rowCount++));
 				egreso.setAct(this.readStringCell(row, rowCount++));
 				egreso.setTg(this.readStringCell(row, rowCount++));
-				egreso.setCap(this.readStringCell(row, rowCount++));
-				egreso.setCon(this.readStringCell(row, rowCount++));
-				egreso.setPg(this.readStringCell(row, rowCount++));
 				egreso.setPe(this.readStringCell(row, rowCount++));
-				egreso.setF(this.readStringCell(row, rowCount++));
-				egreso.setSf(this.readStringCell(row, rowCount++));
 				egreso.setSfe(this.readStringCell(row, rowCount++));
-				egreso.setEf(this.readStringCell(row, rowCount++));
-				egreso.setReg(this.readStringCell(row, rowCount++));
-				egreso.setMun(this.readStringCell(row, rowCount++));
 				egreso.setLoc(this.readStringCell(row, rowCount++));
-				egreso.setSec(this.readStringCell(row, rowCount++));
-				egreso.setSubsec(this.readStringCell(row, rowCount++));
 				egreso.setArea(this.readStringCell(row, rowCount++));
 				egreso.setClavePres(this.readStringCell(row, rowCount++));
-				// egreso.setUsuario(this.readStringCell(row, rowCount++));
+				egreso.setUsuario(this.readStringCell(row, rowCount++));
 				egreso.setEnero(this.readBigDecimalCell(row, rowCount++));
 				egreso.setFebrero(this.readBigDecimalCell(row, rowCount++));
 				egreso.setMarzo(this.readBigDecimalCell(row, rowCount++));
@@ -1544,9 +1511,10 @@ public final class ExcelImportServices extends DomainService {
 	 * 
 	 * @exception ServiceException
 	 *                if an error occurs
-	 * @throws InfrastructureException 
+	 * @throws InfrastructureException
 	 */
-	public void parseFileForDataImport() throws ServiceException, InfrastructureException {
+	public void parseFileForDataImport() throws ServiceException,
+			InfrastructureException {
 
 		// Get the uploaded file
 		File file = getUploadedExcelFile(getUploadedFileName());
@@ -1606,15 +1574,18 @@ public final class ExcelImportServices extends DomainService {
 						deleteEntities("DataImportProject");
 						entitiesToCreate.addAll(createDataImportProject(sheet));
 					} else if (EXCEL_GEO_TAB.equals(excelTab)) {
+						deleteEntities("DataImportGeo");
 						entitiesToCreate.addAll(createDataImportGeo(sheet));
 					} else if (EXCEL_CATEGORY_TAB.equals(excelTab)) {
 						deleteEntities("DataImportCategory");
 						entitiesToCreate
 								.addAll(createDataImportCategory(sheet));
 					} else if (EXCEL_PRESUPUESTO_INGRESO_TAB.equals(excelTab)) {
+						deleteEntities("DataImportPresupuestoIngreso");
 						entitiesToCreate
 								.addAll(createDataImportPresupuestoIngreso(sheet));
 					} else if (EXCEL_PRESUPUESTO_EGRESO_TAB.equals(excelTab)) {
+						deleteEntities("DataImportPresupuestoEgreso");
 						entitiesToCreate
 								.addAll(createDataImportPresupuestoEgreso(sheet));
 					} else if (EXCEL_CGUIDE_TAB.equals(excelTab)) {
@@ -1632,6 +1603,7 @@ public final class ExcelImportServices extends DomainService {
 								.addAll(createDataImportMatrizConversionIngresos(sheet));
 						// etc ...
 					} else if (EXCEL_EGRESO_DIARIO_TAB.equals(excelTab)) {
+						deleteEntities("DataImportEgresoDiario");
 						entitiesToCreate
 								.addAll(createDataImportEgresoDiario(sheet));
 					} else if (EXCEL_CGUIDE_TAB_CON.equals(excelTab)) {
@@ -1641,9 +1613,11 @@ public final class ExcelImportServices extends DomainService {
 						entitiesToCreate
 								.addAll(createDataImportSubConceptos(sheet));
 					} else if (EXCEL_INGRESO_DIARIO_TAB.equals(excelTab)) {
+						deleteEntities("DataImportIngresoDiario");
 						entitiesToCreate
 								.addAll(createDataImportIngresoDiario(sheet));
 					} else if (EXCEL_OPERACION_DIARIA_TAB.equals(excelTab)) {
+						deleteEntities("DataImportOperacionDiaria");
 						entitiesToCreate
 								.addAll(createDataImportOperacionDiaria(sheet));
 					}
@@ -1670,30 +1644,31 @@ public final class ExcelImportServices extends DomainService {
 					MODULE);
 		}
 	}
-	
-	/*Delete Entities 
-	 * */
-private void deleteEntities(String entity) throws InfrastructureException {
-		
-		this.session = this.getInfrastructure().getSession();		
+
+	/*
+	 * Delete Entities
+	 */
+	private void deleteEntities(String entity) throws InfrastructureException {
+
+		this.session = this.getInfrastructure().getSession();
 		Transaction tx = null;
-		
+
 		try {
-				
-			tx = session.beginTransaction();		
-			//Query query = session.createQuery("delete from DataImportGlAccount");
+
+			tx = session.beginTransaction();
+			// Query query =
+			// session.createQuery("delete from DataImportGlAccount");
 			Query query = session.createQuery("delete from " + entity);
 			int rowCount = query.executeUpdate();
-	        logger.debug("Rows affected: " + rowCount + " ," + entity);
-			tx.commit();	
-			
+			logger.debug("Rows affected: " + rowCount + " ," + entity);
+			tx.commit();
+
 		} catch (Exception e) {
-			Debug.log("Error al borrar registros " + e); 
-			if (tx != null)  
-		        tx.rollback();  
+			Debug.log("Error al borrar registros " + e);
+			if (tx != null)
+				tx.rollback();
 		}
 	}
-
 
 	public void setUploadedFileName(String uploadedFileName) {
 		this.uploadedFileName = uploadedFileName;

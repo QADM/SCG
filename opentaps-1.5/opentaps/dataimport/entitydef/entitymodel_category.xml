@@ -20,7 +20,7 @@
         title="Intermediate import entity (i.e., the bridge table) for Category data.">
         <field name="productCategoryId" type="id-ne"><description>Product Category Id</description></field>         
         <field name="productCategoryTypeId" type="id"><description>Product Category Type</description></field>   
-        <field name="categoryName" type="name"><description>Product Category Name</description></field>
+        <field name="categoryName" type="description"><description>Product Category Name</description></field>
         <field name="primaryParentCategoryId" type="id"><description>Primary Parent Category</description></field>
         <field name="code" type="id"><description>Product Category Type</description></field>
         <field name="node" type="indicator"/>

@@ -16,28 +16,32 @@
 -->
 
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
-
+<#assign Nodo = {"R": "Rama", "H": "Rama"} />
 <@frameSection title=uiLabelMap.FinancialsCreateAccountingTag>
   <form method="post" action="<@ofbizUrl>createAccountingTag</@ofbizUrl>" name="createAccountingTag">
     <table class="twoColumnForm" style="border:0">
       <@inputSelectRow title=uiLabelMap.CommonType name="enumTypeId" list=tagTypes key="enumTypeId" ; tag>
         ${tag.description}
       </@inputSelectRow>
-      <@inputTextRow title=uiLabelMap.CommonSequenceNum name="sequenceId" size=3 maxlength=3 />
-      <@inputTextRow title=uiLabelMap.CommonId name="enumId" />
+      <@inputTextRow title=uiLabelMap.Codigo name="sequenceId" size=3 maxlength=3 titleClass="requiredField"/>
+
       <@inputTextRow title=uiLabelMap.CommonName name="enumCode" titleClass="requiredField" />
       <@inputTextRow title=uiLabelMap.CommonDescription name="description" size=60  titleClass="requiredField"/>
      
      
      
-      
-        <@inputSelectRow title=uiLabelMap.Nivel required=false list=nivelLists  displayField="descripcion" name="nivelId"  />     
+   		
+        <@inputSelectRow title=uiLabelMap.Nivel required=false list=nivels  displayField="descripcion" name="nivelId" titleClass="requiredField" />     
+       
+       
+       
            
-
+        <@inputSelectHashRow  title="Nodo" name="node"  hash=Nodo />
+            
       
       <@inputTextRow title=uiLabelMap.ParentId  size=10 name="parentEnumId" size=10  />
-      <@inputDateRow title="Fecha inicio"  name="fechaInicio" size=12 default="" />
-      <@inputDateRow title="Fecha fin" name="fechaFin"   size=12 default="" />
+      <@inputDateRow title="Fecha inicio"  name="fechaInicio" size=12 default="" titleClass="requiredField" />
+      <@inputDateRow title="Fecha fin" name="fechaFin"   size=12 default="" titleClass="requiredField" />
       <@inputSubmitRow title=uiLabelMap.CommonCreate />
     </table>
   </form>

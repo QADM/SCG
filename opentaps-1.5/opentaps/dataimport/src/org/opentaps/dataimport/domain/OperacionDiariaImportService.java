@@ -11,12 +11,11 @@ import org.opentaps.base.constants.StatusItemConstants;
 import org.opentaps.base.entities.AcctgTrans;
 import org.opentaps.base.entities.AcctgTransEntry;
 import org.opentaps.base.entities.AcctgTransPresupuestal;
-import org.opentaps.base.entities.AcctgTransType;
 import org.opentaps.base.entities.DataImportOperacionDiaria;
 import org.opentaps.base.entities.GlAccountOrganization;
 import org.opentaps.base.entities.Party;
-import org.opentaps.base.entities.PaymentMethod;
 import org.opentaps.base.entities.TipoDocumento;
+import org.opentaps.dataimport.UtilImport;
 import org.opentaps.domain.DomainService;
 import org.opentaps.domain.dataimport.OperacionDiariaDataImportRepositoryInterface;
 import org.opentaps.domain.dataimport.OperacionDiariaImportServiceInterface;
@@ -37,10 +36,16 @@ public class OperacionDiariaImportService extends DomainService implements
 			.getName();
 	// session object, using to store/search pojos.
 	private Session session;
+	private String lote;
 	public int importedRecords;
 
 	public OperacionDiariaImportService() {
 		super();
+	}
+
+	/** {@inheritDoc} */
+	public void setLote(String lote) {
+		this.lote = lote;
 	}
 
 	public OperacionDiariaImportService(Infrastructure infrastructure,
@@ -51,120 +56,6 @@ public class OperacionDiariaImportService extends DomainService implements
 	/** {@inheritDoc} */
 	public int getImportedRecords() {
 		return importedRecords;
-	}
-
-	private String validaParty(
-			OperacionDiariaDataImportRepositoryInterface imp_repo,
-			LedgerRepositoryInterface ledger_repo,
-			DataImportOperacionDiaria rowdata, String id, String campo)
-			throws RepositoryException {
-		List<Party> parties = ledger_repo.findList(Party.class,
-				ledger_repo.map(Party.Fields.externalId, id));
-		if (parties.isEmpty()) {
-			Debug.log("Error, " + campo + " no existe");
-			String message = "Failed to import Operacion Diaria ["
-			// + rowdata.getClavePres() + "], Error message : " + campo
-					+ " no existe";
-			Debug.log(message);
-			Debug.log("despues de message");
-			storeImportOperacionDiariaError(rowdata, message, imp_repo);
-			throw new RepositoryException("Error, " + campo + " no existe");
-		}
-		return parties.get(0).getPartyId();
-	}
-
-	private void validaTipoTrans(
-			OperacionDiariaDataImportRepositoryInterface imp_repo,
-			LedgerRepositoryInterface ledger_repo,
-			DataImportOperacionDiaria rowdata, String tipo)
-			throws RepositoryException {
-		AcctgTransType type = ledger_repo.findOne(AcctgTransType.class,
-				ledger_repo.map(AcctgTransType.Fields.acctgTransTypeId, tipo));
-		if (type == null) {
-			Debug.log("Error, tipoTrans no existe");
-			String message = "Failed to import Operacion Diaria ["
-			// + rowdata.getClavePres() + "], Error message : "
-					+ "tipoTrans no existe";
-			storeImportOperacionDiariaError(rowdata, message, imp_repo);
-			throw new RepositoryException("Error, tipoTrans no existe");
-		}
-	}
-
-	private TipoDocumento validaTipoDoc(
-			OperacionDiariaDataImportRepositoryInterface imp_repo,
-			LedgerRepositoryInterface ledger_repo,
-			DataImportOperacionDiaria rowdata, String tipo)
-			throws RepositoryException {
-		TipoDocumento type = ledger_repo.findOne(TipoDocumento.class,
-				ledger_repo.map(TipoDocumento.Fields.idTipoDoc, tipo));
-		if (type == null) {
-			Debug.log("Error, tipoDoc no existe");
-			String message = "Failed to import Operacion Diaria ["
-			// + rowdata.getClavePres() + "], Error message : "
-					+ "tipoDoc no existe";
-			storeImportOperacionDiariaError(rowdata, message, imp_repo);
-			throw new RepositoryException("Error, tipoDoc no existe");
-		}
-		return type;
-	}
-
-	private void validaPago(
-			OperacionDiariaDataImportRepositoryInterface imp_repo,
-			LedgerRepositoryInterface ledger_repo,
-			DataImportOperacionDiaria rowdata, String tipo)
-			throws RepositoryException {
-		PaymentMethod payment = ledger_repo.findOne(PaymentMethod.class,
-				ledger_repo.map(PaymentMethod.Fields.paymentMethodId, tipo));
-		if (payment == null) {
-			Debug.log("Error, idPago no existe");
-			String message = "Failed to import Operacion Diaria ["
-			// + rowdata.getClavePres() + "], Error message : "
-					+ "idPago no existe";
-			storeImportOperacionDiariaError(rowdata, message, imp_repo);
-			throw new RepositoryException("Error, idPago no existe");
-		}
-	}
-
-	private AcctgTransEntry generaAcctgTransEntry(AcctgTrans transaccion,
-			DataImportOperacionDiaria rowdata, String seqId, String flag,
-			String cuenta) {
-		// C/D
-		Debug.log("Empieza AcctgTransEntry " + cuenta);
-
-		AcctgTransEntry acctgentry = new AcctgTransEntry();
-		acctgentry.setAcctgTransId(transaccion.getAcctgTransId());
-		acctgentry.setAcctgTransEntrySeqId(seqId);
-		acctgentry.setAcctgTransEntryTypeId("_NA_");
-		acctgentry.setDescription(acctgentry.getDescription());
-		acctgentry.setGlAccountId(cuenta);
-		acctgentry.setOrganizationPartyId(rowdata.getOrganizationPartyId());
-		acctgentry.setAmount(transaccion.getPostedAmount());
-		acctgentry.setCurrencyUomId("MXN");
-		acctgentry.setDebitCreditFlag(flag);
-		acctgentry.setReconcileStatusId("AES_NOT_RECONCILED");
-		return acctgentry;
-	}
-
-	private GlAccountOrganization actualizaGlAccountOrganization(
-			LedgerRepositoryInterface ledger_repo,
-			DataImportOperacionDiaria rowdata, String cuenta)
-			throws RepositoryException {
-
-		// GlAccountOrganization
-		Debug.log("Empieza GlAccountOrganization " + cuenta);
-		GlAccountOrganization glAccountOrganization = ledger_repo.findOne(
-				GlAccountOrganization.class, ledger_repo.map(
-						GlAccountOrganization.Fields.glAccountId, cuenta,
-						GlAccountOrganization.Fields.organizationPartyId,
-						rowdata.getOrganizationPartyId()));
-
-		if (glAccountOrganization.getPostedBalance() == null) {
-			glAccountOrganization.setPostedBalance(rowdata.getMonto());
-		} else {
-			glAccountOrganization.setPostedBalance(glAccountOrganization
-					.getPostedBalance().add(rowdata.getMonto()));
-		}
-		return glAccountOrganization;
 	}
 
 	private void storeImportOperacionDiariaSuccess(
@@ -218,34 +109,40 @@ public class OperacionDiariaImportService extends DomainService implements
 
 			for (DataImportOperacionDiaria rowdata : dataforimp) {
 				// Empieza bloque de validaciones
-								Debug.log("Empieza bloque de validaciones");
-				String ue = validaParty(imp_repo, ledger_repo, rowdata,
+				String mensaje = "";
+				Debug.log("Empieza bloque de validaciones");
+				mensaje = UtilImport.validaParty(mensaje, ledger_repo,
 						rowdata.getOrganizacionEjecutora(),
 						"Organizacion Ejecutora");
-				Debug.log("Valida tipoDoc");
-				TipoDocumento tipoDoc = validaTipoDoc(imp_repo, ledger_repo,
-						rowdata, rowdata.getIdTipoDoc());
-				Debug.log("Motor Contable");
-//				if (rowdata.getIdC() != null) {
-//					validaPago(imp_repo, ledger_repo, rowdata, rowdata.getIdC());
-//				}
-//
-//				if (rowdata.getIdD() != null) {
-//					validaPago(imp_repo, ledger_repo, rowdata, rowdata.getIdD());
-//				}
+				mensaje = UtilImport.validaTipoDoc(mensaje, ledger_repo,
+						rowdata.getIdTipoDoc());
 
+				if (!mensaje.isEmpty()) {
+					String message = "Failed to import Operacion Diaria ["
+							+ rowdata.getRefDoc() + rowdata.getSecuencia()
+							+ "], Error message : " + mensaje;
+					storeImportOperacionDiariaError(rowdata, message, imp_repo);
+					continue;
+				}
+
+				// Creacion de objetos
+				Debug.log("Empieza creacion de objetos");
+				Party ue = UtilImport.obtenParty(ledger_repo,
+						rowdata.getOrganizacionEjecutora());
+				TipoDocumento tipoDoc = UtilImport.obtenTipoDocumento(
+						ledger_repo, rowdata.getIdTipoDoc());
+
+				Debug.log("Motor Contable");
 				MotorContable motor = new MotorContable(ledger_repo);
 				Map<String, String> cuentas = motor.cuentasDiarias(
 						tipoDoc.getAcctgTransTypeId(), null, null,
 						rowdata.getOrganizationPartyId(), null, null,
 						rowdata.getIdTipoCatalogoC(), rowdata.getIdC(),
 						rowdata.getIdTipoCatalogoD(), rowdata.getIdD(), null,
-						false, rowdata.getConcepto(), rowdata.getSubconcepto(), null);
+						false, rowdata.getConcepto(), rowdata.getSubconcepto(),
+						null);
 				try {
 
-					// id maximo
-					Debug.log("Busqueda idMax");
-					String id = ledger_repo.getNextSeqId("AcctgTrans");
 					imp_tx1 = null;
 					imp_tx2 = null;
 					imp_tx3 = null;
@@ -269,45 +166,52 @@ public class OperacionDiariaImportService extends DomainService implements
 					cal.setTime(rowdata.getFechaContable());
 					OperacionDiaria.setPostedDate(new Timestamp(cal
 							.getTimeInMillis()));
-					OperacionDiaria.setAcctgTransTypeId(tipoDoc.getAcctgTransTypeId());
+					OperacionDiaria.setAcctgTransTypeId(tipoDoc
+							.getAcctgTransTypeId());
 					OperacionDiaria.setLastModifiedByUserLogin(rowdata
 							.getUsuario());
-					OperacionDiaria.setPartyId(ue);
+					OperacionDiaria.setPartyId(ue.getPartyId());
 					OperacionDiaria.setPostedAmount(rowdata.getMonto());
 
 					// ACCTG_TRANS_PRESUPUESTAL
 					AcctgTransPresupuestal aux = new AcctgTransPresupuestal();
-					aux.setUnidadEjecutora(ue);
+					aux.setUnidadEjecutora(ue.getPartyId());
 					aux.setAgrupador(rowdata.getRefDoc());
 					aux.setIdTipoDoc(rowdata.getIdTipoDoc());
-					aux.setDescripcionTipoDoc(tipoDoc.getDescripcion());
 					aux.setSecuencia(rowdata.getSecuencia());
-					aux.setLote(rowdata.getLote());
+					aux.setLote(lote);
 
 					if (cuentas.get("Cuenta Cargo Presupuesto") != null) {
 						Debug.log("Cuenta Presupuestal");
-						OperacionDiaria.setDescription(tipoDoc.getDescripcion() + "-"
-								+ rowdata.getRefDoc() + "-P");
+						OperacionDiaria.setDescription(tipoDoc.getDescripcion()
+								+ "-" + rowdata.getRefDoc() + "-P");
 
 						// id Transaccion
-						List<AcctgTrans> trans = ledger_repo.findList(
-								AcctgTrans.class, ledger_repo.map(
-										AcctgTrans.Fields.description,
-										OperacionDiaria.getDescription()));
+						OperacionDiaria.setAcctgTransId(UtilImport
+								.getAcctgTransIdDiario(rowdata.getRefDoc(),
+										rowdata.getSecuencia(), "P"));
 
-						if (trans.isEmpty()) {
-							Debug.log("Trans Nueva");
-							OperacionDiaria.setAcctgTransId(id + "-P");
-							OperacionDiaria.setCreatedByUserLogin(rowdata
-									.getUsuario());
-						} else {
+						AcctgTrans trans = ledger_repo.findOne(
+								AcctgTrans.class, ledger_repo.map(
+										AcctgTrans.Fields.acctgTransId,
+										OperacionDiaria.getAcctgTransId()));
+
+						if (trans != null) {
 							Debug.log("Trans Modif");
-							OperacionDiaria.setAcctgTransId(trans.get(0)
-									.getAcctgTransId());
-							OperacionDiaria.setCreatedByUserLogin(trans.get(0)
-									.getCreatedByUserLogin());
+							String message = "La transaccion con id: "
+									+ OperacionDiaria.getAcctgTransId()
+									+ "ya existe.";
+							Debug.log(message);
+							storeImportOperacionDiariaError(rowdata, message,
+									imp_repo);
+							continue;
 						}
-						OperacionDiaria.setGlFiscalTypeId("BUDGET");
+
+						Debug.log("Trans Nueva");
+						OperacionDiaria.setCreatedByUserLogin(rowdata
+								.getUsuario());
+						OperacionDiaria.setGlFiscalTypeId(cuentas
+								.get("GlFiscalTypePresupuesto"));
 						imp_tx1 = this.session.beginTransaction();
 						ledger_repo.createOrUpdate(OperacionDiaria);
 						imp_tx1.commit();
@@ -317,30 +221,42 @@ public class OperacionDiariaImportService extends DomainService implements
 						ledger_repo.createOrUpdate(aux);
 						imp_tx3.commit();
 
-						AcctgTransEntry acctgentry = generaAcctgTransEntry(
-								OperacionDiaria, rowdata, "00001", "D",
-								cuentas.get("Cuenta Cargo Presupuesto"));
+						AcctgTransEntry acctgentry = UtilImport
+								.generaAcctgTransEntry(
+										OperacionDiaria,
+										rowdata.getOrganizationPartyId(),
+										"00001",
+										"D",
+										cuentas.get("Cuenta Cargo Presupuesto"),
+										null);
 						imp_tx5 = this.session.beginTransaction();
 						ledger_repo.createOrUpdate(acctgentry);
 						imp_tx5.commit();
 
-						GlAccountOrganization glAccountOrganization = actualizaGlAccountOrganization(
-								ledger_repo, rowdata,
-								cuentas.get("Cuenta Cargo Presupuesto"));
+						GlAccountOrganization glAccountOrganization = UtilImport
+								.actualizaGlAccountOrganization(
+										ledger_repo,
+										rowdata.getMonto(),
+										cuentas.get("Cuenta Cargo Presupuesto"),
+										rowdata.getOrganizationPartyId());
 						imp_tx7 = this.session.beginTransaction();
 						ledger_repo.createOrUpdate(glAccountOrganization);
 						imp_tx7.commit();
 
-						acctgentry = generaAcctgTransEntry(OperacionDiaria,
-								rowdata, "00002", "C",
-								cuentas.get("Cuenta Abono Presupuesto"));
+						acctgentry = UtilImport.generaAcctgTransEntry(
+								OperacionDiaria,
+								rowdata.getOrganizationPartyId(), "00002", "C",
+								cuentas.get("Cuenta Abono Presupuesto"), null);
 						imp_tx9 = this.session.beginTransaction();
 						ledger_repo.createOrUpdate(acctgentry);
 						imp_tx9.commit();
 
-						glAccountOrganization = actualizaGlAccountOrganization(
-								ledger_repo, rowdata,
-								cuentas.get("Cuenta Abono Presupuesto"));
+						glAccountOrganization = UtilImport
+								.actualizaGlAccountOrganization(
+										ledger_repo,
+										rowdata.getMonto(),
+										cuentas.get("Cuenta Abono Presupuesto"),
+										rowdata.getOrganizationPartyId());
 						imp_tx11 = this.session.beginTransaction();
 						ledger_repo.createOrUpdate(glAccountOrganization);
 						imp_tx11.commit();
@@ -349,30 +265,35 @@ public class OperacionDiariaImportService extends DomainService implements
 
 					if (cuentas.get("Cuenta Cargo Contable") != null) {
 						Debug.log("Cuenta Contable");
-						OperacionDiaria.setDescription(tipoDoc.getDescripcion() + "-"
-								+ rowdata.getRefDoc() + "-C");
+						OperacionDiaria.setDescription(tipoDoc.getDescripcion()
+								+ "-" + rowdata.getRefDoc() + "-C");
 
 						// id Transaccion
-						List<AcctgTrans> trans = ledger_repo.findList(
-								AcctgTrans.class, ledger_repo.map(
-										AcctgTrans.Fields.description,
-										OperacionDiaria.getDescription()));
+						OperacionDiaria.setAcctgTransId(UtilImport
+								.getAcctgTransIdDiario(rowdata.getRefDoc(),
+										rowdata.getSecuencia(), "P"));
 
-						if (trans.isEmpty()) {
-							Debug.log("Trans Nueva");
-							OperacionDiaria.setAcctgTransId(id + "-C");
-							OperacionDiaria.setCreatedByUserLogin(rowdata
-									.getUsuario());
-						} else {
+						AcctgTrans trans = ledger_repo.findOne(
+								AcctgTrans.class, ledger_repo.map(
+										AcctgTrans.Fields.acctgTransId,
+										OperacionDiaria.getAcctgTransId()));
+
+						if (trans != null) {
 							Debug.log("Trans Modif");
-							OperacionDiaria.setAcctgTransId(trans.get(0)
-									.getAcctgTransId());
-							OperacionDiaria.setCreatedByUserLogin(trans.get(0)
-									.getCreatedByUserLogin());
+							String message = "La transaccion con id: "
+									+ OperacionDiaria.getAcctgTransId()
+									+ "ya existe.";
+							Debug.log(message);
+							storeImportOperacionDiariaError(rowdata, message,
+									imp_repo);
+							continue;
 						}
 
+						Debug.log("Trans Nueva");
+						OperacionDiaria.setCreatedByUserLogin(rowdata
+								.getUsuario());
 						OperacionDiaria.setGlFiscalTypeId(cuentas
-								.get("GlFiscalType"));
+								.get("GlFiscalTypeContable"));
 						imp_tx2 = this.session.beginTransaction();
 						ledger_repo.createOrUpdate(OperacionDiaria);
 						imp_tx2.commit();
@@ -382,41 +303,51 @@ public class OperacionDiariaImportService extends DomainService implements
 						ledger_repo.createOrUpdate(aux);
 						imp_tx4.commit();
 
-						AcctgTransEntry acctgentry = generaAcctgTransEntry(
-								OperacionDiaria, rowdata, "00001", "D",
-								cuentas.get("Cuenta Cargo Contable"));
+						AcctgTransEntry acctgentry = UtilImport
+								.generaAcctgTransEntry(OperacionDiaria,
+										rowdata.getOrganizationPartyId(),
+										"00001", "D",
+										cuentas.get("Cuenta Cargo Contable"),
+										null);
 						imp_tx6 = this.session.beginTransaction();
 						ledger_repo.createOrUpdate(acctgentry);
 						imp_tx6.commit();
 
-						GlAccountOrganization glAccountOrganization = actualizaGlAccountOrganization(
-								ledger_repo, rowdata,
-								cuentas.get("Cuenta Cargo Contable"));
+						GlAccountOrganization glAccountOrganization = UtilImport
+								.actualizaGlAccountOrganization(ledger_repo,
+										rowdata.getMonto(),
+										cuentas.get("Cuenta Cargo Contable"),
+										rowdata.getOrganizationPartyId());
 						imp_tx8 = this.session.beginTransaction();
 						ledger_repo.createOrUpdate(glAccountOrganization);
 						imp_tx8.commit();
 
-						acctgentry = generaAcctgTransEntry(OperacionDiaria,
-								rowdata, "00002", "C",
-								cuentas.get("Cuenta Abono Contable"));
+						acctgentry = UtilImport.generaAcctgTransEntry(
+								OperacionDiaria,
+								rowdata.getOrganizationPartyId(), "00002", "C",
+								cuentas.get("Cuenta Abono Contable"), null);
 						imp_tx10 = this.session.beginTransaction();
 						ledger_repo.createOrUpdate(acctgentry);
 						imp_tx10.commit();
 
-						glAccountOrganization = actualizaGlAccountOrganization(
-								ledger_repo, rowdata,
-								cuentas.get("Cuenta Abono Contable"));
+						glAccountOrganization = UtilImport
+								.actualizaGlAccountOrganization(ledger_repo,
+										rowdata.getMonto(),
+										cuentas.get("Cuenta Abono Contable"),
+										rowdata.getOrganizationPartyId());
 						imp_tx12 = this.session.beginTransaction();
 						ledger_repo.createOrUpdate(glAccountOrganization);
 						imp_tx12.commit();
 					}
 
-					String message = "Successfully imported Operacion Diaria [";
-					// + rowdata.getClavePres() + "].";
-					this.storeImportOperacionDiariaSuccess(rowdata, imp_repo);
-					Debug.logInfo(message, MODULE);
-					imported = imported + 1;
-
+					if (mensaje.isEmpty()) {
+						String message = "Successfully imported Operacion Diaria [";
+						// + rowdata.getClavePres() + "].";
+						this.storeImportOperacionDiariaSuccess(rowdata,
+								imp_repo);
+						Debug.logInfo(message, MODULE);
+						imported = imported + 1;
+					}
 				} catch (Exception ex) {
 					String message = "Failed to import Operacion Diaria ["
 					// + rowdata.getClavePres() + "], Error message : "

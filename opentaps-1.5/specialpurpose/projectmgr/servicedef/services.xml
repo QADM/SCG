@@ -88,6 +88,7 @@ under the License.
         <permission-service service-name="projectMgrPermission" main-action="VIEW"/>
         <attribute name="projectId" type="String" mode="INOUT" optional="true"/>
         <attribute name="partyId" type="String" mode="INOUT" optional="true"/>
+        <attribute name="nivelId" mode="INOUT" type="String" optional="true"/>
         <attribute name="projectInfo" type="java.util.Map" mode="OUT" optional="true"/>
     </service>
 
@@ -106,10 +107,12 @@ under the License.
         <attribute name="communicationEventId" type="String" mode="IN" optional="true"/>
         <attribute name="organizationPartyId" type="String" mode="IN" optional="true"/>
         <attribute name="clientBillingPartyId" type="String" mode="IN" optional="true"/>
+        <attribute name="nivelId" mode="IN" type="String" optional="true"/>
         <attribute name="emailAddress" type="String" mode="IN" optional="true"/>
         <override name="workEffortTypeId" optional="false"/>
         <override name="workEffortName" optional="false"/>
         <override name="currentStatusId" optional="false"/>
+       
     </service>
 
     <service name="updateProject" default-entity-name="WorkEffort" engine="simple"
@@ -122,7 +125,7 @@ under the License.
         <attribute name="clientBillingPartyId" type="String" mode="IN" optional="true"/>
         <attribute name="emailAddress" type="String" mode="IN" optional="true"/>
          <attribute name="codificacion" type="String" mode="IN" optional="true"/>
-          <attribute name="nivelId" type="String" mode="IN" optional="true"/>
+        <attribute name="nivelId" type="String" mode="IN" optional="true"/>
     </service>
 
     <service name="createProjectTask" engine="simple" default-entity-name="WorkEffort"

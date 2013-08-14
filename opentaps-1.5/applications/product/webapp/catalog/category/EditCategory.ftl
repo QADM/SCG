@@ -73,6 +73,17 @@ function insertImageName(type,nameValue) {
                             <input type="text" name="productCategoryId" size="20" maxlength="40" value=""/>
                         </td>
                     </tr>
+                     <tr>
+                        <td align="right" class="label">${uiLabelMap.Nodo}</td>
+                        <td>&nbsp;</td>
+                        <td>
+                            <select name="node">
+                         	<option value="R">Rama</option>
+							  <option value="H">Hoja</option>
+							</select>
+                        </td>
+                    </tr>
+
     </#if>
 <#else>
     <div class="screenlet-title-bar">
@@ -90,6 +101,21 @@ function insertImageName(type,nameValue) {
                     </td>
                 </tr>
 </#if>
+
+  				<tr>
+  		   <#if productCategory?has_content>
+                        <td align="right" class="label">${uiLabelMap.Nodo}</td>
+                        <td>&nbsp;</td>
+	                        <td>
+	                            <select name="node">
+	                           <option  <#if ((productCategory?has_content)&&((productCategory.node=="R")||(productCategory.node=="H")))>selected="selected"</#if> value="${productCategory.node}"><#if productCategory.node=="R"> Rama</#if><#if productCategory.node=="H"> Hoja</#if></option>
+	                            <#if productCategory.node=="R"><option value="H" > Hoja </option> </#if>
+	                            <#if productCategory.node=="H"><option value="R" > Rama </option> </#if>
+								</select>
+	                        </td>
+                </#if>  
+                    </tr>
+  
                 <tr>
                     <td width="26%" align="right" class="label">${uiLabelMap.ProductProductCategoryType}</td>
                     <td>&nbsp;</td>

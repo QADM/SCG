@@ -150,14 +150,20 @@
         <field name="phaseName"  parameter-name="workEffortName" title="${uiLabelMap.ProjectMgrPhaseName}*" tooltip="${uiLabelMap.CommonRequired}"><text/></field>
         <field name="phaseDdescription" parameter-name="description" title="${uiLabelMap.CommonDescription}"><text/></field>
         <field name="codificacion" title="${uiLabelMap.Codificacion}"><text/></field>
-	   <field name="nivelId" title="nivel">
-           	 <drop-down allow-empty="false" current="selected">
-                <entity-options description="${descripcion}" entity-name="NivelPresupuestal" key-field-name="nivelId">
-                    <entity-order-by field-name="nivelId"/>
+	  	   <field name="nivelId" title="Nivel" >
+           	 <drop-down allow-empty="false" current="selected" >
+                <entity-options description="${descripcion}" entity-name="NivelPresup" key-field-name="clasificacionId">
+                   <entity-constraint name="clasificacionId" operator="equals" value="CL_PROGRAMATICA"/>
+                    <entity-order-by field-name="descripcion"/>
                 </entity-options>
            	 </drop-down>
         </field>
-        
+        <field name="node" title="${uiLabelMap.Nodo}" >            
+            <drop-down>
+                <option key="R" description="Rama"/>
+                <option key="H" description="Hoja"/>
+            </drop-down>  
+        </field> 
         
         <field name="save" title="${uiLabelMap.CommonSave}"><submit/></field>
 

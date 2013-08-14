@@ -18,20 +18,9 @@
 	<entity entity-name="DataImportPresupuestoIngreso" package-name="org.opentaps.dataimport"
 		title="Intermediate import entity (i.e., the bridge table) for Presupuesto Ingreso data.">
 		<field name="ciclo" type="id-ne"></field>
-		<field name="ur" type="id-ne"></field>
-		<field name="uo" type="id-ne"></field>
 		<field name="ue" type="id-ne"></field>
-		<field name="rub" type="id-ne"></field>
-		<field name="tip" type="id-ne"></field>
-		<field name="cla" type="id-ne"></field>
-		<field name="con" type="id-ne"></field>
 		<field name="n5" type="id-ne"></field>
-		<field name="f" type="id-ne"></field>
-		<field name="sf" type="id-ne"></field>
 		<field name="sfe" type="id-ne"></field>
-		<field name="ef" type="id-ne"></field>
-		<field name="reg" type="id-ne"></field>
-		<field name="mun" type="id-ne"></field>
 		<field name="loc" type="id-ne"></field>
 		<field name="clavePres" type="name"></field>
 		<field name="usuario" type="id-ne"></field>
@@ -66,30 +55,13 @@
 	<entity entity-name="DataImportPresupuestoEgreso" package-name="org.opentaps.dataimport"
 		title="Intermediate import entity (i.e., the bridge table) for Presupuesto Egreso data.">
 		<field name="ciclo" type="id-ne"></field>
-		<field name="ur" type="id-ne"></field>
-		<field name="uo" type="id-ne"></field>
 		<field name="ue" type="id-ne"></field>
-		<field name="fin" type="id-ne"></field>
-		<field name="fun" type="id-ne"></field>
 		<field name="subf" type="id-ne"></field>
-		<field name="eje" type="name"></field>
-		<field name="pp" type="name"></field>
-		<field name="spp" type="name"></field>
 		<field name="act" type="name"></field>
 		<field name="tg" type="id-ne"></field>
-		<field name="cap" type="id-ne"></field>
-		<field name="con" type="id-ne"></field>
-		<field name="pg" type="id-ne"></field>
 		<field name="pe" type="id-ne"></field>
-		<field name="f" type="id-ne"></field>
-		<field name="sf" type="id-ne"></field>
 		<field name="sfe" type="id-ne"></field>
-		<field name="ef" type="id-ne"></field>
-		<field name="reg" type="id-ne"></field>
-		<field name="mun" type="id-ne"></field>
 		<field name="loc" type="id-ne"></field>
-		<field name="sec" type="id-ne"></field>
-		<field name="subsec" type="id-ne"></field>
 		<field name="area" type="id-ne"></field>
 		<field name="clavePres" type="name"></field>
 		<field name="usuario" type="id-ne"></field>
@@ -127,68 +99,37 @@
 		<field name="clavePres" type="name"></field>
 		<field name="ciclo" type="id-ne"></field>
 		<field name="unidadResponsable" type="id-ne"></field>
-		<field name="descripcionUr" type="very-long"></field>
 		<field name="unidadOrganizacional" type="id-ne"></field>
-		<field name="descripcionUo" type="very-long"></field>
 		<field name="unidadEjecutora" type="id-ne"></field>
-		<field name="descripcionUe" type="very-long"></field>
 		<field name="rubro" type="id-ne"></field>
-		<field name="descripcionRubro" type="description"></field>
 		<field name="tipo" type="id-ne"></field>
-		<field name="descripcionTipo" type="description"></field>
 		<field name="clase" type="id-ne"></field>
-		<field name="descripcionClase" type="description"></field>
 		<field name="conceptoRub" type="id-ne"></field>
-		<field name="descripcionConceptoRubro" type="description"></field>
 		<field name="nivel5" type="id-ne"></field>
-		<field name="descripcionN5" type="description"></field>
 		<field name="fuente" type="id-ne"></field>
-		<field name="descripcionFuente" type="description"></field>
 		<field name="subFuente" type="id-ne"></field>
-		<field name="descripcionSubfuente" type="description"></field>
 		<field name="subFuenteEspecifica" type="id-ne"></field>
-		<field name="descripcionSubfuenteEspecifica" type="description"></field>
 		<field name="entidadFederativa" type="id-ne"></field>
-		<field name="descripcionEntFed" type="name"></field>
 		<field name="region" type="id-ne"></field>
-		<field name="descripcionRegion" type="name"></field>
 		<field name="municipio" type="id-ne"></field>
-		<field name="descripcionMunicipio" type="name"></field>
 		<field name="localidad" type="id-ne"></field>
-		<field name="descripcionLocalidad" type="name"></field>
 		<field name="finalidad" type="id-ne"></field>
-		<field name="descripcionFinalidad" type="description"></field>
 		<field name="funcion" type="id-ne"></field>
-		<field name="descripcionFuncion" type="description"></field>
 		<field name="subFuncion" type="id-ne"></field>
-		<field name="descripcionSubFuncion" type="description"></field>
 		<field name="programaPlan" type="name"></field>
-		<field name="descripcionProgramaPlan" type="description"></field>
 		<field name="programaPresupuestario" type="name"></field>
-		<field name="descripcionProgramaPres" type="description"></field>
 		<field name="subProgramaPresupuestario" type="name"></field>
-		<field name="descripcionSubProgramaPres" type="description"></field>
 		<field name="actividad" type="name"></field>
-		<field name="descripcionActividad" type="description"></field>
 		<field name="tipoGasto" type="id-ne"></field>
-		<field name="descripcionTg" type="description"></field>
 		<field name="capitulo" type="id-ne"></field>
-		<field name="descripcionCapitulo" type="description"></field>
 		<field name="concepto" type="id-ne"></field>
-		<field name="descripcionConcepto" type="description"></field>
 		<field name="partidaGenerica" type="id-ne"></field>
-		<field name="descripcionPg" type="description"></field>
 		<field name="partidaEspecifica" type="id-ne"></field>
-		<field name="descripcionPe" type="description"></field>
 		<field name="sector" type="id-ne"></field>
-		<field name="descripcionSector" type="description"></field>
 		<field name="subSector" type="id-ne"></field>
-		<field name="descripcionSubsector" type="description"></field>
 		<field name="area" type="id-ne"></field>
-		<field name="descripcionArea" type="description"></field>
-		<field name="agrupador" type="id-ne"></field>
 		<field name="idTipoDoc" type="id-ne"></field>
-		<field name="descripcionTipoDoc" type="id-vlong"></field>
+		<field name="agrupador" type="id-ne"></field>
 		<field name="secuencia" type="id-ne"></field>
 		<field name="lote" type="id-ne"></field>
 		<prim-key field="acctgTransId" />

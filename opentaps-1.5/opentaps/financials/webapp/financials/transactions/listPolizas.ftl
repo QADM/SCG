@@ -18,7 +18,7 @@
                 <@headerCell title="Código de Transacción" orderBy="acctgTransId"/>
                 <@headerCell title="Tipo de Transacción" orderBy="description"/>
                 <@headerCell title="Fecha Contable" orderBy="postedDate DESC"/>
-                <@displayCell text="Monto" blockClass="textright"/>
+                <@displayCell text="Monto" blockClass="textright" />
             </tr>
             <#list pageRows as row>
             <tr class="${tableRowClass(row_index)}">
