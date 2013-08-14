@@ -1527,6 +1527,10 @@
         <security https="true" auth="true"/> 
         <response name="success" type="view" value="viewAcctgTransEg"/> 
     </request-map>
+     <request-map uri="ODIngresos">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="ODIngresos"/>
+    </request-map>    
     
     
     <request-map uri="reverseAcctgTrans">
@@ -2366,6 +2370,9 @@
     <view-map name="viewAcctgTransIng" type="screen" page="component://financials/widget/financials/screens/transactions/TransactionsScreens.xml#viewAcctgTransIng"/>
     <view-map name="viewAcctgTransEg" type="screen" page="component://financials/widget/financials/screens/transactions/TransactionsScreens.xml#viewAcctgTransEg"/>
 
+	<!-- Nuevas pantallas @JSCF -->
+	<view-map name="ODIngresos" type="screen" page="component://financials/widget/financials/screens/transactions/TransactionsScreens.xml#ODIngresos"/>
+	<!-- Nuevas pantallas @JSCF -->
     
 
     <!-- reconciliations -->    

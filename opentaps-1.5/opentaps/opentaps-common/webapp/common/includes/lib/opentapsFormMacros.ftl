@@ -41,7 +41,6 @@ For more information, please see documentation/opentapsFormMacros.html
 <#-- --    Display Macros    -- -->
 <#-- -------------------------- -->
 
-
 <#macro display text="" class="tabletext" style="">
   <span class="${class}" style="${style}">${text}</span>
 </#macro>
@@ -1115,6 +1114,17 @@ For more information, please see documentation/opentapsFormMacros.html
   <td><@inputSelectTaxAuthority list=list defaultGeoId=defaultGeoId defaultPartyId=defaultPartyId required=required /></td>
 </#macro>
 
+<#macro padresGeo name="hijosGeo" geoCode="" hijoName="" >
+	<#assign defaultGeo = Static["org.opentaps.common.util.UtilCommon"].getHijosGeograficos(delegator, geoCode) />
+	<td>
+		<select name="${name}" id="${name}" title="${hijoName}" class="selectBox" onChange="opentaps.obtenHijosCombos(this, '${hijoName}');">
+	        <option></option>
+	        <#list defaultGeo as geo>
+	            <option ${selected} value="${geo.geoId}">${geo.get("geoName", locale)}</option>
+	        </#list>
+	    </select>
+    </td>
+</#macro>
 
 <#macro inputState name="stateProvinceGeoId" countryInputName="countryGeoId" address={}>
     <#if address?size != 0>
