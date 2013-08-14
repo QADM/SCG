@@ -87,7 +87,7 @@
                   linkUrl="assessFinanceChargesForm" securityModule="" securityAction=""/>
 
 <!-- Reports group -->
-<OpentapsShortcutGroup applicationId="financials" tabId="receivables" groupId="financialsReceivableReports" sequenceNum="060" uiLabel="AccountingReports"/>
+<OpentapsShortcutGroup applicationId="financials" tabId="receivables" groupId="financialsReceivableReports" sequenceNum="060" uiLabel="	"/>
 <OpentapsShortcut shortcutId="receivableReports" groupId="financialsReceivableReports" sequenceNum="010" uiLabel="FinancialsReceivableReports"
                   linkUrl="receivableReports" securityModule="" securityAction=""/>
 
@@ -188,6 +188,12 @@
                   linkUrl="Egresos" securityModule="" securityAction=""/>
 <OpentapsShortcut shortcutId="Polizas" groupId="financialsTransactions" sequenceNum="120" uiLabel="Pólizas"
                   linkUrl="Polizas" securityModule="" securityAction=""/>
+                  
+                  
+<OpentapsShortcut shortcutId="ODIngresos" groupId="financialsTransactions" sequenceNum="150" uiLabel="FinancialsDailyOperIncome"
+                  linkUrl="ODIngresos" securityModule="" securityAction=""/>                  
+                  
+                  
 
 
 <!-- Configuration shortcuts -->

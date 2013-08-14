@@ -797,6 +797,7 @@ opentaps.copyOrClearAddressFields = function(prefix1, prefix2, checkbox, default
     }
 }
 
+
 // function to swap states in a dropdown.
 opentaps.swapStatesInDropdown = function(countryElement, stateElementName) {
     var stateElement = countryElement.form[stateElementName];

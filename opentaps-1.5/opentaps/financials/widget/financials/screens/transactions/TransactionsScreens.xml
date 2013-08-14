@@ -707,4 +707,27 @@
         </section>
     </screen>
     
+    <!-- @JSCF -->
+    <screen name="ODIngresos">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="FinancialsDailyOperIncome"/>  
+                <set field="sectionHeaderUiLabel" value="FinancialsDailyOperIncome"/>  
+				<script location="component://financials/webapp/financials/WEB-INF/actions/transactions/getDatosOperacionDiariaIng.bsh"/>                
+<!--                 <java location="com.opensourcestrategies.financials.transactions.TransactionsFindIng" invoke="findTransactionsIngr"/>           -->      
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <frame-container title="FinancialsDailyOperIncome">
+                            <platform-specific><html>
+                                <html-template location="component://financials/webapp/financials/transactions/createOperacionDiariaIngresos.ftl"/>
+                            </html></platform-specific>                         
+                        </frame-container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    
 </screens>

@@ -128,6 +128,21 @@ public final class AjaxEvents {
             return doJSONResponse(response, FastList.newInstance());
         }
     }
+    
+    /** Obtiene la lista de hijos geograficos de un padre (Mexico -> {Aguascalientes,Estado de Mexico,etc}). */
+    public static String getHijosDataJSON(HttpServletRequest request, HttpServletResponse response) {
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
+        String geoCode = request.getParameter("geoCode");
+        Debug.logWarning("Entro al get hijos JSON  geoCode "+geoCode, MODULE);
+
+        try {
+            Collection<GenericValue> states = UtilCommon.getHijosGeograficos(delegator, geoCode);
+            Debug.logWarning("Entro al get hijos JSON  "+states, MODULE);
+            return doJSONResponse(response, states);
+        } catch (GenericEntityException e) {
+            return doJSONResponse(response, FastList.newInstance());
+        }
+    }    
 
     /** Return agreement term list specific for given term type.
      * @throws GenericEntityException */
