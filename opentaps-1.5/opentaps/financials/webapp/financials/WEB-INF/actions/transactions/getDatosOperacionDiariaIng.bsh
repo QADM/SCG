@@ -1,0 +1,101 @@
+/*
+ * Copyright (c) Open Source Strategies, Inc.
+ *
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  @author Leon Torres (leon@opensourcestrategies.com)
+ */
+
+/*
+ * Busca los datos necesarios para ingresar una operacion diaria de ingresos
+ */
+
+import javolution.util.FastMap;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.util.EntityUtil;
+import javolution.util.FastList;
+
+organizationPartyId = parameters.get("organizationPartyId");
+context.put("organizationPartyId",organizationPartyId);
+
+//Buscamos los Documentos que son del tipo operación diaria
+orderBy = org.ofbiz.base.util.UtilMisc.toList("descripcion");
+condicionDoc = EntityCondition.makeCondition("acctgTransTypeId",EntityOperator.LIKE,"TINGRESO%");
+resultadoDoc = delegator.findByCondition("TipoDocumento", condicionDoc , UtilMisc.toList("idTipoDoc", "descripcion"), orderBy);
+context.put("listDocumentos", resultadoDoc);
+
+//Buscamos los tipos fiscales
+resultadoFis = delegator.findAll("GlFiscalType");
+context.put("listFiscalTypes", resultadoFis);
+
+//Buscamos los tipos productos
+resultadoProd = delegator.findAll("Product");
+context.put("listProducts", resultadoProd);
+
+//Buscamos los rubros
+orderByRu = org.ofbiz.base.util.UtilMisc.toList("description");
+condicionRu = EntityCondition.makeCondition("productCategoryTypeId","RU");
+resultadoRu = delegator.findByCondition("ProductCategory", condicionRu , UtilMisc.toList("productCategoryId", "description"), orderByRu);
+context.put("listRubros", resultadoRu);
+
+//Buscamos los tipos
+orderByTi = org.ofbiz.base.util.UtilMisc.toList("description");
+condicionTi = EntityCondition.makeCondition("productCategoryTypeId","TI");
+resultadoTi = delegator.findByCondition("ProductCategory", condicionTi , UtilMisc.toList("productCategoryId", "description"), orderByTi);
+context.put("listTipos", resultadoTi);
+
+//Buscamos las clases
+orderByCl = org.ofbiz.base.util.UtilMisc.toList("description");
+condicionCl = EntityCondition.makeCondition("productCategoryTypeId","CL");
+resultadoCl = delegator.findByCondition("ProductCategory", condicionCl , UtilMisc.toList("productCategoryId", "description"), orderByCl);
+context.put("listClases", resultadoCl);
+
+//Buscamos los Conceptos
+orderByCo = org.ofbiz.base.util.UtilMisc.toList("description");
+condicionCo = EntityCondition.makeCondition("productCategoryTypeId","CO");
+resultadoCo = delegator.findByCondition("ProductCategory", condicionCo , UtilMisc.toList("productCategoryId", "description"), orderByCo);
+context.put("listConceptos", resultadoCo);
+
+//Buscamos N5
+orderByCn = org.ofbiz.base.util.UtilMisc.toList("description");
+condicionCn = EntityCondition.makeCondition("productCategoryTypeId","N5");
+resultadoCn = delegator.findByCondition("ProductCategory", condicionCn , UtilMisc.toList("productCategoryId", "description"), orderByCn);
+context.put("listN5", resultadoCn);
+
+
+//Buscamos Entidad Federativa
+orderByEF = org.ofbiz.base.util.UtilMisc.toList("geoName");
+condicionEF = EntityCondition.makeCondition("geoTypeId","Entidad Federativa");
+resultadoEF = delegator.findByCondition("Geo", condicionEF , UtilMisc.toList("geoId", "geoName"), orderByEF);
+context.put("listEntidades", resultadoEF);
+
+//Buscamos Regiones
+orderByRE = org.ofbiz.base.util.UtilMisc.toList("geoName");
+condicionRE = EntityCondition.makeCondition("geoTypeId","REGION");
+resultadoRE = delegator.findByCondition("Geo", condicionRE , UtilMisc.toList("geoId", "geoName"), orderByRE);
+context.put("listRegiones", resultadoRE);
+
+//Buscamos Municipios
+orderByMU = org.ofbiz.base.util.UtilMisc.toList("geoName");
+condicionMU = EntityCondition.makeCondition("geoTypeId","Municipio");
+resultadoMU = delegator.findByCondition("Geo", condicionMU , UtilMisc.toList("geoId", "geoName"), orderByMU);
+context.put("listMunicipios", resultadoMU);
+
+//Buscamos Localidades
+orderByLO = org.ofbiz.base.util.UtilMisc.toList("geoName");
+condicionLO = EntityCondition.makeCondition("geoTypeId","Localidad");
+resultadoLO = delegator.findByCondition("Geo", condicionLO , UtilMisc.toList("geoId", "geoName"), orderByLO);
+context.put("listLocalidades", resultadoLO);
+
