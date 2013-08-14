@@ -366,6 +366,17 @@ public abstract class UtilCommon {
     }
 
     /**
+     * Obtiene una lista de hijos Geograficos, ejemplo: para obtener las "Entidades Federativas" de Mexico se llena geoCode con "Entidades Federativas" .
+     * @param delegator a <code>Delegator</code> value
+     * @param geoCode the country for which to return the list of states
+     * @return a <code>List</code> of states Geo <code>GenericValue</code>
+     * @exception GenericEntityException if an error occurs
+     */
+    public static List<GenericValue> getHijosGeograficos(Delegator delegator, String geoCode) throws GenericEntityException {
+        return delegator.findByCondition("Geo", EntityCondition.makeCondition("geoCode", EntityOperator.EQUALS, geoCode), null, UtilMisc.toList("geoName"));
+    }
+    
+    /**
      * Gets a list of currencies.
      * @param delegator a <code>Delegator</code> value
      * @return a <code>List</code> of currencies <code>GenericValue</code>

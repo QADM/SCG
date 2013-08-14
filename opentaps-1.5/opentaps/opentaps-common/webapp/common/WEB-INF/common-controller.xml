@@ -50,6 +50,12 @@
         <response name="success" type="none"/>
         <response name="error" type="none"/>
     </request-map>
+    
+    <request-map uri="getHijosDataJSON">
+        <event type="java" path="org.opentaps.common.event.AjaxEvents" invoke="getHijosDataJSON"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>    
 
     <request-map uri="validatePostalCodeJSON">
         <event type="json" invoke="uspsCityStateLookup"/>
