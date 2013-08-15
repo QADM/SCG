@@ -1014,9 +1014,9 @@ public final class ExcelImportServices extends DomainService {
 				ingreso.setRefDoc(this.readStringCell(row, rowCount++));
 				ingreso.setSecuencia(this.readStringCell(row, rowCount++));
 				ingreso.setUsuario(this.readStringCell(row, rowCount++));
-				ingreso.setIdTipoCatalogo(this.readStringCell(row, rowCount++));
 				ingreso.setIdPago(this.readStringCell(row, rowCount++));
-				ingreso.setIdProducto(this.readStringCell(row, rowCount++));
+				ingreso.setIdProductoD(this.readStringCell(row, rowCount++));
+				ingreso.setIdProductoH(this.readStringCell(row, rowCount++));
 				ingreso.setCiclo(this.readStringCell(row, rowCount++));
 				ingreso.setUe(this.readStringCell(row, rowCount++));
 				ingreso.setN5(this.readStringCell(row, rowCount++));
@@ -1073,9 +1073,8 @@ public final class ExcelImportServices extends DomainService {
 				egreso.setRefDoc(this.readStringCell(row, rowCount++));
 				egreso.setSecuencia(this.readStringCell(row, rowCount++));
 				egreso.setUsuario(this.readStringCell(row, rowCount++));
-				egreso.setIdTipoCatalogo(this.readStringCell(row, rowCount++));
-				egreso.setIdPago(this.readStringCell(row, rowCount++));
-				egreso.setIdProducto(this.readStringCell(row, rowCount++));
+				egreso.setIdProductoD(this.readStringCell(row, rowCount++));
+				egreso.setIdProductoH(this.readStringCell(row, rowCount++));
 				egreso.setCiclo(this.readStringCell(row, rowCount++));
 				egreso.setUe(this.readStringCell(row, rowCount++));
 				egreso.setSubf(this.readStringCell(row, rowCount++));

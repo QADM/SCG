@@ -91,7 +91,7 @@ public class EgresoDiarioImportService extends DomainService implements
 					.getEgresoDiarioDataImportRepository();
 			LedgerRepositoryInterface ledger_repo = this.getDomainsDirectory()
 					.getLedgerDomain().getLedgerRepository();
-
+			
 			List<DataImportEgresoDiario> dataforimp = imp_repo
 					.findNotProcessesDataImportEgresoDiarioEntries();
 
@@ -171,20 +171,20 @@ public class EgresoDiarioImportService extends DomainService implements
 				mensaje = UtilImport.validaParty(mensaje, ledger_repo,
 						rowdata.getUe(), "ADMINISTRATIVA");
 				mensaje = UtilImport.validaEnumeration(mensaje, ledger_repo,
-						rowdata.getSubf(), "CLAS_FUN", "FUNCIONAL");
+						rowdata.getSubf(), "CL_FUNCIONAL", "FUNCIONAL");
 				mensaje = UtilImport.validaWorkEffort(mensaje, ledger_repo,
 						rowdata.getAct(), "ACTIVIDAD");
 				mensaje = UtilImport.validaEnumeration(mensaje, ledger_repo,
 						rowdata.getTg(), "TIPO_GASTO", "TIPO GASTO");
 				mensaje = UtilImport.validaProductCategory(mensaje,
-						ledger_repo, rowdata.getPe(), "PE",
+						ledger_repo, rowdata.getPe(), "PARTIDA ESPECIFICA",
 						"PRODUCTO ESPECIFICO");
 				mensaje = UtilImport.validaEnumeration(mensaje, ledger_repo,
-						rowdata.getSfe(), "CLAS_FR", "FUENTE DE LOS RECURSOS");
+						rowdata.getSfe(), "CL_FUENTE_RECURSOS", "FUENTE DE LOS RECURSOS");
 				mensaje = UtilImport.validaGeo(mensaje, ledger_repo,
 						rowdata.getLoc(), "GEOGRAFICA");
 				mensaje = UtilImport.validaEnumeration(mensaje, ledger_repo,
-						rowdata.getArea(), "CLAS_SECT", "SECTORIAL");
+						rowdata.getArea(), "CL_SECTORIAL", "SECTORIAL");
 
 				if (!mensaje.isEmpty()) {
 					String message = "Failed to import Egreso Diario ["
@@ -247,18 +247,18 @@ public class EgresoDiarioImportService extends DomainService implements
 
 				Party ue = UtilImport.obtenParty(ledger_repo, rowdata.getUe());
 				Enumeration subf = UtilImport.obtenEnumeration(ledger_repo,
-						rowdata.getSubf(), "CLAS_FUN");
+						rowdata.getSubf(), "CL_FUNCIONAL");
 				WorkEffort act = UtilImport.obtenWorkEffort(ledger_repo,
 						rowdata.getAct());
 				Enumeration tg = UtilImport.obtenEnumeration(ledger_repo,
 						rowdata.getTg(), "TIPO_GASTO");
 				ProductCategory pe = UtilImport.obtenProductCategory(
-						ledger_repo, rowdata.getPe(), "PE");
+						ledger_repo, rowdata.getPe(), "PARTIDA ESPECIFICA");
 				Geo loc = UtilImport.obtenGeo(ledger_repo, rowdata.getLoc());
 				Enumeration sfe = UtilImport.obtenEnumeration(ledger_repo,
-						rowdata.getSfe(), "CLAS_FR");
+						rowdata.getSfe(), "CL_FUENTE_RECURSOS");
 				Enumeration area = UtilImport.obtenEnumeration(ledger_repo,
-						rowdata.getArea(), "CLAS_SECT");
+						rowdata.getArea(), "CL_SECTORIAL");
 
 				// Empieza bloque de vigencias
 				Debug.log("Empieza bloque de vigencias");
@@ -267,7 +267,8 @@ public class EgresoDiarioImportService extends DomainService implements
 						rowdata.getFechaContable());
 				mensaje = UtilImport.validaVigencia(mensaje, "TIPO GASTO", tg,
 						rowdata.getFechaContable());
-				mensaje = UtilImport.validaVigencia(mensaje, "FUENTE DE LOS RECURSOS", sfe,
+				mensaje = UtilImport.validaVigencia(mensaje,
+						"FUENTE DE LOS RECURSOS", sfe,
 						rowdata.getFechaContable());
 				mensaje = UtilImport.validaVigencia(mensaje, "SECTORIAL", area,
 						rowdata.getFechaContable());
@@ -279,49 +280,59 @@ public class EgresoDiarioImportService extends DomainService implements
 					storeImportEgresoDiarioError(rowdata, message, imp_repo);
 					continue;
 				}
-				
+
 				// Obtenemos los padres de cada nivel.
 				String uo = UtilImport.obtenPadreParty(ledger_repo,
 						ue.getPartyId());
 				String ur = UtilImport.obtenPadreParty(ledger_repo, uo);
-				String fun = UtilImport.obtenPadreEnumeration(
-						ledger_repo, subf.getEnumId());
-				String fin = UtilImport.obtenPadreEnumeration(
-						ledger_repo, fun);
-				String spp = UtilImport.obtenPadreWorkEffort(
-						ledger_repo, act.getWorkEffortId());
-				String pp = UtilImport.obtenPadreWorkEffort(
-						ledger_repo, spp);
-				String eje = UtilImport.obtenPadreWorkEffort(
-						ledger_repo, pp);
-				String pg = UtilImport.obtenPadreProductCategory(
-						ledger_repo, pe.getProductCategoryId());
-				String con = UtilImport.obtenPadreProductCategory(
-						ledger_repo, pg);
-				String cap = UtilImport.obtenPadreProductCategory(
-						ledger_repo, con);
-				String sf = UtilImport.obtenPadreEnumeration(
-						ledger_repo, sfe.getEnumId());
-				String f = UtilImport.obtenPadreEnumeration(
-						ledger_repo, sf);
+				String fun = UtilImport.obtenPadreEnumeration(ledger_repo,
+						subf.getEnumId());
+				String fin = UtilImport.obtenPadreEnumeration(ledger_repo, fun);
+				String spp = UtilImport.obtenPadreWorkEffort(ledger_repo,
+						act.getWorkEffortId());
+				String pp = UtilImport.obtenPadreWorkEffort(ledger_repo, spp);
+				String eje = UtilImport.obtenPadreWorkEffort(ledger_repo, pp);
+				String pg = UtilImport.obtenPadreProductCategory(ledger_repo,
+						pe.getProductCategoryId());
+				String con = UtilImport.obtenPadreProductCategory(ledger_repo,
+						pg);
+				String cap = UtilImport.obtenPadreProductCategory(ledger_repo,
+						con);
+				String sf = UtilImport.obtenPadreEnumeration(ledger_repo,
+						sfe.getEnumId());
+				String f = UtilImport.obtenPadreEnumeration(ledger_repo, sf);
 				String mun = UtilImport.obtenPadreGeo(ledger_repo,
 						loc.getGeoId());
 				String reg = UtilImport.obtenPadreGeo(ledger_repo, mun);
 				String ef = UtilImport.obtenPadreGeo(ledger_repo, reg);
-				String subsec = UtilImport.obtenPadreEnumeration(
-						ledger_repo, area.getEnumId());
-				String sec = UtilImport.obtenPadreEnumeration(
-						ledger_repo, subsec);
+				String subsec = UtilImport.obtenPadreEnumeration(ledger_repo,
+						area.getEnumId());
+				String sec = UtilImport.obtenPadreEnumeration(ledger_repo,
+						subsec);
 
 				Debug.log("Motor Contable");
 				MotorContable motor = new MotorContable(ledger_repo);
-				Map<String, String> cuentas = motor.cuentasDiarias(
+				// Map<String, String> cuentas = motor.cuentasDiarias(
+				// tipoDoc.getAcctgTransTypeId(), pg,
+				// pe.getProductCategoryId(),
+				// rowdata.getOrganizationPartyId(), rowdata.getTg(),
+				// null, rowdata.getIdTipoCatalogo(), rowdata.getIdPago(),
+				// null, null, null, true, null, null,
+				// rowdata.getIdProducto());
+
+				Map<String, String> cuentas = motor.cuentasEgresoDiario(
 						tipoDoc.getAcctgTransTypeId(), pg,
-						pe.getProductCategoryId(),
 						rowdata.getOrganizationPartyId(), rowdata.getTg(),
-						null, rowdata.getIdTipoCatalogo(), rowdata.getIdPago(),
-						null, null, null, true, null, null,
-						rowdata.getIdProducto());
+						rowdata.getIdPago(), rowdata.getIdProductoD(),
+						rowdata.getIdProductoH());
+
+				if (cuentas.get("Mensaje") != null) {
+					String message = "Failed to import Egreso Diario ["
+							+ rowdata.getClavePres() + "], Error message : "
+							+ cuentas.get("Mensaje");
+					storeImportEgresoDiarioError(rowdata, message, imp_repo);
+					continue;
+				}
 
 				try {
 
