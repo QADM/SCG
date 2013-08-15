@@ -236,10 +236,16 @@ public final class ExcelImportServices extends DomainService {
 		String s = null;
 		if (bd == null) {
 			s = cell.toString().trim();
+			if(s.equals("0.0") || s.equals("0"))
+			{	s=null;				
+			}
 
 		} else {
 			// if cell contains number parse it as long
 			s = Long.toString(bd.longValue());
+			if(s.equals("0.0") || s.equals("0"))
+			{	s=null;			
+			}
 
 		}
 
@@ -1264,23 +1270,18 @@ public final class ExcelImportServices extends DomainService {
 	}
 
 	protected Collection<? extends EntityInterface> createDataImportMatrizConversionEngresos(
-			HSSFSheet sheet) throws RepositoryException {
-		Debug.logInfo("OMAR - Entra a createDataImportEgresos", MODULE);
+			HSSFSheet sheet) throws RepositoryException {		
 		List<DataImportMatrizEgr> matrizConversionEgr = FastList.newInstance();
 		int sheetLastRowNumber = sheet.getLastRowNum();
 		for (int j = 1; j <= sheetLastRowNumber; j++) {
-			Debug.logInfo("OMAR - Entra a for Egresos", MODULE);
 			HSSFRow row = sheet.getRow(j);
 			if (isNotEmpty(row)) {
-				Debug.logInfo("OMAR - No esta vacia la fila", MODULE);
 				// row index starts at 0 here but is actually 1 in Excel
 				int rowNum = row.getRowNum() + 1;
 				// read idRegistroEgr from first column "sheet column index
 				// starts from 0"
 				String id = readStringCellPoint(row, 0);
 
-				Debug.logInfo("OMAR - Id: " + id, MODULE);
-				// Debug.logInfo("OMAR - IdIndex: " + id.indexOf(" "), MODULE);
 				if (UtilValidate.isEmpty(id) || id.indexOf(" ") > -1
 						|| id.equalsIgnoreCase("idRegistroEgr")) {
 					Debug.logInfo(
@@ -1291,7 +1292,6 @@ public final class ExcelImportServices extends DomainService {
 					continue;
 				}
 
-				Debug.logInfo("OMAR - Va a hacer la intancia", MODULE);
 				DataImportMatrizEgr matrizEgresos = new DataImportMatrizEgr();
 				matrizEgresos.setIdRegistroEgr(id);
 				matrizEgresos.setMatrizId(this.readStringCell(row, 1));
@@ -1328,22 +1328,17 @@ public final class ExcelImportServices extends DomainService {
 	 */
 	protected Collection<? extends EntityInterface> createDataImportMatrizConversionIngresos(
 			HSSFSheet sheet) throws RepositoryException {
-		Debug.logInfo("OMAR - Entra a createDataImportIngresos", MODULE);
 		List<DataImportMatrizIng> matrizConversionIng = FastList.newInstance();
 		int sheetLastRowNumber = sheet.getLastRowNum();
 		for (int j = 1; j <= sheetLastRowNumber; j++) {
-			Debug.logInfo("OMAR - Entra a for Ingresos", MODULE);
 			HSSFRow row = sheet.getRow(j);
 			if (isNotEmpty(row)) {
-				Debug.logInfo("OMAR - No esta vacia la fila", MODULE);
 				// row index starts at 0 here but is actually 1 in Excel
 				int rowNum = row.getRowNum() + 1;
 				// read glAccountrId from first column "sheet column index
 				// starts from 0"
 				String id = readStringCellPoint(row, 0);
 
-				Debug.logInfo("OMAR - Id: " + id, MODULE);
-				// Debug.logInfo("OMAR - IdIndex: " + id.indexOf(" "), MODULE);
 				if (UtilValidate.isEmpty(id) || id.indexOf(" ") > -1
 						|| id.equalsIgnoreCase("idRegistroIng")) {
 					Debug.logInfo(
@@ -1354,7 +1349,6 @@ public final class ExcelImportServices extends DomainService {
 					continue;
 				}
 
-				Debug.logInfo("OMAR - Va a hacer la intancia", MODULE);
 				DataImportMatrizIng matrizIngresos = new DataImportMatrizIng();
 				matrizIngresos.setIdRegistroIng(id);
 				matrizIngresos.setMatrizId(this.readStringCell(row, 1));
@@ -1591,14 +1585,10 @@ public final class ExcelImportServices extends DomainService {
 					} else if (EXCEL_CGUIDE_TAB.equals(excelTab)) {
 						entitiesToCreate
 								.addAll(createDataImportContableGuide(sheet));
-					} else if (EXCEL_MATRIZ_CONVERSION_EGR_TAB.equals(excelTab)) {
-						Debug.logInfo("OMAR - Entra a tab Matriz Egresos",
-								MODULE);
+					} else if (EXCEL_MATRIZ_CONVERSION_EGR_TAB.equals(excelTab)) {						
 						entitiesToCreate
 								.addAll(createDataImportMatrizConversionEngresos(sheet));
-					} else if (EXCEL_MATRIZ_CONVERSION_ING_TAB.equals(excelTab)) {
-						Debug.logInfo("OMAR - Entra a tab Matriz Ingresos",
-								MODULE);
+					} else if (EXCEL_MATRIZ_CONVERSION_ING_TAB.equals(excelTab)) {						
 						entitiesToCreate
 								.addAll(createDataImportMatrizConversionIngresos(sheet));
 						// etc ...

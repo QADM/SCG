@@ -1404,10 +1404,11 @@ under the License.
        <alias name="postedDate" entity-alias="ATR"/>
        <alias name="amount" entity-alias="ATE"/>
        <alias name="acctgTransTypeId" entity-alias="ATT"/>
+       <alias name="organizationPartyId" entity-alias="ATE" group-by="true"/>       
 
        <view-link entity-alias="ATR" rel-entity-alias="ATE">
            <key-map field-name="acctgTransId"/>
-       </view-link>
+       </view-link>              
        <view-link entity-alias="ATE" rel-entity-alias="ATP">
            <key-map field-name="acctgTransId"/>
        </view-link>
