@@ -122,9 +122,9 @@ public class PresupuestoIngresoImportService extends DomainService implements
 						rowdata.getUe(), "ADMINISTRATIVA");
 				mensaje = UtilImport
 						.validaProductCategory(mensaje, ledger_repo,
-								rowdata.getN5(), "N5", "RUBRO DEL INGRESO");
+								rowdata.getN5(), "NIVEL_5_ING", "RUBRO DEL INGRESO");
 				mensaje = UtilImport.validaEnumeration(mensaje, ledger_repo,
-						rowdata.getSfe(), "CLAS_FR", "FUENTE DE LOS RECURSOS");
+						rowdata.getSfe(), "CL_FUENTE_RECURSOS", "FUENTE DE LOS RECURSOS");
 				mensaje = UtilImport.validaGeo(mensaje, ledger_repo,
 						rowdata.getLoc(), "GEOGRAFICA");
 
@@ -169,9 +169,9 @@ public class PresupuestoIngresoImportService extends DomainService implements
 
 				Party ue = UtilImport.obtenParty(ledger_repo, rowdata.getUe());
 				ProductCategory n5 = UtilImport.obtenProductCategory(
-						ledger_repo, rowdata.getN5(), "N5");
+						ledger_repo, rowdata.getN5(), "NIVEL_5_ING");
 				Enumeration sfe = UtilImport.obtenEnumeration(ledger_repo,
-						rowdata.getSfe(), "CLAS_FR");
+						rowdata.getSfe(), "CL_FUENTE_RECURSOS");
 				Geo loc = UtilImport.obtenGeo(ledger_repo, rowdata.getLoc());
 
 				// import Presupuestos Ingreso as many as possible
