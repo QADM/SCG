@@ -106,14 +106,18 @@ public class ProjectImportService extends DomainService implements
 
 					// begin partyID
 					if(rowdata.getGroupName()!=null || rowdata.getGroupName().equalsIgnoreCase("0")){
-						List<PartyGroup> parties = ledger_repo.findList(
+						/***********************************************************
+						 * Desde el Excel ya viene el Id de la organizacion y no el nombre
+						 * Se modifico para ya no obtener el id a partir del nombre
+						***********************************************************/
+						/*List<PartyGroup> parties = ledger_repo.findList(
 								PartyGroup.class, ledger_repo.map(
 										PartyGroup.Fields.groupName,
-										rowdata.getGroupName()));
+										rowdata.getGroupName()));*/
 						WorkEffortPartyAssignment partyAssignment = new WorkEffortPartyAssignment();
 						partyAssignment.setWorkEffortId(rowdata
 								.getWorkEffortName());
-						partyAssignment.setPartyId(parties.get(0).getPartyId());
+						partyAssignment.setPartyId(rowdata.getGroupName());
 						partyAssignment.setRoleTypeId("INTERNAL_ORGANIZATIO");
 						partyAssignment
 								.setFromDate(UtilDateTime.nowTimestamp());
