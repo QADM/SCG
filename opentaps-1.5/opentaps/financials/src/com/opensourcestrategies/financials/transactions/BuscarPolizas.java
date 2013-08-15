@@ -77,7 +77,7 @@ public class BuscarPolizas {
          String acctgTransId = ac.getParameter("findAcctgTransId");
          String acctgTransTypeId = ac.getParameter("acctgTransTypeId");
          String postedDate = ac.getParameter("postedDate");
-         String agrupador = ac.getParameter("agrupador");
+         String agrupador = ac.getParameter("agrupador");         
 
          DomainsDirectory dd = DomainsDirectory.getDomainsDirectory(ac);
          final LedgerRepositoryInterface ledgerRepository = dd.getLedgerDomain().getLedgerRepository();
@@ -101,8 +101,7 @@ public class BuscarPolizas {
          
          if ("Y".equals(ac.getParameter("performFind"))) {
         	
-             List<EntityCondition> searchConditions = new FastList<EntityCondition>();
-             
+             List<EntityCondition> searchConditions = new FastList<EntityCondition>();             
              if (UtilValidate.isNotEmpty(acctgTransId)) {
                 searchConditions.add(EntityCondition.makeCondition(AcctgPolizas.Fields.acctgTransId.name(), EntityOperator.EQUALS, acctgTransId));
              }
@@ -114,6 +113,9 @@ public class BuscarPolizas {
              }
              if (UtilValidate.isNotEmpty(acctgTransTypeId)) {
             	 searchConditions.add(EntityCondition.makeCondition(AcctgPolizas.Fields.acctgTransTypeId.name(), EntityOperator.EQUALS, acctgTransTypeId));
+             }
+             if (UtilValidate.isNotEmpty(organizationPartyId)) {
+            	 searchConditions.add(EntityCondition.makeCondition(AcctgPolizas.Fields.organizationPartyId.name(), EntityOperator.EQUALS, organizationPartyId));
              }
             
              // fields to select
