@@ -17,17 +17,17 @@
 
 	<entity entity-name="DataImportIngresoDiario" package-name="org.opentaps.dataimport"
 		title="Intermediate import entity (i.e., the bridge table) for Ingreso Diario data.">
+		<field name="idTipoDoc" type="id-ne"></field>
 		<field name="fechaRegistro" type="date"/>
 		<field name="fechaContable" type="date"/>
 		<field name="monto" type="currency-amount"></field>
-		<field name="organizationPartyId" type="id-ne"></field>
-		<field name="idTipoDoc" type="id-ne"></field>
+		<field name="organizationPartyId" type="id-ne"></field>		
 		<field name="refDoc" type="id-ne"></field>
 		<field name="secuencia" type="id-ne"></field>
 		<field name="usuario" type="id-ne"></field>
-		<field name="idTipoCatalogo" type="id-ne"></field>
 		<field name="idPago" type="id-ne"></field>
-		<field name="idProducto" type="id-ne"></field>
+		<field name="idProductoD" type="id-ne"></field>
+		<field name="idProductoH" type="id-ne"></field>
 		<field name="ciclo" type="id-ne"></field>
 		<field name="ue" type="id-ne"></field>
 		<field name="n5" type="id-ne"></field>
@@ -51,17 +51,17 @@
 
 	<entity entity-name="DataImportEgresoDiario" package-name="org.opentaps.dataimport"
 		title="Intermediate import entity (i.e., the bridge table) for Egreso Diario data.">	
+		<field name="idTipoDoc" type="id-ne"></field>
 		<field name="fechaRegistro" type="date"/>
 		<field name="fechaContable" type="date"/>
 		<field name="monto" type="currency-amount"></field>
-		<field name="organizationPartyId" type="id-ne"></field>
-		<field name="idTipoDoc" type="id-ne"></field>
+		<field name="organizationPartyId" type="id-ne"></field>		
 		<field name="refDoc" type="id-ne"></field>
 		<field name="secuencia" type="id-ne"></field>
 		<field name="usuario" type="id-ne"></field>
-		<field name="idTipoCatalogo" type="id-ne"></field>
 		<field name="idPago" type="id-ne"></field>
-		<field name="idProducto" type="id-ne"></field>
+		<field name="idProductoD" type="id-ne"></field>
+		<field name="idProductoH" type="id-ne"></field>
 		<field name="ciclo" type="id-ne"></field>
 		<field name="ue" type="id-ne"></field>
 		<field name="subf" type="id-ne"></field>
@@ -89,12 +89,12 @@
 	
 	<entity entity-name="DataImportOperacionDiaria" package-name="org.opentaps.dataimport"
 		title="Intermediate import entity (i.e., the bridge table) for Operacion Diaria data.">
+		<field name="idTipoDoc" type="id-ne"></field>
 		<field name="fechaRegistro" type="date"/>
 		<field name="fechaContable" type="date"/>
 		<field name="monto" type="currency-amount"></field>
 		<field name="organizationPartyId" type="id-ne"></field>
 		<field name="organizacionEjecutora" type="id-ne"></field>
-		<field name="idTipoDoc" type="id-ne"></field>
 		<field name="refDoc" type="id-ne"></field>
 		<field name="secuencia" type="id-ne"></field>
 		<field name="usuario" type="id-ne"></field>

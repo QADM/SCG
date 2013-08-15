@@ -85,8 +85,10 @@ public class MotorContable {
 								ledger_repo
 										.map(GlAccountCategoryRelation.Fields.glAccountId,
 												cuentas.get(cuenta)));
-				
-				if (!relacion.isEmpty()&&relacion.get(0).getProductCategoryId().equalsIgnoreCase(idCategory)) {
+
+				if (!relacion.isEmpty()
+						&& relacion.get(0).getProductCategoryId()
+								.equalsIgnoreCase(idCategory)) {
 					cuentas.put(cuenta, productGl.get(0).getGlAccountId());
 				}
 			}
@@ -233,7 +235,8 @@ public class MotorContable {
 					buscaCuentaPago(idC, "Cuenta Abono Contable");
 				} else {
 					Debug.log("Producto C");
-					buscaCuentaProductCatalogo(idC, organizationPartyId, "Cuenta Abono Contable", tipoCatalogoC);
+					buscaCuentaProductCatalogo(idC, organizationPartyId,
+							"Cuenta Abono Contable", tipoCatalogoC);
 				}
 			}
 			if (tipoCatalogoD != null) {
@@ -242,10 +245,150 @@ public class MotorContable {
 					buscaCuentaPago(idD, "Cuenta Cargo Contable");
 				} else {
 					Debug.log("Producto D");
-					buscaCuentaProductCatalogo(idD, organizationPartyId, "Cuenta Cargo Contable", tipoCatalogoD);
+					buscaCuentaProductCatalogo(idD, organizationPartyId,
+							"Cuenta Cargo Contable", tipoCatalogoD);
 				}
 			}
 
+		} else {
+			// miniGuia.getReferencia().equalsIgnoreCase("N")
+			Debug.log("Referencia = N");
+		}
+		return cuentas;
+	}
+
+	public void buscaCuentasProductos(String idProductD, String idProductH,
+			String idPago, String organizationPartyId)
+			throws RepositoryException {
+
+		String mensaje = "";
+
+		if (idProductD != null) {
+			buscaCuentaProduct(idProductD, organizationPartyId,
+					"Cuenta Cargo Contable");
+		} else {
+			mensaje += "idProductoD es obligatorio ";
+		}
+
+		if (idPago != null) {
+			buscaCuentaPago(idPago, "Cuenta Cargo Contable");
+		} else {
+			if (idProductH != null) {
+				buscaCuentaProduct(idProductD, organizationPartyId,
+						"Cuenta Abono Contable");
+			} else {
+				mensaje += "idProductoH es obligatorio ";
+			}
+		}
+
+		if (!mensaje.isEmpty()) {
+			cuentas.put("Mensaje", mensaje);
+		}
+
+	}
+
+	public Map<String, String> cuentasIngresoDiario(String tipoTransaccion,
+			String organizationPartyId, String idPago, String tipo,
+			String idProductD, String idProductH) throws RepositoryException {
+
+		MiniGuiaContable miniGuia = ledger_repo.findOne(MiniGuiaContable.class,
+				ledger_repo.map(MiniGuiaContable.Fields.acctgTransTypeId,
+						tipoTransaccion));
+		cuentas.put("GlFiscalTypePresupuesto", miniGuia.getGlFiscalTypeIdPres());
+		cuentas.put("GlFiscalTypeContable", miniGuia.getGlFiscalTypeIdCont());
+		cuentas.put("Cuenta Cargo Presupuesto", miniGuia.getCuentaCargo());
+		cuentas.put("Cuenta Abono Presupuesto", miniGuia.getCuentaAbono());
+
+		if (miniGuia.getReferencia().equalsIgnoreCase("M")) {
+			Debug.log("Referencia = M");
+			List<DataImportMatrizIng> matriz = ledger_repo.findList(
+					DataImportMatrizIng.class, ledger_repo.map(
+							DataImportMatrizIng.Fields.cri, tipo,
+							DataImportMatrizIng.Fields.matrizId,
+							miniGuia.getTipoMatriz()));
+			if (matriz.isEmpty()) {
+				Debug.log("Error, elemento en Matriz no existe");
+				throw new RepositoryException(
+						"Error, elemento en Matriz no existe");
+			}
+
+			cuentas.put("Cuenta Cargo Contable", matriz.get(0).getCargo());
+			cuentas.put("Cuenta Abono Contable", matriz.get(0).getAbono());
+
+			// if (matriz.get(0).getMatrizId().equalsIgnoreCase("B.1")) {
+			// Debug.log("B.1");
+			// buscaCuentaCategory(n5, organizationPartyId,
+			// "Cuenta Abono Contable");
+			// if (idProductD != null) {
+			// buscaCuentaProduct(idProductD, organizationPartyId,
+			// "Cuenta Cargo Contable");
+			// }
+			//
+			// } else {
+			// Debug.log("B.2");
+			// buscaCuentaPago(idPago, "Cuenta Cargo Contable");
+			// }
+
+			buscaCuentasProductos(idProductD, idProductH, idPago,
+					organizationPartyId);
+
+		} else {
+			// miniGuia.getReferencia().equalsIgnoreCase("N")
+			Debug.log("Referencia = N");
+		}
+		return cuentas;
+	}
+
+	public Map<String, String> cuentasEgresoDiario(String tipoTransaccion,
+			String prodGen, String organizationPartyId,
+			String tipoGasto, String idPago, String idProductD,
+			String idProductH) throws RepositoryException {
+
+		MiniGuiaContable miniGuia = ledger_repo.findOne(MiniGuiaContable.class,
+				ledger_repo.map(MiniGuiaContable.Fields.acctgTransTypeId,
+						tipoTransaccion));
+		cuentas.put("GlFiscalTypePresupuesto", miniGuia.getGlFiscalTypeIdPres());
+		cuentas.put("GlFiscalTypeContable", miniGuia.getGlFiscalTypeIdCont());
+		cuentas.put("Cuenta Cargo Presupuesto", miniGuia.getCuentaCargo());
+		cuentas.put("Cuenta Abono Presupuesto", miniGuia.getCuentaAbono());
+
+		if (miniGuia.getReferencia().equalsIgnoreCase("M")) {
+			Debug.log("Referencia = M");
+			Debug.log("Egreso");
+			Debug.log("COG " + prodGen);
+			Debug.log("TIPOGASTO " + tipoGasto);
+			List<DataImportMatrizEgr> matriz = ledger_repo.findList(
+					DataImportMatrizEgr.class, ledger_repo.map(
+							DataImportMatrizEgr.Fields.cog, prodGen,
+							DataImportMatrizEgr.Fields.tipoGasto, tipoGasto,
+							DataImportMatrizEgr.Fields.matrizId,
+							miniGuia.getTipoMatriz()));
+			if (matriz.isEmpty()) {
+				Debug.log("Error, elemento en Matriz no existe");
+				throw new RepositoryException(
+						"Error, elemento en Matriz no existe");
+			}
+			Debug.log("Cuenta Cargo Contable " + matriz.get(0).getCargo());
+			Debug.log("Cuenta Abono Contable " + matriz.get(0).getAbono());
+			Debug.log("Matriz " + matriz.get(0).getMatrizId());
+			cuentas.put("Cuenta Cargo Contable", matriz.get(0).getCargo());
+			cuentas.put("Cuenta Abono Contable", matriz.get(0).getAbono());
+
+			// if (matriz.get(0).getMatrizId().equalsIgnoreCase("A.1")) {
+			// Debug.log("A.1");
+			// buscaCuentaCategory(prodEsp, organizationPartyId,
+			// "Cuenta Cargo Contable");
+			// if (idProduct != null) {
+			// buscaCuentaProduct(idProduct, organizationPartyId,
+			// "Cuenta Cargo Contable");
+			// }
+			// } else {
+			// Debug.log("A.2");
+			// buscaCuentaPago(idC, "Cuenta Abono Contable");
+			// }
+
+			buscaCuentasProductos(idProductD, idProductH, idPago,
+					organizationPartyId);
 		} else {
 			// miniGuia.getReferencia().equalsIgnoreCase("N")
 			Debug.log("Referencia = N");

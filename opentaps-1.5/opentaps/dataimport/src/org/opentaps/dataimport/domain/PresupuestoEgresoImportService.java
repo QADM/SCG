@@ -144,20 +144,20 @@ public class PresupuestoEgresoImportService extends DomainService implements
 				mensaje = UtilImport.validaParty(mensaje, ledger_repo,
 						rowdata.getUe(), "ADMINISTRATIVA");
 				mensaje = UtilImport.validaEnumeration(mensaje, ledger_repo,
-						rowdata.getSubf(), "CLAS_FUN", "FUNCIONAL");
+						rowdata.getSubf(), "CL_FUNCIONAL", "FUNCIONAL");
 				mensaje = UtilImport.validaWorkEffort(mensaje, ledger_repo,
 						rowdata.getAct(), "ACTIVIDAD");
 				mensaje = UtilImport.validaEnumeration(mensaje, ledger_repo,
 						rowdata.getTg(), "TIPO_GASTO", "TIPO GASTO");
 				mensaje = UtilImport.validaProductCategory(mensaje,
-						ledger_repo, rowdata.getPe(), "PE",
+						ledger_repo, rowdata.getPe(), "PARTIDA ESPECIFICA",
 						"PRODUCTO ESPECIFICO");
 				mensaje = UtilImport.validaEnumeration(mensaje, ledger_repo,
-						rowdata.getSfe(), "CLAS_FR", "FUENTE DE LOS RECURSOS");
+						rowdata.getSfe(), "CL_FUENTE_RECURSOS", "FUENTE DE LOS RECURSOS");
 				mensaje = UtilImport.validaGeo(mensaje, ledger_repo,
 						rowdata.getLoc(), "GEOGRAFICA");
 				mensaje = UtilImport.validaEnumeration(mensaje, ledger_repo,
-						rowdata.getArea(), "CLAS_SECT", "SECTORIAL");
+						rowdata.getArea(), "CL_SECTORIAL", "SECTORIAL");
 
 				if (!mensaje.isEmpty()) {
 					String message = "Failed to import Presupuesto Egreso ["
@@ -219,18 +219,18 @@ public class PresupuestoEgresoImportService extends DomainService implements
 
 				Party ue = UtilImport.obtenParty(ledger_repo, rowdata.getUe());
 				Enumeration subf = UtilImport.obtenEnumeration(ledger_repo,
-						rowdata.getSubf(), "CLAS_FUN");
+						rowdata.getSubf(), "CL_FUNCIONAL");
 				WorkEffort act = UtilImport.obtenWorkEffort(ledger_repo,
 						rowdata.getAct());
 				Enumeration tg = UtilImport.obtenEnumeration(ledger_repo,
 						rowdata.getTg(), "TIPO_GASTO");
 				ProductCategory pe = UtilImport.obtenProductCategory(
-						ledger_repo, rowdata.getPe(), "PE");
+						ledger_repo, rowdata.getPe(), "PARTIDA ESPECIFICA");
 				Geo loc = UtilImport.obtenGeo(ledger_repo, rowdata.getLoc());
 				Enumeration sfe = UtilImport.obtenEnumeration(ledger_repo,
-						rowdata.getSfe(), "CLAS_FR");
+						rowdata.getSfe(), "CL_FUENTE_RECURSOS");
 				Enumeration area = UtilImport.obtenEnumeration(ledger_repo,
-						rowdata.getArea(), "CLAS_SECT");
+						rowdata.getArea(), "CL_SECTORIAL");
 
 				// import Presupuestos Egreso as many as possible
 				try {

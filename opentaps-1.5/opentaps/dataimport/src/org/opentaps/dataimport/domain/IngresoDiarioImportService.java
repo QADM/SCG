@@ -152,9 +152,9 @@ public class IngresoDiarioImportService extends DomainService implements
 						rowdata.getUe(), "ADMINISTRATIVA");
 				mensaje = UtilImport
 						.validaProductCategory(mensaje, ledger_repo,
-								rowdata.getN5(), "N5", "RUBRO DEL INGRESO");
+								rowdata.getN5(), "NIVEL_5_ING", "RUBRO DEL INGRESO");
 				mensaje = UtilImport.validaEnumeration(mensaje, ledger_repo,
-						rowdata.getSfe(), "CLAS_FR", "FUENTE DE LOS RECURSOS");
+						rowdata.getSfe(), "CL_FUENTE_RECURSOS", "FUENTE DE LOS RECURSOS");
 				mensaje = UtilImport.validaGeo(mensaje, ledger_repo,
 						rowdata.getLoc(), "GEOGRAFICA");
 
@@ -199,9 +199,9 @@ public class IngresoDiarioImportService extends DomainService implements
 
 				Party ue = UtilImport.obtenParty(ledger_repo, rowdata.getUe());
 				ProductCategory n5 = UtilImport.obtenProductCategory(
-						ledger_repo, rowdata.getN5(), "N5");
+						ledger_repo, rowdata.getN5(), "NIVEL_5_ING");
 				Enumeration sfe = UtilImport.obtenEnumeration(ledger_repo,
-						rowdata.getSfe(), "CLAS_FR");
+						rowdata.getSfe(), "CL_FUENTE_RECURSOS");
 				Geo loc = UtilImport.obtenGeo(ledger_repo, rowdata.getLoc());
 
 				// Empieza bloque de vigencias
@@ -216,23 +216,22 @@ public class IngresoDiarioImportService extends DomainService implements
 					storeImportIngresoDiarioError(rowdata, message, imp_repo);
 					continue;
 				}
-				
+
 				// Obtenemos los padres de cada nivel.
 				String uo = UtilImport.obtenPadreParty(ledger_repo,
 						ue.getPartyId());
 				String ur = UtilImport.obtenPadreParty(ledger_repo, uo);
-				String con = UtilImport.obtenPadreProductCategory(
-						ledger_repo, n5.getProductCategoryId());
-				String cla = UtilImport.obtenPadreProductCategory(
-						ledger_repo, con);
-				String tip = UtilImport.obtenPadreProductCategory(
-						ledger_repo, cla);
-				String rub = UtilImport.obtenPadreProductCategory(
-						ledger_repo, tip);
-				String sf = UtilImport.obtenPadreEnumeration(
-						ledger_repo, sfe.getEnumId());
-				String f = UtilImport.obtenPadreEnumeration(
-						ledger_repo, sf);
+				String con = UtilImport.obtenPadreProductCategory(ledger_repo,
+						n5.getProductCategoryId());
+				String cla = UtilImport.obtenPadreProductCategory(ledger_repo,
+						con);
+				String tip = UtilImport.obtenPadreProductCategory(ledger_repo,
+						cla);
+				String rub = UtilImport.obtenPadreProductCategory(ledger_repo,
+						tip);
+				String sf = UtilImport.obtenPadreEnumeration(ledger_repo,
+						sfe.getEnumId());
+				String f = UtilImport.obtenPadreEnumeration(ledger_repo, sf);
 				String mun = UtilImport.obtenPadreGeo(ledger_repo,
 						loc.getGeoId());
 				String reg = UtilImport.obtenPadreGeo(ledger_repo, mun);
@@ -240,12 +239,27 @@ public class IngresoDiarioImportService extends DomainService implements
 
 				Debug.log("Motor Contable");
 				MotorContable motor = new MotorContable(ledger_repo);
-				Map<String, String> cuentas = motor.cuentasDiarias(
-						tipoDoc.getAcctgTransTypeId(), null, null,
-						rowdata.getOrganizationPartyId(), null,
-						n5.getProductCategoryId(), rowdata.getIdTipoCatalogo(),
-						rowdata.getIdPago(), null, null, tip,
-						false, null, null, rowdata.getIdProducto());
+				// Map<String, String> cuentas = motor.cuentasDiarias(
+				// tipoDoc.getAcctgTransTypeId(), null, null,
+				// rowdata.getOrganizationPartyId(), null,
+				// n5.getProductCategoryId(), rowdata.getIdTipoCatalogo(),
+				// rowdata.getIdPago(), null, null, tip,
+				// false, null, null, rowdata.getIdProducto());
+				Map<String, String> cuentas = motor
+						.cuentasIngresoDiario(tipoDoc.getAcctgTransTypeId(),
+								rowdata.getOrganizationPartyId(),
+								rowdata.getIdPago(), tip,
+								rowdata.getIdProductoD(),
+								rowdata.getIdProductoH());
+				
+				if (cuentas.get("Mensaje") != null) {
+					String message = "Failed to import Ingreso Diario ["
+							+ rowdata.getClavePres() + "], Error message : "
+							+ cuentas.get("Mensaje");
+					storeImportIngresoDiarioError(rowdata, message, imp_repo);
+					continue;
+				}
+
 				try {
 
 					imp_tx1 = null;
@@ -278,7 +292,7 @@ public class IngresoDiarioImportService extends DomainService implements
 					ingresoDiario.setPostedAmount(rowdata.getMonto());
 					ingresoDiario.setDescription(tipoDoc.getDescripcion() + "-"
 							+ rowdata.getRefDoc() + "-P");
-					
+
 					// ACCTG_TRANS_PRESUPUESTAL
 					AcctgTransPresupuestal aux = new AcctgTransPresupuestal();
 					aux.setCiclo(rowdata.getCiclo());
