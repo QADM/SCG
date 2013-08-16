@@ -99,6 +99,8 @@ public class GlAccountImportService extends DomainService implements GlAccountIm
             BigDecimal saldodebit = new BigDecimal(0.00);
             BigDecimal saldoCredit =  new BigDecimal(0.00);
             String TipoParentId = "";
+            String glAccountId  = "";
+            boolean isDebitOrCredit = false;
             
             int imported = 0;
             Transaction imp_tx1 = null;
@@ -144,23 +146,43 @@ public class GlAccountImportService extends DomainService implements GlAccountIm
 		                                         glAccount.getGlAccountClassId()));
                         
                         if(glaccountclass.getParentClassId()!= null)
-                        {
+                        { 
                         	
-                        	TipoParentId = glaccountclass.getParentClassId().toString();
-                        	
-                        	if(TipoParentId.equals("DEBIT") && !rawdata.getSaldoinicial().toString().trim().equals("0.00"))
-                        	{                        		
-                        		saldodebit = saldodebit.add(rawdata.getSaldoinicial());
-                        		cuentas.add(rawdata.getGlAccountId() + ";" +saldoinicial.toString() + ";D" );                        		
-                        	}
-                        	else if(TipoParentId.equals("CREDIT") && !rawdata.getSaldoinicial().toString().trim().equals("0.00"))
-                        	{
-                        		saldoCredit = saldoCredit.add(rawdata.getSaldoinicial());
-                        		cuentas.add(rawdata.getGlAccountId()+ ";" +saldoinicial.toString()+ ";C");
-                        	}
-
-                        }
-                        
+                        	do{                          	
+                        		
+                        		glAccountId = glaccountclass.getParentClassId().toString();
+                        		Debug.logInfo("variable1: " + glAccountId, MODULE);
+                         		                         		
+                         		if (glAccountId.equals("DEBIT") || glAccountId.equals("CREDIT"))
+                         		{
+                         			Debug.logInfo("BANANA", MODULE);
+                         			TipoParentId = glAccountId;
+                         			isDebitOrCredit = true;
+                         		}
+                         		else
+                         		{
+                         			glaccountclass = ledger_repo.findOne(
+                                    		GlAccountClass.class, ledger_repo.map(
+                                    				GlAccountClass.Fields.glAccountClassId,
+                                    				glAccountId));
+                         			Debug.logInfo("variable2: " + glaccountclass, MODULE);
+                         			isDebitOrCredit = false;
+                         		}                    		
+                         		
+                         	} while (isDebitOrCredit == false);
+                            
+                        	Debug.logInfo("variable3: " + TipoParentId, MODULE);
+                         	if (TipoParentId.equals("DEBIT") && !rawdata.getSaldoinicial().toString().trim().equals("0.00"))
+                         	{                        		
+                         		saldodebit = saldodebit.add(rawdata.getSaldoinicial());
+                         		cuentas.add(rawdata.getGlAccountId() + ";" +saldoinicial.toString() + ";D" );                        		
+                         	}
+                         	else if (TipoParentId.equals("CREDIT") && !rawdata.getSaldoinicial().toString().trim().equals("0.00"))
+                         	{
+                         		saldoCredit = saldoCredit.add(rawdata.getSaldoinicial());
+                         		cuentas.add(rawdata.getGlAccountId()+ ";" +saldoinicial.toString()+ ";C");
+                         	}
+                        }	
                     }
                     
                     Debug.log("Saldo Debit " + saldodebit);
