@@ -51,9 +51,13 @@
         <@inputTextCell name="Tipo_Catalogo" maxlength=60  />
       </tr>  
       <tr>
-        <@displayTitleCell title=uiLabelMap.FinancialsProduct />
-        <@inputSelectCell list=listProducts?if_exists displayField="description" name="Id_Producto" default=productId?if_exists key="productId"/>
+        <@displayTitleCell title=uiLabelMap.FinancialsProductCredit />
+        <@inputSelectCell list=listProducts?if_exists displayField="description" name="Id_Producto_Abono" default=productId?if_exists key="productId"/>
       </tr>
+      <tr>
+        <@displayTitleCell title=uiLabelMap.FinancialsProductDebit />
+        <@inputSelectCell list=listProducts?if_exists displayField="description" name="Id_Producto_Cargo" default=productId?if_exists key="productId"/>
+      </tr>      
       <tr>
         <@displayTitleCell title=uiLabelMap.FinancialsCaption />
         <@inputSelectCell list=listRubros?if_exists displayField="description" name="Rubro" default=productCategoryId?if_exists key="productCategoryId"/>
@@ -101,12 +105,8 @@
       </tr>
       <tr>
       	<@displayTitleCell title=uiLabelMap.FinancialsIdPayCredit />
-      	<@inputTextCell name="Id_Pago_Abono" maxlength=60  />
-      </tr>
-      <tr>
-      	<@displayTitleCell title=uiLabelMap.FinancialsIdPayDebit />
-      	<@inputTextCell name="Id_Pago_Cargo" maxlength=60  />
-      </tr>                                            
+      	<@inputTextCell name="Id_Pago" maxlength=60  />
+      </tr>                                        
       <tr>                             
       <tr>
         <@displayTitleCell title=uiLabelMap.CommonAmount titleClass="requiredField" />
