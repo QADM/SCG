@@ -1489,7 +1489,6 @@
         <response name="error" type="view" value="createQuickAcctgTransForm" />
     </request-map> 
     <request-map uri="reconcileAfterSettlement">
-        <security https="true" auth="true"/> <!-- for some odd reason direct-request="false" won't work here -->
         <response name="success" type="view" value="reconcileAfterSettlement"/>
     </request-map>      
     
@@ -1530,7 +1529,16 @@
      <request-map uri="ODIngresos">
         <security https="true" auth="true"/>
         <response name="success" type="view" value="ODIngresos"/>
-    </request-map>    
+<!-- 		<response name="success" type="request-redirect" value="viewAcctgTrans">
+          <redirect-parameter name="acctgTransId"/>
+        </response>    -->     
+    </request-map> 
+	<request-map uri="createOperacionDiariaIngresos">
+		<security https="true" auth="true"/>
+		<event type="service" invoke="createOperacionDiariaIngresos"/>
+		<response name="success" type="view" value="ODIngresos"/>
+<!-- 		<response name="success" type="request-redirect" value="viewAcctgTransEg"></response> -->
+	</request-map>
     
     
     <request-map uri="reverseAcctgTrans">
