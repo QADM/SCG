@@ -1117,7 +1117,7 @@ For more information, please see documentation/opentapsFormMacros.html
 <#macro padresGeo name="hijosGeo" geoCode="" hijoName="" nietos="" >
 	<#assign defaultGeo = Static["org.opentaps.common.util.UtilCommon"].getHijosGeograficos(delegator, geoCode) />
 	<td>
-		<select name="${name}" id="${name}" title="${nietos}" class="selectBox" onChange="opentaps.obtenHijosCombos(this, '${hijoName}','${nietos}');">
+		<select name="${name}" id="${name}" title="${nietos}" class="selectBox" onchange="opentaps.obtenHijosCombos(this, '${hijoName}','${nietos}');">
 	        <option></option>
 	        <#list defaultGeo as geo>
 	            <option ${selected} value="${geo.geoId}">${geo.get("geoName", locale)}</option>
