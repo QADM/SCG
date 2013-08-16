@@ -712,7 +712,8 @@
         <section>
             <actions>
                 <set field="pageTitleLabel" value="FinancialsDailyOperIncome"/>  
-                <set field="sectionHeaderUiLabel" value="FinancialsDailyOperIncome"/>  
+                <set field="sectionHeaderUiLabel" value="${uiLabelMap.FinancialsDailyOperIncome}"/>
+                <set field="creaOpDiariaIngresos" value="createOperacionDiariaIngresos"/>
 				<script location="component://financials/webapp/financials/WEB-INF/actions/transactions/getDatosOperacionDiariaIng.bsh"/>                
 <!--                 <java location="com.opensourcestrategies.financials.transactions.TransactionsFindIng" invoke="findTransactionsIngr"/>           -->      
             </actions>

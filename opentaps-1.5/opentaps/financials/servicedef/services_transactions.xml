@@ -153,4 +153,36 @@
         <attribute name="paymentOrRefund" mode="IN" type="String" optional="false"/>
         <attribute name="transactionDatePrev" type="String" mode="OUT" optional="false"/>
     </service>
+    
+    <service name="createOperacionDiariaIngresos" engine="java"
+            location="com.opensourcestrategies.financials.transactions.TransactionServices" invoke="createOperacionDiariaIngresos" auth="true">
+        <description>Crea una transaccion de Operacion Diaria.</description>
+        <required-permissions join-type="OR">
+            <check-permission permission="ACCOUNTING" action="_ATX_CREATE"/>
+        </required-permissions>
+        <attribute name="organizationPartyId" mode="IN" type="String" optional="false"/>
+        <attribute name="glFiscalTypeId" mode="IN" type="String" optional="false"/>
+        <attribute name="Tipo_Documento" mode="IN" type="String" optional="true"/>
+        <attribute name="Tipo_Fiscal" mode="IN" type="String" optional="true" />
+        <attribute name="Fecha_Transaccion" mode="IN" type="String" optional="true"/>
+        <attribute name="Fecha_Contable" mode="IN" type="String" optional="true" />
+		<attribute name="Referencia_Documento" mode="IN" type="String" optional="true"/>
+        <attribute name="Secuencia" mode="IN" type="String" optional="true" />
+        <attribute name="Tipo_Catalogo" mode="IN" type="String" optional="true"/>
+        <attribute name="Id_Producto" mode="IN" type="String" optional="true" />
+        <attribute name="Rubro" mode="IN" type="String" optional="true"/>
+        <attribute name="Tipo" mode="IN" type="String" optional="true" />
+		<attribute name="Clase" mode="IN" type="String" optional="true"/>
+        <attribute name="Concepto" mode="IN" type="String" optional="true"/>
+        <attribute name="N5" mode="IN" type="String" optional="true"/>
+        <attribute name="EntidadFederativa" mode="IN" type="String" optional="true"/>
+        <attribute name="Region" mode="IN" type="String" optional="true"/>
+        <attribute name="Municipio" mode="IN" type="String" optional="true"/>
+        <attribute name="Localidad" mode="IN" type="String" optional="true"/>
+        <attribute name="Sub_Fuente_Especifica" mode="IN" type="String" optional="true"/>
+        <attribute name="Unidad_Ejecutora" mode="IN" type="String" optional="true"/>
+        <attribute name="Id_Pago" mode="IN" type="String" optional="true"/>  
+        <attribute name="Monto" mode="IN" type="String" optional="false"/>
+        <attribute name="AcctgTrans" mode="OUT" type="org.ofbiz.entity.GenericValue"></attribute>               
+    </service>       
 </services>
