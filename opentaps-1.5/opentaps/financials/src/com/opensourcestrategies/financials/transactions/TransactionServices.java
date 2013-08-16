@@ -52,6 +52,9 @@ import org.opentaps.base.services.PostAcctgTransService;
 import org.opentaps.common.util.UtilAccountingTags;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
+import org.opentaps.dataimport.domain.IngresoDiarioImportService;
+import org.opentaps.dataimport.domain.MotorContable;
+import org.opentaps.domain.DomainsDirectory;
 import org.opentaps.domain.DomainsLoader;
 import org.opentaps.domain.ledger.LedgerRepositoryInterface;
 import org.opentaps.domain.organization.AccountingTagConfigurationForOrganizationAndUsage;
@@ -60,6 +63,7 @@ import org.opentaps.domain.organization.OrganizationRepositoryInterface;
 import org.opentaps.foundation.action.ActionContext;
 import org.opentaps.foundation.infrastructure.Infrastructure;
 import org.opentaps.foundation.infrastructure.User;
+import org.opentaps.foundation.repository.RepositoryException;
 
 import com.ibm.icu.math.BigDecimal;
 
@@ -69,7 +73,7 @@ import com.ibm.icu.math.BigDecimal;
  * @author     <a href="mailto:libertine@ars-industria.com">Chris Liberty</a>
  * @version    $Rev$
  */
-public final class TransactionServices {
+public final class TransactionServices extends DomainsDirectory{
 
     private TransactionServices() { }
 
@@ -561,9 +565,8 @@ public final class TransactionServices {
         
         GenericValue acctgtrans;
         
-        try {        
-	        
-	        
+        try {   
+        	
 	        String userLog = userLogin.getString("userLoginId");
 	        String tipoDoc = (String) context.get("Tipo_Documento");
 	        String tipoFis = (String) context.get("Tipo_Fiscal");
@@ -584,39 +587,18 @@ public final class TransactionServices {
 	        String local = (String) context.get("Localidad");
 	        String suFuente = (String) context.get("Sub_Fuente_Especifica");
 	        String uniEjec = (String) context.get("Unidad_Ejecutora");
-	        String idPago = (String) context.get("Id_Pago");
+	        String idPagoAbono = (String) context.get("Id_Pago_Abono");
+	        String idPagoCargo = (String) context.get("Id_Pago_Cargo");
 	        java.math.BigDecimal monto = java.math.BigDecimal.valueOf(Long.valueOf((String)context.get("Monto")));
 	        
-	        String descripcion = refDoc+" - "+tipoCat;
-	        
+	        String descripcion = refDoc == null?" ":refDoc+" - "+tipoCat == null ?" ":tipoCat;
 	        
 	    	Debug.logWarning("ENTRO AL SERVICIO PARA CREAR OPERACION DIARIA", MODULE);
-	    	
-	        Debug.logWarning("userLogin   "+userLogin, MODULE);
-	        Debug.logWarning("organizationPartyId   "+organizationPartyId, MODULE);
-	        Debug.logWarning("userLogin   "+userLogin, MODULE);
-	        Debug.logWarning("organizationPartyId   "+organizationPartyId, MODULE);
-	        Debug.logWarning("tipoDoc   "+tipoDoc, MODULE);
-	        Debug.logWarning("tipoFis   "+tipoFis, MODULE);
-	        Debug.logWarning("fecTrans   "+fecTrans, MODULE);
-	        Debug.logWarning("fecContable   "+fecContable, MODULE);
-	        Debug.logWarning("refDoc   "+refDoc, MODULE);
-	        Debug.logWarning("sec   "+sec, MODULE);
-	        Debug.logWarning("tipoCat   "+tipoCat, MODULE);
-	        Debug.logWarning("idProd   "+idProd, MODULE);
-	        Debug.logWarning("rubro   "+rubro, MODULE);
-	        Debug.logWarning("tipo   "+tipo, MODULE);
-	        Debug.logWarning("clase   "+clase, MODULE);
-	        Debug.logWarning("concepto   "+concepto, MODULE);
-	        Debug.logWarning("n5   "+n5, MODULE);
-	        Debug.logWarning("entFed   "+entFed, MODULE);
-	        Debug.logWarning("region   "+region, MODULE);
-	        Debug.logWarning("muni   "+muni, MODULE);
-	        Debug.logWarning("local   "+local, MODULE);
-	        Debug.logWarning("suFuente   "+suFuente, MODULE);
-	        Debug.logWarning("uniEjec   "+uniEjec, MODULE);
-	        Debug.logWarning("idPago   "+idPago, MODULE);        
-	        Debug.logWarning("Monto   "+monto, MODULE);
+
+	    	//Se utilza el motor contable para obtener los datos de las cuentas
+            IngresoDiarioImportService ingresoImp = new IngresoDiarioImportService();
+            LedgerRepositoryInterface ledger_repo = ingresoImp.getDomainsDirectory().getLedgerDomain().getLedgerRepository();
+	    	MotorContable motor = new MotorContable(ledger_repo);
 	        
 	        
 	        acctgtrans = GenericValue.create(delegator.getModelEntity("AcctgTrans"));
@@ -632,10 +614,14 @@ public final class TransactionServices {
 	        acctgtrans.set("postedAmount", monto);
 	        acctgtrans.create();
 	        
+	        
+	        
 				
 		} catch (ParseException e) {
 			return UtilMessage.createAndLogServiceError(e, MODULE);
 		} catch (GenericEntityException e) {
+			return UtilMessage.createAndLogServiceError(e, MODULE);
+		} catch (RepositoryException e) {
 			return UtilMessage.createAndLogServiceError(e, MODULE);
 		}
     	

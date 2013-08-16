@@ -100,9 +100,13 @@
         <@inputSelectCell list=listaUnidades?if_exists displayField="groupName" name="Unidad_Ejecutora" default=enumId?if_exists key="partyId"/>
       </tr>
       <tr>
-      	<@displayTitleCell title=uiLabelMap.FinancialsIdPay />
-      	<@inputTextCell name="Id_Pago" maxlength=60  />
-      </tr>                                  
+      	<@displayTitleCell title=uiLabelMap.FinancialsIdPayCredit />
+      	<@inputTextCell name="Id_Pago_Abono" maxlength=60  />
+      </tr>
+      <tr>
+      	<@displayTitleCell title=uiLabelMap.FinancialsIdPayDebit />
+      	<@inputTextCell name="Id_Pago_Cargo" maxlength=60  />
+      </tr>                                            
       <tr>                             
       <tr>
         <@displayTitleCell title=uiLabelMap.CommonAmount titleClass="requiredField" />

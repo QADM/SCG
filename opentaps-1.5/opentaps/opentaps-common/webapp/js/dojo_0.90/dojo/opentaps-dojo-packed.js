@@ -1308,7 +1308,6 @@ opentaps.obtenHijosCombos = function(elementoPadre,nombreElementoHijo,nombreNiet
     	
         var nietosArray = nombreNietos.split(",");
         
-        
         for (var i=0; i<nietosArray.length; i++) {
         	
         	var elementoNieto = elementoPadre.form[nietosArray[i]];
