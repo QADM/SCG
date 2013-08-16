@@ -798,6 +798,33 @@ opentaps.copyOrClearAddressFields = function(prefix1, prefix2, checkbox, default
 }
 
 
+opentaps.obtenHijosCombos = function(elementoPadre,nombreElementoHijo,nombreNietos){
+	
+    var elementoHijo = elementoPadre.form[nombreElementoHijo];
+    var geoCode = elementoPadre[elementoPadre.selectedIndex].value;
+    
+    //Borra a todos los nietos , bisnietos....
+    if(nombreNietos){
+    	
+        var nietosArray = nombreNietos.split(",");
+        
+        
+        for (var i=0; i<nietosArray.length; i++) {
+        	
+        	var elementoNieto = elementoPadre.form[nietosArray[i]];
+        	
+        	 while(elementoNieto.childNodes[0]){  
+        		 elementoNieto.removeChild(elementoNieto.childNodes[0]);  
+        	 }  
+        	
+        }
+    	
+    }
+    
+    opentaps.sendRequest("getHijosDataJSON",{"geoCode" : geoCode},function(data) {opentaps.swapStatesInDropdownResponse(elementoHijo, data)});
+	
+}
+
 // function to swap states in a dropdown.
 opentaps.swapStatesInDropdown = function(countryElement, stateElementName) {
     var stateElement = countryElement.form[stateElementName];
