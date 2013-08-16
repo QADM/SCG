@@ -106,7 +106,7 @@ under the License.
         <override name="firstName" optional="false"/>
         <override name="lastName" optional="false"/>
     </service>
-    <service name="createPartyGroup" engine="java" default-entity-name="PartyGroup"
+  <service name="createPartyGroup" engine="java" default-entity-name="PartyGroup"
             location="org.ofbiz.party.party.PartyServices" invoke="createPartyGroup" auth="false">
         <description>Create a PartyGroup</description>
         <auto-attributes mode="INOUT" include="pk" optional="true"/>
@@ -120,7 +120,7 @@ under the License.
         <attribute name="statusId" type="String" mode="IN" optional="true"/>
         <override name="groupName" optional="false"/>
     </service>
-    <service name="updatePartyGroup" engine="java" default-entity-name="PartyGroup"
+     <service name="updatePartyGroup" engine="java" default-entity-name="PartyGroup"
             location="org.ofbiz.party.party.PartyServices" invoke="updatePartyGroup" auth="true">
         <description>Update a PartyGroup</description>
         <permission-service service-name="partyGroupPermissionCheck" main-action="UPDATE"/>
