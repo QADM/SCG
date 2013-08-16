@@ -955,5 +955,22 @@ under the License.
           <key-map field-name="partyId"/>
       </view-link>
     </view-entity>
+     <view-entity entity-name="PartyView"
+            package-name="org.ofbiz.workeffort.workeffort"
+            title="Vista que da el id del participante asociado">
+      <member-entity entity-alias="WE" entity-name="WorkEffort"/>
+      <member-entity entity-alias="WEPA" entity-name="WorkEffortPartyAssignment"/>
+      <member-entity entity-alias="PG" entity-name="PartyGroup"/>
+      <alias name="workEffortId" entity-alias="WE" group-by="true"/>
+      <alias name="fromDate" entity-alias="WEPA" group-by="false" function="max"/>
+      <alias name="groupName" entity-alias="PG" group-by="false" function="max"/>
+      <alias name="partyId" entity-alias="PG"  group-by="false" function="max"/>
+      <view-link entity-alias="WE" rel-entity-alias="WEPA" rel-optional="true" >
+          <key-map field-name="workEffortId"/>
+      </view-link>
+      <view-link entity-alias="WEPA" rel-entity-alias="PG" rel-optional="true" >
+          <key-map field-name="partyId"/>
+      </view-link>
+    </view-entity>
 
 </entitymodel>
