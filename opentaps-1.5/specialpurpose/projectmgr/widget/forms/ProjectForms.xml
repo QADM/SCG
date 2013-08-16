@@ -69,9 +69,9 @@
        <!-- 
         <field name="codificacion" title="${uiLabelMap.Codificacion}"><text/></field>
         -->
-	   <field name="nivelId" title="Nivel" >
+	   <field name="nivelId" title="Nivel">
            	 <drop-down allow-empty="false" current="selected" >
-                <entity-options description="${descripcion}" entity-name="NivelPresup" key-field-name="clasificacionId">
+                <entity-options description="${descripcion}" entity-name="NivelPresupuestal" key-field-name="nivelId">
                    <entity-constraint name="clasificacionId" operator="equals" value="CL_PROGRAMATICA"/>
                     <entity-order-by field-name="descripcion"/>
                 </entity-options>
@@ -249,11 +249,10 @@
 		<field name="nivelId" title="${uiLabelMap.Nivel}" ><display-entity entity-name="NivelPresupuestal" key-field-name="nivelId"  description="${descripcion}"/></field>
 	     <field name="node" title="Nodo"><display/></field>
       	<field name="enumId" title="Scope"><display-entity entity-name="Enumeration" key-field-name="enumId"  description="${description}"/></field>
-      	<field name="workEffortParentId" title="Proyecto Padre" ><display-entity entity-name="WorkEffort" key-field-name="workEffortId"  description="${workEffortName}"/></field>
+      	<field name="workEffortId" title="Proyecto Padre" ><display-entity entity-name="WorkEffort" key-field-name="workEffortId"  description="${workEffortName}"/></field>
       
-      <field name="workEffortParentId" title="Participante"><display/></field>        
+      <field name="clientBillingPartyId"   title="Participante"><display/></field>        
       
-
       	
         <field name="projectName" title="${uiLabelMap.ProjectMgrProjectName}"><display/></field>
         <field name="projectDescription" title="Descripcion"><display/></field>      
