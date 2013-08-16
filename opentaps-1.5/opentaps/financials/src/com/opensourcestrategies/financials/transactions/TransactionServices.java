@@ -18,11 +18,13 @@
 package com.opensourcestrategies.financials.transactions;
 
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
@@ -41,6 +43,8 @@ import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ModelService;
 import org.ofbiz.service.ServiceUtil;
+import org.opentaps.base.entities.AcctgTrans;
+import org.opentaps.base.entities.AcctgTransAttribute;
 import org.opentaps.base.entities.AcctgTransEntry;
 import org.opentaps.base.entities.PartyAcctgPreference;
 import org.opentaps.base.services.CreateQuickAcctgTransService;
@@ -53,8 +57,11 @@ import org.opentaps.domain.ledger.LedgerRepositoryInterface;
 import org.opentaps.domain.organization.AccountingTagConfigurationForOrganizationAndUsage;
 import org.opentaps.domain.organization.Organization;
 import org.opentaps.domain.organization.OrganizationRepositoryInterface;
+import org.opentaps.foundation.action.ActionContext;
 import org.opentaps.foundation.infrastructure.Infrastructure;
 import org.opentaps.foundation.infrastructure.User;
+
+import com.ibm.icu.math.BigDecimal;
 
 /**
  * TransactionServices - Services for dealing with transactions.
@@ -530,4 +537,111 @@ public final class TransactionServices {
             return UtilMessage.createAndLogServiceError(e, MODULE);
         }
     }
+    
+    /**
+     * Metodo que se utiliza para registrar una operacion diaria de ingresos
+     * @param dctx
+     * @param context
+     * @return
+     */
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	public static Map createOperacionDiariaIngresos(DispatchContext dctx, Map context) {
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        Delegator delegator = dctx.getDelegator();
+        String organizationPartyId = (String) context.get("organizationPartyId");
+        
+        final ActionContext ac = new ActionContext(context);
+        final Locale locale = ac.getLocale();
+        final TimeZone timeZone = ac.getTimeZone();
+        String dateFormat = UtilDateTime.getDateFormat(locale);
+        
+        Timestamp fecContable = null;
+        Timestamp fecTrans = null; 
+        
+        GenericValue acctgtrans;
+        
+        try {        
+	        
+	        
+	        String userLog = userLogin.getString("userLoginId");
+	        String tipoDoc = (String) context.get("Tipo_Documento");
+	        String tipoFis = (String) context.get("Tipo_Fiscal");
+	        fecTrans = (Timestamp) UtilDateTime.stringToTimeStamp((String)context.get("Fecha_Transaccion"), dateFormat, timeZone, locale);
+			fecContable = (Timestamp) UtilDateTime.stringToTimeStamp((String)context.get("Fecha_Contable"), dateFormat, timeZone, locale);
+	        String refDoc = (String) context.get("Referencia_Documento");
+	        String sec = (String) context.get("Secuencia");
+	        String tipoCat = (String) context.get("Tipo_Catalogo");
+	        String idProd = (String) context.get("Id_Producto");
+	        String rubro = (String) context.get("Rubro");
+	        String tipo = (String) context.get("Tipo");
+	        String clase = (String) context.get("Clase");
+	        String concepto = (String) context.get("Concepto");
+	        String n5 = (String) context.get("N5");
+	        String entFed = (String) context.get("EntidadFederativa");
+	        String region = (String) context.get("Region");
+	        String muni = (String) context.get("Municipio");
+	        String local = (String) context.get("Localidad");
+	        String suFuente = (String) context.get("Sub_Fuente_Especifica");
+	        String uniEjec = (String) context.get("Unidad_Ejecutora");
+	        String idPago = (String) context.get("Id_Pago");
+	        java.math.BigDecimal monto = java.math.BigDecimal.valueOf(Long.valueOf((String)context.get("Monto")));
+	        
+	        String descripcion = refDoc+" - "+tipoCat;
+	        
+	        
+	    	Debug.logWarning("ENTRO AL SERVICIO PARA CREAR OPERACION DIARIA", MODULE);
+	    	
+	        Debug.logWarning("userLogin   "+userLogin, MODULE);
+	        Debug.logWarning("organizationPartyId   "+organizationPartyId, MODULE);
+	        Debug.logWarning("userLogin   "+userLogin, MODULE);
+	        Debug.logWarning("organizationPartyId   "+organizationPartyId, MODULE);
+	        Debug.logWarning("tipoDoc   "+tipoDoc, MODULE);
+	        Debug.logWarning("tipoFis   "+tipoFis, MODULE);
+	        Debug.logWarning("fecTrans   "+fecTrans, MODULE);
+	        Debug.logWarning("fecContable   "+fecContable, MODULE);
+	        Debug.logWarning("refDoc   "+refDoc, MODULE);
+	        Debug.logWarning("sec   "+sec, MODULE);
+	        Debug.logWarning("tipoCat   "+tipoCat, MODULE);
+	        Debug.logWarning("idProd   "+idProd, MODULE);
+	        Debug.logWarning("rubro   "+rubro, MODULE);
+	        Debug.logWarning("tipo   "+tipo, MODULE);
+	        Debug.logWarning("clase   "+clase, MODULE);
+	        Debug.logWarning("concepto   "+concepto, MODULE);
+	        Debug.logWarning("n5   "+n5, MODULE);
+	        Debug.logWarning("entFed   "+entFed, MODULE);
+	        Debug.logWarning("region   "+region, MODULE);
+	        Debug.logWarning("muni   "+muni, MODULE);
+	        Debug.logWarning("local   "+local, MODULE);
+	        Debug.logWarning("suFuente   "+suFuente, MODULE);
+	        Debug.logWarning("uniEjec   "+uniEjec, MODULE);
+	        Debug.logWarning("idPago   "+idPago, MODULE);        
+	        Debug.logWarning("Monto   "+monto, MODULE);
+	        
+	        
+	        acctgtrans = GenericValue.create(delegator.getModelEntity("AcctgTrans"));
+	        acctgtrans.setNextSeqId();
+	        acctgtrans.set("acctgTransTypeId", tipoDoc);
+	        acctgtrans.set("description", descripcion);
+	        acctgtrans.set("transactionDate", fecTrans);
+	        acctgtrans.set("isPosted", "N");
+	        acctgtrans.set("postedDate", fecContable);
+	        acctgtrans.set("glFiscalTypeId", tipoFis);
+	        acctgtrans.set("partyId", uniEjec);
+	        acctgtrans.set("createdByUserLogin", userLog);
+	        acctgtrans.set("postedAmount", monto);
+	        acctgtrans.create();
+	        
+				
+		} catch (ParseException e) {
+			return UtilMessage.createAndLogServiceError(e, MODULE);
+		} catch (GenericEntityException e) {
+			return UtilMessage.createAndLogServiceError(e, MODULE);
+		}
+    	
+        Map results = ServiceUtil.returnSuccess();
+        results.put("AcctgTrans",acctgtrans);
+        return results;
+    	
+    }    	
 }
