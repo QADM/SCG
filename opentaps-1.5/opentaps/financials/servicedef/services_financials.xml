@@ -175,6 +175,7 @@
             sheet from a closed time period and other types of AcctgTrans and AcctgTransEntries.</description>
         <implements service="accountingTagsInterface"/>
         <attribute name="organizationPartyId" mode="IN" type="String" optional="false"/>
+        <attribute name="customTimePeriodId" mode="IN" type="String" optional="true"/>
         <attribute name="asOfDate" mode="IN" type="Timestamp" optional="false"/>
         <attribute name="glFiscalTypeId" mode="IN" type="String" optional="true"/>
         <attribute name="opcionBusca" mode="IN" type="String" optional="true"/>
