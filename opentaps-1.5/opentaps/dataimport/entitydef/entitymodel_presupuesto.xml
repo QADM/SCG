@@ -128,6 +128,9 @@
 		<field name="sector" type="id-ne"></field>
 		<field name="subSector" type="id-ne"></field>
 		<field name="area" type="id-ne"></field>
+		<field name="idPago" type="id-ne"></field>
+		<field name="idProductoD" type="id-ne"></field>
+		<field name="idProductoH" type="id-ne"></field>
 		<field name="idTipoDoc" type="id-ne"></field>
 		<field name="agrupador" type="id-ne"></field>
 		<field name="secuencia" type="id-ne"></field>

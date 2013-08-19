@@ -404,6 +404,9 @@ public class EgresoDiarioImportService extends DomainService implements
 					aux.setSubSector(subsec);
 					aux.setArea(area.getEnumId());
 					aux.setAgrupador(rowdata.getRefDoc());
+					aux.setIdPago(rowdata.getIdPago());
+					aux.setIdProductoD(rowdata.getIdProductoD());
+					aux.setIdProductoH(rowdata.getIdProductoH());
 					aux.setIdTipoDoc(rowdata.getIdTipoDoc());
 					aux.setSecuencia(rowdata.getSecuencia());
 					aux.setLote(lote);
