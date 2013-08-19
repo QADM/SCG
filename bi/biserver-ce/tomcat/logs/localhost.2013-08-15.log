@@ -1,0 +1,454 @@
+15/08/2013 11:55:43 AM org.apache.catalina.core.ApplicationContext log
+INFO: Initializing Spring root WebApplicationContext
+15/08/2013 06:44:38 PM org.apache.catalina.core.ApplicationContext log
+INFO: Closing Spring root WebApplicationContext
+15/08/2013 06:55:02 PM org.apache.catalina.core.ApplicationContext log
+INFO: Initializing Spring root WebApplicationContext
+15/08/2013 06:59:21 PM org.apache.catalina.core.StandardWrapperValve invoke
+GRAVE: Servlet.service() para servlet Pivot lanzó excepción
+org.apache.jasper.JasperException: No se puede compilar la clase para JSP: 
+
+Ha tenido lugar un error en la línea: 310 en el archivo jsp: /jsp/Pivot.jsp
+userSession cannot be resolved
+307: 
+308:     IRuntimeContext context = null;
+309:     try {
+310:       context = getRuntimeForQuery( solutionName, actionPath, actionName, request, userSession );
+311:       if( context != null && context.getStatus() == IRuntimeContext.RUNTIME_STATUS_SUCCESS ) {
+312:           if (context.getOutputNames().contains(PivotViewComponent.MODEL)) {
+313:             try {
+
+
+Ha tenido lugar un error en la línea: 674 en el archivo jsp: /jsp/Pivot.jsp
+userSession cannot be resolved
+671:       // Overwrite is true, because the saveAs dialog checks for overwrite, and we never
+672:       // would have gotten here unless the user selected to overwrite the file. 
+673:     try{
+674:       saveResult = AnalysisSaver.saveAnalysis(userSession, props, request.getParameter("save-path"), request.getParameter("save-file"), true);
+675:       switch (saveResult) {
+676:         case ISolutionRepository.FILE_ADD_SUCCESSFUL: 
+677:           saveMessage = Messages.getString("UI.USER_SAVE_SUCCESS");
+
+
+Ha tenido lugar un error en la línea: 715 en el archivo jsp: /jsp/Pivot.jsp
+DUMBUS cannot be resolved
+712:     if (currDataSource != null) {
+713:       request.setAttribute("currDataSource", currDataSource);
+714: %>
+715: <jp:mondrianQuery id="<%=queryId%>" dataSource="${currDataSource}"
+716:   dynResolver="mondrian.i18n.LocalizingDynamicSchemaProcessor"
+717:   dynLocale="<%=DUMBUS
+718:   //userSession.getLocale().toString()
+
+
+Ha tenido lugar un error en la línea: 715 en el archivo jsp: /jsp/Pivot.jsp
+DUMBROLE cannot be resolved
+712:     if (currDataSource != null) {
+713:       request.setAttribute("currDataSource", currDataSource);
+714: %>
+715: <jp:mondrianQuery id="<%=queryId%>" dataSource="${currDataSource}"
+716:   dynResolver="mondrian.i18n.LocalizingDynamicSchemaProcessor"
+717:   dynLocale="<%=DUMBUS
+718:   //userSession.getLocale().toString()
+
+
+Ha tenido lugar un error en la línea: 728 en el archivo jsp: /jsp/Pivot.jsp
+DUMBUS cannot be resolved
+725: <%
+726:     } else {
+727: %>
+728: <jp:mondrianQuery id="<%=queryId%>" dataSource="<%=dataSource%>"
+729:   dynResolver="mondrian.i18n.LocalizingDynamicSchemaProcessor"
+730:   dynLocale="<%=DUMBUS
+731:   //userSession.getLocale().toString() 
+
+
+Ha tenido lugar un error en la línea: 728 en el archivo jsp: /jsp/Pivot.jsp
+DUMBROLE cannot be resolved
+725: <%
+726:     } else {
+727: %>
+728: <jp:mondrianQuery id="<%=queryId%>" dataSource="<%=dataSource%>"
+729:   dynResolver="mondrian.i18n.LocalizingDynamicSchemaProcessor"
+730:   dynLocale="<%=DUMBUS
+731:   //userSession.getLocale().toString() 
+
+
+Ha tenido lugar un error en la línea: 2,906 en el fichero java generado
+wcfcontext cannot be resolved
+
+Stacktrace:
+	at org.apache.jasper.compiler.DefaultErrorHandler.javacError(DefaultErrorHandler.java:92)
+	at org.apache.jasper.compiler.ErrorDispatcher.javacError(ErrorDispatcher.java:330)
+	at org.apache.jasper.compiler.JDTCompiler.generateClass(JDTCompiler.java:439)
+	at org.apache.jasper.compiler.Compiler.compile(Compiler.java:349)
+	at org.apache.jasper.compiler.Compiler.compile(Compiler.java:327)
+	at org.apache.jasper.compiler.Compiler.compile(Compiler.java:314)
+	at org.apache.jasper.JspCompilationContext.compile(JspCompilationContext.java:592)
+	at org.apache.jasper.servlet.JspServletWrapper.service(JspServletWrapper.java:317)
+	at org.apache.jasper.servlet.JspServlet.serviceJspFile(JspServlet.java:313)
+	at org.apache.jasper.servlet.JspServlet.service(JspServlet.java:260)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:717)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:290)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:206)
+	at org.pentaho.platform.web.http.filters.PentahoWebContextFilter.doFilter(PentahoWebContextFilter.java:142)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:235)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:206)
+	at org.pentaho.platform.web.http.filters.PentahoRequestContextFilter.doFilter(PentahoRequestContextFilter.java:84)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:235)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:206)
+	at org.springframework.security.util.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:378)
+	at org.springframework.security.intercept.web.FilterSecurityInterceptor.invoke(FilterSecurityInterceptor.java:109)
+	at org.springframework.security.intercept.web.FilterSecurityInterceptor.doFilter(FilterSecurityInterceptor.java:83)
+	at org.springframework.security.util.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:390)
+	at org.springframework.security.ui.ExceptionTranslationFilter.doFilterHttp(ExceptionTranslationFilter.java:101)
+	at org.springframework.security.ui.SpringSecurityFilter.doFilter(SpringSecurityFilter.java:53)
+	at org.springframework.security.util.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:390)
+	at org.pentaho.platform.web.http.security.SecurityStartupFilter.doFilter(SecurityStartupFilter.java:103)
+	at org.springframework.security.util.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:390)
+	at org.springframework.security.providers.anonymous.AnonymousProcessingFilter.doFilterHttp(AnonymousProcessingFilter.java:105)
+	at org.springframework.security.ui.SpringSecurityFilter.doFilter(SpringSecurityFilter.java:53)
+	at org.springframework.security.util.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:390)
+	at org.pentaho.platform.web.http.security.RequestParameterAuthenticationFilter.doFilter(RequestParameterAuthenticationFilter.java:169)
+	at org.springframework.security.util.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:390)
+	at org.springframework.security.ui.basicauth.BasicProcessingFilter.doFilterHttp(BasicProcessingFilter.java:174)
+	at org.springframework.security.ui.SpringSecurityFilter.doFilter(SpringSecurityFilter.java:53)
+	at org.springframework.security.util.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:390)
+	at org.springframework.security.ui.AbstractProcessingFilter.doFilterHttp(AbstractProcessingFilter.java:278)
+	at org.springframework.security.ui.SpringSecurityFilter.doFilter(SpringSecurityFilter.java:53)
+	at org.springframework.security.util.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:390)
+	at org.springframework.security.ui.logout.LogoutFilter.doFilterHttp(LogoutFilter.java:89)
+	at org.springframework.security.ui.SpringSecurityFilter.doFilter(SpringSecurityFilter.java:53)
+	at org.springframework.security.util.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:390)
+	at org.pentaho.platform.web.http.security.HttpSessionReuseDetectionFilter.doFilter(HttpSessionReuseDetectionFilter.java:134)
+	at org.springframework.security.util.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:390)
+	at org.springframework.security.context.HttpSessionContextIntegrationFilter.doFilterHttp(HttpSessionContextIntegrationFilter.java:235)
+	at org.springframework.security.ui.SpringSecurityFilter.doFilter(SpringSecurityFilter.java:53)
+	at org.springframework.security.util.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:390)
+	at org.springframework.security.wrapper.SecurityContextHolderAwareRequestFilter.doFilterHttp(SecurityContextHolderAwareRequestFilter.java:91)
+	at org.springframework.security.ui.SpringSecurityFilter.doFilter(SpringSecurityFilter.java:53)
+	at org.springframework.security.util.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:390)
+	at org.springframework.security.util.FilterChainProxy.doFilter(FilterChainProxy.java:175)
+	at org.springframework.security.util.FilterToBeanProxy.doFilter(FilterToBeanProxy.java:99)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:235)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:206)
+	at org.pentaho.platform.web.http.filters.SystemStatusFilter.doFilter(SystemStatusFilter.java:60)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:235)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:206)
+	at org.pentaho.platform.web.http.filters.SetCharacterEncodingFilter.doFilter(SetCharacterEncodingFilter.java:113)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:235)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:206)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:233)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:191)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:470)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:127)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:102)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:109)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:298)
+	at org.apache.coyote.http11.Http11Processor.process(Http11Processor.java:857)
+	at org.apache.coyote.http11.Http11Protocol$Http11ConnectionHandler.process(Http11Protocol.java:588)
+	at org.apache.tomcat.util.net.JIoEndpoint$Worker.run(JIoEndpoint.java:489)
+	at java.lang.Thread.run(Unknown Source)
+15/08/2013 06:59:31 PM org.apache.catalina.core.StandardWrapperValve invoke
+GRAVE: Servlet.service() para servlet Pivot lanzó excepción
+org.apache.jasper.JasperException: No se puede compilar la clase para JSP: 
+
+Ha tenido lugar un error en la línea: 310 en el archivo jsp: /jsp/Pivot.jsp
+userSession cannot be resolved
+307: 
+308:     IRuntimeContext context = null;
+309:     try {
+310:       context = getRuntimeForQuery( solutionName, actionPath, actionName, request, userSession );
+311:       if( context != null && context.getStatus() == IRuntimeContext.RUNTIME_STATUS_SUCCESS ) {
+312:           if (context.getOutputNames().contains(PivotViewComponent.MODEL)) {
+313:             try {
+
+
+Ha tenido lugar un error en la línea: 674 en el archivo jsp: /jsp/Pivot.jsp
+userSession cannot be resolved
+671:       // Overwrite is true, because the saveAs dialog checks for overwrite, and we never
+672:       // would have gotten here unless the user selected to overwrite the file. 
+673:     try{
+674:       saveResult = AnalysisSaver.saveAnalysis(userSession, props, request.getParameter("save-path"), request.getParameter("save-file"), true);
+675:       switch (saveResult) {
+676:         case ISolutionRepository.FILE_ADD_SUCCESSFUL: 
+677:           saveMessage = Messages.getString("UI.USER_SAVE_SUCCESS");
+
+
+Ha tenido lugar un error en la línea: 715 en el archivo jsp: /jsp/Pivot.jsp
+DUMBUS cannot be resolved
+712:     if (currDataSource != null) {
+713:       request.setAttribute("currDataSource", currDataSource);
+714: %>
+715: <jp:mondrianQuery id="<%=queryId%>" dataSource="${currDataSource}"
+716:   dynResolver="mondrian.i18n.LocalizingDynamicSchemaProcessor"
+717:   dynLocale="<%=DUMBUS
+718:   //userSession.getLocale().toString()
+
+
+Ha tenido lugar un error en la línea: 715 en el archivo jsp: /jsp/Pivot.jsp
+DUMBROLE cannot be resolved
+712:     if (currDataSource != null) {
+713:       request.setAttribute("currDataSource", currDataSource);
+714: %>
+715: <jp:mondrianQuery id="<%=queryId%>" dataSource="${currDataSource}"
+716:   dynResolver="mondrian.i18n.LocalizingDynamicSchemaProcessor"
+717:   dynLocale="<%=DUMBUS
+718:   //userSession.getLocale().toString()
+
+
+Ha tenido lugar un error en la línea: 728 en el archivo jsp: /jsp/Pivot.jsp
+DUMBUS cannot be resolved
+725: <%
+726:     } else {
+727: %>
+728: <jp:mondrianQuery id="<%=queryId%>" dataSource="<%=dataSource%>"
+729:   dynResolver="mondrian.i18n.LocalizingDynamicSchemaProcessor"
+730:   dynLocale="<%=DUMBUS
+731:   //userSession.getLocale().toString() 
+
+
+Ha tenido lugar un error en la línea: 728 en el archivo jsp: /jsp/Pivot.jsp
+DUMBROLE cannot be resolved
+725: <%
+726:     } else {
+727: %>
+728: <jp:mondrianQuery id="<%=queryId%>" dataSource="<%=dataSource%>"
+729:   dynResolver="mondrian.i18n.LocalizingDynamicSchemaProcessor"
+730:   dynLocale="<%=DUMBUS
+731:   //userSession.getLocale().toString() 
+
+
+Ha tenido lugar un error en la línea: 2,906 en el fichero java generado
+wcfcontext cannot be resolved
+
+Stacktrace:
+	at org.apache.jasper.compiler.DefaultErrorHandler.javacError(DefaultErrorHandler.java:92)
+	at org.apache.jasper.compiler.ErrorDispatcher.javacError(ErrorDispatcher.java:330)
+	at org.apache.jasper.compiler.JDTCompiler.generateClass(JDTCompiler.java:439)
+	at org.apache.jasper.compiler.Compiler.compile(Compiler.java:349)
+	at org.apache.jasper.compiler.Compiler.compile(Compiler.java:327)
+	at org.apache.jasper.compiler.Compiler.compile(Compiler.java:314)
+	at org.apache.jasper.JspCompilationContext.compile(JspCompilationContext.java:592)
+	at org.apache.jasper.servlet.JspServletWrapper.service(JspServletWrapper.java:317)
+	at org.apache.jasper.servlet.JspServlet.serviceJspFile(JspServlet.java:313)
+	at org.apache.jasper.servlet.JspServlet.service(JspServlet.java:260)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:717)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:290)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:206)
+	at org.pentaho.platform.web.http.filters.PentahoWebContextFilter.doFilter(PentahoWebContextFilter.java:142)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:235)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:206)
+	at org.pentaho.platform.web.http.filters.PentahoRequestContextFilter.doFilter(PentahoRequestContextFilter.java:84)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:235)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:206)
+	at org.springframework.security.util.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:378)
+	at org.springframework.security.intercept.web.FilterSecurityInterceptor.invoke(FilterSecurityInterceptor.java:109)
+	at org.springframework.security.intercept.web.FilterSecurityInterceptor.doFilter(FilterSecurityInterceptor.java:83)
+	at org.springframework.security.util.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:390)
+	at org.springframework.security.ui.ExceptionTranslationFilter.doFilterHttp(ExceptionTranslationFilter.java:101)
+	at org.springframework.security.ui.SpringSecurityFilter.doFilter(SpringSecurityFilter.java:53)
+	at org.springframework.security.util.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:390)
+	at org.pentaho.platform.web.http.security.SecurityStartupFilter.doFilter(SecurityStartupFilter.java:103)
+	at org.springframework.security.util.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:390)
+	at org.springframework.security.providers.anonymous.AnonymousProcessingFilter.doFilterHttp(AnonymousProcessingFilter.java:105)
+	at org.springframework.security.ui.SpringSecurityFilter.doFilter(SpringSecurityFilter.java:53)
+	at org.springframework.security.util.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:390)
+	at org.pentaho.platform.web.http.security.RequestParameterAuthenticationFilter.doFilter(RequestParameterAuthenticationFilter.java:169)
+	at org.springframework.security.util.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:390)
+	at org.springframework.security.ui.basicauth.BasicProcessingFilter.doFilterHttp(BasicProcessingFilter.java:174)
+	at org.springframework.security.ui.SpringSecurityFilter.doFilter(SpringSecurityFilter.java:53)
+	at org.springframework.security.util.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:390)
+	at org.springframework.security.ui.AbstractProcessingFilter.doFilterHttp(AbstractProcessingFilter.java:278)
+	at org.springframework.security.ui.SpringSecurityFilter.doFilter(SpringSecurityFilter.java:53)
+	at org.springframework.security.util.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:390)
+	at org.springframework.security.ui.logout.LogoutFilter.doFilterHttp(LogoutFilter.java:89)
+	at org.springframework.security.ui.SpringSecurityFilter.doFilter(SpringSecurityFilter.java:53)
+	at org.springframework.security.util.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:390)
+	at org.pentaho.platform.web.http.security.HttpSessionReuseDetectionFilter.doFilter(HttpSessionReuseDetectionFilter.java:134)
+	at org.springframework.security.util.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:390)
+	at org.springframework.security.context.HttpSessionContextIntegrationFilter.doFilterHttp(HttpSessionContextIntegrationFilter.java:235)
+	at org.springframework.security.ui.SpringSecurityFilter.doFilter(SpringSecurityFilter.java:53)
+	at org.springframework.security.util.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:390)
+	at org.springframework.security.wrapper.SecurityContextHolderAwareRequestFilter.doFilterHttp(SecurityContextHolderAwareRequestFilter.java:91)
+	at org.springframework.security.ui.SpringSecurityFilter.doFilter(SpringSecurityFilter.java:53)
+	at org.springframework.security.util.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:390)
+	at org.springframework.security.util.FilterChainProxy.doFilter(FilterChainProxy.java:175)
+	at org.springframework.security.util.FilterToBeanProxy.doFilter(FilterToBeanProxy.java:99)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:235)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:206)
+	at org.pentaho.platform.web.http.filters.SystemStatusFilter.doFilter(SystemStatusFilter.java:60)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:235)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:206)
+	at org.pentaho.platform.web.http.filters.SetCharacterEncodingFilter.doFilter(SetCharacterEncodingFilter.java:113)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:235)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:206)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:233)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:191)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:470)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:127)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:102)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:109)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:298)
+	at org.apache.coyote.http11.Http11Processor.process(Http11Processor.java:857)
+	at org.apache.coyote.http11.Http11Protocol$Http11ConnectionHandler.process(Http11Protocol.java:588)
+	at org.apache.tomcat.util.net.JIoEndpoint$Worker.run(JIoEndpoint.java:489)
+	at java.lang.Thread.run(Unknown Source)
+15/08/2013 07:00:39 PM org.apache.catalina.core.StandardWrapperValve invoke
+GRAVE: Servlet.service() para servlet Pivot lanzó excepción
+java.lang.NullPointerException
+	at com.tonbeller.wcf.controller.WcfController.request(WcfController.java:71)
+	at org.apache.jsp.jsp.Pivot_jsp._jspService(Pivot_jsp.java:212)
+	at org.apache.jasper.runtime.HttpJspBase.service(HttpJspBase.java:70)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:717)
+	at org.apache.jasper.servlet.JspServletWrapper.service(JspServletWrapper.java:377)
+	at org.apache.jasper.servlet.JspServlet.serviceJspFile(JspServlet.java:313)
+	at org.apache.jasper.servlet.JspServlet.service(JspServlet.java:260)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:717)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:290)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:206)
+	at org.pentaho.platform.web.http.filters.PentahoWebContextFilter.doFilter(PentahoWebContextFilter.java:142)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:235)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:206)
+	at org.pentaho.platform.web.http.filters.PentahoRequestContextFilter.doFilter(PentahoRequestContextFilter.java:84)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:235)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:206)
+	at org.springframework.security.util.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:378)
+	at org.springframework.security.intercept.web.FilterSecurityInterceptor.invoke(FilterSecurityInterceptor.java:109)
+	at org.springframework.security.intercept.web.FilterSecurityInterceptor.doFilter(FilterSecurityInterceptor.java:83)
+	at org.springframework.security.util.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:390)
+	at org.springframework.security.ui.ExceptionTranslationFilter.doFilterHttp(ExceptionTranslationFilter.java:101)
+	at org.springframework.security.ui.SpringSecurityFilter.doFilter(SpringSecurityFilter.java:53)
+	at org.springframework.security.util.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:390)
+	at org.pentaho.platform.web.http.security.SecurityStartupFilter.doFilter(SecurityStartupFilter.java:103)
+	at org.springframework.security.util.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:390)
+	at org.springframework.security.providers.anonymous.AnonymousProcessingFilter.doFilterHttp(AnonymousProcessingFilter.java:105)
+	at org.springframework.security.ui.SpringSecurityFilter.doFilter(SpringSecurityFilter.java:53)
+	at org.springframework.security.util.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:390)
+	at org.pentaho.platform.web.http.security.RequestParameterAuthenticationFilter.doFilter(RequestParameterAuthenticationFilter.java:169)
+	at org.springframework.security.util.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:390)
+	at org.springframework.security.ui.basicauth.BasicProcessingFilter.doFilterHttp(BasicProcessingFilter.java:174)
+	at org.springframework.security.ui.SpringSecurityFilter.doFilter(SpringSecurityFilter.java:53)
+	at org.springframework.security.util.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:390)
+	at org.springframework.security.ui.AbstractProcessingFilter.doFilterHttp(AbstractProcessingFilter.java:278)
+	at org.springframework.security.ui.SpringSecurityFilter.doFilter(SpringSecurityFilter.java:53)
+	at org.springframework.security.util.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:390)
+	at org.springframework.security.ui.logout.LogoutFilter.doFilterHttp(LogoutFilter.java:89)
+	at org.springframework.security.ui.SpringSecurityFilter.doFilter(SpringSecurityFilter.java:53)
+	at org.springframework.security.util.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:390)
+	at org.pentaho.platform.web.http.security.HttpSessionReuseDetectionFilter.doFilter(HttpSessionReuseDetectionFilter.java:134)
+	at org.springframework.security.util.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:390)
+	at org.springframework.security.context.HttpSessionContextIntegrationFilter.doFilterHttp(HttpSessionContextIntegrationFilter.java:235)
+	at org.springframework.security.ui.SpringSecurityFilter.doFilter(SpringSecurityFilter.java:53)
+	at org.springframework.security.util.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:390)
+	at org.springframework.security.wrapper.SecurityContextHolderAwareRequestFilter.doFilterHttp(SecurityContextHolderAwareRequestFilter.java:91)
+	at org.springframework.security.ui.SpringSecurityFilter.doFilter(SpringSecurityFilter.java:53)
+	at org.springframework.security.util.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:390)
+	at org.springframework.security.util.FilterChainProxy.doFilter(FilterChainProxy.java:175)
+	at org.springframework.security.util.FilterToBeanProxy.doFilter(FilterToBeanProxy.java:99)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:235)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:206)
+	at org.pentaho.platform.web.http.filters.SystemStatusFilter.doFilter(SystemStatusFilter.java:60)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:235)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:206)
+	at org.pentaho.platform.web.http.filters.SetCharacterEncodingFilter.doFilter(SetCharacterEncodingFilter.java:113)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:235)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:206)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:233)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:191)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:470)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:127)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:102)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:109)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:298)
+	at org.apache.coyote.http11.Http11Processor.process(Http11Processor.java:857)
+	at org.apache.coyote.http11.Http11Protocol$Http11ConnectionHandler.process(Http11Protocol.java:588)
+	at org.apache.tomcat.util.net.JIoEndpoint$Worker.run(JIoEndpoint.java:489)
+	at java.lang.Thread.run(Unknown Source)
+15/08/2013 07:23:16 PM org.apache.catalina.core.StandardWrapperValve invoke
+GRAVE: Servlet.service() para servlet SolutionRepositoryService lanzó excepción
+java.lang.IllegalStateException: getAttribute: La Sesión ya ha sido invalidada
+	at org.apache.catalina.session.StandardSession.getAttribute(StandardSession.java:1067)
+	at org.apache.catalina.session.StandardSessionFacade.getAttribute(StandardSessionFacade.java:110)
+	at org.pentaho.platform.web.http.session.PentahoHttpSession.getAttribute(PentahoHttpSession.java:73)
+	at org.pentaho.platform.engine.security.SecurityHelper.getAuthentication(SecurityHelper.java:68)
+	at org.pentaho.platform.engine.security.acls.voter.PentahoAllowAnonymousAclVoter.getAuthentication(PentahoAllowAnonymousAclVoter.java:37)
+	at org.pentaho.platform.engine.security.acls.voter.PentahoBasicAclVoter.hasAccess(PentahoBasicAclVoter.java:89)
+	at org.pentaho.platform.engine.security.SecurityHelper.hasAccess(SecurityHelper.java:283)
+	at org.pentaho.platform.repository.solution.dbbased.DbBasedSolutionRepository.hasAccess(DbBasedSolutionRepository.java:146)
+	at org.pentaho.platform.repository.solution.dbbased.DbBasedSolutionRepository.getRootFolder(DbBasedSolutionRepository.java:993)
+	at org.pentaho.platform.repository.solution.SolutionRepositoryServiceImpl.processRepositoryFile(SolutionRepositoryServiceImpl.java:222)
+	at org.pentaho.platform.repository.solution.SolutionRepositoryServiceImpl.processRepositoryFile(SolutionRepositoryServiceImpl.java:274)
+	at org.pentaho.platform.repository.solution.SolutionRepositoryServiceImpl.processRepositoryFile(SolutionRepositoryServiceImpl.java:274)
+	at org.pentaho.platform.repository.solution.SolutionRepositoryServiceImpl.processRepositoryFile(SolutionRepositoryServiceImpl.java:274)
+	at org.pentaho.platform.repository.solution.SolutionRepositoryServiceImpl.processRepositoryFile(SolutionRepositoryServiceImpl.java:274)
+	at org.pentaho.platform.repository.solution.SolutionRepositoryServiceImpl.processRepositoryFile(SolutionRepositoryServiceImpl.java:274)
+	at org.pentaho.platform.repository.solution.SolutionRepositoryServiceImpl.processRepositoryFile(SolutionRepositoryServiceImpl.java:226)
+	at org.pentaho.platform.repository.solution.SolutionRepositoryServiceImpl.getSolutionRepositoryDoc(SolutionRepositoryServiceImpl.java:563)
+	at org.pentaho.platform.web.servlet.SolutionRepositoryService.dispatch(SolutionRepositoryService.java:152)
+	at org.pentaho.platform.web.servlet.SolutionRepositoryService.doGet(SolutionRepositoryService.java:78)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:617)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:717)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:290)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:206)
+	at org.pentaho.platform.web.http.filters.PentahoWebContextFilter.doFilter(PentahoWebContextFilter.java:142)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:235)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:206)
+	at org.pentaho.platform.web.http.filters.PentahoRequestContextFilter.doFilter(PentahoRequestContextFilter.java:84)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:235)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:206)
+	at org.springframework.security.util.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:378)
+	at org.springframework.security.intercept.web.FilterSecurityInterceptor.invoke(FilterSecurityInterceptor.java:109)
+	at org.springframework.security.intercept.web.FilterSecurityInterceptor.doFilter(FilterSecurityInterceptor.java:83)
+	at org.springframework.security.util.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:390)
+	at org.springframework.security.ui.ExceptionTranslationFilter.doFilterHttp(ExceptionTranslationFilter.java:101)
+	at org.springframework.security.ui.SpringSecurityFilter.doFilter(SpringSecurityFilter.java:53)
+	at org.springframework.security.util.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:390)
+	at org.pentaho.platform.web.http.security.SecurityStartupFilter.doFilter(SecurityStartupFilter.java:103)
+	at org.springframework.security.util.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:390)
+	at org.springframework.security.providers.anonymous.AnonymousProcessingFilter.doFilterHttp(AnonymousProcessingFilter.java:105)
+	at org.springframework.security.ui.SpringSecurityFilter.doFilter(SpringSecurityFilter.java:53)
+	at org.springframework.security.util.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:390)
+	at org.pentaho.platform.web.http.security.RequestParameterAuthenticationFilter.doFilter(RequestParameterAuthenticationFilter.java:169)
+	at org.springframework.security.util.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:390)
+	at org.springframework.security.ui.basicauth.BasicProcessingFilter.doFilterHttp(BasicProcessingFilter.java:174)
+	at org.springframework.security.ui.SpringSecurityFilter.doFilter(SpringSecurityFilter.java:53)
+	at org.springframework.security.util.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:390)
+	at org.springframework.security.ui.AbstractProcessingFilter.doFilterHttp(AbstractProcessingFilter.java:278)
+	at org.springframework.security.ui.SpringSecurityFilter.doFilter(SpringSecurityFilter.java:53)
+	at org.springframework.security.util.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:390)
+	at org.springframework.security.ui.logout.LogoutFilter.doFilterHttp(LogoutFilter.java:89)
+	at org.springframework.security.ui.SpringSecurityFilter.doFilter(SpringSecurityFilter.java:53)
+	at org.springframework.security.util.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:390)
+	at org.pentaho.platform.web.http.security.HttpSessionReuseDetectionFilter.doFilter(HttpSessionReuseDetectionFilter.java:134)
+	at org.springframework.security.util.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:390)
+	at org.springframework.security.context.HttpSessionContextIntegrationFilter.doFilterHttp(HttpSessionContextIntegrationFilter.java:235)
+	at org.springframework.security.ui.SpringSecurityFilter.doFilter(SpringSecurityFilter.java:53)
+	at org.springframework.security.util.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:390)
+	at org.springframework.security.wrapper.SecurityContextHolderAwareRequestFilter.doFilterHttp(SecurityContextHolderAwareRequestFilter.java:91)
+	at org.springframework.security.ui.SpringSecurityFilter.doFilter(SpringSecurityFilter.java:53)
+	at org.springframework.security.util.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:390)
+	at org.springframework.security.util.FilterChainProxy.doFilter(FilterChainProxy.java:175)
+	at org.springframework.security.util.FilterToBeanProxy.doFilter(FilterToBeanProxy.java:99)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:235)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:206)
+	at org.pentaho.platform.web.http.filters.ProxyTrustingFilter.doFilter(ProxyTrustingFilter.java:222)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:235)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:206)
+	at org.pentaho.platform.web.http.filters.SystemStatusFilter.doFilter(SystemStatusFilter.java:60)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:235)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:206)
+	at org.pentaho.platform.web.http.filters.SetCharacterEncodingFilter.doFilter(SetCharacterEncodingFilter.java:113)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:235)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:206)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:233)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:191)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:470)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:127)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:102)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:109)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:298)
+	at org.apache.coyote.http11.Http11Processor.process(Http11Processor.java:857)
+	at org.apache.coyote.http11.Http11Protocol$Http11ConnectionHandler.process(Http11Protocol.java:588)
+	at org.apache.tomcat.util.net.JIoEndpoint$Worker.run(JIoEndpoint.java:489)
+	at java.lang.Thread.run(Unknown Source)
