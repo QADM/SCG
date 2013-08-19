@@ -321,6 +321,9 @@ public class IngresoDiarioImportService extends DomainService implements
 					aux.setMunicipio(mun);
 					aux.setLocalidad(loc.getGeoId());
 					aux.setAgrupador(rowdata.getRefDoc());
+					aux.setIdPago(rowdata.getIdPago());
+					aux.setIdProductoD(rowdata.getIdProductoD());
+					aux.setIdProductoH(rowdata.getIdProductoH());
 					aux.setIdTipoDoc(rowdata.getIdTipoDoc());
 					aux.setSecuencia(rowdata.getSecuencia());
 					aux.setLote(lote);
