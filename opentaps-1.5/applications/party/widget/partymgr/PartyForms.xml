@@ -119,7 +119,7 @@ under the License.
            	 <drop-down allow-empty="false" current="selected">
                 <entity-options description="${descripcion}" entity-name="NivelPresupuestal" key-field-name="nivelId">
                
-                          <entity-constraint name="clasificacionId" operator="equals" value="1002"/>               
+                          <entity-constraint name="clasificacionId" operator="equals" value="CL_ADMINISTRATIVA"/>               
                     <entity-order-by field-name="descripcion"/>
                 </entity-options>
            	 </drop-down>
