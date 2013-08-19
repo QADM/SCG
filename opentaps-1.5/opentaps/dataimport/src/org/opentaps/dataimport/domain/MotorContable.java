@@ -288,7 +288,7 @@ public class MotorContable {
 	}
 
 	public Map<String, String> cuentasIngresoDiario(String tipoTransaccion,
-			String organizationPartyId, String idPago, String tipo,
+			String organizationPartyId, String idPago, String cri,
 			String idProductD, String idProductH) throws RepositoryException {
 
 		MiniGuiaContable miniGuia = ledger_repo.findOne(MiniGuiaContable.class,
@@ -303,7 +303,7 @@ public class MotorContable {
 			Debug.log("Referencia = M");
 			List<DataImportMatrizIng> matriz = ledger_repo.findList(
 					DataImportMatrizIng.class, ledger_repo.map(
-							DataImportMatrizIng.Fields.cri, tipo,
+							DataImportMatrizIng.Fields.cri, cri,
 							DataImportMatrizIng.Fields.matrizId,
 							miniGuia.getTipoMatriz()));
 			if (matriz.isEmpty()) {
@@ -340,7 +340,7 @@ public class MotorContable {
 	}
 
 	public Map<String, String> cuentasEgresoDiario(String tipoTransaccion,
-			String prodGen, String organizationPartyId,
+			String cog, String organizationPartyId,
 			String tipoGasto, String idPago, String idProductD,
 			String idProductH) throws RepositoryException {
 
@@ -355,11 +355,11 @@ public class MotorContable {
 		if (miniGuia.getReferencia().equalsIgnoreCase("M")) {
 			Debug.log("Referencia = M");
 			Debug.log("Egreso");
-			Debug.log("COG " + prodGen);
+			Debug.log("COG " + cog);
 			Debug.log("TIPOGASTO " + tipoGasto);
 			List<DataImportMatrizEgr> matriz = ledger_repo.findList(
 					DataImportMatrizEgr.class, ledger_repo.map(
-							DataImportMatrizEgr.Fields.cog, prodGen,
+							DataImportMatrizEgr.Fields.cog, cog,
 							DataImportMatrizEgr.Fields.tipoGasto, tipoGasto,
 							DataImportMatrizEgr.Fields.matrizId,
 							miniGuia.getTipoMatriz()));

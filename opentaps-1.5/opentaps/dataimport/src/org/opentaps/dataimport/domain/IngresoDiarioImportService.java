@@ -245,12 +245,21 @@ public class IngresoDiarioImportService extends DomainService implements
 				// n5.getProductCategoryId(), rowdata.getIdTipoCatalogo(),
 				// rowdata.getIdPago(), null, null, tip,
 				// false, null, null, rowdata.getIdProducto());
+				
+//				Map<String, String> cuentas = motor
+//						.cuentasIngresoDiario(tipoDoc.getAcctgTransTypeId(),
+//								rowdata.getOrganizationPartyId(),
+//								rowdata.getIdPago(), tip,
+//								rowdata.getIdProductoD(),
+//								rowdata.getIdProductoH());
+				
 				Map<String, String> cuentas = motor
 						.cuentasIngresoDiario(tipoDoc.getAcctgTransTypeId(),
 								rowdata.getOrganizationPartyId(),
-								rowdata.getIdPago(), tip,
+								rowdata.getIdPago(), n5.getProductCategoryId(),
 								rowdata.getIdProductoD(),
 								rowdata.getIdProductoH());
+				
 				
 				if (cuentas.get("Mensaje") != null) {
 					String message = "Failed to import Ingreso Diario ["

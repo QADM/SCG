@@ -320,11 +320,18 @@ public class EgresoDiarioImportService extends DomainService implements
 				// null, null, null, true, null, null,
 				// rowdata.getIdProducto());
 
+//				Map<String, String> cuentas = motor.cuentasEgresoDiario(
+//						tipoDoc.getAcctgTransTypeId(), pg,
+//						rowdata.getOrganizationPartyId(), rowdata.getTg(),
+//						rowdata.getIdPago(), rowdata.getIdProductoD(),
+//						rowdata.getIdProductoH());
+
 				Map<String, String> cuentas = motor.cuentasEgresoDiario(
-						tipoDoc.getAcctgTransTypeId(), pg,
+						tipoDoc.getAcctgTransTypeId(), pe.getProductCategoryId(),
 						rowdata.getOrganizationPartyId(), rowdata.getTg(),
 						rowdata.getIdPago(), rowdata.getIdProductoD(),
 						rowdata.getIdProductoH());
+				
 
 				if (cuentas.get("Mensaje") != null) {
 					String message = "Failed to import Egreso Diario ["
