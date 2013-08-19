@@ -402,7 +402,7 @@ public class PartyServices {
 
 		String partyId = (String) context.get("partyId");
 		Locale locale = (Locale) context.get("locale");
-		String nivelId = (String) context.get("nivelId");
+		String nivelId = (String) context.get("Nivel_id");
 		String errMsg = null;
 
 		// partyId might be empty, so check it and get next seq party id if
@@ -586,7 +586,7 @@ public class PartyServices {
 		Delegator delegator = ctx.getDelegator();
 		LocalDispatcher dispatcher = ctx.getDispatcher();
 		Locale locale = (Locale) context.get("locale");
-		String nivel =(String) context.get("nivelId");
+		String nivel =(String) context.get("Nivel_id");
 
 		String partyId = getPartyId(context);
 		if (UtilValidate.isEmpty(partyId)) {
