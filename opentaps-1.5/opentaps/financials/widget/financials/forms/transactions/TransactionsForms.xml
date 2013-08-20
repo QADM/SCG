@@ -488,18 +488,15 @@
             <field name="submitButton" title="${uiLabelMap.CommonFind}" widget-style="smallSubmit"><submit button-type="button"/></field>
     </form>
     
-    <form name="viewAcctPresupuestal" type="single" target="updateAcctgTransEntryForm" default-map-name="acctgTransPres"
+    <form name="viewAcctPresupuestal" type="single" target="updateAcctgTransEntryForm" default-map-name="mapTransPresup"
         default-title-style="tableheadtext" default-widget-style="tabletext" default-tooltip-style="tabletext">
-		<auto-fields-entity entity-name="AcctgTransPresupuestal" default-field-type="display" map-name="acctgTransPres"/>
-<!-- 		<field name="acctgTransId" entry-name="acctgTransId"> -->
-<!-- 			<display-entity entity-name="AcctgTransPresupuestal"/> -->
-<!-- 		</field> -->
-<!--         	<field  name="acctgTransId" widget-style="linktext"> -->
-<!--             <hyperlink description="${AcctgTransPresupuestal.acctgTransId}" target="viewAcctgTrans"> -->
-<!--                 <parameter param-name="acctgTransId" from-field="AcctgTransPresupuestal.acctgTransId"/> -->
-<!--             </hyperlink> -->
-<!-- 	        </field>  -->
-<!--             <display-entity entity-name="AcctgTransType" cache="true"/> -->
+		<auto-fields-entity entity-name="AcctgTransPresupuestal" default-field-type="display" map-name="mapTransPresup"/>
+			<field name="unidadOrganizacional" entry-name="unidadOrganizacional">
+	            <display-entity entity-name="Party" key-field-name="partyId" />
+	        </field>
+	        <field name="unidadEjecutora" entry-name="unidadEjecutora">
+	            <display-entity entity-name="Party" key-field-name="partyId" description="${description}"/>
+	        </field>	        
 <!--         <field name="glAccountId" title="${uiLabelMap.GlAccount}"> -->
 <!--             <display-entity entity-name="GlAccount" description="${accountCode}: ${accountName} (${glAccountId})" key-field-name="glAccountId"> -->
 <!--                 <sub-hyperlink target="AccountActivitiesDetail" description="(${uiLabelMap.FinancialsActivities})" link-style="linktext"> -->

@@ -39,6 +39,18 @@ print("AcctPResu $%&  "+acctTransPresu);
 	
 context.put("acctTransPresu", acctTransPresu);
 
+acctgTransId = acctTransPresu.getString("acctgTransId");
+
+print("acctgTransId $%&  "+acctgTransId);
+
+acctTransPresu = delegator.findByPrimaryKey("AcctgTransPresupuestal", UtilMisc.toMap("acctgTransId", acctgTransId));
+mapTransPresup = new HashMap();
+mapTransPresup.putAll(acctTransPresu.getAllFields());
+
+context.put("mapTransPresup", mapTransPresup);
+
+
+
 //acctgTransId = UtilCommon.getParameter(context, "acctgTransId");
 //if (acctgTransId == null) {
 //    // get the ID when multi form is used

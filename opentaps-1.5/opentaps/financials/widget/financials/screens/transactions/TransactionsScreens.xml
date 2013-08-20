@@ -720,7 +720,7 @@
             <widgets>
                 <decorator-screen name="main-section-decorator">
                     <decorator-section name="section-body">
-                        <frame-container title="FinancialsDailyOperIncome">
+                        <frame-container title="${uiLabelMap.FinancialsDailyOperIncome}">
                             <platform-specific><html>
                                 <html-template location="component://financials/webapp/financials/transactions/createOperacionDiariaIngresos.ftl"/>
                             </html></platform-specific>                         
