@@ -120,11 +120,12 @@ public class PresupuestoIngresoImportService extends DomainService implements
 				// rowdata.getLoc(), "LOC");
 				mensaje = UtilImport.validaParty(mensaje, ledger_repo,
 						rowdata.getUe(), "ADMINISTRATIVA");
-				mensaje = UtilImport
-						.validaProductCategory(mensaje, ledger_repo,
-								rowdata.getN5(), "NIVEL_5_ING", "RUBRO DEL INGRESO");
+				mensaje = UtilImport.validaProductCategory(mensaje,
+						ledger_repo, rowdata.getN5(), "NIVEL_5_ING",
+						"RUBRO DEL INGRESO");
 				mensaje = UtilImport.validaEnumeration(mensaje, ledger_repo,
-						rowdata.getSfe(), "CL_FUENTE_RECURSOS", "FUENTE DE LOS RECURSOS");
+						rowdata.getSfe(), "CL_FUENTE_RECURSOS",
+						"FUENTE DE LOS RECURSOS");
 				mensaje = UtilImport.validaGeo(mensaje, ledger_repo,
 						rowdata.getLoc(), "GEOGRAFICA");
 
@@ -291,6 +292,18 @@ public class PresupuestoIngresoImportService extends DomainService implements
 							presupuestoIngreso.setPostedAmount(rowdata
 									.getDiciembre());
 							break;
+						}
+
+						mensaje = UtilImport.validaMonto(
+								presupuestoIngreso.getPostedAmount(), mensaje);
+
+						if (!mensaje.isEmpty()) {
+							String message = "Failed to import Presupuesto Egreso ["
+									+ rowdata.getClavePres()
+									+ "], Error message : " + mensaje;
+							storeImportPresupuestoIngresoError(rowdata, message,
+									imp_repo);
+							continue;
 						}
 
 						Debug.log("Obtencion Dinamico FiscalType");

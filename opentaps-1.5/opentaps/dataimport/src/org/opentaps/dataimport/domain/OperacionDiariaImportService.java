@@ -116,6 +116,7 @@ public class OperacionDiariaImportService extends DomainService implements
 						"Organizacion Ejecutora");
 				mensaje = UtilImport.validaTipoDoc(mensaje, ledger_repo,
 						rowdata.getIdTipoDoc());
+				mensaje = UtilImport.validaMonto(rowdata.getMonto(), mensaje);
 
 				if (!mensaje.isEmpty()) {
 					String message = "Failed to import Operacion Diaria ["
