@@ -185,6 +185,7 @@ public class EgresoDiarioImportService extends DomainService implements
 						rowdata.getLoc(), "GEOGRAFICA");
 				mensaje = UtilImport.validaEnumeration(mensaje, ledger_repo,
 						rowdata.getArea(), "CL_SECTORIAL", "SECTORIAL");
+				mensaje = UtilImport.validaMonto(rowdata.getMonto(), mensaje);
 
 				if (!mensaje.isEmpty()) {
 					String message = "Failed to import Egreso Diario ["

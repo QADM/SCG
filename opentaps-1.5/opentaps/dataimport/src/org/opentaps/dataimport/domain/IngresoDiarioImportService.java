@@ -157,6 +157,7 @@ public class IngresoDiarioImportService extends DomainService implements
 						rowdata.getSfe(), "CL_FUENTE_RECURSOS", "FUENTE DE LOS RECURSOS");
 				mensaje = UtilImport.validaGeo(mensaje, ledger_repo,
 						rowdata.getLoc(), "GEOGRAFICA");
+				mensaje = UtilImport.validaMonto(rowdata.getMonto(), mensaje);
 
 				if (!mensaje.isEmpty()) {
 					String message = "Failed to import Ingreso Diario ["

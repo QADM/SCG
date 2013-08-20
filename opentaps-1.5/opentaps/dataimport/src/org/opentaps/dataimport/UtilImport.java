@@ -593,4 +593,13 @@ public class UtilImport {
 		return work.getWorkEffortParentId();
 	}
 
+	public static String validaMonto(BigDecimal monto, String mensaje) {
+		if (monto.doubleValue() <= 0) {
+			Debug.log("Error, el monto debe ser mayor a 0");
+			mensaje += "el monto debe ser mayor a 0, ";
+			Debug.log(mensaje);
+		}
+		return mensaje;
+	}
+
 }
