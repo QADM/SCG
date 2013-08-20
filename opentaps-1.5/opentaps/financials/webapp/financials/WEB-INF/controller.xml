@@ -1529,16 +1529,19 @@
      <request-map uri="ODIngresos">
         <security https="true" auth="true"/>
         <response name="success" type="view" value="ODIngresos"/>
-<!-- 		<response name="success" type="request-redirect" value="viewAcctgTrans">
-          <redirect-parameter name="acctgTransId"/>
-        </response>    -->     
     </request-map> 
 	<request-map uri="createOperacionDiariaIngresos">
 		<security https="true" auth="true"/>
 		<event type="service" invoke="createOperacionDiariaIngresos"/>
-		<response name="success" type="view" value="ODIngresos"/>
-<!-- 		<response name="success" type="request-redirect" value="viewAcctgTransEg"></response> -->
+		<response name="success" type="request-redirect" value="viewAcctPresupuestal">
+          <redirect-parameter name="acctgTransId"/>
+        </response>
+        <response name="error" type="view" value="createOperacionDiariaIngresos" />
 	</request-map>
+     <request-map uri="viewAcctPresupuestal">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="viewAcctPresupuestal"/>
+    </request-map> 	
     
     
     <request-map uri="reverseAcctgTrans">
@@ -2303,6 +2306,9 @@
 	<view-map name="JRVariacionPatrPDF" type="jasperreports" page="component://financials/webapp/financials/reports/repository/EdoVariacionPatromonio.jrxml" content-type="application/pdf" encoding="none"/>
 	<view-map name="JRVariacionPatrXLS" type="jasperreports" page="component://financials/webapp/financials/reports/repository/EdoVariacionPatromonio.jrxml" content-type="application/vnd.ms-excel" encoding="none"/>
 	<view-map name="JRVariacionPatrCSV" type="jasperreports" page="component://financials/webapp/financials/reports/repository/EdoVariacionPatromonio.jrxml" content-type="text/csv" encoding="none"/>
+	
+	
+	<view-map name="viewAcctPresupuestal" type="screen" page="component://financials/widget/financials/screens/transactions/TransactionsScreens.xml#viewAcctPresupuestal" />
 		    
     <!-- Pantallas de reportes CUSTOM @JSCF -->
     

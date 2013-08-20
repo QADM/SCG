@@ -38,7 +38,7 @@ context.put("userLogin",userLogin);
 //Buscamos los Documentos que son del tipo operación diaria
 orderBy = org.ofbiz.base.util.UtilMisc.toList("descripcion");
 condicionDoc = EntityCondition.makeCondition("tipoPoliza",EntityOperator.LIKE,"Ingresos");
-resultadoDoc = delegator.findByCondition("TipoDocumento", condicionDoc , UtilMisc.toList("acctgTransTypeId", "descripcion"), orderBy);
+resultadoDoc = delegator.findByCondition("TipoDocumento", condicionDoc , UtilMisc.toList("idTipoDoc", "descripcion"), orderBy);
 context.put("listDocumentos", resultadoDoc);
 
 //Buscamos los tipos fiscales

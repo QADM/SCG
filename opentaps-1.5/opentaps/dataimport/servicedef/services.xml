@@ -296,7 +296,8 @@
 		<attribute name="Referencia_Documento" mode="IN" type="String" optional="true"/>
         <attribute name="Secuencia" mode="IN" type="String" optional="true" />
         <attribute name="Tipo_Catalogo" mode="IN" type="String" optional="true"/>
-        <attribute name="Id_Producto" mode="IN" type="String" optional="true" />
+        <attribute name="Id_Producto_Abono" mode="IN" type="String" optional="false" />
+        <attribute name="Id_Producto_Cargo" mode="IN" type="String" optional="false" />
         <attribute name="Rubro" mode="IN" type="String" optional="true"/>
         <attribute name="Tipo" mode="IN" type="String" optional="true" />
 		<attribute name="Clase" mode="IN" type="String" optional="true"/>
@@ -310,7 +311,19 @@
         <attribute name="Unidad_Ejecutora" mode="IN" type="String" optional="true"/>
         <attribute name="Id_Pago" mode="IN" type="String" optional="true"/>  
         <attribute name="Monto" mode="IN" type="String" optional="false"/>
-        <attribute name="AcctgTrans" mode="OUT" type="org.ofbiz.entity.GenericValue"></attribute>               
-    </service>       
+        <attribute name="acctgTrans" mode="OUT" type="org.ofbiz.entity.GenericValue"/>
+        <attribute name="acctgTransPres" mode="OUT" type="org.ofbiz.entity.GenericValue"></attribute>               
+    </service>
+    
+    <service name="obtenerCuentasIngresos" engine="java"
+            location="org.opentaps.dataimport.domain.OperacionDiariaIngresosManual" invoke="obtenerCuentasIngresos" auth="true">
+        <description>Busca las cuentas para la operacion diaria de ingresos.</description>
+        <required-permissions join-type="OR">
+            <check-permission permission="ACCOUNTING" action="_ATX_CREATE"/>
+        </required-permissions>
+        <attribute name="acctgTransTypeId" mode="IN" type="String" optional="false"/>
+        <attribute name="tipo" mode="IN" type="String" optional="false"></attribute>
+        <attribute name="cuentas" mode="OUT" type="java.util.Map"></attribute>               
+    </service>
     
 </services>

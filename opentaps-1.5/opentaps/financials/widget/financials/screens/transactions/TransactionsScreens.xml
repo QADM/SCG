@@ -223,7 +223,7 @@
             </widgets>
         </section>
     </screen>
-    
+
      <screen name="viewAcctgTransIng">
         <section>
             <actions>
@@ -711,7 +711,7 @@
     <screen name="ODIngresos">
         <section>
             <actions>
-                <set field="pageTitleLabel" value="FinancialsDailyOperIncome"/>  
+                <set field="pageTitleLabel" value="${uiLabelMap.FinancialsDailyOperIncome}"/>  
                 <set field="sectionHeaderUiLabel" value="${uiLabelMap.FinancialsDailyOperIncome}"/>
                 <set field="creaOpDiariaIngresos" value="createOperacionDiariaIngresos"/>
 				<script location="component://financials/webapp/financials/WEB-INF/actions/transactions/getDatosOperacionDiariaIng.bsh"/>                
@@ -730,5 +730,40 @@
             </widgets>
         </section>
     </screen>
+    
+    
+    <screen name="viewAcctPresupuestal">
+        <section>
+            <actions>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/transactions/viewAcctgTransOperaDiaIngresos.bsh"/>
+                <set field="viewIndex" from-field="parameters.VIEW_INDEX" type="Integer" default-value="0"/>
+                <set field="viewSize" from-field="parameters.VIEW_SIZE" type="Integer" default-value="50"/>
+                <set field="pageTitleLabel" value="PageTitleViewAccountingTransaction"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="screenlet">
+<!--                            <platform-specific><html> -->
+<!--                               <html-template location="component://financials/webapp/financials/transactions/acctgTransOptions.ftl"/> -->
+<!--                            </html></platform-specific> -->
+<!--                            <platform-specific><html> -->
+<!--                               <html-template location="component://financials/webapp/financials/transactions/viewAcctPresupOperaDiaIngre.ftl"/> -->
+<!--                            </html></platform-specific> -->
+                           <include-form name="viewAcctPresupuestal" location="component://financials/widget/financials/forms/transactions/TransactionsForms.xml"/>
+                        </container>
+<!--                         <platform-specific><html> -->
+<!--                             <html-template location="component://financials/webapp/financials/transactions/acctgTransEntriesBalance.ftl"/> -->
+<!--                         </html></platform-specific> -->
+<!--                         <container style="screenlet"> -->
+<!--                            <platform-specific><html> -->
+<!--                               <html-template location="component://financials/webapp/financials/transactions/acctgTransEntries.ftl"/> -->
+<!--                            </html></platform-specific> -->
+<!--                         </container> -->
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>    
     
 </screens>
