@@ -31,98 +31,14 @@ import org.opentaps.foundation.exception.FoundationException;
 import org.opentaps.foundation.repository.ofbiz.Repository;
 import org.opentaps.foundation.infrastructure.*;
 
-print("Dentro");
-
 acctTransPresu = parameters.get("acctgTransPres");
-
-print("AcctPResu $%&  "+acctTransPresu);
-	
-context.put("acctTransPresu", acctTransPresu);
-
 acctgTransId = acctTransPresu.getString("acctgTransId");
-
-print("acctgTransId $%&  "+acctgTransId);
 
 acctTransPresu = delegator.findByPrimaryKey("AcctgTransPresupuestal", UtilMisc.toMap("acctgTransId", acctgTransId));
 mapTransPresup = new HashMap();
 mapTransPresup.putAll(acctTransPresu.getAllFields());
 
+acctgTrans = delegator.findByPrimaryKey("AcctgTrans", UtilMisc.toMap("acctgTransId", acctgTransId));
+mapTransPresup.putAll(acctgTrans.getAllFields());
+
 context.put("mapTransPresup", mapTransPresup);
-
-
-
-//acctgTransId = UtilCommon.getParameter(context, "acctgTransId");
-//if (acctgTransId == null) {
-//    // get the ID when multi form is used
-//    acctgTransId = UtilCommon.getParameter(request, "acctgTransId_o_0"); 
-//}
-//dl = new DomainsLoader(new Infrastructure(dispatcher), new User(userLogin));
-//ledgerDomain = dl.loadDomainsDirectory().getLedgerDomain();
-//ledgerRepository = ledgerDomain.getLedgerRepository();
-//ledgerSpecification = ledgerRepository.getSpecification();
-//try {
-//    acctgTrans = ledgerRepository.getAccountingTransaction(acctgTransId);
-//   
-//   
-//      acctgTransPresupuestalEg = ledgerRepository.getAcctgTransPresupuestalEg(acctgTransId);
-//      acctgTransPresupuestalIng = ledgerRepository.getAcctgTransPresupuestalIng(acctgTransId);
-//      acctgTransPresupuestalPolizas = ledgerRepository.getAcctgPolizasDetalle(acctgTransId);
-//   
-//
-//    
-// 
-//    
-//   
-//    
-//} catch (FoundationException e) {
-//}
-//
-//if (acctgTrans == null) return;
-//context.put("accountingTransaction", acctgTrans);
-//// for compatibility with the ofbiz form
-//context.put("acctgTrans", Repository.genericValueFromEntity(delegator, acctgTrans));
-//context.put("acctgTransPresupuestalEg", Repository.genericValueFromEntity(delegator, acctgTransPresupuestalEg));
-//context.put("acctgTransPresupuestalIng", Repository.genericValueFromEntity(delegator, acctgTransPresupuestalIng));
-//context.put("acctgTransPresupuestalPolizas", Repository.genericValueFromEntity(delegator, acctgTransPresupuestalPolizas));
-//
-//
-//
-//
-//// for the documentation system
-//if (acctgTrans.isPosted()) {
-//    context.put("screenState", "viewTransaction");
-//} else {
-//    context.put("screenState", "editTransaction");
-//}
-//
-//acctgTransEntries = acctgTrans.getTransactionEntries();
-//// delete if the transaction can be deleted for the screen
-//canDeleteTrans = false;
-//if (UtilValidate.isEmpty(acctgTransEntries)) {
-//   canDeleteTrans = true;
-//}
-//context.put("acctgTransEntries", acctgTransEntries);
-//context.put("canDeleteTrans", canDeleteTrans);
-//// better to use sesison than parameters, in case somebody puts organizationPartyId into URL
-//organizationPartyId = UtilCommon.getOrganizationPartyId(request);
-//
-//// if the transaction is still not posted then populate some data for editing forms
-//if (!acctgTrans.isPosted()) {
-//    glAccounts = delegator.findByAnd("GlAccountOrganizationAndClass", UtilMisc.toMap("organizationPartyId", organizationPartyId));
-//    context.put("glAccounts", glAccounts);
-//
-//    debitFlag = UtilMisc.toMap("debitCreditFlag", ledgerSpecification.getDebitFlag(), "description", "Debit");
-//    creditFlag = UtilMisc.toMap("debitCreditFlag", ledgerSpecification.getCreditFlag(), "description", "Credit");
-//    context.put("debitCreditFlags", UtilMisc.toList(debitFlag, creditFlag));
-//}
-//
-//// get the accounting tags
-//context.put("tagTypes", UtilAccountingTags.getAccountingTagsForOrganization(organizationPartyId, UtilAccountingTags.TRANSACTION_ENTRY_TAG, delegator));
-//
-////put to history
-//acctgTransType = acctgTrans.getRelatedOne("AcctgTransType");
-//context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.expandLabel("FinancialsNavHistoryAcctgTransaction", locale, UtilMisc.toMap("acctgTransId", acctgTransId)), "viewAcctgTrans", UtilMisc.toList("acctgTransId"));
-//
-//// Get the base currency for the organization
-//baseCurrencyUomId = UtilCommon.getOrgBaseCurrency(organizationPartyId, delegator);
-//context.put("orgCurrencyUomId", baseCurrencyUomId);

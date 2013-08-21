@@ -312,7 +312,10 @@
         <attribute name="Id_Pago" mode="IN" type="String" optional="true"/>  
         <attribute name="Monto" mode="IN" type="String" optional="false"/>
         <attribute name="acctgTrans" mode="OUT" type="org.ofbiz.entity.GenericValue"/>
-        <attribute name="acctgTransPres" mode="OUT" type="org.ofbiz.entity.GenericValue"></attribute>               
+        <attribute name="acctgTransPres" mode="OUT" type="org.ofbiz.entity.GenericValue"/>
+        <attribute name="acctgTransId" mode="OUT" type="String"/>
+        <attribute name="acctgTransEntries" mode="OUT" type="java.util.List"/>
+                       
     </service>
     
     <service name="obtenerCuentasIngresos" engine="java"

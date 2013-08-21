@@ -2,11 +2,13 @@ package org.opentaps.dataimport.domain;
 
 import java.sql.Timestamp;
 import java.text.ParseException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 
+import javolution.util.FastList;
 import javolution.util.FastMap;
 
 import org.ofbiz.base.util.Debug;
@@ -18,8 +20,12 @@ import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.service.DispatchContext;
+import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
+import org.ofbiz.service.ModelService;
 import org.ofbiz.service.ServiceUtil;
+import org.opentaps.base.entities.AcctgTransEntry;
+import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
 import org.opentaps.foundation.action.ActionContext;
 
@@ -33,9 +39,11 @@ public class OperacionDiariaIngresosManual {
      * @param dctx
      * @param context
      * @return
+     * @throws GenericEntityException 
+     * @throws GenericServiceException 
      */
     @SuppressWarnings({ "unchecked", "rawtypes" })
-	public static Map createOperacionDiariaIngresos(DispatchContext dctx, Map context) {
+	public static Map createOperacionDiariaIngresos(DispatchContext dctx, Map context) throws GenericEntityException, GenericServiceException {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Delegator delegator = dctx.getDelegator();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -51,6 +59,9 @@ public class OperacionDiariaIngresosManual {
         
         GenericValue acctgtrans;
         GenericValue acctgtransPres;
+        
+        String acctgTransId;
+        List<AcctgTransEntry> entries = FastList.newInstance();
         
         Debug.logWarning("ENTRO AL SERVICIO PARA CREAR OPERACION DIARIA", MODULE);
         
@@ -114,7 +125,7 @@ public class OperacionDiariaIngresosManual {
 	        acctgtrans.set("acctgTransTypeId", acctgTransTypeId);
 	        acctgtrans.set("description", descripcion);
 	        acctgtrans.set("transactionDate", fecTrans);
-	        acctgtrans.set("isPosted", "N");
+	        acctgtrans.set("isPosted", "Y");
 	        acctgtrans.set("postedDate", fecContable);
 	        acctgtrans.set("glFiscalTypeId", tipoFis);
 	        acctgtrans.set("partyId", uniEjec);
@@ -129,10 +140,10 @@ public class OperacionDiariaIngresosManual {
 		        Debug.logWarning("CLICLO STRING +++ "+ciclo, MODULE);
 	        }
 
-	        
+	        acctgTransId = acctgtrans.getString("acctgTransId");
 	        //Se registra en AcctTransPresupuestal
 	        acctgtransPres = GenericValue.create(delegator.getModelEntity("AcctgTransPresupuestal"));
-	        acctgtransPres.set("acctgTransId", acctgtrans.get("acctgTransId"));
+	        acctgtransPres.set("acctgTransId", acctgTransId);
 	        acctgtransPres.set("ciclo", ciclo);
 	        acctgtransPres.set("unidadOrganizacional", organizationPartyId);
 	        acctgtransPres.set("unidadEjecutora", uniEjec);
@@ -151,72 +162,188 @@ public class OperacionDiariaIngresosManual {
 	        acctgtransPres.create();
 
 
-//			//Se obtiene el tipo (CRI)
-//	    	String tipoCRI = new String();
-//	    	boolean encontro = false;
-//	    	if(n5 != null && !n5.isEmpty() && !encontro){
-//	    		tipoCRI = n5;
-//	    		encontro = true;
-//	    	} else if (concepto != null && !concepto.isEmpty() && !encontro){
-//	    		tipoCRI = concepto;
-//	    		encontro = true;
-//	    	} else if (clase != null && !clase.isEmpty() && !encontro){
-//	    		tipoCRI = clase;
-//	    		encontro = true;
-//	    	} else if (tipo != null && !tipo.isEmpty() && !encontro){
-//	    		tipoCRI = tipo;
-//	    		encontro = true;
-//	    	} else {
-//	    		tipoCRI = rubro;
-//	    		encontro = true;
-//	    	}
-//	    	
-//	    	Debug.logWarning("tipoCRI   "+tipoCRI, MODULE);	
-//			
-//			    	// calculate a net income since the last closed date and add it to our equity account balances
-//        Map input = new HashMap(context);
-//        input.put("acctgTransTypeId", acctgTransTypeId);
-//        input.put("tipo", tipoCRI);
-//        input = dctx.getModelService("obtenerCuentasIngresos").makeValid(input, ModelService.IN_PARAM);
-//        Map tmpResult = dispatcher.runSync("obtenerCuentasIngresos", input);
-//        Map<String,String> cuentas = (Map<String, String>) tmpResult.get("cuentas");
-//        
-//        Debug.logWarning("cuentas   Regresadas :  "+cuentas, MODULE);
-//        
-//        if(cuentas != null && !cuentas.isEmpty()){
-//        	
-//        	String cargoPres = cuentas.get("Cuenta Cargo Presupuesto");
-//        	String abonoPres = cuentas.get("Cuenta Abono Presupuesto");
-//        	String cargoCont = cuentas.get("Cuenta Cargo Contable");
-//        	String abonoCont = cuentas.get("Cuenta Abono Contable");
-//        	
-//        	if(cargoPres != null && !cargoPres.isEmpty() && abonoPres != null && !abonoPres.isEmpty()){
-//        		
-//                acctgtransPres = GenericValue.create(delegator.getModelEntity("AcctgTransPresupuestal"));
-//                acctgtransPres.setNextSeqId();
-//        		
-//        	}
-//        	
-//        	if(cargoCont != null && !cargoCont.isEmpty() && abonoCont != null && !abonoCont.isEmpty()){
-//        		
-//                acctgtransContable = GenericValue.create(delegator.getModelEntity("AcctgTransPresupuestal"));
-//                acctgtransContable.setNextSeqId();
-//        		
-//        	}
-//        	
-//
-//        	
-//        }	        
+	        //Aqui se realiza la extraccion de las cuentas para la operacion 
+	        
+			//Se obtiene el tipo (CRI)
+	    	String tipoCRI = new String();
+	    	boolean encontro = false;
+	    	if(n5 != null && !n5.isEmpty() && !encontro){
+	    		tipoCRI = n5;
+	    		encontro = true;
+	    	} else if (concepto != null && !concepto.isEmpty() && !encontro){
+	    		tipoCRI = concepto;
+	    		encontro = true;
+	    	} else if (clase != null && !clase.isEmpty() && !encontro){
+	    		tipoCRI = clase;
+	    		encontro = true;
+	    	} else if (tipo != null && !tipo.isEmpty() && !encontro){
+	    		tipoCRI = tipo;
+	    		encontro = true;
+	    	} else {
+	    		tipoCRI = rubro;
+	    		encontro = true;
+	    	}
+	    	
+	    	Debug.logWarning("tipoCRI   "+tipoCRI, MODULE);	
+	    	
+	    	String currencyId = UtilCommon.getOrgBaseCurrency(organizationPartyId, delegator);
+	    	
+//	    	AcctgTransEntry transEntryPreC = new AcctgTransEntry();
+//	    	AcctgTransEntry transEntryPreA = new AcctgTransEntry();
+//	    	AcctgTransEntry transEntryConC = new AcctgTransEntry();
+//	    	AcctgTransEntry transEntryConA = new AcctgTransEntry();
+			
+	        Map input = new HashMap(context);
+	        input.put("acctgTransTypeId", acctgTransTypeId);
+	        input.put("tipo", tipoCRI);
+	        input = dctx.getModelService("obtenerCuentasIngresos").makeValid(input, ModelService.IN_PARAM);
+	        Map tmpResult = dispatcher.runSync("obtenerCuentasIngresos", input);
+	        Map<String,String> cuentas = (Map<String, String>) tmpResult.get("cuentas");
+        
+	        Debug.logWarning("cuentas   Regresadas :  "+cuentas, MODULE);
+        
+	        if(cuentas != null && !cuentas.isEmpty()){
+	        	
+	        	String cargoPres = cuentas.get("Cuenta Cargo Presupuesto");
+	        	String abonoPres = cuentas.get("Cuenta Abono Presupuesto");
+	        	String cargoCont = cuentas.get("Cuenta Cargo Contable");
+	        	String abonoCont = cuentas.get("Cuenta Abono Contable");
+	        	
+	        	if(cargoPres != null && !cargoPres.isEmpty() && abonoPres != null && !abonoPres.isEmpty()){
+	        		
+	        		//Generamos la transaccion para Cargo
+//	        		transEntryPreC.setAcctgTransId(acctgTransId);
+//	        		transEntryPreC.setAcctgTransEntrySeqId(String.format("%05d",1));
+//	        		transEntryPreC.setAcctgTransEntryTypeId("_NA_");
+//	        		transEntryPreC.setDescription("Operación  diaria PRESUPUESTAL"+acctgTransId);
+//	        		transEntryPreC.setGlAccountId(cargoPres);
+//	        		transEntryPreC.setOrganizationPartyId(organizationPartyId);
+//	        		transEntryPreC.setAmount(monto);
+//	        		transEntryPreC.setCurrencyUomId(currencyId);
+//	        		transEntryPreC.setDebitCreditFlag("D");
+//	        		transEntryPreC.setReconcileStatusId("AES_NOT_RECONCILED");	
+//	        		transEntryPreC.setPartyId(organizationPartyId);
+//	        		
+//	        		entries.add(transEntryPreC);
+	        		
+	        		GenericValue gTransEntryPreC = GenericValue.create(delegator.getModelEntity("AcctgTransEntry"));
+	        		gTransEntryPreC.set("acctgTransId", acctgTransId);
+	        		gTransEntryPreC.set("acctgTransEntrySeqId", String.format("%05d",1));
+	        		gTransEntryPreC.set("acctgTransEntryTypeId", "_NA_");
+	        		gTransEntryPreC.set("description", "Operación  diaria PRESUPUESTAL Abono"+acctgTransId);
+	        		gTransEntryPreC.set("glAccountId", cargoPres);
+	        		gTransEntryPreC.set("organizationPartyId", organizationPartyId);
+	        		gTransEntryPreC.set("amount", monto);
+	        		gTransEntryPreC.set("currencyUomId", currencyId);
+	        		gTransEntryPreC.set("debitCreditFlag", "D");
+	        		gTransEntryPreC.set("reconcileStatusId", "AES_NOT_RECONCILED");
+	        		gTransEntryPreC.set("partyId", organizationPartyId);
+	        		gTransEntryPreC.create();
+	        		
+	        		//Generamos la transaccion para Abono
+//	        		transEntryPreA.setAcctgTransId(acctgTransId);
+//	        		transEntryPreA.setAcctgTransEntrySeqId(String.format("%05d",2));
+//	        		transEntryPreA.setAcctgTransEntryTypeId("_NA_");
+//	        		transEntryPreA.setDescription("Operación  diaria PRESUPUESTAL Abono "+acctgTransId);
+//	        		transEntryPreA.setGlAccountId(abonoPres);
+//	        		transEntryPreA.setOrganizationPartyId(organizationPartyId);
+//	        		transEntryPreA.setAmount(monto);
+//	        		transEntryPreA.setCurrencyUomId(currencyId);
+//	        		transEntryPreA.setDebitCreditFlag("C");
+//	        		transEntryPreA.setReconcileStatusId("AES_NOT_RECONCILED");	
+//	        		transEntryPreA.setPartyId(organizationPartyId);	        		
+//	        		
+//	        		entries.add(transEntryPreA);
+	        		
+	        		GenericValue gtransEntryPreA = GenericValue.create(delegator.getModelEntity("AcctgTransEntry"));
+	        		gtransEntryPreA.set("acctgTransId", acctgTransId);
+	        		gtransEntryPreA.set("acctgTransEntrySeqId", String.format("%05d",2));
+	        		gtransEntryPreA.set("acctgTransEntryTypeId", "_NA_");
+	        		gtransEntryPreA.set("description", "Operación  diaria PRESUPUESTAL Abono "+acctgTransId);
+	        		gtransEntryPreA.set("glAccountId", abonoPres);
+	        		gtransEntryPreA.set("organizationPartyId", organizationPartyId);
+	        		gtransEntryPreA.set("amount", monto);
+	        		gtransEntryPreA.set("currencyUomId", currencyId);
+	        		gtransEntryPreA.set("debitCreditFlag", "C");
+	        		gtransEntryPreA.set("reconcileStatusId", "AES_NOT_RECONCILED");
+	        		gtransEntryPreA.set("partyId", organizationPartyId);	 
+	        		gtransEntryPreA.create();
+	        		
+	        	}
+	        	
+	        	if(cargoCont != null && !cargoCont.isEmpty() && abonoCont != null && !abonoCont.isEmpty()){
+	        		
+	        		//Generamos la transaccion para Cargo
+//	        		transEntryConC.setAcctgTransId(acctgTransId);
+//	        		transEntryConC.setAcctgTransEntrySeqId(String.format("%05d",3));
+//	        		transEntryConC.setAcctgTransEntryTypeId("_NA_");
+//	        		transEntryConC.setDescription("Operación  diaria Contable"+acctgTransId);
+//	        		transEntryConC.setGlAccountId(cargoCont);
+//	        		transEntryConC.setOrganizationPartyId(organizationPartyId);
+//	        		transEntryConC.setAmount(monto);
+//	        		transEntryConC.setCurrencyUomId(currencyId);
+//	        		transEntryConC.setDebitCreditFlag("D");
+//	        		transEntryConC.setReconcileStatusId("AES_NOT_RECONCILED");	
+//	        		transEntryConC.setPartyId(organizationPartyId);
+//	        		
+//	        		entries.add(transEntryConC);
+	        		
+	        		GenericValue gTransEntryConC = GenericValue.create(delegator.getModelEntity("AcctgTransEntry"));
+	        		gTransEntryConC.set("acctgTransId", acctgTransId);
+	        		gTransEntryConC.set("acctgTransEntrySeqId", String.format("%05d",3));
+	        		gTransEntryConC.set("acctgTransEntryTypeId", "_NA_");
+	        		gTransEntryConC.set("description", "Operación  diaria Contable Abono"+acctgTransId);
+	        		gTransEntryConC.set("glAccountId", cargoCont);
+	        		gTransEntryConC.set("organizationPartyId", organizationPartyId);
+	        		gTransEntryConC.set("amount", monto);
+	        		gTransEntryConC.set("currencyUomId", currencyId);
+	        		gTransEntryConC.set("debitCreditFlag", "D");
+	        		gTransEntryConC.set("reconcileStatusId", "AES_NOT_RECONCILED");
+	        		gTransEntryConC.set("partyId", organizationPartyId);
+	        		gTransEntryConC.create();
+	        		
+	        		//Generamos la transaccion para Abono
+//	        		transEntryConA.setAcctgTransId(acctgTransId);
+//	        		transEntryConA.setAcctgTransEntrySeqId(String.format("%05d",4));
+//	        		transEntryConA.setAcctgTransEntryTypeId("_NA_");
+//	        		transEntryConA.setDescription("Operación  diaria Contable"+acctgTransId);
+//	        		transEntryConA.setGlAccountId(abonoCont);
+//	        		transEntryConA.setOrganizationPartyId(organizationPartyId);
+//	        		transEntryConA.setAmount(monto);
+//	        		transEntryConA.setCurrencyUomId(currencyId);
+//	        		transEntryConA.setDebitCreditFlag("C");
+//	        		transEntryConA.setReconcileStatusId("AES_NOT_RECONCILED");	
+//	        		transEntryConA.setPartyId(organizationPartyId);	    
+//	        		
+//	        		entries.add(transEntryConA);
+	        		
+	        		GenericValue gTransEntryConA = GenericValue.create(delegator.getModelEntity("AcctgTransEntry"));
+	        		gTransEntryConA.set("acctgTransId", acctgTransId);
+	        		gTransEntryConA.set("acctgTransEntrySeqId", String.format("%05d",4));
+	        		gTransEntryConA.set("acctgTransEntryTypeId", "_NA_");
+	        		gTransEntryConA.set("description", "Operación  diaria Contable Abono"+acctgTransId);
+	        		gTransEntryConA.set("glAccountId", abonoCont);
+	        		gTransEntryConA.set("organizationPartyId", organizationPartyId);
+	        		gTransEntryConA.set("amount", monto);
+	        		gTransEntryConA.set("currencyUomId", currencyId);
+	        		gTransEntryConA.set("debitCreditFlag", "C");
+	        		gTransEntryConA.set("reconcileStatusId", "AES_NOT_RECONCILED");
+	        		gTransEntryConA.set("partyId", organizationPartyId);
+	        		gTransEntryConA.create();	        		
+	        		
+	        	}
+	        	
+	        }	        
 
 		} catch (ParseException e) {
-			return UtilMessage.createAndLogServiceError(e, MODULE);
-		} catch (GenericEntityException e) {
 			return UtilMessage.createAndLogServiceError(e, MODULE);
 		}
     	
         Map results = ServiceUtil.returnSuccess();
         results.put("acctgTrans",acctgtrans);
         results.put("acctgTransPres",acctgtransPres);
+        results.put("acctgTransId",acctgTransId);
+        results.put("acctgTransEntries", entries);
         return results;
     	
     }
@@ -289,4 +416,5 @@ public class OperacionDiariaIngresosManual {
     }
 
 }
+
 
