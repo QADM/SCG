@@ -2374,9 +2374,9 @@ under the License.
         <field name="comments" type="comment"></field>
         <field name="sequenceNum" type="numeric"></field>
         <field name="quantity" type="fixed-point"></field>
-        <prim-key field="productCategoryId"/>
+
         <prim-key field="glAccountId"/>
-        <prim-key field="fromDate"/>
+
         <relation type="one" fk-name="GL_CMBR_GLACCOUNT" rel-entity-name="GlAccount">
             <key-map field-name="glAccountId"/>
         </relation>
