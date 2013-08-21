@@ -328,7 +328,7 @@ public class EgresoDiarioImportService extends DomainService implements
 //						rowdata.getIdProductoH());
 
 				Map<String, String> cuentas = motor.cuentasEgresoDiario(
-						tipoDoc.getAcctgTransTypeId(), pe.getProductCategoryId(),
+						tipoDoc.getAcctgTransTypeId(), rowdata.getPe(),
 						rowdata.getOrganizationPartyId(), rowdata.getTg(),
 						rowdata.getIdPago(), rowdata.getIdProductoD(),
 						rowdata.getIdProductoH());
