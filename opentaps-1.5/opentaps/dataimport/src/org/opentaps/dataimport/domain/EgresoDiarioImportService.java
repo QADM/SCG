@@ -420,8 +420,9 @@ public class EgresoDiarioImportService extends DomainService implements
 								+ "-" + rowdata.getRefDoc() + "-P");
 
 						// id Transaccion
-						egresoDiario.setAcctgTransId(tipoDoc.getDescripcion()
-								+ "-" + rowdata.getRefDoc() + "-P");
+						egresoDiario.setAcctgTransId(UtilImport
+								.getAcctgTransIdDiario(rowdata.getRefDoc(),
+										rowdata.getSecuencia(), "P"));
 
 						AcctgTrans trans = ledger_repo.findOne(
 								AcctgTrans.class, ledger_repo.map(
