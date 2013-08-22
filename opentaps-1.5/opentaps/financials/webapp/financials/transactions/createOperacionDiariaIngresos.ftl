@@ -47,10 +47,6 @@
         <@inputTextCell name="Secuencia" maxlength=20  />
       </tr>
       <tr>
-        <@displayTitleCell title=uiLabelMap.FinancialsCatalogType />
-        <@inputTextCell name="Tipo_Catalogo" maxlength=60  />
-      </tr>  
-      <tr>
         <@displayTitleCell title=uiLabelMap.FinancialsProductCredit />
         <@inputSelectCell list=listProducts?if_exists displayField="description" name="Id_Producto_Abono" default=productId?if_exists key="productId"/>
       </tr>
@@ -101,7 +97,7 @@
       </tr>
       <tr>
       	<@displayTitleCell title=uiLabelMap.FinancialsExecutingUnit />
-        <@inputSelectCell list=listaUnidades?if_exists displayField="groupName" name="Unidad_Ejecutora" default=enumId?if_exists key="partyId"/>
+        <@inputSelectCell list=listaUnidades?if_exists displayField="groupName" name="Unidad_Ejecutora" default=partyId?if_exists key="partyId"/>
       </tr>
       <tr>
       	<@displayTitleCell title=uiLabelMap.FinancialsId />

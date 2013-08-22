@@ -191,7 +191,9 @@
                   
                   
 <OpentapsShortcut shortcutId="ODIngresos" groupId="financialsTransactions" sequenceNum="150" uiLabel="FinancialsDailyOperIncome"
-                  linkUrl="ODIngresos" securityModule="" securityAction=""/>                  
+                  linkUrl="ODIngresos" securityModule="" securityAction=""/>
+<OpentapsShortcut shortcutId="ODEgresos" groupId="financialsTransactions" sequenceNum="160" uiLabel="FinancialsDailyOperExpens"
+                  linkUrl="ODEgresos" securityModule="" securityAction=""/>                                        
                   
                   
 

@@ -511,7 +511,13 @@
         	</field> 	
         	<field name="nivel5">
             	<display description="${groovy:com.opentaps.financials.Helpers.OperacionDiariaHelper.getProductCategoryName(delegator, mapTransPresup.get(&quot;nivel5&quot;))}" />
-        	</field>    	     
+        	</field> 
+       		<field name="fuente">
+            	<display description="${groovy:com.opentaps.financials.Helpers.OperacionDiariaHelper.getEnumName(delegator, mapTransPresup.get(&quot;fuente&quot;))}" />
+        	</field>         	
+       		<field name="subFuente">
+            	<display description="${groovy:com.opentaps.financials.Helpers.OperacionDiariaHelper.getEnumName(delegator, mapTransPresup.get(&quot;subFuente&quot;))}" />
+        	</field>           	   	     
        		<field name="subFuenteEspecifica">
             	<display description="${groovy:com.opentaps.financials.Helpers.OperacionDiariaHelper.getEnumName(delegator, mapTransPresup.get(&quot;subFuenteEspecifica&quot;))}" />
         	</field>       
