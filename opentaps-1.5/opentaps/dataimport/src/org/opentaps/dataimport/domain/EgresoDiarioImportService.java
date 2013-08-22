@@ -185,6 +185,7 @@ public class EgresoDiarioImportService extends DomainService implements
 						rowdata.getLoc(), "GEOGRAFICA");
 				mensaje = UtilImport.validaEnumeration(mensaje, ledger_repo,
 						rowdata.getArea(), "CL_SECTORIAL", "SECTORIAL");
+				mensaje = UtilImport.validaMonto(rowdata.getMonto(), mensaje);
 
 				if (!mensaje.isEmpty()) {
 					String message = "Failed to import Egreso Diario ["
@@ -320,11 +321,18 @@ public class EgresoDiarioImportService extends DomainService implements
 				// null, null, null, true, null, null,
 				// rowdata.getIdProducto());
 
+//				Map<String, String> cuentas = motor.cuentasEgresoDiario(
+//						tipoDoc.getAcctgTransTypeId(), pg,
+//						rowdata.getOrganizationPartyId(), rowdata.getTg(),
+//						rowdata.getIdPago(), rowdata.getIdProductoD(),
+//						rowdata.getIdProductoH());
+
 				Map<String, String> cuentas = motor.cuentasEgresoDiario(
-						tipoDoc.getAcctgTransTypeId(), pg,
+						tipoDoc.getAcctgTransTypeId(), rowdata.getPe(),
 						rowdata.getOrganizationPartyId(), rowdata.getTg(),
 						rowdata.getIdPago(), rowdata.getIdProductoD(),
 						rowdata.getIdProductoH());
+				
 
 				if (cuentas.get("Mensaje") != null) {
 					String message = "Failed to import Egreso Diario ["
@@ -397,6 +405,9 @@ public class EgresoDiarioImportService extends DomainService implements
 					aux.setSubSector(subsec);
 					aux.setArea(area.getEnumId());
 					aux.setAgrupador(rowdata.getRefDoc());
+					aux.setIdPago(rowdata.getIdPago());
+					aux.setIdProductoD(rowdata.getIdProductoD());
+					aux.setIdProductoH(rowdata.getIdProductoH());
 					aux.setIdTipoDoc(rowdata.getIdTipoDoc());
 					aux.setSecuencia(rowdata.getSecuencia());
 					aux.setLote(lote);
@@ -409,8 +420,9 @@ public class EgresoDiarioImportService extends DomainService implements
 								+ "-" + rowdata.getRefDoc() + "-P");
 
 						// id Transaccion
-						egresoDiario.setAcctgTransId(tipoDoc.getDescripcion()
-								+ "-" + rowdata.getRefDoc() + "-P");
+						egresoDiario.setAcctgTransId(UtilImport
+								.getAcctgTransIdDiario(rowdata.getRefDoc(),
+										rowdata.getSecuencia(), "P"));
 
 						AcctgTrans trans = ledger_repo.findOne(
 								AcctgTrans.class, ledger_repo.map(

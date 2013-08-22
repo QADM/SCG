@@ -750,7 +750,7 @@ public final class ExcelImportServices extends DomainService {
 	private Date getFechaHHMMSS(HSSFCell celda) {
 
 		SimpleDateFormat formatoDelTexto = new SimpleDateFormat(
-				"dd-MM-yyy hh:mm:ss");
+				"dd-MM-yyyy hh:mm:ss");
 		Date fecha = null;
 
 		try {
@@ -1073,6 +1073,7 @@ public final class ExcelImportServices extends DomainService {
 				egreso.setRefDoc(this.readStringCell(row, rowCount++));
 				egreso.setSecuencia(this.readStringCell(row, rowCount++));
 				egreso.setUsuario(this.readStringCell(row, rowCount++));
+				egreso.setIdPago(this.readStringCell(row, rowCount++));
 				egreso.setIdProductoD(this.readStringCell(row, rowCount++));
 				egreso.setIdProductoH(this.readStringCell(row, rowCount++));
 				egreso.setCiclo(this.readStringCell(row, rowCount++));

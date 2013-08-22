@@ -257,27 +257,45 @@ public class MotorContable {
 		return cuentas;
 	}
 
+	public boolean validaCuentaAuxiliar(String cuenta)
+			throws RepositoryException {
+		Debug.log("Se valida que la Cuenta tenga un catálogo auxiliar");
+		GlAccountCategoryRelation auxiliar = ledger_repo.findOne(
+				GlAccountCategoryRelation.class, ledger_repo.map(
+						GlAccountCategoryRelation.Fields.glAccountId,
+						cuentas.get(cuenta)));
+
+		if (auxiliar != null) {
+			return true;
+		}
+		return false;
+	}
+
 	public void buscaCuentasProductos(String idProductD, String idProductH,
-			String idPago, String organizationPartyId)
+			String idPagoD, String idPagoH, String organizationPartyId)
 			throws RepositoryException {
 
 		String mensaje = "";
 
-		if (idProductD != null) {
-			buscaCuentaProduct(idProductD, organizationPartyId,
-					"Cuenta Cargo Contable");
-		} else {
-			mensaje += "idProductoD es obligatorio ";
-		}
-
-		if (idPago != null) {
-			buscaCuentaPago(idPago, "Cuenta Cargo Contable");
-		} else {
+		if (idPagoH != null) {
+			buscaCuentaPago(idPagoH, "Cuenta Abono Contable");
+		} else if (validaCuentaAuxiliar("Cuenta Abono Contable")) {
 			if (idProductH != null) {
-				buscaCuentaProduct(idProductD, organizationPartyId,
+				buscaCuentaProduct(idProductH, organizationPartyId,
 						"Cuenta Abono Contable");
 			} else {
 				mensaje += "idProductoH es obligatorio ";
+			}
+		}
+
+		if (idPagoD != null) {
+			buscaCuentaPago(idPagoD, "Cuenta Cargo Contable");
+		} else if (validaCuentaAuxiliar("Cuenta Cargo Contable")) {
+			if (idProductD != null) {
+				buscaCuentaProduct(idProductD, organizationPartyId,
+						"Cuenta Cargo Contable");
+			} else {
+				mensaje += "idProductoD es obligatorio ";
 			}
 		}
 
@@ -288,7 +306,7 @@ public class MotorContable {
 	}
 
 	public Map<String, String> cuentasIngresoDiario(String tipoTransaccion,
-			String organizationPartyId, String idPago, String tipo,
+			String organizationPartyId, String idPago, String cri,
 			String idProductD, String idProductH) throws RepositoryException {
 
 		MiniGuiaContable miniGuia = ledger_repo.findOne(MiniGuiaContable.class,
@@ -303,7 +321,7 @@ public class MotorContable {
 			Debug.log("Referencia = M");
 			List<DataImportMatrizIng> matriz = ledger_repo.findList(
 					DataImportMatrizIng.class, ledger_repo.map(
-							DataImportMatrizIng.Fields.cri, tipo,
+							DataImportMatrizIng.Fields.cri, cri,
 							DataImportMatrizIng.Fields.matrizId,
 							miniGuia.getTipoMatriz()));
 			if (matriz.isEmpty()) {
@@ -329,7 +347,7 @@ public class MotorContable {
 			// buscaCuentaPago(idPago, "Cuenta Cargo Contable");
 			// }
 
-			buscaCuentasProductos(idProductD, idProductH, idPago,
+			buscaCuentasProductos(idProductD, idProductH, idPago, null,
 					organizationPartyId);
 
 		} else {
@@ -340,9 +358,9 @@ public class MotorContable {
 	}
 
 	public Map<String, String> cuentasEgresoDiario(String tipoTransaccion,
-			String prodGen, String organizationPartyId,
-			String tipoGasto, String idPago, String idProductD,
-			String idProductH) throws RepositoryException {
+			String cog, String organizationPartyId, String tipoGasto,
+			String idPago, String idProductD, String idProductH)
+			throws RepositoryException {
 
 		MiniGuiaContable miniGuia = ledger_repo.findOne(MiniGuiaContable.class,
 				ledger_repo.map(MiniGuiaContable.Fields.acctgTransTypeId,
@@ -355,11 +373,11 @@ public class MotorContable {
 		if (miniGuia.getReferencia().equalsIgnoreCase("M")) {
 			Debug.log("Referencia = M");
 			Debug.log("Egreso");
-			Debug.log("COG " + prodGen);
+			Debug.log("COG " + cog);
 			Debug.log("TIPOGASTO " + tipoGasto);
 			List<DataImportMatrizEgr> matriz = ledger_repo.findList(
 					DataImportMatrizEgr.class, ledger_repo.map(
-							DataImportMatrizEgr.Fields.cog, prodGen,
+							DataImportMatrizEgr.Fields.cog, cog,
 							DataImportMatrizEgr.Fields.tipoGasto, tipoGasto,
 							DataImportMatrizEgr.Fields.matrizId,
 							miniGuia.getTipoMatriz()));
@@ -387,7 +405,7 @@ public class MotorContable {
 			// buscaCuentaPago(idC, "Cuenta Abono Contable");
 			// }
 
-			buscaCuentasProductos(idProductD, idProductH, idPago,
+			buscaCuentasProductos(idProductD, idProductH, null, idPago,
 					organizationPartyId);
 		} else {
 			// miniGuia.getReferencia().equalsIgnoreCase("N")
