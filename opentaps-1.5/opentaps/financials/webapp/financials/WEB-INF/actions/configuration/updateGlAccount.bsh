@@ -33,20 +33,36 @@ if (UtilValidate.isNotEmpty(parameters.get("glAccountId"))) {
     }    
     context.put("glAccount", glAccount);
 
+
     // need both values to look up in GlAccountClassTypeMap
     glAccountTypeId = glAccount.getString("glAccountTypeId");
     glAccountClassId = glAccount.getString("glAccountClassId");
+    
+    
+
     if(glAccountTypeId == null || glAccountClassId == null)
 	    return;
-
+	glAccountId= glAccount.getString("glAccountId");
+    if(glAccountId==null)
+    	return;
+   glId = delegator.findByPrimaryKey("GlAccountCategoryRelation", UtilMisc.toMap("glAccountId",glAccountId));
+   productCategory=glId.getString("productCategoryId");
+   if(productCategory==null)
+   	return;
+   	list1=delegator.findByAnd("ProductCategory", UtilMisc.toMap("productCategoryId",productCategory));
     list = delegator.findByAnd("GlAccountClassTypeMap", UtilMisc.toMap("glAccountTypeId", glAccountTypeId, "glAccountClassId", glAccountClassId));
 
     // the combination glAccountTypeId and glAccountClassId must be valid
     if(list.size() == 0)
 	    return;
+	if(list1.size()==0)
+		return;
 
     glAccountClassTypeMap = list.get(0);
+    productCategoryId= list1.get(0);
+    
     context.put("glAccountClassTypeMap",glAccountClassTypeMap);
+    context.put("ProductCategory",productCategoryId);
 }
 
 //  this form is also used to add a subaccount, so we also try to find the parent GL account

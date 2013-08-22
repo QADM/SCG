@@ -57,7 +57,6 @@ under the License.
 <!-- ============================Creación y actualizacion de campos en tabla updateGlAccountCategoryRelation====== -->
 
 
-
     <service name="createGlAccountCategoryRelation" default-entity-name="GlAccountCategoryRelation" engine="simple"
             location="component://accounting/script/org/ofbiz/accounting/ledger/GeneralLedgerServices.xml" invoke="createGlAccountCategoryRelation" auth="true">
         <description>Create a GlAccount record</description>
@@ -72,8 +71,7 @@ under the License.
         <description>Update a GlAccount record</description>
         <permission-service service-name="basicGeneralLedgerPermissionCheck" main-action="UPDATE"/>
         <auto-attributes include="pk" mode="IN" optional="true"/>
-        
-    
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
     </service>
     
     <!-- ============================Creación y actualizacion de campos en tabla updateGlAccountCategoryRelation====== -->

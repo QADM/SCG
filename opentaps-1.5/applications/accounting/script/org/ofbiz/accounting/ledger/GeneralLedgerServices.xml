@@ -61,15 +61,13 @@ under the License.
 
         <create-value value-field="newEntity"/>
     </simple-method>
-    
-    
-    
-    
+ 
         <simple-method method-name="updateGlAccountCategoryRelation" short-description="Update GlAccountOrganization">
         <make-value entity-name="GlAccountCategoryRelation" value-field="lookupPKMap"/>
         <set-pk-fields map="parameters" value-field="lookupPKMap"/>
         <find-by-primary-key map="lookupPKMap" value-field="lookedUpValue"/>
-                <set field="GlAccountCategoryRelation.fromDate" value="lookedUpValue"/>
+        <set-nonpk-fields map="parameters" value-field="lookedUpValue"/>
+
         <store-value value-field="lookedUpValue"/>
     </simple-method>
 <!-- ============================Creación y actualizacion de campos en tabla updateGlAccountCategoryRelation====== -->
