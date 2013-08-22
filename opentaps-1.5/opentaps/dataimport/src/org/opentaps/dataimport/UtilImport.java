@@ -13,6 +13,7 @@ import org.opentaps.base.entities.AcctgTransEntry;
 import org.opentaps.base.entities.Enumeration;
 import org.opentaps.base.entities.Geo;
 import org.opentaps.base.entities.GeoType;
+import org.opentaps.base.entities.GlAccount;
 import org.opentaps.base.entities.GlAccountOrganization;
 import org.opentaps.base.entities.NivelPresupuestal;
 import org.opentaps.base.entities.Party;
@@ -524,8 +525,14 @@ public class UtilImport {
 
 	public static GlAccountOrganization actualizaGlAccountOrganization(
 			LedgerRepositoryInterface ledger_repo, BigDecimal monto,
-			String cuenta, String organizacionPartyId)
+			String cuenta, String organizacionPartyId, String naturaleza)
 			throws RepositoryException {
+
+		Debug.log("Empieza GlAccountOrganization " + cuenta);
+
+		// Se busca la naturaleza de la cuenta.
+		GlAccount glAccount = ledger_repo.findOne(GlAccount.class,
+				ledger_repo.map(GlAccount.Fields.glAccountId, cuenta));
 
 		// GlAccountOrganization
 		Debug.log("Empieza GlAccountOrganization " + cuenta);
@@ -535,12 +542,22 @@ public class UtilImport {
 						GlAccountOrganization.Fields.organizationPartyId,
 						organizacionPartyId));
 
-		if (glAccountOrganization.getPostedBalance() == null) {
-			glAccountOrganization.setPostedBalance(monto);
+		if (glAccount.getNaturaleza().equalsIgnoreCase(naturaleza)) {
+			if (glAccountOrganization.getPostedBalance() == null) {
+				glAccountOrganization.setPostedBalance(monto);
+			} else {
+				glAccountOrganization.setPostedBalance(glAccountOrganization
+						.getPostedBalance().add(monto));
+			}
 		} else {
+			if (glAccountOrganization.getPostedBalance() == null) {
+				glAccountOrganization.setPostedBalance(BigDecimal.ZERO);
+			}
 			glAccountOrganization.setPostedBalance(glAccountOrganization
-					.getPostedBalance().add(monto));
+					.getPostedBalance().subtract(monto));
+
 		}
+
 		return glAccountOrganization;
 	}
 

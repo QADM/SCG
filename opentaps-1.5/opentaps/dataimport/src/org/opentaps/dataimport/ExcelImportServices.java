@@ -27,6 +27,7 @@ import java.util.Collection;
 import java.sql.Date;
 import java.util.List;
 import java.util.Locale;
+import java.sql.Timestamp;
 
 import javolution.util.FastList;
 import org.hibernate.Query;
@@ -236,15 +237,15 @@ public final class ExcelImportServices extends DomainService {
 		String s = null;
 		if (bd == null) {
 			s = cell.toString().trim();
-			if(s.equals("0.0") || s.equals("0"))
-			{	s=null;				
+			if (s.equals("0.0") || s.equals("0")) {
+				s = null;
 			}
 
 		} else {
 			// if cell contains number parse it as long
 			s = Long.toString(bd.longValue());
-			if(s.equals("0.0") || s.equals("0"))
-			{	s=null;			
+			if (s.equals("0.0") || s.equals("0")) {
+				s = null;
 			}
 
 		}
@@ -747,11 +748,12 @@ public final class ExcelImportServices extends DomainService {
 
 	}
 
-	private Date getFechaHHMMSS(HSSFCell celda) {
+	private Timestamp getFechaHHMMSS(HSSFCell celda) {
 
 		SimpleDateFormat formatoDelTexto = new SimpleDateFormat(
 				"dd-MM-yyyy hh:mm:ss");
-		Date fecha = null;
+
+		Calendar cal = null;
 
 		try {
 			switch (celda.getCellType()) {
@@ -761,15 +763,15 @@ public final class ExcelImportServices extends DomainService {
 			default:
 
 				String cadFecha = celda.toString().trim();
-				fecha = new java.sql.Date(formatoDelTexto.parse(cadFecha)
-						.getTime());
+				cal = Calendar.getInstance();
+				cal.setTime(formatoDelTexto.parse(cadFecha));
 				break;
 			}
 		} catch (Exception e) {
 			logger.debug("No se pudo hacer el parser de la fecha: " + e);
 		}
 
-		return fecha;
+		return new Timestamp(cal.getTimeInMillis());
 
 	}
 
@@ -1270,7 +1272,7 @@ public final class ExcelImportServices extends DomainService {
 	}
 
 	protected Collection<? extends EntityInterface> createDataImportMatrizConversionEngresos(
-			HSSFSheet sheet) throws RepositoryException {		
+			HSSFSheet sheet) throws RepositoryException {
 		List<DataImportMatrizEgr> matrizConversionEgr = FastList.newInstance();
 		int sheetLastRowNumber = sheet.getLastRowNum();
 		for (int j = 1; j <= sheetLastRowNumber; j++) {
@@ -1585,10 +1587,10 @@ public final class ExcelImportServices extends DomainService {
 					} else if (EXCEL_CGUIDE_TAB.equals(excelTab)) {
 						entitiesToCreate
 								.addAll(createDataImportContableGuide(sheet));
-					} else if (EXCEL_MATRIZ_CONVERSION_EGR_TAB.equals(excelTab)) {						
+					} else if (EXCEL_MATRIZ_CONVERSION_EGR_TAB.equals(excelTab)) {
 						entitiesToCreate
 								.addAll(createDataImportMatrizConversionEngresos(sheet));
-					} else if (EXCEL_MATRIZ_CONVERSION_ING_TAB.equals(excelTab)) {						
+					} else if (EXCEL_MATRIZ_CONVERSION_ING_TAB.equals(excelTab)) {
 						entitiesToCreate
 								.addAll(createDataImportMatrizConversionIngresos(sheet));
 						// etc ...
