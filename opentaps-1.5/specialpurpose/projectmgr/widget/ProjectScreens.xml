@@ -509,6 +509,7 @@ under the License.
                     <select-field field-name="middleName"/>
                     <select-field field-name="groupName"/>
                     <select-field field-name="roleTypeId"/>
+                    <select-field field-name="fromDate"/>
                     <order-by field-name="lastName"/>
                     <order-by field-name="firstName"/>
                     <order-by field-name="groupName"/>
@@ -527,6 +528,8 @@ under the License.
                     <select-field field-name="middleName"/>
                     <select-field field-name="groupName"/>
                     <select-field field-name="roleTypeId"/>
+                      <select-field field-name="fromDate"/>
+                    <order-by field-name="-fromDate"/>
                     <order-by field-name="lastName"/>
                     <order-by field-name="firstName"/>
                     <order-by field-name="groupName"/>

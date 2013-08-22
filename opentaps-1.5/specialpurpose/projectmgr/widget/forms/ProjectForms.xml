@@ -243,10 +243,7 @@
 	     <field name="node" title="Nodo"><display/></field>
       	<field name="enumId" title="Scope"><display-entity entity-name="Enumeration" key-field-name="enumId"  description="${description}"/></field>
       	<field name="workEffortId" title="Proyecto Padre" ><display-entity entity-name="WorkEffort" key-field-name="workEffortId"  description="${workEffortName}"/></field>
-      
-      <field name="clientBillingPartyId"   title="Participante"><display/></field>        
-      
-      	
+         <field name="participante"   title="Participante"><display/></field>        	
         <field name="projectName" title="${uiLabelMap.ProjectMgrProjectName}"><display/></field>
         <field name="projectDescription" title="Descripcion"><display/></field>      
         <field name="currentStatusId" title="${uiLabelMap.CommonStatus}">
@@ -554,6 +551,7 @@
             <set field="currencyUomId" value="${bsh:clientParty!=null&amp;&amp;clientParty.getString(&quot;preferredCurrencyUomId&quot;)!=null?clientParty.getString(&quot;preferredCurrencyUomId&quot;):currencyUomId}"/>
         </row-actions>
         <field name="projectId"><hidden/></field>
+         <field name="fromDate"><display/></field>
         <field name="partyName" title="${uiLabelMap.CommonName}">
             <hyperlink target="viewprofile" description="${groupName} [${partyId}]">
                 <parameter param-name="partyId"/>
