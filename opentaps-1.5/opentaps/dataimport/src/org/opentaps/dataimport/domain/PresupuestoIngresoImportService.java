@@ -202,8 +202,13 @@ public class PresupuestoIngresoImportService extends DomainService implements
 
 						if (trans.isEmpty()) {
 							Debug.log("Trans Nueva");
-							presupuestoIngreso.setAcctgTransId(id + " I"
-									+ rowdata.getCiclo() + "-" + mes);
+							if (mes < 10) {
+								presupuestoIngreso.setAcctgTransId(id + " I"
+										+ rowdata.getCiclo() + "-0" + mes);
+							} else {
+								presupuestoIngreso.setAcctgTransId(id + " I"
+										+ rowdata.getCiclo() + "-" + mes);
+							}
 							presupuestoIngreso.setCreatedByUserLogin(rowdata
 									.getUsuario());
 						} else {
@@ -301,8 +306,8 @@ public class PresupuestoIngresoImportService extends DomainService implements
 							String message = "Failed to import Presupuesto Egreso ["
 									+ rowdata.getClavePres()
 									+ "], Error message : " + mensaje;
-							storeImportPresupuestoIngresoError(rowdata, message,
-									imp_repo);
+							storeImportPresupuestoIngresoError(rowdata,
+									message, imp_repo);
 							continue;
 						}
 

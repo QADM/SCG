@@ -153,11 +153,12 @@ public class PresupuestoEgresoImportService extends DomainService implements
 						ledger_repo, rowdata.getPe(), "PARTIDA ESPECIFICA",
 						"PRODUCTO ESPECIFICO");
 				mensaje = UtilImport.validaEnumeration(mensaje, ledger_repo,
-						rowdata.getSfe(), "CL_FUENTE_RECURSOS", "FUENTE DE LOS RECURSOS");
+						rowdata.getSfe(), "CL_FUENTE_RECURSOS",
+						"FUENTE DE LOS RECURSOS");
 				mensaje = UtilImport.validaGeo(mensaje, ledger_repo,
 						rowdata.getLoc(), "GEOGRAFICA");
 				mensaje = UtilImport.validaEnumeration(mensaje, ledger_repo,
-						rowdata.getArea(), "CL_SECTORIAL", "SECTORIAL");				
+						rowdata.getArea(), "CL_SECTORIAL", "SECTORIAL");
 
 				if (!mensaje.isEmpty()) {
 					String message = "Failed to import Presupuesto Egreso ["
@@ -259,8 +260,14 @@ public class PresupuestoEgresoImportService extends DomainService implements
 
 						if (trans.isEmpty()) {
 							Debug.log("Trans Nueva");
-							presupuestoEgreso.setAcctgTransId(id + " E"
-									+ rowdata.getCiclo() + "-" + mes);
+							if (mes < 10) {
+								presupuestoEgreso.setAcctgTransId(id + " E"
+										+ rowdata.getCiclo() + "-0" + mes);
+							} else {
+								presupuestoEgreso.setAcctgTransId(id + " E"
+										+ rowdata.getCiclo() + "-" + mes);
+							}
+
 							presupuestoEgreso.setCreatedByUserLogin(rowdata
 									.getUsuario());
 						} else {
@@ -276,14 +283,14 @@ public class PresupuestoEgresoImportService extends DomainService implements
 						cal.set(Calendar.MONTH, mes - 1);
 
 						// Vigencias
-						mensaje = UtilImport.validaVigencia(mensaje, "FUNCIONAL",
-								subf, cal.getTime());
-						mensaje = UtilImport.validaVigencia(mensaje, "TIPO GASTO", tg,
-								cal.getTime());
-						mensaje = UtilImport.validaVigencia(mensaje, "FUENTE DE LOS RECURSOS",
-								sfe, cal.getTime());
-						mensaje = UtilImport.validaVigencia(mensaje, "SECTORIAL",
-								area, cal.getTime());
+						mensaje = UtilImport.validaVigencia(mensaje,
+								"FUNCIONAL", subf, cal.getTime());
+						mensaje = UtilImport.validaVigencia(mensaje,
+								"TIPO GASTO", tg, cal.getTime());
+						mensaje = UtilImport.validaVigencia(mensaje,
+								"FUENTE DE LOS RECURSOS", sfe, cal.getTime());
+						mensaje = UtilImport.validaVigencia(mensaje,
+								"SECTORIAL", area, cal.getTime());
 
 						if (!mensaje.isEmpty()) {
 							String message = "Failed to import Presupuesto Egreso ["
@@ -356,10 +363,11 @@ public class PresupuestoEgresoImportService extends DomainService implements
 									.getDiciembre());
 							break;
 						}
-						
-						mensaje = UtilImport.validaMonto(presupuestoEgreso.getPostedAmount(), mensaje);
-						
-						if(!mensaje.isEmpty()){
+
+						mensaje = UtilImport.validaMonto(
+								presupuestoEgreso.getPostedAmount(), mensaje);
+
+						if (!mensaje.isEmpty()) {
 							String message = "Failed to import Presupuesto Egreso ["
 									+ rowdata.getClavePres()
 									+ "], Error message : " + mensaje;
