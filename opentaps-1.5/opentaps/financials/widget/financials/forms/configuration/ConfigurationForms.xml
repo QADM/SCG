@@ -166,6 +166,10 @@
     <form  name="updateGlAccount" type="single" title="Update an existing Gl Account" target="updateExistingGlAccount" default-map-name="glAccount"
         default-widget-style="tabletext" default-title-style="tableheadtext">
 <field name="glAccountId"><display/></field>
+        
+        
+        
+        
         <field name="glAccountClassTypeKey" map-name="glAccountClassTypeMap">            
             <drop-down allow-empty="true">
                 <entity-options entity-name="GlAccountClassTypeMap" description="${description}">
@@ -173,6 +177,7 @@
                 </entity-options>
             </drop-down>  
         </field>
+            
 
         <field name="parentGlAccountId">            
             <text/>
@@ -210,8 +215,8 @@
         </field> 
        <field name="tipoCuenta" title="${uiLabelMap.TipoCuenta}" >            
             <drop-down>
-                <option key="A" description="Acredora"/>
-                <option key="D" description="Deudora"/>
+                <option key="A" description="Acumulativa"/>
+                <option key="R" description="Registro"/>
                 <option key="T" description="Totalizadora"/>
             </drop-down>  
         </field> 
@@ -230,13 +235,17 @@
                 <option key="Y" description="Si"/>
             </drop-down>  
         </field>   
-       <field name="productCategoryId" title="Categoria" >
-           	 <drop-down allow-empty="false" current="selected">
-                <entity-options description="${description}" entity-name="ProductCategory" key-field-name="productCategoryId">
+        
+         <field name="productCategoryId" map-name="ProductCategory"  >            
+            <drop-down allow-empty="true">
+                <entity-options entity-name="ProductCategory" description="${description}"  >
                     <entity-order-by field-name="description"/>
                 </entity-options>
-           	 </drop-down>
+            </drop-down>  
         </field>
+        
+        
+
         <field name="submitButton" title="Update"><submit/></field>
     </form>
     
@@ -291,10 +300,10 @@
                 <option key="D" description="Deudora"/>
             </drop-down>  
         </field> 
-       <field name="tipoCuenta" title="${uiLabelMap.TipoCuenta}" >            
+      <field name="tipoCuenta" title="${uiLabelMap.TipoCuenta}" >            
             <drop-down>
-                <option key="A" description="Acredora"/>
-                <option key="D" description="Deudora"/>
+                <option key="A" description="Acumulativa"/>
+                <option key="R" description="Registro"/>
                 <option key="T" description="Totalizadora"/>
             </drop-down>  
         </field> 
@@ -314,7 +323,7 @@
             </drop-down>  
         </field>   
        <field name="productCategoryId" title="Categoria" >
-           	 <drop-down allow-empty="false" current="selected">
+           	 <drop-down allow-empty="true" current="selected">
                 <entity-options description="${description}" entity-name="ProductCategory" key-field-name="productCategoryId">
                     <entity-order-by field-name="description"/>
                 </entity-options>

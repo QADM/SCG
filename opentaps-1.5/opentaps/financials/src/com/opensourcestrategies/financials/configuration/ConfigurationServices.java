@@ -33,6 +33,7 @@ import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
+import org.opentaps.base.entities.GlAccountCategoryRelation;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
 
@@ -70,6 +71,8 @@ public final class ConfigurationServices {
 		String organizationPartyId = (String) context
 				.get("organizationPartyId");
 		List value = null;
+		
+
 
 		Map fields = UtilMisc.toMap("glAccountId", glAccountId,
 				"organizationPartyId", organizationPartyId);
@@ -234,6 +237,18 @@ public final class ConfigurationServices {
 				return addNewGlAccountResult;
 			}
 
+			// associate it with the organization
+			Map addNewGlAccountOrganizationContext = UtilMisc.toMap(
+					"glAccountId", glAccountId, "organizationPartyId",
+					organizationPartyId, "postedBalance", postedBalance,
+					"userLogin", userLogin);
+			Map addNewGlAccountOrganizationResult = dispatcher.runSync(
+					"createGlAccountOrganization",
+					addNewGlAccountOrganizationContext, -1, false);
+			
+			if (ServiceUtil.isError(addNewGlAccountOrganizationResult)) {
+				return addNewGlAccountOrganizationResult;
+			}
 			Map addNewRelationContext = UtilMisc.toMap("productCategoryId",
 					categoria, "glAccountId", glAccountId, "fromDate", fecha,
 					"userLogin", userLogin);
@@ -243,19 +258,6 @@ public final class ConfigurationServices {
 			if (ServiceUtil.isError(addNewRelationResult)) {
 				return addNewRelationResult;
 			}
-
-			// associate it with the organization
-			Map addNewGlAccountOrganizationContext = UtilMisc.toMap(
-					"glAccountId", glAccountId, "organizationPartyId",
-					organizationPartyId, "postedBalance", postedBalance,
-					"userLogin", userLogin);
-			Map addNewGlAccountOrganizationResult = dispatcher.runSync(
-					"createGlAccountOrganization",
-					addNewGlAccountOrganizationContext, -1, false);
-			if (ServiceUtil.isError(addNewGlAccountOrganizationResult)) {
-				return addNewGlAccountOrganizationResult;
-			}
-
 			return ServiceUtil.returnSuccess();
 		} catch (GenericEntityException e) {
 			return ServiceUtil.returnError("Could not add the Gl Account ("
@@ -281,11 +283,18 @@ public final class ConfigurationServices {
 		LocalDispatcher dispatcher = dctx.getDispatcher();
 		String glAccountClassTypeKey = (String) context
 				.get("glAccountClassTypeKey");
+    	String accountCode = (String) context.get("glAccount");
 		context.remove("glAccountClassTypeKey");
-
+		String categoria = (String) context.get("productCategoryId");
+		GenericValue userLogin = (GenericValue) context.get("userLogin");
+		String glAccountId = (String) context.get("glAccountId");
+		Date fecha = new Date();
 		try {
 			// extract glAccountClassId and glAccountTypeId from
 			// GlAccountClassType
+			GenericValue gv1=delegator.findByPrimaryKeyCache(
+					"GlAccountCategoryRelation", UtilMisc.toMap(
+							"glAccountId", "91"));
 			GenericValue gv = delegator.findByPrimaryKeyCache(
 					"GlAccountClassTypeMap", UtilMisc.toMap(
 							"glAccountClassTypeKey", glAccountClassTypeKey));
@@ -295,6 +304,13 @@ public final class ConfigurationServices {
 
 			context.put("glAccountTypeId", glAccountTypeId);
 			context.put("glAccountClassId", glAccountClassId);
+			
+			Map addNewRelationContext = UtilMisc.toMap("productCategoryId",
+					categoria, "glAccountId", glAccountId,"fromDate",fecha,
+					"userLogin", userLogin);
+			Map addNewRelationResult = dispatcher.runSync(
+					"updateGlAccountCategoryRelation", addNewRelationContext,
+					-1, false);
 
 			// forward to the original updateGlAccount service
 			return dispatcher.runSync("updateGlAccount", context, -1, false);
