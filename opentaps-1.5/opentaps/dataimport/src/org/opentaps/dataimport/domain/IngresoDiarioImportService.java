@@ -150,11 +150,12 @@ public class IngresoDiarioImportService extends DomainService implements
 
 				mensaje = UtilImport.validaParty(mensaje, ledger_repo,
 						rowdata.getUe(), "ADMINISTRATIVA");
-				mensaje = UtilImport
-						.validaProductCategory(mensaje, ledger_repo,
-								rowdata.getN5(), "NIVEL_5_ING", "RUBRO DEL INGRESO");
+				mensaje = UtilImport.validaProductCategory(mensaje,
+						ledger_repo, rowdata.getN5(), "NIVEL_5_ING",
+						"RUBRO DEL INGRESO");
 				mensaje = UtilImport.validaEnumeration(mensaje, ledger_repo,
-						rowdata.getSfe(), "CL_FUENTE_RECURSOS", "FUENTE DE LOS RECURSOS");
+						rowdata.getSfe(), "CL_FUENTE_RECURSOS",
+						"FUENTE DE LOS RECURSOS");
 				mensaje = UtilImport.validaGeo(mensaje, ledger_repo,
 						rowdata.getLoc(), "GEOGRAFICA");
 				mensaje = UtilImport.validaMonto(rowdata.getMonto(), mensaje);
@@ -246,22 +247,20 @@ public class IngresoDiarioImportService extends DomainService implements
 				// n5.getProductCategoryId(), rowdata.getIdTipoCatalogo(),
 				// rowdata.getIdPago(), null, null, tip,
 				// false, null, null, rowdata.getIdProducto());
-				
-//				Map<String, String> cuentas = motor
-//						.cuentasIngresoDiario(tipoDoc.getAcctgTransTypeId(),
-//								rowdata.getOrganizationPartyId(),
-//								rowdata.getIdPago(), tip,
-//								rowdata.getIdProductoD(),
-//								rowdata.getIdProductoH());
-				
-				Map<String, String> cuentas = motor
-						.cuentasIngresoDiario(tipoDoc.getAcctgTransTypeId(),
-								rowdata.getOrganizationPartyId(),
-								rowdata.getIdPago(), rowdata.getN5(),
-								rowdata.getIdProductoD(),
-								rowdata.getIdProductoH());
-				
-				
+
+				// Map<String, String> cuentas = motor
+				// .cuentasIngresoDiario(tipoDoc.getAcctgTransTypeId(),
+				// rowdata.getOrganizationPartyId(),
+				// rowdata.getIdPago(), tip,
+				// rowdata.getIdProductoD(),
+				// rowdata.getIdProductoH());
+
+				Map<String, String> cuentas = motor.cuentasIngresoDiario(
+						tipoDoc.getAcctgTransTypeId(),
+						rowdata.getOrganizationPartyId(), rowdata.getIdPago(),
+						rowdata.getN5(), rowdata.getIdProductoD(),
+						rowdata.getIdProductoH());
+
 				if (cuentas.get("Mensaje") != null) {
 					String message = "Failed to import Ingreso Diario ["
 							+ rowdata.getClavePres() + "], Error message : "

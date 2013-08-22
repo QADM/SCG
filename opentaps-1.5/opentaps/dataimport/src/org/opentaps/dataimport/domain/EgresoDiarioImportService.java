@@ -91,7 +91,7 @@ public class EgresoDiarioImportService extends DomainService implements
 					.getEgresoDiarioDataImportRepository();
 			LedgerRepositoryInterface ledger_repo = this.getDomainsDirectory()
 					.getLedgerDomain().getLedgerRepository();
-			
+
 			List<DataImportEgresoDiario> dataforimp = imp_repo
 					.findNotProcessesDataImportEgresoDiarioEntries();
 
@@ -180,7 +180,8 @@ public class EgresoDiarioImportService extends DomainService implements
 						ledger_repo, rowdata.getPe(), "PARTIDA ESPECIFICA",
 						"PRODUCTO ESPECIFICO");
 				mensaje = UtilImport.validaEnumeration(mensaje, ledger_repo,
-						rowdata.getSfe(), "CL_FUENTE_RECURSOS", "FUENTE DE LOS RECURSOS");
+						rowdata.getSfe(), "CL_FUENTE_RECURSOS",
+						"FUENTE DE LOS RECURSOS");
 				mensaje = UtilImport.validaGeo(mensaje, ledger_repo,
 						rowdata.getLoc(), "GEOGRAFICA");
 				mensaje = UtilImport.validaEnumeration(mensaje, ledger_repo,
@@ -321,18 +322,17 @@ public class EgresoDiarioImportService extends DomainService implements
 				// null, null, null, true, null, null,
 				// rowdata.getIdProducto());
 
-//				Map<String, String> cuentas = motor.cuentasEgresoDiario(
-//						tipoDoc.getAcctgTransTypeId(), pg,
-//						rowdata.getOrganizationPartyId(), rowdata.getTg(),
-//						rowdata.getIdPago(), rowdata.getIdProductoD(),
-//						rowdata.getIdProductoH());
+				// Map<String, String> cuentas = motor.cuentasEgresoDiario(
+				// tipoDoc.getAcctgTransTypeId(), pg,
+				// rowdata.getOrganizationPartyId(), rowdata.getTg(),
+				// rowdata.getIdPago(), rowdata.getIdProductoD(),
+				// rowdata.getIdProductoH());
 
 				Map<String, String> cuentas = motor.cuentasEgresoDiario(
 						tipoDoc.getAcctgTransTypeId(), rowdata.getPe(),
 						rowdata.getOrganizationPartyId(), rowdata.getTg(),
 						rowdata.getIdPago(), rowdata.getIdProductoD(),
 						rowdata.getIdProductoH());
-				
 
 				if (cuentas.get("Mensaje") != null) {
 					String message = "Failed to import Egreso Diario ["
