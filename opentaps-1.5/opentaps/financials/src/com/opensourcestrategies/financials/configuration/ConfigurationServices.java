@@ -292,9 +292,7 @@ public final class ConfigurationServices {
 		try {
 			// extract glAccountClassId and glAccountTypeId from
 			// GlAccountClassType
-			GenericValue gv1=delegator.findByPrimaryKeyCache(
-					"GlAccountCategoryRelation", UtilMisc.toMap(
-							"glAccountId", "91"));
+
 			GenericValue gv = delegator.findByPrimaryKeyCache(
 					"GlAccountClassTypeMap", UtilMisc.toMap(
 							"glAccountClassTypeKey", glAccountClassTypeKey));
