@@ -38,7 +38,7 @@ context.put("userLogin",userLogin);
 //Buscamos los Documentos que son del tipo operación diaria
 orderBy = org.ofbiz.base.util.UtilMisc.toList("descripcion");
 condicionDoc = EntityCondition.makeCondition("tipoPoliza",EntityOperator.LIKE,"Ingresos");
-resultadoDoc = delegator.findByCondition("TipoDocumento", condicionDoc , UtilMisc.toList("acctgTransTypeId", "descripcion"), orderBy);
+resultadoDoc = delegator.findByCondition("TipoDocumento", condicionDoc , UtilMisc.toList("idTipoDoc", "descripcion"), orderBy);
 context.put("listDocumentos", resultadoDoc);
 
 //Buscamos los tipos fiscales
@@ -86,7 +86,7 @@ condicionUnidadEje = EntityCondition.makeCondition("descripcion","Unidad Ejecuto
 resultadoSubNiv = delegator.findByCondition("NivelPresupuestal", condicionSubfuente , UtilMisc.toList("nivelId"), null);
 resultadoUniNiv = delegator.findByCondition("NivelPresupuestal", condicionUnidadEje , UtilMisc.toList("nivelId"), null);
 
-if(resultadoSubNiv != null){
+if(resultadoSubNiv != null && !resultadoSubNiv.isEmpty()){
 	
 	nivelSub = resultadoSubNiv.get(0).getString("nivelId");
 	
@@ -99,7 +99,7 @@ if(resultadoSubNiv != null){
 	context.put("listaSubfuente", resultadoSub);
 }
 
-if(resultadoUniNiv != null){
+if(resultadoUniNiv != null && !resultadoUniNiv.isEmpty()){
 	
 	nivelUnidad = resultadoUniNiv.get(0).getString("nivelId");
 	
