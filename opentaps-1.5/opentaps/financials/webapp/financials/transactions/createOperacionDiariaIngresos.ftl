@@ -23,11 +23,11 @@
   <div class="form" style="border:0">
     <table class="fourColumnForm" style="border:0">
       <tr>
-        <@displayTitleCell title=uiLabelMap.FinancialDocumentType titleClass="requiredField"/>
-        <@inputSelectCell list=listDocumentos?if_exists displayField="descripcion" name="Tipo_Documento" default=idTipoDoc?if_exists key="acctgTransTypeId" />
+        <@displayTitleCell title=uiLabelMap.FinancialDocumentType />
+        <@inputSelectCell list=listDocumentos?if_exists displayField="descripcion" name="Tipo_Documento" default=idTipoDoc?if_exists key="idTipoDoc" />
       </tr>
       <tr>
-        <@displayTitleCell title=uiLabelMap.FinancialsGlFiscalType titleClass="requiredField"/>
+        <@displayTitleCell title=uiLabelMap.FinancialsGlFiscalType />
         <@inputSelectCell list=listFiscalTypes?if_exists displayField="description" name="Tipo_Fiscal" default=glFiscalTypeId?if_exists key="glFiscalTypeId"/>
       </tr>      
       <tr>
@@ -35,7 +35,7 @@
         <@inputDateTimeCell name="Fecha_Transaccion" default=Static["org.ofbiz.base.util.UtilDateTime"].nowTimestamp() />
       </tr>
       <tr>
-        <@displayTitleCell title=uiLabelMap.FinancialsAccountigDate titleClass="requiredField"/>
+        <@displayTitleCell title=uiLabelMap.FinancialsAccountigDate />
         <@inputDateTimeCell name="Fecha_Contable" default=Static["org.ofbiz.base.util.UtilDateTime"].nowTimestamp() />
       </tr>      
       <tr>
@@ -44,12 +44,8 @@
       </tr>
       <tr>
         <@displayTitleCell title=uiLabelMap.FinancialsSequence />
-        <@inputTextCell name="Secuencia" maxlength=60  />
+        <@inputTextCell name="Secuencia" maxlength=20  />
       </tr>
-      <tr>
-        <@displayTitleCell title=uiLabelMap.FinancialsCatalogType />
-        <@inputTextCell name="Tipo_Catalogo" maxlength=60  />
-      </tr>  
       <tr>
         <@displayTitleCell title=uiLabelMap.FinancialsProductCredit />
         <@inputSelectCell list=listProducts?if_exists displayField="description" name="Id_Producto_Abono" default=productId?if_exists key="productId"/>
@@ -101,15 +97,15 @@
       </tr>
       <tr>
       	<@displayTitleCell title=uiLabelMap.FinancialsExecutingUnit />
-        <@inputSelectCell list=listaUnidades?if_exists displayField="groupName" name="Unidad_Ejecutora" default=enumId?if_exists key="partyId"/>
+        <@inputSelectCell list=listaUnidades?if_exists displayField="groupName" name="Unidad_Ejecutora" default=partyId?if_exists key="partyId"/>
       </tr>
       <tr>
-      	<@displayTitleCell title=uiLabelMap.FinancialsIdPayCredit />
+      	<@displayTitleCell title=uiLabelMap.FinancialsId />
       	<@inputTextCell name="Id_Pago" maxlength=60  />
       </tr>                                        
       <tr>                             
       <tr>
-        <@displayTitleCell title=uiLabelMap.CommonAmount titleClass="requiredField" />
+        <@displayTitleCell title=uiLabelMap.CommonAmount  />
         <@inputTextCell size="10" name="Monto" />
       </tr>
       <@inputSubmitRow title=uiLabelMap.CommonCreate />

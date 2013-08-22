@@ -72,7 +72,7 @@
         <auto-fields-entity entity-name="AcctgTrans" default-field-type="display"/>
 
         <field name="acctgTransTypeId" title="${uiLabelMap.FinancialsTransactionType}">
-            <display-entity entity-name="AcctgTransType"/>
+            <display-entity entity-name="AcctgTransType" />
         </field>
         <field name="partyId" widget-area-style="linktext">
             <display description="${groovy:org.ofbiz.party.party.PartyHelper.getPartyName(delegator, acctgTrans.get(&quot;partyId&quot;), false)} (${acctgTrans.partyId})"/>
@@ -486,6 +486,56 @@
       		</field>
         
             <field name="submitButton" title="${uiLabelMap.CommonFind}" widget-style="smallSubmit"><submit button-type="button"/></field>
+    </form>
+    
+    <form name="viewAcctPresupuestal" type="single" target="updateAcctgTransEntryForm" default-map-name="mapTransPresup"
+        default-title-style="tableheadtext" default-widget-style="tabletext" default-tooltip-style="tabletext">
+		<auto-fields-entity entity-name="AcctgTransPresupuestal" default-field-type="display" map-name="mapTransPresup"/>		
+	        <field name="unidadOrganizacional">
+            	<display description="${groovy:org.ofbiz.party.party.PartyHelper.getPartyName(delegator, mapTransPresup.get(&quot;unidadOrganizacional&quot;), false)} (${mapTransPresup.unidadOrganizacional})" />
+        	</field>
+        	<field name="unidadEjecutora">
+            	<display description="${groovy:org.ofbiz.party.party.PartyHelper.getPartyName(delegator, mapTransPresup.get(&quot;unidadEjecutora&quot;), false)} (${mapTransPresup.unidadEjecutora})" />
+        	</field>
+        	<field name="rubro">
+            	<display description="${groovy:com.opentaps.financials.Helpers.OperacionDiariaHelper.getProductCategoryName(delegator, mapTransPresup.get(&quot;rubro&quot;))}" />
+        	</field>
+        	<field name="tipo">
+            	<display description="${groovy:com.opentaps.financials.Helpers.OperacionDiariaHelper.getProductCategoryName(delegator, mapTransPresup.get(&quot;tipo&quot;))}" />
+        	</field> 	         
+        	<field name="clase">
+            	<display description="${groovy:com.opentaps.financials.Helpers.OperacionDiariaHelper.getProductCategoryName(delegator, mapTransPresup.get(&quot;clase&quot;))}" />
+        	</field>
+        	<field name="conceptoRub" >
+            	<display description="${groovy:com.opentaps.financials.Helpers.OperacionDiariaHelper.getProductCategoryName(delegator, mapTransPresup.get(&quot;conceptoRub&quot;))}" />
+        	</field> 	
+        	<field name="nivel5">
+            	<display description="${groovy:com.opentaps.financials.Helpers.OperacionDiariaHelper.getProductCategoryName(delegator, mapTransPresup.get(&quot;nivel5&quot;))}" />
+        	</field> 
+       		<field name="fuente">
+            	<display description="${groovy:com.opentaps.financials.Helpers.OperacionDiariaHelper.getEnumName(delegator, mapTransPresup.get(&quot;fuente&quot;))}" />
+        	</field>         	
+       		<field name="subFuente">
+            	<display description="${groovy:com.opentaps.financials.Helpers.OperacionDiariaHelper.getEnumName(delegator, mapTransPresup.get(&quot;subFuente&quot;))}" />
+        	</field>           	   	     
+       		<field name="subFuenteEspecifica">
+            	<display description="${groovy:com.opentaps.financials.Helpers.OperacionDiariaHelper.getEnumName(delegator, mapTransPresup.get(&quot;subFuenteEspecifica&quot;))}" />
+        	</field>       
+       		<field name="entidadFederativa">
+            	<display description="${groovy:com.opentaps.financials.Helpers.OperacionDiariaHelper.getGeoName(delegator, mapTransPresup.get(&quot;entidadFederativa&quot;))}" />
+        	</field>       
+       		<field name="region">
+            	<display description="${groovy:com.opentaps.financials.Helpers.OperacionDiariaHelper.getGeoName(delegator, mapTransPresup.get(&quot;region&quot;))}" />
+        	</field>       
+       		<field name="municipio">
+            	<display description="${groovy:com.opentaps.financials.Helpers.OperacionDiariaHelper.getGeoName(delegator, mapTransPresup.get(&quot;municipio&quot;))}" />
+        	</field>       
+       		<field name="localidad">
+            	<display description="${groovy:com.opentaps.financials.Helpers.OperacionDiariaHelper.getGeoName(delegator, mapTransPresup.get(&quot;localidad&quot;))}" />
+        	</field>
+       		<field name="idTipoDoc">
+            	<display description="${groovy:com.opentaps.financials.Helpers.OperacionDiariaHelper.getTipoDocName(delegator, mapTransPresup.get(&quot;idTipoDoc&quot;))}" />
+        	</field>        	
     </form>
     
 </forms>
