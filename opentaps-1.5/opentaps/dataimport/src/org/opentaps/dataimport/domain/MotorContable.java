@@ -48,12 +48,16 @@ public class MotorContable {
 	public void buscaCuentaProduct(String idProduct,
 			String organizationPartyId, String cuenta)
 			throws RepositoryException {
+		Debug.log("BUG en cuentas:");
+		Debug.log("productid.- " + idProduct);
+		Debug.log("organization.- " + organizationPartyId);
 		List<ProductGlAccount> productGl = ledger_repo.findList(
 				ProductGlAccount.class, ledger_repo.map(
 						ProductGlAccount.Fields.productId, idProduct,
 						ProductGlAccount.Fields.organizationPartyId,
 						organizationPartyId));
 
+		Debug.log("!productGl.isEmpty().- " + !productGl.isEmpty());
 		if (!productGl.isEmpty()) {
 			cuentas.put(cuenta, productGl.get(0).getGlAccountId());
 		}
