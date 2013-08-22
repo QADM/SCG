@@ -91,7 +91,7 @@
     <li><a href="<@ofbizUrl>SalesByStoreByDayReportSetup</@ofbizUrl>">${uiLabelMap.FinancialsSalesByStoreByDayReport}</a></li>
     </ul>
     </p>
--->zz
+-->
 
   </td>
 </tr>
