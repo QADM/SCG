@@ -43,10 +43,6 @@
 
     <ReportGroup reportGroupId="FIN_FINANCIALS" showInSelect="N" description="%Financials" application="financials" sequenceNum="2"/>
     
-    <ReportGroup reportGroupId="FIN_CONAC" showInSelect="N" description="%FinancialsCONAC" application="financials" sequenceNum="3"/>  
-    
-	<!-- Grupo Analiticos CG -->
-    <ReportGroup reportGroupId="BUD_EXEC" showInSelect="N" description="%BudgetExecution" application="financials" sequenceNum="2"/>
-    <!-- Grupo Analiticos CG -->
+    <ReportGroup reportGroupId="FIN_CONAC" showInSelect="N" description="%FinancialsCONAC" application="financials" sequenceNum="3"/>
 
 </entity-engine-xml>
