@@ -89,7 +89,9 @@ under the License.
         <attribute name="projectId" type="String" mode="INOUT" optional="true"/>
         <attribute name="partyId" type="String" mode="INOUT" optional="true"/>
         <attribute name="nivelId" mode="INOUT" type="String" optional="true"/>
+        <attribute name="clientBillingPartyId" type="String" mode="IN" optional="true"/>
         <attribute name="projectInfo" type="java.util.Map" mode="OUT" optional="true"/>
+        
     </service>
 
     <service name="createProject" engine="simple" default-entity-name="WorkEffort"

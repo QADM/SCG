@@ -744,12 +744,17 @@
          <set field="highInfo.workEffortId" from-field="project.workEffortParentId"/>
           <set field="highInfo.workEffortParentId" from-field="project.workEffortParentId"/>
 
-
-	    <entity-and list="participantess" entity-name="PartyView">
+  <entity-and  entity-name="WorkEffortPartyAssignView" list="participantess"  filter-by-date="true">
 	            <field-map field-name="workEffortId" from-field="highInfo.projectId"/>
-	     </entity-and>
+                    <order-by field-name="-fromDate"/>
+                </entity-and>
 	     <first-from-list entry="participantes" list="participantess"/>
-	     <set field="highInfo.clientBillingPartyId" from-field="participantes.groupName"/>
+	     <set field="highInfo.clientBillingPartyId" from-field="participantes.partyId"/>
+	     <set field="highInfo.participante" from-field="participantes.groupName"/>
+	     
+	     
+	     
+	     
 
 
         <!-- translate squenceId back into statusId -->
