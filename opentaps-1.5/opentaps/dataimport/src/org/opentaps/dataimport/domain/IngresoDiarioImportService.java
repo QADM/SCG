@@ -257,7 +257,7 @@ public class IngresoDiarioImportService extends DomainService implements
 				Map<String, String> cuentas = motor
 						.cuentasIngresoDiario(tipoDoc.getAcctgTransTypeId(),
 								rowdata.getOrganizationPartyId(),
-								rowdata.getIdPago(), n5.getProductCategoryId(),
+								rowdata.getIdPago(), rowdata.getN5(),
 								rowdata.getIdProductoD(),
 								rowdata.getIdProductoH());
 				
