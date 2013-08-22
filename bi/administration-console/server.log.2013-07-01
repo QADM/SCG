@@ -1,0 +1,19 @@
+2013-07-02 10:42:39,046 INFO  [org.pentaho.pac.server.JettyServer] Console is starting
+2013-07-02 10:42:39,167 INFO  [/] org.pentaho.pac.server.BrowserLocaleServlet-1857040122: init
+2013-07-02 10:42:39,168 INFO  [/] org.pentaho.pac.server.DefaultConsoleServlet-1228283922: init
+2013-07-02 10:42:39,168 INFO  [/] org.pentaho.pac.server.PacServiceImpl-1892376585: init
+2013-07-02 10:42:39,168 INFO  [/] org.pentaho.pac.server.SchedulerServiceImpl-954049115: init
+2013-07-02 10:42:39,169 INFO  [/] org.pentaho.pac.server.SolutionRepositoryServiceImpl-980075617: init
+2013-07-02 10:42:39,169 INFO  [/] org.pentaho.pac.server.SubscriptionServiceImpl-1741825447: init
+2013-07-02 10:42:39,169 INFO  [/] org.pentaho.pac.server.common.HibernateConfigurationServiceImpl-1734782899: init
+2013-07-02 10:42:39,169 INFO  [/] org.pentaho.pac.server.common.JdbcDriverDiscoveryServiceImpl-637148086: init
+2013-07-02 10:42:39,182 INFO  [/] org.pentaho.pac.server.common.HibernateConfigurationServiceImpl-1734782899: destroy
+2013-07-02 10:42:39,182 INFO  [/] org.pentaho.pac.server.common.JdbcDriverDiscoveryServiceImpl-637148086: destroy
+2013-07-02 10:42:39,183 INFO  [/] org.pentaho.pac.server.SolutionRepositoryServiceImpl-980075617: destroy
+2013-07-02 10:42:39,183 INFO  [/] org.pentaho.pac.server.SubscriptionServiceImpl-1741825447: destroy
+2013-07-02 10:42:39,183 INFO  [/] org.pentaho.pac.server.SchedulerServiceImpl-954049115: destroy
+2013-07-02 10:42:39,184 INFO  [/] org.pentaho.pac.server.PacServiceImpl-1892376585: destroy
+2013-07-02 10:42:39,184 INFO  [/] org.pentaho.pac.server.BrowserLocaleServlet-1857040122: destroy
+2013-07-02 10:42:39,184 INFO  [/] org.pentaho.pac.server.DefaultConsoleServlet-1228283922: destroy
+2013-07-02 10:42:39,284 ERROR [org.pentaho.pac.server.JettyServer] IO Error:Address already in use: JVM_Bind
+2013-07-02 10:42:39,284 ERROR [org.pentaho.pac.server.JettyServer] IO Error:null

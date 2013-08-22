@@ -1,0 +1,10 @@
+com.google.gwt.user.client.rpc.IncompatibleRemoteServiceException, true, true, true, true, com.google.gwt.user.client.rpc.IncompatibleRemoteServiceException/3936916533, 3936916533
+java.lang.Exception, true, false, true, false, java.lang.Exception/1920171873, 1920171873
+java.lang.RuntimeException, true, false, true, false, java.lang.RuntimeException/515124647, 515124647
+java.lang.String, true, true, true, true, java.lang.String/2004016611, 2004016611
+java.lang.Throwable, true, false, true, false, java.lang.Throwable/2953622131, 2953622131
+org.pentaho.pac.client.JdbcDriverDiscoveryService, false, false, false, false, _, 430911334
+org.pentaho.pac.common.CheckedException, true, false, false, false, org.pentaho.pac.common.CheckedException/1953023493, 1953023493
+org.pentaho.pac.common.JdbcDriverDiscoveryServiceException, true, true, false, false, org.pentaho.pac.common.JdbcDriverDiscoveryServiceException/3787425910, 3787425910
+org.pentaho.pac.common.NameValue, true, true, false, false, org.pentaho.pac.common.NameValue/3093524049, 3093524049
+[Lorg.pentaho.pac.common.NameValue;, true, true, false, false, [Lorg.pentaho.pac.common.NameValue;/664015831, 664015831

@@ -1,0 +1,1747 @@
+
+body,td,a,div,.p{font-family:Tahoma, Arial, Helvetica, sans-serif;}
+div,td{color:#000000}
+a:link,.w,.w a:link{color:#0000cc}
+a:visited{color:#551a8b}
+a:active{color:#ff0000}
+
+.configConsolePanel{
+  height: 570px;
+  overflow:auto;
+  width: 100%;
+}
+
+.bordered-white-panel{
+	border: 1px solid #888888;
+	background-color: white;
+	padding:2px;
+	width:100%;
+}
+
+.bordered-grey-panel{
+	border: 1px solid #777;
+	background-color: #E0E0E0;
+	padding:2px;
+	width:100%;
+}
+
+#canvas{
+	width:1150px;
+	height: 700px;
+	padding-right: 8px;
+}
+
+.common-toolbar{
+	border: 1px dotted black;
+	background-color: #DDD;
+	width:100%;
+	height:100%;
+}
+
+.common-toolbar-group-label-disabled{	
+	color: #777;
+	line-height:22px;
+	height:22px;
+	background-color:#EEE;
+}
+
+.common-toolbar-group-label{	
+	color: #000;
+	line-height:22px;
+	height:22px;
+}
+
+.common-toolbar-button{
+	/*border-right: 1px solid #999;*/
+	padding:3px;
+}
+
+.gwt-DisclosurePanel-open .header {
+  background-color: #A0AF21;
+  text-decoration: none;
+  outline: 0px;
+  -moz-user-focus: none;   
+  user-focus: none;
+}
+
+.gwt-DisclosurePanel-open .header td{
+  color: white;	
+}
+
+.gwt-DisclosurePanel-closed .header {
+  background-color: #A0AF21;
+  text-decoration: none;
+  outline: 0px;
+  -moz-user-focus: none;   
+  user-focus: none;
+}
+
+.gwt-DisclosurePanel-closed .header td{
+  color: white;	
+}
+
+.common-toolbar-button-up-hovering{
+	background-color: #E8E8E8;
+	cursor: pointer;
+}
+
+.common-toolbar-button-up-disabled{
+	background-color: #EEE;
+}
+
+.welcomeTab {
+  padding: 0px 10;
+}
+
+.anchorLabelNoUnderline {
+}
+
+.anchorLabel {
+  cursor: pointer;
+  cursor: hand;
+  text-decoration: underline;
+}
+
+.fileLabel {
+  background-color: #ffffff;
+  cursor: pointer;
+  cursor: hand;
+}
+
+.fileLabelSelected {
+  background-color: #C3D9FF;
+  cursor: pointer;
+  cursor: hand;
+}
+
+.permissionsTable {
+  border: 1px solid #7f9db9;
+}
+
+.image-button {
+  cursor: pointer;
+  cursor: hand;
+}
+
+.image-button-over {
+  cursor: pointer;
+  cursor: hand;	
+}
+
+.enabled-image-button {
+  cursor: pointer;
+  cursor: hand;
+}
+
+.enabled-image-button-over {
+  cursor: pointer;
+  cursor: hand;	
+}
+
+.disabled-image-button {
+  cursor: default;	
+}
+
+.disabled-image-button-over {
+  cursor: default;
+}
+
+.gwt-HorizontalSplitPanel {
+}
+
+.currently-registered-table-panel {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.monitoring-status-table-panel {
+  padding-top: 5px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.currently-registered-table-top {
+  margin-bottom: 2px;	
+}
+
+.gwt-HorizontalSplitPanel .hsplitter {
+  background-color: #87944c;
+  cursor: w-resize;
+  width: 2px;
+}
+
+.gwt-HorizontalSplitPanel .left {
+  background-color: #E8EEF7;
+}
+
+.gwt-VerticalSplitPanel {
+}
+
+.gwt-VerticalSplitPanel .vsplitter {
+  background-color: #87944c;
+  height: 8px;
+  cursor: n-resize;
+}
+
+#loading {
+  position: absolute;
+  left: 48%;
+  top: 45%;
+  margin-left: -45px;
+  padding: 2px;
+  z-index: 20001;
+  height: auto;
+  border: 1px solid #ccc;
+}
+
+#loading a {
+  color: #225588;
+}
+
+#loading .loading-indicator {
+  background: white;
+  color: #444;
+  font: bold 13px tahoma, arial, helvetica;
+  padding: 10px;
+  margin: 0;
+  height: auto;
+}
+
+#loading .loading-indicator img {
+  margin-right:8px;
+  float:left;
+  vertical-align:top;
+}
+
+#loading-msg {
+  font: normal 10px arial, tahoma, sans-serif;
+}
+
+.modalDialogPageBackground {
+  opacity: 0.20;
+  background-color:  #000000;
+  /* Transparency for IE */
+  background-image: expression('url(wait-background.gif)');
+  background-color: expression('transparent');
+  /*
+  opacity: 0.20;
+  position: expression('absolute');
+  height: expression(document.documentElement.scrollHeight+'px');
+  width: expression(document.documentElement.scrollWidth+'px');
+  */
+	cursor: wait;
+} 
+
+
+
+.ajax-pci-shell {
+	  border: 0px;
+	  height: 100%;
+	  width: 100%;
+}
+
+body {
+  background-color: white;
+  color: black;
+  font-family: Tahoma, Arial, Helvetica, sans-serif;
+  font-size: 10pt;
+  margin: 0px;
+  padding: 0px;
+}
+
+h2 {
+  font-weight: normal;
+}
+
+table {
+  font-size: 100%;
+}
+
+code {
+  font-size: small;
+}
+
+a {
+  color: darkblue;
+}
+
+a:visited {
+  color: darkblue;
+}
+
+
+.filePropertyTabContent {
+  border-left: 2px solid #87944C;
+  border-bottom: 2px solid #87944C;
+  border-right: 2px solid #87944C;
+}
+
+.filePropertiesDialogContent {
+  background: white;
+}
+
+
+.backgroundContentAction {
+  color: blue;
+  cursor: pointer;
+  cursor: hand;
+}
+
+.backgroundContentTable {
+ border: 1px solid black;
+ background: #FEF9CE;
+ margin: 5px 20px;
+}
+
+.backgroundContentHeaderTableCell {
+ color: white;
+ background: #87944C;
+ padding: 0px 10px;
+ border-right: 1px solid black;
+ border-bottom: 1px solid black;
+}
+
+.backgroundContentHeaderTableCellRight {
+ color: white;
+ background: #87944C;
+ padding: 0px 10px;
+ border-bottom: 1px solid black;
+}
+
+.backgroundContentTableCell {
+ padding: 0px 10px;
+ border-right: 1px solid black;
+ border-bottom: 1px solid black;
+}
+
+.backgroundContentTableCellRight {
+ padding: 0px 10px;
+ border-bottom: 1px solid black;
+}
+
+.backgroundContentTableCellBottom {
+ padding: 0px 10px;
+ border-right: 1px solid black;
+}
+
+.backgroundContentTableCellBottomRight {
+ padding: 0px 10px;
+}
+
+
+.gwt-BorderedPanel {
+}
+
+.gwt-Button {
+	height:22px;
+	background-image: expression('url(buttonbg.gif)');
+	background-image:url(buttonbg.gif);
+	font-weight: plain;
+	border-style:solid;
+	border-color:#000000;
+	border-width:1px;
+	margin: 0px 0px 0px 0px;	/* top right bottom left*/
+	outline: 0px;
+	-moz-user-focus: none;   
+	user-focus: none;
+}
+
+.gwt-Button:hover {
+	margin: 0px 0px 0px 0px;	/* top right bottom left*/
+	height:22px;
+	background-image:url(buttonhoverbg.gif);
+	background-image: expression('url(buttonhoverbg.gif)');
+	font-weight: plain;
+	border-style:solid;
+	border-color:#000000;
+	border-width:1px;
+	cursor: pointer;
+	cursor: hand;
+}
+
+.gwt-Button:disabled {
+   margin: 0px 0px 0px 10px;	/* top right bottom left*/
+   height:22px;
+   background-image:url(buttonbg.gif);
+   background-image: expression('url(buttonbg.gif)');
+   border-style:solid;
+   border-color:#c0c0c0;
+   border-width:1px;
+   cursor: default;
+}
+
+.gwt-Canvas {
+}
+
+.gwt-CheckBox {
+}
+
+
+.dialogContentPanel {
+	background-color: #e8eefa;
+  	padding: 0px 0px 0px 0px;
+    font-size: 12px;
+}
+
+.viewContentDialogBox {
+  background-color: white;
+  border: 3px solid #000000;
+  padding: 2px;
+}
+
+.viewContentDialogBox .Caption {
+  background-color: #87944c;
+  color: #ffffff;
+  cursor: move;
+  border-bottom: 2px solid #000000;
+  text-align: left;
+  padding: 5px;
+}
+
+.gwt-DialogBox {
+  background-color: #EDEDED;
+  border-top: 2px solid #CCCCCC;
+  border-right: 2px solid #777777;
+  border-bottom: 2px solid #777777;
+  border-left: 2px solid #CCCCCC;
+  padding: 0px;
+}
+
+.gwt-DialogBox .Caption {
+  background-color: #C2CFA2;
+  background-image: none;
+  color: #000000;
+  cursor: move;
+  text-align: left;
+  padding: 2px 5px 2px 5px; /* top right bottom left */
+}
+
+
+.gwt-FileUpload {
+}
+
+.gwt-Frame {
+	border: none;
+	overflow:visible; 
+	width:100%; 
+	display:none
+}
+
+.gwt-HTML {
+  text-align: left;
+}
+
+.gwt-Hyperlink {
+  outline: 0px;
+  -moz-user-focus: none;   
+  user-focus: none;
+}
+
+.gwt-Hyperlink a{
+  outline: 0px;
+  -moz-user-focus: none;   
+  user-focus: none;
+}
+
+.gwt-Image {
+  outline: 0px;
+  -moz-user-focus: none;   
+  user-focus: none;
+}
+
+.gwt-Label {
+}
+
+.gwt-ListBox {
+}
+
+.gwt-SubMenuBar {
+  background-color: #FEF9CE;
+  border-bottom: 1px solid black;
+  border-right: 1px solid black;
+  cursor: default;
+}
+
+.gwt-SubMenuBar .gwt-MenuItem {
+  color: black;
+  padding: 1px 4px 1px 4px;
+  border: 1px solid #FEF9CE;
+  cursor: default;
+}
+
+.gwt-SubMenuBar .gwt-MenuItem-selected {
+  color: white;
+  background-color: #87944c;
+  border: 1px solid #87944c;
+  cursor: pointer;
+}
+
+.gwt-MenuItemSeparator {
+  height: 1px;
+  margin: 0px;
+  padding: 0px;
+  border: 0px;
+}
+
+.gwt-MenuItemSeparator div {
+  height: 1px;
+  margin: 0px;
+  padding: 0px;
+  border: 0px;
+  border-top: 1px solid #888888;
+}
+
+.gwt-MenuBar {
+  background-color: #87944c;
+  border-top: 1px solid #87944c;
+  border-left: 1px solid #87944c;
+  border-right: 1px solid #87944c;
+  border-bottom: 3px solid black;;
+  cursor: default;
+}
+
+.gwt-MenuBar .gwt-MenuItem {
+  color: white;
+  padding: 1px 4px 1px 4px;
+  border: 1px solid #87944c;
+  cursor: default;
+}
+
+.gwt-MenuBar .gwt-MenuItem-selected {
+  color: black;
+  background-color: #f1a500;
+  border: 1px solid #f1a500;
+  cursor: default;
+}
+
+.gwt-PasswordTextBox {
+}
+
+.gwt-RadioButton {
+}
+
+.gwt-TabPanel {
+  margin-top: 0px;
+}
+
+.gwt-TabPanelBottom {
+		background-color:#EDEDED;
+		border-top-color:#A0AF21;
+		border-color:#95A22C;
+		border-style:solid;
+		border-width: 3px 1px 1px 1px;
+}
+
+.gwt-TabBar {
+}
+
+.gwt-TabBar .gwt-TabBarFirst {
+  border-style: none;
+}
+
+.gwt-TabBar .gwt-TabBarRest {
+}
+
+.gwt-TabBar .gwt-TabBarItem {
+  padding: 3px 8px 3px 8px;
+  cursor: pointer;
+  color: black;
+  font-color: black;
+  cursor: hand;
+  background-color: #CACACA;
+  border-color:#848484;
+  border-style:solid;
+  border-width: 1px 1px 0px 1px;
+  margin-right: 2px;
+  outline: 0px;
+  -moz-user-focus: none;   
+  user-focus: none;
+}
+
+.gwt-TabBar .gwt-TabBarItem-selected {
+  color: white;
+  padding: 3px 8px 3px 8px;
+  cursor: default;
+  background-color:#A0AF21;
+  border-color:#95A22C;
+  border-style:solid;
+  border-width: 1px 1px 0px 1px;
+  margin-right: 2px;
+}
+
+.gwt-TabBar .gwt-TabBarItem-selected div{
+  color: white;
+}
+
+.gwt-TabBar .gwt-TabBarItem div{
+  font-color: black;
+}
+
+.gwt-TabBar .gwt-TabBarItemCloseIcon-selected {
+  cursor: pointer;
+  cursor: hand;
+}
+
+.gwt-TextArea {
+}
+
+.gwt-TextBox {
+}
+
+.gwt-TextBox-readonly {
+  color: #888;
+}
+
+.gwt-Tree {
+  background: white;
+}
+
+.gwt-Tree .gwt-TreeItem {
+  cursor: pointer;
+  cursor: hand;
+}
+
+.gwt-Tree .gwt-TreeItem-selected {
+  background-color: #C3D9FF;
+  cursor: pointer;
+  cursor: hand;
+}
+
+.gwt-StackPanel {
+}
+
+.gwt-StackPanel .gwt-StackPanelItem {
+  background-color: #C3D9FF;
+  cursor: pointer;
+  cursor: hand;
+}
+
+.gwt-StackPanel .gwt-StackPanelItem-selected {
+}
+
+.gwt-PushButton-up {
+  background-color: #C3D9FF;
+  padding: 2px;
+  border: 2px solid transparent;
+  border-color: #E8F1FF rgb(157, 174, 205) rgb(157, 174, 205) rgb(232, 241, 255);
+  cursor: pointer;
+  cursor: hand;
+}
+
+.gwt-PushButton-up-hovering {
+  background-color: #C3D9FF;
+  padding: 2px;
+  border: 2px solid transparent;
+  border-color: #E8F1FF rgb(157, 174, 205) rgb(157, 174, 205) rgb(232, 241, 255);
+  cursor: pointer;
+  cursor: hand;
+}
+
+.gwt-PushButton-down {
+  background-color: #C3D9FF;
+  padding: 2px;
+  border: 2px solid transparent;
+  border-color: #9DAECD rgb(232, 241, 255) rgb(232, 241, 255) rgb(157, 174, 205);
+  cursor: pointer;
+  cursor: hand;
+}
+
+.gwt-PushButton-down-hovering {
+  background-color: #C3D9FF;
+  padding: 2px;
+  border: 2px solid transparent;
+  border-color: #9DAECD rgb(232, 241, 255) rgb(232, 241, 255) rgb(157, 174, 205);
+  cursor: pointer;
+  cursor: hand;
+}
+
+.gwt-ToggleButton-up {
+  background-color: #C3D9FF;
+  padding: 2px;
+  border: 2px solid transparent;
+  border-color: #E8F1FF rgb(157, 174, 205) rgb(157, 174, 205) rgb(232, 241, 255);
+  cursor: pointer;
+  cursor: hand;
+}
+
+.gwt-ToggleButton-up-hovering {
+  background-color: #C3D9FF;
+  padding: 2px;
+  border: 2px solid transparent;
+  border-color: #E8F1FF rgb(157, 174, 205) rgb(157, 174, 205) rgb(232, 241, 255);
+  cursor: pointer;
+  cursor: hand;
+}
+
+.gwt-ToggleButton-down {
+  background-color: #C3D9FF;
+  padding: 2px;
+  background-color: #E8F1FF;
+  border: 2px solid transparent;
+  border-color: #9DAECD rgb(232, 241, 255) rgb(232, 241, 255) rgb(157, 174, 205);
+  cursor: pointer;
+  cursor: hand;
+}
+
+.gwt-ToggleButton-down-hovering {
+  background-color: #C3D9FF;
+  padding: 2px;
+  background-color: #E8F1FF;
+  border: 2px solid transparent;
+  border-color: #9DAECD rgb(232, 241, 255) rgb(232, 241, 255) rgb(157, 174, 205);
+  cursor: pointer;
+  cursor: hand;
+}
+
+.gwt-RichTextArea {
+  border: 1px solid black;
+  background-color: white;
+}
+
+.gwt-RichTextToolbar {
+  background-color: #C3D9FF;
+  padding: 2px;
+}
+
+.gwt-RichTextToolbar .gwt-PushButton-up {
+  margin-right: 2px;
+  border: 1px solid #C3D9FF;
+}
+
+.gwt-RichTextToolbar .gwt-PushButton-up-hovering {
+  margin-right: 2px;
+  border: 1px solid #C3D9FF;
+  border-color: #E8F1FF rgb(157, 174, 205) rgb(157, 174, 205) rgb(232, 241, 255);
+}
+
+.gwt-RichTextToolbar .gwt-PushButton-down {
+  margin-right: 2px;
+  border: 1px solid #C3D9FF;
+  border-color: #9DAECD rgb(232, 241, 255) rgb(232, 241, 255) rgb(157, 174, 205);
+}
+
+.gwt-RichTextToolbar .gwt-PushButton-down-hovering {
+  margin-right: 2px;
+  border: 1px solid #C3D9FF;
+  border-color: #9DAECD rgb(232, 241, 255) rgb(232, 241, 255) rgb(157, 174, 205);
+}
+
+.gwt-RichTextToolbar .gwt-ToggleButton-up {
+  margin-right: 2px;
+  border: 1px solid #C3D9FF;
+}
+
+.gwt-RichTextToolbar .gwt-ToggleButton-up-hovering {
+  margin-right: 2px;
+  border: 1px solid #C3D9FF;
+  border-color: #E8F1FF rgb(157, 174, 205) rgb(157, 174, 205) rgb(232, 241, 255);
+}
+
+.gwt-RichTextToolbar .gwt-ToggleButton-down {
+  margin-right: 2px;
+  background-color: #E8F1FF;
+  border: 1px solid #C3D9FF;
+  border-color: #9DAECD rgb(232, 241, 255) rgb(232, 241, 255) rgb(157, 174, 205);
+}
+
+.gwt-RichTextToolbar .gwt-ToggleButton-down-hovering {
+  margin-right: 2px;
+  background-color: #E8F1FF;
+  border: 1px solid #C3D9FF;
+  border-color: #9DAECD rgb(232, 241, 255) rgb(232, 241, 255) rgb(157, 174, 205);
+}
+
+.gwt-SuggestBoxPopup {
+  border: 2px solid #C3D9FF;
+}
+
+.gwt-SuggestBoxPopup .item {
+  padding: 2px;
+}
+
+.gwt-SuggestBoxPopup .item-selected {
+  background-color: #C3D9FF;
+  padding: 2px;
+}
+
+.leftToggleButtons{
+	clear: both;
+	background: url("style/images/btn2.png") left center no-repeat;
+	line-height: 35px;
+	height: 35px;
+	padding: 1px 0px 4px 15px;
+	margin-right:3px;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	margin-left:0px;
+	cursor: pointer;
+	text-align: left;
+	font-weight: normal;
+	font-family: Tahoma, Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	text-decoration: none;
+	border:none;
+	outline: 0px;
+	-moz-user-focus: none;   
+	user-focus: none;
+}
+
+.leftToggleButtons div {
+	color: #FFF;	
+}
+
+.leftToggleButtons-down div {
+	color: #000;	
+}
+
+.leftToggleButtons-down-hovering div {
+	color: #000;	
+}
+
+.leftToggleButtons-up {
+    clear: both;
+	background: url("style/images/btn2.png") left center no-repeat;
+	line-height: 35px;
+	padding: 1px 0px 4px 15px;
+	cursor: pointer;
+	text-align: left;
+	font-weight: normal;
+	font-family: Tahoma, Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	text-decoration: none;
+}
+
+.leftToggleButtons-up-hovering {
+	background-image: url(style/images/btn3.png);
+	background-repeat: no-repeat;
+	text-decoration: none;
+	display: block; /* border: 1px solid #999999; */
+}
+
+.leftToggleButtons-down {
+	clear: both;
+	background: url("style/images/btn.png") left center no-repeat;
+	line-height: 35px;
+	padding: 1px 0px 4px 15px;
+	cursor: default;
+	text-align: left;
+	font-weight: normal;
+	font-family: Tahoma, Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	text-decoration: none;
+}
+
+.leftToggleButtons-down-hovering {
+	clear: both;
+	background: url("style/images/btn.png") left center no-repeat;
+	line-height: 35px;
+	padding: 1px 0px 4px 15px;
+	cursor: default;
+	text-align: left;
+	font-weight: normal;
+	font-family: Tahoma, Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	text-decoration: none;
+}
+
+.adminconsole-toolbar{
+	margin: 0px 0px 0px 2px;
+	padding: 0 0px 0 0;
+	width: 100%;
+	height: 60px;
+	float: left;
+}
+
+.adminconsole-toolbar_left{
+	width: 5px;
+	height: 55px;
+	background: url('style/images/toolbar_left.png') top right no-repeat;	
+}
+
+
+.adminconsole-toolbar_right{
+	width: 6px;
+	height: 55px;
+	overflow: hidden;
+	background: url('style/images/toolbar_right.png') top left no-repeat;	
+}
+
+.adminconsole-toolbar_center{
+	width: 100%;
+	height: 55px;
+	overflow: hidden;
+	background: url('style/images/toolbar_background.png') top left no-repeat;
+}
+
+.main-panel{
+	width:100%;
+	height:100%;
+	
+}
+
+/* users toggle button */
+.usersToggleBtn {
+  background-image:url(style/images/users_off.png);
+  background-repeat: no-repeat;
+  background-position: center center;
+  width: 32px;
+  height: 32px;
+  margin: 5px 0px 0px 10px; /* top right bottom left*/
+  font-size: .8em;
+  cursor: pointer;
+}
+.usersToggleBtn-up-hovering {
+  background-image:url(style/images/users_over.png);
+  background-repeat: no-repeat;
+  background-position: center center;
+  width: 32px;
+  height: 32px;
+  margin: 5px 0px 0px 10px; /* top right bottom left*/
+  font-size: .8em;
+  cursor: pointer;
+}
+.usersToggleBtn-down {
+  background-image:url(style/images/users_selected.png);
+  background-repeat: no-repeat;
+  background-position: center center;
+  width: 32px;
+  height: 32px;
+  margin: 5px 0px 0px 10px; /* top right bottom left*/
+  font-size: .8em;
+  cursor: none;
+}
+.usersToggleBtn-down-hovering {
+  background-image:url(style/images/users_selected.png);
+  background-repeat: no-repeat;
+  background-position: center center;
+  width: 32px;
+  height: 32px;
+  margin: 5px 0px 0px 10px; /* top right bottom left*/
+  font-size: .8em;
+  cursor: none;
+}
+
+.usersToggleBtn div {
+	padding-top: 19px;
+	text-align: center;
+}
+
+/* roles toggle button */
+.rolesToggleBtn {
+  background-image:url(style/images/roles_off.png);
+  background-repeat: no-repeat;
+  background-position: center center;
+  width: 32px;
+  height: 32px;
+  margin: 5px 0px 0px 10px; /* top right bottom left*/
+  font-size: .8em;
+  cursor: pointer;
+}
+.rolesToggleBtn-up-hovering {
+  background-image:url(style/images/roles_over.png);
+  background-repeat: no-repeat;
+  background-position: center center;
+  width: 32px;
+  height: 32px;
+  margin: 5px 0px 0px 10px; /* top right bottom left*/
+  font-size: .8em;
+  cursor: pointer;
+}
+.rolesToggleBtn-down {
+  background-image:url(style/images/roles_selected.png);
+  background-repeat: no-repeat;
+  background-position: center center;
+  width: 32px;
+  height: 32px;
+  margin: 5px 0px 0px 10px; /* top right bottom left*/
+  font-size: .8em;
+  cursor: none;
+}
+.rolesToggleBtn-down-hovering {
+  background-image:url(style/images/roles_selected.png);
+  background-repeat: no-repeat;
+  background-position: center center;
+  width: 32px;
+  height: 32px;
+  margin: 5px 0px 0px 10px; /* top right bottom left*/
+  font-size: .8em;
+  cursor: none;
+}
+
+.rolesToggleBtn div {
+	padding-top: 19px;
+	text-align: center;
+}
+
+
+/* general database toggle button */
+.generalToggleBtn {
+  background-image:url(style/images/Gen_off.png);
+  background-repeat: no-repeat;
+  background-position: center center;
+  width: 32px;
+  height: 32px;
+  margin: 5px 0px 0px 10px; /* top right bottom left*/
+  font-size: .8em;
+}
+.generalToggleBtn-up-hovering {
+  background-image:url(style/images/Gen_over.png);
+  background-repeat: no-repeat;
+  background-position: center center;
+  width: 32px;
+  height: 32px;
+  margin: 5px 0px 0px 10px; /* top right bottom left*/
+  font-size: .8em;
+}
+.generalToggleBtn-down {
+  background-image:url(style/images/Gen_selected.png);
+  background-repeat: no-repeat;
+  background-position: center center;
+  width: 32px;
+  height: 32px;
+  margin: 5px 0px 0px 10px; /* top right bottom left*/
+  font-size: .8em;
+}
+.generalToggleBtn-down-hovering {
+  background-image:url(style/images/Gen_selected.png);
+  background-repeat: no-repeat;
+  background-position: center center;
+  width: 32px;
+  height: 32px;
+  margin: 5px 0px 0px 10px; /* top right bottom left*/
+  font-size: .8em;
+}
+
+.generalToggleBtn div {
+	padding-top: 19px;
+	text-align: center;
+}
+
+/* Advance Database toggle button */
+.advanceToggleBtn {
+  background-image:url(style/images/Advanced_off.png);
+  background-repeat: no-repeat;
+  background-position: center center;
+  width: 32px;
+  height: 32px;
+  margin: 5px 0px 0px 10px; /* top right bottom left*/
+  font-size: .8em;
+}
+.advanceToggleBtn-up-hovering {
+  background-image:url(style/images/Advanced_over.png);
+  background-repeat: no-repeat;
+  background-position: center center;
+  width: 32px;
+  height: 32px;
+  margin: 5px 0px 0px 10px; /* top right bottom left*/
+  font-size: .8em;
+}
+.advanceToggleBtn-down {
+  background-image:url(style/images/Adv_Selected.png);
+  background-repeat: no-repeat;
+  background-position: center center;
+  width: 32px;
+  height: 32px;
+  margin: 5px 0px 0px 10px; /* top right bottom left*/
+  font-size: .8em;
+}
+.advanceToggleBtn-down-hovering {
+  background-image:url(style/images/Adv_Selected.png);
+  background-repeat: no-repeat;
+  background-position: center center;
+  width: 32px;
+  height: 32px;
+  margin: 5px 0px 0px 10px; /* top right bottom left*/
+  font-size: .8em;
+}
+
+.advanceToggleBtn div {
+	padding-top: 19px;
+	text-align: center;
+}
+
+
+
+.logo{
+	background: url(style/images/pentaho_logo.png) top center no-repeat;
+	height: 60px;
+	width: 196px;
+	margin-left:5px;
+	margin-right: 20px;
+}
+
+.leftPanel{
+	height:100%;
+	width:204px;
+	white-space:nowrap;
+}
+
+.leftTabPanel{
+	padding: 0px 0px 0px 0px;
+	margin-left:11px;
+	width: 219px;
+}
+
+.CommonTasks{
+	background-image:url(style/images/task_bottom.png);
+	background-position:center bottom;
+	background-repeat:no-repeat;
+	border:0pt none;
+	margin:10px 0pt 0pt 2px;
+	padding:0pt 0pt 15px;
+	width:200px;
+}
+
+.CommonTasksHeader{
+	background: url(style/images/task_header.png) top left no-repeat;
+	width:200px;
+	height:25px;
+	padding:3px;
+	line-height:25px;
+}
+.commonTasksHeaderText{
+	color:#5C631F;
+	font-size:14px;
+	font-weight:bold; 
+	margin-left:5px
+}
+.CommonTasksLinks{
+	background: url(style/images/task_bg.png) repeat-y;
+	font-decoration: none;
+	color:black;
+	width:100%;
+	padding:0pt 2px 2px 10px;
+}
+
+.commonTasksHeader{
+
+}
+
+/* begin scheduler panel */
+.schedulerPanel {
+	/*padding: 10px;*/  /* this was what worked in FF and not IE*/
+	width: 100%;
+	height: 100%;
+}
+
+.schedulerPanelPadderPanel {
+	padding: 10px; /* this plus the new SimplePanel works in IE, but bleeds to the right in FF*/
+	width: 100%;
+	height: 100%;
+}
+
+.schedulerPanel td {
+	padding:0px;
+	vertical-align: top;
+}
+
+.schedulerPanel a {
+	cursor: hand;
+	cursor: pointer;
+	color:#949E3E;
+	font-family:  Tahoma, Arial, Helvetica, sans-serif;
+	font-size:1em;
+	font-size-adjust:none;
+	font-stretch:normal;
+	font-style:normal;
+	font-variant:normal;
+	font-weight:normal;
+	line-height:normal;
+	text-decoration:none;
+	white-space:nowrap;
+}
+
+/* TODO doesnt seem to get picked up */
+.schedulerPanel a:hover {
+	cursor: hand;
+	cursor: pointer;
+	color:#EF8033;
+	font-family:Tahoma, Arial, Helvetica, sans-serif;
+	font-size:1em;
+	font-size-adjust:none;
+	font-stretch:normal;
+	font-style:normal;
+	font-variant:normal;
+	font-weight:normal;
+	line-height:normal;
+	text-decoration:none;
+	white-space:nowrap;
+}
+
+.allActionTable {
+	border-top: 1px solid #808080;
+	border-left: 1px solid #808080;
+	width: 300px;
+	margin-bottom: 20px;
+	
+	font-family:Tahoma, Arial, Helvetica, sans-serif;
+	font-size:.85em;
+	font-size-adjust:none;
+	font-stretch:normal;
+	font-style:normal;
+	font-variant:normal;
+	font-weight:normal;
+	line-height:normal;
+	white-space:nowrap;
+	background-color: #FFFFFF;
+}
+
+.allActionTable td {
+	border-right: 1px solid #808080;
+	border-bottom: 1px solid #808080;
+	padding: 5px;
+	vertical-align: top;
+}
+
+.allActionTableHeader td {
+	background-color:#C2CFA2;
+	border-bottom:1px solid #818F49;
+	border-left:1px solid #778645;
+	border-right:1px solid #FFFFFF;
+	color:#000000;
+	font-family:Tahoma, Arial, Helvetica, sans-serif;
+	font-size-adjust:none;
+	font-stretch:normal;
+	font-style:normal;
+	font-variant:normal;
+	font-weight:normal;
+	line-height:normal;
+	padding:0px 5px 1px;
+	white-space:nowrap;
+}
+
+/* resumeSuspendPanel contains the Resume All Jobs/Suspend All Jobs in the allActionsTable */
+.resumeSuspendPanel {
+	border: 0px solid purple;
+}
+.resumeSuspendPanel td {
+	border: 0px solid purple;
+	padding: 0px;
+}
+
+/* begin schedules table */
+.schedulesTable {
+	border-top: 1px solid #808080;
+	border-left: 1px solid #808080;
+	width: 100%;
+	/*height: 100%;*/
+	
+	font-family:Tahoma, Arial, Helvetica, sans-serif;
+	font-size:.85em;
+	font-size-adjust:none;
+	font-stretch:normal;
+	font-style:normal;
+	font-variant:normal;
+	font-weight:normal;
+	line-height:normal;
+	
+	background-color: #FFFFFF;
+}
+
+.schedulesTable td {
+	border-right: 1px solid #808080;
+	border-bottom: 1px solid #808080;
+	padding: 5px;
+	vertical-align: top;
+}
+
+/* some cells in the schedule table contain tables to support multiple rows in the cell */
+/* sbarkdull, this may no longer be used*/
+.schedulesTableCellTable {
+	border: 0px;
+	padding: 0px;
+	margin: 0px;
+}
+
+/* sbarkdull, this may no longer be used*/
+.schedulesTableCellTable td {
+	border: 0px;
+	padding: 0px;
+	margin: 0px;
+}
+
+.schedulesTableHeader td {
+	background-color:#C2CFA2;
+	border-bottom:1px solid #818F49;
+	border-left:1px solid #778645;
+	border-right:1px solid #FFFFFF;
+	color:#000000;
+	font-family:Tahoma, Arial, Helvetica, sans-serif;
+	font-size-adjust:none;
+	font-stretch:normal;
+	font-style:normal;
+	font-variant:normal;
+	font-weight:normal;
+	line-height:normal;
+	padding:0px 5px 1px;
+	white-space:nowrap;
+}
+
+/* panel in the allActionTable's action column containing Suspend, Delete, Run New */
+.actionCellPanel {
+	border: 0px solid purple;
+}
+.actionCellPanel td {
+	border: 0px solid purple;
+	padding: 0px;
+}
+/* end schedules table */
+/* end scheduler panel */
+
+/* begin styles for BasicDialog, also see: ".gwt-DialogBox" and ".gwt-DialogBox .Caption" */
+.basicDialog\.rootPanel {
+	margin: 0px 0px 0px 0px;	/* top right bottom left*/
+	background-color: #ECECEC;
+	padding: 0px;
+}
+
+.basicDialog\.clientPanel {
+	border: 1px solid #95A22C;
+	margin: 10px 10px 15px 10px;
+	vertical-align: top;
+	padding: 0px;
+}
+
+.basicDialog\.clientPanelNoBorder {
+	margin: 10px 10px 15px 10px;
+	margin-bottom: 10px;
+	vertical-align: top;
+}
+
+.basicDialog\.buttonPanel {
+	border-top: 1px solid #95A22C;
+	padding: 6px 10px 6px 0px;
+}
+
+.basicDialog\.button {
+	padding: 0px;
+	margin: 0px 0px 0px 10px; /* top right bottom left*/
+}
+
+.basicDialog\.button:hover {
+	padding: 0px;
+	margin: 0px 0px 0px 10px; /* top right bottom left*/
+}
+
+.basicDialog\.titleBarContent {
+	cursor: move;
+}
+
+.basicDialog\.closeIcon {
+	cursor: default;
+}
+
+/* end styles for BasicDialog */
+
+.newDataSourceDialogBox\.detailsPanel {
+	width: 100%;
+	/*background-color:red;*/
+}
+
+.newUserDialogBox\.detailsPanel {
+	width: 100%;
+	/*background-color:red;*/
+}
+
+.newRoleDialogBox\.detailsPanel {
+	width: 100%;
+	/*background-color:red;*/
+}
+
+.addUserAssignmentsDialogBox\.usersList {
+	width: 100%;
+}
+
+.addRoleAssignmentsDialogBox\.rolesList {
+	width: 100%;
+}
+
+.simpleGroupBox {
+	padding: 4px;
+}
+
+/* begin styles for group box */
+.groupBox{
+}
+
+.homeGroupBox{
+	clear:both;
+	width:100%;
+	height:100%;
+	margin-right: 8px;
+	margin-left: 2px
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+
+.groupBoxHeader{
+	color:#FFFFFF;
+	font-size:14px;
+	font-weight:normal;
+	padding: 4px 4px 0px 10px;	
+}
+
+.groupbox-nw-grey {
+	background: url(style/images/dialog_nw_grey.png) repeat-x;
+	height: 28px;
+	width: 10px;
+}
+
+.groupbox-n-grey {
+	background: url(style/images/dialog_n_grey.png) repeat-x;
+}
+
+.groupbox-ne-grey {
+	background: url(style/images/dialog_ne_grey.png) repeat-x;
+	height: 28px;
+	width: 10px;
+}
+
+.groupbox-nw {
+	background: url(style/images/dialog_nw.png) repeat-x;
+	height: 28px;
+	width: 10px;
+}
+
+.groupbox-n {
+	background: url(style/images/dialog_n.png) repeat-x;
+}
+
+.groupbox-ne {
+	background: url(style/images/dialog_ne.png) repeat-x;
+	height: 28px;
+	width: 10px;
+}
+
+.groupbox-w {
+	background: url(style/images/dialog_w.png) repeat-y;
+}
+
+.groupbox-e {
+	background: url(style/images/dialog_e.png) repeat-y;
+}
+
+.groupbox-sw {
+	background: url(style/images/dialog_sw.png) repeat-x;
+	height: 11px;
+	width: 10px;
+}
+
+.groupbox-s {
+	background: url(style/images/dialog_s.png) repeat-x;
+}
+
+.groupbox-se {
+	background: url(style/images/dialog_se.png) repeat-x;
+	height: 11px;
+	width: 10px;
+}
+
+.groupbox-c {
+	background-color: #ffffff;
+	text-align:center;
+}
+/* end styles for group box */
+
+.buttons{
+	margin-right: 10px;
+	margin-top: 8px;
+}
+
+/* begin toolbar styles */
+.toolBarIndicators{
+	margin:  6px 0 0 18px;
+	padding:0;
+	float:left;
+
+	font-family: Tahoma, Arial, Helvetica, sans-serif;
+	font-weight: normal;
+	color: #292929;
+	font-size: 12px;
+	
+}
+
+.indicators_left{
+	background: url('style/images/indicator_left.png') top left no-repeat;
+	padding-left: 5px;
+}
+
+.indicators_right{
+	background: url('style/images/indicator_right.png') top right no-repeat;
+}
+
+.indicators{
+	background: url('style/images/indicator_middle.png') top repeat-x;
+	margin:0px 5px 0px 0px;
+	height: 43px;
+	width:auto;
+	padding: 0px;
+}
+
+.indicators_label{
+	line-height: 42px;
+	font-weight: bold;
+	margin-right: 8px;
+}
+
+.biServerAliveIcon {
+  background: url(style/images/serverAlive.png) top center no-repeat;
+	width: 29px;
+	height: 42px;
+}
+
+.biServerDeadIcon {
+  background: url(style/images/serverDead.png) top center no-repeat;
+	width: 29px;
+	height: 42px;
+}
+/* end toolbar styles */
+
+
+.deckToolbar{
+	border: 1px solid #888888;
+	background-color: white;
+	padding:2px;
+	width:100%;
+}
+
+.simpleGroupBox{
+	background-color: #FAFAFA;
+}
+
+.borderPane{
+	border: 1px solid #888888;
+	background-color: #FAFAFA;
+	padding:4px;
+}
+
+.fieldsetPanel{
+	padding:4px;
+}
+
+.deckPanel{
+	padding: 0px 5px 0px 3px;
+}
+
+.deckPanel-top-tr{
+	height:4px;
+	overflow:hidden;
+}
+.deckPanel-n{
+  background: url(style/images/body_n.gif) top center repeat-x;
+  background-color: #CACACA;
+  height:4px;
+  width:100%;
+}
+
+.deckPanel-nw{
+  background: url(style/images/body_nw.gif) top right no-repeat;
+  width:4px;
+  height:4px;
+}
+.deckPanel-ne{
+  background: url(style/images/body_ne.gif) top right no-repeat;
+  width:4px;
+  height:4px;
+}
+.deckPanel-c{
+  background: url(style/images/body_center.gif) top center repeat;
+  width:100%;
+  height:100%;
+}
+
+.deckPanel-cw{
+  background: url(style/images/body_w.gif) top right repeat-y;
+  height:100%;
+}
+.deckPanel-ce{
+  background: url(style/images/body_e.gif) top center repeat-y;
+  height:100%;
+}
+.deckPanel-s{
+  background: url(style/images/body_s.gif) top center repeat-x;
+  width:100%;
+}
+.deckPanel-sw{
+  background: url(style/images/body_sw.gif) top right no-repeat;
+  width:4px;
+  height:4px;
+}
+.deckPanel-se{
+  background: url(style/images/body_se.gif) top right no-repeat;
+  width:4px;
+  height:4px;
+}
+
+.centerPanel{
+	margin-right:8px;
+}
+
+.datepicker {
+	background-color: #AAAAFF;
+}
+.advanced-Calendar {
+	background-color: #AAAAFF;
+}
+
+/* begin style for the tab labels in the Schedule Creator dialog's 2 tabs */
+.tabLabel {
+	white-space: nowrap;
+	width: 100%;
+	height: 100%;
+	color: #000000;
+}
+
+.tabLabel-selected {
+	color: #FFFFFF;
+}
+
+.tabLabelError {
+	background-color: #FFDDDD;
+	color: red;
+	white-space: nowrap;
+	width: 100%;
+	height: 100%;
+}
+/* end style for the tab labels in the Schedule Creator dialog's 2 tabs */
+
+/* tab panels in the schedule editor (Schedule, Scheduled Actions)*/
+.schedulerTabPanel {
+	width: 100%;
+	height:100%;
+}
+
+/* the DeckPanel in the TabPanel in the scheduleCreatorDialog */
+.scheduleCreatorDeckPanel {
+	padding: 10px;
+}
+
+.schedulerListCtrl {
+	height: 540px;
+}
+	
+/* modest kludge to force some space around the enclosed panel 
+   kludge required because IE7 doesn't handle margins worth a duck */
+.paddingPanel {
+	padding: 10px;
+}
+
+.scheduleEditor {
+	/* can't add a margin here, IE7 can't handle it */
+	/*margin: 10px;*/
+	padding: 0px;
+}
+
+.actionsEditor {
+	width: 100%;
+	height: 100%;
+	/*
+	overflow-x: auto;
+	overflow-y: auto;
+	*/
+}
+
+.solutionRepositoryActionSequenceListEditor {
+	/* can't add a margin here, IE7 can't handle it */
+/*	margin: 10px;*/
+	padding: 0px;
+}
+
+/* begin scheduler toolbar */
+.schedToolbar {
+	border: 1px solid #999999;
+	width:100%;
+	background-color: #DDDDDD;
+}
+
+.schedToolbar td {
+}
+
+.schedToolbar\.leftPanel {
+	/*background-color: cyan;*/
+}
+
+.schedToolbar\.leftPanel td {
+	padding: 4px;
+}
+
+.schedToolbar\.rightPanel {
+}
+
+.toolbarBtn {
+	width: 16px;
+	height: 16px;
+	cursor: pointer;
+	/*border: 1px dotted red;*/
+	/* sbarkdull: setting the padding here doesn't work properly on IE7*/
+}
+.toolbarCreateBtn {
+	background: url(style/images/create.png) no-repeat center center;
+	padding-left: 0px;
+}
+.toolbarCreateBtn-disabled {
+	background: url(style/images/create_disabled.png) no-repeat center center;
+	padding-left: 0px;
+}
+.toolbarUpdateBtn {
+	background: url(style/images/update.png) no-repeat center center;
+}
+.toolbarUpdateBtn-disabled {
+	background: url(style/images/update_disabled.png) no-repeat center center;
+}
+.toolbarDeleteBtn {
+	background: url(style/images/delete.png) no-repeat center center;
+}
+.toolbarDeleteBtn-disabled {
+	background: url(style/images/delete_disabled.png) no-repeat center center;
+}
+.toolbarResumeBtn {
+	background: url(style/images/resume.png) no-repeat center center;
+}
+.toolbarResumeBtn-disabled {
+	background: url(style/images/resume_disabled.png) no-repeat center center;
+}
+.toolbarSuspendBtn {
+	background: url(style/images/suspend.png) no-repeat center center;
+}
+.toolbarSuspendBtn-disabled {
+	background: url(style/images/suspend_disabled.png) no-repeat center center;
+}
+.toolbarRunNowBtn {
+	background: url(style/images/run.png) no-repeat center center;
+}
+.toolbarRunNowBtn-disabled {
+	background: url(style/images/run_disabled.png) no-repeat center center;
+}
+.toolbarSuspendSchedulerBtn {
+	background: url(style/images/suspend.png) no-repeat center center;
+}
+.toolbarSuspendSchedulerBtn-disabled {
+	background: url(style/images/suspend_disabled.png) no-repeat center center;
+}
+.toolbarResumeSchedulerBtn {
+	background: url(style/images/resume.png) no-repeat center center;
+}
+.toolbarResumeSchedulerBtn-disabled {
+	background: url(style/images/resume_disabled.png) no-repeat center center;
+}
+.toolbarRefreshBtn {
+	background: url(style/images/refresh_small.png) no-repeat center center;
+}
+.toolbarRefreshBtn-disabled {
+	background: url(style/images/refresh_small_disabled.png) no-repeat center center;
+}
+.toolbarDivider {
+	background: url(style/images/toolbarDivider.png) no-repeat center center;
+	width: 2px;
+	height: 16px;
+}
+/* end scheduler toolbar */
+
+/* not used
+.tabLabelError-selected {
+	background-color: magenta;
+	white-space: nowrap;
+	width: 100%;
+	height: 100%;
+}*/

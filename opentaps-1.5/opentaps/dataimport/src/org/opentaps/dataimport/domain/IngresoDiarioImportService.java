@@ -157,6 +157,7 @@ public class IngresoDiarioImportService extends DomainService implements
 						rowdata.getSfe(), "CL_FUENTE_RECURSOS", "FUENTE DE LOS RECURSOS");
 				mensaje = UtilImport.validaGeo(mensaje, ledger_repo,
 						rowdata.getLoc(), "GEOGRAFICA");
+				mensaje = UtilImport.validaMonto(rowdata.getMonto(), mensaje);
 
 				if (!mensaje.isEmpty()) {
 					String message = "Failed to import Ingreso Diario ["
@@ -245,12 +246,21 @@ public class IngresoDiarioImportService extends DomainService implements
 				// n5.getProductCategoryId(), rowdata.getIdTipoCatalogo(),
 				// rowdata.getIdPago(), null, null, tip,
 				// false, null, null, rowdata.getIdProducto());
+				
+//				Map<String, String> cuentas = motor
+//						.cuentasIngresoDiario(tipoDoc.getAcctgTransTypeId(),
+//								rowdata.getOrganizationPartyId(),
+//								rowdata.getIdPago(), tip,
+//								rowdata.getIdProductoD(),
+//								rowdata.getIdProductoH());
+				
 				Map<String, String> cuentas = motor
 						.cuentasIngresoDiario(tipoDoc.getAcctgTransTypeId(),
 								rowdata.getOrganizationPartyId(),
-								rowdata.getIdPago(), tip,
+								rowdata.getIdPago(), rowdata.getN5(),
 								rowdata.getIdProductoD(),
 								rowdata.getIdProductoH());
+				
 				
 				if (cuentas.get("Mensaje") != null) {
 					String message = "Failed to import Ingreso Diario ["
@@ -312,6 +322,9 @@ public class IngresoDiarioImportService extends DomainService implements
 					aux.setMunicipio(mun);
 					aux.setLocalidad(loc.getGeoId());
 					aux.setAgrupador(rowdata.getRefDoc());
+					aux.setIdPago(rowdata.getIdPago());
+					aux.setIdProductoD(rowdata.getIdProductoD());
+					aux.setIdProductoH(rowdata.getIdProductoH());
 					aux.setIdTipoDoc(rowdata.getIdTipoDoc());
 					aux.setSecuencia(rowdata.getSecuencia());
 					aux.setLote(lote);
