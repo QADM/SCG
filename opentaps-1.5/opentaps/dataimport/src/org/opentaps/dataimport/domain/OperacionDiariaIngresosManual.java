@@ -25,6 +25,7 @@ import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ModelService;
 import org.ofbiz.service.ServiceUtil;
 import org.opentaps.base.entities.AcctgTransEntry;
+import org.opentaps.base.entities.AcctgTransPresupuestal;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
 import org.opentaps.foundation.action.ActionContext;
@@ -61,11 +62,10 @@ public class OperacionDiariaIngresosManual {
         GenericValue acctgtransPres;
         
         String acctgTransId;
-        List<AcctgTransEntry> entries = FastList.newInstance();
         
         Debug.logWarning("ENTRO AL SERVICIO PARA CREAR OPERACION DIARIA", MODULE);
         
-        try {   
+        try {
         	
 	        String userLog = userLogin.getString("userLoginId");
 	        String tipoDoc = (String) context.get("Tipo_Documento");
@@ -74,7 +74,6 @@ public class OperacionDiariaIngresosManual {
 			fecContable = (Timestamp) UtilDateTime.stringToTimeStamp((String)context.get("Fecha_Contable"), dateFormat, timeZone, locale);
 	        String refDoc = (String) context.get("Referencia_Documento");
 	        String sec = (String) context.get("Secuencia");
-	        String tipoCat = (String) context.get("Tipo_Catalogo");
 	        String idProdAbono = (String) context.get("Id_Producto_Abono");
 	        String idProdCargo = (String) context.get("Id_Producto_Cargo");
 	        String rubro = (String) context.get("Rubro");
@@ -86,7 +85,7 @@ public class OperacionDiariaIngresosManual {
 	        String region = (String) context.get("Region");
 	        String muni = (String) context.get("Municipio");
 	        String local = (String) context.get("Localidad");
-	        String suFuente = (String) context.get("Sub_Fuente_Especifica");
+	        String suFuenteEsp = (String) context.get("Sub_Fuente_Especifica");
 	        String uniEjec = (String) context.get("Unidad_Ejecutora");
 	        String idPago = (String) context.get("Id_Pago");
 	        java.math.BigDecimal monto = java.math.BigDecimal.valueOf(Long.valueOf((String)context.get("Monto")));
@@ -98,7 +97,6 @@ public class OperacionDiariaIngresosManual {
 	        Debug.logWarning("fecContable "+fecContable, MODULE);
 	        Debug.logWarning("refDoc "+refDoc, MODULE);
 	        Debug.logWarning("sec "+sec, MODULE);
-	        Debug.logWarning("tipoCat "+tipoCat, MODULE);
 	        Debug.logWarning("idProdAbono "+idProdAbono, MODULE);
 	        Debug.logWarning("idProdCargo "+idProdCargo, MODULE);
 	        Debug.logWarning("rubro "+rubro, MODULE);
@@ -110,15 +108,17 @@ public class OperacionDiariaIngresosManual {
 	        Debug.logWarning("region "+region, MODULE);
 	        Debug.logWarning("muni "+muni, MODULE);
 	        Debug.logWarning("local "+local, MODULE);
-	        Debug.logWarning("suFuente "+suFuente, MODULE);
+	        Debug.logWarning("suFuente "+suFuenteEsp, MODULE);
 	        Debug.logWarning("uniEjec "+uniEjec, MODULE);
 	        Debug.logWarning("idPago "+idPago, MODULE);
 	        Debug.logWarning("monto "+monto, MODULE);
 	        
-	        String descripcion = refDoc == null?" ":refDoc+" - "+tipoCat == null ?" ":tipoCat;
+	        
 			GenericValue tipoDocumento = delegator.findByPrimaryKeyCache("TipoDocumento",UtilMisc.<String, Object>toMap("idTipoDoc", tipoDoc));
 			String acctgTransTypeId = tipoDocumento.getString("acctgTransTypeId");
-			Debug.logWarning("tipoDocumento  Encontrado "+tipoDocumento, MODULE);	  
+			Debug.logWarning("tipoDocumento  Encontrado "+tipoDocumento, MODULE);
+			String docu = tipoDocumento.getString("descripcion");
+			String descripcion = docu == null?" ":docu+" - "+refDoc == null ?" ":refDoc;
 	        
 	        acctgtrans = GenericValue.create(delegator.getModelEntity("AcctgTrans"));
 	        acctgtrans.setNextSeqId();
@@ -147,12 +147,20 @@ public class OperacionDiariaIngresosManual {
 	        acctgtransPres.set("ciclo", ciclo);
 	        acctgtransPres.set("unidadOrganizacional", organizationPartyId);
 	        acctgtransPres.set("unidadEjecutora", uniEjec);
+	        String unidadOr = obtenPadrePartyId(dctx, dispatcher, uniEjec);
+	        acctgtransPres.set("unidadOrganizacional", unidadOr);
+	        String unidadRes = obtenPadrePartyId(dctx, dispatcher, unidadOr);
+	        acctgtransPres.set("unidadResponsable", unidadRes);
 	        acctgtransPres.set("rubro", rubro);
 	        acctgtransPres.set("tipo", tipo);
 	        acctgtransPres.set("clase", clase);
 	        acctgtransPres.set("conceptoRub", concepto);
 	        acctgtransPres.set("nivel5", n5);
-	        acctgtransPres.set("subFuenteEspecifica", suFuente);
+	        acctgtransPres.set("subFuenteEspecifica", suFuenteEsp);
+	        String subfuente = obtenPadresSubfuenteEspecifica(dctx, dispatcher, suFuenteEsp);
+	        acctgtransPres.set("subFuente",subfuente);
+	        String fuente = obtenPadresSubfuenteEspecifica(dctx, dispatcher, subfuente);
+	        acctgtransPres.set("subFuente",fuente);	        
 	        acctgtransPres.set("entidadFederativa", entFed);
 	        acctgtransPres.set("region", region);
 	        acctgtransPres.set("municipio", muni);
@@ -188,10 +196,6 @@ public class OperacionDiariaIngresosManual {
 	    	
 	    	String currencyId = UtilCommon.getOrgBaseCurrency(organizationPartyId, delegator);
 	    	
-//	    	AcctgTransEntry transEntryPreC = new AcctgTransEntry();
-//	    	AcctgTransEntry transEntryPreA = new AcctgTransEntry();
-//	    	AcctgTransEntry transEntryConC = new AcctgTransEntry();
-//	    	AcctgTransEntry transEntryConA = new AcctgTransEntry();
 			
 	        Map input = new HashMap(context);
 	        input.put("acctgTransTypeId", acctgTransTypeId);
@@ -211,21 +215,6 @@ public class OperacionDiariaIngresosManual {
 	        	
 	        	if(cargoPres != null && !cargoPres.isEmpty() && abonoPres != null && !abonoPres.isEmpty()){
 	        		
-	        		//Generamos la transaccion para Cargo
-//	        		transEntryPreC.setAcctgTransId(acctgTransId);
-//	        		transEntryPreC.setAcctgTransEntrySeqId(String.format("%05d",1));
-//	        		transEntryPreC.setAcctgTransEntryTypeId("_NA_");
-//	        		transEntryPreC.setDescription("Operación  diaria PRESUPUESTAL"+acctgTransId);
-//	        		transEntryPreC.setGlAccountId(cargoPres);
-//	        		transEntryPreC.setOrganizationPartyId(organizationPartyId);
-//	        		transEntryPreC.setAmount(monto);
-//	        		transEntryPreC.setCurrencyUomId(currencyId);
-//	        		transEntryPreC.setDebitCreditFlag("D");
-//	        		transEntryPreC.setReconcileStatusId("AES_NOT_RECONCILED");	
-//	        		transEntryPreC.setPartyId(organizationPartyId);
-//	        		
-//	        		entries.add(transEntryPreC);
-	        		
 	        		GenericValue gTransEntryPreC = GenericValue.create(delegator.getModelEntity("AcctgTransEntry"));
 	        		gTransEntryPreC.set("acctgTransId", acctgTransId);
 	        		gTransEntryPreC.set("acctgTransEntrySeqId", String.format("%05d",1));
@@ -239,21 +228,6 @@ public class OperacionDiariaIngresosManual {
 	        		gTransEntryPreC.set("reconcileStatusId", "AES_NOT_RECONCILED");
 	        		gTransEntryPreC.set("partyId", organizationPartyId);
 	        		gTransEntryPreC.create();
-	        		
-	        		//Generamos la transaccion para Abono
-//	        		transEntryPreA.setAcctgTransId(acctgTransId);
-//	        		transEntryPreA.setAcctgTransEntrySeqId(String.format("%05d",2));
-//	        		transEntryPreA.setAcctgTransEntryTypeId("_NA_");
-//	        		transEntryPreA.setDescription("Operación  diaria PRESUPUESTAL Abono "+acctgTransId);
-//	        		transEntryPreA.setGlAccountId(abonoPres);
-//	        		transEntryPreA.setOrganizationPartyId(organizationPartyId);
-//	        		transEntryPreA.setAmount(monto);
-//	        		transEntryPreA.setCurrencyUomId(currencyId);
-//	        		transEntryPreA.setDebitCreditFlag("C");
-//	        		transEntryPreA.setReconcileStatusId("AES_NOT_RECONCILED");	
-//	        		transEntryPreA.setPartyId(organizationPartyId);	        		
-//	        		
-//	        		entries.add(transEntryPreA);
 	        		
 	        		GenericValue gtransEntryPreA = GenericValue.create(delegator.getModelEntity("AcctgTransEntry"));
 	        		gtransEntryPreA.set("acctgTransId", acctgTransId);
@@ -273,21 +247,6 @@ public class OperacionDiariaIngresosManual {
 	        	
 	        	if(cargoCont != null && !cargoCont.isEmpty() && abonoCont != null && !abonoCont.isEmpty()){
 	        		
-	        		//Generamos la transaccion para Cargo
-//	        		transEntryConC.setAcctgTransId(acctgTransId);
-//	        		transEntryConC.setAcctgTransEntrySeqId(String.format("%05d",3));
-//	        		transEntryConC.setAcctgTransEntryTypeId("_NA_");
-//	        		transEntryConC.setDescription("Operación  diaria Contable"+acctgTransId);
-//	        		transEntryConC.setGlAccountId(cargoCont);
-//	        		transEntryConC.setOrganizationPartyId(organizationPartyId);
-//	        		transEntryConC.setAmount(monto);
-//	        		transEntryConC.setCurrencyUomId(currencyId);
-//	        		transEntryConC.setDebitCreditFlag("D");
-//	        		transEntryConC.setReconcileStatusId("AES_NOT_RECONCILED");	
-//	        		transEntryConC.setPartyId(organizationPartyId);
-//	        		
-//	        		entries.add(transEntryConC);
-	        		
 	        		GenericValue gTransEntryConC = GenericValue.create(delegator.getModelEntity("AcctgTransEntry"));
 	        		gTransEntryConC.set("acctgTransId", acctgTransId);
 	        		gTransEntryConC.set("acctgTransEntrySeqId", String.format("%05d",3));
@@ -301,21 +260,6 @@ public class OperacionDiariaIngresosManual {
 	        		gTransEntryConC.set("reconcileStatusId", "AES_NOT_RECONCILED");
 	        		gTransEntryConC.set("partyId", organizationPartyId);
 	        		gTransEntryConC.create();
-	        		
-	        		//Generamos la transaccion para Abono
-//	        		transEntryConA.setAcctgTransId(acctgTransId);
-//	        		transEntryConA.setAcctgTransEntrySeqId(String.format("%05d",4));
-//	        		transEntryConA.setAcctgTransEntryTypeId("_NA_");
-//	        		transEntryConA.setDescription("Operación  diaria Contable"+acctgTransId);
-//	        		transEntryConA.setGlAccountId(abonoCont);
-//	        		transEntryConA.setOrganizationPartyId(organizationPartyId);
-//	        		transEntryConA.setAmount(monto);
-//	        		transEntryConA.setCurrencyUomId(currencyId);
-//	        		transEntryConA.setDebitCreditFlag("C");
-//	        		transEntryConA.setReconcileStatusId("AES_NOT_RECONCILED");	
-//	        		transEntryConA.setPartyId(organizationPartyId);	    
-//	        		
-//	        		entries.add(transEntryConA);
 	        		
 	        		GenericValue gTransEntryConA = GenericValue.create(delegator.getModelEntity("AcctgTransEntry"));
 	        		gTransEntryConA.set("acctgTransId", acctgTransId);
@@ -343,7 +287,6 @@ public class OperacionDiariaIngresosManual {
         results.put("acctgTrans",acctgtrans);
         results.put("acctgTransPres",acctgtransPres);
         results.put("acctgTransId",acctgTransId);
-        results.put("acctgTransEntries", entries);
         return results;
     	
     }
@@ -414,6 +357,61 @@ public class OperacionDiariaIngresosManual {
         results.put("cuentas", cuentas);
         return results;
     }
+    
+    /**
+     * Obtiene el padre de un enumId 
+     * @param enumId (Subfuente Especifica)
+     * @return
+     * @throws GenericServiceException 
+     */
+    public static String obtenPadresSubfuenteEspecifica(DispatchContext dctx,LocalDispatcher dispatcher,String enumId) throws GenericServiceException{
+    	
+    	String padreEnumId = null;
+    	
+    	if(enumId != null && !enumId.isEmpty()){
+
+        	Map input = FastMap.newInstance();
+        	input.put("enumId", enumId);
+        	input = dctx.getModelService("obtenEnumIdPadre").makeValid(input, ModelService.IN_PARAM);
+        	Map tmpResult = dispatcher.runSync("obtenEnumIdPadre", input);
+            padreEnumId = (String) tmpResult.get("enumIdPadre");
+            
+            Debug.logWarning("ENUM ID "+enumId+"   PADRE  "+padreEnumId, MODULE);
+    		
+    	}
+    	
+    	return padreEnumId;
+    	
+    }
+    
+    /**
+     * Obtiene el padre de un partyId
+     * @param dctx
+     * @param dispatcher
+     * @param partyId
+     * @return
+     * @throws GenericServiceException
+     */
+    public static String obtenPadrePartyId(DispatchContext dctx,LocalDispatcher dispatcher,String partyId) throws GenericServiceException{
+    	
+    	String partyIdPadre = null;
+    	
+    	if(partyId != null && !partyId.isEmpty()){
+    		
+        	Map input = FastMap.newInstance();
+        	input.put("partyId", partyId);
+        	input = dctx.getModelService("obtenPartyIdPadre").makeValid(input, ModelService.IN_PARAM);
+        	Map tmpResult = dispatcher.runSync("obtenPartyIdPadre", input);
+        	partyIdPadre = (String) tmpResult.get("partyIdPadre");
+            
+            Debug.logWarning("PARTY ID "+partyId+"   PADRE  "+partyIdPadre, MODULE);
+            
+            
+    	}
+    	
+    	return partyIdPadre;
+    	
+    }    
 
 }
 

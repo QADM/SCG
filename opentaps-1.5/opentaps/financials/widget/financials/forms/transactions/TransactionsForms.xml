@@ -490,7 +490,10 @@
     
     <form name="viewAcctPresupuestal" type="single" target="updateAcctgTransEntryForm" default-map-name="mapTransPresup"
         default-title-style="tableheadtext" default-widget-style="tabletext" default-tooltip-style="tabletext">
-		<auto-fields-entity entity-name="AcctgTransPresupuestal" default-field-type="display" map-name="mapTransPresup"/>		
+		<auto-fields-entity entity-name="AcctgTransPresupuestal" default-field-type="display" map-name="mapTransPresup"/>	
+	        <field name="unidadResponsable">
+            	<display description="${groovy:org.ofbiz.party.party.PartyHelper.getPartyName(delegator, mapTransPresup.get(&quot;unidadResponsable&quot;), false)} (${mapTransPresup.unidadResponsable})" />
+        	</field>			
 	        <field name="unidadOrganizacional">
             	<display description="${groovy:org.ofbiz.party.party.PartyHelper.getPartyName(delegator, mapTransPresup.get(&quot;unidadOrganizacional&quot;), false)} (${mapTransPresup.unidadOrganizacional})" />
         	</field>
@@ -511,7 +514,13 @@
         	</field> 	
         	<field name="nivel5">
             	<display description="${groovy:com.opentaps.financials.Helpers.OperacionDiariaHelper.getProductCategoryName(delegator, mapTransPresup.get(&quot;nivel5&quot;))}" />
-        	</field>    	     
+        	</field> 
+       		<field name="fuente">
+            	<display description="${groovy:com.opentaps.financials.Helpers.OperacionDiariaHelper.getEnumName(delegator, mapTransPresup.get(&quot;fuente&quot;))}" />
+        	</field>         	
+       		<field name="subFuente">
+            	<display description="${groovy:com.opentaps.financials.Helpers.OperacionDiariaHelper.getEnumName(delegator, mapTransPresup.get(&quot;subFuente&quot;))}" />
+        	</field>           	   	     
        		<field name="subFuenteEspecifica">
             	<display description="${groovy:com.opentaps.financials.Helpers.OperacionDiariaHelper.getEnumName(delegator, mapTransPresup.get(&quot;subFuenteEspecifica&quot;))}" />
         	</field>       

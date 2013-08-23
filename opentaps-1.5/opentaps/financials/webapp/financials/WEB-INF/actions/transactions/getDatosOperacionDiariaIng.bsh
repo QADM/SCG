@@ -86,7 +86,7 @@ condicionUnidadEje = EntityCondition.makeCondition("descripcion","Unidad Ejecuto
 resultadoSubNiv = delegator.findByCondition("NivelPresupuestal", condicionSubfuente , UtilMisc.toList("nivelId"), null);
 resultadoUniNiv = delegator.findByCondition("NivelPresupuestal", condicionUnidadEje , UtilMisc.toList("nivelId"), null);
 
-if(resultadoSubNiv != null){
+if(resultadoSubNiv != null && !resultadoSubNiv.isEmpty()){
 	
 	nivelSub = resultadoSubNiv.get(0).getString("nivelId");
 	
@@ -99,7 +99,7 @@ if(resultadoSubNiv != null){
 	context.put("listaSubfuente", resultadoSub);
 }
 
-if(resultadoUniNiv != null){
+if(resultadoUniNiv != null && !resultadoUniNiv.isEmpty()){
 	
 	nivelUnidad = resultadoUniNiv.get(0).getString("nivelId");
 	

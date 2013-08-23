@@ -1526,6 +1526,7 @@
         <security https="true" auth="true"/> 
         <response name="success" type="view" value="viewAcctgTransEg"/> 
     </request-map>
+    <!-- @JSCF -->
      <request-map uri="ODIngresos">
         <security https="true" auth="true"/>
         <response name="success" type="view" value="ODIngresos"/>
@@ -1542,6 +1543,19 @@
         <security https="true" auth="true"/>
         <response name="success" type="view" value="viewAcctPresupuestal"/>
     </request-map> 	
+     <request-map uri="ODEgresos">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="ODEgresos"/>
+    </request-map>
+	<request-map uri="createOperacionDiariaEgresos">
+		<security https="true" auth="true"/>
+		<event type="service" invoke="createOperacionDiariaEgresos"/>
+		<response name="success" type="request-redirect" value="viewAcctPresupuestal">
+          <redirect-parameter name="acctgTransId"/>
+        </response>
+        <response name="error" type="view" value="createOperacionDiariaEgresos" />
+	</request-map>
+    <!-- @JSCF -->        
     
     
     <request-map uri="reverseAcctgTrans">
@@ -2386,6 +2400,7 @@
 
 	<!-- Nuevas pantallas @JSCF -->
 	<view-map name="ODIngresos" type="screen" page="component://financials/widget/financials/screens/transactions/TransactionsScreens.xml#ODIngresos"/>
+	<view-map name="ODEgresos" type="screen" page="component://financials/widget/financials/screens/transactions/TransactionsScreens.xml#ODEgresos"/>
 	<!-- Nuevas pantallas @JSCF -->
     
 

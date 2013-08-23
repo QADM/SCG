@@ -715,7 +715,6 @@
                 <set field="sectionHeaderUiLabel" value="${uiLabelMap.FinancialsDailyOperIncome}"/>
                 <set field="creaOpDiariaIngresos" value="createOperacionDiariaIngresos"/>
 				<script location="component://financials/webapp/financials/WEB-INF/actions/transactions/getDatosOperacionDiariaIng.bsh"/>                
-<!--                 <java location="com.opensourcestrategies.financials.transactions.TransactionsFindIng" invoke="findTransactionsIngr"/>           -->      
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator">
@@ -730,6 +729,27 @@
             </widgets>
         </section>
     </screen>
+    <screen name="ODEgresos">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="${uiLabelMap.FinancialsDailyOperIncome}"/>  
+                <set field="sectionHeaderUiLabel" value="${uiLabelMap.FinancialsDailyOperIncome}"/>
+                <set field="creaOpDiariaIngresos" value="createOperacionDiariaIngresos"/>
+				<script location="component://financials/webapp/financials/WEB-INF/actions/transactions/getDatosOperacionDiariaIng.bsh"/>                
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <frame-container title="${uiLabelMap.FinancialsDailyOperIncome}">
+                            <platform-specific><html>
+                                <html-template location="component://financials/webapp/financials/transactions/createOperacionDiariaIngresos.ftl"/>
+                            </html></platform-specific>                         
+                        </frame-container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>    
     
     
     <screen name="viewAcctPresupuestal">
