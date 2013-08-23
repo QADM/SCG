@@ -102,7 +102,19 @@
       <tr>
       	<@displayTitleCell title=uiLabelMap.FinancialsId />
       	<@inputTextCell name="Id_Pago" maxlength=60  />
-      </tr>                                        
+      </tr>
+      <tr>
+      	<@displayTitleCell title=uiLabelMap.FinancialsIdProductD />
+      	<@inputTextCell name="Id_ProductoD" maxlength=60  />
+      </tr>   
+      <tr>
+      	<@displayTitleCell title=uiLabelMap.FinancialsIdProductH />
+      	<@inputTextCell name="Id_ProductoH" maxlength=60  />
+      </tr>
+     <tr>
+      	<@displayTitleCell title=uiLabelMap.FinancialsId />
+      	<@inputTextCell name="Id_RecaudadoH" maxlength=60  />
+      </tr>                                                                  
       <tr>                             
       <tr>
         <@displayTitleCell title=uiLabelMap.CommonAmount  />

@@ -7,10 +7,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
-
-import javolution.util.FastList;
 import javolution.util.FastMap;
-
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
@@ -24,8 +21,6 @@ import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ModelService;
 import org.ofbiz.service.ServiceUtil;
-import org.opentaps.base.entities.AcctgTransEntry;
-import org.opentaps.base.entities.AcctgTransPresupuestal;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
 import org.opentaps.foundation.action.ActionContext;
@@ -297,8 +292,8 @@ public class OperacionDiariaIngresosManual {
      * @param context
      * @return
      */
-    public static Map obtenerCuentasIngresos(DispatchContext dctx, Map context){
-        LocalDispatcher dispatcher = dctx.getDispatcher();
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	public static Map obtenerCuentasIngresos(DispatchContext dctx, Map context){
         Delegator delegator = dctx.getDelegator();
         String acctgTransTypeId = (String) context.get("acctgTransTypeId");
         String tipo = (String) context.get("tipo");
@@ -364,7 +359,8 @@ public class OperacionDiariaIngresosManual {
      * @return
      * @throws GenericServiceException 
      */
-    public static String obtenPadresSubfuenteEspecifica(DispatchContext dctx,LocalDispatcher dispatcher,String enumId) throws GenericServiceException{
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	public static String obtenPadresSubfuenteEspecifica(DispatchContext dctx,LocalDispatcher dispatcher,String enumId) throws GenericServiceException{
     	
     	String padreEnumId = null;
     	
@@ -392,7 +388,8 @@ public class OperacionDiariaIngresosManual {
      * @return
      * @throws GenericServiceException
      */
-    public static String obtenPadrePartyId(DispatchContext dctx,LocalDispatcher dispatcher,String partyId) throws GenericServiceException{
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	public static String obtenPadrePartyId(DispatchContext dctx,LocalDispatcher dispatcher,String partyId) throws GenericServiceException{
     	
     	String partyIdPadre = null;
     	
