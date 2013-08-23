@@ -147,6 +147,10 @@ public class OperacionDiariaIngresosManual {
 	        acctgtransPres.set("ciclo", ciclo);
 	        acctgtransPres.set("unidadOrganizacional", organizationPartyId);
 	        acctgtransPres.set("unidadEjecutora", uniEjec);
+	        String unidadOr = obtenPadrePartyId(dctx, dispatcher, uniEjec);
+	        acctgtransPres.set("unidadOrganizacional", unidadOr);
+	        String unidadRes = obtenPadrePartyId(dctx, dispatcher, unidadOr);
+	        acctgtransPres.set("unidadResponsable", unidadRes);
 	        acctgtransPres.set("rubro", rubro);
 	        acctgtransPres.set("tipo", tipo);
 	        acctgtransPres.set("clase", clase);
@@ -355,7 +359,7 @@ public class OperacionDiariaIngresosManual {
     }
     
     /**
-     * Obtiene un mapa con los partId padres de la subfuente especifica , las llaves son los nombres de los campos
+     * Obtiene el padre de un enumId 
      * @param enumId (Subfuente Especifica)
      * @return
      * @throws GenericServiceException 
@@ -364,17 +368,50 @@ public class OperacionDiariaIngresosManual {
     	
     	String padreEnumId = null;
     	
-    	Map input = FastMap.newInstance();
-    	input.put("enumId", enumId);
-    	input = dctx.getModelService("obtenEnumIdPadre").makeValid(input, ModelService.IN_PARAM);
-    	Map tmpResult = dispatcher.runSync("obtenEnumIdPadre", input);
-        padreEnumId = (String) tmpResult.get("enumIdPadre");
-        
-        Debug.logWarning("ENUM ID "+enumId+"   PADRE  "+padreEnumId, MODULE);
+    	if(enumId != null && !enumId.isEmpty()){
+
+        	Map input = FastMap.newInstance();
+        	input.put("enumId", enumId);
+        	input = dctx.getModelService("obtenEnumIdPadre").makeValid(input, ModelService.IN_PARAM);
+        	Map tmpResult = dispatcher.runSync("obtenEnumIdPadre", input);
+            padreEnumId = (String) tmpResult.get("enumIdPadre");
+            
+            Debug.logWarning("ENUM ID "+enumId+"   PADRE  "+padreEnumId, MODULE);
+    		
+    	}
     	
     	return padreEnumId;
     	
     }
+    
+    /**
+     * Obtiene el padre de un partyId
+     * @param dctx
+     * @param dispatcher
+     * @param partyId
+     * @return
+     * @throws GenericServiceException
+     */
+    public static String obtenPadrePartyId(DispatchContext dctx,LocalDispatcher dispatcher,String partyId) throws GenericServiceException{
+    	
+    	String partyIdPadre = null;
+    	
+    	if(partyId != null && !partyId.isEmpty()){
+    		
+        	Map input = FastMap.newInstance();
+        	input.put("partyId", partyId);
+        	input = dctx.getModelService("obtenPartyIdPadre").makeValid(input, ModelService.IN_PARAM);
+        	Map tmpResult = dispatcher.runSync("obtenPartyIdPadre", input);
+        	partyIdPadre = (String) tmpResult.get("partyIdPadre");
+            
+            Debug.logWarning("PARTY ID "+partyId+"   PADRE  "+partyIdPadre, MODULE);
+            
+            
+    	}
+    	
+    	return partyIdPadre;
+    	
+    }    
 
 }
 

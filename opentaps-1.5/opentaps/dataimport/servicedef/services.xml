@@ -371,6 +371,13 @@
     	<attribute name="enumIdPadre" mode="OUT" type="String" optional="true"/>
     </service>
     
+    <service name="obtenPartyIdPadre" engine="java" 
+    	location="org.opentaps.dataimport.UtilOperacionDiariaServices" invoke="obtenPartyIdPadre">
+    <description>Obtiene el enumId padre de un enumId dado</description>
+    	<attribute name="partyId" mode="IN" type="String" optional="false"/>
+    	<attribute name="partyIdPadre" mode="OUT" type="String" optional="true"/>
+    </service>
+    
     <service name="operacionIngreso" engine="java"  auth="true"
             location="org.opentaps.dataimport.domain.OperacionIngresoService" invoke="registraIngreso" export="true">
         <description>Registra la operacion diaria presupuestal de Ingreso</description>

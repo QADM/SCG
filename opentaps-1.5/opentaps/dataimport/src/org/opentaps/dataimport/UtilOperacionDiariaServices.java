@@ -49,5 +49,38 @@ public class UtilOperacionDiariaServices {
         results.put("enumIdPadre", enumPadre);
         return results;
     }	
+    
+
+    /**
+     * Metodo utilizado para obtener el enumId padre a partir de uno dado
+     * @param enumId
+     * @return partyId(Padre)
+     */
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+	public static Map obtenPartyIdPadre(DispatchContext dctx, Map context) {
+        Delegator delegator = dctx.getDelegator();
+        String partyId = (String) context.get("partyId");
+        
+        String partyIdPadre = null;
+      
+		try {        
+			
+	    	EntityCondition condicionEnum = EntityCondition.makeCondition("partyId", EntityOperator.EQUALS, partyId);
+	    	List<GenericValue> resultadoEnum = delegator.findByConditionCache("PartyGroup", condicionEnum , UtilMisc.toList("partyId","Parent_id"), null);
+	    	
+	    	if(resultadoEnum != null && !resultadoEnum.isEmpty()){
+	    		
+	    		partyIdPadre = resultadoEnum.get(0).getString("Parent_id");
+	    		
+	    	}
+			
+		} catch (GenericEntityException e) {
+			return UtilMessage.createAndLogServiceError(e, MODULE);
+		}
+        
+        Map results = ServiceUtil.returnSuccess();
+        results.put("partyIdPadre", partyIdPadre);
+        return results;
+    }	
 
 }
