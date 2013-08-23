@@ -474,13 +474,14 @@ public class PresupuestoEgresoImportService extends DomainService implements
 						// C/D
 						Debug.log("Obtencion de Cuentas Dinamico");
 						String seqId = "00001", flag = "D", cuenta = miniguia
-								.getCuentaCargo();
+								.getCuentaCargo(), naturaleza = "D";
 
 						for (int j = 0; j < 2; j++) {
 							if (j != 0) {
 								seqId = "00002";
 								flag = "C";
 								cuenta = miniguia.getCuentaAbono();
+								naturaleza = "A";
 							}
 							AcctgTransEntry acctgentry = UtilImport
 									.generaAcctgTransEntry(presupuestoEgreso,
@@ -501,7 +502,7 @@ public class PresupuestoEgresoImportService extends DomainService implements
 									.actualizaGlAccountOrganization(
 											ledger_repo,
 											presupuestoEgreso.getPostedAmount(),
-											cuenta, organizationPartyId);
+											cuenta, organizationPartyId,naturaleza);
 							imp_tx4 = this.session.beginTransaction();
 							ledger_repo.createOrUpdate(glAccountOrganization);
 							imp_tx4.commit();

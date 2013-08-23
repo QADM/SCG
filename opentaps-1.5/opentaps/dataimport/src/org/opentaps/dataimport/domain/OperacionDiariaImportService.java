@@ -239,7 +239,7 @@ public class OperacionDiariaImportService extends DomainService implements
 										ledger_repo,
 										rowdata.getMonto(),
 										cuentas.get("Cuenta Cargo Presupuesto"),
-										rowdata.getOrganizationPartyId());
+										rowdata.getOrganizationPartyId(),"D");
 						imp_tx7 = this.session.beginTransaction();
 						ledger_repo.createOrUpdate(glAccountOrganization);
 						imp_tx7.commit();
@@ -257,7 +257,7 @@ public class OperacionDiariaImportService extends DomainService implements
 										ledger_repo,
 										rowdata.getMonto(),
 										cuentas.get("Cuenta Abono Presupuesto"),
-										rowdata.getOrganizationPartyId());
+										rowdata.getOrganizationPartyId(),"A");
 						imp_tx11 = this.session.beginTransaction();
 						ledger_repo.createOrUpdate(glAccountOrganization);
 						imp_tx11.commit();
@@ -318,7 +318,7 @@ public class OperacionDiariaImportService extends DomainService implements
 								.actualizaGlAccountOrganization(ledger_repo,
 										rowdata.getMonto(),
 										cuentas.get("Cuenta Cargo Contable"),
-										rowdata.getOrganizationPartyId());
+										rowdata.getOrganizationPartyId(),"D");
 						imp_tx8 = this.session.beginTransaction();
 						ledger_repo.createOrUpdate(glAccountOrganization);
 						imp_tx8.commit();
@@ -335,7 +335,7 @@ public class OperacionDiariaImportService extends DomainService implements
 								.actualizaGlAccountOrganization(ledger_repo,
 										rowdata.getMonto(),
 										cuentas.get("Cuenta Abono Contable"),
-										rowdata.getOrganizationPartyId());
+										rowdata.getOrganizationPartyId(),"A");
 						imp_tx12 = this.session.beginTransaction();
 						ledger_repo.createOrUpdate(glAccountOrganization);
 						imp_tx12.commit();
