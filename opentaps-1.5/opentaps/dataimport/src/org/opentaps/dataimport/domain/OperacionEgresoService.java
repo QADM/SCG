@@ -2,17 +2,30 @@ package org.opentaps.dataimport.domain;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import org.ofbiz.base.util.Debug;
+import org.ofbiz.entity.condition.EntityCondition;
+import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.ServiceUtil;
+import org.opentaps.base.entities.AcctgPolizasDetalle;
+import org.opentaps.base.entities.AcctgTagPostingCheck;
 import org.opentaps.base.entities.AcctgTrans;
+import org.opentaps.base.entities.AcctgTransAndEntries;
 import org.opentaps.base.entities.AcctgTransEntry;
 import org.opentaps.base.entities.AcctgTransPresupuestal;
+import org.opentaps.base.entities.AcctgTransPresupuestalEg;
+import org.opentaps.base.entities.AcctgTransPresupuestalIng;
 import org.opentaps.base.entities.Enumeration;
 import org.opentaps.base.entities.Geo;
+import org.opentaps.base.entities.GlAccountClass;
+import org.opentaps.base.entities.GlAccountHistory;
 import org.opentaps.base.entities.GlAccountOrganization;
+import org.opentaps.base.entities.InvoiceAdjustmentGlAccount;
+import org.opentaps.base.entities.InvoiceGlAccountType;
 import org.opentaps.base.entities.Party;
 import org.opentaps.base.entities.ProductCategory;
 import org.opentaps.base.entities.TipoDocumento;
@@ -21,10 +34,22 @@ import org.opentaps.dataimport.UtilImport;
 import org.opentaps.dataimport.domain.MotorContable;
 import org.opentaps.domain.DomainService;
 import org.opentaps.domain.dataimport.EgresoDiarioDataImportRepositoryInterface;
+import org.opentaps.domain.ledger.AccountingTransaction;
+import org.opentaps.domain.ledger.GeneralLedgerAccount;
+import org.opentaps.domain.ledger.LedgerException;
 import org.opentaps.domain.ledger.LedgerRepositoryInterface;
+import org.opentaps.domain.ledger.LedgerSpecificationInterface;
+import org.opentaps.domain.organization.AccountingTagConfigurationForOrganizationAndUsage;
+import org.opentaps.foundation.entity.EntityFieldInterface;
+import org.opentaps.foundation.entity.EntityInterface;
+import org.opentaps.foundation.entity.EntityNotFoundException;
 import org.opentaps.foundation.entity.hibernate.Session;
 import org.opentaps.foundation.entity.hibernate.Transaction;
+import org.opentaps.foundation.entity.util.EntityListIterator;
+import org.opentaps.foundation.infrastructure.DomainContextInterface;
+import org.opentaps.foundation.infrastructure.Infrastructure;
 import org.opentaps.foundation.infrastructure.InfrastructureException;
+import org.opentaps.foundation.infrastructure.User;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.service.ServiceException;
 
@@ -32,10 +57,11 @@ import com.ibm.icu.util.Calendar;
 
 public class OperacionEgresoService extends DomainService{
 
-	private Session session;
 	
-	public Map<String, Object> registraEgreso(Map<String, Object> context) throws ServiceException
+	public Map<String, Object> registraEgreso(DispatchContext d,Map<String, Object> context) throws ServiceException
 	{
+		Session session = null;
+		Infrastructure i = new Infrastructure(d.getDelegator());
 		Map<String,Object> output = null;
 		String tipoDocumento= (String) context.get("tipoDocumento");
 		Date fechaRegistro= (Date) context.get("fechaRegistro");
@@ -62,12 +88,839 @@ public class OperacionEgresoService extends DomainService{
         
         try
         {
-        	this.session = this.getInfrastructure().getSession();
-        	EgresoDiarioDataImportRepositoryInterface imp_repo = this
-				.getDomainsDirectory().getDataImportDomain()
-				.getEgresoDiarioDataImportRepository();
-        	LedgerRepositoryInterface ledger_repo = this.getDomainsDirectory()
-				.getLedgerDomain().getLedgerRepository();
+        	session = i.getSession();
+        	LedgerRepositoryInterface ledger_repo = new LedgerRepositoryInterface() {
+				
+				@Override
+				public void setUser(User user) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void setInfrastructure(Infrastructure infrastructure) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void setDomainContext(Infrastructure infrastructure, User user) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void setDomainContext(DomainContextInterface context) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public User getUser() {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public Infrastructure getInfrastructure() {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public void update(Collection<? extends EntityInterface> entities)
+						throws RepositoryException {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void update(EntityInterface entity) throws RepositoryException {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void remove(Collection<? extends EntityInterface> entities)
+						throws RepositoryException {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void remove(EntityInterface entity) throws RepositoryException {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public <T extends EntityInterface> Map<? extends EntityFieldInterface<? super T>, Object> map(
+						EntityFieldInterface<? super T> key1, Object value1,
+						EntityFieldInterface<? super T> key2, Object value2,
+						EntityFieldInterface<? super T> key3, Object value3,
+						EntityFieldInterface<? super T> key4, Object value4,
+						EntityFieldInterface<? super T> key5, Object value5,
+						EntityFieldInterface<? super T> key6, Object value6,
+						EntityFieldInterface<? super T> key7, Object value7) {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public <T extends EntityInterface> Map<? extends EntityFieldInterface<? super T>, Object> map(
+						EntityFieldInterface<? super T> key1, Object value1,
+						EntityFieldInterface<? super T> key2, Object value2,
+						EntityFieldInterface<? super T> key3, Object value3,
+						EntityFieldInterface<? super T> key4, Object value4,
+						EntityFieldInterface<? super T> key5, Object value5,
+						EntityFieldInterface<? super T> key6, Object value6) {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public <T extends EntityInterface> Map<? extends EntityFieldInterface<? super T>, Object> map(
+						EntityFieldInterface<? super T> key1, Object value1,
+						EntityFieldInterface<? super T> key2, Object value2,
+						EntityFieldInterface<? super T> key3, Object value3,
+						EntityFieldInterface<? super T> key4, Object value4,
+						EntityFieldInterface<? super T> key5, Object value5) {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public <T extends EntityInterface> Map<? extends EntityFieldInterface<? super T>, Object> map(
+						EntityFieldInterface<? super T> key1, Object value1,
+						EntityFieldInterface<? super T> key2, Object value2,
+						EntityFieldInterface<? super T> key3, Object value3,
+						EntityFieldInterface<? super T> key4, Object value4) {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public <T extends EntityInterface> Map<? extends EntityFieldInterface<? super T>, Object> map(
+						EntityFieldInterface<? super T> key1, Object value1,
+						EntityFieldInterface<? super T> key2, Object value2,
+						EntityFieldInterface<? super T> key3, Object value3) {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public <T extends EntityInterface> Map<? extends EntityFieldInterface<? super T>, Object> map(
+						EntityFieldInterface<? super T> key1, Object value1,
+						EntityFieldInterface<? super T> key2, Object value2) {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public <T extends EntityInterface> Map<? extends EntityFieldInterface<? super T>, Object> map(
+						EntityFieldInterface<? super T> key1, Object value1) {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public <T extends EntityInterface, T2 extends EntityInterface> T getRelatedOneCache(
+						Class<T> entityName, String relation, T2 entity)
+						throws RepositoryException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public <T extends EntityInterface, T2 extends EntityInterface> T getRelatedOneCache(
+						Class<T> entityName, T2 entity) throws RepositoryException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public <T extends EntityInterface> EntityInterface getRelatedOneCache(
+						String relation, T entity) throws RepositoryException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public <T extends EntityInterface, T2 extends EntityInterface> T getRelatedOne(
+						Class<T> entityName, String relation, T2 entity)
+						throws RepositoryException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public <T extends EntityInterface, T2 extends EntityInterface> T getRelatedOne(
+						Class<T> entityName, T2 entity) throws RepositoryException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public <T extends EntityInterface> EntityInterface getRelatedOne(
+						String relation, T entity) throws RepositoryException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public <T extends EntityInterface, T2 extends EntityInterface> List<T> getRelatedCache(
+						Class<T> entityName, String relation, T2 entity)
+						throws RepositoryException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public <T extends EntityInterface, T2 extends EntityInterface> List<T> getRelatedCache(
+						Class<T> entityName, T2 entity) throws RepositoryException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public <T extends EntityInterface> List<? extends EntityInterface> getRelatedCache(
+						String relation, T entity) throws RepositoryException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public <T extends EntityInterface, T2 extends EntityInterface> List<T> getRelated(
+						Class<T> entityName, String relation, T2 entity,
+						List<String> orderBy) throws RepositoryException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public <T extends EntityInterface, T2 extends EntityInterface> List<T> getRelated(
+						Class<T> entityName, String relation, T2 entity)
+						throws RepositoryException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public <T extends EntityInterface, T2 extends EntityInterface> List<T> getRelated(
+						Class<T> entityName, T2 entity, List<String> orderBy)
+						throws RepositoryException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public <T extends EntityInterface, T2 extends EntityInterface> List<T> getRelated(
+						Class<T> entityName, T2 entity) throws RepositoryException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public <T extends EntityInterface> List<? extends EntityInterface> getRelated(
+						String relation, T entity, List<String> orderBy)
+						throws RepositoryException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public <T extends EntityInterface> List<? extends EntityInterface> getRelated(
+						String relation, T entity) throws RepositoryException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public String getNextSubSeqId(EntityInterface entity,
+						String sequenceFieldName, int numericPadding, int incrementBy)
+						throws RepositoryException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public String getNextSeqId(EntityInterface entity) {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public String getNextSeqId(String seqName, long staggerMax) {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public String getNextSeqId(String seqName) {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public <T extends EntityInterface> List<T> findPage(Class<T> entityName,
+						EntityCondition condition, List<String> fields,
+						List<String> orderBy, int pageStart, int pageSize)
+						throws RepositoryException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public <T extends EntityInterface> List<T> findPage(Class<T> entityName,
+						EntityCondition condition, List<String> orderBy, int pageStart,
+						int pageSize) throws RepositoryException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public <T extends EntityInterface> List<T> findPage(Class<T> entityName,
+						EntityCondition condition, int pageStart, int pageSize)
+						throws RepositoryException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public <T extends EntityInterface> List<T> findPage(Class<T> entityName,
+						List<? extends EntityCondition> conditions, List<String> fields,
+						List<String> orderBy, int pageStart, int pageSize)
+						throws RepositoryException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public <T extends EntityInterface> List<T> findPage(Class<T> entityName,
+						List<? extends EntityCondition> conditions, List<String> orderBy,
+						int pageStart, int pageSize) throws RepositoryException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public <T extends EntityInterface> List<T> findPage(Class<T> entityName,
+						List<? extends EntityCondition> conditions, int pageStart,
+						int pageSize) throws RepositoryException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public <T extends EntityInterface> List<T> findPage(Class<T> entityName,
+						Map<? extends EntityFieldInterface<? super T>, Object> conditions,
+						List<String> fields, List<String> orderBy, int pageStart,
+						int pageSize) throws RepositoryException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public <T extends EntityInterface> List<T> findPage(Class<T> entityName,
+						Map<? extends EntityFieldInterface<? super T>, Object> conditions,
+						List<String> orderBy, int pageStart, int pageSize)
+						throws RepositoryException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public <T extends EntityInterface> List<T> findPage(Class<T> entityName,
+						Map<? extends EntityFieldInterface<? super T>, Object> conditions,
+						int pageStart, int pageSize) throws RepositoryException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public <T extends EntityInterface> T findOneNotNullCache(
+						Class<T> entityName,
+						Map<? extends EntityFieldInterface<? super T>, Object> pk,
+						String messageLabel, Map<String, Object> context)
+						throws RepositoryException, EntityNotFoundException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public <T extends EntityInterface> T findOneNotNullCache(
+						Class<T> entityName,
+						Map<? extends EntityFieldInterface<? super T>, Object> pk,
+						String message) throws RepositoryException, EntityNotFoundException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public <T extends EntityInterface> T findOneNotNullCache(
+						Class<T> entityName,
+						Map<? extends EntityFieldInterface<? super T>, Object> pk)
+						throws RepositoryException, EntityNotFoundException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public <T extends EntityInterface> T findOneNotNull(Class<T> entityName,
+						Map<? extends EntityFieldInterface<? super T>, Object> pk,
+						String messageLabel, Map context) throws RepositoryException,
+						EntityNotFoundException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public <T extends EntityInterface> T findOneNotNull(Class<T> entityName,
+						Map<? extends EntityFieldInterface<? super T>, Object> pk,
+						String message) throws RepositoryException, EntityNotFoundException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public <T extends EntityInterface> T findOneNotNull(Class<T> entityName,
+						Map<? extends EntityFieldInterface<? super T>, Object> pk)
+						throws RepositoryException, EntityNotFoundException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public <T extends EntityInterface> T findOneCache(Class<T> entityName,
+						Map<? extends EntityFieldInterface<? super T>, Object> pk)
+						throws RepositoryException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public <T extends EntityInterface> T findOne(Class<T> entityName,
+						Map<? extends EntityFieldInterface<? super T>, Object> pk)
+						throws RepositoryException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public <T extends EntityInterface> List<T> findListCache(
+						Class<T> entityName, EntityCondition condition, List<String> orderBy)
+						throws RepositoryException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public <T extends EntityInterface> List<T> findListCache(
+						Class<T> entityName, EntityCondition condition)
+						throws RepositoryException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public <T extends EntityInterface> List<T> findListCache(
+						Class<T> entityName, List<? extends EntityCondition> conditions,
+						List<String> orderBy) throws RepositoryException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public <T extends EntityInterface> List<T> findListCache(
+						Class<T> entityName, List<? extends EntityCondition> conditions)
+						throws RepositoryException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public <T extends EntityInterface> List<T> findListCache(
+						Class<T> entityName,
+						Map<? extends EntityFieldInterface<? super T>, Object> conditions,
+						List<String> orderBy) throws RepositoryException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public <T extends EntityInterface> List<T> findListCache(
+						Class<T> entityName,
+						Map<? extends EntityFieldInterface<? super T>, Object> conditions)
+						throws RepositoryException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public <T extends EntityInterface> List<T> findList(Class<T> entityName,
+						EntityCondition condition, List<String> fields, List<String> orderBy)
+						throws RepositoryException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public <T extends EntityInterface> List<T> findList(Class<T> entityName,
+						EntityCondition condition, List<String> orderBy)
+						throws RepositoryException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public <T extends EntityInterface> List<T> findList(Class<T> entityName,
+						EntityCondition condition) throws RepositoryException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public <T extends EntityInterface> List<T> findList(Class<T> entityName,
+						List<? extends EntityCondition> conditions, List<String> fields,
+						List<String> orderBy) throws RepositoryException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public <T extends EntityInterface> List<T> findList(Class<T> entityName,
+						List<? extends EntityCondition> conditions, List<String> orderBy)
+						throws RepositoryException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public <T extends EntityInterface> List<T> findList(Class<T> entityName,
+						List<? extends EntityCondition> conditions)
+						throws RepositoryException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public <T extends EntityInterface> List<T> findList(Class<T> entityName,
+						Map<? extends EntityFieldInterface<? super T>, Object> conditions,
+						List<String> fields, List<String> orderBy)
+						throws RepositoryException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public <T extends EntityInterface> List<T> findList(Class<T> entityName,
+						Map<? extends EntityFieldInterface<? super T>, Object> conditions,
+						List<String> orderBy) throws RepositoryException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public <T extends EntityInterface> List<T> findList(Class<T> entityName,
+						Map<? extends EntityFieldInterface<? super T>, Object> conditions)
+						throws RepositoryException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public <T extends EntityInterface> EntityListIterator<T> findIterator(
+						Class<T> entityName, EntityCondition condition,
+						List<String> fields, List<String> orderBy)
+						throws RepositoryException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public <T extends EntityInterface> EntityListIterator<T> findIterator(
+						Class<T> entityName, EntityCondition condition, List<String> orderBy)
+						throws RepositoryException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public <T extends EntityInterface> EntityListIterator<T> findIterator(
+						Class<T> entityName, EntityCondition condition)
+						throws RepositoryException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public <T extends EntityInterface> EntityListIterator<T> findIterator(
+						Class<T> entityName, List<? extends EntityCondition> conditions,
+						List<String> fields, List<String> orderBy)
+						throws RepositoryException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public <T extends EntityInterface> EntityListIterator<T> findIterator(
+						Class<T> entityName, List<? extends EntityCondition> conditions,
+						List<String> orderBy) throws RepositoryException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public <T extends EntityInterface> EntityListIterator<T> findIterator(
+						Class<T> entityName, List<? extends EntityCondition> conditions)
+						throws RepositoryException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public <T extends EntityInterface> EntityListIterator<T> findIterator(
+						Class<T> entityName,
+						Map<? extends EntityFieldInterface<? super T>, Object> conditions,
+						List<String> fields, List<String> orderBy)
+						throws RepositoryException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public <T extends EntityInterface> EntityListIterator<T> findIterator(
+						Class<T> entityName,
+						Map<? extends EntityFieldInterface<? super T>, Object> conditions,
+						List<String> orderBy) throws RepositoryException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public <T extends EntityInterface> EntityListIterator<T> findIterator(
+						Class<T> entityName,
+						Map<? extends EntityFieldInterface<? super T>, Object> conditions)
+						throws RepositoryException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public <T extends EntityInterface> List<T> findAllCache(
+						Class<T> entityName, List<String> orderBy)
+						throws RepositoryException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public <T extends EntityInterface> List<T> findAllCache(Class<T> entityName)
+						throws RepositoryException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public <T extends EntityInterface> List<T> findAll(Class<T> entityName,
+						List<String> orderBy) throws RepositoryException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public <T extends EntityInterface> List<T> findAll(Class<T> entityName)
+						throws RepositoryException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public void createOrUpdate(Collection<? extends EntityInterface> entities)
+						throws RepositoryException {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void createOrUpdate(EntityInterface entity)
+						throws RepositoryException {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void create(EntityInterface entity) throws RepositoryException {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public List<AccountingTagConfigurationForOrganizationAndUsage> validateTagParameters(
+						AcctgTransEntry entry) throws RepositoryException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public String storeAcctgTransAndEntries(AccountingTransaction acctgTrans,
+						List<AcctgTransEntry> acctgTransEntries)
+						throws RepositoryException, ServiceException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public void setPosted(AccountingTransaction transaction)
+						throws RepositoryException, LedgerException {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public AcctgTransEntry getTransactionEntry(String acctgTransId,
+						String acctgTransEntrySeqId) throws RepositoryException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public List<AcctgTransEntry> getTransactionEntries(String acctgTransId)
+						throws RepositoryException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public LedgerSpecificationInterface getSpecification() {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public GeneralLedgerAccount getProductLedgerAccount(String productId,
+						String glAccountTypeId, String organizationPartyId)
+						throws RepositoryException, EntityNotFoundException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public List<AcctgTransAndEntries> getPostedTransactionsAndEntries(
+						String organizationPartyId, List<String> glFiscalTypeId,
+						Timestamp fromDate, Timestamp thruDate) throws RepositoryException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public List<AccountingTransaction> getPostedTransactions(
+						String organizationPartyId, String glFiscalTypeId,
+						Timestamp fromDate, Timestamp thruDate) throws RepositoryException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public GlAccountOrganization getOrganizationAccount(String glAccountId,
+						String organizationPartyId) throws RepositoryException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public GeneralLedgerAccount getLedgerAccount(String glAccountId,
+						String organizationPartyId) throws RepositoryException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public InvoiceGlAccountType getInvoiceGlAccountType(
+						String organizationPartyId, String invoiceTypeId)
+						throws RepositoryException, EntityNotFoundException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public InvoiceAdjustmentGlAccount getInvoiceAdjustmentGlAccount(
+						String organizationPartyId, String invoiceTypeId,
+						String invoiceAdjustmentTypeId) throws RepositoryException,
+						EntityNotFoundException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public GeneralLedgerAccount getDefaultLedgerAccount(String glAccountTypeId,
+						String organizationPartyId) throws RepositoryException,
+						EntityNotFoundException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public AcctgTransPresupuestalIng getAcctgTransPresupuestalIng(
+						String acctgTransId) throws RepositoryException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public AcctgTransPresupuestalEg getAcctgTransPresupuestalEg(
+						String acctgTransId) throws RepositoryException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public AcctgTagPostingCheck getAcctgTagPostingCheck(
+						AccountingTransaction transaction) throws RepositoryException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public AcctgPolizasDetalle getAcctgPolizasDetalle(String acctgTransId)
+						throws RepositoryException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public AccountingTransaction getAccountingTransaction(String acctgTransId)
+						throws RepositoryException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public GlAccountHistory getAccountHistory(String glAccountId,
+						String organizationPartyId, String customTimePeriodId)
+						throws RepositoryException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public List<GlAccountClass> getAccountClassTree(String glAccountClassId)
+						throws RepositoryException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public AccountingTransaction createSimpleTransaction(
+						AccountingTransaction acctgTrans,
+						GeneralLedgerAccount debitAccount,
+						GeneralLedgerAccount creditAccount, String organizationPartyId,
+						BigDecimal amount, String transactionPartyId)
+						throws RepositoryException, ServiceException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+			};
         	
         	Transaction imp_tx1 = null;
 			Transaction imp_tx2 = null;
@@ -265,7 +1118,7 @@ public class OperacionEgresoService extends DomainService{
 				aux.setAgrupador(refDoc);
 				aux.setIdTipoDoc(tipoDocumento);
 				aux.setSecuencia(secuencia);
-				//aux.setLote(lote);
+				aux.setLote(lote);
 				aux.setClavePres(concatenacion);
 
 				if (cuentas.get("Cuenta Cargo Presupuesto") != null) {
@@ -300,13 +1153,13 @@ public class OperacionEgresoService extends DomainService{
 
 					egresoDiario.setGlFiscalTypeId(cuentas
 							.get("GlFiscalTypePresupuesto"));
-					imp_tx1 = this.session.beginTransaction();
+					imp_tx1 = session.beginTransaction();
 					ledger_repo.createOrUpdate(egresoDiario);
 					imp_tx1.commit();
 
 					Debug.log("commit Aux");
 					aux.setAcctgTransId(egresoDiario.getAcctgTransId());
-					imp_tx3 = this.session.beginTransaction();
+					imp_tx3 = session.beginTransaction();
 					ledger_repo.createOrUpdate(aux);
 					imp_tx3.commit();
 
@@ -324,7 +1177,7 @@ public class OperacionEgresoService extends DomainService{
 					acctgentry.setAcctgTagEnumId2(tg.getEnumId());
 					acctgentry.setAcctgTagEnumId3(sfe.getEnumId());
 					acctgentry.setAcctgTagEnumId4(area.getEnumId());
-					imp_tx5 = this.session.beginTransaction();
+					imp_tx5 = session.beginTransaction();
 					ledger_repo.createOrUpdate(acctgentry);
 					imp_tx5.commit();
 
@@ -334,8 +1187,8 @@ public class OperacionEgresoService extends DomainService{
 									ledger_repo,
 									monto,
 									cuentas.get("Cuenta Cargo Presupuesto"),
-									organizacionContable,"D");
-					imp_tx7 = this.session.beginTransaction();
+									organizacionContable);
+					imp_tx7 = session.beginTransaction();
 					ledger_repo.createOrUpdate(glAccountOrganization);
 					imp_tx7.commit();
 
@@ -350,7 +1203,7 @@ public class OperacionEgresoService extends DomainService{
 					acctgentry.setAcctgTagEnumId2(tg.getEnumId());
 					acctgentry.setAcctgTagEnumId3(sfe.getEnumId());
 					acctgentry.setAcctgTagEnumId4(area.getEnumId());
-					imp_tx9 = this.session.beginTransaction();
+					imp_tx9 = session.beginTransaction();
 					ledger_repo.createOrUpdate(acctgentry);
 					imp_tx9.commit();
 
@@ -360,8 +1213,8 @@ public class OperacionEgresoService extends DomainService{
 									ledger_repo,
 									monto,
 									cuentas.get("Cuenta Abono Presupuesto"),
-									organizacionContable,"A");
-					imp_tx11 = this.session.beginTransaction();
+									organizacionContable);
+					imp_tx11 = session.beginTransaction();
 					ledger_repo.createOrUpdate(glAccountOrganization);
 					imp_tx11.commit();
 
@@ -396,12 +1249,12 @@ public class OperacionEgresoService extends DomainService{
 
 					egresoDiario.setGlFiscalTypeId(cuentas
 							.get("GlFiscalTypeContable"));
-					imp_tx2 = this.session.beginTransaction();
+					imp_tx2 = session.beginTransaction();
 					ledger_repo.createOrUpdate(egresoDiario);
 					imp_tx2.commit();
 
 					aux.setAcctgTransId(egresoDiario.getAcctgTransId());
-					imp_tx4 = this.session.beginTransaction();
+					imp_tx4 = session.beginTransaction();
 					ledger_repo.createOrUpdate(aux);
 					imp_tx4.commit();
 
@@ -416,7 +1269,7 @@ public class OperacionEgresoService extends DomainService{
 					acctgentry.setAcctgTagEnumId2(tg.getEnumId());
 					acctgentry.setAcctgTagEnumId3(sfe.getEnumId());
 					acctgentry.setAcctgTagEnumId4(area.getEnumId());
-					imp_tx6 = this.session.beginTransaction();
+					imp_tx6 = session.beginTransaction();
 					ledger_repo.createOrUpdate(acctgentry);
 					imp_tx6.commit();
 
@@ -424,8 +1277,8 @@ public class OperacionEgresoService extends DomainService{
 							.actualizaGlAccountOrganization(ledger_repo,
 									monto,
 									cuentas.get("Cuenta Cargo Contable"),
-									organizacionContable,"D");
-					imp_tx8 = this.session.beginTransaction();
+									organizacionContable);
+					imp_tx8 = session.beginTransaction();
 					ledger_repo.createOrUpdate(glAccountOrganization);
 					imp_tx8.commit();
 
@@ -439,7 +1292,7 @@ public class OperacionEgresoService extends DomainService{
 					acctgentry.setAcctgTagEnumId2(tg.getEnumId());
 					acctgentry.setAcctgTagEnumId3(sfe.getEnumId());
 					acctgentry.setAcctgTagEnumId4(area.getEnumId());
-					imp_tx10 = this.session.beginTransaction();
+					imp_tx10 = session.beginTransaction();
 					ledger_repo.createOrUpdate(acctgentry);
 					imp_tx10.commit();
 
@@ -447,8 +1300,8 @@ public class OperacionEgresoService extends DomainService{
 							.actualizaGlAccountOrganization(ledger_repo,
 									monto,
 									cuentas.get("Cuenta Abono Contable"),
-									organizacionContable,"A");
-					imp_tx12 = this.session.beginTransaction();
+									organizacionContable);
+					imp_tx12 = session.beginTransaction();
 					ledger_repo.createOrUpdate(glAccountOrganization);
 					imp_tx12.commit();
 				}

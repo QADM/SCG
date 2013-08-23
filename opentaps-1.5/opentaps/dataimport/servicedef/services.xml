@@ -371,7 +371,7 @@
     	<attribute name="enumIdPadre" mode="OUT" type="String" optional="true"/>
     </service>
     
-    <service name="operacionIngreso" engine="java"  auth="true"
+    <service name="operacionIngreso" engine="java" auth="true"
             location="org.opentaps.dataimport.domain.OperacionIngresoService" invoke="registraIngreso" export="true">
         <description>Registra la operacion diaria presupuestal de Ingreso</description>
         <attribute type="String" mode="IN" name="tipoDocumento" optional="false"/>
@@ -382,10 +382,9 @@
         <attribute type="String" mode="IN" name="refDoc" optional="false"/>
         <attribute type="String" mode="IN" name="secuencia" optional="false"/>
         <attribute type="String" mode="IN" name="usuario" optional="false"/>
-        <attribute type="String" mode="IN" name="lote" optional="false"/>
-        <attribute type="String" mode="IN" name="tipoCatalogo" optional="false"/>
-        <attribute type="String" mode="IN" name="idPago" optional="false"/>
-        <attribute type="String" mode="IN" name="idProducto" optional="false"/>
+        <attribute type="String" mode="IN" name="idPago" optional="true"/>
+        <attribute type="String" mode="IN" name="idProductoD" optional="true"/>
+        <attribute type="String" mode="IN" name="idProductoH" optional="true"/>
         <attribute type="String" mode="IN" name="ciclo" optional="false"/>
         <attribute type="String" mode="IN" name="ue" optional="false"/>
         <attribute type="String" mode="IN" name="n5" optional="false"/>
@@ -395,7 +394,7 @@
         <attribute type="String" mode="OUT" name="messageOut" optional="true"/>
     </service>
       
-    <service name="operacionEgreso" engine="java"  auth="true"
+    <service name="operacionEgreso" engine="java"
             location="org.opentaps.dataimport.domain.OperacionEgresoService" invoke="registraEgreso" export="true">
         <description>Registra la operacion diaria presupuestal de Egreso</description>
         <attribute type="String" mode="IN" name="tipoDocumento" optional="false"/>
@@ -423,7 +422,7 @@
         <attribute type="String" mode="OUT" name="messageOut" optional="true"/>
     </service>  
     
-    <service name="operacionDiaria" engine="java"  auth="true"
+    <service name="operacionDiaria" engine="java"
             location="org.opentaps.dataimport.domain.OperacionDiariaService" invoke="registraDiario" export="true">
         <description>Registra la operacion diaria</description>
         <attribute type="String" mode="IN" name="tTrans" optional="false"/>
@@ -444,6 +443,6 @@
         <attribute type="String" mode="IN" name="tipoCatalogoD" optional="false"/>
         <attribute type="String" mode="IN" name="idD" optional="false"/>
         <attribute type="String" mode="OUT" name="messageOut" optional="true"/>
-    </service>      
-
+    </service>   
+    
 </services>
