@@ -1,0 +1,485 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at http://mozilla.org/MPL/2.0/. 
+ *  
+*/
+
+/* Begin Style Guide */
+
+
+.cafPopup
+{
+    display: none;
+    position: absolute;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    top: 0px; left: 0px;
+    z-index: 9995;
+
+    -webkit-transition: opacity 500ms ease-in;
+    -moz-transition: opacity 500ms ease-in;
+    -o-transition: opacity 500ms ease-in;
+    transition: opacity 500ms ease-in;
+}
+
+
+.cafPopupVisible{
+    opacity: 1;
+}
+
+
+.cafPopupBackground
+{
+    width: 100%; height: 100%; 
+    background-color: rgba(0,0,0,0.4);
+    top: 0px; 
+    left: 0px;
+    text-align: center;
+}
+
+.cafPopupContent
+{
+    /*    position: relative;*/
+    display: inline-block;
+    text-align: left;
+    min-height: 450px;
+    min-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: white;
+    border: 1px solid rgba(50,50,50,0.4);;
+    padding: 10px;
+
+
+}
+
+
+.cafBasicPopupCenterContainer{
+    min-height: 370px;
+
+}
+
+
+.cafBasicPopupTopContainer{
+
+    font-size:28px; 
+    color:#2c3030; 
+    letter-spacing:-1px; 
+    margin-left:0px; 
+    border-bottom: 1px dotted #666; 
+    padding-bottom:10px;  
+    margin-bottom:5px; 
+
+}
+
+
+.cafPopupBottomContent{
+
+    width: 100%;
+    border-top: 1px dotted white; 
+    padding-top:10px;  
+    margin-top:5px; 
+    overflow: hidden;
+}
+
+.cafBasicPopupButton{
+
+    -webkit-transition: all 200ms ease-in;
+    -moz-transition: all 200ms ease-in;
+    -o-transition: all 200ms ease-in;
+    transition: all 200ms ease-in;
+
+    display: inline-block;
+    float: right;
+    text-align: center;
+    min-width: 60px;
+    border: 1px solid #666;
+    padding: 4px 8px;
+    margin: 2px;
+}
+
+
+.cafBasicPopupButton:hover{
+    background-color: white;
+    cursor: pointer;
+}
+
+.cafBasicPopupButton:active{
+    border: 1px solid white;
+}
+
+.cafBasicPopupButton.cafBasicPopupNonValidated,
+.cafBasicPopupButton.cafBasicPopupNonValidated:hover,
+.cafBasicPopupButton.cafBasicPopupNonValidated:active
+{
+    background-color: inherit;
+    border: 1px solid #666;
+    color: #999;
+    cursor: default
+}
+
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at http://mozilla.org/MPL/2.0/. 
+ *  
+*/
+
+
+
+.underConstruction {
+
+    font-size: 40px;
+    text-align: center;
+    padding-top: 200px;
+    
+
+}/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at http://mozilla.org/MPL/2.0/. 
+ *  
+*/
+.notificationDefault
+{
+    -webkit-transition: top 500ms ease-in;
+    -moz-transition: top 500ms ease-in;
+    -o-transition: top 500ms ease-in;
+    transition: top 500ms ease-in;
+
+
+    -webkit-background-size: 40px 40px;
+    -moz-background-size: 40px 40px;
+    background-size: 40px 40px;
+    background-image: -webkit-gradient(linear, left top, right bottom,
+        color-stop(.25, rgba(255, 255, 255, .05)), color-stop(.25, transparent),
+        color-stop(.5, transparent), color-stop(.5, rgba(255, 255, 255, .05)),
+        color-stop(.75, rgba(255, 255, 255, .05)), color-stop(.75, transparent),
+        to(transparent));
+    background-image: -webkit-linear-gradient(135deg, rgba(255, 255, 255, .05) 25%, transparent 25%,
+        transparent 50%, rgba(255, 255, 255, .05) 50%, rgba(255, 255, 255, .05) 75%,
+        transparent 75%, transparent);
+    background-image: -moz-linear-gradient(135deg, rgba(255, 255, 255, .05) 25%, transparent 25%,
+        transparent 50%, rgba(255, 255, 255, .05) 50%, rgba(255, 255, 255, .05) 75%,
+        transparent 75%, transparent);
+    background-image: -ms-linear-gradient(135deg, rgba(255, 255, 255, .05) 25%, transparent 25%,
+        transparent 50%, rgba(255, 255, 255, .05) 50%, rgba(255, 255, 255, .05) 75%,
+        transparent 75%, transparent);
+    background-image: -o-linear-gradient(135deg, rgba(255, 255, 255, .05) 25%, transparent 25%,
+        transparent 50%, rgba(255, 255, 255, .05) 50%, rgba(255, 255, 255, .05) 75%,
+        transparent 75%, transparent);
+    background-image: linear-gradient(135deg, rgba(255, 255, 255, .05) 25%, transparent 25%,
+        transparent 50%, rgba(255, 255, 255, .05) 50%, rgba(255, 255, 255, .05) 75%,
+        transparent 75%, transparent);
+    -moz-box-shadow: inset 0 -1px 0 rgba(255,255,255,.4);
+    -webkit-box-shadow: inset 0 -1px 0 rgba(255,255,255,.4);
+    box-shadow: inset 0 -1px 0 rgba(255,255,255,.4);
+    width: 100%;
+    height: 100px;
+    top: -100px;
+    border: 1px solid;
+    color: #fff;
+    padding: 25px;
+    position: fixed;
+    _position: absolute;
+    text-shadow: 0 1px 0 rgba(0,0,0,.5);
+/*    -webkit-animation: animate-bg 5s linear infinite;*/
+/*    -moz-animation: animate-bg 5s linear infinite;*/
+    
+    font-size: 1.5em;
+}
+
+.notificationDefault.basicNotificationShown{
+    top: 0px;
+}
+
+.info
+{
+    background-color: #4ea5cd;
+    border-color: #3b8eb5;
+}
+
+.error
+{
+    background-color: #de4343;
+    border-color: #c43d3d;
+}
+
+.warn
+{
+    background-color: #eaaf51;
+    border-color: #d99a36;
+}
+
+.success
+{
+    background-color: #61b832;
+    border-color: #55a12c;
+}
+
+.debug
+{
+    background-color: #00a9a3;
+    border-color: #04efe7;
+}
+
+.message h3
+{
+    margin: 0 0 5px 0;
+}
+
+.message p
+{
+    margin: 0;
+}
+
+@-webkit-keyframes animate-bg
+{
+    from {
+    background-position: 0 0;
+}
+to {
+    background-position: -80px 0;
+}
+}
+
+@-moz-keyframes animate-bg
+{
+    from {
+    background-position: 0 0;
+}
+to {
+    background-position: -80px 0;
+}
+}
+
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at http://mozilla.org/MPL/2.0/. 
+ *  
+*/
+
+body {
+
+    margin-top:20px;
+    background-color:#e0e8ec; 
+/*    min-height:900px;*/
+    font-family: Verdana,Arial,Helvetica,sans-serif;
+    font-size: 12px;
+}
+
+.templateHead{
+    width: 1150px;
+    margin-left: auto;
+    margin-right: auto;
+    overflow: hidden;
+    clear: both;
+}
+
+
+
+/*.templateHead > div{
+    display: inline-block;
+    position: relative;
+    line-height: 32px;
+    vertical-align: middle;
+    bottom: 0px;
+    float: left;
+}
+*/
+
+.templateLogo{
+    margin-left: 50px;
+    width: 32px;
+    height: 32px;
+    display: inline-block;
+    background: url('images/webdetails.png');
+    float: left;
+}
+
+.templateTitle{
+    font-size:  22px;
+    margin-left: 5px;
+    margin-right: 20px;
+    font-family: Gudea;
+
+}
+
+.templateHead div.cafLinks{
+
+    line-height: 25px;
+    color: #999;
+    font-size:10px;
+    text-align: center;
+    cursor: pointer;
+    float: left;
+
+    padding-top: 7px;
+    padding-right: 10px;
+    padding-left: 10px;
+
+    -webkit-transition: all 200ms ease-in;
+    -moz-transition: all 200ms ease-in;
+    -o-transition: all 200ms ease-in;
+    transition: all 200ms ease-in;
+}
+
+.templateHead div.cafLinks:hover{
+
+    color: #393e3e;
+
+}
+
+
+.templateHead > div.templateActions{
+
+
+}
+
+
+.templateHead > div.templatePanels{
+
+    float: right;
+    margin-right: 50px
+}
+
+.templatePanelsContainer {
+
+    width: 1150px;
+    margin-left: auto;
+    margin-right: auto;
+
+}
+
+
+/* Panel implmementation */
+
+.panelTitle{
+
+    height: 100px;
+    font-size: 60px;
+    color: white;
+    padding-left: 50px;
+
+}
+
+
+.panelContainer{
+
+    width: 1150px;
+    overflow: hidden;
+}
+
+.panelContainer > div{
+    /*display: inline-block;
+    float: left;*/
+}
+
+
+/* Div content panel */
+
+.cafDivContentPanel{
+    
+    margin-left: 50px;
+    margin-right: 50px;
+    margin-top: 20px;
+    
+}
+
+.cafExternalDivContentPanel{
+    
+    margin-left: 50px;
+    margin-right: 50px;
+    margin-top: 20px;
+    
+}
+
+
+.cafIframeContentPanel{
+    width: 100%;
+}
+
+/* Popups */
+
+
+div.cafPopupContent{
+    background-color:#e0e8ec; 
+
+}
+
+.helpHeader{
+
+    font-size:28px; 
+    color:#2c3030; 
+    letter-spacing:-1px; 
+    margin-left:0px; 
+    border-bottom: 1px dotted #666; 
+    padding-bottom:10px;  
+    margin-top:20px; 
+    margin-bottom:5px; 
+
+}
+
+.helpContent{
+
+
+}
+
+
+dl {
+}
+dt {
+    float: left;
+    clear: left;
+    width: 100px;
+    text-align: right;
+    font-weight: bold;
+    color: rgb(153, 153, 153);
+}
+dt:after {
+    content: ":\0000a0";
+}
+dd {
+    margin: 0 0 0 110px;
+    padding: 0 0 0.5em 0;
+}
+
+
+
+/* Popups */
+
+.dummyFileOperationsList{
+    list-style: none;  
+
+}
+
+.dummyFileOperationsList > li{
+
+
+    -webkit-transition: background-color 200ms ease-in;
+    -moz-transition: background-color 200ms ease-in;
+    -o-transition: background-color 200ms ease-in;
+    transition: background-color 200ms ease-in;
+
+    display: block;
+    text-align: center;
+    min-width: 60px;
+    border: 1px solid #666;
+    padding: 4px 8px;
+    margin: 10px;
+}
+
+
+
+.dummyFileOperationsList > li:hover{
+    background-color: white;
+    cursor: pointer;
+}
+
+.dummyFileOperationsList > li:active{
+    border: 1px solid white;
+}
+
+.dummyFileOperationsListSelected{
+    background-color: white;
+    cursor: pointer;
+}

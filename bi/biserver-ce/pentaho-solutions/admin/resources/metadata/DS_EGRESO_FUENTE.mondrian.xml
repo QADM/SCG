@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Schema name="DS_EGRESO_FUENTE">
+  <Dimension name="Unidad responsable">
+    <Hierarchy hasAll="true" primaryKey="id_unidad_responsable">
+      <Table name="&quot;EGR_ADM_UNIDAD_RESPONSABLE&quot;" schema="&quot;dbo&quot;"/>
+      <Level name="Unidad responsable" column="unidad_responsable" type="String" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension name="Fuente">
+    <Hierarchy name="Fuente recurso" hasAll="true" primaryKey="id_fuente_recurso">
+      <Table name="&quot;EGR_FUE_FUENTE&quot;" schema="&quot;dbo&quot;"/>
+      <Level name="Fuente recurso" column="fuente_recurso" type="String" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension name="Subfuente">
+    <Hierarchy hasAll="true" primaryKey="id_subfuente">
+      <Table name="&quot;EGR_FUE_SUBFUENTE&quot;" schema="&quot;dbo&quot;"/>
+      <Level name="Subfuente" column="subfuente" type="String" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension name="Subfuente especifica">
+    <Hierarchy hasAll="true" primaryKey="id_subfuente_especifica">
+      <Table name="&quot;EGR_FUE_SUBFUENTE_ESPECIFICA&quot;" schema="&quot;dbo&quot;"/>
+      <Level name="Subfuente especifica" column="subfuente_especifica" type="String" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension name="Ciclo">
+    <Hierarchy hasAll="true" primaryKey="id_ciclo">
+      <Table name="&quot;INGEGR_CICLO&quot;" schema="&quot;dbo&quot;"/>
+      <Level name="Ciclo" column="ciclo" type="String" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension name="Periodo">
+    <Hierarchy hasAll="true" primaryKey="id_periodo">
+      <Table name="&quot;INGEGR_PERIODO&quot;" schema="&quot;dbo&quot;"/>
+      <Level name="Periodo" column="periodo" type="String" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Cube name="DS_EGRESO_FUENTE">
+    <Table name="&quot;EGR_EJE_EGRESO&quot;" schema="&quot;dbo&quot;"/>
+    <DimensionUsage name="Unidad responsable" source="Unidad responsable" foreignKey="unidad_responsable"/>
+    <DimensionUsage name="Fuente" source="Fuente" foreignKey="fuente"/>
+    <DimensionUsage name="Subfuente" source="Subfuente" foreignKey="subfuente"/>
+    <DimensionUsage name="Subfuente especifica" source="Subfuente especifica" foreignKey="subfuente_especifica"/>
+    <DimensionUsage name="Ciclo" source="Ciclo" foreignKey="ciclo"/>
+    <DimensionUsage name="Periodo" source="Periodo" foreignKey="periodo"/>
+    <Measure name="Aprobado" column="aprobado" aggregator="sum" formatString="$#,###.00;($#,###.00)"/>
+    <Measure name="Ampliaciones reducciones" column="ampliaciones_reducciones" aggregator="sum" formatString="$#,###.00;($#,###.00)"/>
+    <Measure name="Vigente" column="vigente" aggregator="sum" formatString="$#,###.00;($#,###.00)"/>
+    <Measure name="Comprometido" column="comprometido" aggregator="sum" formatString="$#,###.00;($#,###.00)"/>
+    <Measure name="Disponible" column="disponible" aggregator="sum" formatString="$#,###.00;($#,###.00)"/>
+    <Measure name="Devengado" column="devengado" aggregator="sum" formatString="$#,###.00;($#,###.00)"/>
+    <Measure name="Comprometido no devengado" column="comprometido_no_devengado" aggregator="sum" formatString="$#,###.00;($#,###.00)"/>
+    <Measure name="Sin devengar" column="sin_devengar" aggregator="sum" formatString="$#,###.00;($#,###.00)"/>
+    <Measure name="Ejercido" column="ejercido" aggregator="sum" formatString="$#,###.00;($#,###.00)"/>
+    <Measure name="Pagado" column="pagado" aggregator="sum" formatString="$#,###.00;($#,###.00)"/>
+    <Measure name="Deuda" column="deuda" aggregator="sum" formatString="$#,###.00;($#,###.00)"/>
+  </Cube>
+</Schema>

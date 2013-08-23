@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin title="marketplace">
+<lifecycle-listener class="org.pentaho.marketplace.MarketplaceLifeCycleListener"/>
+    <static-paths>
+        <static-path url="/marketplace/resources" localFolder="resources"/>
+    </static-paths>
+
+  <!-- Menu entry -->
+    <menu-items>
+        <menu-item id="cda_refresh" anchor="tools-submenu" label="Marketplace" command="content/marketplace/resources/marketplace.html" type="MENU_ITEM" how="LAST_CHILD"/>
+    </menu-items>
+
+    <webservice  
+    id="MarketplaceService" 
+    type="xml" 
+    class="org.pentaho.marketplace.MarketplaceService"/>
+
+
+
+	<overlays>
+                            
+		<overlay id="startup.marketplace"  resourcebundle="../content/marketplace/resources/lang/messages.properties">
+			<overlay id="startup.marketplace" resourcebundle="../content/marketplace/resources/lang/messages.properties">
+				<toolbar id="mainToolbar">
+					<toolbarbutton id="newMarketplace" 
+                                        image="../content/marketplace/resources/img/mk_icon.png" 
+                                        onclick="mainToolbarHandler.openUrl('${tabName}','${tabName}','content/marketplace/resources/marketplace.html')" 
+                                        tooltiptext="${openNewMarketplace}" 
+                                        insertafter="newAnalysisButton"/>
+				</toolbar>
+			</overlay>
+		</overlay>
+	</overlays>
+
+
+    <content-generator scope="local" id="marketplace" type="MarketplaceContentGenerator" url="">
+        <classname>org.pentaho.marketplace.MarketplaceContentGenerator</classname>
+        <title>Marketplace</title>
+    </content-generator>
+
+</plugin>
