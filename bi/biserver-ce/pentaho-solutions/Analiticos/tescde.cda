@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CDADescriptor>
+   <DataSources>
+      <Connection id="asdfQuery" type="mondrian.jndi">
+         <Catalog>admin/resources/metadata/DS_INGRESOV1.mondrian.xml</Catalog>
+         <Jndi>LOCAL_SS</Jndi>
+      </Connection>
+      <Connection id="" type="kettle.TransFromFile">
+         <KtrFile></KtrFile>
+      </Connection>
+   </DataSources>
+   <DataAccess access="public" cache="true" cacheDuration="3600" connection="asdfQuery"
+               id="asdfQuery"
+               type="mdx">
+      <BandedMode>compact</BandedMode>
+      <Columns/>
+      <Output indexes="1,0" mode="include"/>
+      <Parameters/>
+      <Query>with member [Measures].[Name] as '[Ciclo].CurrentMember.UniqueName' select NON EMPTY(TopCount( filter({Descendants([Ciclo].[All Ciclos] ,[Ciclo].[Ciclo]) * Descendants([Periodo].[All Periodos] ,[Periodo].[Periodo])}, not isempty(([Ciclo].CurrentMember, [Measures].[Estimado])) ) , 50, [Measures].[Estimado])) on ROWS, 
+ NON EMPTY({[Measures].[Name],[Measures].[Estimado] * [Measures].[Fact Count]}) on Columns 
+ from [DS_INGRESOV1]</Query>
+   </DataAccess>
+   <DataAccess access="public" cache="true" cacheDuration="3600" id="" type="kettle">
+      <Columns/>
+      <Parameters/>
+      <Query></Query>
+   </DataAccess>
+</CDADescriptor>
