@@ -267,7 +267,7 @@ public class OperacionIngresoService extends DomainService  {
 									ledger_repo,
 									monto,
 									cuentas.get("Cuenta Cargo Presupuesto"),
-									organizacionContable);
+									organizacionContable,"D");
 					imp_tx7 = this.session.beginTransaction();
 					ledger_repo.createOrUpdate(glAccountOrganization);
 					imp_tx7.commit();
@@ -286,7 +286,7 @@ public class OperacionIngresoService extends DomainService  {
 									ledger_repo,
 									monto,
 									cuentas.get("Cuenta Abono Presupuesto"),
-									organizacionContable);
+									organizacionContable,"A");
 					imp_tx11 = this.session.beginTransaction();
 					ledger_repo.createOrUpdate(glAccountOrganization);
 					imp_tx11.commit();
@@ -347,7 +347,7 @@ public class OperacionIngresoService extends DomainService  {
 							.actualizaGlAccountOrganization(ledger_repo,
 									monto,
 									cuentas.get("Cuenta Cargo Contable"),
-									organizacionContable);
+									organizacionContable,"D");
 					imp_tx8 = this.session.beginTransaction();
 					ledger_repo.createOrUpdate(glAccountOrganization);
 					imp_tx8.commit();
@@ -365,7 +365,7 @@ public class OperacionIngresoService extends DomainService  {
 							.actualizaGlAccountOrganization(ledger_repo,
 									monto,
 									cuentas.get("Cuenta Abono Contable"),
-									organizacionContable);
+									organizacionContable,"A");
 					imp_tx12 = this.session.beginTransaction();
 					ledger_repo.createOrUpdate(glAccountOrganization);
 					imp_tx12.commit();

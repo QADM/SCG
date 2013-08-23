@@ -81,7 +81,7 @@ public class OperacionDiariaService extends DomainService{
 					"Organizacion Ejecutora");
 			mensaje = UtilImport.validaTipoDoc(mensaje, ledger_repo,
 					tipoDocumento_S);
-
+			mensaje = UtilImport.validaMonto(monto_S, mensaje);
 			if (!mensaje.isEmpty()) {
 				String message = "Failed to import Operacion Diaria ["
 						+ refDoc_S + secuencia_S
@@ -143,7 +143,7 @@ public class OperacionDiariaService extends DomainService{
 				aux.setAgrupador(refDoc_S);
 				aux.setIdTipoDoc(tipoDocumento_S);
 				aux.setSecuencia(secuencia_S);
-				aux.setLote(lote_S);
+				//aux.setLote(lote_S);
 
 				if (cuentas.get("Cuenta Cargo Presupuesto") != null) {
 					Debug.log("Cuenta Presupuestal");
@@ -201,7 +201,7 @@ public class OperacionDiariaService extends DomainService{
 									ledger_repo,
 									monto_S,
 									cuentas.get("Cuenta Cargo Presupuesto"),
-									organizacionContable_S);
+									organizacionContable_S,"D");
 					imp_tx7 = this.session.beginTransaction();
 					ledger_repo.createOrUpdate(glAccountOrganization);
 					imp_tx7.commit();
@@ -219,7 +219,7 @@ public class OperacionDiariaService extends DomainService{
 									ledger_repo,
 									monto_S,
 									cuentas.get("Cuenta Abono Presupuesto"),
-									organizacionContable_S);
+									organizacionContable_S,"A");
 					imp_tx11 = this.session.beginTransaction();
 					ledger_repo.createOrUpdate(glAccountOrganization);
 					imp_tx11.commit();
@@ -279,7 +279,7 @@ public class OperacionDiariaService extends DomainService{
 							.actualizaGlAccountOrganization(ledger_repo,
 									monto_S,
 									cuentas.get("Cuenta Cargo Contable"),
-									organizacionContable_S);
+									organizacionContable_S,"D");
 					imp_tx8 = this.session.beginTransaction();
 					ledger_repo.createOrUpdate(glAccountOrganization);
 					imp_tx8.commit();
@@ -296,7 +296,7 @@ public class OperacionDiariaService extends DomainService{
 							.actualizaGlAccountOrganization(ledger_repo,
 									monto_S,
 									cuentas.get("Cuenta Abono Contable"),
-									organizacionContable_S);
+									organizacionContable_S,"A");
 					imp_tx12 = this.session.beginTransaction();
 					ledger_repo.createOrUpdate(glAccountOrganization);
 					imp_tx12.commit();
