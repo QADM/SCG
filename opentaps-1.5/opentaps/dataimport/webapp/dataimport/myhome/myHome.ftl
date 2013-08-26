@@ -79,7 +79,7 @@
   <tr>
     <@importForm importService="importGlAccounts"
                  sectionLabel="DataImportImportGlAccounts"
-                 label=uiLabelMap.DataImportGlAccounts
+                 label="Lista de Cuentas"
                  submitLabel=uiLabelMap.DataImportImport
                  processed=glAccountsProcessed notProcessed=glAccountsNotProcessed
                  reportHref="setupReport?reportId=GL_ACCTS_IMP&amp;sectionName=myHome"
@@ -97,7 +97,7 @@
   <tr>
     <@importForm importService="importParty"
                  sectionLabel="DataImportImportParty"
-                 label=uiLabelMap.DataImportImportParty
+                 label="Clasificación administrativa"
                  submitLabel=uiLabelMap.DataImportImport
                  processed=partyProcessed notProcessed=partyNotProcessed
                  reportHref="setupReport?reportId=CUST_IMP&amp;sectionName=myHome"
@@ -107,7 +107,7 @@
   <tr>
     <@importForm importService="importProject"
                  sectionLabel="DataImportImportProject"
-                 label=uiLabelMap.DataImportProject
+                 label="Clasificación programática"
                  submitLabel=uiLabelMap.DataImportImport
                  processed=projectProcessed notProcessed=projectNotProcessed
                  reportHref="setupReport?reportId=CUST_IMP&amp;sectionName=myHome"
@@ -116,7 +116,7 @@
   <tr>
     <@importForm importService="importGeo"
                  sectionLabel="DataImportImportGeo"
-                 label=uiLabelMap.DataImportGeo
+                 label="Clasificación geográfica"
                  submitLabel=uiLabelMap.DataImportImport
                  processed=geoProcessed notProcessed=geoNotProcessed
                  reportHref="setupReport?reportId=CUST_IMP&amp;sectionName=myHome"
@@ -125,7 +125,7 @@
   <tr>
     <@importForm importService="importCategory"
                  sectionLabel="DataImportImportCategory"
-                 label=uiLabelMap.DataImportCategory
+                 label="CRI / COG / CA"
                  submitLabel=uiLabelMap.DataImportImport
                  processed=categoryProcessed notProcessed=categoryNotProcessed
                  reportHref="setupReport?reportId=CUST_IMP&amp;sectionName=myHome"
