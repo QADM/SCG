@@ -629,7 +629,7 @@ access. For a detailed description see the core/docs/entityconfig.html file.
         <read-data reader-name="ext"/>
         <inline-jdbc
                 jdbc-driver="com.microsoft.sqlserver.jdbc.SQLServerDriver"
-                jdbc-uri="jdbc:sqlserver://localhost;databaseName=ofbiz;SelectMethod=cursor;"
+                jdbc-uri="jdbc:sqlserver://otdserver;databaseName=ofbiz;SelectMethod=cursor;"
                 jdbc-username="ofbiz"
                 jdbc-password="ofbiz"
                 isolation-level="ReadCommitted"
@@ -655,7 +655,7 @@ access. For a detailed description see the core/docs/entityconfig.html file.
         <read-data reader-name="ext"/>
         <inline-jdbc
                 jdbc-driver="com.microsoft.sqlserver.jdbc.SQLServerDriver"
-                jdbc-uri="jdbc:sqlserver://localhost;databaseName=ofbiz;SelectMethod=cursor;"
+                jdbc-uri="jdbc:sqlserver://otdserver;databaseName=ofbiz;SelectMethod=cursor;"
                 jdbc-username="ofbiz"
                 jdbc-password="ofbiz"
                 isolation-level="ReadCommitted"
