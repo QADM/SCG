@@ -24,11 +24,11 @@
     <table class="fourColumnForm" style="border:0">
       <tr>
         <@displayTitleCell title=uiLabelMap.FinancialDocumentType />
-        <@inputSelectCell list=listDocumentos?if_exists displayField="descripcion" name="Tipo_Documento" default=idTipoDoc?if_exists key="idTipoDoc" />
+        <@inputSelectCell list=listDocumentos?if_exists displayField="descripcion" name="Tipo_Documento" default=idTipoDoc?if_exists key="idTipoDoc" onChange="opentaps.getTipoFiscalByDoc(this,'Tipo_Fiscal');" />
       </tr>
       <tr>
         <@displayTitleCell title=uiLabelMap.FinancialsGlFiscalType />
-        <@inputSelectCell list=listFiscalTypes?if_exists displayField="description" name="Tipo_Fiscal" default=glFiscalTypeId?if_exists key="glFiscalTypeId"/>
+        <@inputSelectCell list="" name="Tipo_Fiscal" />
       </tr>      
       <tr>
         <@displayTitleCell title=uiLabelMap.FinancialsTransactionDate />
@@ -46,6 +46,10 @@
         <@displayTitleCell title=uiLabelMap.FinancialsSequence />
         <@inputTextCell name="Secuencia" maxlength=20  />
       </tr>
+      <tr>
+        <@displayTitleCell title=uiLabelMap.FinancialsKeyBudget />
+        <@inputTextCell name="Cve_Presupuestal" maxlength=100   />
+      </tr>      
       <tr>
         <@displayTitleCell title=uiLabelMap.FinancialsProductCredit />
         <@inputSelectCell list=listProducts?if_exists displayField="description" name="Id_Producto_Abono" default=productId?if_exists key="productId"/>
@@ -103,17 +107,9 @@
       	<@displayTitleCell title=uiLabelMap.FinancialsId />
       	<@inputTextCell name="Id_Pago" maxlength=60  />
       </tr>
-      <tr>
-      	<@displayTitleCell title=uiLabelMap.FinancialsIdProductD />
-      	<@inputTextCell name="Id_ProductoD" maxlength=60  />
-      </tr>   
-      <tr>
-      	<@displayTitleCell title=uiLabelMap.FinancialsIdProductH />
-      	<@inputTextCell name="Id_ProductoH" maxlength=60  />
-      </tr>
      <tr>
-      	<@displayTitleCell title=uiLabelMap.FinancialsId />
-      	<@inputTextCell name="Id_RecaudadoH" maxlength=60  />
+      	<@displayTitleCell title=uiLabelMap.FinancialsIdLeviedH />
+      	<@inputSelectCell list=listPayments?if_exists name="Id_RecaudadoH" displayField="description" default=paymentMethodId?if_exists key="paymentMethodId" />
       </tr>                                                                  
       <tr>                             
       <tr>

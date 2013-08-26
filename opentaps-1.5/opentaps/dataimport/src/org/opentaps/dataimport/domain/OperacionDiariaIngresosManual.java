@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
+
+import javolution.util.FastList;
 import javolution.util.FastMap;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
@@ -24,6 +26,7 @@ import org.ofbiz.service.ServiceUtil;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
 import org.opentaps.foundation.action.ActionContext;
+import org.opentaps.foundation.service.ServiceException;
 
 
 public class OperacionDiariaIngresosManual {
@@ -69,6 +72,7 @@ public class OperacionDiariaIngresosManual {
 			fecContable = (Timestamp) UtilDateTime.stringToTimeStamp((String)context.get("Fecha_Contable"), dateFormat, timeZone, locale);
 	        String refDoc = (String) context.get("Referencia_Documento");
 	        String sec = (String) context.get("Secuencia");
+	        String cvePrespues = (String) context.get("Cve_Presupuestal");
 	        String idProdAbono = (String) context.get("Id_Producto_Abono");
 	        String idProdCargo = (String) context.get("Id_Producto_Cargo");
 	        String rubro = (String) context.get("Rubro");
@@ -92,6 +96,7 @@ public class OperacionDiariaIngresosManual {
 	        Debug.logWarning("fecContable "+fecContable, MODULE);
 	        Debug.logWarning("refDoc "+refDoc, MODULE);
 	        Debug.logWarning("sec "+sec, MODULE);
+	        Debug.logWarning("cvePrespues "+cvePrespues, MODULE);
 	        Debug.logWarning("idProdAbono "+idProdAbono, MODULE);
 	        Debug.logWarning("idProdCargo "+idProdCargo, MODULE);
 	        Debug.logWarning("rubro "+rubro, MODULE);
@@ -146,6 +151,7 @@ public class OperacionDiariaIngresosManual {
 	        acctgtransPres.set("unidadOrganizacional", unidadOr);
 	        String unidadRes = obtenPadrePartyId(dctx, dispatcher, unidadOr);
 	        acctgtransPres.set("unidadResponsable", unidadRes);
+	        acctgtransPres.set("clavePres", cvePrespues);
 	        acctgtransPres.set("rubro", rubro);
 	        acctgtransPres.set("tipo", tipo);
 	        acctgtransPres.set("clase", clase);
@@ -162,39 +168,21 @@ public class OperacionDiariaIngresosManual {
 	        acctgtransPres.set("localidad", local);
 	        acctgtransPres.set("idTipoDoc", tipoDoc);
 	        acctgtransPres.set("secuencia", sec);
+	        acctgtransPres.set("idProductoD", idProdCargo);
+	        acctgtransPres.set("idProductoH", idProdAbono);
 	        acctgtransPres.create();
 
 
 	        //Aqui se realiza la extraccion de las cuentas para la operacion 
-	        
-			//Se obtiene el tipo (CRI)
-	    	String tipoCRI = new String();
-	    	boolean encontro = false;
-	    	if(n5 != null && !n5.isEmpty() && !encontro){
-	    		tipoCRI = n5;
-	    		encontro = true;
-	    	} else if (concepto != null && !concepto.isEmpty() && !encontro){
-	    		tipoCRI = concepto;
-	    		encontro = true;
-	    	} else if (clase != null && !clase.isEmpty() && !encontro){
-	    		tipoCRI = clase;
-	    		encontro = true;
-	    	} else if (tipo != null && !tipo.isEmpty() && !encontro){
-	    		tipoCRI = tipo;
-	    		encontro = true;
-	    	} else {
-	    		tipoCRI = rubro;
-	    		encontro = true;
-	    	}
-	    	
-	    	Debug.logWarning("tipoCRI   "+tipoCRI, MODULE);	
 	    	
 	    	String currencyId = UtilCommon.getOrgBaseCurrency(organizationPartyId, delegator);
-	    	
-			
+		
 	        Map input = new HashMap(context);
 	        input.put("acctgTransTypeId", acctgTransTypeId);
-	        input.put("tipo", tipoCRI);
+	        input.put("cri", n5);
+	        input.put("tipoFis", tipoFis);
+	        input.put("idProdAbono", idProdAbono);
+	        input.put("idProdCargo", idProdCargo);
 	        input = dctx.getModelService("obtenerCuentasIngresos").makeValid(input, ModelService.IN_PARAM);
 	        Map tmpResult = dispatcher.runSync("obtenerCuentasIngresos", input);
 	        Map<String,String> cuentas = (Map<String, String>) tmpResult.get("cuentas");
@@ -291,13 +279,18 @@ public class OperacionDiariaIngresosManual {
      * @param dctx
      * @param context
      * @return
+     * @throws GenericServiceException 
+     * @throws ServiceException 
      */
     @SuppressWarnings({ "unchecked", "rawtypes" })
-	public static Map obtenerCuentasIngresos(DispatchContext dctx, Map context){
+	public static Map obtenerCuentasIngresos(DispatchContext dctx, Map context) throws ServiceException, GenericServiceException{
         Delegator delegator = dctx.getDelegator();
+        LocalDispatcher dispatcher = dctx.getDispatcher();
         String acctgTransTypeId = (String) context.get("acctgTransTypeId");
-        String tipo = (String) context.get("tipo");
-        
+        String tipoFis = (String) context.get("tipoFis");
+        String cri = (String) context.get("cri");
+        String idProdAbono = (String) context.get("idProdAbono");
+        String idProdCargo = (String) context.get("idProdCargo");
         
         Debug.logWarning("ENTRO A obtenerCuentasIngresos ", MODULE);
         Debug.logWarning("acctgTransTypeId "+acctgTransTypeId, MODULE);
@@ -310,39 +303,65 @@ public class OperacionDiariaIngresosManual {
 			
 			Debug.logWarning("miniGuia     {obtenerCuentasIngresos}  : "+miniGuia, MODULE);
 			
-	    	cuentas.put("GlFiscalTypePresupuesto", miniGuia.getString("glFiscalTypeIdPres"));
-	    	cuentas.put("GlFiscalTypeContable", miniGuia.getString("glFiscalTypeIdCont"));
-	    	cuentas.put("Cuenta Cargo Presupuesto", miniGuia.getString("cuentaCargo"));
-	    	cuentas.put("Cuenta Abono Presupuesto", miniGuia.getString("cuentaAbono"));
-	    	
-	    	String referencia = miniGuia.getString("referencia");
-	    	String matrizId = miniGuia.getString("tipoMatriz");
-	    	
-	    	if(referencia.equalsIgnoreCase("M")){
-	    		
-		        EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
-		                EntityCondition.makeCondition("cri", EntityOperator.EQUALS,tipo),
-		                EntityCondition.makeCondition("matrizId", EntityOperator.EQUALS,matrizId));
-		
-				List<GenericValue> listMatriz = delegator.findByCondition("DataImportMatrizIng", conditions, null, null);
-	    		
-				Debug.logWarning("matriz     {obtenerCuentasIngresos}  : "+listMatriz, MODULE);
+			String glFiscalTypeIdPres = miniGuia.getString("glFiscalTypeIdPres");
+			String glFiscalTypeIdCont = miniGuia.getString("glFiscalTypeIdCont");
+			
+	    	cuentas.put("GlFiscalTypePresupuesto", glFiscalTypeIdPres);
+	    	cuentas.put("GlFiscalTypeContable", glFiscalTypeIdCont);
+			
+			//Si el tipo fiscal es de presupuesto se obtienen las cuentas
+			if(tipoFis.equalsIgnoreCase(glFiscalTypeIdPres)){
 				
-				if(listMatriz.isEmpty()){
-					Debug.logError("Error, elemento en Matriz no existe",MODULE);
-					return UtilMessage.createAndLogServiceError("Error, elemento en Matriz no existe", MODULE);
-				} else {
-					
-					Debug.log("matriz     {obtenerCuentasIngresos} (0) : "+listMatriz.get(0), MODULE);
-					GenericValue matriz = listMatriz.get(0);
-					
-					cuentas.put("Cuenta Cargo Contable",matriz.getString("cargo"));
-					cuentas.put("Cuenta Abono Contable", matriz.getString("abono"));
-					
-				}
+		    	cuentas.put("Cuenta_Cargo_Presupuesto", miniGuia.getString("cuentaCargo"));
+		    	cuentas.put("Cuenta_Abono_Presupuesto", miniGuia.getString("cuentaAbono"));
+		    	
+			} 
+			
+			if(tipoFis.equalsIgnoreCase(glFiscalTypeIdCont)){
 				
-	    		
-	    	}
+		    	String referencia = miniGuia.getString("referencia");
+		    	String matrizId = miniGuia.getString("tipoMatriz");
+		    	
+		    	if(referencia.equalsIgnoreCase("M")){
+		    		
+			        EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
+			                EntityCondition.makeCondition("cri", EntityOperator.EQUALS,cri),
+			                EntityCondition.makeCondition("matrizId", EntityOperator.EQUALS,matrizId));
+			
+					List<GenericValue> listMatriz = delegator.findByCondition("DataImportMatrizIng", conditions, null, null);
+		    		
+					Debug.logWarning("matriz     {obtenerCuentasIngresos}  : "+listMatriz, MODULE);
+					
+					if(listMatriz.isEmpty()){
+						Debug.logError("Error, elemento en Matriz no existe",MODULE);
+						return UtilMessage.createAndLogServiceError("Error, elemento en Matriz no existe", MODULE);
+					} else {
+						
+						Debug.log("matriz     {obtenerCuentasIngresos} (0) : "+listMatriz.get(0), MODULE);
+						GenericValue matriz = listMatriz.get(0);
+						
+						String cuentaCargo = matriz.getString("cargo");
+						String cuentaAbono = matriz.getString("cargo");
+						
+						if(matrizId.equalsIgnoreCase("B.1")){
+							
+							cuentaCargo = verificarAuxiliarProducto(dctx, dispatcher, cuentaCargo, idProdCargo);
+							cuentaAbono = verificarAuxiliarProducto(dctx, dispatcher, cuentaAbono, idProdAbono);
+							
+						} else if(matrizId.equalsIgnoreCase("B.2")){
+							
+							cuentaAbono = verificarAuxiliarProducto(dctx, dispatcher, cuentaAbono, idProdAbono);
+						}
+						
+						cuentas.put("Cuenta Cargo Contable",cuentaCargo);
+						cuentas.put("Cuenta Abono Contable", cuentaAbono);
+						
+					}
+					
+		    		
+		    	}				
+				
+			}
     	
 		} catch (GenericEntityException e) {
 			return UtilMessage.createAndLogServiceError(e, MODULE);
@@ -408,8 +427,61 @@ public class OperacionDiariaIngresosManual {
     	
     	return partyIdPadre;
     	
-    }    
-
+    }   
+    
+    /**
+     * Metodo que valida las cuentas auxiliares de los productos a partir de una cuenta dada y regresa 
+     * la cuenta correspondiente al catálogo auxiliar si se encuentra ahí , si no regresa la misma cuenta
+     * @param dctx
+     * @param dispatcher
+     * @param glAccountId
+     * @param productId
+     * @return
+     * @throws ServiceException
+     * @throws GenericServiceException
+     */
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+	public static String verificarAuxiliarProducto(DispatchContext dctx,LocalDispatcher dispatcher,String glAccountId,String productId) throws ServiceException, GenericServiceException{
+    	
+    	String cuentaRegresa = glAccountId;
+    	
+    		if(glAccountId != null && !glAccountId.isEmpty()){
+    			
+            	Map input = FastMap.newInstance();
+            	input.put("glAccountId", glAccountId);
+            	input = dctx.getModelService("getAuxiliarProd").makeValid(input, ModelService.IN_PARAM);
+            	Map tmpResult = dispatcher.runSync("getAuxiliarProd", input);
+            	List<GenericValue> resultados = (List<GenericValue>) tmpResult.get("resultadoPrdCat");
+            	
+            	if(resultados != null && !resultados.isEmpty()){
+            		
+            		if(productId != null && !productId.isEmpty()){
+            			
+            			resultados.contains(glAccountId);
+            			
+            			//Iteramos ProductCategory
+            			for (GenericValue genericValue : resultados) {
+            				if(genericValue.getString("productCategoryId").equalsIgnoreCase(productId))
+            					cuentaRegresa = genericValue.getString("glAccountId");
+						}
+            			
+            		} else {
+    					Debug.logError("Debe de proporcionar el Producto",MODULE);
+    					throw new ServiceException(String.format("Debe de proporcionar el Producto"));
+            		}
+            	} else {
+					Debug.logError("No existe catalogo auxiliar asociado a la cuenta",MODULE);
+					throw new ServiceException(String.format("No existe catalogo auxiliar asociado a la cuenta : ["+glAccountId+"]"));
+            	}
+                
+                Debug.logWarning("Cuenta Entrada {{ "+glAccountId+"   cuenta Salida ]{ "+cuentaRegresa, MODULE);
+    			
+    		}
+    	
+    	return cuentaRegresa;
+    	
+    }
+    
 }
 
 

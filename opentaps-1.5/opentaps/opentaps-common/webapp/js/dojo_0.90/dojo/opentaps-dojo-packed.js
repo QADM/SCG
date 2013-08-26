@@ -1298,6 +1298,33 @@ opentaps.copyOrClearAddressFields = function(prefix1, prefix2, checkbox, default
     }
 }
 
+opentaps.getTipoFiscalByDoc = function(elementoPadre,nombreElementoHijo){
+	
+	var elementoHijo = elementoPadre.form[nombreElementoHijo];
+	var tipoDocumento = elementoPadre[elementoPadre.selectedIndex].value;
+	
+	if(tipoDocumento){
+		
+		opentaps.sendRequest("getTiposFiscalesDoc",{"idTipoDoc" : tipoDocumento},function(data) {opentaps.llenaComboTipoFiscal(elementoHijo, data)});
+		
+	}
+	
+	
+}
+
+opentaps.llenaComboTipoFiscal = function(elementoLlena, datos) {
+
+    // build the state options
+    elementoLlena.options[0] = new Option('', ''); // first element is always empty
+    for (i = 0; i < datos.length; i++) {
+        state = datos[i];
+        elementoLlena.options[i+1] = new Option(state.description, state.glFiscalTypeId);
+    }
+
+    // by setting the length of the select option array, we can truncate it
+    elementoLlena.options.length = datos.length + 1;
+}
+
 opentaps.obtenHijosCombos = function(elementoPadre,nombreElementoHijo,nombreNietos){
 	
     var elementoHijo = elementoPadre.form[nombreElementoHijo];

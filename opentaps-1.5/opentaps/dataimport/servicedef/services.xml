@@ -290,7 +290,7 @@
         <attribute name="organizationPartyId" mode="IN" type="String" optional="false"/>
         <attribute name="glFiscalTypeId" mode="IN" type="String" optional="false"/>
         <attribute name="Tipo_Documento" mode="IN" type="String" optional="true"/>
-        <attribute name="Tipo_Fiscal" mode="IN" type="String" optional="true" />
+        <attribute name="Tipo_Fiscal" mode="IN" type="String" optional="false" />
         <attribute name="Fecha_Transaccion" mode="IN" type="String" optional="true"/>
         <attribute name="Fecha_Contable" mode="IN" type="String" optional="true" />
 		<attribute name="Referencia_Documento" mode="IN" type="String" optional="true"/>
@@ -326,7 +326,7 @@
         <attribute name="organizationPartyId" mode="IN" type="String" optional="false"/>
         <attribute name="glFiscalTypeId" mode="IN" type="String" optional="false"/>
         <attribute name="Tipo_Documento" mode="IN" type="String" optional="true"/>
-        <attribute name="Tipo_Fiscal" mode="IN" type="String" optional="true" />
+        <attribute name="Tipo_Fiscal" mode="IN" type="String" optional="false	" />
         <attribute name="Fecha_Transaccion" mode="IN" type="String" optional="true"/>
         <attribute name="Fecha_Contable" mode="IN" type="String" optional="true" />
 		<attribute name="Referencia_Documento" mode="IN" type="String" optional="true"/>
@@ -360,8 +360,11 @@
             <check-permission permission="ACCOUNTING" action="_ATX_CREATE"/>
         </required-permissions>
         <attribute name="acctgTransTypeId" mode="IN" type="String" optional="false"/>
-        <attribute name="tipo" mode="IN" type="String" optional="false"></attribute>
-        <attribute name="cuentas" mode="OUT" type="java.util.Map"></attribute>               
+        <attribute name="tipoFis" mode="IN" type="String" optional="false"/>
+        <attribute name="cri" mode="IN" type="String"/>
+        <attribute name="idProdAbono" mode="IN" type="String"/>
+        <attribute name="idProdCargo" mode="IN" type="String"/>
+        <attribute name="cuentas" mode="OUT" type="java.util.Map"/>               
     </service>
     
     <service name="operacionDiaria" engine="java"
@@ -393,5 +396,20 @@
     	<attribute name="partyId" mode="IN" type="String" optional="false"/>
     	<attribute name="partyIdPadre" mode="OUT" type="String" optional="true"/>
     </service>
+    <service name="obtenPeriodosFecha" engine="java"
+    	location="org.opentaps.dataimport.UtilOperacionDiariaServices" invoke="obtenPeriodosFecha">
+    	<description>Obtiene los periodos custom que coinciden en una fecha y una organizacion.
+    	</description>	
+    	<attribute name="organizationPartyId" mode="IN" type="String" optional="false"/>
+    	<attribute name="fecha" mode="IN" type="String" optional="false"/>
+    	<attribute name="listPeriods" mode="OUT" type="java.util.Map"></attribute>
+    </service>
+    <service name="getAuxiliarProd" engine="java"
+    	location="org.opentaps.dataimport.UtilOperacionDiariaServices" invoke="getAuxiliarProd">
+    	<description>Obtiene los productos asociados a una cuenta .
+    	</description>	
+    	<attribute name="glAccountId" mode="IN" type="String" optional="false"/>
+    	<attribute name="resultadoPrdCat" mode="OUT" type="java.util.List" />
+    </service>    
     
 </services>
