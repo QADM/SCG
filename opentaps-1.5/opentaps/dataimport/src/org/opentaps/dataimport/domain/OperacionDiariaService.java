@@ -36,9 +36,9 @@ public class OperacionDiariaService extends DomainService{
 		//String lote_S= (String) context.get("lote");
 		String concepto_S= (String) context.get("concepto");
 		String subConcepto_S= (String) context.get("subConcepto");
-		String tipoCatalogoC_S= (String) context.get("tipoCatalogoC");
+		String tipoCatalogoC_S= (String) context.get("idTipoCatalogoC");
 		String idC_S= (String) context.get("idC");
-		String tipoCatalogoD_S= (String) context.get("tipoCatalogoD");
+		String tipoCatalogoD_S= (String) context.get("idTipoCatalogoD");
 		String idD_S= (String) context.get("idD");
 		
 		 //Crea un registro de la entidad
@@ -54,9 +54,9 @@ public class OperacionDiariaService extends DomainService{
         dataImportOperacionDiaria.set("usuario", usuario_S );
         dataImportOperacionDiaria.set("concepto", concepto_S );
         dataImportOperacionDiaria.set("subconcepto", subConcepto_S );
-        dataImportOperacionDiaria.set("tipoCatalogoC", tipoCatalogoC_S );
+        dataImportOperacionDiaria.set("idTipoCatalogoC", tipoCatalogoC_S );
         dataImportOperacionDiaria.set("idC", idC_S);
-        dataImportOperacionDiaria.set("tipoCatalogoD", tipoCatalogoD_S );
+        dataImportOperacionDiaria.set("idTipoCatalogoD", tipoCatalogoD_S );
         dataImportOperacionDiaria.set("idD", idD_S);
         dataImportOperacionDiaria.create();
         

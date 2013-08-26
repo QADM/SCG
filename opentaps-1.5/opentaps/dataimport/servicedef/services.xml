@@ -432,7 +432,7 @@
         <attribute type="String" mode="IN" name="sfe" optional="false"/>
         <attribute type="String" mode="IN" name="loc" optional="false"/>
         <attribute type="String" mode="IN" name="concatenacion" optional="false"/>
-        <attribute type="String" mode="OUT" name="messageOut" optional="true"/>
+        <attribute type="Integer" mode="OUT" name="messageOut" optional="true"/>
     </service>
       
     <service name="operacionEgreso" engine="java" auth="true"
@@ -446,11 +446,9 @@
         <attribute type="String" mode="IN" name="refDoc" optional="false"/>
         <attribute type="String" mode="IN" name="secuencia" optional="false"/>
         <attribute type="String" mode="IN" name="usuario" optional="false"/>
-        <attribute type="String" mode="IN" name="lote" optional="false"/>
-        <attribute type="String" mode="IN" name="tipoCatalogo" optional="false"/>
-        <attribute type="String" mode="IN" name="idPago" optional="false"/>
-        <attribute type="String" mode="IN" name="idProductoD" optional="false"/>
-        <attribute type="String" mode="IN" name="idProductoH" optional="false"/>
+        <attribute type="String" mode="IN" name="idPago" optional="true"/>
+        <attribute type="String" mode="IN" name="idProductoD" optional="true"/>
+        <attribute type="String" mode="IN" name="idProductoH" optional="true"/>
         <attribute type="String" mode="IN" name="ciclo" optional="false"/>
         <attribute type="String" mode="IN" name="ue" optional="false"/>
         <attribute type="String" mode="IN" name="subf" optional="false"/>
@@ -461,7 +459,7 @@
         <attribute type="String" mode="IN" name="loc" optional="false"/>
         <attribute type="String" mode="IN" name="area" optional="false"/>
         <attribute type="String" mode="IN" name="concatenacion" optional="false"/>
-        <attribute type="String" mode="OUT" name="messageOut" optional="true"/>
+        <attribute type="Integer" mode="OUT" name="messageOut" optional="true"/>
     </service>  
     
     <service name="operacionDiaria" engine="java" auth="true"
@@ -476,12 +474,12 @@
         <attribute type="String" mode="IN" name="refDoc" optional="false"/>
         <attribute type="String" mode="IN" name="secuencia" optional="false"/>
         <attribute type="String" mode="IN" name="usuario" optional="false"/>
-        <attribute type="String" mode="IN" name="concepto" optional="false"/>
-        <attribute type="String" mode="IN" name="subConcepto" optional="false"/>
-        <attribute type="String" mode="IN" name="tipoCatalogoC" optional="false"/>
-        <attribute type="String" mode="IN" name="idC" optional="false"/>
-        <attribute type="String" mode="IN" name="tipoCatalogoD" optional="false"/>
-        <attribute type="String" mode="IN" name="idD" optional="false"/>
-        <attribute type="String" mode="OUT" name="messageOut" optional="true"/>
+        <attribute type="String" mode="IN" name="concepto" optional="true"/>
+        <attribute type="String" mode="IN" name="subConcepto" optional="true"/>
+        <attribute type="String" mode="IN" name="idTipoCatalogoC" optional="true"/>
+        <attribute type="String" mode="IN" name="idC" optional="true"/>
+        <attribute type="String" mode="IN" name="idTipoCatalogoD" optional="true"/>
+        <attribute type="String" mode="IN" name="idD" optional="true"/>
+        <attribute type="Integer" mode="OUT" name="messageOut" optional="true"/>
     </service> 
 </services>
