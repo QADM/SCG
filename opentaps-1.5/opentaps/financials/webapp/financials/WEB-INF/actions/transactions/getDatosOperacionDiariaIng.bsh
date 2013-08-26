@@ -49,6 +49,10 @@ context.put("listFiscalTypes", resultadoFis);
 resultadoProd = delegator.findAll("Product");
 context.put("listProducts", resultadoProd);
 
+//Buscamos los tipos de pagos
+resultadoPayment = delegator.findAll("PaymentMethod");
+context.put("listPayments", resultadoPayment);
+
 //Buscamos los rubros
 orderByRu = org.ofbiz.base.util.UtilMisc.toList("description");
 condicionRu = EntityCondition.makeCondition("productCategoryTypeId","RU");
