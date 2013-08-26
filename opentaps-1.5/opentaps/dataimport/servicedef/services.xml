@@ -388,7 +388,7 @@
         <attribute type="String" mode="IN" name="tipoCatalogoD" optional="false"/>
         <attribute type="String" mode="IN" name="idD" optional="false"/>
         <attribute type="String" mode="OUT" name="messageOut" optional="true"/>
-    </service>   
+    </service>      
     
     <service name="obtenPartyIdPadre" engine="java" 
     	location="org.opentaps.dataimport.UtilOperacionDiariaServices" invoke="obtenPartyIdPadre">
