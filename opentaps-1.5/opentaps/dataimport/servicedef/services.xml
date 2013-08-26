@@ -283,7 +283,7 @@
     
     <service name="createOperacionDiariaIngresos" engine="java"
             location="org.opentaps.dataimport.domain.OperacionDiariaIngresosManual" invoke="createOperacionDiariaIngresos" auth="true">
-        <description>Crea una transaccion de Operacion Diaria para ingresos.</description>
+        <description>Crea una transaccion de Operacion Diaria.</description>
         <required-permissions join-type="OR">
             <check-permission permission="ACCOUNTING" action="_ATX_CREATE"/>
         </required-permissions>
@@ -296,8 +296,7 @@
 		<attribute name="Referencia_Documento" mode="IN" type="String" optional="true"/>
         <attribute name="Secuencia" mode="IN" type="String" optional="true" />
         <attribute name="Tipo_Catalogo" mode="IN" type="String" optional="true"/>
-        <attribute name="Id_Producto_Abono" mode="IN" type="String" optional="false" />
-        <attribute name="Id_Producto_Cargo" mode="IN" type="String" optional="false" />
+        <attribute name="Id_Producto" mode="IN" type="String" optional="true" />
         <attribute name="Rubro" mode="IN" type="String" optional="true"/>
         <attribute name="Tipo" mode="IN" type="String" optional="true" />
 		<attribute name="Clase" mode="IN" type="String" optional="true"/>
@@ -311,64 +310,7 @@
         <attribute name="Unidad_Ejecutora" mode="IN" type="String" optional="true"/>
         <attribute name="Id_Pago" mode="IN" type="String" optional="true"/>  
         <attribute name="Monto" mode="IN" type="String" optional="false"/>
-        <attribute name="acctgTrans" mode="OUT" type="org.ofbiz.entity.GenericValue"/>
-        <attribute name="acctgTransPres" mode="OUT" type="org.ofbiz.entity.GenericValue"/>
-        <attribute name="acctgTransId" mode="OUT" type="String"/>
-                       
-    </service>
-    
-    <service name="createOperacionDiariaEgresos" engine="java"
-            location="org.opentaps.dataimport.domain.OperacionDiariaIngresosManual" invoke="createOperacionDiariaEgresos" auth="true">
-        <description>Crea una transaccion de Operacion Diaria para egresos.</description>
-        <required-permissions join-type="OR">
-            <check-permission permission="ACCOUNTING" action="_ATX_CREATE"/>
-        </required-permissions>
-        <attribute name="organizationPartyId" mode="IN" type="String" optional="false"/>
-        <attribute name="glFiscalTypeId" mode="IN" type="String" optional="false"/>
-        <attribute name="Tipo_Documento" mode="IN" type="String" optional="true"/>
-        <attribute name="Tipo_Fiscal" mode="IN" type="String" optional="true" />
-        <attribute name="Fecha_Transaccion" mode="IN" type="String" optional="true"/>
-        <attribute name="Fecha_Contable" mode="IN" type="String" optional="true" />
-		<attribute name="Referencia_Documento" mode="IN" type="String" optional="true"/>
-        <attribute name="Secuencia" mode="IN" type="String" optional="true" />
-        <attribute name="Tipo_Catalogo" mode="IN" type="String" optional="true"/>
-        <attribute name="Id_Producto_Abono" mode="IN" type="String" optional="false" />
-        <attribute name="Id_Producto_Cargo" mode="IN" type="String" optional="false" />
-        <attribute name="Rubro" mode="IN" type="String" optional="true"/>
-        <attribute name="Tipo" mode="IN" type="String" optional="true" />
-		<attribute name="Clase" mode="IN" type="String" optional="true"/>
-        <attribute name="Concepto" mode="IN" type="String" optional="true"/>
-        <attribute name="N5" mode="IN" type="String" optional="true"/>
-        <attribute name="EntidadFederativa" mode="IN" type="String" optional="true"/>
-        <attribute name="Region" mode="IN" type="String" optional="true"/>
-        <attribute name="Municipio" mode="IN" type="String" optional="true"/>
-        <attribute name="Localidad" mode="IN" type="String" optional="true"/>
-        <attribute name="Sub_Fuente_Especifica" mode="IN" type="String" optional="true"/>
-        <attribute name="Unidad_Ejecutora" mode="IN" type="String" optional="true"/>
-        <attribute name="Id_Pago" mode="IN" type="String" optional="true"/>  
-        <attribute name="Monto" mode="IN" type="String" optional="false"/>
-        <attribute name="acctgTrans" mode="OUT" type="org.ofbiz.entity.GenericValue"/>
-        <attribute name="acctgTransPres" mode="OUT" type="org.ofbiz.entity.GenericValue"/>
-        <attribute name="acctgTransId" mode="OUT" type="String"/>
-                       
-    </service>    
-    
-    <service name="obtenerCuentasIngresos" engine="java"
-            location="org.opentaps.dataimport.domain.OperacionDiariaIngresosManual" invoke="obtenerCuentasIngresos" auth="true">
-        <description>Busca las cuentas para la operacion diaria de ingresos.</description>
-        <required-permissions join-type="OR">
-            <check-permission permission="ACCOUNTING" action="_ATX_CREATE"/>
-        </required-permissions>
-        <attribute name="acctgTransTypeId" mode="IN" type="String" optional="false"/>
-        <attribute name="tipo" mode="IN" type="String" optional="false"></attribute>
-        <attribute name="cuentas" mode="OUT" type="java.util.Map"></attribute>               
-    </service>
-    
-    <service name="obtenEnumIdPadre" engine="java" 
-    	location="org.opentaps.dataimport.UtilOperacionDiariaServices" invoke="obtenEnumIdPadre">
-    <description>Obtiene el enumId padre de un enumId dado</description>
-    	<attribute name="enumId" mode="IN" type="String" optional="false"/>
-    	<attribute name="enumIdPadre" mode="OUT" type="String" optional="true"/>
+        <attribute name="AcctgTrans" mode="OUT" type="org.ofbiz.entity.GenericValue"></attribute>               
     </service>
     
     <service name="operacionIngreso" engine="java" auth="true"
@@ -443,6 +385,6 @@
         <attribute type="String" mode="IN" name="tipoCatalogoD" optional="false"/>
         <attribute type="String" mode="IN" name="idD" optional="false"/>
         <attribute type="String" mode="OUT" name="messageOut" optional="true"/>
-    </service>   
+    </service>      
     
 </services>
