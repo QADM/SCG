@@ -368,29 +368,6 @@
         <attribute name="mapCuentas" mode="OUT" type="java.util.Map"/>               
     </service>
     
-    <service name="operacionDiaria" engine="java"
-            location="org.opentaps.dataimport.domain.OperacionDiariaService" invoke="registraDiario" export="true">
-        <description>Registra la operacion diaria</description>
-        <attribute type="String" mode="IN" name="tTrans" optional="false"/>
-        <attribute type="Date" mode="IN" name="fechaRegistro" optional="false"/>
-        <attribute type="Date" mode="IN" name="fechaContable" optional="false"/>
-        <attribute type="BigDecimal" mode="IN" name="monto" optional="false"/>
-        <attribute type="String" mode="IN" name="organizacionContable" optional="false"/>
-        <attribute type="String" mode="IN" name="organizacionEjecutora" optional="false"/>
-        <attribute type="String" mode="IN" name="tipoDocumento" optional="false"/>
-        <attribute type="String" mode="IN" name="refDoc" optional="false"/>
-        <attribute type="String" mode="IN" name="secuencia" optional="false"/>
-        <attribute type="String" mode="IN" name="usuario" optional="false"/>
-        <attribute type="String" mode="IN" name="lote" optional="false"/>
-        <attribute type="String" mode="IN" name="concepto" optional="false"/>
-        <attribute type="String" mode="IN" name="subConcepto" optional="false"/>
-        <attribute type="String" mode="IN" name="tipoCatalogoC" optional="false"/>
-        <attribute type="String" mode="IN" name="idC" optional="false"/>
-        <attribute type="String" mode="IN" name="tipoCatalogoD" optional="false"/>
-        <attribute type="String" mode="IN" name="idD" optional="false"/>
-        <attribute type="String" mode="OUT" name="messageOut" optional="true"/>
-    </service>      
-    
     <service name="obtenPartyIdPadre" engine="java" 
     	location="org.opentaps.dataimport.UtilOperacionDiariaServices" invoke="obtenPartyIdPadre">
     <description>Obtiene el enumId padre de un enumId dado</description>
