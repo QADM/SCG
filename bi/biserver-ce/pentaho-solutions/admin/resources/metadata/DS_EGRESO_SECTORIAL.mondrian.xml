@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Schema name="DS_EGRESO_SECTORIAL">
+  <Dimension name="Unidad responsable">
+    <Hierarchy hasAll="true" primaryKey="id_unidad_responsable">
+      <Table name="&quot;EGR_ADM_UNIDAD_RESPONSABLE&quot;" schema="&quot;dbo&quot;"/>
+      <Level name="Unidad responsable" column="unidad_responsable" type="String" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension name="Unidad organizacional">
+    <Hierarchy hasAll="true" primaryKey="id_unidad_organizacional">
+      <Table name="&quot;EGR_ADM_UNIDAD_ORGANIZACIONAL&quot;" schema="&quot;dbo&quot;"/>
+      <Level name="Unidad organizacional" column="unidad_organizacional" type="String" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension name="Unidad ejecutora">
+    <Hierarchy hasAll="true" primaryKey="id_unidad_ejecutora">
+      <Table name="&quot;EGR_ADM_UNIDAD_EJECUTORA&quot;" schema="&quot;dbo&quot;"/>
+      <Level name="Unidad ejecutora" column="unidad_ejecutora" type="String" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension name="Sector">
+    <Hierarchy hasAll="true" primaryKey="id_sector">
+      <Table name="&quot;EGR_SEC_SEC&quot;" schema="&quot;dbo&quot;"/>
+      <Level name="Sector" column="sector" type="String" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension name="Subsector">
+    <Hierarchy hasAll="true" primaryKey="id_subsector">
+      <Table name="&quot;EGR_SEC_SUBSEC&quot;" schema="&quot;dbo&quot;"/>
+      <Level name="Subsector" column="subsector" type="String" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension name="Area">
+    <Hierarchy hasAll="true" primaryKey="id_area">
+      <Table name="&quot;EGR_SEC_AREA&quot;" schema="&quot;dbo&quot;"/>
+      <Level name="Area" column="area" type="String" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension name="Ciclo">
+    <Hierarchy hasAll="true" primaryKey="id_ciclo">
+      <Table name="&quot;INGEGR_CICLO&quot;" schema="&quot;dbo&quot;"/>
+      <Level name="Ciclo" column="ciclo" type="String" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension name="Periodo">
+    <Hierarchy hasAll="true" primaryKey="id_periodo">
+      <Table name="&quot;INGEGR_PERIODO&quot;" schema="&quot;dbo&quot;"/>
+      <Level name="Periodo" column="periodo" type="String" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Cube name="DS_EGRESO_SECTORIAL">
+    <Table name="&quot;EGR_EJE_EGRESO&quot;" schema="&quot;dbo&quot;"/>
+    <DimensionUsage name="Unidad responsable" source="Unidad responsable" foreignKey="unidad_responsable"/>
+    <DimensionUsage name="Unidad organizacional" source="Unidad organizacional" foreignKey="unidad_organizacional"/>
+    <DimensionUsage name="Unidad ejecutora" source="Unidad ejecutora" foreignKey="unidad_ejecutora"/>
+    <DimensionUsage name="Sector" source="Sector" foreignKey="sector"/>
+    <DimensionUsage name="Subsector" source="Subsector" foreignKey="sub_sector"/>
+    <DimensionUsage name="Area" source="Area" foreignKey="area"/>
+    <DimensionUsage name="Ciclo" source="Ciclo" foreignKey="ciclo"/>
+    <DimensionUsage name="Periodo" source="Periodo" foreignKey="periodo"/>
+    <Measure name="Aprobado" column="aprobado" aggregator="sum" formatString="$#,###.00;($#,###.00)"/>
+    <Measure name="Ampliaciones reducciones" column="ampliaciones_reducciones" aggregator="sum" formatString="$#,###.00;($#,###.00)"/>
+    <Measure name="Vigente" column="vigente" aggregator="sum" formatString="$#,###.00;($#,###.00)"/>
+    <Measure name="Comprometido" column="comprometido" aggregator="sum" formatString="$#,###.00;($#,###.00)"/>
+    <Measure name="Disponible" column="disponible" aggregator="sum" formatString="$#,###.00;($#,###.00)"/>
+    <Measure name="Devengado" column="devengado" aggregator="sum" formatString="#"/>
+    <Measure name="Comprometido no devengado" column="comprometido_no_devengado" aggregator="sum" formatString="$#,###.00;($#,###.00)"/>
+    <Measure name="Sin devengar" column="sin_devengar" aggregator="sum" formatString="$#,###.00;($#,###.00)"/>
+    <Measure name="Ejercido" column="ejercido" aggregator="sum" formatString="#"/>
+    <Measure name="Pagado" column="pagado" aggregator="sum" formatString="#"/>
+    <Measure name="Deuda" column="deuda" aggregator="sum" formatString="$#,###.00;($#,###.00)"/>
+  </Cube>
+</Schema>

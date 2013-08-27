@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Schema name="DS_EGRESO_PROGRAMATICA">
+  <Dimension name="Unidad responsable">
+    <Hierarchy hasAll="true" primaryKey="id_unidad_responsable">
+      <Table name="&quot;EGR_ADM_UNIDAD_RESPONSABLE&quot;" schema="&quot;dbo&quot;"/>
+      <Level name="Unidad responsable" column="unidad_responsable" type="String" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension name="Unidad organizacional">
+    <Hierarchy hasAll="true" primaryKey="id_unidad_organizacional">
+      <Table name="&quot;EGR_ADM_UNIDAD_ORGANIZACIONAL&quot;" schema="&quot;dbo&quot;"/>
+      <Level name="Unidad organizacional" column="unidad_organizacional" type="String" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension name="Unidad ejecutora">
+    <Hierarchy hasAll="true" primaryKey="id_unidad_ejecutora">
+      <Table name="&quot;EGR_ADM_UNIDAD_EJECUTORA&quot;" schema="&quot;dbo&quot;"/>
+      <Level name="Unidad ejecutora" column="unidad_ejecutora" type="String" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension name="Plan">
+    <Hierarchy name="Programa plan" hasAll="true" primaryKey="id_programa_plan">
+      <Table name="&quot;EGR_PRO_PROGRAMA_PLAN&quot;" schema="&quot;dbo&quot;"/>
+      <Level name="Programa plan" column="programa_plan" type="String" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension name="Programa presupuestario">
+    <Hierarchy hasAll="true" primaryKey="id_programa_presupuestario">
+      <Table name="&quot;EGR_PRO_PROGRAMA_PRESUPUESTARIO&quot;" schema="&quot;dbo&quot;"/>
+      <Level name="Programa presupuestario" column="programa_presupuestario" type="String" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension name="Subprograma presupuestario">
+    <Hierarchy hasAll="true" primaryKey="id_subprograma_presupuestario">
+      <Table name="&quot;EGR_PRO_SUBPROGRAMA_PRESUPUESTARIO&quot;" schema="&quot;dbo&quot;"/>
+      <Level name="Subprograma presupuestario" column="subprograma_presupuestario" type="String" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension name="Actividad">
+    <Hierarchy hasAll="true" primaryKey="id_actividad">
+      <Table name="&quot;EGR_PRO_ACTIVIDAD&quot;" schema="&quot;dbo&quot;"/>
+      <Level name="Actividad" column="actividad" type="String" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension name="Ciclo">
+    <Hierarchy hasAll="true" primaryKey="id_ciclo">
+      <Table name="&quot;INGEGR_CICLO&quot;" schema="&quot;dbo&quot;"/>
+      <Level name="Ciclo" column="ciclo" type="String" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension name="Periodo">
+    <Hierarchy hasAll="true" primaryKey="id_periodo">
+      <Table name="&quot;INGEGR_PERIODO&quot;" schema="&quot;dbo&quot;"/>
+      <Level name="Periodo" column="periodo" type="String" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Cube name="DS_EGRESO_PROGRAMATICA">
+    <Table name="&quot;EGR_EJE_EGRESO&quot;" schema="&quot;dbo&quot;"/>
+    <DimensionUsage name="Unidad responsable" source="Unidad responsable" foreignKey="unidad_responsable"/>
+    <DimensionUsage name="Unidad organizacional" source="Unidad organizacional" foreignKey="unidad_organizacional"/>
+    <DimensionUsage name="Unidad ejecutora" source="Unidad ejecutora" foreignKey="unidad_ejecutora"/>
+    <DimensionUsage name="Plan" source="Plan" foreignKey="programa_plan"/>
+    <DimensionUsage name="Programa presupuestario" source="Programa presupuestario" foreignKey="programa_presupuestario"/>
+    <DimensionUsage name="Subprograma presupuestario" source="Subprograma presupuestario" foreignKey="subprograma_presupuestario"/>
+    <DimensionUsage name="Actividad" source="Actividad" foreignKey="actividad"/>
+    <DimensionUsage name="Ciclo" source="Ciclo" foreignKey="ciclo"/>
+    <DimensionUsage name="Periodo" source="Periodo" foreignKey="periodo"/>
+    <Measure name="Aprobado" column="aprobado" aggregator="sum" formatString="$#,###.00;($#,###.00)"/>
+    <Measure name="Ampliaciones reducciones" column="ampliaciones_reducciones" aggregator="sum" formatString="$#,###.00;($#,###.00)"/>
+    <Measure name="Vigente" column="vigente" aggregator="sum" formatString="$#,###.00;($#,###.00)"/>
+    <Measure name="Comprometido" column="comprometido" aggregator="sum" formatString="$#,###.00;($#,###.00)"/>
+    <Measure name="Disponible" column="disponible" aggregator="sum" formatString="$#,###.00;($#,###.00)"/>
+    <Measure name="Devengado" column="devengado" aggregator="sum" formatString="$#,###.00;($#,###.00)"/>
+    <Measure name="Comprometido no devengado" column="comprometido_no_devengado" aggregator="sum" formatString="$#,###.00;($#,###.00)"/>
+    <Measure name="Sin devengar" column="sin_devengar" aggregator="sum" formatString="$#,###.00;($#,###.00)"/>
+    <Measure name="Ejercido" column="ejercido" aggregator="sum" formatString="$#,###.00;($#,###.00)"/>
+    <Measure name="Pagado" column="pagado" aggregator="sum" formatString="$#,###.00;($#,###.00)"/>
+    <Measure name="Deuda" column="deuda" aggregator="sum" formatString="$#,###.00;($#,###.00)"/>
+  </Cube>
+</Schema>
