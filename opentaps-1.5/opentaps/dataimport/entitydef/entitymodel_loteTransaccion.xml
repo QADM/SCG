@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<entitymodel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/entitymodel.xsd">
+	<!-- ========================================================= -->
+	<!-- ======================== Defaults ======================= -->
+	<!-- ========================================================= -->
+	<title>Entidad Lote Transaccion</title>
+	<description>Define la entidad para la validacion del lote segun el tipo de transaccion</description>
+	<copyright>Copyright (c) Open Source Strategies, Inc.</copyright>
+	<author>Jesus Rodrigo Ruiz Merlin</author>
+	<version>1.0</version>
+
+	<!-- =========================== -->
+	<!-- org.opentaps.dataimport -->
+	<!-- =========================== -->
+
+	<entity entity-name="LoteTransaccion" package-name="org.opentaps.dataimport"
+		title="Entidad para la validacion del lote segun el tipo de transaccion.">
+		<field name="idLote" type="id-ne"></field>
+		<field name="tipoTransaccion" type="id-ne"></field>
+		<prim-key field="idLote" />
+		<prim-key field="tipoTransaccion" />
+	</entity>
+</entitymodel>
