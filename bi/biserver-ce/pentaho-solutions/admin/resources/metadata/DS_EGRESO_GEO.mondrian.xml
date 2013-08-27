@@ -58,18 +58,18 @@
     <DimensionUsage name="REGION" source="REGION" foreignKey="region"/>
     <DimensionUsage name="CICLO" source="CICLO" foreignKey="ciclo"/>
     <DimensionUsage name="PERIODO" source="PERIODO" foreignKey="periodo"/>
-    <Measure name="Modificaciones" column="ampliaciones_reducciones" aggregator="sum" formatString="$#,###.00;($#,###.00)"/>
+    <Measure name="Modificado" column="ampliaciones_reducciones" aggregator="sum" formatString="$#,###.00;($#,###.00)"/>
     <Measure name="Aprobado" column="aprobado" aggregator="sum" formatString="$#,###.00;($#,###.00)"/>
     <Measure name="Ciclo" column="ciclo" aggregator="min" formatString="#"/>
     <Measure name="Comprometido" column="comprometido" aggregator="sum" formatString="$#,###.00;($#,###.00)"/>
     <Measure name="Comprometido no devengado" column="comprometido_no_devengado" aggregator="sum" formatString="$#,###.00;($#,###.00)"/>
-    <Measure name="Deuda" column="deuda" aggregator="sum" formatString="$#,###.00;($#,###.00)"/>
+    <Measure name="Cuentas por pagar (Deuda)" column="deuda" aggregator="sum" formatString="$#,###.00;($#,###.00)"/>
     <Measure name="Devengado" column="devengado" aggregator="sum" formatString="$#,###.00;($#,###.00)"/>
     <Measure name="Disponible" column="disponible" aggregator="sum" formatString="$#,###.00;($#,###.00)"/>
     <Measure name="Ejercido" column="ejercido" aggregator="sum" formatString="$#,###.00;($#,###.00)"/>
     <Measure name="Pagado" column="pagado" aggregator="sum" formatString="$#,###.00;($#,###.00)"/>
     <Measure name="Periodo" column="periodo" aggregator="min" formatString="$#,###.00;($#,###.00)"/>
-    <Measure name="Sin devengar" column="sin_devengar" aggregator="sum" formatString="$#,###.00;($#,###.00)"/>
-    <Measure name="Modificado" column="vigente" aggregator="sum" formatString="$#,###.00;($#,###.00)"/>
+    <Measure name="Egreso sin devengar" column="sin_devengar" aggregator="sum" formatString="$#,###.00;($#,###.00)"/>
+    <Measure name="Modificaciones" column="vigente" aggregator="sum" formatString="$#,###.00;($#,###.00)"/>
   </Cube>
 </Schema>
