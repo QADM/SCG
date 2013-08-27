@@ -361,10 +361,11 @@
         </required-permissions>
         <attribute name="acctgTransTypeId" mode="IN" type="String" optional="false"/>
         <attribute name="tipoFis" mode="IN" type="String" optional="false"/>
-        <attribute name="cri" mode="IN" type="String"/>
-        <attribute name="idProdAbono" mode="IN" type="String"/>
-        <attribute name="idProdCargo" mode="IN" type="String"/>
-        <attribute name="cuentas" mode="OUT" type="java.util.Map"/>               
+        <attribute name="cri" mode="IN" type="String" optional="false"/>
+        <attribute name="idProdAbono" mode="IN" type="String" optional="true"/>
+        <attribute name="idProdCargo" mode="IN" type="String" optional="true"/>
+        <attribute name="idPago" mode="IN" type="String" optional="true"/>
+        <attribute name="mapCuentas" mode="OUT" type="java.util.Map"/>               
     </service>
     
     <service name="operacionDiaria" engine="java"
@@ -410,6 +411,32 @@
     	</description>	
     	<attribute name="glAccountId" mode="IN" type="String" optional="false"/>
     	<attribute name="resultadoPrdCat" mode="OUT" type="java.util.List" />
-    </service>    
+    </service>
+    <service name="guardaAccountHistory" engine="java"
+    	location="org.opentaps.dataimport.UtilOperacionDiariaServices" invoke="guardaAccountHistory">
+    	<description>Metodo que guarda los registros correspondientes en la tabla GL_ACCOUNT_HISTORY 
+    				 los realiza a partir de una lista de cuentas a guardar y una fecha contable.
+    	</description>	
+    	<attribute name="fecContable" mode="IN" type="String" optional="false"/>
+    	<attribute name="organizationPartyId" mode="IN" type="String" />
+    	<attribute name="listCuentas" mode="IN" type="java.util.List" />
+    	<attribute name="listAccountsSaved" mode="OUT" type="java.util.List"/>
+    </service>
+    <service name="guardaAccountOrganization" engine="java"
+    	location="org.opentaps.dataimport.UtilOperacionDiariaServices" invoke="guardaAccountOrganization">
+    	<description>Metodo que guarda los registros correspondientes en la tabla GL_ACCOUNT_ORGANIZATION 
+     					lo realiza a partir de una lista de cuentas , una organizacion y un monto .
+    	</description>	
+    	<attribute name="organizationPartyId" mode="IN" type="String" optional="false"/>
+    	<attribute name="monto" mode="IN" type="String" optional="false"/>
+    	<attribute name="mapCuentas" mode="IN" type="java.util.Map" optional="false"/>
+    	<attribute name="listAccountsSaved" mode="OUT" type="java.util.List"/>
+    </service>
+    <service name="obtenEnumIdPadre" engine="java"
+    	location="org.opentaps.dataimport.UtilOperacionDiariaServices" invoke="obtenEnumIdPadre">
+    	<description>Metodo utilizado para obtener el enumId padre a partir de uno dado.</description>
+    	<attribute name="enumId" mode="IN" type="String" optional="false"/>
+    	<attribute name="enumIdPadre" mode="OUT" type="String"/>
+    </service>
     
 </services>
