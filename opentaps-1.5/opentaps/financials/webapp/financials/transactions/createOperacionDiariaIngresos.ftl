@@ -24,7 +24,8 @@
     <table class="fourColumnForm" style="border:0">
       <tr>
         <@displayTitleCell title=uiLabelMap.FinancialDocumentType />
-        <@inputSelectCell list=listDocumentos?if_exists displayField="descripcion" name="Tipo_Documento" default=idTipoDoc?if_exists key="idTipoDoc" onChange="opentaps.getTipoFiscalByDoc(this,'Tipo_Fiscal');" />
+        <@inputSelectCell list=listDocumentos?if_exists displayField="descripcion" name="Tipo_Documento" default=idTipoDoc?if_exists key="idTipoDoc" 
+        			onChange="opentaps.getTipoFiscalByDoc(this,'Tipo_Fiscal');" />
       </tr>
       <tr>
         <@displayTitleCell title=uiLabelMap.FinancialsGlFiscalType />

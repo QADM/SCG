@@ -394,7 +394,7 @@
     	<description>Metodo que guarda los registros correspondientes en la tabla GL_ACCOUNT_HISTORY 
     				 los realiza a partir de una lista de cuentas a guardar y una fecha contable.
     	</description>	
-    	<attribute name="fecContable" mode="IN" type="String" optional="false"/>
+    	<attribute name="fecContable" mode="IN" type="java.sql.Timestamp" optional="false"/>
     	<attribute name="organizationPartyId" mode="IN" type="String" />
     	<attribute name="listCuentas" mode="IN" type="java.util.List" />
     	<attribute name="listAccountsSaved" mode="OUT" type="java.util.List"/>
@@ -405,7 +405,7 @@
      					lo realiza a partir de una lista de cuentas , una organizacion y un monto .
     	</description>	
     	<attribute name="organizationPartyId" mode="IN" type="String" optional="false"/>
-    	<attribute name="monto" mode="IN" type="String" optional="false"/>
+    	<attribute name="monto" mode="IN" type="java.math.BigDecimal" optional="false"/>
     	<attribute name="mapCuentas" mode="IN" type="java.util.Map" optional="false"/>
     	<attribute name="listAccountsSaved" mode="OUT" type="java.util.List"/>
     </service>
@@ -427,8 +427,8 @@
     	<description>Obtiene los periodos custom que coinciden en una fecha y una organizacion.
     	</description>	
     	<attribute name="organizationPartyId" mode="IN" type="String" optional="false"/>
-    	<attribute name="fecha" mode="IN" type="String" optional="false"/>
-    	<attribute name="listPeriods" mode="OUT" type="java.util.Map"></attribute>
+    	<attribute name="fecha" mode="IN" type="java.sql.Timestamp" optional="false"/>
+    	<attribute name="listPeriods" mode="OUT" type="java.util.List"></attribute>
     </service>
     <service name="getAuxiliarProd" engine="java"
     	location="org.opentaps.dataimport.UtilOperacionDiariaServices" invoke="getAuxiliarProd">

@@ -115,7 +115,7 @@ public class OperacionDiariaIngresosManual {
 	        Debug.logWarning("monto "+monto, MODULE);
 	        
 	        
-			GenericValue tipoDocumento = delegator.findByPrimaryKeyCache("TipoDocumento",UtilMisc.<String, Object>toMap("idTipoDoc", tipoDoc));
+			GenericValue tipoDocumento = delegator.findByPrimaryKey("TipoDocumento",UtilMisc.<String, Object>toMap("idTipoDoc", tipoDoc));
 			String acctgTransTypeId = tipoDocumento.getString("acctgTransTypeId");
 			Debug.logWarning("tipoDocumento  Encontrado "+tipoDocumento, MODULE);
 			String docu = tipoDocumento.getString("descripcion");
@@ -177,9 +177,11 @@ public class OperacionDiariaIngresosManual {
 
 	        //Se realiza el registro de trans entries
 	    	
-	        List<GenericValue> listEntries = registraEntries(dctx, dispatcher, context, organizationPartyId,
-	        			acctgTransId, monto, acctgTransTypeId, n5, tipoFis, 
-	        			idProdAbono, idProdCargo, idPago);
+	        registraEntries(dctx, dispatcher, context, organizationPartyId,
+		        			acctgTransId, monto, fecContable,
+		        			acctgTransTypeId, n5, tipoFis, 
+		        			idProdAbono, idProdCargo, idPago);
+	        
 	        
 		} catch (ParseException e) {
 			return UtilMessage.createAndLogServiceError(e, MODULE);
@@ -376,6 +378,8 @@ public class OperacionDiariaIngresosManual {
             	Map tmpResult = dispatcher.runSync("getAuxiliarProd", input);
             	List<GenericValue> resultados = (List<GenericValue>) tmpResult.get("resultadoPrdCat");
             	
+            	Debug.logWarning("glAccountId  "+glAccountId+"  getAuxiliarProd   *[ "+resultados+"*]", MODULE);
+            	
             	if(resultados != null && !resultados.isEmpty()){
             		
             		if(productId != null && !productId.isEmpty()){
@@ -392,10 +396,7 @@ public class OperacionDiariaIngresosManual {
     					Debug.logError("Debe de proporcionar el Producto",MODULE);
     					throw new ServiceException(String.format("Debe de proporcionar el Producto"));
             		}
-            	} else {
-					Debug.logError("No existe catalogo auxiliar asociado a la cuenta",MODULE);
-					throw new ServiceException(String.format("No existe catalogo auxiliar asociado a la cuenta : ["+glAccountId+"]"));
-            	}
+            	} 
                 
                 Debug.logWarning("Cuenta Entrada {{ "+glAccountId+"   cuenta Salida ]{ "+cuentaRegresa, MODULE);
     			
@@ -427,10 +428,7 @@ public class OperacionDiariaIngresosManual {
     		if(paymenthMet != null && !paymenthMet.isEmpty())
     			cuentaRegresa = paymenthMet.getString("glAccountId");
     		
-    	} else {
-			Debug.logError("No existe catalogo auxiliar asociado a la cuenta de banco ",MODULE);
-			throw new ServiceException(String.format("No existe catalogo auxiliar asociado a la cuenta de banco : ["+glAccountId+"]"));
-    	}
+    	} 
     	
     	return cuentaRegresa;
     	
@@ -447,7 +445,7 @@ public class OperacionDiariaIngresosManual {
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static List<GenericValue> registraEntries(DispatchContext dctx,LocalDispatcher dispatcher,Map context,
-						String organizationPartyId,String acctgTransId,BigDecimal monto,
+						String organizationPartyId,String acctgTransId,BigDecimal monto,Timestamp fecContable,
 						String acctgTransTypeId, String CRI , String tipoFiscal, 
 						String idProdAbono, String idProdCargo, String idPago) throws GenericEntityException, GenericServiceException{
 		
@@ -551,12 +549,70 @@ public class OperacionDiariaIngresosManual {
         }
         
         Debug.logWarning("LISTA DE CUENTAS REGISTRADAS  } "+listCuentas, MODULE);
+        
+        //Aqui se guardan los datos correspondientes en la tabla AccountHistory
+        
+        List<GenericValue> listHistory = registrarAcctHistory(dctx, dispatcher, context, 
+        			fecContable, organizationPartyId, listCuentas);
+        
+        Debug.logWarning("LISTA DE CUENTAS HISTORY REGISTRADAS  } "+listHistory, MODULE);
+        
+        List<GenericValue> listOrganization = registrarAcctOrganization(dctx, dispatcher, context,
+        			organizationPartyId,monto, mapCuentas);
+        
+        Debug.logWarning("LISTA DE CUENTAS ORGANIZATION REGISTRADAS  } "+listOrganization, MODULE);
+        
 		
         return listCuentas;
 	}
 	
+	/**
+	 * Metodo que registra el GL_ACCOUNT_HISTORY
+	 * @param fechaContable
+	 * @param organizationPartyId
+	 * @param listCuentas
+	 * @throws GenericServiceException 
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public static List<GenericValue> registrarAcctHistory(DispatchContext dctx,LocalDispatcher dispatcher,
+					Map context,Timestamp fechaContable, 
+					String organizationPartyId, List<GenericValue> listCuentas) throws GenericServiceException{
+		
+        Map input = new HashMap(context);
+        input.put("fecContable", fechaContable);
+        input.put("organizationPartyId", organizationPartyId);
+        input.put("listCuentas", listCuentas);
+        input = dctx.getModelService("guardaAccountHistory").makeValid(input, ModelService.IN_PARAM);
+        Map tmpResult = dispatcher.runSync("guardaAccountHistory", input);
+
+        List<GenericValue> listSaved = (List<GenericValue>) tmpResult.get("listAccountsSaved");
+		
+		return listSaved;
+	}
 	
-    
+	/**
+	 * Metodo que registra el GL_ACCOUNT_ORGANIZATION
+	 * @param fechaContable
+	 * @param organizationPartyId
+	 * @param listCuentas
+	 * @throws GenericServiceException 
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public static List<GenericValue> registrarAcctOrganization(DispatchContext dctx,LocalDispatcher dispatcher,Map context,
+					String organizationPartyId,BigDecimal monto, Map<String,String> mapCuentas) throws GenericServiceException{
+		
+        Map input = new HashMap(context);
+        input.put("organizationPartyId", organizationPartyId);
+        input.put("mapCuentas", mapCuentas);
+        input.put("monto", monto);
+        input = dctx.getModelService("guardaAccountOrganization").makeValid(input, ModelService.IN_PARAM);
+        Map tmpResult = dispatcher.runSync("guardaAccountOrganization", input);
+
+        List<GenericValue> listSaved = (List<GenericValue>) tmpResult.get("listAccountsSaved");
+		
+		return listSaved;
+	}	
+	
 }
 
 

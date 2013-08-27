@@ -37,7 +37,7 @@ context.put("userLogin",userLogin);
 
 //Buscamos los Documentos que son del tipo operación diaria
 orderBy = org.ofbiz.base.util.UtilMisc.toList("descripcion");
-condicionDoc = EntityCondition.makeCondition("tipoPoliza",EntityOperator.LIKE,"Ingresos");
+condicionDoc = EntityCondition.makeCondition("tipoPoliza",EntityOperator.LIKE,"INGRESO");
 resultadoDoc = delegator.findByCondition("TipoDocumento", condicionDoc , UtilMisc.toList("idTipoDoc", "descripcion"), orderBy);
 context.put("listDocumentos", resultadoDoc);
 
@@ -55,99 +55,58 @@ context.put("listPayments", resultadoPayment);
 
 //Buscamos los rubros
 orderByRu = org.ofbiz.base.util.UtilMisc.toList("description");
-condicionRu = EntityCondition.makeCondition("productCategoryTypeId","RU");
+condicionRu = EntityCondition.makeCondition("productCategoryTypeId","RUBRO");
 resultadoRu = delegator.findByCondition("ProductCategory", condicionRu , UtilMisc.toList("productCategoryId", "description"), orderByRu);
 context.put("listRubros", resultadoRu);
 
 //Buscamos los tipos
 orderByTi = org.ofbiz.base.util.UtilMisc.toList("description");
-condicionTi = EntityCondition.makeCondition("productCategoryTypeId","TI");
+condicionTi = EntityCondition.makeCondition("productCategoryTypeId","TIPO");
 resultadoTi = delegator.findByCondition("ProductCategory", condicionTi , UtilMisc.toList("productCategoryId", "description"), orderByTi);
 context.put("listTipos", resultadoTi);
 
 //Buscamos las clases
 orderByCl = org.ofbiz.base.util.UtilMisc.toList("description");
-condicionCl = EntityCondition.makeCondition("productCategoryTypeId","CL");
+condicionCl = EntityCondition.makeCondition("productCategoryTypeId","CLASE");
 resultadoCl = delegator.findByCondition("ProductCategory", condicionCl , UtilMisc.toList("productCategoryId", "description"), orderByCl);
 context.put("listClases", resultadoCl);
 
 //Buscamos los Conceptos
 orderByCo = org.ofbiz.base.util.UtilMisc.toList("description");
-condicionCo = EntityCondition.makeCondition("productCategoryTypeId","CO");
+condicionCo = EntityCondition.makeCondition("productCategoryTypeId","CONCEPTO_ING");
 resultadoCo = delegator.findByCondition("ProductCategory", condicionCo , UtilMisc.toList("productCategoryId", "description"), orderByCo);
 context.put("listConceptos", resultadoCo);
 
 //Buscamos N5
 orderByCn = org.ofbiz.base.util.UtilMisc.toList("description");
-condicionCn = EntityCondition.makeCondition("productCategoryTypeId","N5");
+condicionCn = EntityCondition.makeCondition("productCategoryTypeId","NIVEL_5_ING");
 resultadoCn = delegator.findByCondition("ProductCategory", condicionCn , UtilMisc.toList("productCategoryId", "description"), orderByCn);
 context.put("listN5", resultadoCn);
 
-//Obtenemos el id del nivel presupuestal para la subfuente especifica
-condicionSubfuente = EntityCondition.makeCondition("descripcion","Subfuente Especifica");
-condicionUnidadEje = EntityCondition.makeCondition("descripcion","Unidad Ejecutora");
-
-resultadoSubNiv = delegator.findByCondition("NivelPresupuestal", condicionSubfuente , UtilMisc.toList("nivelId"), null);
-resultadoUniNiv = delegator.findByCondition("NivelPresupuestal", condicionUnidadEje , UtilMisc.toList("nivelId"), null);
-
-if(resultadoSubNiv != null && !resultadoSubNiv.isEmpty()){
+//Buscamos las subfuente especifica
 	
-	nivelSub = resultadoSubNiv.get(0).getString("nivelId");
-	
-	subConditions = UtilMisc.toList(
-		new EntityExpr("enumTypeId", EntityOperator.EQUALS, "CLAS_FR"),
-		new EntityExpr("nivelId", EntityOperator.EQUALS, nivelSub)
+subConditions = UtilMisc.toList(
+	new EntityExpr("enumTypeId", EntityOperator.EQUALS, "CL_FUENTE_RECURSOS"),
+	new EntityExpr("nivelId", EntityOperator.EQUALS, "SUBFUENTE_ESPECIFICA")
+);
+
+resultadoSub = delegator.findByCondition("Enumeration", new EntityConditionList(subConditions, EntityOperator.AND) , UtilMisc.toList("enumId","description"), null);
+context.put("listaSubfuente", resultadoSub);
+
+//Buscamos las unidades ejecutoras
+condicionNivUn = EntityCondition.makeCondition("Nivel_id","UNIDAD_EJECUTORA");
+resultadoNivPar = delegator.findByCondition("Party", condicionNivUn , UtilMisc.toList("partyId"), null);
+
+//Se obtienen los ids de los party que pertenecen unidad ejecutora
+listIdsParty = FastList.newInstance();
+	for (GenericValue genericValue : resultadoNivPar) {
+		listIdsParty.add(genericValue.getString("partyId"));
+	}
+
+	//Obtenemos las unidades ejecutoras
+	unidadConditions = UtilMisc.toList(
+		new EntityExpr("partyId", EntityOperator.IN, listIdsParty)
 	);
 
-	resultadoSub = delegator.findByCondition("Enumeration", new EntityConditionList(subConditions, EntityOperator.AND) , UtilMisc.toList("enumId","description"), null);
-	context.put("listaSubfuente", resultadoSub);
-}
-
-if(resultadoUniNiv != null && !resultadoUniNiv.isEmpty()){
-	
-	nivelUnidad = resultadoUniNiv.get(0).getString("nivelId");
-	
-	condicionNivUn = EntityCondition.makeCondition("Nivel_id",nivelUnidad);
-	resultadoNivPar = delegator.findByCondition("Party", condicionNivUn , UtilMisc.toList("partyId"), null);
-	
-		//Se obtienen los ids de los party que pertenecen unidad ejecutora
-		listIdsParty = FastList.newInstance();
-		for (GenericValue genericValue : resultadoNivPar) {
-			listIdsParty.add(genericValue.getString("partyId"));
-		}
-		
-		//Obtenemos las unidades ejecutoras
-		unidadConditions = UtilMisc.toList(
-			new EntityExpr("partyId", EntityOperator.IN, listIdsParty)
-		);
-		
-		resultadoUnid = delegator.findByCondition("PartyGroup", new EntityConditionList(unidadConditions, EntityOperator.AND) , UtilMisc.toList("partyId","groupName"), null);
-	
-		//print("Lista de Unidades $$$ "+resultadoUnid);
-		
-		context.put("listaUnidades", resultadoUnid);
-}
-
-//Buscamos Entidad Federativa
-//orderByEF = org.ofbiz.base.util.UtilMisc.toList("geoName");
-//condicionEF = EntityCondition.makeCondition("geoTypeId","Entidad Federativa");
-//resultadoEF = delegator.findByCondition("Geo", condicionEF , UtilMisc.toList("geoId", "geoName"), orderByEF);
-//context.put("listEntidades", resultadoEF);
-
-//Buscamos Regiones
-//orderByRE = org.ofbiz.base.util.UtilMisc.toList("geoName");
-//condicionRE = EntityCondition.makeCondition("geoTypeId","REGION");
-//resultadoRE = delegator.findByCondition("Geo", condicionRE , UtilMisc.toList("geoId", "geoName"), orderByRE);
-//context.put("listRegiones", resultadoRE);
-
-//Buscamos Municipios
-//orderByMU = org.ofbiz.base.util.UtilMisc.toList("geoName");
-//condicionMU = EntityCondition.makeCondition("geoTypeId","Municipio");
-//resultadoMU = delegator.findByCondition("Geo", condicionMU , UtilMisc.toList("geoId", "geoName"), orderByMU);
-//context.put("listMunicipios", resultadoMU);
-
-//Buscamos Localidades
-//orderByLO = org.ofbiz.base.util.UtilMisc.toList("geoName");
-//condicionLO = EntityCondition.makeCondition("geoTypeId","Localidad");
-//resultadoLO = delegator.findByCondition("Geo", condicionLO , UtilMisc.toList("geoId", "geoName"), orderByLO);
-//context.put("listLocalidades", resultadoLO);
+resultadoUnid = delegator.findByCondition("PartyGroup", new EntityConditionList(unidadConditions, EntityOperator.AND) , UtilMisc.toList("partyId","groupName"), null);
+context.put("listaUnidades", resultadoUnid);

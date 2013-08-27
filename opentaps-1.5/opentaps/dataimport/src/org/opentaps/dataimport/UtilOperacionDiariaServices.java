@@ -8,6 +8,7 @@ import java.util.Map;
 import javolution.util.FastList;
 import javolution.util.FastMap;
 
+import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
@@ -41,7 +42,7 @@ public class UtilOperacionDiariaServices {
 		try {        
 			
 	    	EntityCondition condicionEnum = EntityCondition.makeCondition("enumId", EntityOperator.EQUALS, enumId);
-	    	List<GenericValue> resultadoEnum = delegator.findByConditionCache("Enumeration", condicionEnum , UtilMisc.toList("enumId","parentEnumId"), null);
+	    	List<GenericValue> resultadoEnum = delegator.findByCondition("Enumeration", condicionEnum , UtilMisc.toList("enumId","parentEnumId"), null);
 	    	
 	    	if(resultadoEnum != null && !resultadoEnum.isEmpty()){
 	    		
@@ -74,7 +75,7 @@ public class UtilOperacionDiariaServices {
 		try {        
 			
 	    	EntityCondition condicionEnum = EntityCondition.makeCondition("partyId", EntityOperator.EQUALS, partyId);
-	    	List<GenericValue> resultadoEnum = delegator.findByConditionCache("PartyGroup", condicionEnum , UtilMisc.toList("partyId","Parent_id"), null);
+	    	List<GenericValue> resultadoEnum = delegator.findByCondition("PartyGroup", condicionEnum , UtilMisc.toList("partyId","Parent_id"), null);
 	    	
 	    	if(resultadoEnum != null && !resultadoEnum.isEmpty()){
 	    		
@@ -138,7 +139,7 @@ public class UtilOperacionDiariaServices {
     	String glAccountId = (String) context.get("glAccountId");
     	
     	EntityCondition condicionPrdCat = EntityCondition.makeCondition("glAccountId", EntityOperator.EQUALS, glAccountId);
-    	List<GenericValue> resultadoPrdCat = delegator.findByConditionCache("GlAccountCategoryRelation", condicionPrdCat , UtilMisc.toList("glAccountId","productCategoryId"), null);
+    	List<GenericValue> resultadoPrdCat = delegator.findByCondition("GlAccountCategoryRelation", condicionPrdCat , UtilMisc.toList("glAccountId","productCategoryId"), null);
     	
         Map results = ServiceUtil.returnSuccess();
         results.put("resultadoPrdCat", resultadoPrdCat);
@@ -180,7 +181,13 @@ public class UtilOperacionDiariaServices {
 	    		for (GenericValue customPeriod : listPeriods) {
 	    			
 	    			String customTimePeriodId = customPeriod.getString("customTimePeriodId");
-					
+	    			
+	    			//Primero buscamos si existe el registro
+	    			GenericValue actHistoryBusca = delegator.findByPrimaryKey("GlAccountHistory", 
+	    						UtilMisc.toMap("glAccountId",glAccountId,"organizationPartyId",organizationPartyId,
+	    								"customTimePeriodId",customTimePeriodId));
+	    			Debug.logWarning("actHistoryBusca   ["+actHistoryBusca+"]", MODULE);
+	    			
 	    			GenericValue accountHistory = GenericValue.create(delegator.getModelEntity("GlAccountHistory"));
 	    			accountHistory.set("glAccountId", glAccountId);
 	    			accountHistory.set("organizationPartyId", organizationPartyId);
@@ -190,7 +197,12 @@ public class UtilOperacionDiariaServices {
 	    			else
 	    				accountHistory.set("postedCredits", monto);
 	    			
-	    			accountHistory.create();
+	    			if(actHistoryBusca !=null && !actHistoryBusca.isEmpty()){
+	    				accountHistory.store();
+	    			} else {
+	    				accountHistory.create();
+	    			}
+	    			
 	    			
 	    			listAccountsSaved.add(accountHistory);
 	    			
@@ -226,6 +238,7 @@ public class UtilOperacionDiariaServices {
     	List<String> listAccountId = FastList.newInstance();
     	Map<String,String> accountsNatu = FastMap.newInstance();
     	Map<String,BigDecimal> accountsOrga = FastMap.newInstance();
+    	Map<String,GenericValue> accountsOrgaGen = FastMap.newInstance();
     	
     	List<GenericValue> listAccountsSaved = FastList.newInstance();
     	
@@ -236,7 +249,7 @@ public class UtilOperacionDiariaServices {
     	try {
     		
         	EntityCondition condicionAcc = EntityCondition.makeCondition("glAccountId", EntityOperator.IN, listAccountId);
-        	List<GenericValue> resultadoAcc = delegator.findByConditionCache("GlAccount", condicionAcc , UtilMisc.toList("glAccountId","naturaleza"), null);
+        	List<GenericValue> resultadoAcc = delegator.findByCondition("GlAccount", condicionAcc , UtilMisc.toList("glAccountId","naturaleza"), null);
         	
         	for (GenericValue accounts : resultadoAcc) {
         		accountsNatu.put(accounts.getString("glAccountId"), accounts.getString("naturaleza"));
@@ -245,34 +258,51 @@ public class UtilOperacionDiariaServices {
         	EntityCondition condicionAccOr = EntityCondition.makeCondition(EntityOperator.AND,
         			EntityCondition.makeCondition("glAccountId", EntityOperator.IN, listAccountId),
         			EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, organizationPartyId));
-        	List<GenericValue> resultadoAccOr = delegator.findByConditionCache("GlAccount", condicionAccOr , UtilMisc.toList("glAccountId","postedBalance"), null);
+        	List<GenericValue> resultadoAccOr = delegator.findByCondition("GlAccountOrganization", condicionAccOr , UtilMisc.toList("glAccountId","postedBalance"), null);
+        	
         	
         	for (GenericValue accoutOrg : resultadoAccOr) {
         		accountsOrga.put(accoutOrg.getString("glAccountId"), (accoutOrg.getBigDecimal("postedBalance") == null ? ZERO : accoutOrg.getBigDecimal("postedBalance")));
+        		accountsOrgaGen.put(accoutOrg.getString("glAccountId"),accoutOrg);
 			}
         	
         	for (Map.Entry<String, String> cuenta : mapCuentas.entrySet())
         	{
         		
-        		String glAccountId = cuenta.getValue();
-        		
-        		GenericValue accountOrgani = GenericValue.create(delegator.getModelEntity("GlAccountOrganization"));
-        		accountOrgani.set("glAccountId", glAccountId);
-        		accountOrgani.set("organizationPartyId", organizationPartyId);
-        		
-        		BigDecimal monto = ZERO;
-        		String natu = null;
-        		if(cuenta.getKey().contains("Cuenta_Cargo"))
-        			natu = "D";
-        		else
-        			natu = "A";
-        		
-        		BigDecimal montoAux = accountsOrga.get(glAccountId);
-        		monto = natu.equals(accountsNatu.get(glAccountId)) ? montoAux.add(montoPrl) : montoAux.subtract(montoPrl);
-        		accountOrgani.set("postedBalance", monto);
-        		accountOrgani.create();
-        		
-        		listAccountsSaved.add(accountOrgani);
+        		String tipoDato = cuenta.getKey();
+        		Debug.logWarning("tipoDato   "+tipoDato, MODULE);
+        		if(!tipoDato.equalsIgnoreCase("GlFiscalTypePresupuesto") && !tipoDato.equalsIgnoreCase("GlFiscalTypeContable") ){
+            		
+            		String glAccountId = cuenta.getValue();
+            		
+        			//Primero buscamos si existe el registro
+        			GenericValue actOrganizBusca = accountsOrgaGen.get(glAccountId);
+        			
+            		GenericValue accountOrgani = GenericValue.create(delegator.getModelEntity("GlAccountOrganization"));
+            		accountOrgani.set("glAccountId", glAccountId);
+            		accountOrgani.set("organizationPartyId", organizationPartyId);
+            		
+            		BigDecimal monto = ZERO;
+            		String natu = null;
+            		if(cuenta.getKey().contains("Cuenta_Cargo"))
+            			natu = "D";
+            		else
+            			natu = "A";
+            		
+            		BigDecimal montoAux = accountsOrga.get(glAccountId) == null ? ZERO : accountsOrga.get(glAccountId);
+            		monto = natu.equals(accountsNatu.get(glAccountId)) ? montoAux.add(montoPrl) : montoAux.subtract(montoPrl);
+            		accountOrgani.set("postedBalance", monto);
+            		
+        			if(actOrganizBusca !=null && !actOrganizBusca.isEmpty()){
+        				accountOrgani.store();
+        			} else {
+        				accountOrgani.create();
+        			}        		
+            		
+            		listAccountsSaved.add(accountOrgani);
+            		
+        		}
+
         		
         	}        	
     		

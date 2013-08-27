@@ -735,14 +735,14 @@
                 <set field="pageTitleLabel" value="${uiLabelMap.FinancialsDailyOperIncome}"/>  
                 <set field="sectionHeaderUiLabel" value="${uiLabelMap.FinancialsDailyOperIncome}"/>
                 <set field="creaOpDiariaIngresos" value="createOperacionDiariaIngresos"/>
-				<script location="component://financials/webapp/financials/WEB-INF/actions/transactions/getDatosOperacionDiariaIng.bsh"/>                
+				<script location="component://financials/webapp/financials/WEB-INF/actions/transactions/getDatosOperacionDiariaEgre.bsh"/>                
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator">
                     <decorator-section name="section-body">
                         <frame-container title="${uiLabelMap.FinancialsDailyOperIncome}">
                             <platform-specific><html>
-                                <html-template location="component://financials/webapp/financials/transactions/createOperacionDiariaIngresos.ftl"/>
+                                <html-template location="component://financials/webapp/financials/transactions/createOperacionDiariaEgresos.ftl"/>
                             </html></platform-specific>                         
                         </frame-container>
                     </decorator-section>
