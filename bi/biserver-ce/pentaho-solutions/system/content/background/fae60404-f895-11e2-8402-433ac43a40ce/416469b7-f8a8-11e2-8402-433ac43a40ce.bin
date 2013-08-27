@@ -1,0 +1,70 @@
+<html><head><title></title><link rel="stylesheet" type="text/css" href="/pentaho-style/active/default.css"></head>
+<body>
+<script language="javascript" type="text/javascript">
+<!--
+function showHide(shID) {
+    if (document.getElementById(shID)) {
+        if (document.getElementById(shID+'-show').style.display != 'none') {
+            document.getElementById(shID+'-show').style.display = 'none';
+            document.getElementById(shID+'-hide').style.display = 'inline';
+            document.getElementById(shID).style.display = 'block';
+        } 
+        else {
+            document.getElementById(shID+'-show').style.display = 'inline';
+            document.getElementById(shID+'-hide').style.display = 'none';
+            document.getElementById(shID).style.display = 'none';
+        }
+    }
+} 
+  
+//-->
+</script>
+
+<div id="errorResponse">
+<div class="error"> 
+         
+<h1>The Pentaho BI Platform reported an error while running an action sequence</h1>
+<div class="summary">
+  <div class="item"><span class="label">Possible Causes:</span><pre>RuntimeContext.ERROR_0017 - [es_18] Activity failed to execute 
+</pre></div>
+  <div class="item"><span class="label">Action Sequence:</span>HQL_Datasource.xaction</div>
+  <div class="item"><span class="label">Execution Stack:</span><pre>EXECUTING ACTION: HQL For Report Data (HQLLookupRule)
+</pre></div>
+  <div class="item"><span class="label">Loop Index (1-based):</span>0</div>
+  <div class="item"><span class="label">Error Time:</span>lunes 29 de julio de 2013 06:40:29 PM CDT</div>
+  <div class="item"><span class="label">Error Type:</span>ActionExecutionException</div>
+  <div class="item"><span class="label">Session ID:</span>admin</div>
+  <div class="item"><span class="label">Instance Id:</span>fb0f8507-f895-11e2-8402-433ac43a40ce</div>
+  <div class="item"><span class="label">Action Class:</span>HQLLookupRule</div>
+  <div class="item"><span class="label">Action Description:</span>HQL For Report Data</div>
+  <!-- <div class="item"><span class="label">Step #:</span>N/A</div> -->
+</div>
+  
+<div id="controls">  
+<a href="#" id="details-show" class="showLink" onclick="showHide('details');return false;">View Details</a>
+<a href="#" id="details-hide" class="hideLink" onclick="showHide('details');return false;">Hide Details</a>
+</div>
+
+<div id="details" class="details"><span class="label">Stack Trace:</span><pre class="stackTrace">org.pentaho.platform.api.engine.ActionExecutionException: RuntimeContext.ERROR_0017 - [es_18] Activity failed to execute 
+	at org.pentaho.platform.engine.services.runtime.RuntimeContext.executeComponent(RuntimeContext.java:1325)
+	at org.pentaho.platform.engine.services.runtime.RuntimeContext.executeAction(RuntimeContext.java:1262)
+	at org.pentaho.platform.engine.services.runtime.RuntimeContext.performActions(RuntimeContext.java:1161)
+	at org.pentaho.platform.engine.services.runtime.RuntimeContext.executeLoop(RuntimeContext.java:1105)
+	at org.pentaho.platform.engine.services.runtime.RuntimeContext.executeSequence(RuntimeContext.java:987)
+	at org.pentaho.platform.engine.services.runtime.RuntimeContext.executeSequence(RuntimeContext.java:897)
+	at org.pentaho.platform.engine.services.solution.SolutionEngine.executeInternal(SolutionEngine.java:399)
+	at org.pentaho.platform.engine.services.solution.SolutionEngine.execute(SolutionEngine.java:317)
+	at org.pentaho.platform.engine.services.solution.SolutionEngine.execute(SolutionEngine.java:193)
+	at org.pentaho.platform.engine.services.BaseRequestHandler.handleActionRequest(BaseRequestHandler.java:159)
+	at org.pentaho.platform.scheduler.QuartzExecute.execute(QuartzExecute.java:198)
+	at org.quartz.core.JobRunShell.run(JobRunShell.java:203)
+	at org.quartz.simpl.SimpleThreadPool$WorkerThread.run(SimpleThreadPool.java:520)
+<pre></div>
+  
+</div> 
+</div>
+
+<div class="errorResponseFooter">Server Version: Pentaho Platform Engine Core 4.8.0-stable.51169</div>
+    
+</body>
+</html>

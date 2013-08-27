@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Schema name="DS_INGRESOV1">
+  <Dimension name="Clase">
+    <Hierarchy hasAll="true" primaryKey="id_clase">
+      <Table name="&quot;ING_CRI_CLASE&quot;" schema="&quot;dbo&quot;"/>
+      <Level name="Clase" column="clase" type="String" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension name="Concepto">
+    <Hierarchy hasAll="true" primaryKey="id_concepto">
+      <Table name="&quot;ING_CRI_CONCEPTO&quot;" schema="&quot;dbo&quot;"/>
+      <Level name="Concepto" column="concepto" type="String" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension name="Nivel 5">
+    <Hierarchy name="N5" hasAll="true" primaryKey="id_n5">
+      <Table name="&quot;ING_CRI_N5&quot;" schema="&quot;dbo&quot;"/>
+      <Level name="N5" column="n5" type="String" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension name="Rubro">
+    <Hierarchy hasAll="true" primaryKey="id_rubro">
+      <Table name="&quot;ING_CRI_RUBRO&quot;" schema="&quot;dbo&quot;"/>
+      <Level name="Rubro" column="rubro" type="String" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension name="Tipo">
+    <Hierarchy hasAll="true" primaryKey="id_tipo">
+      <Table name="&quot;ING_CRI_TIPO&quot;" schema="&quot;dbo&quot;"/>
+      <Level name="Tipo" column="tipo" type="String" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension name="Fuente recurso">
+    <Hierarchy hasAll="true" primaryKey="id_fuente_recurso">
+      <Table name="&quot;ING_FUENTE_ECONOMICA&quot;" schema="&quot;dbo&quot;"/>
+      <Level name="Fuente recurso" column="fuente_recurso" type="String" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension name="Unidad responsable">
+    <Hierarchy hasAll="true" primaryKey="id_unidad_responsable">
+      <Table name="&quot;ING_UNIDAD_RESPONSABLE&quot;" schema="&quot;dbo&quot;"/>
+      <Level name="Unidad responsable" column="unidad_responsable" type="String" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension name="Ciclo">
+    <Hierarchy hasAll="true" primaryKey="id_ciclo">
+      <Table name="&quot;INGEGR_CICLO&quot;" schema="&quot;dbo&quot;"/>
+      <Level name="Ciclo" column="ciclo" type="String" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension name="Periodo">
+    <Hierarchy hasAll="true" primaryKey="id_periodo">
+      <Table name="&quot;INGEGR_PERIODO&quot;" schema="&quot;dbo&quot;"/>
+      <Level name="Periodo" column="periodo" type="String" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Cube name="DS_INGRESOV1">
+    <Table name="&quot;ING_EJERCICIO_INGRESO&quot;" schema="&quot;dbo&quot;"/>
+    <DimensionUsage name="Clase" source="Clase" foreignKey="clase"/>
+    <DimensionUsage name="Concepto" source="Concepto" foreignKey="concepto"/>
+    <DimensionUsage name="Nivel 5" source="Nivel 5" foreignKey="nivel5"/>
+    <DimensionUsage name="Rubro" source="Rubro" foreignKey="rubro"/>
+    <DimensionUsage name="Tipo" source="Tipo" foreignKey="tipo"/>
+    <DimensionUsage name="Fuente recurso" source="Fuente recurso" foreignKey="fuente_economica"/>
+    <DimensionUsage name="Unidad responsable" source="Unidad responsable" foreignKey="unidad_responsable"/>
+    <DimensionUsage name="Ciclo" source="Ciclo" foreignKey="ciclo"/>
+    <DimensionUsage name="Periodo" source="Periodo" foreignKey="periodo"/>
+    <Measure name="Ingreso por recaudar" column="Ingreso_por_recaudar" aggregator="sum" formatString="$#,###.00;($#,###.00)"/>
+    <Measure name="Avance de recaudacion" column="avance_de_recaudacion" aggregator="avg" formatString="#.#%;(#.#%)"/>
+    <Measure name="Devengado" column="devengado" aggregator="sum" formatString="$#,###.00;($#,###.00)"/>
+    <Measure name="Estimado" column="estimado" aggregator="sum" formatString="$#,###.00;($#,###.00)"/>
+    <Measure name="Modificado" column="modificado2" aggregator="sum" formatString="$#,###.00;($#,###.00)"/>
+    <Measure name="Modificaciones" column="modificado" aggregator="sum" formatString="$#,###.00;($#,###.00)"/>
+    <Measure name="Recaudado" column="recaudado" aggregator="sum" formatString="$#,###.00;($#,###.00)"/>
+  </Cube>
+</Schema>

@@ -65,7 +65,7 @@ public class OperacionDiariaService extends DomainService{
         Map<String,Object> input = new HashMap<String,Object>();
         input.put("login.username", "admin");
         input.put("login.password", "opentaps");
-        input.put("lote", "1");
+        input.put("lote", "x");
         input = d.getModelService("importOperacionDiaria").makeValid(input, ModelService.IN_PARAM);
         Map<String,Object> tmpResult = d.getDispatcher().runSync("importOperacionDiaria", input);
         output.put("messageOut", tmpResult.get("importedRecords"));

@@ -14,6 +14,7 @@ import org.opentaps.base.entities.DataImportPresupuestoIngreso;
 import org.opentaps.base.entities.Enumeration;
 import org.opentaps.base.entities.Geo;
 import org.opentaps.base.entities.GlAccountOrganization;
+import org.opentaps.base.entities.LoteTransaccion;
 import org.opentaps.base.entities.MiniGuiaContable;
 import org.opentaps.base.entities.Party;
 import org.opentaps.base.entities.ProductCategory;
@@ -84,6 +85,8 @@ public class PresupuestoIngresoImportService extends DomainService implements
 			Transaction imp_tx2 = null;
 			Transaction imp_tx3 = null;
 			Transaction imp_tx4 = null;
+			
+			if (UtilImport.validaLote(ledger_repo, lote, "PresupuestoIngreso")) {
 			for (DataImportPresupuestoIngreso rowdata : dataforimp) {
 				// Empieza bloque de validaciones
 				Debug.log("Empieza bloque de validaciones");
@@ -452,6 +455,17 @@ public class PresupuestoIngresoImportService extends DomainService implements
 					throw new ServiceException(ex.getMessage());
 				}
 			}
+			// Se inserta el Lote.
+			if (!lote.equalsIgnoreCase("X")) {
+				LoteTransaccion loteTrans = new LoteTransaccion();
+				loteTrans.setIdLote(lote);
+				loteTrans.setTipoTransaccion("PresupuestoIngreso");
+				Transaction transLote = null;
+				transLote = this.session.beginTransaction();
+				ledger_repo.createOrUpdate(loteTrans);
+				transLote.commit();
+			}
+		}
 			this.importedRecords = imported;
 
 		} catch (InfrastructureException ex) {
