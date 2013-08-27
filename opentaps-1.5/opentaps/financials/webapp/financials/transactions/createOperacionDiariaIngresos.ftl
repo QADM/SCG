@@ -103,10 +103,6 @@
       	<@displayTitleCell title=uiLabelMap.FinancialsExecutingUnit />
         <@inputSelectCell list=listaUnidades?if_exists displayField="groupName" name="Unidad_Ejecutora" default=partyId?if_exists key="partyId"/>
       </tr>
-      <tr>
-      	<@displayTitleCell title=uiLabelMap.FinancialsId />
-      	<@inputTextCell name="Id_Pago" maxlength=60  />
-      </tr>
      <tr>
       	<@displayTitleCell title=uiLabelMap.FinancialsIdLeviedH />
       	<@inputSelectCell list=listPayments?if_exists name="Id_RecaudadoH" displayField="description" default=paymentMethodId?if_exists key="paymentMethodId" />
