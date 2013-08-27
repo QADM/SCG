@@ -63,15 +63,6 @@
       </Level>
     </Hierarchy>
   </Dimension>
-  <Dimension name="Filtro Periodo">
-    <Hierarchy hasAll="true" primaryKey="id_periodo">
-      <Table name="&quot;INGEGR_PERIODO&quot;" schema="&quot;dbo&quot;"/>
-      <Level name="Id periodo" column="id_periodo" type="Numeric" uniqueMembers="false">
-      </Level>
-      <Level name="Periodo" column="periodo" type="String" uniqueMembers="false">
-      </Level>
-    </Hierarchy>
-  </Dimension>
   <Cube name="DS_EGRESOV1">
     <Table name="&quot;EGR_EJE_EGRESO&quot;" schema="&quot;dbo&quot;"/>
     <DimensionUsage name="Unidad responsable" source="Unidad responsable" foreignKey="unidad_responsable"/>
@@ -83,7 +74,6 @@
     <DimensionUsage name="Partida especifica" source="Partida especifica" foreignKey="partida_especifica"/>
     <DimensionUsage name="Ciclo" source="Ciclo" foreignKey="ciclo"/>
     <DimensionUsage name="Periodo" source="Periodo" foreignKey="periodo"/>
-    <DimensionUsage name="Filtro Periodo" source="Filtro Periodo" foreignKey="periodo"/>
     <Measure name="Aprobado" column="aprobado" aggregator="sum" formatString="$#,###;($#,###)"/>
     <Measure name="Ampliaciones reducciones" column="ampliaciones_reducciones" aggregator="sum" formatString="$#,###.00;($#,###.00)"/>
     <Measure name="Vigente" column="vigente" aggregator="sum" formatString="$#,###.00;($#,###.00)"/>
