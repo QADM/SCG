@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Schema name="DS_INGRESO_ALT">
+  <Dimension name="Clase">
+    <Hierarchy hasAll="true" primaryKey="id_clase">
+      <Table name="&quot;ING_CRI_CLASE&quot;" schema="&quot;dbo&quot;"/>
+      <Level name="Clase" column="clase" type="String" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension name="Concepto">
+    <Hierarchy hasAll="true" primaryKey="id_concepto">
+      <Table name="&quot;ING_CRI_CONCEPTO&quot;" schema="&quot;dbo&quot;"/>
+      <Level name="Concepto" column="concepto" type="String" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension name="N5">
+    <Hierarchy hasAll="true" primaryKey="id_n5">
+      <Table name="&quot;ING_CRI_N5&quot;" schema="&quot;dbo&quot;"/>
+      <Level name="N5" column="n5" type="String" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension name="Rubro">
+    <Hierarchy hasAll="true" primaryKey="id_rubro">
+      <Table name="&quot;ING_CRI_RUBRO&quot;" schema="&quot;dbo&quot;"/>
+      <Level name="Rubro" column="rubro" type="String" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension name="Tipo">
+    <Hierarchy hasAll="true" primaryKey="id_tipo">
+      <Table name="&quot;ING_CRI_TIPO&quot;" schema="&quot;dbo&quot;"/>
+      <Level name="Tipo" column="tipo" type="String" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension name="Devengado">
+    <Hierarchy name="DEVENGADO" hasAll="true" primaryKey="CLAVEI">
+      <Table name="&quot;ING_MOMENTO_DEVENGADO&quot;" schema="&quot;dbo&quot;"/>
+      <Level name="DEVENGADO" column="DEVENGADO" type="Numeric" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension name="Modificado">
+    <Hierarchy name="MODIFICADO" hasAll="true" primaryKey="CLAVEI">
+      <Table name="&quot;ING_MOMENTO_MODIFICADO&quot;" schema="&quot;dbo&quot;"/>
+      <Level name="MODIFICADO" column="MODIFICADO" type="Numeric" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension name="Recaudado">
+    <Hierarchy name="RECAUDADO" hasAll="true" primaryKey="CLAVEI">
+      <Table name="&quot;ING_MOMENTO_RECAUDADO&quot;" schema="&quot;dbo&quot;"/>
+      <Level name="RECAUDADO" column="RECAUDADO" type="Numeric" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension name="Ciclo">
+    <Hierarchy hasAll="true" primaryKey="id_ciclo">
+      <Table name="&quot;INGEGR_CICLO&quot;" schema="&quot;dbo&quot;"/>
+      <Level name="Ciclo" column="ciclo" type="String" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension name="Periodo">
+    <Hierarchy hasAll="true" primaryKey="id_periodo">
+      <Table name="&quot;INGEGR_PERIODO&quot;" schema="&quot;dbo&quot;"/>
+      <Level name="Periodo" column="periodo" type="String" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Cube name="DS_INGRESO_ALT">
+    <Table name="&quot;ING_EJERCICIO_INGRESO&quot;" schema="&quot;dbo&quot;"/>
+    <DimensionUsage name="Clase" source="Clase" foreignKey="clase"/>
+    <DimensionUsage name="Concepto" source="Concepto" foreignKey="concepto"/>
+    <DimensionUsage name="N5" source="N5" foreignKey="nivel5"/>
+    <DimensionUsage name="Rubro" source="Rubro" foreignKey="rubro"/>
+    <DimensionUsage name="Tipo" source="Tipo" foreignKey="tipo"/>
+    <DimensionUsage name="Devengado" source="Devengado" foreignKey="clave"/>
+    <DimensionUsage name="Modificado" source="Modificado" foreignKey="clave"/>
+    <DimensionUsage name="Recaudado" source="Recaudado" foreignKey="clave"/>
+    <DimensionUsage name="Ciclo" source="Ciclo" foreignKey="ciclo"/>
+    <DimensionUsage name="Periodo" source="Periodo" foreignKey="periodo"/>
+    <Measure name="Avance de recaudacion" column="avance_de_recaudacion" aggregator="sum" formatString="#"/>
+    <Measure name="Estimado" column="estimado" aggregator="sum" formatString="#"/>
+  </Cube>
+</Schema>
