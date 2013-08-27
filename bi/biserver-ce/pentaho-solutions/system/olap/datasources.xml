@@ -26,10 +26,6 @@
         <DataSourceInfo>Provider=mondrian;DataSource=LOCAL_SS</DataSourceInfo>  
         <Definition>solution:admin/resources/metadata/DS_EGRESO_FUNCION.mondrian.xml</Definition> 
       </Catalog>  
-      <Catalog name="DS_EGRESO_GEO"> 
-        <DataSourceInfo>Provider=mondrian;DataSource=LOCAL_SS</DataSourceInfo>  
-        <Definition>solution:admin/resources/metadata/DS_EGRESO_GEO.mondrian.xml</Definition> 
-      </Catalog>  
       <Catalog name="DS_EGRESO_SECTORIAL"> 
         <DataSourceInfo>Provider=mondrian;DataSource=LOCAL_SS</DataSourceInfo>  
         <Definition>solution:admin/resources/metadata/DS_EGRESO_SECTORIAL.mondrian.xml</Definition> 
@@ -45,6 +41,10 @@
       <Catalog name="DS_INGRESOV1"> 
         <DataSourceInfo>Provider=mondrian;DataSource=LOCAL_SS</DataSourceInfo>  
         <Definition>solution:admin/resources/metadata/DS_INGRESOV1.mondrian.xml</Definition> 
+      </Catalog>  
+      <Catalog name="DS_EGRESO_GEO"> 
+        <DataSourceInfo>Provider=mondrian;DataSource=LOCAL_SS</DataSourceInfo>  
+        <Definition>solution:admin/resources/metadata/DS_EGRESO_GEO.mondrian.xml</Definition> 
       </Catalog> 
     </Catalogs> 
   </DataSource> 
