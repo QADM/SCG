@@ -15,6 +15,7 @@ import org.opentaps.base.entities.Geo;
 import org.opentaps.base.entities.GeoType;
 import org.opentaps.base.entities.GlAccount;
 import org.opentaps.base.entities.GlAccountOrganization;
+import org.opentaps.base.entities.LoteTransaccion;
 import org.opentaps.base.entities.NivelPresupuestal;
 import org.opentaps.base.entities.Party;
 import org.opentaps.base.entities.PartyGroup;
@@ -617,6 +618,19 @@ public class UtilImport {
 			Debug.log(mensaje);
 		}
 		return mensaje;
+	}
+
+	public static boolean validaLote(LedgerRepositoryInterface ledger_repo,
+			String lote, String tipo) throws RepositoryException {
+		LoteTransaccion loteTrans = ledger_repo.findOne(LoteTransaccion.class,
+				ledger_repo.map(LoteTransaccion.Fields.idLote, lote,
+						LoteTransaccion.Fields.tipoTransaccion, tipo));
+		if (loteTrans == null) {
+			return true;
+		} else {
+			Debug.log("El lote ya existe.");
+			return false;
+		}
 	}
 
 }
