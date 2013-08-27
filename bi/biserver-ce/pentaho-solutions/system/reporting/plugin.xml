@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<plugin title="reporting">
+
+   <lifecycle-listener class="org.pentaho.reporting.platform.plugin.LifecycleListener"/>
+
+   <static-paths>
+     <!-- this translates to /pentaho/content/reporting/resources/* -->
+     <static-path url="/reporting/reportviewer" localFolder="reportviewer"/>
+     <static-path url="/reporting/gwt" localFolder="gwt"/>
+   </static-paths>
+
+    <menu-items/>
+
+    <overlays/>
+
+    <content-types>
+      <content-type type="prpt" mime-type="application/zip">
+        <title>Pentaho Report</title>
+        <description>Pentaho Report Bundle</description>
+        <icon-url>content/reporting/reportviewer/images/prptFileType.png</icon-url>
+        <operations>
+          <!-- for any of these urls, you can add layout=flow to the url -->
+          <operation>
+            <id>RUN</id>
+            <command>content/reporting/reportviewer/report.html?solution={solution}&amp;path={path}&amp;name={name}&amp;locale={locale}</command>
+          </operation>
+          <operation>
+            <id>NEWWINDOW</id>
+            <command>content/reporting/reportviewer/report.html?solution={solution}&amp;path={path}&amp;name={name}&amp;locale={locale}</command>
+          </operation>
+          <operation>
+            <id>SCHEDULE_NEW</id>
+            <command>content/reporting/reportviewer/report.html?solution={solution}&amp;path={path}&amp;name={name}&amp;subscribe=true&amp;locale={locale}</command>
+          </operation>
+          <operation>
+            <id>SCHEDULE_EDIT</id>
+            <command>content/reporting/reportviewer/report.html?subscribe=true&amp;subscription-id={subscription-id}&amp;locale={locale}</command>
+          </operation>
+          <operation>
+            <id>BACKGROUND</id>
+            <command>ViewAction?solution={solution}&amp;path={path}&amp;action={name}&amp;background=true</command>
+          </operation>
+          <operation>
+            <id>PARAMETER</id>
+            <command>content/reporting/?renderMode=PARAMETER&amp;solution={solution}&amp;path={path}&amp;name={name}</command>
+          </operation>
+        </operations>
+      </content-type>
+    </content-types>
+
+    <content-generator id="reporting" type="prpt">
+      <classname>org.pentaho.reporting.platform.plugin.ReportContentGenerator</classname>
+      <fileinfo-classname>org.pentaho.reporting.platform.plugin.ReportFileMetaDataProvider</fileinfo-classname>
+      <title>Reporting Plugin</title>
+    </content-generator>
+
+    <bean id="SimpleReportingComponent" class="org.pentaho.reporting.platform.plugin.SimpleReportingComponent"/>
+
+    <external-resources>
+      <file context="requirejs">content/reporting/reportviewer/reporting-require-js-cfg.js</file>
+      <!-- Example Prompting component that replaces the default prompt labels. Uncomment to use. -->
+      <!-- <file context="reporting">content/reporting/reportviewer/reportviewer-sample-component.js</file> -->
+    </external-resources>
+</plugin>
+

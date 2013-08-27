@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings>
+    <marketplace-site>http://marketplace.pentaho.com/marketplace-plugins.xml</marketplace-site>
+   <telemetry-site>http://marketplace.pentaho.com/telemetry-servlet/telemetry</telemetry-site>
+
+</settings>

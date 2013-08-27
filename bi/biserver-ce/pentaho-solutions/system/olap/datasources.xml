@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<DataSources> 
+  <DataSource> 
+    <DataSourceName>Provider=Mondrian;DataSource=Pentaho</DataSourceName>  
+    <DataSourceDescription>Pentaho BI Platform Datasources</DataSourceDescription>  
+    <URL>http://localhost:8080/pentaho/Xmla?userid=joe&amp;password=password</URL>  
+    <DataSourceInfo>Provider=mondrian</DataSourceInfo>  
+    <ProviderName>PentahoXMLA</ProviderName>  
+    <ProviderType>MDP</ProviderType>  
+    <AuthenticationMode>Unauthenticated</AuthenticationMode>  
+    <Catalogs> 
+      <Catalog name="SteelWheels"> 
+        <DataSourceInfo>Provider=mondrian;DataSource=SampleData</DataSourceInfo>  
+        <Definition>solution:steel-wheels/analysis/steelwheels.mondrian.xml</Definition> 
+      </Catalog>  
+      <Catalog name="SampleData"> 
+        <DataSourceInfo>Provider=mondrian;DataSource=SampleData</DataSourceInfo>  
+        <Definition>solution:steel-wheels/analysis/SampleData.mondrian.xml</Definition> 
+      </Catalog>  
+      <Catalog name="DS_EGRESO_FUENTE"> 
+        <DataSourceInfo>Provider=mondrian;DataSource=LOCAL_SS</DataSourceInfo>  
+        <Definition>solution:admin/resources/metadata/DS_EGRESO_FUENTE.mondrian.xml</Definition> 
+      </Catalog>  
+      <Catalog name="DS_EGRESO_FUNCION"> 
+        <DataSourceInfo>Provider=mondrian;DataSource=LOCAL_SS</DataSourceInfo>  
+        <Definition>solution:admin/resources/metadata/DS_EGRESO_FUNCION.mondrian.xml</Definition> 
+      </Catalog>  
+      <Catalog name="DS_EGRESO_GEO"> 
+        <DataSourceInfo>Provider=mondrian;DataSource=LOCAL_SS</DataSourceInfo>  
+        <Definition>solution:admin/resources/metadata/DS_EGRESO_GEO.mondrian.xml</Definition> 
+      </Catalog>  
+      <Catalog name="DS_EGRESO_SECTORIAL"> 
+        <DataSourceInfo>Provider=mondrian;DataSource=LOCAL_SS</DataSourceInfo>  
+        <Definition>solution:admin/resources/metadata/DS_EGRESO_SECTORIAL.mondrian.xml</Definition> 
+      </Catalog>  
+      <Catalog name="DS_EGRESO_PROGRAMATICA"> 
+        <DataSourceInfo>Provider=mondrian;DataSource=LOCAL_SS</DataSourceInfo>  
+        <Definition>solution:admin/resources/metadata/DS_EGRESO_PROGRAMATICA.mondrian.xml</Definition> 
+      </Catalog>  
+      <Catalog name="DS_EGRESOV1"> 
+        <DataSourceInfo>Provider=mondrian;DataSource=LOCAL_SS</DataSourceInfo>  
+        <Definition>solution:admin/resources/metadata/DS_EGRESOV1.mondrian.xml</Definition> 
+      </Catalog>  
+      <Catalog name="DS_INGRESOV1"> 
+        <DataSourceInfo>Provider=mondrian;DataSource=LOCAL_SS</DataSourceInfo>  
+        <Definition>solution:admin/resources/metadata/DS_INGRESOV1.mondrian.xml</Definition> 
+      </Catalog> 
+    </Catalogs> 
+  </DataSource> 
+</DataSources>
