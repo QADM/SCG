@@ -86,7 +86,7 @@ public class OperacionDiariaIngresosManual {
 	        String local = (String) context.get("Localidad");
 	        String suFuenteEsp = (String) context.get("Sub_Fuente_Especifica");
 	        String uniEjec = (String) context.get("Unidad_Ejecutora");
-	        String idPago = (String) context.get("Id_Pago");
+	        String idPago = (String) context.get("Id_RecaudadoH");
 	        java.math.BigDecimal monto = java.math.BigDecimal.valueOf(Long.valueOf((String)context.get("Monto")));
 	        
 	        Debug.logWarning("userLog "+userLog, MODULE);
@@ -170,6 +170,7 @@ public class OperacionDiariaIngresosManual {
 	        acctgtransPres.set("secuencia", sec);
 	        acctgtransPres.set("idProductoD", idProdCargo);
 	        acctgtransPres.set("idProductoH", idProdAbono);
+	        acctgtransPres.set("idPago",idPago);
 	        acctgtransPres.create();
 
 
@@ -183,18 +184,23 @@ public class OperacionDiariaIngresosManual {
 	        input.put("tipoFis", tipoFis);
 	        input.put("idProdAbono", idProdAbono);
 	        input.put("idProdCargo", idProdCargo);
+	        input.put("idPago",idPago);
 	        input = dctx.getModelService("obtenerCuentasIngresos").makeValid(input, ModelService.IN_PARAM);
 	        Map tmpResult = dispatcher.runSync("obtenerCuentasIngresos", input);
-	        Map<String,String> cuentas = (Map<String, String>) tmpResult.get("cuentas");
+	        Map<String,String> mapCuentas = (Map<String, String>) tmpResult.get("mapCuentas");
+	        List<GenericValue> listCuentas = FastList.newInstance();
         
-	        Debug.logWarning("cuentas   Regresadas :  "+cuentas, MODULE);
-        
-	        if(cuentas != null && !cuentas.isEmpty()){
+	        if(mapCuentas != null && !mapCuentas.isEmpty()){
 	        	
-	        	String cargoPres = cuentas.get("Cuenta Cargo Presupuesto");
-	        	String abonoPres = cuentas.get("Cuenta Abono Presupuesto");
-	        	String cargoCont = cuentas.get("Cuenta Cargo Contable");
-	        	String abonoCont = cuentas.get("Cuenta Abono Contable");
+	        	String cargoPres = mapCuentas.get("Cuenta_Cargo_Presupuesto");
+	        	String abonoPres = mapCuentas.get("Cuenta_Abono_Presupuesto");
+	        	String cargoCont = mapCuentas.get("Cuenta_Cargo_Contable");
+	        	String abonoCont = mapCuentas.get("Cuenta_Abono_Contable");
+	        	
+	        	Debug.logWarning(" cargoPres "+cargoPres, MODULE);
+	        	Debug.logWarning(" abonoPres "+abonoPres, MODULE);
+	        	Debug.logWarning(" cargoCont "+cargoCont, MODULE);
+	        	Debug.logWarning(" abonoCont "+abonoCont, MODULE);
 	        	
 	        	if(cargoPres != null && !cargoPres.isEmpty() && abonoPres != null && !abonoPres.isEmpty()){
 	        		
@@ -226,6 +232,8 @@ public class OperacionDiariaIngresosManual {
 	        		gtransEntryPreA.set("partyId", organizationPartyId);	 
 	        		gtransEntryPreA.create();
 	        		
+	        		listCuentas.add(gTransEntryPreC);
+	        		listCuentas.add(gtransEntryPreA);
 	        	}
 	        	
 	        	if(cargoCont != null && !cargoCont.isEmpty() && abonoCont != null && !abonoCont.isEmpty()){
@@ -256,11 +264,16 @@ public class OperacionDiariaIngresosManual {
 	        		gTransEntryConA.set("debitCreditFlag", "C");
 	        		gTransEntryConA.set("reconcileStatusId", "AES_NOT_RECONCILED");
 	        		gTransEntryConA.set("partyId", organizationPartyId);
-	        		gTransEntryConA.create();	        		
+	        		gTransEntryConA.create();
+	        		
+	        		listCuentas.add(gTransEntryConC);
+	        		listCuentas.add(gTransEntryConA);
 	        		
 	        	}
 	        	
-	        }	        
+	        }	    
+	        
+	        Debug.logWarning("LISTA DE CUENTAS REGISTRADAS  } "+listCuentas, MODULE);
 
 		} catch (ParseException e) {
 			return UtilMessage.createAndLogServiceError(e, MODULE);
@@ -291,10 +304,11 @@ public class OperacionDiariaIngresosManual {
         String cri = (String) context.get("cri");
         String idProdAbono = (String) context.get("idProdAbono");
         String idProdCargo = (String) context.get("idProdCargo");
+        String idPago = (String) context.get("idPago");
         
         Debug.logWarning("ENTRO A obtenerCuentasIngresos ", MODULE);
         Debug.logWarning("acctgTransTypeId "+acctgTransTypeId, MODULE);
-		Map<String,String> cuentas = FastMap.newInstance();
+		Map<String,String> mapCuentas = FastMap.newInstance();
 		
         try {
         	
@@ -306,14 +320,14 @@ public class OperacionDiariaIngresosManual {
 			String glFiscalTypeIdPres = miniGuia.getString("glFiscalTypeIdPres");
 			String glFiscalTypeIdCont = miniGuia.getString("glFiscalTypeIdCont");
 			
-	    	cuentas.put("GlFiscalTypePresupuesto", glFiscalTypeIdPres);
-	    	cuentas.put("GlFiscalTypeContable", glFiscalTypeIdCont);
+	    	mapCuentas.put("GlFiscalTypePresupuesto", glFiscalTypeIdPres);
+	    	mapCuentas.put("GlFiscalTypeContable", glFiscalTypeIdCont);
 			
 			//Si el tipo fiscal es de presupuesto se obtienen las cuentas
 			if(tipoFis.equalsIgnoreCase(glFiscalTypeIdPres)){
 				
-		    	cuentas.put("Cuenta_Cargo_Presupuesto", miniGuia.getString("cuentaCargo"));
-		    	cuentas.put("Cuenta_Abono_Presupuesto", miniGuia.getString("cuentaAbono"));
+		    	mapCuentas.put("Cuenta_Cargo_Presupuesto", miniGuia.getString("cuentaCargo"));
+		    	mapCuentas.put("Cuenta_Abono_Presupuesto", miniGuia.getString("cuentaAbono"));
 		    	
 			} 
 			
@@ -350,11 +364,12 @@ public class OperacionDiariaIngresosManual {
 							
 						} else if(matrizId.equalsIgnoreCase("B.2")){
 							
+							cuentaCargo = verificarBancos(dctx, dispatcher, cuentaCargo, idPago);
 							cuentaAbono = verificarAuxiliarProducto(dctx, dispatcher, cuentaAbono, idProdAbono);
 						}
 						
-						cuentas.put("Cuenta Cargo Contable",cuentaCargo);
-						cuentas.put("Cuenta Abono Contable", cuentaAbono);
+						mapCuentas.put("Cuenta_Cargo_Contable",cuentaCargo);
+						mapCuentas.put("Cuenta_Abono_Contable", cuentaAbono);
 						
 					}
 					
@@ -367,8 +382,10 @@ public class OperacionDiariaIngresosManual {
 			return UtilMessage.createAndLogServiceError(e, MODULE);
 		}
         
+        Debug.logWarning("CUENTAS REGRESADAS [obtenerCuentasIngresos] "+mapCuentas, MODULE);
+        
         Map results = ServiceUtil.returnSuccess();
-        results.put("cuentas", cuentas);
+        results.put("mapCuentas", mapCuentas);
         return results;
     }
     
@@ -477,6 +494,37 @@ public class OperacionDiariaIngresosManual {
                 Debug.logWarning("Cuenta Entrada {{ "+glAccountId+"   cuenta Salida ]{ "+cuentaRegresa, MODULE);
     			
     		}
+    	
+    	return cuentaRegresa;
+    	
+    }
+    
+    /**
+     * Metodo que valida las cuentas auxiliares de los productos a partir de una cuenta dada y regresa 
+     * la cuenta correspondiente al catálogo auxiliar si se encuentra ahí , si no regresa la misma cuenta
+     * @param dctx
+     * @param dispatcher
+     * @param glAccountId
+     * @param productId
+     * @return string
+     * @throws ServiceException
+     * @throws GenericServiceException
+     */
+	public static String verificarBancos(DispatchContext dctx,LocalDispatcher dispatcher,String glAccountId,String recaudadoD) throws ServiceException, GenericEntityException{
+		Delegator delegator = dctx.getDelegator();
+		
+    	String cuentaRegresa = glAccountId;
+    	
+    	if(glAccountId != null && !glAccountId.isEmpty()){
+    		
+    		GenericValue paymenthMet = delegator.findByPrimaryKey("PaymentMethod", UtilMisc.toMap("paymentMethodId",recaudadoD));
+    		if(paymenthMet != null && !paymenthMet.isEmpty())
+    			cuentaRegresa = paymenthMet.getString("glAccountId");
+    		
+    	} else {
+			Debug.logError("No existe catalogo auxiliar asociado a la cuenta de banco ",MODULE);
+			throw new ServiceException(String.format("No existe catalogo auxiliar asociado a la cuenta de banco : ["+glAccountId+"]"));
+    	}
     	
     	return cuentaRegresa;
     	
