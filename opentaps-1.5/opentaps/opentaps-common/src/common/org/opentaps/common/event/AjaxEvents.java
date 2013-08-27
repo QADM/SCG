@@ -47,6 +47,7 @@ import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
+import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
@@ -129,21 +130,6 @@ public final class AjaxEvents {
         }
     }
     
-    /** Obtiene la lista de hijos geograficos de un padre (Mexico -> {Aguascalientes,Estado de Mexico,etc}). */
-    public static String getHijosDataJSON(HttpServletRequest request, HttpServletResponse response) {
-        Delegator delegator = (Delegator) request.getAttribute("delegator");
-        String geoCode = request.getParameter("geoCode");
-        Debug.logWarning("Entro al get hijos JSON  geoCode "+geoCode, MODULE);
-
-        try {
-            Collection<GenericValue> states = UtilCommon.getHijosGeograficos(delegator, geoCode);
-            Debug.logWarning("Entro al get hijos JSON  "+states, MODULE);
-            return doJSONResponse(response, states);
-        } catch (GenericEntityException e) {
-            return doJSONResponse(response, FastList.newInstance());
-        }
-    }    
-
     /** Return agreement term list specific for given term type.
      * @throws GenericEntityException */
     public static String getAgreementTermValidFieldsJSON(HttpServletRequest request, HttpServletResponse response) throws GenericEntityException {
@@ -326,5 +312,71 @@ public final class AjaxEvents {
         return doJSONResponse(response, results);
     }
 
+    /** Obtiene la lista de hijos geograficos de un padre (Mexico -> {Aguascalientes,Estado de Mexico,etc}). */
+    public static String getHijosDataJSON(HttpServletRequest request, HttpServletResponse response) {
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
+        String geoCode = request.getParameter("geoCode");
+        Debug.logWarning("Entro al get hijos JSON  geoCode "+geoCode, MODULE);
+
+        try {
+            Collection<GenericValue> states = UtilCommon.getHijosGeograficos(delegator, geoCode);
+            Debug.logWarning("Entro al get hijos JSON  "+states, MODULE);
+            return doJSONResponse(response, states);
+        } catch (GenericEntityException e) {
+            return doJSONResponse(response, FastList.newInstance());
+        }
+    }    
+    
+    /**
+     * Obtiene el o los tipos fiscales asociados a un tipo de documento por medio del 
+     * Id del tipo de documento
+     * @param request
+     * @param response
+     * @return
+     */
+    public static String getTiposFiscalesDoc(HttpServletRequest request, HttpServletResponse response){
+    	 Delegator delegator = (Delegator) request.getAttribute("delegator");
+    	 String idTipoDoc = request.getParameter("idTipoDoc");
+    	 
+    	 List<String> transTypeList = FastList.newInstance();
+    	 Collection<GenericValue> fiscalType  = null;
+    	 
+    	  try {
+    		  List<GenericValue> docList = delegator.findByCondition("TipoDocumento", 
+							EntityCondition.makeCondition("idTipoDoc", EntityOperator.EQUALS, idTipoDoc), 
+							null, UtilMisc.toList("idTipoDoc"));
+    		  
+    		  if( docList!= null && !docList.isEmpty()){
+    			  String acctgTransTypeId = docList.get(0).getString("acctgTransTypeId");
+    			  
+        		  List<GenericValue> miguiaList = delegator.findByCondition("MiniGuiaContable", 
+    							EntityCondition.makeCondition("acctgTransTypeId", EntityOperator.EQUALS, acctgTransTypeId), 
+    							null, null);
+        		  if( miguiaList!= null && !miguiaList.isEmpty()){
+        			  
+        			  String fiscalTypePres = miguiaList.get(0).getString("glFiscalTypeIdPres");
+        			  String fiscalTypeCont = miguiaList.get(0).getString("glFiscalTypeIdCont");
+        			  
+        			  if(fiscalTypePres != null && !fiscalTypePres.isEmpty())
+        				  transTypeList.add(fiscalTypePres);
+        			  if(fiscalTypeCont != null && !fiscalTypeCont.isEmpty())
+        				  transTypeList.add(fiscalTypeCont);
+        			  
+            		  fiscalType =delegator.findByCondition("GlFiscalType", 
+  							EntityCondition.makeCondition("glFiscalTypeId", EntityOperator.IN, transTypeList), 
+  							null, null);
+        			  
+        		  }
+        		  
+    		  }
+			
+    		  Debug.logWarning("REGISTROS ENCONTRADOS PARA MOSTRAR }}}}} "+fiscalType, MODULE);
+    		  
+			return doJSONResponse(response, fiscalType);
+		} catch (GenericEntityException e) {
+			return doJSONResponse(response, FastList.newInstance());
+		}
+    	
+    }
 
 }

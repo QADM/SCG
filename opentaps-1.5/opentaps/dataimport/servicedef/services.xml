@@ -283,20 +283,21 @@
     
     <service name="createOperacionDiariaIngresos" engine="java"
             location="org.opentaps.dataimport.domain.OperacionDiariaIngresosManual" invoke="createOperacionDiariaIngresos" auth="true">
-        <description>Crea una transaccion de Operacion Diaria.</description>
+        <description>Crea una transaccion de Operacion Diaria para ingresos.</description>
         <required-permissions join-type="OR">
             <check-permission permission="ACCOUNTING" action="_ATX_CREATE"/>
         </required-permissions>
         <attribute name="organizationPartyId" mode="IN" type="String" optional="false"/>
         <attribute name="glFiscalTypeId" mode="IN" type="String" optional="false"/>
         <attribute name="Tipo_Documento" mode="IN" type="String" optional="true"/>
-        <attribute name="Tipo_Fiscal" mode="IN" type="String" optional="true" />
+        <attribute name="Tipo_Fiscal" mode="IN" type="String" optional="false" />
         <attribute name="Fecha_Transaccion" mode="IN" type="String" optional="true"/>
         <attribute name="Fecha_Contable" mode="IN" type="String" optional="true" />
 		<attribute name="Referencia_Documento" mode="IN" type="String" optional="true"/>
         <attribute name="Secuencia" mode="IN" type="String" optional="true" />
         <attribute name="Tipo_Catalogo" mode="IN" type="String" optional="true"/>
-        <attribute name="Id_Producto" mode="IN" type="String" optional="true" />
+        <attribute name="Id_Producto_Abono" mode="IN" type="String" optional="false" />
+        <attribute name="Id_Producto_Cargo" mode="IN" type="String" optional="false" />
         <attribute name="Rubro" mode="IN" type="String" optional="true"/>
         <attribute name="Tipo" mode="IN" type="String" optional="true" />
 		<attribute name="Clase" mode="IN" type="String" optional="true"/>
@@ -310,59 +311,61 @@
         <attribute name="Unidad_Ejecutora" mode="IN" type="String" optional="true"/>
         <attribute name="Id_Pago" mode="IN" type="String" optional="true"/>  
         <attribute name="Monto" mode="IN" type="String" optional="false"/>
-        <attribute name="AcctgTrans" mode="OUT" type="org.ofbiz.entity.GenericValue"></attribute>               
+        <attribute name="acctgTrans" mode="OUT" type="org.ofbiz.entity.GenericValue"/>
+        <attribute name="acctgTransPres" mode="OUT" type="org.ofbiz.entity.GenericValue"/>
+        <attribute name="acctgTransId" mode="OUT" type="String"/>
+                       
     </service>
     
-    <service name="operacionIngreso" engine="java" auth="true"
-            location="org.opentaps.dataimport.domain.OperacionIngresoService" invoke="registraIngreso" export="true">
-        <description>Registra la operacion diaria presupuestal de Ingreso</description>
-        <attribute type="String" mode="IN" name="tipoDocumento" optional="false"/>
-        <attribute type="Date" mode="IN" name="fechaRegistro" optional="false"/>
-        <attribute type="Date" mode="IN" name="fechaContable" optional="false"/>
-        <attribute type="BigDecimal" mode="IN" name="monto" optional="false"/>
-        <attribute type="String" mode="IN" name="organizacionContable" optional="false"/>
-        <attribute type="String" mode="IN" name="refDoc" optional="false"/>
-        <attribute type="String" mode="IN" name="secuencia" optional="false"/>
-        <attribute type="String" mode="IN" name="usuario" optional="false"/>
-        <attribute type="String" mode="IN" name="idPago" optional="true"/>
-        <attribute type="String" mode="IN" name="idProductoD" optional="true"/>
-        <attribute type="String" mode="IN" name="idProductoH" optional="true"/>
-        <attribute type="String" mode="IN" name="ciclo" optional="false"/>
-        <attribute type="String" mode="IN" name="ue" optional="false"/>
-        <attribute type="String" mode="IN" name="n5" optional="false"/>
-        <attribute type="String" mode="IN" name="sfe" optional="false"/>
-        <attribute type="String" mode="IN" name="loc" optional="false"/>
-        <attribute type="String" mode="IN" name="concatenacion" optional="false"/>
-        <attribute type="String" mode="OUT" name="messageOut" optional="true"/>
+    <service name="createOperacionDiariaEgresos" engine="java"
+            location="org.opentaps.dataimport.domain.OperacionDiariaIngresosManual" invoke="createOperacionDiariaEgresos" auth="true">
+        <description>Crea una transaccion de Operacion Diaria para egresos.</description>
+        <required-permissions join-type="OR">
+            <check-permission permission="ACCOUNTING" action="_ATX_CREATE"/>
+        </required-permissions>
+        <attribute name="organizationPartyId" mode="IN" type="String" optional="false"/>
+        <attribute name="glFiscalTypeId" mode="IN" type="String" optional="false"/>
+        <attribute name="Tipo_Documento" mode="IN" type="String" optional="true"/>
+        <attribute name="Tipo_Fiscal" mode="IN" type="String" optional="false	" />
+        <attribute name="Fecha_Transaccion" mode="IN" type="String" optional="true"/>
+        <attribute name="Fecha_Contable" mode="IN" type="String" optional="true" />
+		<attribute name="Referencia_Documento" mode="IN" type="String" optional="true"/>
+        <attribute name="Secuencia" mode="IN" type="String" optional="true" />
+        <attribute name="Tipo_Catalogo" mode="IN" type="String" optional="true"/>
+        <attribute name="Id_Producto_Abono" mode="IN" type="String" optional="false" />
+        <attribute name="Id_Producto_Cargo" mode="IN" type="String" optional="false" />
+        <attribute name="Rubro" mode="IN" type="String" optional="true"/>
+        <attribute name="Tipo" mode="IN" type="String" optional="true" />
+		<attribute name="Clase" mode="IN" type="String" optional="true"/>
+        <attribute name="Concepto" mode="IN" type="String" optional="true"/>
+        <attribute name="N5" mode="IN" type="String" optional="true"/>
+        <attribute name="EntidadFederativa" mode="IN" type="String" optional="true"/>
+        <attribute name="Region" mode="IN" type="String" optional="true"/>
+        <attribute name="Municipio" mode="IN" type="String" optional="true"/>
+        <attribute name="Localidad" mode="IN" type="String" optional="true"/>
+        <attribute name="Sub_Fuente_Especifica" mode="IN" type="String" optional="true"/>
+        <attribute name="Unidad_Ejecutora" mode="IN" type="String" optional="true"/>
+        <attribute name="Id_Pago" mode="IN" type="String" optional="true"/>  
+        <attribute name="Monto" mode="IN" type="String" optional="false"/>
+        <attribute name="acctgTrans" mode="OUT" type="org.ofbiz.entity.GenericValue"/>
+        <attribute name="acctgTransPres" mode="OUT" type="org.ofbiz.entity.GenericValue"/>
+        <attribute name="acctgTransId" mode="OUT" type="String"/>
+                       
+    </service>    
+    
+    <service name="obtenerCuentasIngresos" engine="java"
+            location="org.opentaps.dataimport.domain.OperacionDiariaIngresosManual" invoke="obtenerCuentasIngresos" auth="true">
+        <description>Busca las cuentas para la operacion diaria de ingresos.</description>
+        <required-permissions join-type="OR">
+            <check-permission permission="ACCOUNTING" action="_ATX_CREATE"/>
+        </required-permissions>
+        <attribute name="acctgTransTypeId" mode="IN" type="String" optional="false"/>
+        <attribute name="tipoFis" mode="IN" type="String" optional="false"/>
+        <attribute name="cri" mode="IN" type="String"/>
+        <attribute name="idProdAbono" mode="IN" type="String"/>
+        <attribute name="idProdCargo" mode="IN" type="String"/>
+        <attribute name="cuentas" mode="OUT" type="java.util.Map"/>               
     </service>
-      
-    <service name="operacionEgreso" engine="java"
-            location="org.opentaps.dataimport.domain.OperacionEgresoService" invoke="registraEgreso" export="true">
-        <description>Registra la operacion diaria presupuestal de Egreso</description>
-        <attribute type="String" mode="IN" name="tipoDocumento" optional="false"/>
-        <attribute type="Date" mode="IN" name="fechaRegistro" optional="false"/>
-        <attribute type="Date" mode="IN" name="fechaContable" optional="false"/>
-        <attribute type="BigDecimal" mode="IN" name="monto" optional="false"/>
-        <attribute type="String" mode="IN" name="organizacionContable" optional="false"/>
-        <attribute type="String" mode="IN" name="refDoc" optional="false"/>
-        <attribute type="String" mode="IN" name="secuencia" optional="false"/>
-        <attribute type="String" mode="IN" name="usuario" optional="false"/>
-        <attribute type="String" mode="IN" name="lote" optional="false"/>
-        <attribute type="String" mode="IN" name="tipoCatalogo" optional="false"/>
-        <attribute type="String" mode="IN" name="idPago" optional="false"/>
-        <attribute type="String" mode="IN" name="idProducto" optional="false"/>
-        <attribute type="String" mode="IN" name="ciclo" optional="false"/>
-        <attribute type="String" mode="IN" name="ue" optional="false"/>
-        <attribute type="String" mode="IN" name="subf" optional="false"/>
-        <attribute type="String" mode="IN" name="act" optional="false"/>
-        <attribute type="String" mode="IN" name="tg" optional="false"/>
-        <attribute type="String" mode="IN" name="pe" optional="false"/>
-        <attribute type="String" mode="IN" name="sfe" optional="false"/>
-        <attribute type="String" mode="IN" name="loc" optional="false"/>
-        <attribute type="String" mode="IN" name="area" optional="false"/>
-        <attribute type="String" mode="IN" name="concatenacion" optional="false"/>
-        <attribute type="String" mode="OUT" name="messageOut" optional="true"/>
-    </service>  
     
     <service name="operacionDiaria" engine="java"
             location="org.opentaps.dataimport.domain.OperacionDiariaService" invoke="registraDiario" export="true">
@@ -387,4 +390,96 @@
         <attribute type="String" mode="OUT" name="messageOut" optional="true"/>
     </service>      
     
+    <service name="obtenPartyIdPadre" engine="java" 
+    	location="org.opentaps.dataimport.UtilOperacionDiariaServices" invoke="obtenPartyIdPadre">
+    <description>Obtiene el enumId padre de un enumId dado</description>
+    	<attribute name="partyId" mode="IN" type="String" optional="false"/>
+    	<attribute name="partyIdPadre" mode="OUT" type="String" optional="true"/>
+    </service>
+    <service name="obtenPeriodosFecha" engine="java"
+    	location="org.opentaps.dataimport.UtilOperacionDiariaServices" invoke="obtenPeriodosFecha">
+    	<description>Obtiene los periodos custom que coinciden en una fecha y una organizacion.
+    	</description>	
+    	<attribute name="organizationPartyId" mode="IN" type="String" optional="false"/>
+    	<attribute name="fecha" mode="IN" type="String" optional="false"/>
+    	<attribute name="listPeriods" mode="OUT" type="java.util.Map"></attribute>
+    </service>
+    <service name="getAuxiliarProd" engine="java"
+    	location="org.opentaps.dataimport.UtilOperacionDiariaServices" invoke="getAuxiliarProd">
+    	<description>Obtiene los productos asociados a una cuenta .
+    	</description>	
+    	<attribute name="glAccountId" mode="IN" type="String" optional="false"/>
+    	<attribute name="resultadoPrdCat" mode="OUT" type="java.util.List" />
+    </service>    
+    
+    <service name="operacionIngreso" engine="java" auth="true"
+            location="org.opentaps.dataimport.domain.OperacionIngresoService" invoke="registraIngreso" export="true">
+        <description>Registra la operacion diaria presupuestal de Ingreso</description>
+        <attribute type="String" mode="IN" name="tipoDocumento" optional="false"/>
+        <attribute type="String" mode="IN" name="fechaRegistro" optional="false"/>
+        <attribute type="String" mode="IN" name="fechaContable" optional="false"/>
+        <attribute type="BigDecimal" mode="IN" name="monto" optional="false"/>
+        <attribute type="String" mode="IN" name="organizacionContable" optional="false"/>
+        <attribute type="String" mode="IN" name="refDoc" optional="false"/>
+        <attribute type="String" mode="IN" name="secuencia" optional="false"/>
+        <attribute type="String" mode="IN" name="usuario" optional="false"/>
+        <attribute type="String" mode="IN" name="idPago" optional="true"/>
+        <attribute type="String" mode="IN" name="idProductoD" optional="true"/>
+        <attribute type="String" mode="IN" name="idProductoH" optional="true"/>
+        <attribute type="String" mode="IN" name="ciclo" optional="false"/>
+        <attribute type="String" mode="IN" name="ue" optional="false"/>
+        <attribute type="String" mode="IN" name="n5" optional="false"/>
+        <attribute type="String" mode="IN" name="sfe" optional="false"/>
+        <attribute type="String" mode="IN" name="loc" optional="false"/>
+        <attribute type="String" mode="IN" name="concatenacion" optional="false"/>
+        <attribute type="Integer" mode="OUT" name="messageOut" optional="true"/>
+    </service>
+      
+    <service name="operacionEgreso" engine="java" auth="true"
+            location="org.opentaps.dataimport.domain.OperacionEgresoService" invoke="registraEgreso" export="true">
+        <description>Registra la operacion diaria presupuestal de Egreso</description>
+        <attribute type="String" mode="IN" name="tipoDocumento" optional="false"/>
+        <attribute type="String" mode="IN" name="fechaRegistro" optional="false"/>
+        <attribute type="String" mode="IN" name="fechaContable" optional="false"/>
+        <attribute type="BigDecimal" mode="IN" name="monto" optional="false"/>
+        <attribute type="String" mode="IN" name="organizacionContable" optional="false"/>
+        <attribute type="String" mode="IN" name="refDoc" optional="false"/>
+        <attribute type="String" mode="IN" name="secuencia" optional="false"/>
+        <attribute type="String" mode="IN" name="usuario" optional="false"/>
+        <attribute type="String" mode="IN" name="idPago" optional="true"/>
+        <attribute type="String" mode="IN" name="idProductoD" optional="true"/>
+        <attribute type="String" mode="IN" name="idProductoH" optional="true"/>
+        <attribute type="String" mode="IN" name="ciclo" optional="false"/>
+        <attribute type="String" mode="IN" name="ue" optional="false"/>
+        <attribute type="String" mode="IN" name="subf" optional="false"/>
+        <attribute type="String" mode="IN" name="act" optional="false"/>
+        <attribute type="String" mode="IN" name="tg" optional="false"/>
+        <attribute type="String" mode="IN" name="pe" optional="false"/>
+        <attribute type="String" mode="IN" name="sfe" optional="false"/>
+        <attribute type="String" mode="IN" name="loc" optional="false"/>
+        <attribute type="String" mode="IN" name="area" optional="false"/>
+        <attribute type="String" mode="IN" name="concatenacion" optional="false"/>
+        <attribute type="Integer" mode="OUT" name="messageOut" optional="true"/>
+    </service>  
+    
+    <service name="operacionDiaria" engine="java" auth="true"
+            location="org.opentaps.dataimport.domain.OperacionDiariaService" invoke="registraDiario" export="true">
+        <description>Registra la operacion diaria</description>
+        <attribute type="String" mode="IN" name="fechaRegistro" optional="false"/>
+        <attribute type="String" mode="IN" name="fechaContable" optional="false"/>
+        <attribute type="BigDecimal" mode="IN" name="monto" optional="false"/>
+        <attribute type="String" mode="IN" name="organizacionContable" optional="false"/>
+        <attribute type="String" mode="IN" name="organizacionEjecutora" optional="false"/>
+        <attribute type="String" mode="IN" name="tipoDocumento" optional="false"/>
+        <attribute type="String" mode="IN" name="refDoc" optional="false"/>
+        <attribute type="String" mode="IN" name="secuencia" optional="false"/>
+        <attribute type="String" mode="IN" name="usuario" optional="false"/>
+        <attribute type="String" mode="IN" name="concepto" optional="true"/>
+        <attribute type="String" mode="IN" name="subConcepto" optional="true"/>
+        <attribute type="String" mode="IN" name="idTipoCatalogoC" optional="true"/>
+        <attribute type="String" mode="IN" name="idC" optional="true"/>
+        <attribute type="String" mode="IN" name="idTipoCatalogoD" optional="true"/>
+        <attribute type="String" mode="IN" name="idD" optional="true"/>
+        <attribute type="Integer" mode="OUT" name="messageOut" optional="true"/>
+    </service> 
 </services>
