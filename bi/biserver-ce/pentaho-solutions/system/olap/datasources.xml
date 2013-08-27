@@ -18,10 +18,6 @@
         <DataSourceInfo>Provider=mondrian;DataSource=SampleData</DataSourceInfo>  
         <Definition>solution:steel-wheels/analysis/SampleData.mondrian.xml</Definition> 
       </Catalog>  
-      <Catalog name="DS_EGRESOV1"> 
-        <DataSourceInfo>Provider=mondrian;DataSource=LOCAL_SS</DataSourceInfo>  
-        <Definition>solution:admin/resources/metadata/DS_EGRESOV1.mondrian.xml</Definition> 
-      </Catalog>  
       <Catalog name="DS_EGRESO_FUENTE"> 
         <DataSourceInfo>Provider=mondrian;DataSource=LOCAL_SS</DataSourceInfo>  
         <Definition>solution:admin/resources/metadata/DS_EGRESO_FUENTE.mondrian.xml</Definition> 
@@ -42,13 +38,13 @@
         <DataSourceInfo>Provider=mondrian;DataSource=LOCAL_SS</DataSourceInfo>  
         <Definition>solution:admin/resources/metadata/DS_EGRESO_PROGRAMATICA.mondrian.xml</Definition> 
       </Catalog>  
+      <Catalog name="DS_EGRESOV1"> 
+        <DataSourceInfo>Provider=mondrian;DataSource=LOCAL_SS</DataSourceInfo>  
+        <Definition>solution:admin/resources/metadata/DS_EGRESOV1.mondrian.xml</Definition> 
+      </Catalog>  
       <Catalog name="DS_INGRESOV1"> 
         <DataSourceInfo>Provider=mondrian;DataSource=LOCAL_SS</DataSourceInfo>  
         <Definition>solution:admin/resources/metadata/DS_INGRESOV1.mondrian.xml</Definition> 
-      </Catalog>  
-      <Catalog name="DS_INGRESO_ALT"> 
-        <DataSourceInfo>Provider=mondrian;DataSource=LOCAL_SS</DataSourceInfo>  
-        <Definition>solution:admin/resources/metadata/DS_INGRESO_ALT.mondrian.xml</Definition> 
       </Catalog> 
     </Catalogs> 
   </DataSource> 
