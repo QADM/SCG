@@ -65,6 +65,48 @@ public class OperacionDiariaHelper {
         } else {
             return tipoDocObject.getString("descripcion");
         }
+    }
+	
+	public static String getWorkEffortName(Delegator delegator, String workEffortId) {
+        GenericValue workEffortObject = null;
+        try {
+            workEffortObject = delegator.findByPrimaryKey("WorkEffort", UtilMisc.toMap("workEffortId", workEffortId));
+        } catch (GenericEntityException e) {
+            Debug.logError(e, "Error al buscar WorkEffort ", MODULE);
+        }
+        if (workEffortObject == null) {
+            return workEffortId;
+        } else {
+            return workEffortObject.getString("description");
+        }
     }		
 
+	public static String getPaymenthMethodName(Delegator delegator, String paymentMethodId) {
+        GenericValue paymenthMethodObject = null;
+        try {
+            paymenthMethodObject = delegator.findByPrimaryKey("PaymentMethod", UtilMisc.toMap("paymentMethodId", paymentMethodId));
+        } catch (GenericEntityException e) {
+            Debug.logError(e, "Error al buscar PaymentMethod ", MODULE);
+        }
+        if (paymenthMethodObject == null) {
+            return paymentMethodId;
+        } else {
+            return paymenthMethodObject.getString("description");
+        }
+    }
+	
+	public static String getProductName(Delegator delegator, String productId) {
+        GenericValue paymenthMethodObject = null;
+        try {
+            paymenthMethodObject = delegator.findByPrimaryKey("Product", UtilMisc.toMap("productId", productId));
+        } catch (GenericEntityException e) {
+            Debug.logError(e, "Error al buscar Product ", MODULE);
+        }
+        if (paymenthMethodObject == null) {
+            return productId;
+        } else {
+            return paymenthMethodObject.getString("productName");
+        }
+    }	
+    
 }
