@@ -1,5 +1,6 @@
 package org.opentaps.dataimport.domain;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.HashMap;
@@ -174,107 +175,12 @@ public class OperacionDiariaIngresosManual {
 	        acctgtransPres.create();
 
 
-	        //Aqui se realiza la extraccion de las cuentas para la operacion 
+	        //Se realiza el registro de trans entries
 	    	
-	    	String currencyId = UtilCommon.getOrgBaseCurrency(organizationPartyId, delegator);
-		
-	        Map input = new HashMap(context);
-	        input.put("acctgTransTypeId", acctgTransTypeId);
-	        input.put("cri", n5);
-	        input.put("tipoFis", tipoFis);
-	        input.put("idProdAbono", idProdAbono);
-	        input.put("idProdCargo", idProdCargo);
-	        input.put("idPago",idPago);
-	        input = dctx.getModelService("obtenerCuentasIngresos").makeValid(input, ModelService.IN_PARAM);
-	        Map tmpResult = dispatcher.runSync("obtenerCuentasIngresos", input);
-	        Map<String,String> mapCuentas = (Map<String, String>) tmpResult.get("mapCuentas");
-	        List<GenericValue> listCuentas = FastList.newInstance();
-        
-	        if(mapCuentas != null && !mapCuentas.isEmpty()){
-	        	
-	        	String cargoPres = mapCuentas.get("Cuenta_Cargo_Presupuesto");
-	        	String abonoPres = mapCuentas.get("Cuenta_Abono_Presupuesto");
-	        	String cargoCont = mapCuentas.get("Cuenta_Cargo_Contable");
-	        	String abonoCont = mapCuentas.get("Cuenta_Abono_Contable");
-	        	
-	        	Debug.logWarning(" cargoPres "+cargoPres, MODULE);
-	        	Debug.logWarning(" abonoPres "+abonoPres, MODULE);
-	        	Debug.logWarning(" cargoCont "+cargoCont, MODULE);
-	        	Debug.logWarning(" abonoCont "+abonoCont, MODULE);
-	        	
-	        	if(cargoPres != null && !cargoPres.isEmpty() && abonoPres != null && !abonoPres.isEmpty()){
-	        		
-	        		GenericValue gTransEntryPreC = GenericValue.create(delegator.getModelEntity("AcctgTransEntry"));
-	        		gTransEntryPreC.set("acctgTransId", acctgTransId);
-	        		gTransEntryPreC.set("acctgTransEntrySeqId", String.format("%05d",1));
-	        		gTransEntryPreC.set("acctgTransEntryTypeId", "_NA_");
-	        		gTransEntryPreC.set("description", "Operación  diaria PRESUPUESTAL Abono"+acctgTransId);
-	        		gTransEntryPreC.set("glAccountId", cargoPres);
-	        		gTransEntryPreC.set("organizationPartyId", organizationPartyId);
-	        		gTransEntryPreC.set("amount", monto);
-	        		gTransEntryPreC.set("currencyUomId", currencyId);
-	        		gTransEntryPreC.set("debitCreditFlag", "D");
-	        		gTransEntryPreC.set("reconcileStatusId", "AES_NOT_RECONCILED");
-	        		gTransEntryPreC.set("partyId", organizationPartyId);
-	        		gTransEntryPreC.create();
-	        		
-	        		GenericValue gtransEntryPreA = GenericValue.create(delegator.getModelEntity("AcctgTransEntry"));
-	        		gtransEntryPreA.set("acctgTransId", acctgTransId);
-	        		gtransEntryPreA.set("acctgTransEntrySeqId", String.format("%05d",2));
-	        		gtransEntryPreA.set("acctgTransEntryTypeId", "_NA_");
-	        		gtransEntryPreA.set("description", "Operación  diaria PRESUPUESTAL Abono "+acctgTransId);
-	        		gtransEntryPreA.set("glAccountId", abonoPres);
-	        		gtransEntryPreA.set("organizationPartyId", organizationPartyId);
-	        		gtransEntryPreA.set("amount", monto);
-	        		gtransEntryPreA.set("currencyUomId", currencyId);
-	        		gtransEntryPreA.set("debitCreditFlag", "C");
-	        		gtransEntryPreA.set("reconcileStatusId", "AES_NOT_RECONCILED");
-	        		gtransEntryPreA.set("partyId", organizationPartyId);	 
-	        		gtransEntryPreA.create();
-	        		
-	        		listCuentas.add(gTransEntryPreC);
-	        		listCuentas.add(gtransEntryPreA);
-	        	}
-	        	
-	        	if(cargoCont != null && !cargoCont.isEmpty() && abonoCont != null && !abonoCont.isEmpty()){
-	        		
-	        		GenericValue gTransEntryConC = GenericValue.create(delegator.getModelEntity("AcctgTransEntry"));
-	        		gTransEntryConC.set("acctgTransId", acctgTransId);
-	        		gTransEntryConC.set("acctgTransEntrySeqId", String.format("%05d",3));
-	        		gTransEntryConC.set("acctgTransEntryTypeId", "_NA_");
-	        		gTransEntryConC.set("description", "Operación  diaria Contable Abono"+acctgTransId);
-	        		gTransEntryConC.set("glAccountId", cargoCont);
-	        		gTransEntryConC.set("organizationPartyId", organizationPartyId);
-	        		gTransEntryConC.set("amount", monto);
-	        		gTransEntryConC.set("currencyUomId", currencyId);
-	        		gTransEntryConC.set("debitCreditFlag", "D");
-	        		gTransEntryConC.set("reconcileStatusId", "AES_NOT_RECONCILED");
-	        		gTransEntryConC.set("partyId", organizationPartyId);
-	        		gTransEntryConC.create();
-	        		
-	        		GenericValue gTransEntryConA = GenericValue.create(delegator.getModelEntity("AcctgTransEntry"));
-	        		gTransEntryConA.set("acctgTransId", acctgTransId);
-	        		gTransEntryConA.set("acctgTransEntrySeqId", String.format("%05d",4));
-	        		gTransEntryConA.set("acctgTransEntryTypeId", "_NA_");
-	        		gTransEntryConA.set("description", "Operación  diaria Contable Abono"+acctgTransId);
-	        		gTransEntryConA.set("glAccountId", abonoCont);
-	        		gTransEntryConA.set("organizationPartyId", organizationPartyId);
-	        		gTransEntryConA.set("amount", monto);
-	        		gTransEntryConA.set("currencyUomId", currencyId);
-	        		gTransEntryConA.set("debitCreditFlag", "C");
-	        		gTransEntryConA.set("reconcileStatusId", "AES_NOT_RECONCILED");
-	        		gTransEntryConA.set("partyId", organizationPartyId);
-	        		gTransEntryConA.create();
-	        		
-	        		listCuentas.add(gTransEntryConC);
-	        		listCuentas.add(gTransEntryConA);
-	        		
-	        	}
-	        	
-	        }	    
+	        List<GenericValue> listEntries = registraEntries(dctx, dispatcher, context, organizationPartyId,
+	        			acctgTransId, monto, acctgTransTypeId, n5, tipoFis, 
+	        			idProdAbono, idProdCargo, idPago);
 	        
-	        Debug.logWarning("LISTA DE CUENTAS REGISTRADAS  } "+listCuentas, MODULE);
-
 		} catch (ParseException e) {
 			return UtilMessage.createAndLogServiceError(e, MODULE);
 		}
@@ -529,6 +435,127 @@ public class OperacionDiariaIngresosManual {
     	return cuentaRegresa;
     	
     }
+	
+	/**
+	 * Metodo que se utiliza para registrar los entries relacionados a una operacion de ingresos
+	 * @param dctx
+	 * @param dispatcher
+	 * @param context
+	 * @return
+	 * @throws GenericEntityException 
+	 * @throws GenericServiceException 
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public static List<GenericValue> registraEntries(DispatchContext dctx,LocalDispatcher dispatcher,Map context,
+						String organizationPartyId,String acctgTransId,BigDecimal monto,
+						String acctgTransTypeId, String CRI , String tipoFiscal, 
+						String idProdAbono, String idProdCargo, String idPago) throws GenericEntityException, GenericServiceException{
+		
+		Delegator delegator = dctx.getDelegator();
+		
+    	String currencyId = UtilCommon.getOrgBaseCurrency(organizationPartyId, delegator);
+		
+        Map input = new HashMap(context);
+        input.put("acctgTransTypeId", acctgTransTypeId);
+        input.put("cri", CRI);
+        input.put("tipoFis", tipoFiscal);
+        input.put("idProdAbono", idProdAbono);
+        input.put("idProdCargo", idProdCargo);
+        input.put("idPago",idPago);
+        input = dctx.getModelService("obtenerCuentasIngresos").makeValid(input, ModelService.IN_PARAM);
+        Map tmpResult = dispatcher.runSync("obtenerCuentasIngresos", input);
+        Map<String,String> mapCuentas = (Map<String, String>) tmpResult.get("mapCuentas");
+        List<GenericValue> listCuentas = FastList.newInstance();
+    
+        if(mapCuentas != null && !mapCuentas.isEmpty()){
+        	
+        	String cargoPres = mapCuentas.get("Cuenta_Cargo_Presupuesto");
+        	String abonoPres = mapCuentas.get("Cuenta_Abono_Presupuesto");
+        	String cargoCont = mapCuentas.get("Cuenta_Cargo_Contable");
+        	String abonoCont = mapCuentas.get("Cuenta_Abono_Contable");
+        	
+        	Debug.logWarning(" cargoPres "+cargoPres, MODULE);
+        	Debug.logWarning(" abonoPres "+abonoPres, MODULE);
+        	Debug.logWarning(" cargoCont "+cargoCont, MODULE);
+        	Debug.logWarning(" abonoCont "+abonoCont, MODULE);
+        	
+        	if(cargoPres != null && !cargoPres.isEmpty() && abonoPres != null && !abonoPres.isEmpty()){
+        		
+        		GenericValue gTransEntryPreC = GenericValue.create(delegator.getModelEntity("AcctgTransEntry"));
+        		gTransEntryPreC.set("acctgTransId", acctgTransId);
+        		gTransEntryPreC.set("acctgTransEntrySeqId", String.format("%05d",1));
+        		gTransEntryPreC.set("acctgTransEntryTypeId", "_NA_");
+        		gTransEntryPreC.set("description", "Operación  diaria PRESUPUESTAL Abono"+acctgTransId);
+        		gTransEntryPreC.set("glAccountId", cargoPres);
+        		gTransEntryPreC.set("organizationPartyId", organizationPartyId);
+        		gTransEntryPreC.set("amount", monto);
+        		gTransEntryPreC.set("currencyUomId", currencyId);
+        		gTransEntryPreC.set("debitCreditFlag", "D");
+        		gTransEntryPreC.set("reconcileStatusId", "AES_NOT_RECONCILED");
+        		gTransEntryPreC.set("partyId", organizationPartyId);
+        		gTransEntryPreC.create();
+        		
+        		GenericValue gtransEntryPreA = GenericValue.create(delegator.getModelEntity("AcctgTransEntry"));
+        		gtransEntryPreA.set("acctgTransId", acctgTransId);
+        		gtransEntryPreA.set("acctgTransEntrySeqId", String.format("%05d",2));
+        		gtransEntryPreA.set("acctgTransEntryTypeId", "_NA_");
+        		gtransEntryPreA.set("description", "Operación  diaria PRESUPUESTAL Abono "+acctgTransId);
+        		gtransEntryPreA.set("glAccountId", abonoPres);
+        		gtransEntryPreA.set("organizationPartyId", organizationPartyId);
+        		gtransEntryPreA.set("amount", monto);
+        		gtransEntryPreA.set("currencyUomId", currencyId);
+        		gtransEntryPreA.set("debitCreditFlag", "C");
+        		gtransEntryPreA.set("reconcileStatusId", "AES_NOT_RECONCILED");
+        		gtransEntryPreA.set("partyId", organizationPartyId);	 
+        		gtransEntryPreA.create();
+        		
+        		listCuentas.add(gTransEntryPreC);
+        		listCuentas.add(gtransEntryPreA);
+        	}
+        	
+        	if(cargoCont != null && !cargoCont.isEmpty() && abonoCont != null && !abonoCont.isEmpty()){
+        		
+        		GenericValue gTransEntryConC = GenericValue.create(delegator.getModelEntity("AcctgTransEntry"));
+        		gTransEntryConC.set("acctgTransId", acctgTransId);
+        		gTransEntryConC.set("acctgTransEntrySeqId", String.format("%05d",3));
+        		gTransEntryConC.set("acctgTransEntryTypeId", "_NA_");
+        		gTransEntryConC.set("description", "Operación  diaria Contable Abono"+acctgTransId);
+        		gTransEntryConC.set("glAccountId", cargoCont);
+        		gTransEntryConC.set("organizationPartyId", organizationPartyId);
+        		gTransEntryConC.set("amount", monto);
+        		gTransEntryConC.set("currencyUomId", currencyId);
+        		gTransEntryConC.set("debitCreditFlag", "D");
+        		gTransEntryConC.set("reconcileStatusId", "AES_NOT_RECONCILED");
+        		gTransEntryConC.set("partyId", organizationPartyId);
+        		gTransEntryConC.create();
+        		
+        		GenericValue gTransEntryConA = GenericValue.create(delegator.getModelEntity("AcctgTransEntry"));
+        		gTransEntryConA.set("acctgTransId", acctgTransId);
+        		gTransEntryConA.set("acctgTransEntrySeqId", String.format("%05d",4));
+        		gTransEntryConA.set("acctgTransEntryTypeId", "_NA_");
+        		gTransEntryConA.set("description", "Operación  diaria Contable Abono"+acctgTransId);
+        		gTransEntryConA.set("glAccountId", abonoCont);
+        		gTransEntryConA.set("organizationPartyId", organizationPartyId);
+        		gTransEntryConA.set("amount", monto);
+        		gTransEntryConA.set("currencyUomId", currencyId);
+        		gTransEntryConA.set("debitCreditFlag", "C");
+        		gTransEntryConA.set("reconcileStatusId", "AES_NOT_RECONCILED");
+        		gTransEntryConA.set("partyId", organizationPartyId);
+        		gTransEntryConA.create();
+        		
+        		listCuentas.add(gTransEntryConC);
+        		listCuentas.add(gTransEntryConA);
+        		
+        	}
+        	
+        }
+        
+        Debug.logWarning("LISTA DE CUENTAS REGISTRADAS  } "+listCuentas, MODULE);
+		
+        return listCuentas;
+	}
+	
+	
     
 }
 
