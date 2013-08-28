@@ -26,6 +26,7 @@ import org.ofbiz.service.ModelService;
 import org.ofbiz.service.ServiceUtil;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
+import org.opentaps.dataimport.UtilOperacionDiariaServices;
 import org.opentaps.foundation.action.ActionContext;
 import org.opentaps.foundation.service.ServiceException;
 
@@ -39,11 +40,9 @@ public class OperacionDiariaIngresosManual {
      * @param dctx
      * @param context
      * @return
-     * @throws GenericEntityException 
-     * @throws GenericServiceException 
      */
     @SuppressWarnings({ "unchecked", "rawtypes" })
-	public static Map createOperacionDiariaIngresos(DispatchContext dctx, Map context) throws GenericEntityException, GenericServiceException {
+	public static Map createOperacionDiariaIngresos(DispatchContext dctx, Map context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Delegator delegator = dctx.getDelegator();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -62,7 +61,7 @@ public class OperacionDiariaIngresosManual {
         
         String acctgTransId;
         
-        Debug.logWarning("ENTRO AL SERVICIO PARA CREAR OPERACION DIARIA", MODULE);
+        Debug.logWarning("ENTRO AL SERVICIO PARA CREAR OPERACION DIARIA INGRESOS", MODULE);
         
         try {
         	
@@ -114,12 +113,16 @@ public class OperacionDiariaIngresosManual {
 	        Debug.logWarning("idPago "+idPago, MODULE);
 	        Debug.logWarning("monto "+monto, MODULE);
 	        
-	        
-			GenericValue tipoDocumento = delegator.findByPrimaryKey("TipoDocumento",UtilMisc.<String, Object>toMap("idTipoDoc", tipoDoc));
+	        //Buscamos el tipo documento seleccionado en pantalla para obtener el acctgTransTypeId
+			GenericValue tipoDocumento = delegator.findByPrimaryKeyCache("TipoDocumento",UtilMisc.<String, Object>toMap("idTipoDoc", tipoDoc));
 			String acctgTransTypeId = tipoDocumento.getString("acctgTransTypeId");
 			Debug.logWarning("tipoDocumento  Encontrado "+tipoDocumento, MODULE);
 			String docu = tipoDocumento.getString("descripcion");
 			String descripcion = docu == null?" ":docu+" - "+refDoc == null ?" ":refDoc;
+			
+	        String ciclo = "";
+	        if(fecContable != null)
+		        ciclo = String.valueOf(UtilDateTime.getYear(fecContable, timeZone, locale)).substring(2);
 	        
 	        acctgtrans = GenericValue.create(delegator.getModelEntity("AcctgTrans"));
 	        acctgtrans.setNextSeqId();
@@ -134,13 +137,6 @@ public class OperacionDiariaIngresosManual {
 	        acctgtrans.set("postedAmount", monto);
 	        acctgtrans.create();
 	        
-	        
-	        String ciclo = "";
-	        if(fecContable != null){
-		        ciclo = String.valueOf(UtilDateTime.getYear(fecContable, timeZone, locale)).substring(2);
-		        Debug.logWarning("CLICLO STRING +++ "+ciclo, MODULE);
-	        }
-
 	        acctgTransId = acctgtrans.getString("acctgTransId");
 	        //Se registra en AcctTransPresupuestal
 	        acctgtransPres = GenericValue.create(delegator.getModelEntity("AcctgTransPresupuestal"));
@@ -148,9 +144,9 @@ public class OperacionDiariaIngresosManual {
 	        acctgtransPres.set("ciclo", ciclo);
 	        acctgtransPres.set("unidadOrganizacional", organizationPartyId);
 	        acctgtransPres.set("unidadEjecutora", uniEjec);
-	        String unidadOr = obtenPadrePartyId(dctx, dispatcher, uniEjec);
+	        String unidadOr = UtilOperacionDiariaServices.obtenPadrePartyId(dctx, dispatcher, uniEjec);
 	        acctgtransPres.set("unidadOrganizacional", unidadOr);
-	        String unidadRes = obtenPadrePartyId(dctx, dispatcher, unidadOr);
+	        String unidadRes = UtilOperacionDiariaServices.obtenPadrePartyId(dctx, dispatcher, unidadOr);
 	        acctgtransPres.set("unidadResponsable", unidadRes);
 	        acctgtransPres.set("clavePres", cvePrespues);
 	        acctgtransPres.set("rubro", rubro);
@@ -159,9 +155,9 @@ public class OperacionDiariaIngresosManual {
 	        acctgtransPres.set("conceptoRub", concepto);
 	        acctgtransPres.set("nivel5", n5);
 	        acctgtransPres.set("subFuenteEspecifica", suFuenteEsp);
-	        String subfuente = obtenPadresSubfuenteEspecifica(dctx, dispatcher, suFuenteEsp);
+	        String subfuente = UtilOperacionDiariaServices.obtenPadreEnumeration(dctx, dispatcher, suFuenteEsp);
 	        acctgtransPres.set("subFuente",subfuente);
-	        String fuente = obtenPadresSubfuenteEspecifica(dctx, dispatcher, subfuente);
+	        String fuente = UtilOperacionDiariaServices.obtenPadreEnumeration(dctx, dispatcher, subfuente);
 	        acctgtransPres.set("subFuente",fuente);	        
 	        acctgtransPres.set("entidadFederativa", entFed);
 	        acctgtransPres.set("region", region);
@@ -184,6 +180,10 @@ public class OperacionDiariaIngresosManual {
 	        
 	        
 		} catch (ParseException e) {
+			return UtilMessage.createAndLogServiceError(e, MODULE);
+		} catch (GenericServiceException e) {
+			return UtilMessage.createAndLogServiceError(e, MODULE);
+		} catch (GenericEntityException e) {
 			return UtilMessage.createAndLogServiceError(e, MODULE);
 		}
     	
@@ -296,63 +296,6 @@ public class OperacionDiariaIngresosManual {
         results.put("mapCuentas", mapCuentas);
         return results;
     }
-    
-    /**
-     * Obtiene el padre de un enumId 
-     * @param enumId (Subfuente Especifica)
-     * @return
-     * @throws GenericServiceException 
-     */
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-	public static String obtenPadresSubfuenteEspecifica(DispatchContext dctx,LocalDispatcher dispatcher,String enumId) throws GenericServiceException{
-    	
-    	String padreEnumId = null;
-    	
-    	if(enumId != null && !enumId.isEmpty()){
-
-        	Map input = FastMap.newInstance();
-        	input.put("enumId", enumId);
-        	input = dctx.getModelService("obtenEnumIdPadre").makeValid(input, ModelService.IN_PARAM);
-        	Map tmpResult = dispatcher.runSync("obtenEnumIdPadre", input);
-            padreEnumId = (String) tmpResult.get("enumIdPadre");
-            
-            Debug.logWarning("ENUM ID "+enumId+"   PADRE  "+padreEnumId, MODULE);
-    		
-    	}
-    	
-    	return padreEnumId;
-    	
-    }
-    
-    /**
-     * Obtiene el padre de un partyId
-     * @param dctx
-     * @param dispatcher
-     * @param partyId
-     * @return
-     * @throws GenericServiceException
-     */
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-	public static String obtenPadrePartyId(DispatchContext dctx,LocalDispatcher dispatcher,String partyId) throws GenericServiceException{
-    	
-    	String partyIdPadre = null;
-    	
-    	if(partyId != null && !partyId.isEmpty()){
-    		
-        	Map input = FastMap.newInstance();
-        	input.put("partyId", partyId);
-        	input = dctx.getModelService("obtenPartyIdPadre").makeValid(input, ModelService.IN_PARAM);
-        	Map tmpResult = dispatcher.runSync("obtenPartyIdPadre", input);
-        	partyIdPadre = (String) tmpResult.get("partyIdPadre");
-            
-            Debug.logWarning("PARTY ID "+partyId+"   PADRE  "+partyIdPadre, MODULE);
-            
-            
-    	}
-    	
-    	return partyIdPadre;
-    	
-    }   
     
     /**
      * Metodo que valida las cuentas auxiliares de los productos a partir de una cuenta dada y regresa 

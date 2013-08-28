@@ -17,9 +17,8 @@
 -->
 
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
-<form method="POST" name="createOperacionDiariaIngresos" action="${creaOpDiariaIngresos}"> <#-- action set by the screen -->
+<form method="POST" name="createOperacionDiariaEgresos" action="${creaOpDiariaEgresos}"> <#-- action set by the screen -->
   <input type="hidden" name="organizationPartyId" value="${organizationPartyId}"/>
-  <input type="hidden" name="glFiscalTypeId" value="ACTUAL"/>
   <div class="form" style="border:0">
     <table class="fourColumnForm" style="border:0">
       <tr>
@@ -60,26 +59,6 @@
         <@inputSelectCell list=listProducts?if_exists displayField="description" name="Id_Producto_Cargo" default=productId?if_exists key="productId"/>
       </tr>      
       <tr>
-        <@displayTitleCell title=uiLabelMap.FinancialsCaption />
-        <@inputSelectCell list=listRubros?if_exists displayField="description" name="Rubro" default=productCategoryId?if_exists key="productCategoryId"/>
-      </tr>         
-      <tr>
-        <@displayTitleCell title=uiLabelMap.FinancialsType />
-        <@inputSelectCell list=listTipos?if_exists displayField="description" name="Tipo" default=productCategoryId?if_exists key="productCategoryId"/>
-      </tr> 
-      <tr>
-        <@displayTitleCell title=uiLabelMap.FinancialsClass />
-        <@inputSelectCell list=listClases?if_exists displayField="description" name="Clase" default=productCategoryId?if_exists key="productCategoryId"/>
-      </tr>    
-      <tr>
-        <@displayTitleCell title=uiLabelMap.FinancialsConcept />
-        <@inputSelectCell list=listConceptos?if_exists displayField="description" name="Concepto" default=productCategoryId?if_exists key="productCategoryId"/>
-      </tr>    
-      <tr>
-        <@displayTitleCell title=uiLabelMap.FinancialsN5 />
-        <@inputSelectCell list=listN5?if_exists displayField="description" name="N5" default=productCategoryId?if_exists key="productCategoryId"/>
-      </tr>
-      <tr>
       	<@displayTitleCell title=uiLabelMap.FinancialsFederalEntity />
       	<@padresGeo name="EntidadFederativa" geoCode="MEX" hijoName="Region" nietos="Municipio,Localidad"/>
       </tr>
@@ -113,8 +92,16 @@
         <@inputSelectCell list=listTipoGastos?if_exists displayField="description" name="Tipo_Gasto" default=enumId?if_exists key="enumId"/>
       </tr>      
       <tr>
-      	<@displayTitleCell title=uiLabelMap.FinancialsExpenseType />
+      	<@displayTitleCell title=uiLabelMap.FinancialsSpecifiedItem />
         <@inputSelectCell list=listPartidasEsp?if_exists displayField="description" name="Partida_Especifica" default=productCategoryId?if_exists key="productCategoryId"/>
+      </tr>      
+      <tr>
+      	<@displayTitleCell title=uiLabelMap.FinancialsActivity />
+        <@inputSelectCell list=listaActividades?if_exists displayField="description" name="Actividad" default=workEffortTypeId?if_exists key="workEffortTypeId"/>
+      </tr>      
+      <tr>
+      	<@displayTitleCell title=uiLabelMap.FinancialsArea />
+        <@inputSelectCell list=listAreas?if_exists displayField="description" name="Area" default=enumId?if_exists key="enumId"/>
       </tr>      
      <tr>
       	<@displayTitleCell title=uiLabelMap.FinancialsIdLeviedH />

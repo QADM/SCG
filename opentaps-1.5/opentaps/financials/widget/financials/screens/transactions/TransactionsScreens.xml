@@ -734,7 +734,7 @@
             <actions>
                 <set field="pageTitleLabel" value="${uiLabelMap.FinancialsDailyOperIncome}"/>  
                 <set field="sectionHeaderUiLabel" value="${uiLabelMap.FinancialsDailyOperIncome}"/>
-                <set field="creaOpDiariaIngresos" value="createOperacionDiariaIngresos"/>
+                <set field="creaOpDiariaEgresos" value="createOperacionDiariaEgresos"/>
 				<script location="component://financials/webapp/financials/WEB-INF/actions/transactions/getDatosOperacionDiariaEgre.bsh"/>                
             </actions>
             <widgets>

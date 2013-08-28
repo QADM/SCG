@@ -19,7 +19,6 @@
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 <form method="POST" name="createOperacionDiariaIngresos" action="${creaOpDiariaIngresos}"> <#-- action set by the screen -->
   <input type="hidden" name="organizationPartyId" value="${organizationPartyId}"/>
-  <input type="hidden" name="glFiscalTypeId" value="ACTUAL"/>
   <div class="form" style="border:0">
     <table class="fourColumnForm" style="border:0">
       <tr>

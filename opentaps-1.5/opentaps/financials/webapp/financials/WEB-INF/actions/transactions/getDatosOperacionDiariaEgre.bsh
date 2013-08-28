@@ -132,11 +132,18 @@ resultadoClasEc = delegator.findByCondition("ProductCategory", condicionClasEc ,
 context.put("listPartidasEsp", resultadoClasEc);
 
 //Buscamos las clasificaciones programaticas
-subConditions = UtilMisc.toList(
-	new EntityExpr("enumTypeId", EntityOperator.EQUALS, "CL_FUENTE_RECURSOS"),
-	new EntityExpr("nivelId", EntityOperator.EQUALS, "SUBFUENTE_ESPECIFICA")
+condicionesClasPro = UtilMisc.toList(
+	new EntityExpr("workEffortTypeId", EntityOperator.EQUALS, "PHASE"),
+	new EntityExpr("nivelId", EntityOperator.EQUALS, "ACTIVIDAD_INSTITUCIO")
 );
+resultadoClasPro = delegator.findByCondition("WorkEffort", new EntityConditionList(condicionesClasPro, EntityOperator.AND) , UtilMisc.toList("workEffortTypeId","description"), null);
+context.put("listaActividades", resultadoClasPro);
 
-resultadoSub = delegator.findByCondition("WorkEffort", new EntityConditionList(subConditions, EntityOperator.AND) , UtilMisc.toList("enumId","description"), null);
-context.put("listaSubfuente", resultadoSub);
-
+//Buscamos Areas
+orderByArea = org.ofbiz.base.util.UtilMisc.toList("description");
+condicionArea = UtilMisc.toList(
+	new EntityExpr("enumTypeId", EntityOperator.EQUALS, "CL_SECTORIAL"),
+	new EntityExpr("nivelId", EntityOperator.EQUALS, "AREA")
+);
+resultadoArea = delegator.findByCondition("Enumeration", new EntityConditionList(condicionArea, EntityOperator.AND) , UtilMisc.toList("enumId", "description"), orderByArea);
+context.put("listAreas", resultadoArea);

@@ -26,7 +26,155 @@ public class UtilOperacionDiariaServices {
 	
 	private static final String MODULE = UtilOperacionDiariaServices.class.getName();
 	private static final BigDecimal ZERO = BigDecimal.ZERO;
+	
+	/**
+	 * Metodo para obtener workeffortid Padre
+	 * @param dctx
+	 * @param dispatcher
+	 * @param workEffortTypeId
+	 * @return
+	 * @throws GenericServiceException
+	 */
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	public static String obtenPadreWorkEffort(DispatchContext dctx,LocalDispatcher dispatcher,String workEffortTypeId) throws GenericServiceException{
+    	
+    	String padreWorkEffortTypeId = null;
+    	
+    	if(workEffortTypeId != null && !workEffortTypeId.isEmpty()){
+
+        	Map input = FastMap.newInstance();
+        	input.put("workEffortTypeId", workEffortTypeId);
+        	input = dctx.getModelService("obtenWorkEffortPadreId").makeValid(input, ModelService.IN_PARAM);
+        	Map tmpResult = dispatcher.runSync("obtenWorkEffortPadreId", input);
+            padreWorkEffortTypeId = (String) tmpResult.get("workEffortTypeIdPadre");
+            
+            Debug.logWarning("workEffortTypeId "+workEffortTypeId+"   PADRE  "+padreWorkEffortTypeId, MODULE);
+    		
+    	}
+    	
+    	return padreWorkEffortTypeId;
+    	
+    }	
+	
+	/**
+	 * Servicio obtiene WorkEffortId Padre a partir de uno dado
+	 * @param dctx
+	 * @param context
+	 * @return
+	 */
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+	public static Map obtenWorkEffortPadreId(DispatchContext dctx, Map context) {
+        Delegator delegator = dctx.getDelegator();
+        String workEffortTypeId = (String) context.get("workEffortTypeId");
+        
+        String workEffortTypeIdPadre = null;
+      
+		try {        
+			
+	    	EntityCondition condicionWork = EntityCondition.makeCondition("workEffortTypeId", EntityOperator.EQUALS, workEffortTypeId);
+	    	List<GenericValue> resultadoWorkEff = delegator.findByCondition("WorkEffort", condicionWork , UtilMisc.toList("workEffortTypeId","workEffortParentId"), null);
+	    	
+	    	if(resultadoWorkEff != null && !resultadoWorkEff.isEmpty()){
+	    		
+	    		workEffortTypeIdPadre = resultadoWorkEff.get(0).getString("workEffortParentId");
+	    		
+	    	}
+			
+		} catch (GenericEntityException e) {
+			return UtilMessage.createAndLogServiceError(e, MODULE);
+		}
+        
+        Map results = ServiceUtil.returnSuccess();
+        results.put("workEffortTypeIdPadre", workEffortTypeIdPadre);
+        return results;
+    }
+	
+    /**
+     * Obtiene el padre de un productCategoryId 
+     * @param productCategoryId 
+     * @return
+     * @throws GenericServiceException 
+     */
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	public static String obtenPadreProductCate(DispatchContext dctx,LocalDispatcher dispatcher,String productCategoryId) throws GenericServiceException{
+    	
+    	String padreProductCategoryId = null;
+    	
+    	if(productCategoryId != null && !productCategoryId.isEmpty()){
+
+        	Map input = FastMap.newInstance();
+        	input.put("productCategoryId", productCategoryId);
+        	input = dctx.getModelService("obtenProdCategoryPadreId").makeValid(input, ModelService.IN_PARAM);
+        	Map tmpResult = dispatcher.runSync("obtenProdCategoryPadreId", input);
+            padreProductCategoryId = (String) tmpResult.get("productCategoryIdPadre");
+            
+            Debug.logWarning("productCategoryId "+productCategoryId+"   PADRE  "+padreProductCategoryId, MODULE);
+    		
+    	}
+    	
+    	return padreProductCategoryId;
+    	
+    }	
+	
+    /**
+     * Metodo utilizado para obtener el productCategoryId padre a partir de uno dado
+     * @param productCategoryId
+     * @return productCategoryId(Padre)
+     */
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+	public static Map obtenProdCategoryPadreId(DispatchContext dctx, Map context) {
+        Delegator delegator = dctx.getDelegator();
+        String productCategoryId = (String) context.get("productCategoryId");
+        
+        String productCategoryIdPadre = null;
+      
+		try {        
+			
+	    	EntityCondition condicionProd = EntityCondition.makeCondition("productCategoryId", EntityOperator.EQUALS, productCategoryId);
+	    	List<GenericValue> resultadoProdCa = delegator.findByCondition("ProductCategory", condicionProd , UtilMisc.toList("productCategoryId","primaryParentCategoryId"), null);
+	    	
+	    	if(resultadoProdCa != null && !resultadoProdCa.isEmpty()){
+	    		
+	    		productCategoryIdPadre = resultadoProdCa.get(0).getString("primaryParentCategoryId");
+	    		
+	    	}
+			
+		} catch (GenericEntityException e) {
+			return UtilMessage.createAndLogServiceError(e, MODULE);
+		}
+        
+        Map results = ServiceUtil.returnSuccess();
+        results.put("productCategoryIdPadre", productCategoryIdPadre);
+        return results;
+    }
    
+    /**
+     * Obtiene el padre de un enumId 
+     * @param enumId (Subfuente Especifica)
+     * @return
+     * @throws GenericServiceException 
+     */
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	public static String obtenPadreEnumeration(DispatchContext dctx,LocalDispatcher dispatcher,String enumId) throws GenericServiceException{
+    	
+    	String padreEnumId = null;
+    	
+    	if(enumId != null && !enumId.isEmpty()){
+
+        	Map input = FastMap.newInstance();
+        	input.put("enumId", enumId);
+        	input = dctx.getModelService("obtenEnumIdPadre").makeValid(input, ModelService.IN_PARAM);
+        	Map tmpResult = dispatcher.runSync("obtenEnumIdPadre", input);
+            padreEnumId = (String) tmpResult.get("enumIdPadre");
+            
+            Debug.logWarning("ENUM ID "+enumId+"   PADRE  "+padreEnumId, MODULE);
+    		
+    	}
+    	
+    	return padreEnumId;
+    	
+    }
+    
     /**
      * Metodo utilizado para obtener el enumId padre a partir de uno dado
      * @param enumId
@@ -59,6 +207,35 @@ public class UtilOperacionDiariaServices {
         return results;
     }	
     
+    /**
+     * Obtiene el padre de un partyId
+     * @param dctx
+     * @param dispatcher
+     * @param partyId
+     * @return
+     * @throws GenericServiceException
+     */
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	public static String obtenPadrePartyId(DispatchContext dctx,LocalDispatcher dispatcher,String partyId) throws GenericServiceException{
+    	
+    	String partyIdPadre = null;
+    	
+    	if(partyId != null && !partyId.isEmpty()){
+    		
+        	Map input = FastMap.newInstance();
+        	input.put("partyId", partyId);
+        	input = dctx.getModelService("obtenPartyIdPadre").makeValid(input, ModelService.IN_PARAM);
+        	Map tmpResult = dispatcher.runSync("obtenPartyIdPadre", input);
+        	partyIdPadre = (String) tmpResult.get("partyIdPadre");
+            
+            Debug.logWarning("PARTY ID "+partyId+"   PADRE  "+partyIdPadre, MODULE);
+            
+            
+    	}
+    	
+    	return partyIdPadre;
+    	
+    }   
 
     /**
      * Metodo utilizado para obtener el enumId padre a partir de uno dado
