@@ -5,7 +5,6 @@ import java.text.ParseException;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
-
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
@@ -172,6 +171,12 @@ public class OperacionDiariaEgresosManual {
 	        acctgtransPres.set("idProductoH", idProdAbono);
 	        acctgtransPres.set("idPago",idPago);
 	        acctgtransPres.create();
+	        
+	        //Se realiza el registro de trans entries
+	        UtilOperacionDiariaServices.registraEntries(dctx, dispatcher, context, organizationPartyId,
+		        			acctgTransId, monto, fecContable,
+		        			acctgTransTypeId, partEspec, tipoFis, 
+		        			idProdAbono, idProdCargo, idPago);
 			
         
         } catch (ParseException e) {
@@ -188,5 +193,6 @@ public class OperacionDiariaEgresosManual {
         results.put("acctgTransId",acctgTransId);
         return results;
 	}
+
 
 }
