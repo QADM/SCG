@@ -188,7 +188,11 @@
                   linkUrl="Egresos" securityModule="" securityAction=""/>
 <OpentapsShortcut shortcutId="Polizas" groupId="financialsTransactions" sequenceNum="120" uiLabel="Pólizas"
                   linkUrl="Polizas" securityModule="" securityAction=""/>
-                  
+<!-- Presupuesto Ingreso Egreso -->                  
+<OpentapsShortcut shortcutId="PresupuestoIngreso" groupId="financialsTransactions" sequenceNum="130" uiLabel="Presupuesto Ingreso"
+                  linkUrl="createPresupuestoIngresoForm" securityModule="" securityAction=""/>
+<OpentapsShortcut shortcutId="PresupuestoEgreso" groupId="financialsTransactions" sequenceNum="140" uiLabel="Presupuesto Egreso"
+                  linkUrl="createPresupuestoEgresoForm" securityModule="" securityAction=""/>   
                   
 <OpentapsShortcut shortcutId="ODIngresos" groupId="financialsTransactions" sequenceNum="150" uiLabel="FinancialsDailyOperIncome"
                   linkUrl="ODIngresos" securityModule="" securityAction=""/>

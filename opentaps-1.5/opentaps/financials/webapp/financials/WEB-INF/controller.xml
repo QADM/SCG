@@ -1501,6 +1501,31 @@
         <response name="error" type="view" value="createQuickAcctgTransForm" />
     </request-map>
     
+    <!-- Presupuesto Ingreso, Egreso -->
+    
+     <request-map uri="viewAcctgTransPresupuestoIngreso"> 
+        <security https="true" auth="true"/> 
+        <response name="success" type="view" value="viewAcctgTransPresupuestoIngreso"/> 
+    </request-map> 
+    
+     <request-map uri="createPresupuestoIngresoForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="createPresupuestoIngresoForm"/>
+    </request-map>
+    
+    <request-map uri="createPresupuestoEgresoForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="createPresupuestoEgresoForm"/>
+    </request-map>
+    
+   <request-map uri="createAcctgTransPresupuestoIngreso">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createAcctgTransPresupuestoIngreso"/>
+        <response name="success" type="request-redirect" value="viewAcctgTransPresupuestoIngreso">
+          <redirect-parameter name="acctgTransId"/>
+        </response>
+        <response name="error" type="view" value="createPresupuestoIngresoForm" />
+    </request-map>
     
      <request-map uri="Ingresos">
         <security https="true" auth="true"/>
@@ -2397,6 +2422,11 @@
     <view-map name="viewAcctgTransPolizas" type="screen" page="component://financials/widget/financials/screens/transactions/TransactionsScreens.xml#viewAcctgTransPolizas"/>
     <view-map name="viewAcctgTransIng" type="screen" page="component://financials/widget/financials/screens/transactions/TransactionsScreens.xml#viewAcctgTransIng"/>
     <view-map name="viewAcctgTransEg" type="screen" page="component://financials/widget/financials/screens/transactions/TransactionsScreens.xml#viewAcctgTransEg"/>
+
+<!-- Pantallas Presupuesto Ingreso, Egreso -->
+	<view-map name="createPresupuestoEgresoForm" type="screen" page="component://financials/widget/financials/screens/transactions/TransactionsScreens.xml#createPresupuestoEgresoForm"/>
+	<view-map name="createPresupuestoIngresoForm" type="screen" page="component://financials/widget/financials/screens/transactions/TransactionsScreens.xml#createPresupuestoIngresoForm"/> 
+	<view-map name="viewAcctgTransPresupuestoIngreso" type="screen" page="component://financials/widget/financials/screens/transactions/TransactionsScreens.xml#viewAcctgTransPresupuestoIngreso"/>
 
 	<!-- Nuevas pantallas @JSCF -->
 	<view-map name="ODIngresos" type="screen" page="component://financials/widget/financials/screens/transactions/TransactionsScreens.xml#ODIngresos"/>
