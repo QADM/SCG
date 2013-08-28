@@ -538,7 +538,37 @@
         	</field>
        		<field name="idTipoDoc">
             	<display description="${groovy:com.opentaps.financials.Helpers.OperacionDiariaHelper.getTipoDocName(delegator, mapTransPresup.get(&quot;idTipoDoc&quot;))}" />
-        	</field>        	
+        	</field>
+        	<field name="funcion">
+        		<display description="${groovy:com.opentaps.financials.Helpers.OperacionDiariaHelper.getEnumName(delegator, mapTransPresup.get(&quot;funcion&quot;))}"/>
+        	</field>          	
+        	<field name="subFuncion">
+        		<display description="${groovy:com.opentaps.financials.Helpers.OperacionDiariaHelper.getEnumName(delegator, mapTransPresup.get(&quot;subFuncion&quot;))}"/>
+        	</field> 
+        	<field name="partidaGenerica">
+        		<display description="${groovy:com.opentaps.financials.Helpers.OperacionDiariaHelper.getProductCategoryName(delegator, mapTransPresup.get(&quot;partidaGenerica&quot;))}"/>
+        	</field>            	
+        	<field name="partidaEspecifica">
+        		<display description="${groovy:com.opentaps.financials.Helpers.OperacionDiariaHelper.getProductCategoryName(delegator, mapTransPresup.get(&quot;partidaEspecifica&quot;))}"/>
+        	</field>
+        	<field name="tipoGasto">
+        		<display description="${groovy:com.opentaps.financials.Helpers.OperacionDiariaHelper.getEnumName(delegator, mapTransPresup.get(&quot;tipoGasto&quot;))}"/>
+        	</field>	
+        	<field name="funcion">
+        		<display description="${groovy:com.opentaps.financials.Helpers.OperacionDiariaHelper.getEnumName(delegator, mapTransPresup.get(&quot;funcion&quot;))}"/>
+        	</field>
+        	<field name="subFuncion">
+        		<display description="${groovy:com.opentaps.financials.Helpers.OperacionDiariaHelper.getEnumName(delegator, mapTransPresup.get(&quot;subFuncion&quot;))}"/>
+        	</field>
+        	<field name="sector">
+        		<display description="${groovy:com.opentaps.financials.Helpers.OperacionDiariaHelper.getEnumName(delegator, mapTransPresup.get(&quot;sector&quot;))}"/>
+        	</field>          	
+        	<field name="subSector">
+        		<display description="${groovy:com.opentaps.financials.Helpers.OperacionDiariaHelper.getEnumName(delegator, mapTransPresup.get(&quot;subSector&quot;))}"/>
+        	</field>         	        
+        	<field name="area">
+        		<display description="${groovy:com.opentaps.financials.Helpers.OperacionDiariaHelper.getEnumName(delegator, mapTransPresup.get(&quot;area&quot;))}"/>
+        	</field> 	        	
     </form>
     
     <!--  Esme Presupuesto formas  -->    

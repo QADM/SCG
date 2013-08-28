@@ -288,13 +288,13 @@
             <check-permission permission="ACCOUNTING" action="_ATX_CREATE"/>
         </required-permissions>
         <attribute name="organizationPartyId" mode="IN" type="String" optional="false"/>
-        <attribute name="glFiscalTypeId" mode="IN" type="String" optional="false"/>
         <attribute name="Tipo_Documento" mode="IN" type="String" optional="true"/>
         <attribute name="Tipo_Fiscal" mode="IN" type="String" optional="false" />
         <attribute name="Fecha_Transaccion" mode="IN" type="String" optional="true"/>
         <attribute name="Fecha_Contable" mode="IN" type="String" optional="true" />
 		<attribute name="Referencia_Documento" mode="IN" type="String" optional="true"/>
         <attribute name="Secuencia" mode="IN" type="String" optional="true" />
+        <attribute name="Cve_Presupuestal" mode="IN" type="String"/>
         <attribute name="Tipo_Catalogo" mode="IN" type="String" optional="true"/>
         <attribute name="Id_Producto_Abono" mode="IN" type="String" optional="false" />
         <attribute name="Id_Producto_Cargo" mode="IN" type="String" optional="false" />
@@ -309,7 +309,7 @@
         <attribute name="Localidad" mode="IN" type="String" optional="true"/>
         <attribute name="Sub_Fuente_Especifica" mode="IN" type="String" optional="true"/>
         <attribute name="Unidad_Ejecutora" mode="IN" type="String" optional="true"/>
-        <attribute name="Id_Pago" mode="IN" type="String" optional="true"/>  
+        <attribute name="Id_RecaudadoH" mode="IN" type="String" optional="true"/>  
         <attribute name="Monto" mode="IN" type="String" optional="false"/>
         <attribute name="acctgTrans" mode="OUT" type="org.ofbiz.entity.GenericValue"/>
         <attribute name="acctgTransPres" mode="OUT" type="org.ofbiz.entity.GenericValue"/>
@@ -318,39 +318,37 @@
     </service>
     
     <service name="createOperacionDiariaEgresos" engine="java"
-            location="org.opentaps.dataimport.domain.OperacionDiariaIngresosManual" invoke="createOperacionDiariaEgresos" auth="true">
+            location="org.opentaps.dataimport.domain.OperacionDiariaEgresosManual" invoke="createOperacionDiariaEgresos" auth="true">
         <description>Crea una transaccion de Operacion Diaria para egresos.</description>
         <required-permissions join-type="OR">
             <check-permission permission="ACCOUNTING" action="_ATX_CREATE"/>
         </required-permissions>
         <attribute name="organizationPartyId" mode="IN" type="String" optional="false"/>
-        <attribute name="glFiscalTypeId" mode="IN" type="String" optional="false"/>
         <attribute name="Tipo_Documento" mode="IN" type="String" optional="true"/>
         <attribute name="Tipo_Fiscal" mode="IN" type="String" optional="false	" />
         <attribute name="Fecha_Transaccion" mode="IN" type="String" optional="true"/>
         <attribute name="Fecha_Contable" mode="IN" type="String" optional="true" />
 		<attribute name="Referencia_Documento" mode="IN" type="String" optional="true"/>
         <attribute name="Secuencia" mode="IN" type="String" optional="true" />
-        <attribute name="Tipo_Catalogo" mode="IN" type="String" optional="true"/>
+        <attribute name="Cve_Presupuestal" mode="IN" type="String"/>
         <attribute name="Id_Producto_Abono" mode="IN" type="String" optional="false" />
         <attribute name="Id_Producto_Cargo" mode="IN" type="String" optional="false" />
-        <attribute name="Rubro" mode="IN" type="String" optional="true"/>
-        <attribute name="Tipo" mode="IN" type="String" optional="true" />
-		<attribute name="Clase" mode="IN" type="String" optional="true"/>
-        <attribute name="Concepto" mode="IN" type="String" optional="true"/>
-        <attribute name="N5" mode="IN" type="String" optional="true"/>
         <attribute name="EntidadFederativa" mode="IN" type="String" optional="true"/>
         <attribute name="Region" mode="IN" type="String" optional="true"/>
         <attribute name="Municipio" mode="IN" type="String" optional="true"/>
         <attribute name="Localidad" mode="IN" type="String" optional="true"/>
         <attribute name="Sub_Fuente_Especifica" mode="IN" type="String" optional="true"/>
         <attribute name="Unidad_Ejecutora" mode="IN" type="String" optional="true"/>
-        <attribute name="Id_Pago" mode="IN" type="String" optional="true"/>  
+        <attribute name="Subfuncion" mode="IN" type="String" optional="true"/>
+        <attribute name="Tipo_Gasto" mode="IN" type="String" optional="true"/>
+        <attribute name="Partida_Especifica" mode="IN" type="String" optional="true"/>
+        <attribute name="Actividad" mode="IN" type="String" optional="true"/>
+        <attribute name="Area" mode="IN" type="String" optional="true"/>
+        <attribute name="Id_RecaudadoH" mode="IN" type="String" optional="true"/>  
         <attribute name="Monto" mode="IN" type="String" optional="false"/>
         <attribute name="acctgTrans" mode="OUT" type="org.ofbiz.entity.GenericValue"/>
         <attribute name="acctgTransPres" mode="OUT" type="org.ofbiz.entity.GenericValue"/>
         <attribute name="acctgTransId" mode="OUT" type="String"/>
-                       
     </service>    
     
     <service name="obtenerCuentasIngresos" engine="java"
@@ -367,7 +365,18 @@
         <attribute name="idPago" mode="IN" type="String" optional="true"/>
         <attribute name="mapCuentas" mode="OUT" type="java.util.Map"/>               
     </service>
-    
+    <service name="obtenProdCategoryPadreId" engine="java" 
+    	location="org.opentaps.dataimport.UtilOperacionDiariaServices" invoke="obtenProdCategoryPadreId">
+    <description>Metodo utilizado para obtener el productCategoryId padre a partir de uno dado.</description>
+    	<attribute name="productCategoryId" mode="IN" type="String" optional="false"/>
+    	<attribute name="productCategoryIdPadre" mode="OUT" type="String" optional="true"/>
+    </service>    
+    <service name="obtenWorkEffortPadreId" engine="java" 
+    	location="org.opentaps.dataimport.UtilOperacionDiariaServices" invoke="obtenWorkEffortPadreId">
+    <description>Servicio obtiene WorkEffortId Padre a partir de uno dado.</description>
+    	<attribute name="workEffortTypeId" mode="IN" type="String" optional="false"/>
+    	<attribute name="workEffortTypeIdPadre" mode="OUT" type="String" optional="true"/>
+    </service>    
     <service name="obtenPartyIdPadre" engine="java" 
     	location="org.opentaps.dataimport.UtilOperacionDiariaServices" invoke="obtenPartyIdPadre">
     <description>Obtiene el enumId padre de un enumId dado</description>
@@ -394,7 +403,7 @@
     	<description>Metodo que guarda los registros correspondientes en la tabla GL_ACCOUNT_HISTORY 
     				 los realiza a partir de una lista de cuentas a guardar y una fecha contable.
     	</description>	
-    	<attribute name="fecContable" mode="IN" type="String" optional="false"/>
+    	<attribute name="fecContable" mode="IN" type="java.sql.Timestamp" optional="false"/>
     	<attribute name="organizationPartyId" mode="IN" type="String" />
     	<attribute name="listCuentas" mode="IN" type="java.util.List" />
     	<attribute name="listAccountsSaved" mode="OUT" type="java.util.List"/>
@@ -405,7 +414,7 @@
      					lo realiza a partir de una lista de cuentas , una organizacion y un monto .
     	</description>	
     	<attribute name="organizationPartyId" mode="IN" type="String" optional="false"/>
-    	<attribute name="monto" mode="IN" type="String" optional="false"/>
+    	<attribute name="monto" mode="IN" type="java.math.BigDecimal" optional="false"/>
     	<attribute name="mapCuentas" mode="IN" type="java.util.Map" optional="false"/>
     	<attribute name="listAccountsSaved" mode="OUT" type="java.util.List"/>
     </service>
@@ -427,8 +436,8 @@
     	<description>Obtiene los periodos custom que coinciden en una fecha y una organizacion.
     	</description>	
     	<attribute name="organizationPartyId" mode="IN" type="String" optional="false"/>
-    	<attribute name="fecha" mode="IN" type="String" optional="false"/>
-    	<attribute name="listPeriods" mode="OUT" type="java.util.Map"></attribute>
+    	<attribute name="fecha" mode="IN" type="java.sql.Timestamp" optional="false"/>
+    	<attribute name="listPeriods" mode="OUT" type="java.util.List"></attribute>
     </service>
     <service name="getAuxiliarProd" engine="java"
     	location="org.opentaps.dataimport.UtilOperacionDiariaServices" invoke="getAuxiliarProd">
