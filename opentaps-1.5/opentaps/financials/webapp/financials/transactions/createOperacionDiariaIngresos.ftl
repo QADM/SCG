@@ -19,12 +19,12 @@
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 <form method="POST" name="createOperacionDiariaIngresos" action="${creaOpDiariaIngresos}"> <#-- action set by the screen -->
   <input type="hidden" name="organizationPartyId" value="${organizationPartyId}"/>
-  <input type="hidden" name="glFiscalTypeId" value="ACTUAL"/>
   <div class="form" style="border:0">
     <table class="fourColumnForm" style="border:0">
       <tr>
         <@displayTitleCell title=uiLabelMap.FinancialDocumentType />
-        <@inputSelectCell list=listDocumentos?if_exists displayField="descripcion" name="Tipo_Documento" default=idTipoDoc?if_exists key="idTipoDoc" onChange="opentaps.getTipoFiscalByDoc(this,'Tipo_Fiscal');" />
+        <@inputSelectCell list=listDocumentos?if_exists displayField="descripcion" name="Tipo_Documento" default=idTipoDoc?if_exists key="idTipoDoc" 
+        			onChange="opentaps.getTipoFiscalByDoc(this,'Tipo_Fiscal');" />
       </tr>
       <tr>
         <@displayTitleCell title=uiLabelMap.FinancialsGlFiscalType />

@@ -8,6 +8,7 @@ import java.util.Map;
 import javolution.util.FastList;
 import javolution.util.FastMap;
 
+import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
@@ -25,7 +26,155 @@ public class UtilOperacionDiariaServices {
 	
 	private static final String MODULE = UtilOperacionDiariaServices.class.getName();
 	private static final BigDecimal ZERO = BigDecimal.ZERO;
+	
+	/**
+	 * Metodo para obtener workeffortid Padre
+	 * @param dctx
+	 * @param dispatcher
+	 * @param workEffortTypeId
+	 * @return
+	 * @throws GenericServiceException
+	 */
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	public static String obtenPadreWorkEffort(DispatchContext dctx,LocalDispatcher dispatcher,String workEffortTypeId) throws GenericServiceException{
+    	
+    	String padreWorkEffortTypeId = null;
+    	
+    	if(workEffortTypeId != null && !workEffortTypeId.isEmpty()){
+
+        	Map input = FastMap.newInstance();
+        	input.put("workEffortTypeId", workEffortTypeId);
+        	input = dctx.getModelService("obtenWorkEffortPadreId").makeValid(input, ModelService.IN_PARAM);
+        	Map tmpResult = dispatcher.runSync("obtenWorkEffortPadreId", input);
+            padreWorkEffortTypeId = (String) tmpResult.get("workEffortTypeIdPadre");
+            
+            Debug.logWarning("workEffortTypeId "+workEffortTypeId+"   PADRE  "+padreWorkEffortTypeId, MODULE);
+    		
+    	}
+    	
+    	return padreWorkEffortTypeId;
+    	
+    }	
+	
+	/**
+	 * Servicio obtiene WorkEffortId Padre a partir de uno dado
+	 * @param dctx
+	 * @param context
+	 * @return
+	 */
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+	public static Map obtenWorkEffortPadreId(DispatchContext dctx, Map context) {
+        Delegator delegator = dctx.getDelegator();
+        String workEffortTypeId = (String) context.get("workEffortTypeId");
+        
+        String workEffortTypeIdPadre = null;
+      
+		try {        
+			
+	    	EntityCondition condicionWork = EntityCondition.makeCondition("workEffortTypeId", EntityOperator.EQUALS, workEffortTypeId);
+	    	List<GenericValue> resultadoWorkEff = delegator.findByCondition("WorkEffort", condicionWork , UtilMisc.toList("workEffortTypeId","workEffortParentId"), null);
+	    	
+	    	if(resultadoWorkEff != null && !resultadoWorkEff.isEmpty()){
+	    		
+	    		workEffortTypeIdPadre = resultadoWorkEff.get(0).getString("workEffortParentId");
+	    		
+	    	}
+			
+		} catch (GenericEntityException e) {
+			return UtilMessage.createAndLogServiceError(e, MODULE);
+		}
+        
+        Map results = ServiceUtil.returnSuccess();
+        results.put("workEffortTypeIdPadre", workEffortTypeIdPadre);
+        return results;
+    }
+	
+    /**
+     * Obtiene el padre de un productCategoryId 
+     * @param productCategoryId 
+     * @return
+     * @throws GenericServiceException 
+     */
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	public static String obtenPadreProductCate(DispatchContext dctx,LocalDispatcher dispatcher,String productCategoryId) throws GenericServiceException{
+    	
+    	String padreProductCategoryId = null;
+    	
+    	if(productCategoryId != null && !productCategoryId.isEmpty()){
+
+        	Map input = FastMap.newInstance();
+        	input.put("productCategoryId", productCategoryId);
+        	input = dctx.getModelService("obtenProdCategoryPadreId").makeValid(input, ModelService.IN_PARAM);
+        	Map tmpResult = dispatcher.runSync("obtenProdCategoryPadreId", input);
+            padreProductCategoryId = (String) tmpResult.get("productCategoryIdPadre");
+            
+            Debug.logWarning("productCategoryId "+productCategoryId+"   PADRE  "+padreProductCategoryId, MODULE);
+    		
+    	}
+    	
+    	return padreProductCategoryId;
+    	
+    }	
+	
+    /**
+     * Metodo utilizado para obtener el productCategoryId padre a partir de uno dado
+     * @param productCategoryId
+     * @return productCategoryId(Padre)
+     */
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+	public static Map obtenProdCategoryPadreId(DispatchContext dctx, Map context) {
+        Delegator delegator = dctx.getDelegator();
+        String productCategoryId = (String) context.get("productCategoryId");
+        
+        String productCategoryIdPadre = null;
+      
+		try {        
+			
+	    	EntityCondition condicionProd = EntityCondition.makeCondition("productCategoryId", EntityOperator.EQUALS, productCategoryId);
+	    	List<GenericValue> resultadoProdCa = delegator.findByCondition("ProductCategory", condicionProd , UtilMisc.toList("productCategoryId","primaryParentCategoryId"), null);
+	    	
+	    	if(resultadoProdCa != null && !resultadoProdCa.isEmpty()){
+	    		
+	    		productCategoryIdPadre = resultadoProdCa.get(0).getString("primaryParentCategoryId");
+	    		
+	    	}
+			
+		} catch (GenericEntityException e) {
+			return UtilMessage.createAndLogServiceError(e, MODULE);
+		}
+        
+        Map results = ServiceUtil.returnSuccess();
+        results.put("productCategoryIdPadre", productCategoryIdPadre);
+        return results;
+    }
    
+    /**
+     * Obtiene el padre de un enumId 
+     * @param enumId (Subfuente Especifica)
+     * @return
+     * @throws GenericServiceException 
+     */
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	public static String obtenPadreEnumeration(DispatchContext dctx,LocalDispatcher dispatcher,String enumId) throws GenericServiceException{
+    	
+    	String padreEnumId = null;
+    	
+    	if(enumId != null && !enumId.isEmpty()){
+
+        	Map input = FastMap.newInstance();
+        	input.put("enumId", enumId);
+        	input = dctx.getModelService("obtenEnumIdPadre").makeValid(input, ModelService.IN_PARAM);
+        	Map tmpResult = dispatcher.runSync("obtenEnumIdPadre", input);
+            padreEnumId = (String) tmpResult.get("enumIdPadre");
+            
+            Debug.logWarning("ENUM ID "+enumId+"   PADRE  "+padreEnumId, MODULE);
+    		
+    	}
+    	
+    	return padreEnumId;
+    	
+    }
+    
     /**
      * Metodo utilizado para obtener el enumId padre a partir de uno dado
      * @param enumId
@@ -41,7 +190,7 @@ public class UtilOperacionDiariaServices {
 		try {        
 			
 	    	EntityCondition condicionEnum = EntityCondition.makeCondition("enumId", EntityOperator.EQUALS, enumId);
-	    	List<GenericValue> resultadoEnum = delegator.findByConditionCache("Enumeration", condicionEnum , UtilMisc.toList("enumId","parentEnumId"), null);
+	    	List<GenericValue> resultadoEnum = delegator.findByCondition("Enumeration", condicionEnum , UtilMisc.toList("enumId","parentEnumId"), null);
 	    	
 	    	if(resultadoEnum != null && !resultadoEnum.isEmpty()){
 	    		
@@ -58,6 +207,35 @@ public class UtilOperacionDiariaServices {
         return results;
     }	
     
+    /**
+     * Obtiene el padre de un partyId
+     * @param dctx
+     * @param dispatcher
+     * @param partyId
+     * @return
+     * @throws GenericServiceException
+     */
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	public static String obtenPadrePartyId(DispatchContext dctx,LocalDispatcher dispatcher,String partyId) throws GenericServiceException{
+    	
+    	String partyIdPadre = null;
+    	
+    	if(partyId != null && !partyId.isEmpty()){
+    		
+        	Map input = FastMap.newInstance();
+        	input.put("partyId", partyId);
+        	input = dctx.getModelService("obtenPartyIdPadre").makeValid(input, ModelService.IN_PARAM);
+        	Map tmpResult = dispatcher.runSync("obtenPartyIdPadre", input);
+        	partyIdPadre = (String) tmpResult.get("partyIdPadre");
+            
+            Debug.logWarning("PARTY ID "+partyId+"   PADRE  "+partyIdPadre, MODULE);
+            
+            
+    	}
+    	
+    	return partyIdPadre;
+    	
+    }   
 
     /**
      * Metodo utilizado para obtener el enumId padre a partir de uno dado
@@ -74,7 +252,7 @@ public class UtilOperacionDiariaServices {
 		try {        
 			
 	    	EntityCondition condicionEnum = EntityCondition.makeCondition("partyId", EntityOperator.EQUALS, partyId);
-	    	List<GenericValue> resultadoEnum = delegator.findByConditionCache("PartyGroup", condicionEnum , UtilMisc.toList("partyId","Parent_id"), null);
+	    	List<GenericValue> resultadoEnum = delegator.findByCondition("PartyGroup", condicionEnum , UtilMisc.toList("partyId","Parent_id"), null);
 	    	
 	    	if(resultadoEnum != null && !resultadoEnum.isEmpty()){
 	    		
@@ -138,7 +316,7 @@ public class UtilOperacionDiariaServices {
     	String glAccountId = (String) context.get("glAccountId");
     	
     	EntityCondition condicionPrdCat = EntityCondition.makeCondition("glAccountId", EntityOperator.EQUALS, glAccountId);
-    	List<GenericValue> resultadoPrdCat = delegator.findByConditionCache("GlAccountCategoryRelation", condicionPrdCat , UtilMisc.toList("glAccountId","productCategoryId"), null);
+    	List<GenericValue> resultadoPrdCat = delegator.findByCondition("GlAccountCategoryRelation", condicionPrdCat , UtilMisc.toList("glAccountId","productCategoryId"), null);
     	
         Map results = ServiceUtil.returnSuccess();
         results.put("resultadoPrdCat", resultadoPrdCat);
@@ -180,7 +358,13 @@ public class UtilOperacionDiariaServices {
 	    		for (GenericValue customPeriod : listPeriods) {
 	    			
 	    			String customTimePeriodId = customPeriod.getString("customTimePeriodId");
-					
+	    			
+	    			//Primero buscamos si existe el registro
+	    			GenericValue actHistoryBusca = delegator.findByPrimaryKey("GlAccountHistory", 
+	    						UtilMisc.toMap("glAccountId",glAccountId,"organizationPartyId",organizationPartyId,
+	    								"customTimePeriodId",customTimePeriodId));
+	    			Debug.logWarning("actHistoryBusca   ["+actHistoryBusca+"]", MODULE);
+	    			
 	    			GenericValue accountHistory = GenericValue.create(delegator.getModelEntity("GlAccountHistory"));
 	    			accountHistory.set("glAccountId", glAccountId);
 	    			accountHistory.set("organizationPartyId", organizationPartyId);
@@ -190,7 +374,12 @@ public class UtilOperacionDiariaServices {
 	    			else
 	    				accountHistory.set("postedCredits", monto);
 	    			
-	    			accountHistory.create();
+	    			if(actHistoryBusca !=null && !actHistoryBusca.isEmpty()){
+	    				accountHistory.store();
+	    			} else {
+	    				accountHistory.create();
+	    			}
+	    			
 	    			
 	    			listAccountsSaved.add(accountHistory);
 	    			
@@ -226,6 +415,7 @@ public class UtilOperacionDiariaServices {
     	List<String> listAccountId = FastList.newInstance();
     	Map<String,String> accountsNatu = FastMap.newInstance();
     	Map<String,BigDecimal> accountsOrga = FastMap.newInstance();
+    	Map<String,GenericValue> accountsOrgaGen = FastMap.newInstance();
     	
     	List<GenericValue> listAccountsSaved = FastList.newInstance();
     	
@@ -236,7 +426,7 @@ public class UtilOperacionDiariaServices {
     	try {
     		
         	EntityCondition condicionAcc = EntityCondition.makeCondition("glAccountId", EntityOperator.IN, listAccountId);
-        	List<GenericValue> resultadoAcc = delegator.findByConditionCache("GlAccount", condicionAcc , UtilMisc.toList("glAccountId","naturaleza"), null);
+        	List<GenericValue> resultadoAcc = delegator.findByCondition("GlAccount", condicionAcc , UtilMisc.toList("glAccountId","naturaleza"), null);
         	
         	for (GenericValue accounts : resultadoAcc) {
         		accountsNatu.put(accounts.getString("glAccountId"), accounts.getString("naturaleza"));
@@ -245,34 +435,51 @@ public class UtilOperacionDiariaServices {
         	EntityCondition condicionAccOr = EntityCondition.makeCondition(EntityOperator.AND,
         			EntityCondition.makeCondition("glAccountId", EntityOperator.IN, listAccountId),
         			EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, organizationPartyId));
-        	List<GenericValue> resultadoAccOr = delegator.findByConditionCache("GlAccount", condicionAccOr , UtilMisc.toList("glAccountId","postedBalance"), null);
+        	List<GenericValue> resultadoAccOr = delegator.findByCondition("GlAccountOrganization", condicionAccOr , UtilMisc.toList("glAccountId","postedBalance"), null);
+        	
         	
         	for (GenericValue accoutOrg : resultadoAccOr) {
         		accountsOrga.put(accoutOrg.getString("glAccountId"), (accoutOrg.getBigDecimal("postedBalance") == null ? ZERO : accoutOrg.getBigDecimal("postedBalance")));
+        		accountsOrgaGen.put(accoutOrg.getString("glAccountId"),accoutOrg);
 			}
         	
         	for (Map.Entry<String, String> cuenta : mapCuentas.entrySet())
         	{
         		
-        		String glAccountId = cuenta.getValue();
-        		
-        		GenericValue accountOrgani = GenericValue.create(delegator.getModelEntity("GlAccountOrganization"));
-        		accountOrgani.set("glAccountId", glAccountId);
-        		accountOrgani.set("organizationPartyId", organizationPartyId);
-        		
-        		BigDecimal monto = ZERO;
-        		String natu = null;
-        		if(cuenta.getKey().contains("Cuenta_Cargo"))
-        			natu = "D";
-        		else
-        			natu = "A";
-        		
-        		BigDecimal montoAux = accountsOrga.get(glAccountId);
-        		monto = natu.equals(accountsNatu.get(glAccountId)) ? montoAux.add(montoPrl) : montoAux.subtract(montoPrl);
-        		accountOrgani.set("postedBalance", monto);
-        		accountOrgani.create();
-        		
-        		listAccountsSaved.add(accountOrgani);
+        		String tipoDato = cuenta.getKey();
+        		Debug.logWarning("tipoDato   "+tipoDato, MODULE);
+        		if(!tipoDato.equalsIgnoreCase("GlFiscalTypePresupuesto") && !tipoDato.equalsIgnoreCase("GlFiscalTypeContable") ){
+            		
+            		String glAccountId = cuenta.getValue();
+            		
+        			//Primero buscamos si existe el registro
+        			GenericValue actOrganizBusca = accountsOrgaGen.get(glAccountId);
+        			
+            		GenericValue accountOrgani = GenericValue.create(delegator.getModelEntity("GlAccountOrganization"));
+            		accountOrgani.set("glAccountId", glAccountId);
+            		accountOrgani.set("organizationPartyId", organizationPartyId);
+            		
+            		BigDecimal monto = ZERO;
+            		String natu = null;
+            		if(cuenta.getKey().contains("Cuenta_Cargo"))
+            			natu = "D";
+            		else
+            			natu = "A";
+            		
+            		BigDecimal montoAux = accountsOrga.get(glAccountId) == null ? ZERO : accountsOrga.get(glAccountId);
+            		monto = natu.equals(accountsNatu.get(glAccountId)) ? montoAux.add(montoPrl) : montoAux.subtract(montoPrl);
+            		accountOrgani.set("postedBalance", monto);
+            		
+        			if(actOrganizBusca !=null && !actOrganizBusca.isEmpty()){
+        				accountOrgani.store();
+        			} else {
+        				accountOrgani.create();
+        			}        		
+            		
+            		listAccountsSaved.add(accountOrgani);
+            		
+        		}
+
         		
         	}        	
     		
