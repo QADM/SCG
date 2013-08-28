@@ -351,15 +351,15 @@
         <attribute name="acctgTransId" mode="OUT" type="String"/>
     </service>    
     
-    <service name="obtenerCuentasIngresos" engine="java"
-            location="org.opentaps.dataimport.domain.OperacionDiariaIngresosManual" invoke="obtenerCuentasIngresos" auth="true">
-        <description>Busca las cuentas para la operacion diaria de ingresos.</description>
+    <service name="obtenerCuentasOpDiaria" engine="java"
+            location="org.opentaps.dataimport.UtilOperacionDiariaServices" invoke="obtenerCuentasOpDiaria" auth="true">
+        <description>Busca las cuentas para la operacion diaria.</description>
         <required-permissions join-type="OR">
             <check-permission permission="ACCOUNTING" action="_ATX_CREATE"/>
         </required-permissions>
         <attribute name="acctgTransTypeId" mode="IN" type="String" optional="false"/>
         <attribute name="tipoFis" mode="IN" type="String" optional="false"/>
-        <attribute name="cri" mode="IN" type="String" optional="false"/>
+        <attribute name="clasificaEco" mode="IN" type="String" optional="false"/>
         <attribute name="idProdAbono" mode="IN" type="String" optional="true"/>
         <attribute name="idProdCargo" mode="IN" type="String" optional="true"/>
         <attribute name="idPago" mode="IN" type="String" optional="true"/>
