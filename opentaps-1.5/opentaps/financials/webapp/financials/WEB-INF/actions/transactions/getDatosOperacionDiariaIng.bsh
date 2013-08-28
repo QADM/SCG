@@ -55,31 +55,31 @@ context.put("listPayments", resultadoPayment);
 
 //Buscamos los rubros
 orderByRu = org.ofbiz.base.util.UtilMisc.toList("description");
-condicionRu = EntityCondition.makeCondition("productCategoryTypeId","RU");
+condicionRu = EntityCondition.makeCondition("productCategoryTypeId","RUBRO");
 resultadoRu = delegator.findByCondition("ProductCategory", condicionRu , UtilMisc.toList("productCategoryId", "description"), orderByRu);
 context.put("listRubros", resultadoRu);
 
 //Buscamos los tipos
 orderByTi = org.ofbiz.base.util.UtilMisc.toList("description");
-condicionTi = EntityCondition.makeCondition("productCategoryTypeId","TI");
+condicionTi = EntityCondition.makeCondition("productCategoryTypeId","TIPO");
 resultadoTi = delegator.findByCondition("ProductCategory", condicionTi , UtilMisc.toList("productCategoryId", "description"), orderByTi);
 context.put("listTipos", resultadoTi);
 
 //Buscamos las clases
 orderByCl = org.ofbiz.base.util.UtilMisc.toList("description");
-condicionCl = EntityCondition.makeCondition("productCategoryTypeId","CL");
+condicionCl = EntityCondition.makeCondition("productCategoryTypeId","CLASE");
 resultadoCl = delegator.findByCondition("ProductCategory", condicionCl , UtilMisc.toList("productCategoryId", "description"), orderByCl);
 context.put("listClases", resultadoCl);
 
 //Buscamos los Conceptos
 orderByCo = org.ofbiz.base.util.UtilMisc.toList("description");
-condicionCo = EntityCondition.makeCondition("productCategoryTypeId","CO");
+condicionCo = EntityCondition.makeCondition("productCategoryTypeId","CONCEPTO_ING");
 resultadoCo = delegator.findByCondition("ProductCategory", condicionCo , UtilMisc.toList("productCategoryId", "description"), orderByCo);
 context.put("listConceptos", resultadoCo);
 
 //Buscamos N5
 orderByCn = org.ofbiz.base.util.UtilMisc.toList("description");
-condicionCn = EntityCondition.makeCondition("productCategoryTypeId","N5");
+condicionCn = EntityCondition.makeCondition("productCategoryTypeId","NIVEL_5_ING");
 resultadoCn = delegator.findByCondition("ProductCategory", condicionCn , UtilMisc.toList("productCategoryId", "description"), orderByCn);
 context.put("listN5", resultadoCn);
 
@@ -151,3 +151,11 @@ if(resultadoUniNiv != null && !resultadoUniNiv.isEmpty()){
 //condicionLO = EntityCondition.makeCondition("geoTypeId","Localidad");
 //resultadoLO = delegator.findByCondition("Geo", condicionLO , UtilMisc.toList("geoId", "geoName"), orderByLO);
 //context.put("listLocalidades", resultadoLO);
+
+
+//Subfuncion
+//orderBySubF = org.ofbiz.base.util.UtilMisc.toList("description");
+//condicionSubF = EntityCondition.makeCondition("productCategoryTypeId","CONCEPTO_ING");
+//resultadoSubF = delegator.findByCondition("Enumeration", condicionCo , UtilMisc.toList("productCategoryId", "description"), orderByCo);
+//context.put("listConceptos", resultadoCo);
+

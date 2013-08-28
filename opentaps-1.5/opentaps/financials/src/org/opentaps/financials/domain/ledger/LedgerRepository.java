@@ -396,5 +396,17 @@ public class LedgerRepository extends Repository implements LedgerRepositoryInte
         }
         return organizationRepository;
     }
+    
+    /*
+     * AcctgTransPresupuestal
+     * acctgTransID
+     * */
+    public AcctgTransPresupuestal getAcctgTransPresupuestal(String acctgTransId) throws RepositoryException {
+        try {
+            return findOneNotNull(AcctgTransPresupuestal.class, map(AcctgTransPresupuestal.Fields.acctgTransId, acctgTransId), "Accounting Transaction Presupuestal [" + acctgTransId + "] not found.");
+        } catch (GeneralException e) {
+            throw new RepositoryException(e);
+        }
+    }
 
 }

@@ -153,4 +153,52 @@
         <attribute name="paymentOrRefund" mode="IN" type="String" optional="false"/>
         <attribute name="transactionDatePrev" type="String" mode="OUT" optional="false"/>
     </service>
+    
+    <!-- Servicio Presupuesto Ingreso Egreso -->
+    
+    <service name="createAcctgTransPresupuestoIngreso" default-entity-name="AcctgTrans" engine="java"
+            location="com.opensourcestrategies.financials.transactions.TransactionBudget" invoke="createAcctgTransPresupuestoIngreso" auth="true">
+        <description>Create a Quick AcctgTrans record.  isPosted is forced to "N"</description>
+        <required-permissions join-type="OR">
+           <check-permission permission="ACCOUNTING" action="_ATX_CREATE"/>
+        </required-permissions>
+        <auto-attributes include="pk" mode="OUT" optional="false"/>      
+ 		<auto-attributes include="nonpk" mode="IN" optional="true">
+            <exclude field-name="isPosted"/>
+            <exclude field-name="postedDate"/>
+            <exclude field-name="createdByUserLogin"/>
+            <exclude field-name="lastModifiedByUserLogin"/>
+        </auto-attributes>
+		<attribute name="organizationPartyId" mode="IN" type="String" optional="false"/>
+		<attribute name="glFiscalTypeId" mode="IN" type="String" optional="false"/>
+        <attribute name="acctgTransTypeId" mode="IN" type="String" optional="false"/>
+        <attribute name="description" mode="IN" type="String"/>
+        <attribute name="idRubro" mode="IN" type="String"/>
+        <attribute name="idTipo" mode="IN" type="String"/>
+        <attribute name="idClase" mode="IN" type="String"/>
+        <attribute name="idConcepto" mode="IN" type="String"/>
+        <attribute name="idN5" mode="IN" type="String"/>
+        <attribute name="EntidadFederativa" mode="IN" type="String"/>
+        <attribute name="Region" mode="IN" type="String"/>
+        <attribute name="Municipio" mode="IN" type="String"/>
+        <attribute name="Localidad" mode="IN" type="String"/>
+        <attribute name="fechaTransaccion" mode="IN" type="String"/>
+        <attribute name="fechaContable" mode="IN" type="String"/>
+        <attribute name="clave" mode="IN" type="String"/>
+        <attribute name="amount" mode="IN" type="Double" optional="false" />
+        <attribute name="referencia" mode="IN" type="String"/>
+        <attribute name="subFuenteEsp" mode="IN" type="String"/>
+        <attribute name="unidadEjecutora" mode="IN" type="String"/> 
+<!--         <attribute name="amount" mode="IN" type="Double" optional="false"/>  -->
+    </service>
+     <service name="createAcctgTransPresupuestalManual" default-entity-name="AcctgTransPresupuestal" engine="java"
+            location="com.opensourcestrategies.financials.transactions.TransactionBudget" invoke="createAcctgTransPresupuestalManual" auth="true">
+        <description>Add an Entry to a AcctgTrans.  Will use baseCurrencyUomId in PartyAcctgPreference if no currencyUomId is in parameters.</description>
+        <required-permissions join-type="OR">
+            <check-permission permission="ACCOUNTING" action="_ATX_CREATE"/>
+        </required-permissions>        
+        <auto-attributes include="pk" mode="IN" optional="false"/> 
+        <override name="acctgTransId" mode="OUT"/>       
+    </service>
+    
 </services>
