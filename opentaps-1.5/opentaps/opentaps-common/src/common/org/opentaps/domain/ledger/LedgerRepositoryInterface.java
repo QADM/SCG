@@ -228,5 +228,14 @@ public interface LedgerRepositoryInterface extends RepositoryInterface {
      * @throws RepositoryException
      */
     public List<AcctgTransAndEntries> getPostedTransactionsAndEntries(String organizationPartyId, List<String> glFiscalTypeId, Timestamp fromDate, Timestamp thruDate) throws RepositoryException;
+    
+    /**
+     * Returns AcctgTransPresupuestal 
+     *
+     * @param acctgTransId transaction identifier    
+     * @return AcctgTransPresupuestal
+     * @throws RepositoryException
+     */
+    public AcctgTransPresupuestal getAcctgTransPresupuestal(String acctgTransId) throws RepositoryException;
 
 }

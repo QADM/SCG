@@ -785,4 +785,121 @@
         </section>
     </screen>    
     
+     <!--                   Screen para Presupuesto Ingreso e Egreso  ECO                               -->
+    
+    <screen name="createPresupuestoIngresoForm">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="Presupuesto Ingreso"/>  
+                <set field="sectionHeaderUiLabel" value="Presupuestos"/> 
+                <set field="createAcctgPresupuestoIngresoFormTarget" value="createAcctgTransPresupuestoIngreso"/>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/transactions/getDatosOperacionDiariaIng.bsh"/> 
+                <java location="com.opensourcestrategies.financials.transactions.TransactionBudget" invoke="buscarCatalogos"/>             
+	            <entity-condition list="listGeo" entity-name="Geo">
+	            	<order-by field-name="geoId"/>
+	            </entity-condition>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <frame-container title="Presupuesto Ingreso">
+                            <platform-specific><html>
+                                <html-template location="component://financials/webapp/financials/transactions/crearPresupuestoIngresoForm.ftl"/>                               										 
+                            </html></platform-specific>
+                        </frame-container>                        
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    
+     <screen name="viewAcctgTransPresupuestoIngreso">
+        <section>
+            <actions>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/transactions/viewAcctgTransPresupuestal.bsh"/>
+                <set field="viewIndex" from-field="parameters.VIEW_INDEX" type="Integer" default-value="0"/>
+                <set field="viewSize" from-field="parameters.VIEW_SIZE" type="Integer" default-value="50"/>
+                <set field="pageTitleLabel" value="PageTitleViewAccountingTransaction"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="screenlet">
+                           <platform-specific><html>
+                              <html-template location="component://financials/webapp/financials/transactions/acctgTransOptions.ftl"/>
+                           </html></platform-specific>
+                           <include-form name="viewAcctgTrans" location="component://financials/widget/financials/forms/transactions/TransactionsForms.xml"/>
+                           <include-form name="viewAcctgTransIngreso" location="component://financials/widget/financials/forms/transactions/TransactionsForms.xml"/>
+                        </container>
+                        <platform-specific><html>
+                            <html-template location="component://financials/webapp/financials/transactions/acctgTransEntriesBalance.ftl"/>
+                        </html></platform-specific>
+                        <container style="screenlet">
+                           <platform-specific><html>
+                              <html-template location="component://financials/webapp/financials/transactions/acctgTransEntries.ftl"/>
+                           </html></platform-specific>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="createPresupuestoEgresoForm">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="Presupuesto Egreso"/>  
+                <set field="sectionHeaderUiLabel" value="Presupuestos"/> 
+                <set field="createAcctgPresupuestoIngresoFormTarget" value="createAcctgTransPresupuestoIngreso"/>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/transactions/getDatosOperacionDiariaIng.bsh"/> 
+                <java location="com.opensourcestrategies.financials.transactions.TransactionBudget" invoke="buscarCatalogos"/>             
+	            <entity-condition list="listGeo" entity-name="Geo">
+	            	<order-by field-name="geoId"/>
+	            </entity-condition>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <frame-container title="Presupuesto Ingreso">
+                            <platform-specific><html>
+                                <html-template location="component://financials/webapp/financials/transactions/crearPresupuestoEgresoForm.ftl"/>                               										 
+                            </html></platform-specific>
+                        </frame-container>                        
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="viewAcctgTransPresupuestoEgreso">
+        <section>
+            <actions>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/transactions/viewAcctgTrans.bsh"/>
+                <set field="viewIndex" from-field="parameters.VIEW_INDEX" type="Integer" default-value="0"/>
+                <set field="viewSize" from-field="parameters.VIEW_SIZE" type="Integer" default-value="50"/>
+                <set field="pageTitleLabel" value="PageTitleViewAccountingTransaction"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="screenlet">
+                           <platform-specific><html>
+                              <html-template location="component://financials/webapp/financials/transactions/acctgTransOptions.ftl"/>
+                           </html></platform-specific>
+                           <include-form name="viewAcctgTrans" location="component://financials/widget/financials/forms/transactions/TransactionsForms.xml"/>
+                        </container>
+                        <platform-specific><html>
+                            <html-template location="component://financials/webapp/financials/transactions/acctgTransEntriesBalance.ftl"/>
+                        </html></platform-specific>
+                        <container style="screenlet">
+                           <platform-specific><html>
+                              <html-template location="component://financials/webapp/financials/transactions/acctgTransEntries.ftl"/>
+                           </html></platform-specific>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    
 </screens>
