@@ -16,29 +16,77 @@
 -->
 
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
+    <script  languaje="JavaScript">
+    <!--
+	     provincias = new Array();
+	     provincias[0] = new Array();
+	     niveles=new Array();
+	     niveles[0] = new Array();
+	     <#assign contador=1/>
+	     <#list tagTypes as tagsss>
+	     	<#assign valor=" "/>
+	     	<#assign valor2=" "/>
+	     	<#list nivels as niveles>
+	     		<#if niveles.parentTypeId=="ACCOUNTING_TAG">
+	     			<#if niveles.clasificacionId==tagsss.clasificacionId>
+						<#assign valor=valor+"','"+niveles.descripcion/>
+						<#assign valor2=valor2+"','"+niveles.nivelId/>
+					</#if>
+	     		</#if>
+	     	</#list>
+	     	provincias[${contador}]=new Array('${valor}');
+	     	niveles[${contador}]=new Array('${valor2}');
+	     	<#assign contador=contador+1/>
+	     </#list>
+	     function cambiar(formulario){
+			  var i = 0;
+			  var select1 = formulario['enumTypeId'];
+			  var select2 = formulario['nivelId'];
+			  var vector = provincias[select1.selectedIndex];
+			  var vector2= niveles[select1.selectedIndex];
+			  if(vector.length)select2.length=vector.length;
+			  while(vector[i]){
+				    select2.options[i].value = vector2[i];
+				    select2.options[i].text = vector[i];
+				    i++;
+			  }
+			  select2.options[0].selected = 1;
+			  
+		}
+
+		-->
+    </script> 
 <#assign Nodo = {"R": "Rama", "H": "Rama"} />
 <@frameSection title=uiLabelMap.FinancialsCreateAccountingTag>
-  <form method="post" action="<@ofbizUrl>createAccountingTag</@ofbizUrl>" name="createAccountingTag">
+  <form method="post" action="<@ofbizUrl>createAccountingTag</@ofbizUrl>" name="createAccountingTag"  onsubmint="valida(this.form)">
     <table class="twoColumnForm" style="border:0">
-      <@inputSelectRow title=uiLabelMap.CommonType name="enumTypeId" list=tagTypes key="enumTypeId" ; tag>
-        ${tag.description}
-      </@inputSelectRow>
+    <tr>
+    	<td align=center width="20"><b>Tipo<b>
+    	</td>
+	    <td>
+     <select name="enumTypeId" size="1"  onchange="cambiar(this.form)">
+		    	<option value=" ">-</option>
+		        <#list tagTypes as tagsty>
+		        	<option  value="${tagsty.enumTypeId}">${tagsty.get("description",locale)}</option>
+		        </#list>
+		    </select>
+	    </td>
+    </tr>
+      <tr>
+   <td align=center><b>Nivel<b>
+    	</td>
+	    <td>  
+      <select name="nivelId">
+		  <option value=" ">-</option>
+	  </select>
+	  	    </td>
+    </tr>
+    
       <@inputTextRow title=uiLabelMap.Codigo name="sequenceId" size=10 maxlength=20 titleClass="requiredField"/>
-
       <@inputTextRow title=uiLabelMap.CommonName name="enumCode" titleClass="requiredField" />
-      <@inputTextRow title=uiLabelMap.CommonDescription name="description" size=60  titleClass="requiredField"/>
-     
-     
-     
-   		
-        <@inputSelectRow title=uiLabelMap.Nivel required=false list=nivels  displayField="descripcion" name="nivelId" titleClass="requiredField" />     
-       
-       
-       
-           
-        <@inputSelectHashRow  title="Nodo" name="node"  hash=Nodo />
-            
-      
+      <@inputTextRow title=uiLabelMap.CommonDescription name="description" size=60  titleClass="requiredField"/>	
+       <@inputSelectHashRow  title="Nodo" name="node"  hash=Nodo />
+
       <@inputTextRow title=uiLabelMap.ParentId  size=10 name="parentEnumId" size=10  />
       <@inputDateRow title="Fecha inicio"  name="fechaInicio" size=12 default="" titleClass="requiredField" />
       <@inputDateRow title="Fecha fin" name="fechaFin"   size=12 default="" titleClass="requiredField" />
