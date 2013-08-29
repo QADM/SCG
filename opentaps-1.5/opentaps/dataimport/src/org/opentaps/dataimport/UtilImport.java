@@ -10,10 +10,13 @@ import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.opentaps.base.entities.AcctgTrans;
 import org.opentaps.base.entities.AcctgTransEntry;
+import org.opentaps.base.entities.CustomTimePeriod;
 import org.opentaps.base.entities.Enumeration;
 import org.opentaps.base.entities.Geo;
 import org.opentaps.base.entities.GeoType;
 import org.opentaps.base.entities.GlAccount;
+import org.opentaps.base.entities.GlAccountAndHistory;
+import org.opentaps.base.entities.GlAccountHistory;
 import org.opentaps.base.entities.GlAccountOrganization;
 import org.opentaps.base.entities.LoteTransaccion;
 import org.opentaps.base.entities.NivelPresupuestal;
@@ -31,6 +34,7 @@ import com.ibm.icu.util.Calendar;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -513,6 +517,7 @@ public class UtilImport {
 		acctgentry.setGlAccountId(cuenta);
 		Debug.log("Organization.- " + organizacionPartyId);
 		acctgentry.setOrganizationPartyId(organizacionPartyId);
+		acctgentry.setPartyId(organizacionPartyId);
 		acctgentry.setAmount(transaccion.getPostedAmount());
 		acctgentry.setCurrencyUomId("MXN");
 		acctgentry.setDebitCreditFlag(flag);
@@ -631,6 +636,66 @@ public class UtilImport {
 			Debug.log("El lote ya existe.");
 			return false;
 		}
+	}
+
+	public static List<CustomTimePeriod> obtenPeriodos(
+			LedgerRepositoryInterface ledger_repo, String organizacionPartyId,
+			Date fechaTrans) throws RepositoryException {
+		List<CustomTimePeriod> periodos = ledger_repo.findList(
+				CustomTimePeriod.class, ledger_repo.map(
+						CustomTimePeriod.Fields.organizationPartyId,
+						organizacionPartyId, CustomTimePeriod.Fields.isClosed,
+						'N'));
+		List<CustomTimePeriod> periodosAplicables = new ArrayList<CustomTimePeriod>();
+		for (CustomTimePeriod periodo : periodos) {
+			if (fechaTrans.after(periodo.getFromDate())
+					&& fechaTrans.before(periodo.getThruDate())) {
+				periodosAplicables.add(periodo);
+			}
+		}
+		return periodosAplicables;
+	}
+
+	public static List<GlAccountHistory> actualizaGlAccountHistories(
+			LedgerRepositoryInterface ledger_repo,
+			List<CustomTimePeriod> periodos, String cuenta, BigDecimal monto,
+			String tipo) throws RepositoryException {
+		List<GlAccountHistory> glAccountHistories = new ArrayList<GlAccountHistory>();
+		
+		for (CustomTimePeriod periodo : periodos) {
+			GlAccountHistory glAccountHistory = ledger_repo.findOne(
+					GlAccountHistory.class, ledger_repo.map(
+							GlAccountHistory.Fields.glAccountId, cuenta,
+							GlAccountHistory.Fields.organizationPartyId,
+							periodo.getOrganizationPartyId(),
+							GlAccountHistory.Fields.customTimePeriodId,
+							periodo.getCustomTimePeriodId()));
+
+			if (glAccountHistory == null) {
+				glAccountHistory = new GlAccountHistory();
+				glAccountHistory.setGlAccountId(cuenta);
+				glAccountHistory.setOrganizationPartyId(periodo
+						.getOrganizationPartyId());
+				glAccountHistory.setCustomTimePeriodId(periodo
+						.getCustomTimePeriodId());
+				
+				if (tipo.equalsIgnoreCase("Credit")) {
+					glAccountHistory.setPostedCredits(monto);
+				} else {
+					glAccountHistory.setPostedDebits(monto);
+				}
+			} else {
+				if (tipo.equalsIgnoreCase("Credit")) {
+					glAccountHistory.setPostedCredits(glAccountHistory
+							.getPostedCredits().add(monto));
+				} else {
+					glAccountHistory.setPostedDebits(glAccountHistory
+							.getPostedDebits().add(monto));
+				}
+			}
+			glAccountHistories.add(glAccountHistory);
+		}
+		return glAccountHistories;
 	}
 
 }

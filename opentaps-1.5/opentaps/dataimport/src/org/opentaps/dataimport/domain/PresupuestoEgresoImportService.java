@@ -11,9 +11,11 @@ import org.opentaps.base.constants.StatusItemConstants;
 import org.opentaps.base.entities.AcctgTrans;
 import org.opentaps.base.entities.AcctgTransEntry;
 import org.opentaps.base.entities.AcctgTransPresupuestal;
+import org.opentaps.base.entities.CustomTimePeriod;
 import org.opentaps.base.entities.DataImportPresupuestoEgreso;
 import org.opentaps.base.entities.Enumeration;
 import org.opentaps.base.entities.Geo;
+import org.opentaps.base.entities.GlAccountHistory;
 import org.opentaps.base.entities.GlAccountOrganization;
 import org.opentaps.base.entities.LoteTransaccion;
 import org.opentaps.base.entities.MiniGuiaContable;
@@ -512,10 +514,17 @@ public class PresupuestoEgresoImportService extends DomainService implements
 							ledger_repo.createOrUpdate(aux);
 							imp_tx2.commit();
 
+							// History
+							Debug.log("Busca periodos");
+							List<CustomTimePeriod> periodos = UtilImport
+									.obtenPeriodos(ledger_repo,
+											organizationPartyId,
+											presupuestoEgreso.getPostedDate());
+
 							// C/D
 							Debug.log("Obtencion de Cuentas Dinamico");
 							String seqId = "00001", flag = "D", cuenta = miniguia
-									.getCuentaCargo(), naturaleza = "D";
+									.getCuentaCargo(), naturaleza = "D", tipo = "Debit";
 
 							for (int j = 0; j < 2; j++) {
 								if (j != 0) {
@@ -523,6 +532,7 @@ public class PresupuestoEgresoImportService extends DomainService implements
 									flag = "C";
 									cuenta = miniguia.getCuentaAbono();
 									naturaleza = "A";
+									tipo = "Credit";
 								}
 								AcctgTransEntry acctgentry = UtilImport
 										.generaAcctgTransEntry(
@@ -550,6 +560,22 @@ public class PresupuestoEgresoImportService extends DomainService implements
 								ledger_repo
 										.createOrUpdate(glAccountOrganization);
 								imp_tx4.commit();
+
+								// GlAccountHistory
+								Debug.log("Busca histories");
+								List<GlAccountHistory> histories = UtilImport
+										.actualizaGlAccountHistories(
+												ledger_repo, periodos, cuenta,
+												presupuestoEgreso
+														.getPostedAmount(),
+												tipo);
+
+								for (GlAccountHistory history : histories) {
+									Transaction txHistory = null;
+									txHistory = this.session.beginTransaction();
+									ledger_repo.createOrUpdate(history);
+									txHistory.commit();
+								}
 							}
 						}
 
