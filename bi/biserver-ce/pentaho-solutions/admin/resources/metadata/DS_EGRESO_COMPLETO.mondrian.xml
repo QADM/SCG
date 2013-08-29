@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Schema name="DS_EGRESO_COMPLETO">
+  <Dimension name="Ciclo">
+    <Hierarchy hasAll="true" primaryKey="Id_ciclo">
+      <Table name="&quot;COM_CICLO&quot;" schema="&quot;dbo&quot;"/>
+      <Level name="Ciclo" column="Ciclo" type="String" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension name="Periodo">
+    <Hierarchy hasAll="true" primaryKey="Id_periodo">
+      <Table name="&quot;COM_PERIODO&quot;" schema="&quot;dbo&quot;"/>
+      <Level name="Periodo" column="Periodo" type="String" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension name="UR">
+    <Hierarchy name="Unidad responsable" hasAll="true" primaryKey="Id_unidad_responsable">
+      <Table name="&quot;COM_ADM_UNIDAD_RESPONSABLE&quot;" schema="&quot;dbo&quot;"/>
+      <Level name="Unidad responsable" column="Unidad_responsable" type="String" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension name="UO">
+    <Hierarchy name="Unidad organizacional" hasAll="true" primaryKey="Id_unidad_organizacional">
+      <Table name="&quot;COM_ADM_UNIDAD_ORGANIZACIONAL&quot;" schema="&quot;dbo&quot;"/>
+      <Level name="Unidad organizacional" column="Unidad_organizacional" type="String" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension name="UE">
+    <Hierarchy name="Unidad ejecutora" hasAll="true" primaryKey="Id_unidad_ejecutora">
+      <Table name="&quot;COM_ADM_UNIDAD_EJECUTORA&quot;" schema="&quot;dbo&quot;"/>
+      <Level name="Unidad ejecutora" column="Unidad_ejecutora" type="String" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension name="Fuente">
+    <Hierarchy hasAll="true" primaryKey="Id_fuente">
+      <Table name="&quot;COM_FUE_FUENTE&quot;" schema="&quot;dbo&quot;"/>
+      <Level name="Fuente" column="Fuente" type="String" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension name="Subfuente">
+    <Hierarchy hasAll="true" primaryKey="Id_subfuente">
+      <Table name="&quot;COM_FUE_SUBFUENTE&quot;" schema="&quot;dbo&quot;"/>
+      <Level name="Subfuente" column="Subfuente" type="String" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension name="SubfuenteEsp">
+    <Hierarchy name="Subfuente especifica" hasAll="true" primaryKey="Id_subfuente_especifica">
+      <Table name="&quot;COM_FUE_SUBFUESPECIFICA&quot;" schema="&quot;dbo&quot;"/>
+      <Level name="Subfuente especifica" column="Subfuente_especifica" type="String" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension name="Entidad">
+    <Hierarchy name="Entidad federativa" hasAll="true" primaryKey="Id_entidad">
+      <Table name="&quot;COM_GEO_ENTIDAD&quot;" schema="&quot;dbo&quot;"/>
+      <Level name="Entidad federativa" column="Entidad_federativa" type="String" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension name="Region">
+    <Hierarchy hasAll="true" primaryKey="Id_region">
+      <Table name="&quot;COM_GEO_REGION&quot;" schema="&quot;dbo&quot;"/>
+      <Level name="Region" column="Region" type="String" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension name="Municipio">
+    <Hierarchy hasAll="true" primaryKey="Id_municipio">
+      <Table name="&quot;COM_GEO_MUNICIPIO&quot;" schema="&quot;dbo&quot;"/>
+      <Level name="Municipio" column="Municipio" type="String" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension name="Localidad">
+    <Hierarchy hasAll="true" primaryKey="Id_localidad">
+      <Table name="&quot;COM_GEO_LOCALIDAD&quot;" schema="&quot;dbo&quot;"/>
+      <Level name="Localidad" column="Localidad" type="String" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension name="Finalidad">
+    <Hierarchy hasAll="true" primaryKey="Id_finalidad">
+      <Table name="&quot;EGR_FUN_FINALIDAD&quot;" schema="&quot;dbo&quot;"/>
+      <Level name="Finalidad" column="Finalidad" type="String" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension name="Funcion">
+    <Hierarchy hasAll="true" primaryKey="Id_funcion">
+      <Table name="&quot;EGR_FUN_FUNCION&quot;" schema="&quot;dbo&quot;"/>
+      <Level name="Funcion" column="Funcion" type="String" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension name="Subfuncion">
+    <Hierarchy hasAll="true" primaryKey="Id_subfuncion">
+      <Table name="&quot;EGR_FUN_SUBFUNCION&quot;" schema="&quot;dbo&quot;"/>
+      <Level name="Subfuncion" column="Subfuncion" type="String" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension name="ProgramaPlan">
+    <Hierarchy name="Programa plan" hasAll="true" primaryKey="Id_programa_plan">
+      <Table name="&quot;EGR_PRO_PROGRAMA_PLAN&quot;" schema="&quot;dbo&quot;"/>
+      <Level name="Programa plan" column="Programa_plan" type="String" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension name="ProgramaPresup">
+    <Hierarchy name="Programa presupuestario" hasAll="true" primaryKey="Id_programa_presupuestario">
+      <Table name="&quot;EGR_PRO_PROGRAMA_PRESUPUESTARIO&quot;" schema="&quot;dbo&quot;"/>
+      <Level name="Programa presupuestario" column="Programa_presupuestario" type="String" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension name="SubprogramaPresup">
+    <Hierarchy name="Subprograma presupuestario" hasAll="true" primaryKey="Id_subprograma_presupuestario">
+      <Table name="&quot;EGR_PRO_SUBPROGRAMA_PRESUPUESTARIO&quot;" schema="&quot;dbo&quot;"/>
+      <Level name="Subprograma presupuestario" column="Subprograma_presupuestario" type="String" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension name="Actividad">
+    <Hierarchy name="Actividad institucional" hasAll="true" primaryKey="Id_actividad_institucional">
+      <Table name="&quot;EGR_PRO_ACTIVIDAD&quot;" schema="&quot;dbo&quot;"/>
+      <Level name="Actividad institucional" column="Actividad_institucional" type="String" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension name="TipoGasto">
+    <Hierarchy name="Tipo de gasto" hasAll="true" primaryKey="Id_tipo_gasto">
+      <Table name="&quot;EGR_COG_TIPO_GASTO&quot;" schema="&quot;dbo&quot;"/>
+      <Level name="Tipo de gasto" column="Tipo_de_gasto" type="String" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension name="Capitulo">
+    <Hierarchy hasAll="true" primaryKey="Id_capitulo">
+      <Table name="&quot;EGR_COG_CAP&quot;" schema="&quot;dbo&quot;"/>
+      <Level name="Capitulo" column="Capitulo" type="String" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension name="Concepto">
+    <Hierarchy hasAll="true" primaryKey="Id_concepto">
+      <Table name="&quot;EGR_COG_CON&quot;" schema="&quot;dbo&quot;"/>
+      <Level name="Concepto" column="Concepto" type="String" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension name="PartidaGen">
+    <Hierarchy name="Partida generica" hasAll="true" primaryKey="Id_partida_generica">
+      <Table name="&quot;EGR_COG_PG&quot;" schema="&quot;dbo&quot;"/>
+      <Level name="Partida generica" column="Partida_generica" type="String" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension name="PartidaEsp">
+    <Hierarchy name="Partida especifica" hasAll="true" primaryKey="Id_partida_especifica">
+      <Table name="&quot;EGR_COG_PE&quot;" schema="&quot;dbo&quot;"/>
+      <Level name="Partida especifica" column="Partida_especifica" type="String" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension name="Sector">
+    <Hierarchy hasAll="true" primaryKey="Id_sector">
+      <Table name="&quot;EGR_SEC_SEC&quot;" schema="&quot;dbo&quot;"/>
+      <Level name="Sector" column="Sector" type="String" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension name="Subsector">
+    <Hierarchy hasAll="true" primaryKey="Id_subsector">
+      <Table name="&quot;EGR_SEC_SUBSEC&quot;" schema="&quot;dbo&quot;"/>
+      <Level name="Subsector" column="Subsector" type="String" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension name="Area">
+    <Hierarchy hasAll="true" primaryKey="Id_area">
+      <Table name="&quot;EGR_SEC_AREA&quot;" schema="&quot;dbo&quot;"/>
+      <Level name="Area" column="Area" type="String" uniqueMembers="false">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Cube name="DS_EGRESO_COMPLETO">
+    <Table name="&quot;EGR_EJERCICIO_EGRESO&quot;" schema="&quot;dbo&quot;"/>
+    <DimensionUsage name="Ciclo" source="Ciclo" foreignKey="Id_ciclo"/>
+    <DimensionUsage name="Periodo" source="Periodo" foreignKey="Id_periodo"/>
+    <DimensionUsage name="UR" source="UR" foreignKey="Id_unidad_responsable"/>
+    <DimensionUsage name="UO" source="UO" foreignKey="Id_unidad_organizacional"/>
+    <DimensionUsage name="UE" source="UE" foreignKey="Id_unidad_ejecutora"/>
+    <DimensionUsage name="Fuente" source="Fuente" foreignKey="Id_fuente"/>
+    <DimensionUsage name="Subfuente" source="Subfuente" foreignKey="Id_subfuente"/>
+    <DimensionUsage name="SubfuenteEsp" source="SubfuenteEsp" foreignKey="Id_subfuente_especifica"/>
+    <DimensionUsage name="Entidad" source="Entidad" foreignKey="Id_entidad_federativa"/>
+    <DimensionUsage name="Region" source="Region" foreignKey="Id_region"/>
+    <DimensionUsage name="Municipio" source="Municipio" foreignKey="Id_municipio"/>
+    <DimensionUsage name="Localidad" source="Localidad" foreignKey="Id_localidad"/>
+    <DimensionUsage name="Finalidad" source="Finalidad" foreignKey="Id_finalidad"/>
+    <DimensionUsage name="Funcion" source="Funcion" foreignKey="Id_funcion"/>
+    <DimensionUsage name="Subfuncion" source="Subfuncion" foreignKey="Id_subfuncion"/>
+    <DimensionUsage name="ProgramaPlan" source="ProgramaPlan" foreignKey="Id_programa_plan"/>
+    <DimensionUsage name="ProgramaPresup" source="ProgramaPresup" foreignKey="Id_programa_presupuestario"/>
+    <DimensionUsage name="SubprogramaPresup" source="SubprogramaPresup" foreignKey="Id_subprograma_presupuestario"/>
+    <DimensionUsage name="Actividad" source="Actividad" foreignKey="Id_actividad_institucional"/>
+    <DimensionUsage name="TipoGasto" source="TipoGasto" foreignKey="Id_tipo_de_gasto"/>
+    <DimensionUsage name="Capitulo" source="Capitulo" foreignKey="Id_capitulo"/>
+    <DimensionUsage name="Concepto" source="Concepto" foreignKey="Id_concepto"/>
+    <DimensionUsage name="PartidaGen" source="PartidaGen" foreignKey="Id_partida_generica"/>
+    <DimensionUsage name="PartidaEsp" source="PartidaEsp" foreignKey="Id_partida_especifica"/>
+    <DimensionUsage name="Sector" source="Sector" foreignKey="Id_sector"/>
+    <DimensionUsage name="Subsector" source="Subsector" foreignKey="Id_subsector"/>
+    <DimensionUsage name="Area" source="Area" foreignKey="Id_area"/>
+    <Measure name="Aprobado" column="Aprobado" aggregator="sum" formatString="$#,###.00;($#,###.00)"/>
+    <Measure name="Modificaciones" column="Modificaciones" aggregator="sum" formatString="$#,###.00;($#,###.00)"/>
+    <Measure name="Comprometido" column="Comprometido" aggregator="sum" formatString="$#,###.00;($#,###.00)"/>
+    <Measure name="Devengado" column="Devengado" aggregator="sum" formatString="$#,###.00;($#,###.00)"/>
+    <Measure name="Ejercido" column="Ejercido" aggregator="sum" formatString="$#,###.00;($#,###.00)"/>
+    <Measure name="Pagado" column="Pagado" aggregator="sum" formatString="$#,###.00;($#,###.00)"/>
+  </Cube>
+</Schema>
