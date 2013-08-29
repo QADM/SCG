@@ -41,8 +41,10 @@ import org.opentaps.base.entities.AcctgTransEntry;
 import org.opentaps.base.entities.AcctgTransOrgPresupIng;
 import org.opentaps.base.entities.AcctgTransPresupuestal;
 import org.opentaps.base.entities.AcctgTransType;
+import org.opentaps.base.entities.CustomTimePeriod;
 import org.opentaps.base.entities.Enumeration;
 import org.opentaps.base.entities.GlAccount;
+import org.opentaps.base.entities.GlAccountHistory;
 import org.opentaps.base.entities.GlAccountOrganization;
 import org.opentaps.base.entities.GlFiscalType;
 import org.opentaps.base.entities.NivelPresupuestal;
@@ -50,6 +52,8 @@ import org.opentaps.base.entities.Party;
 import org.opentaps.base.entities.PartyAcctgPreference;
 import org.opentaps.base.entities.PartyGroup;
 import org.opentaps.base.entities.ProductCategory;
+import org.opentaps.base.entities.WorkEffort;
+import org.opentaps.base.entities.bridge.GlAccountTypeDefaultPkBridge;
 import org.opentaps.base.services.CreateQuickAcctgTransService;
 import org.opentaps.base.services.PostAcctgTransService;
 import org.opentaps.common.builder.EntityListBuilder;
@@ -67,6 +71,7 @@ import org.opentaps.foundation.action.ActionContext;
 import org.opentaps.foundation.infrastructure.Infrastructure;
 import org.opentaps.foundation.infrastructure.User;
 import org.opentaps.foundation.repository.RepositoryException;
+
 
 /**
  * TransactionActions - Java Actions for Transactions.
@@ -93,38 +98,11 @@ public class TransactionBudget {
 		String organizationPartyId = UtilCommon.getOrganizationPartyId(ac
 				.getRequest());
 
-		// possible fields we're searching by
-		String partyId = ac.getParameter("partyId");
-		String acctgTransId = ac.getParameter("findAcctgTransId");
-		String glFiscalTypeId = ac.getParameter("glFiscalTypeId");
-		String geoIdEntidad = ac.getParameter("geoId");
-		// String geoSubFuente = ac.getParameter("geoId");
-
-		if (UtilValidate.isEmpty(glFiscalTypeId)) {
-			glFiscalTypeId = "ACTUAL";
-		}
-
-		ac.put("glFiscalTypeId", glFiscalTypeId);
-
-		if (!UtilValidate.isEmpty(geoIdEntidad)) {
-			Debug.log("geoIdEntidad " + geoIdEntidad);
-		}
+		
 
 		DomainsDirectory dd = DomainsDirectory.getDomainsDirectory(ac);
 		final LedgerRepositoryInterface ledgerRepository = dd.getLedgerDomain()
-				.getLedgerRepository();
-
-		// TODO: Put a currencyUomId on AcctgTrans and modify postAcctgTrans to
-		// set that in addition to postedAmount,
-		// instead of using the organization's base currency
-		OrganizationRepositoryInterface organizationRepository = dd
-				.getOrganizationDomain().getOrganizationRepository();
-		Organization organization = organizationRepository
-				.getOrganizationById(organizationPartyId);
-		if (organization != null) {
-			ac.put("orgCurrencyUomId", organization.getPartyAcctgPreference()
-					.getBaseCurrencyUomId());
-		}
+				.getLedgerRepository();		
 
 		List<Map<String, Object>> categoryEntry = new FastList<Map<String, Object>>();
 		List<Map<String, Object>> categoryType = new FastList<Map<String, Object>>();
@@ -133,6 +111,11 @@ public class TransactionBudget {
 		List<Map<String, Object>> categoryN5 = new FastList<Map<String, Object>>();
 		List<Map<String, Object>> subFuenteE = new FastList<Map<String, Object>>();
 		List<Map<String, Object>> unidadE = new FastList<Map<String, Object>>();
+		List<Map<String, Object>> subfuncion = new FastList<Map<String, Object>>();
+		List<Map<String, Object>> actividad = new FastList<Map<String, Object>>();
+		List<Map<String, Object>> tipoGasto = new FastList<Map<String, Object>>();
+		List<Map<String, Object>> partidaEspecifica = new FastList<Map<String, Object>>();
+		List<Map<String, Object>> area = new FastList<Map<String, Object>>();
 
 		/*
 		 * Lista para visualizar catalogos PRODUCTCATEGORY
@@ -202,8 +185,72 @@ public class TransactionBudget {
 			// party.getPartyGroup().getGroupName();
 
 		}
+		
+		
+		/*
+		 * Obtener Subfuncion*/
+		
+		List<Enumeration> listsubfuncion = ledgerRepository.findList(
+				Enumeration.class, ledgerRepository.map(
+						Enumeration.Fields.enumTypeId, "CL_FUNCIONAL",
+						Enumeration.Fields.nivelId, "SUBFUNCION"));
+		
+		for (Enumeration enumeration : listsubfuncion) {
+			Map<String, Object> map = enumeration.toMap();
+			subfuncion.add(map);
+		}
+		
+		/*
+		 * Obtener Tipo Gasto*/
+		List<Enumeration> listTipoGasto = ledgerRepository.findList(
+				Enumeration.class, ledgerRepository.map(
+						Enumeration.Fields.enumTypeId, "TIPO_GASTO",
+						Enumeration.Fields.nivelId, "TIPO_DE_GASTO"));
+		
+		for (Enumeration enumeration : listTipoGasto) {
+			Map<String, Object> map = enumeration.toMap();
+			tipoGasto.add(map);
+		}
+		
+		/*
+		 * Obtener Area*/		
+		
+		List<Enumeration> listarea = ledgerRepository.findList(
+		Enumeration.class, ledgerRepository.map(
+				Enumeration.Fields.enumTypeId, "CL_SECTORIAL",
+				Enumeration.Fields.nivelId, "AREA"));
+		
+		for (Enumeration enumeration : listarea) {
+			Map<String, Object> map = enumeration.toMap();
+			area.add(map);
+		}
+		
+		/*
+		 * Obtener Actividades
+		 */
+		List<WorkEffort> listactividades = ledgerRepository.findList(
+				WorkEffort.class, ledgerRepository.map(
+						WorkEffort.Fields.workEffortTypeId, "PHASE",
+						WorkEffort.Fields.nivelId, "ACTIVIDAD_INSTITUCIO"));
+		
+		for (WorkEffort workEffort : listactividades) {
+			Map<String, Object> map = workEffort.toMap();
+			actividad.add(map);
+		}
+		
+		/*
+		 * Obtener Partida Especifica
+		 * select * from PRODUCT_CATEGORY where PRODUCT_CATEGORY_TYPE_ID = 'PARTIDA ESPECIFICA'*/
 
-		// listpartys.get(0).getPartyGroup().getGroupName();
+		List<ProductCategory> listPE = ledgerRepository.findList(
+				ProductCategory.class, ledgerRepository.map(
+						ProductCategory.Fields.productCategoryTypeId,
+						"PARTIDA ESPECIFICA"));
+		
+		for (ProductCategory productCategory : listPE) {
+			Map<String, Object> map = productCategory.toMap();
+			partidaEspecifica.add(map);
+		}
 
 		ac.put("listallcategory", categoryEntry);
 		ac.put("listallcategoryType", categoryType);
@@ -212,6 +259,12 @@ public class TransactionBudget {
 		ac.put("listallcategoryN", categoryN5);
 		ac.put("listSubFuente", subFuenteE);
 		ac.put("listUnidadE", unidadE);
+		ac.put("listsubfuncion", subfuncion);
+		ac.put("listtipoGasto", tipoGasto);
+		ac.put("listarea", area);
+		ac.put("listactividad", actividad);
+		ac.put("listpartidaEspecifica", partidaEspecifica);
+
 
 	}
 
@@ -383,6 +436,7 @@ public class TransactionBudget {
 			debitCtx.put("debitCreditFlag", "D");
 			debitCtx.put("acctgTransEntryTypeId", "_NA_");
 			debitCtx.put("currencyUomId", currencyUomId);
+			//debitCtx.put("", (String) context.get("subFuenteEsp"));
 			results = dispatcher.runSync("createAcctgTransEntryManual",
 					debitCtx);
 
@@ -395,6 +449,7 @@ public class TransactionBudget {
 			creditCtx.put("debitCreditFlag", "C");
 			creditCtx.put("acctgTransEntryTypeId", "_NA_");
 			creditCtx.put("currencyUomId", currencyUomId);
+			//creditCtx.put("", (String) context.get("subFuenteEsp"));
 			results = dispatcher.runSync("createAcctgTransEntryManual",
 					creditCtx);
 
@@ -403,7 +458,7 @@ public class TransactionBudget {
 
 			postedTransaccion(acctgTransId, fechaConta, dctx, userLogin);
 			glOrganizationHistory(debitGlAccountId, creditGlAccountId, dctx,
-					organizationPartyId, userLogin, amount);
+					organizationPartyId, userLogin, amount, fechaConta);
 			return results;
 
 		} catch (GeneralException e) {
@@ -413,7 +468,7 @@ public class TransactionBudget {
 
 	private static void glOrganizationHistory(String debitGlAccountId,
 			String creditGlAccountId, DispatchContext dctx,
-			String organizationPartyId, GenericValue userLogin, double amount)
+			String organizationPartyId, GenericValue userLogin, double amount, Date fechaConta)
 			throws RepositoryException {
 
 		Delegator delegator = dctx.getDelegator();
@@ -424,12 +479,20 @@ public class TransactionBudget {
 
 		BigDecimal monto = new BigDecimal(amount);
 		String cuenta = debitGlAccountId;
+		String tipo = "D";
 		try {
-
+			
+			List<CustomTimePeriod> periodos = getPeriodos(organizationPartyId,
+					fechaConta, ledgerRepository);
+			
 			for (int i = 0; i < 2; i++) {
 
 				if (i != 0)
+				{
 					cuenta = creditGlAccountId;
+					tipo = "C";
+				}
+					
 
 				GlAccountOrganization glorganization = ledgerRepository
 						.findOne(
@@ -448,13 +511,118 @@ public class TransactionBudget {
 				}
 
 				ledgerRepository.createOrUpdate(glorganization);
+				
+				
+				
+				for (CustomTimePeriod customTimePeriod : periodos) {
+					
+					GlAccountHistory glhistory = ledgerRepository
+							.findOne(
+									GlAccountHistory.class,
+									ledgerRepository
+											.map(GlAccountHistory.Fields.glAccountId,
+													cuenta,
+													GlAccountHistory.Fields.organizationPartyId,
+													organizationPartyId,
+													GlAccountHistory.Fields.customTimePeriodId,
+													customTimePeriod
+															.getCustomTimePeriodId()));
+					BigDecimal saldoD = BigDecimal.ZERO;
+					BigDecimal saldoC = BigDecimal.ZERO;
+					BigDecimal amouts = BigDecimal.valueOf(amount);
+					if(glhistory!= null)
+					{
+						if(tipo == "D")
+						{
+							if(glhistory.getPostedDebits()==null)
+							{
+								saldoD =  amouts;
+							}
+							else
+							{
+								saldoD = glhistory.getPostedDebits().add(amouts);
+							}
+						}
+						else
+						{
+							if(glhistory.getPostedCredits()==null)
+							{
+								saldoC =  amouts;
+							}
+							else
+							{
+								saldoC = glhistory.getPostedCredits().add(amouts);
+							}
+						}
+						glhistory.setPostedDebits(saldoD);
+						glhistory.setPostedCredits(saldoC);
+						ledgerRepository.createOrUpdate(glhistory);
+						
+					}
+					else
+					{
+						GlAccountHistory glaccounthistory = new GlAccountHistory();
+						glaccounthistory.setGlAccountId(cuenta);
+						glaccounthistory.setOrganizationPartyId(organizationPartyId);
+						glaccounthistory.setCustomTimePeriodId(customTimePeriod.getCustomTimePeriodId());
+						
+						if(tipo == "D")
+						{
+							
+							glaccounthistory.setPostedDebits(amouts);
+							
+						}
+						else
+						{
+							glaccounthistory.setPostedCredits(amouts);
+						}
+						
+						ledgerRepository.createOrUpdate(glaccounthistory);
+						
+					}
+					
+				}
 
 			}
+			
+			
 
 		} catch (Exception e) {
 
 		}
 
+	}
+
+	/**
+	 * @param organizationPartyId
+	 * @param fechaConta
+	 * @param ledgerRepository
+	 * @return
+	 * @throws RepositoryException
+	 */
+	private static List<CustomTimePeriod> getPeriodos(
+			String organizationPartyId, Date fechaConta,
+			LedgerRepositoryInterface ledgerRepository)
+			throws RepositoryException {
+		EntityCondition condicion = EntityCondition.makeCondition(EntityOperator.AND,
+		        EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS,organizationPartyId),
+		        EntityCondition.makeCondition("isClosed", EntityOperator.EQUALS,"N"),
+		        EntityCondition.makeCondition("fromDate", EntityOperator.LESS_THAN_EQUAL_TO,fechaConta),
+		        EntityCondition.makeCondition("thruDate", EntityOperator.GREATER_THAN_EQUAL_TO,fechaConta));
+
+		List<CustomTimePeriod> periodos = ledgerRepository.findList(CustomTimePeriod.class, condicion);
+		return periodos;
+	}
+
+	private static void getPeriodos() {
+		try {
+			
+			
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
 	}
 
 	private static void postedTransaccion(String acctgTransId, Date fechaConta,
@@ -477,6 +645,8 @@ public class TransactionBudget {
 				Timestamp timestamp = new Timestamp(fechaConta.getTime());
 				acctgtrans.setIsPosted("Y");
 				acctgtrans.setPostedDate(timestamp);
+				
+			
 
 				ledgerRepository.createOrUpdate(acctgtrans);
 			}
@@ -527,6 +697,15 @@ public class TransactionBudget {
 			String SubFuente = getParentEnumeration(SubFuenteEspecifica,
 					dispatcher);
 			String Fuente = getParentEnumeration(SubFuente, dispatcher);
+			
+			String subFuncion = (String) context.get("subFuncion");
+			String funcion = getParentEnumeration(subFuncion, dispatcher);
+			String finalidad = getParentEnumeration(funcion, dispatcher);
+			
+			String actividad = (String) context.get("actividad");
+			String subprogramap = getParentWorkEffort(actividad, dispatcher);
+			String programa = getParentWorkEffort(subprogramap, dispatcher);
+			String plan = getParentWorkEffort(programa, dispatcher);
 
 			AcctgTransPresupuestal presupuestal = new AcctgTransPresupuestal();
 			presupuestal.initRepository(ledgerRepository);
@@ -552,7 +731,15 @@ public class TransactionBudget {
 			presupuestal.setMunicipio((String) context.get("Municipio"));
 			presupuestal.setLocalidad((String) context.get("Localidad"));
 			presupuestal.setSecuencia((String) context.get("referencia"));
-
+			presupuestal.setArea((String) context.get("area"));
+			presupuestal.setFinalidad(finalidad);
+			presupuestal.setFuncion(funcion);
+			presupuestal.setSubFuncion(subFuncion);
+			presupuestal.setActividad(actividad);
+			presupuestal.setTipoGasto((String) context.get("tipoGasto"));
+			presupuestal.setPartidaEspecifica((String) context.get("partidaEspecifica"));
+			
+			
 			// create
 			// presupuestal.setNextSubSeqId(AcctgTransEntry.Fields.acctgTransEntrySeqId.name());
 			ledgerRepository.createOrUpdate(presupuestal);
@@ -565,9 +752,41 @@ public class TransactionBudget {
 		}
 	}
 
+	private static String getParentWorkEffort(String actividad,
+			LocalDispatcher dispatcher) {
+		
+		String parentwork = null;
+		try {
+			
+			EntityCondition condicion = EntityCondition.makeCondition("workEffortId",
+					actividad);
+			List<GenericValue> workeffort = dispatcher.getDelegator()
+					.findByCondition("WorkEffort", condicion,
+							UtilMisc.toList("workEffortId", "workEffortParentId"), null);
+
+			for (GenericValue genericValue : workeffort) {
+				if(genericValue.get("workEffortParentId") != null || !genericValue.get("workEffortParentId").toString().equals(""))
+				{
+					Debug.log("workEffortId" + genericValue.get("workEffortId").toString());
+					Debug.log("workEffortParentId"
+							+ genericValue.get("workEffortParentId").toString());
+					
+					parentwork = genericValue.get("workEffortParentId").toString();
+				}
+				
+			}
+			
+		} catch (Exception e) {
+			Debug.log("Error al obtener Parent de Enumeration Id ["
+					+ parentwork + "] " + e);
+		}
+		return parentwork;
+
+	}
+
 	private static String getParentEnumeration(String subFuenteEspecificaId,
 			LocalDispatcher dispatcher) {
-		String parentEnum = "";
+		String parentEnum = null;
 		try {
 
 			EntityCondition condicion = EntityCondition.makeCondition("enumId",
@@ -597,7 +816,7 @@ public class TransactionBudget {
 
 	private static String getParentParty(String partyId,
 			LocalDispatcher dispatcher) {
-		String parentParty = "";
+		String parentParty = null;
 		try {
 
 			EntityCondition condicion = EntityCondition.makeCondition(
@@ -646,6 +865,206 @@ public class TransactionBudget {
 			Map results = ServiceUtil.returnSuccess();
 			results.put("acctgTransId", presupuestal.getAcctgTransId());
 			return results;
+		} catch (GeneralException e) {
+			return UtilMessage.createAndLogServiceError(e, MODULE);
+		}
+	}
+	
+	
+	/**
+	 * Create a Quick <code>AcctgTrans</code> record. IsPosted is forced to "N".
+	 * Creates an Quick AcctgTrans and two offsetting AcctgTransEntry records.
+	 * 
+	 * @param dctx
+	 *            a <code>DispatchContext</code> value
+	 * @param context
+	 *            a <code>Map</code> value
+	 * @return a <code>Map</code> value
+	 */
+	@SuppressWarnings("unchecked")
+	public static Map createAcctgTransPresupuestoEgreso(DispatchContext dctx,
+			Map context) {
+		Debug.log("Si entro al servicio createAcctgTransPresupuestoEgreso");
+
+		LocalDispatcher dispatcher = dctx.getDispatcher();
+		GenericValue userLogin = (GenericValue) context.get("userLogin");
+
+		try {
+			DomainsLoader dl = new DomainsLoader(
+					new Infrastructure(dispatcher), new User(userLogin));
+			OrganizationRepositoryInterface organizationRepository = dl
+					.loadDomainsDirectory().getOrganizationDomain()
+					.getOrganizationRepository();
+
+			String organizationPartyId = (String) context
+					.get("organizationPartyId");
+
+			//String glFiscalTypeId = (String) context.get("glFiscalTypeId");
+			String acctgTransTypeId = (String) context.get("acctgTransTypeId");
+			String subfuncion = (String) context.get("subfuncion");
+			String actividad = (String) context.get("actividad");
+			String tipoGasto = (String) context.get("tipoGasto");
+			String partidaEspecifica = (String) context.get("partidaEspecifica");
+			String area = (String) context.get("area");
+			String EntidadFederativa = (String) context
+					.get("EntidadFederativa");
+			String Region = (String) context.get("Region");
+			String Municipio = (String) context.get("Municipio");
+			String Localidad = (String) context.get("Localidad");
+			String fechaTransaccion = (String) context.get("fechaTransaccion");
+			String fechaContable = (String) context.get("fechaContable");
+			String clave = (String) context.get("clave");
+			//String monto = (String) context.get("amount");
+			String referencia = (String) context.get("referencia");
+			String descripcion = (String) context.get("description");
+			Double amount = (Double) context.get("amount");
+			Debug.log("organizacion" + organizationPartyId);
+			//Debug.log("glFiscalTypeId" + glFiscalTypeId);
+			Debug.log("acctgTransTypeId" + acctgTransTypeId);
+			Debug.log("area" + subfuncion);
+			Debug.log("actividad" + actividad);
+			Debug.log("tipoGasto" + tipoGasto);
+			Debug.log("partidaEspecifica" + partidaEspecifica);
+			Debug.log("area" + area);
+			Debug.log("EntidadFederativa" + EntidadFederativa);
+			Debug.log("Region" + Region);
+			Debug.log("Municipio" + Municipio);
+			Debug.log("Localidad" + Localidad);
+			Debug.log("fechaTransaccion" + fechaTransaccion);
+			Debug.log("fechaContable" + fechaContable);
+			Debug.log("clave" + clave);
+			//Debug.log("monto" + monto);
+			Debug.log("referencia" + referencia);
+			Debug.log("descripcion" + descripcion);
+			Debug.log("amount" + amount);
+
+			Organization organization = organizationRepository
+					.getOrganizationById(organizationPartyId);
+
+			Date fechaTrasac = getDateTransaction(fechaTransaccion);
+			Date fechaConta = getDateTransaction(fechaContable);
+			// create the accounting transaction
+			
+			
+
+			Map createAcctgTransCtx = dctx.getModelService("createAcctgTrans")
+					.makeValid(context, ModelService.IN_PARAM);
+			if (UtilValidate.isEmpty(createAcctgTransCtx
+					.get("fechaTransaccion"))) {
+				createAcctgTransCtx.put("transactionDate", fechaTrasac);
+				createAcctgTransCtx.put("glFiscalTypeId", "BUDGET");
+
+			}
+
+			Map results = dispatcher.runSync("createAcctgTrans",
+					createAcctgTransCtx);
+
+			if (!UtilCommon.isSuccess(results)) {
+				Debug.log("results" + results.toString());
+				return UtilMessage.createAndLogServiceError(results, MODULE);
+
+			}
+			String acctgTransId = (String) results.get("acctgTransId");
+			Debug.log("acctgTransId" + acctgTransId);
+
+			// create createAcctgTransPresupuestalManual
+
+			// Map createAcctgTransPresupuestalCtx = dctx.getModelService(
+			// "createAcctgTransPresupuestalManual").makeValid(context,
+			// ModelService.IN_PARAM);
+			//
+			// Map acctranspresu = new HashMap(createAcctgTransPresupuestalCtx);
+			// acctranspresu.put("acctgTransId", acctgTransId);
+			// acctranspresu.put("clavePres", clave);
+			// acctranspresu.put("ciclo", "2013");
+			// acctranspresu.put("unidadResponsable", organizationPartyId);
+			// acctranspresu.put("unidadOrganizacional", organizationPartyId);
+			// acctranspresu.put("unidadEjecutora", organizationPartyId);
+			// acctranspresu.put("rubro", idRubro);
+			// acctranspresu.put("tipo", idTipo);
+			// acctranspresu.put("conceptoRub", idConcepto);
+			// acctranspresu.put("nivel5", idN5);
+			// results =
+			// dispatcher.runSync("createAcctgTransPresupuestalManual",
+			// createAcctgTransPresupuestalCtx);
+
+			// /
+
+			UtilCommon.isSuccess(createAcctgPresupuestal(context, acctgTransId,
+					dctx));
+
+			// create both debit and credit entries
+			String currencyUomId = (String) context.get("currencyUomId");
+			if (UtilValidate.isEmpty(currencyUomId)) {
+				PartyAcctgPreference partyAcctgPref = organization
+						.getPartyAcctgPreference();
+				if (partyAcctgPref != null) {
+					currencyUomId = partyAcctgPref.getBaseCurrencyUomId();
+				} else {
+					Debug.logWarning(
+							"No accounting preference found for organization: "
+									+ organizationPartyId, MODULE);
+				}
+			}
+
+			EntityCondition condicion = EntityCondition.makeCondition(
+					"acctgTransTypeId", acctgTransTypeId);
+			List<GenericValue> cuentas = dispatcher
+					.getDelegator()
+					.findByCondition("MiniGuiaContable", condicion,
+							UtilMisc.toList("cuentaCargo", "cuentaAbono"), null);
+
+			String debitGlAccountId = "";
+			String creditGlAccountId = "";
+
+			for (GenericValue genericValue : cuentas) {
+				Debug.log("cuentaCargo"
+						+ genericValue.get("cuentaCargo").toString());
+				Debug.log("cuentaAbono"
+						+ genericValue.get("cuentaAbono").toString());
+				debitGlAccountId = genericValue.get("cuentaCargo").toString();
+				creditGlAccountId = genericValue.get("cuentaAbono").toString();
+			}
+
+			String rubro = (String) context.get("idRubro");
+			Debug.log("idRubro" + rubro);
+			// debit entry, using createAcctgTransEntryManual which validate the
+			// accounting tags, the tags for are prefixed by "debitTagEnumId"
+			Map createAcctgTransEntryCtx = dctx.getModelService(
+					"createAcctgTransEntryManual").makeValid(context,
+					ModelService.IN_PARAM);
+
+			Map debitCtx = new HashMap(createAcctgTransEntryCtx);
+			UtilAccountingTags.addTagParameters(context, debitCtx,
+					"debitTagEnumId", UtilAccountingTags.ENTITY_TAG_PREFIX);
+			debitCtx.put("acctgTransId", acctgTransId);
+			debitCtx.put("glAccountId", debitGlAccountId);
+			debitCtx.put("debitCreditFlag", "D");
+			debitCtx.put("acctgTransEntryTypeId", "_NA_");
+			debitCtx.put("currencyUomId", currencyUomId);
+			results = dispatcher.runSync("createAcctgTransEntryManual",
+					debitCtx);
+
+			// credit entry, the tags for are prefixed by "creditTagEnumId"
+			Map creditCtx = new HashMap(createAcctgTransEntryCtx);
+			UtilAccountingTags.addTagParameters(context, creditCtx,
+					"creditTagEnumId", UtilAccountingTags.ENTITY_TAG_PREFIX);
+			creditCtx.put("acctgTransId", acctgTransId);
+			creditCtx.put("glAccountId", creditGlAccountId);
+			creditCtx.put("debitCreditFlag", "C");
+			creditCtx.put("acctgTransEntryTypeId", "_NA_");
+			creditCtx.put("currencyUomId", currencyUomId);
+			results = dispatcher.runSync("createAcctgTransEntryManual",
+					creditCtx);
+
+			results = ServiceUtil.returnSuccess();
+			results.put("acctgTransId", acctgTransId);
+
+			postedTransaccion(acctgTransId, fechaConta, dctx, userLogin);
+			glOrganizationHistory(debitGlAccountId, creditGlAccountId, dctx,
+					organizationPartyId, userLogin, amount, fechaConta);
+			return results;
+
 		} catch (GeneralException e) {
 			return UtilMessage.createAndLogServiceError(e, MODULE);
 		}
