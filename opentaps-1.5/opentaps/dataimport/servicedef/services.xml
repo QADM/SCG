@@ -294,10 +294,10 @@
         <attribute name="Fecha_Contable" mode="IN" type="String" optional="true" />
 		<attribute name="Referencia_Documento" mode="IN" type="String" optional="true"/>
         <attribute name="Secuencia" mode="IN" type="String" optional="true" />
-        <attribute name="Cve_Presupuestal" mode="IN" type="String"/>
+        <attribute name="Cve_Presupuestal" mode="IN" type="String" />
         <attribute name="Tipo_Catalogo" mode="IN" type="String" optional="true"/>
-        <attribute name="Id_Producto_Abono" mode="IN" type="String" />
-        <attribute name="Id_Producto_Cargo" mode="IN" type="String" />
+        <attribute name="Id_Producto_Abono" mode="IN" type="String" optional="true"/>
+        <attribute name="Id_Producto_Cargo" mode="IN" type="String" optional="true"/>
         <attribute name="Rubro" mode="IN" type="String" optional="true"/>
         <attribute name="Tipo" mode="IN" type="String" optional="true" />
 		<attribute name="Clase" mode="IN" type="String" optional="true"/>
@@ -309,7 +309,7 @@
         <attribute name="Localidad" mode="IN" type="String" optional="true"/>
         <attribute name="Sub_Fuente_Especifica" mode="IN" type="String" optional="true"/>
         <attribute name="Unidad_Ejecutora" mode="IN" type="String" optional="true"/>
-        <attribute name="Id_RecaudadoH" mode="IN" type="String" />  
+        <attribute name="Id_RecaudadoH" mode="IN" type="String" optional="true"/>  
         <attribute name="Monto" mode="IN" type="String" optional="false"/>
         <attribute name="acctgTrans" mode="OUT" type="org.ofbiz.entity.GenericValue"/>
         <attribute name="acctgTransPres" mode="OUT" type="org.ofbiz.entity.GenericValue"/>
@@ -331,8 +331,8 @@
 		<attribute name="Referencia_Documento" mode="IN" type="String" optional="true"/>
         <attribute name="Secuencia" mode="IN" type="String" optional="true" />
         <attribute name="Cve_Presupuestal" mode="IN" type="String"/>
-        <attribute name="Id_Producto_Abono" mode="IN" type="String" />
-        <attribute name="Id_Producto_Cargo" mode="IN" type="String" />
+        <attribute name="Id_Producto_Abono" mode="IN" type="String" optional="true"/>
+        <attribute name="Id_Producto_Cargo" mode="IN" type="String" optional="true"/>
         <attribute name="EntidadFederativa" mode="IN" type="String" optional="true"/>
         <attribute name="Region" mode="IN" type="String" optional="true"/>
         <attribute name="Municipio" mode="IN" type="String" optional="true"/>
@@ -344,7 +344,7 @@
         <attribute name="Partida_Especifica" mode="IN" type="String" optional="true"/>
         <attribute name="Actividad" mode="IN" type="String" optional="true"/>
         <attribute name="Area" mode="IN" type="String" optional="true"/>
-        <attribute name="Id_RecaudadoH" mode="IN" type="String" />  
+        <attribute name="Id_RecaudadoH" mode="IN" type="String" optional="true"/>  
         <attribute name="Monto" mode="IN" type="String" optional="false"/>
         <attribute name="acctgTrans" mode="OUT" type="org.ofbiz.entity.GenericValue"/>
         <attribute name="acctgTransPres" mode="OUT" type="org.ofbiz.entity.GenericValue"/>
