@@ -767,18 +767,27 @@ public final class FinancialServices {
         Map<GenericValue, BigDecimal> equityAccountBalances = new HashMap<GenericValue, BigDecimal>();
         
         try {
-
+        	
             Map tmpResult;
             boolean accountingTagsUsed = UtilAccountingTags.areTagsSet(context);
-            
-            Debug.logWarning("customTimePeriodId  [[ "+customTimePeriodId, MODULE);
             Timestamp desdeFecha = null;
+            Debug.logWarning("customTimePeriodId  [[ "+customTimePeriodId, MODULE);
             if(customTimePeriodId != null && !customTimePeriodId.isEmpty()){
             	
             	GenericValue timePeriod = delegator.findByPrimaryKeyCache("CustomTimePeriod", UtilMisc.toMap("customTimePeriodId", customTimePeriodId));
             		
-            	desdeFecha = UtilDateTime.getDayEnd(UtilDateTime.toTimestamp(timePeriod.getDate("fromDate")));
+//            	desdeFecha = UtilDateTime.getDayEnd(UtilDateTime.toTimestamp(timePeriod.getDate("fromDate")));
             	asOfDate = UtilDateTime.getDayEnd(UtilDateTime.toTimestamp(timePeriod.getDate("thruDate")));
+            	
+                EntityCondition conditionsTP = EntityCondition.makeCondition(EntityOperator.AND,
+                        EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, organizationPartyId),
+                        EntityCondition.makeCondition("thruDate", EntityOperator.LESS_THAN_EQUAL_TO, asOfDate));
+                List<GenericValue> timePeriodsIni = delegator.findByCondition("CustomTimePeriod", conditionsTP, UtilMisc.toList("fromDate"), UtilMisc.toList("fromDate ASC"));
+                
+                Debug.logWarning("lista Periodos ++++ "+timePeriodsIni, MODULE);
+                
+                if(timePeriodsIni != null && !timePeriodsIni.isEmpty())
+                	desdeFecha = UtilDateTime.toTimestamp(timePeriodsIni.get(0).getDate("fromDate"));
             		
             } else {
             	
