@@ -1325,9 +1325,10 @@ under the License.
        <member-entity entity-alias="NP" entity-name="NivelPresupuestal"/>
        <member-entity entity-alias="ET" entity-name="EnumerationType"/>
        <alias name="enumTypeId" entity-alias="ET"/>
-	    <alias name="parentTypeId" entity-alias="ET"  />
-	    <alias name="clasificacionId" entity-alias="NP"/>
-		<alias name="descripcion" entity-alias="NP"/>
+	   <alias name="parentTypeId" entity-alias="ET"  />
+	   <alias name="description" entity-alias="ET" />
+	   <alias name="clasificacionId" entity-alias="NP"/>
+	   <alias name="descripcion" entity-alias="NP"/>
        <alias name="nivelId" entity-alias="NP"/>
        <view-link entity-alias="NP" rel-entity-alias="ET" rel-optional="true">
            <key-map field-name="clasificacionId"/>
