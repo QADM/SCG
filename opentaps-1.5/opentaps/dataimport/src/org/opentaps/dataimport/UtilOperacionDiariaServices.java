@@ -773,11 +773,17 @@ public class UtilOperacionDiariaServices {
 	    			accountHistory.set("organizationPartyId", organizationPartyId);
 	    			accountHistory.set("customTimePeriodId", customTimePeriodId);
 	    			if(tipoMonto.equalsIgnoreCase("D")){
-	    				montoAnt = actHistoryBusca.getBigDecimal("postedDebits") == null ? ZERO : actHistoryBusca.getBigDecimal("postedDebits");
+	    				if(actHistoryBusca != null)
+	    					montoAnt = actHistoryBusca.getBigDecimal("postedDebits") == null ? ZERO : actHistoryBusca.getBigDecimal("postedDebits");
+	    				else 
+	    					montoAnt = ZERO;
 	    				accountHistory.set("postedDebits", monto.add(montoAnt));
 	    			}
 	    			else {
-	    				montoAnt = actHistoryBusca.getBigDecimal("postedCredits") == null ? ZERO : actHistoryBusca.getBigDecimal("postedCredits");
+	    				if(actHistoryBusca != null)
+	    					montoAnt = actHistoryBusca.getBigDecimal("postedCredits") == null ? ZERO : actHistoryBusca.getBigDecimal("postedCredits");
+	    				else 
+	    					montoAnt = ZERO;
 	    				accountHistory.set("postedCredits", monto.add(montoAnt));
 	    			}
 	    			
