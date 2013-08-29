@@ -341,7 +341,7 @@ public class UtilOperacionDiariaServices {
 	public static List<GenericValue> registraEntries(DispatchContext dctx,LocalDispatcher dispatcher,Map context,
 						String organizationPartyId,String acctgTransId,BigDecimal monto,Timestamp fecContable,
 						String acctgTransTypeId, String clasificaEco , String tipoFiscal, 
-						String idProdAbono, String idProdCargo, String idPago) throws GenericEntityException, GenericServiceException{
+						String idProdAbono, String idProdCargo, String idPago,String tipoClasiEco) throws GenericEntityException, GenericServiceException{
 		
 		Delegator delegator = dctx.getDelegator();
 		
@@ -352,6 +352,7 @@ public class UtilOperacionDiariaServices {
         input.put("idProdAbono", idProdAbono);
         input.put("idProdCargo", idProdCargo);
         input.put("idPago",idPago);
+        input.put("tipoClasiEco",tipoClasiEco);
         input = dctx.getModelService("obtenerCuentasOpDiaria").makeValid(input, ModelService.IN_PARAM);
         Map tmpResult = dispatcher.runSync("obtenerCuentasOpDiaria", input);
         Map<String,String> mapCuentas = (Map<String, String>) tmpResult.get("mapCuentas");
@@ -393,10 +394,23 @@ public class UtilOperacionDiariaServices {
         String idProdAbono = (String) context.get("idProdAbono");
         String idProdCargo = (String) context.get("idProdCargo");
         String idPago = (String) context.get("idPago");
+        String tipoClasiEco = (String) context.get("tipoClasiEco");
         
         Debug.logWarning("ENTRO A obtenerCuentasOpDiaria ", MODULE);
         Debug.logWarning("acctgTransTypeId "+acctgTransTypeId, MODULE);
 		Map<String,String> mapCuentas = FastMap.newInstance();
+		
+		String campoClasi = new String();
+		String tablaClasi = new String();
+		
+		if(tipoClasiEco.equalsIgnoreCase("CRI")){
+			tablaClasi = "DataImportMatrizIng";
+			campoClasi = "cri";
+		} else {
+			tablaClasi = "DataImportMatrizEgr";
+			campoClasi = "cog";
+		}
+			
 		
         try {
         	
@@ -427,10 +441,10 @@ public class UtilOperacionDiariaServices {
 		    	if(referencia.equalsIgnoreCase("M")){
 		    		
 			        EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
-			                EntityCondition.makeCondition("cri", EntityOperator.EQUALS,clasificaEco),
+			                EntityCondition.makeCondition(campoClasi, EntityOperator.EQUALS,clasificaEco),
 			                EntityCondition.makeCondition("matrizId", EntityOperator.EQUALS,matrizId));
 			
-					List<GenericValue> listMatriz = delegator.findByCondition("DataImportMatrizIng", conditions, null, null);
+					List<GenericValue> listMatriz = delegator.findByCondition(tablaClasi, conditions, null, null);
 		    		
 					Debug.logWarning("matriz     {obtenerCuentasOpDiaria}  : "+listMatriz, MODULE);
 					
@@ -443,7 +457,7 @@ public class UtilOperacionDiariaServices {
 						GenericValue matriz = listMatriz.get(0);
 						
 						String cuentaCargo = matriz.getString("cargo");
-						String cuentaAbono = matriz.getString("cargo");
+						String cuentaAbono = matriz.getString("abono");
 						
 						if(matrizId.equalsIgnoreCase("B.1") || matrizId.equalsIgnoreCase("A.1")){
 							
