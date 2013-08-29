@@ -176,7 +176,7 @@ public class OperacionDiariaEgresosManual {
 	        UtilOperacionDiariaServices.registraEntries(dctx, dispatcher, context, organizationPartyId,
 		        			acctgTransId, monto, fecContable,
 		        			acctgTransTypeId, partEspec, tipoFis, 
-		        			idProdAbono, idProdCargo, idPago);
+		        			idProdAbono, idProdCargo, idPago,"COG");
 			
         
         } catch (ParseException e) {

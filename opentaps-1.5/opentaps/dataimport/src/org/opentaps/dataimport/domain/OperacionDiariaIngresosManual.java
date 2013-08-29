@@ -165,7 +165,7 @@ public class OperacionDiariaIngresosManual {
 	        UtilOperacionDiariaServices.registraEntries(dctx, dispatcher, context, organizationPartyId,
 		        			acctgTransId, monto, fecContable,
 		        			acctgTransTypeId, n5, tipoFis, 
-		        			idProdAbono, idProdCargo, idPago);
+		        			idProdAbono, idProdCargo, idPago,"CRI");
 	        
 	        
 		} catch (ParseException e) {
