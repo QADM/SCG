@@ -28,7 +28,7 @@
       </tr>
       <tr>
         <@displayTitleCell title=uiLabelMap.FinancialsGlFiscalType />
-        <@inputSelectCell list="" name="Tipo_Fiscal" />
+        <@inputSelectCell list=Static["javolution.util.FastList"].newInstance() name="Tipo_Fiscal" />
       </tr>      
       <tr>
         <@displayTitleCell title=uiLabelMap.FinancialsTransactionDate />
