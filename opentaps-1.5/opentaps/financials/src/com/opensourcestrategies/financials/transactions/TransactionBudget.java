@@ -47,6 +47,7 @@ import org.opentaps.base.entities.GlAccount;
 import org.opentaps.base.entities.GlAccountHistory;
 import org.opentaps.base.entities.GlAccountOrganization;
 import org.opentaps.base.entities.GlFiscalType;
+import org.opentaps.base.entities.MiniGuiaContable;
 import org.opentaps.base.entities.NivelPresupuestal;
 import org.opentaps.base.entities.Party;
 import org.opentaps.base.entities.PartyAcctgPreference;
@@ -361,29 +362,6 @@ public class TransactionBudget {
 			String acctgTransId = (String) results.get("acctgTransId");
 			Debug.log("acctgTransId" + acctgTransId);
 
-			// create createAcctgTransPresupuestalManual
-
-			// Map createAcctgTransPresupuestalCtx = dctx.getModelService(
-			// "createAcctgTransPresupuestalManual").makeValid(context,
-			// ModelService.IN_PARAM);
-			//
-			// Map acctranspresu = new HashMap(createAcctgTransPresupuestalCtx);
-			// acctranspresu.put("acctgTransId", acctgTransId);
-			// acctranspresu.put("clavePres", clave);
-			// acctranspresu.put("ciclo", "2013");
-			// acctranspresu.put("unidadResponsable", organizationPartyId);
-			// acctranspresu.put("unidadOrganizacional", organizationPartyId);
-			// acctranspresu.put("unidadEjecutora", organizationPartyId);
-			// acctranspresu.put("rubro", idRubro);
-			// acctranspresu.put("tipo", idTipo);
-			// acctranspresu.put("conceptoRub", idConcepto);
-			// acctranspresu.put("nivel5", idN5);
-			// results =
-			// dispatcher.runSync("createAcctgTransPresupuestalManual",
-			// createAcctgTransPresupuestalCtx);
-
-			// /
-
 			UtilCommon.isSuccess(createAcctgPresupuestal(context, acctgTransId,
 					dctx));
 
@@ -407,7 +385,8 @@ public class TransactionBudget {
 					.getDelegator()
 					.findByCondition("MiniGuiaContable", condicion,
 							UtilMisc.toList("cuentaCargo", "cuentaAbono"), null);
-
+			//AcctgTransEntry.Fields.acctgTagEnumId3
+			
 			String debitGlAccountId = "";
 			String creditGlAccountId = "";
 
@@ -436,7 +415,7 @@ public class TransactionBudget {
 			debitCtx.put("debitCreditFlag", "D");
 			debitCtx.put("acctgTransEntryTypeId", "_NA_");
 			debitCtx.put("currencyUomId", currencyUomId);
-			//debitCtx.put("", (String) context.get("subFuenteEsp"));
+			debitCtx.put("acctgTagEnumId3", (String) context.get("subFuenteEsp"));
 			results = dispatcher.runSync("createAcctgTransEntryManual",
 					debitCtx);
 
@@ -449,7 +428,7 @@ public class TransactionBudget {
 			creditCtx.put("debitCreditFlag", "C");
 			creditCtx.put("acctgTransEntryTypeId", "_NA_");
 			creditCtx.put("currencyUomId", currencyUomId);
-			//creditCtx.put("", (String) context.get("subFuenteEsp"));
+			creditCtx.put("acctgTagEnumId3", (String) context.get("subFuenteEsp"));
 			results = dispatcher.runSync("createAcctgTransEntryManual",
 					creditCtx);
 
@@ -692,13 +671,19 @@ public class TransactionBudget {
 			String UE = (String) context.get("unidadEjecutora");
 			String UO = getParentParty(UE, dispatcher);
 			String UR = getParentParty(UO, dispatcher);
+			
+			String nivel5 = (String) context.get("idN5");
+			String conceptoRUB = getParentProductCategory(nivel5, dispatcher);
+			String clase = getParentProductCategory(conceptoRUB, dispatcher);
+			String tipo = getParentProductCategory(clase, dispatcher);
+			String rubro = getParentProductCategory(tipo, dispatcher);
 
 			String SubFuenteEspecifica = (String) context.get("subFuenteEsp");
 			String SubFuente = getParentEnumeration(SubFuenteEspecifica,
 					dispatcher);
 			String Fuente = getParentEnumeration(SubFuente, dispatcher);
 			
-			String subFuncion = (String) context.get("subFuncion");
+			String subFuncion = (String) context.get("subfuncion");
 			String funcion = getParentEnumeration(subFuncion, dispatcher);
 			String finalidad = getParentEnumeration(funcion, dispatcher);
 			
@@ -706,6 +691,16 @@ public class TransactionBudget {
 			String subprogramap = getParentWorkEffort(actividad, dispatcher);
 			String programa = getParentWorkEffort(subprogramap, dispatcher);
 			String plan = getParentWorkEffort(programa, dispatcher);
+			
+			String PE = (String) context.get("partidaEspecifica");
+			String PG = getParentProductCategory(PE, dispatcher);
+			String conceptoPG = getParentProductCategory(PG, dispatcher);
+			String capitulo = getParentProductCategory(conceptoPG, dispatcher);
+			
+			String area = ((String) context.get("area"));
+			String subSector = getParentEnumeration(area, dispatcher);
+			String sector = getParentEnumeration(subSector, dispatcher);
+			
 
 			AcctgTransPresupuestal presupuestal = new AcctgTransPresupuestal();
 			presupuestal.initRepository(ledgerRepository);
@@ -717,29 +712,45 @@ public class TransactionBudget {
 			presupuestal.setUnidadResponsable(UR);
 			presupuestal.setUnidadOrganizacional(UO);
 			presupuestal.setUnidadEjecutora(UE);
-			presupuestal.setRubro((String) context.get("idRubro"));
-			presupuestal.setTipo((String) context.get("idTipo"));
-			presupuestal.setClase((String) context.get("idClase"));
-			presupuestal.setConceptoRub((String) context.get("idConcepto"));
-			presupuestal.setNivel5((String) context.get("idN5"));
+			
+			presupuestal.setRubro(rubro);
+			presupuestal.setTipo(tipo);
+			presupuestal.setClase(clase);
+			presupuestal.setConceptoRub(conceptoRUB);
+			presupuestal.setNivel5(nivel5);
+			
 			presupuestal.setFuente(Fuente);
 			presupuestal.setSubFuente(SubFuente);
 			presupuestal.setSubFuenteEspecifica(SubFuenteEspecifica);
+			
 			presupuestal.setEntidadFederativa((String) context
 					.get("EntidadFederativa"));
 			presupuestal.setRegion((String) context.get("Region"));
 			presupuestal.setMunicipio((String) context.get("Municipio"));
 			presupuestal.setLocalidad((String) context.get("Localidad"));
-			presupuestal.setSecuencia((String) context.get("referencia"));
-			presupuestal.setArea((String) context.get("area"));
+			presupuestal.setAgrupador((String) context.get("referencia"));
+			
 			presupuestal.setFinalidad(finalidad);
 			presupuestal.setFuncion(funcion);
 			presupuestal.setSubFuncion(subFuncion);
-			presupuestal.setActividad(actividad);
+			
+			presupuestal.setProgramaPlan(plan);
+			presupuestal.setProgramaPresupuestario(programa);
+			presupuestal.setSubProgramaPresupuestario(subprogramap);			
+			presupuestal.setActividad(actividad);	
+			
 			presupuestal.setTipoGasto((String) context.get("tipoGasto"));
+			
+			presupuestal.setCapitulo(capitulo);
+			presupuestal.setConcepto(conceptoPG);
+			presupuestal.setPartidaGenerica(PG);
 			presupuestal.setPartidaEspecifica((String) context.get("partidaEspecifica"));
 			
+			presupuestal.setSector(sector);
+			presupuestal.setSubSector(subSector);
+			presupuestal.setArea(area);
 			
+			presupuestal.setAgrupador((String) context.get("referencia"));
 			// create
 			// presupuestal.setNextSubSeqId(AcctgTransEntry.Fields.acctgTransEntrySeqId.name());
 			ledgerRepository.createOrUpdate(presupuestal);
@@ -752,14 +763,44 @@ public class TransactionBudget {
 		}
 	}
 
-	private static String getParentWorkEffort(String actividad,
+	private static String getParentProductCategory(String id,
+			LocalDispatcher dispatcher) {
+		String parentProduct = null;
+		try {
+			
+			EntityCondition condicion = EntityCondition.makeCondition("productCategoryId",
+					id);
+			List<GenericValue> workeffort = dispatcher.getDelegator()
+					.findByCondition("ProductCategory", condicion,
+							UtilMisc.toList("productCategoryId", "primaryParentCategoryId"), null);
+
+			for (GenericValue genericValue : workeffort) {
+				if(genericValue.get("primaryParentCategoryId") != null || !genericValue.get("primaryParentCategoryId").toString().equals(""))
+				{
+					Debug.log("productCategoryId" + genericValue.get("productCategoryId").toString());
+					Debug.log("primaryParentCategoryId"
+							+ genericValue.get("primaryParentCategoryId").toString());
+					
+					parentProduct = genericValue.get("primaryParentCategoryId").toString();
+				}
+				
+			}
+			
+		} catch (Exception e) {
+			Debug.log("Error al obtener Parent de ProductCategory Id ["
+					+ parentProduct + "] " + e);
+		}
+		return parentProduct;
+	}
+
+	private static String getParentWorkEffort(String id,
 			LocalDispatcher dispatcher) {
 		
 		String parentwork = null;
 		try {
 			
 			EntityCondition condicion = EntityCondition.makeCondition("workEffortId",
-					actividad);
+					id);
 			List<GenericValue> workeffort = dispatcher.getDelegator()
 					.findByCondition("WorkEffort", condicion,
 							UtilMisc.toList("workEffortId", "workEffortParentId"), null);
@@ -777,7 +818,7 @@ public class TransactionBudget {
 			}
 			
 		} catch (Exception e) {
-			Debug.log("Error al obtener Parent de Enumeration Id ["
+			Debug.log("Error al obtener Parent de WorkEffort Id ["
 					+ parentwork + "] " + e);
 		}
 		return parentwork;
@@ -967,29 +1008,6 @@ public class TransactionBudget {
 			String acctgTransId = (String) results.get("acctgTransId");
 			Debug.log("acctgTransId" + acctgTransId);
 
-			// create createAcctgTransPresupuestalManual
-
-			// Map createAcctgTransPresupuestalCtx = dctx.getModelService(
-			// "createAcctgTransPresupuestalManual").makeValid(context,
-			// ModelService.IN_PARAM);
-			//
-			// Map acctranspresu = new HashMap(createAcctgTransPresupuestalCtx);
-			// acctranspresu.put("acctgTransId", acctgTransId);
-			// acctranspresu.put("clavePres", clave);
-			// acctranspresu.put("ciclo", "2013");
-			// acctranspresu.put("unidadResponsable", organizationPartyId);
-			// acctranspresu.put("unidadOrganizacional", organizationPartyId);
-			// acctranspresu.put("unidadEjecutora", organizationPartyId);
-			// acctranspresu.put("rubro", idRubro);
-			// acctranspresu.put("tipo", idTipo);
-			// acctranspresu.put("conceptoRub", idConcepto);
-			// acctranspresu.put("nivel5", idN5);
-			// results =
-			// dispatcher.runSync("createAcctgTransPresupuestalManual",
-			// createAcctgTransPresupuestalCtx);
-
-			// /
-
 			UtilCommon.isSuccess(createAcctgPresupuestal(context, acctgTransId,
 					dctx));
 
@@ -1042,6 +1060,10 @@ public class TransactionBudget {
 			debitCtx.put("debitCreditFlag", "D");
 			debitCtx.put("acctgTransEntryTypeId", "_NA_");
 			debitCtx.put("currencyUomId", currencyUomId);
+			debitCtx.put("acctgTagEnumId1", subfuncion);
+			debitCtx.put("acctgTagEnumId2", tipoGasto);
+			debitCtx.put("acctgTagEnumId3", (String) context.get("subFuenteEsp"));
+			debitCtx.put("acctgTagEnumId4", area);
 			results = dispatcher.runSync("createAcctgTransEntryManual",
 					debitCtx);
 
@@ -1054,8 +1076,14 @@ public class TransactionBudget {
 			creditCtx.put("debitCreditFlag", "C");
 			creditCtx.put("acctgTransEntryTypeId", "_NA_");
 			creditCtx.put("currencyUomId", currencyUomId);
+			creditCtx.put("acctgTagEnumId1", subfuncion);
+			creditCtx.put("acctgTagEnumId1", tipoGasto);
+			creditCtx.put("acctgTagEnumId3", (String) context.get("subFuenteEsp"));
+			creditCtx.put("acctgTagEnumId4", area);
 			results = dispatcher.runSync("createAcctgTransEntryManual",
 					creditCtx);
+			
+			//AcctgTransEntry.Fields.acctgTagEnumId1
 
 			results = ServiceUtil.returnSuccess();
 			results.put("acctgTransId", acctgTransId);
