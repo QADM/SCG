@@ -45,6 +45,14 @@
       <Catalog name="DS_EGRESO_GEO"> 
         <DataSourceInfo>Provider=mondrian;DataSource=LOCAL_SS</DataSourceInfo>  
         <Definition>solution:admin/resources/metadata/DS_EGRESO_GEO.mondrian.xml</Definition> 
+      </Catalog>  
+      <Catalog name="DS_INGRESO_COMPLETO"> 
+        <DataSourceInfo>Provider=mondrian;DataSource=LOCAL_SS</DataSourceInfo>  
+        <Definition>solution:admin/resources/metadata/DS_INGRESO_COMPLETO.mondrian.xml</Definition> 
+      </Catalog>  
+      <Catalog name="DS_EGRESO_COMPLETO"> 
+        <DataSourceInfo>Provider=mondrian;DataSource=LOCAL_SS</DataSourceInfo>  
+        <Definition>solution:admin/resources/metadata/DS_EGRESO_COMPLETO.mondrian.xml</Definition> 
       </Catalog> 
     </Catalogs> 
   </DataSource> 
