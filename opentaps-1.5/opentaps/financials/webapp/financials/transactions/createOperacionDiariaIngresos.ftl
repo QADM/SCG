@@ -59,22 +59,6 @@
         <@inputSelectCell list=listProducts?if_exists displayField="description" name="Id_Producto_Cargo" default=productId?if_exists key="productId" required=false />
       </tr>      
       <tr>
-        <@displayTitleCell title=uiLabelMap.FinancialsCaption />
-        <@inputSelectCell list=listRubros?if_exists displayField="description" name="Rubro" default=productCategoryId?if_exists key="productCategoryId"/>
-      </tr>         
-      <tr>
-        <@displayTitleCell title=uiLabelMap.FinancialsType />
-        <@inputSelectCell list=listTipos?if_exists displayField="description" name="Tipo" default=productCategoryId?if_exists key="productCategoryId"/>
-      </tr> 
-      <tr>
-        <@displayTitleCell title=uiLabelMap.FinancialsClass />
-        <@inputSelectCell list=listClases?if_exists displayField="description" name="Clase" default=productCategoryId?if_exists key="productCategoryId"/>
-      </tr>    
-      <tr>
-        <@displayTitleCell title=uiLabelMap.FinancialsConcept />
-        <@inputSelectCell list=listConceptos?if_exists displayField="description" name="Concepto" default=productCategoryId?if_exists key="productCategoryId"/>
-      </tr>    
-      <tr>
         <@displayTitleCell title=uiLabelMap.FinancialsN5 />
         <@inputSelectCell list=listN5?if_exists displayField="description" name="N5" default=productCategoryId?if_exists key="productCategoryId"/>
       </tr>
