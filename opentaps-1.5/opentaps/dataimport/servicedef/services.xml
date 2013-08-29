@@ -294,10 +294,10 @@
         <attribute name="Fecha_Contable" mode="IN" type="String" optional="true" />
 		<attribute name="Referencia_Documento" mode="IN" type="String" optional="true"/>
         <attribute name="Secuencia" mode="IN" type="String" optional="true" />
-        <attribute name="Cve_Presupuestal" mode="IN" type="String"/>
+        <attribute name="Cve_Presupuestal" mode="IN" type="String" />
         <attribute name="Tipo_Catalogo" mode="IN" type="String" optional="true"/>
-        <attribute name="Id_Producto_Abono" mode="IN" type="String" optional="false" />
-        <attribute name="Id_Producto_Cargo" mode="IN" type="String" optional="false" />
+        <attribute name="Id_Producto_Abono" mode="IN" type="String" optional="true"/>
+        <attribute name="Id_Producto_Cargo" mode="IN" type="String" optional="true"/>
         <attribute name="Rubro" mode="IN" type="String" optional="true"/>
         <attribute name="Tipo" mode="IN" type="String" optional="true" />
 		<attribute name="Clase" mode="IN" type="String" optional="true"/>
@@ -331,8 +331,8 @@
 		<attribute name="Referencia_Documento" mode="IN" type="String" optional="true"/>
         <attribute name="Secuencia" mode="IN" type="String" optional="true" />
         <attribute name="Cve_Presupuestal" mode="IN" type="String"/>
-        <attribute name="Id_Producto_Abono" mode="IN" type="String" optional="false" />
-        <attribute name="Id_Producto_Cargo" mode="IN" type="String" optional="false" />
+        <attribute name="Id_Producto_Abono" mode="IN" type="String" optional="true"/>
+        <attribute name="Id_Producto_Cargo" mode="IN" type="String" optional="true"/>
         <attribute name="EntidadFederativa" mode="IN" type="String" optional="true"/>
         <attribute name="Region" mode="IN" type="String" optional="true"/>
         <attribute name="Municipio" mode="IN" type="String" optional="true"/>
@@ -364,6 +364,7 @@
         <attribute name="idProdAbono" mode="IN" type="String" optional="true"/>
         <attribute name="idProdCargo" mode="IN" type="String" optional="true"/>
         <attribute name="idPago" mode="IN" type="String" optional="true"/>
+        <attribute name="mapaAcctgEnums" mode="IN" type="java.util.Map"/>
         <attribute name="mapCuentas" mode="OUT" type="java.util.Map"/>               
     </service>
     <service name="obtenProdCategoryPadreId" engine="java" 

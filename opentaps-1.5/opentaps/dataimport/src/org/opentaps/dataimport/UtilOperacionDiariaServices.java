@@ -333,6 +333,7 @@ public class UtilOperacionDiariaServices {
 	 * @param dctx
 	 * @param dispatcher
 	 * @param context
+	 * @param mapaAcctgEnums 
 	 * @return
 	 * @throws GenericEntityException 
 	 * @throws GenericServiceException 
@@ -341,7 +342,8 @@ public class UtilOperacionDiariaServices {
 	public static List<GenericValue> registraEntries(DispatchContext dctx,LocalDispatcher dispatcher,Map context,
 						String organizationPartyId,String acctgTransId,BigDecimal monto,Timestamp fecContable,
 						String acctgTransTypeId, String clasificaEco , String tipoFiscal, 
-						String idProdAbono, String idProdCargo, String idPago,String tipoClasiEco) throws GenericEntityException, GenericServiceException{
+						String idProdAbono, String idProdCargo, String idPago,String tipoClasiEco,
+						Map<String, String> mapaAcctgEnums) throws GenericEntityException, GenericServiceException{
 		
 		Delegator delegator = dctx.getDelegator();
 		
@@ -353,12 +355,13 @@ public class UtilOperacionDiariaServices {
         input.put("idProdCargo", idProdCargo);
         input.put("idPago",idPago);
         input.put("tipoClasiEco",tipoClasiEco);
+        input.put("mapaAcctgEnums", mapaAcctgEnums);
         input = dctx.getModelService("obtenerCuentasOpDiaria").makeValid(input, ModelService.IN_PARAM);
         Map tmpResult = dispatcher.runSync("obtenerCuentasOpDiaria", input);
         Map<String,String> mapCuentas = (Map<String, String>) tmpResult.get("mapCuentas");
         
         List<GenericValue> listCuentas = UtilOperacionDiariaServices.guardaEntries(delegator, mapCuentas, 
-        									acctgTransId, organizationPartyId, monto);
+        									acctgTransId, organizationPartyId, monto,mapaAcctgEnums);
         
         //Aqui se guardan los datos correspondientes en la tabla AccountHistory
         
@@ -395,6 +398,7 @@ public class UtilOperacionDiariaServices {
         String idProdCargo = (String) context.get("idProdCargo");
         String idPago = (String) context.get("idPago");
         String tipoClasiEco = (String) context.get("tipoClasiEco");
+        
         
         Debug.logWarning("ENTRO A obtenerCuentasOpDiaria ", MODULE);
         Debug.logWarning("acctgTransTypeId "+acctgTransTypeId, MODULE);
@@ -625,11 +629,13 @@ public class UtilOperacionDiariaServices {
      * @param acctgTransId
      * @param organizationPartyId
      * @param monto
+     * @param mapaAcctgEnums 
      * @return
      * @throws GenericEntityException
      */
     public static List<GenericValue> guardaEntries(Delegator delegator,Map<String,String> mapCuentas,
-    					String acctgTransId, String organizationPartyId, BigDecimal monto) throws GenericEntityException{
+    					String acctgTransId, String organizationPartyId, BigDecimal monto,
+    					Map<String, String> mapaAcctgEnums) throws GenericEntityException{
     	
     	String currencyId = UtilCommon.getOrgBaseCurrency(organizationPartyId, delegator);
     	
@@ -661,6 +667,10 @@ public class UtilOperacionDiariaServices {
         		gTransEntryPreC.set("debitCreditFlag", "D");
         		gTransEntryPreC.set("reconcileStatusId", "AES_NOT_RECONCILED");
         		gTransEntryPreC.set("partyId", organizationPartyId);
+            	for (Map.Entry<String, String> acctEnum : mapaAcctgEnums.entrySet())
+            	{
+            		gTransEntryPreC.set(acctEnum.getKey(), acctEnum.getValue());
+            	}
         		gTransEntryPreC.create();
         		
         		GenericValue gtransEntryPreA = GenericValue.create(delegator.getModelEntity("AcctgTransEntry"));
@@ -674,7 +684,11 @@ public class UtilOperacionDiariaServices {
         		gtransEntryPreA.set("currencyUomId", currencyId);
         		gtransEntryPreA.set("debitCreditFlag", "C");
         		gtransEntryPreA.set("reconcileStatusId", "AES_NOT_RECONCILED");
-        		gtransEntryPreA.set("partyId", organizationPartyId);	 
+        		gtransEntryPreA.set("partyId", organizationPartyId);
+            	for (Map.Entry<String, String> acctEnum : mapaAcctgEnums.entrySet())
+            	{
+            		gtransEntryPreA.set(acctEnum.getKey(), acctEnum.getValue());
+            	}
         		gtransEntryPreA.create();
         		
         		listCuentas.add(gTransEntryPreC);
@@ -695,6 +709,10 @@ public class UtilOperacionDiariaServices {
         		gTransEntryConC.set("debitCreditFlag", "D");
         		gTransEntryConC.set("reconcileStatusId", "AES_NOT_RECONCILED");
         		gTransEntryConC.set("partyId", organizationPartyId);
+            	for (Map.Entry<String, String> acctEnum : mapaAcctgEnums.entrySet())
+            	{
+            		gTransEntryConC.set(acctEnum.getKey(), acctEnum.getValue());
+            	}
         		gTransEntryConC.create();
         		
         		GenericValue gTransEntryConA = GenericValue.create(delegator.getModelEntity("AcctgTransEntry"));
@@ -709,6 +727,10 @@ public class UtilOperacionDiariaServices {
         		gTransEntryConA.set("debitCreditFlag", "C");
         		gTransEntryConA.set("reconcileStatusId", "AES_NOT_RECONCILED");
         		gTransEntryConA.set("partyId", organizationPartyId);
+            	for (Map.Entry<String, String> acctEnum : mapaAcctgEnums.entrySet())
+            	{
+            		gTransEntryConA.set(acctEnum.getKey(), acctEnum.getValue());
+            	}
         		gTransEntryConA.create();
         		
         		listCuentas.add(gTransEntryConC);
