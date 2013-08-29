@@ -852,7 +852,7 @@
             <actions>
                 <set field="pageTitleLabel" value="Presupuesto Egreso"/>  
                 <set field="sectionHeaderUiLabel" value="Presupuestos"/> 
-                <set field="createAcctgPresupuestoIngresoFormTarget" value="createAcctgTransPresupuestoIngreso"/>
+                <set field="createAcctgPresupuestoEgresoFormTarget" value="createAcctgTransPresupuestoEgreso"/>
                 <script location="component://financials/webapp/financials/WEB-INF/actions/transactions/getDatosOperacionDiariaIng.bsh"/> 
                 <java location="com.opensourcestrategies.financials.transactions.TransactionBudget" invoke="buscarCatalogos"/>             
 	            <entity-condition list="listGeo" entity-name="Geo">
@@ -876,7 +876,7 @@
     <screen name="viewAcctgTransPresupuestoEgreso">
         <section>
             <actions>
-                <script location="component://financials/webapp/financials/WEB-INF/actions/transactions/viewAcctgTrans.bsh"/>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/transactions/viewAcctgTransPresupuestal.bsh"/>
                 <set field="viewIndex" from-field="parameters.VIEW_INDEX" type="Integer" default-value="0"/>
                 <set field="viewSize" from-field="parameters.VIEW_SIZE" type="Integer" default-value="50"/>
                 <set field="pageTitleLabel" value="PageTitleViewAccountingTransaction"/>
@@ -889,6 +889,7 @@
                               <html-template location="component://financials/webapp/financials/transactions/acctgTransOptions.ftl"/>
                            </html></platform-specific>
                            <include-form name="viewAcctgTrans" location="component://financials/widget/financials/forms/transactions/TransactionsForms.xml"/>
+                           <include-form name="viewAcctgTransIngreso" location="component://financials/widget/financials/forms/transactions/TransactionsForms.xml"/>
                         </container>
                         <platform-specific><html>
                             <html-template location="component://financials/webapp/financials/transactions/acctgTransEntriesBalance.ftl"/>
