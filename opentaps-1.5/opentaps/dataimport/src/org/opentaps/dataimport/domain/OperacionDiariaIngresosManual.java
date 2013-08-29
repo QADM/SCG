@@ -6,6 +6,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 
+import javolution.util.FastMap;
+
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
@@ -160,12 +162,14 @@ public class OperacionDiariaIngresosManual {
 	        acctgtransPres.set("idPago",idPago);
 	        acctgtransPres.create();
 
+	        Map<String,String> mapaAcctgEnums = FastMap.newInstance();
+	        mapaAcctgEnums.put("acctgTagEnumId3",suFuenteEsp);
 
 	        //Se realiza el registro de trans entries
 	        UtilOperacionDiariaServices.registraEntries(dctx, dispatcher, context, organizationPartyId,
 		        			acctgTransId, monto, fecContable,
 		        			acctgTransTypeId, n5, tipoFis, 
-		        			idProdAbono, idProdCargo, idPago,"CRI");
+		        			idProdAbono, idProdCargo, idPago,"CRI",mapaAcctgEnums);
 	        
 	        
 		} catch (ParseException e) {
