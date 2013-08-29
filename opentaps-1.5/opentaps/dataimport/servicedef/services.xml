@@ -360,6 +360,7 @@
         <attribute name="acctgTransTypeId" mode="IN" type="String" optional="false"/>
         <attribute name="tipoFis" mode="IN" type="String" optional="false"/>
         <attribute name="clasificaEco" mode="IN" type="String" optional="false"/>
+        <attribute name="tipoClasiEco" mode="IN" type="String" optional="false"/>
         <attribute name="idProdAbono" mode="IN" type="String" optional="true"/>
         <attribute name="idProdCargo" mode="IN" type="String" optional="true"/>
         <attribute name="idPago" mode="IN" type="String" optional="true"/>
