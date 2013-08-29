@@ -760,6 +760,8 @@ public class UtilOperacionDiariaServices {
 	    			
 	    			String customTimePeriodId = customPeriod.getString("customTimePeriodId");
 	    			
+	    			BigDecimal montoAnt = ZERO;
+	    			
 	    			//Primero buscamos si existe el registro
 	    			GenericValue actHistoryBusca = delegator.findByPrimaryKey("GlAccountHistory", 
 	    						UtilMisc.toMap("glAccountId",glAccountId,"organizationPartyId",organizationPartyId,
@@ -770,10 +772,14 @@ public class UtilOperacionDiariaServices {
 	    			accountHistory.set("glAccountId", glAccountId);
 	    			accountHistory.set("organizationPartyId", organizationPartyId);
 	    			accountHistory.set("customTimePeriodId", customTimePeriodId);
-	    			if(tipoMonto.equalsIgnoreCase("D"))
-	    				accountHistory.set("postedDebits", monto);
-	    			else
-	    				accountHistory.set("postedCredits", monto);
+	    			if(tipoMonto.equalsIgnoreCase("D")){
+	    				montoAnt = actHistoryBusca == null ? ZERO : actHistoryBusca.getBigDecimal("postedDebits");
+	    				accountHistory.set("postedDebits", monto.add(montoAnt));
+	    			}
+	    			else {
+	    				montoAnt = actHistoryBusca == null ? ZERO : actHistoryBusca.getBigDecimal("postedCredits");
+	    				accountHistory.set("postedCredits", monto.add(montoAnt));
+	    			}
 	    			
 	    			if(actHistoryBusca !=null && !actHistoryBusca.isEmpty()){
 	    				accountHistory.store();
