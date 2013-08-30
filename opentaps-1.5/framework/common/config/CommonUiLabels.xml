@@ -8563,7 +8563,7 @@
     </property>  
     <property key="BudgetExecutionI">
         <value xml:lang="en">Income Budget Execution</value>
-        <value xml:lang="es">Ejercicio del Presuspuesto del Ingreso</value>
+        <value xml:lang="es">Ejecución de la Ley de Ingreso</value>
     </property>  
     <property key="FormFieldTitle_acceptButton">
         <value xml:lang="en">Accept</value>
