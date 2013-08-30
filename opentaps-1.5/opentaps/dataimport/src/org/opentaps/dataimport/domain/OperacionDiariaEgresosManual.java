@@ -109,7 +109,7 @@ public class OperacionDiariaEgresosManual {
 			String acctgTransTypeId = tipoDocumento.getString("acctgTransTypeId");
 			Debug.logWarning("tipoDocumento  Encontrado "+tipoDocumento, MODULE);
 			String docu = tipoDocumento.getString("descripcion");
-			String descripcion = docu == null?" ":docu+" - "+refDoc == null ?" ":refDoc;
+			String descripcion = (docu == null?" ":docu)+" - "+(refDoc == null ?" ":refDoc);
 			
 	        String ciclo = "";
 	        if(fecContable != null)
@@ -144,7 +144,7 @@ public class OperacionDiariaEgresosManual {
 	        String subfuente = UtilOperacionDiariaServices.obtenPadreEnumeration(dctx, dispatcher, suFuenteEsp);
 	        acctgtransPres.set("subFuente",subfuente);
 	        String fuente = UtilOperacionDiariaServices.obtenPadreEnumeration(dctx, dispatcher, subfuente);
-	        acctgtransPres.set("subFuente",fuente);	        
+	        acctgtransPres.set("fuente",fuente);	        
 	        acctgtransPres.set("entidadFederativa", entFed);
 	        acctgtransPres.set("region", region);
 	        acctgtransPres.set("municipio", muni);
@@ -152,17 +152,23 @@ public class OperacionDiariaEgresosManual {
 	        acctgtransPres.set("subFuncion", subFun);
 	        String funcion = UtilOperacionDiariaServices.obtenPadreEnumeration(dctx, dispatcher, subFun);
 	        acctgtransPres.set("funcion", funcion);
+	        String finalidad = UtilOperacionDiariaServices.obtenPadreEnumeration(dctx, dispatcher, funcion);
+	        acctgtransPres.set("finalidad", finalidad);
 	        acctgtransPres.set("tipoGasto", tipoGasto);
 	        acctgtransPres.set("partidaEspecifica", partEspec);
 	        String partGene = UtilOperacionDiariaServices.obtenPadreProductCate(dctx, dispatcher, partEspec);
 	        acctgtransPres.set("partidaGenerica", partGene);
 	        acctgtransPres.set("actividad", actividad);
+	        Debug.logWarning("actividad  enviado"+actividad, MODULE);
 	        String subProg = UtilOperacionDiariaServices.obtenPadreWorkEffort(dctx, dispatcher, actividad);
 	        acctgtransPres.set("subProgramaPresupuestario", subProg);
+	        Debug.logWarning("subProg  enviado"+subProg, MODULE);
 	        String progPresu = UtilOperacionDiariaServices.obtenPadreWorkEffort(dctx, dispatcher, subProg);
 	        acctgtransPres.set("programaPresupuestario", progPresu);	      
 	        String progPlan = UtilOperacionDiariaServices.obtenPadreWorkEffort(dctx, dispatcher, progPresu);
+	        Debug.logWarning("progPresu  enviado"+progPresu, MODULE);
 	        acctgtransPres.set("programaPlan", progPlan);
+	        Debug.logWarning("progPlan  enviado"+progPlan, MODULE);
 	        acctgtransPres.set("area", area);
 	        String subSector = UtilOperacionDiariaServices.obtenPadreEnumeration(dctx, dispatcher, area);
 	        acctgtransPres.set("subSector", subSector); 
@@ -173,6 +179,7 @@ public class OperacionDiariaEgresosManual {
 	        acctgtransPres.set("idProductoD", idProdCargo);
 	        acctgtransPres.set("idProductoH", idProdAbono);
 	        acctgtransPres.set("idPago",idPago);
+	        acctgtransPres.set("agrupador", refDoc);
 	        acctgtransPres.create();
 	        
 	        Map<String,String> mapaAcctgEnums = FastMap.newInstance();

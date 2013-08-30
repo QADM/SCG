@@ -581,9 +581,18 @@
         	</field>         	        
         	<field name="area">
         		<display description="${groovy:com.opentaps.financials.Helpers.OperacionDiariaHelper.getEnumName(delegator, mapTransPresup.get(&quot;area&quot;))}"/>
-        	</field> 	     
+        	</field>
+        	<field name="programaPlan">
+        		<display description="${groovy:com.opentaps.financials.Helpers.OperacionDiariaHelper.getWorkEffortName(delegator, mapTransPresup.get(&quot;programaPlan&quot;))}"/>
+        	</field>         	
+        	<field name="programaPresupuestario">
+        		<display description="${groovy:com.opentaps.financials.Helpers.OperacionDiariaHelper.getWorkEffortName(delegator, mapTransPresup.get(&quot;programaPresupuestario&quot;))}"/>
+        	</field>         	 	
+        	<field name="subProgramaPresupuestario">
+        		<display description="${groovy:com.opentaps.financials.Helpers.OperacionDiariaHelper.getWorkEffortName(delegator, mapTransPresup.get(&quot;subProgramaPresupuestario&quot;))}"/>
+        	</field>         	     
         	<field name="actividad">
-        		<display description="${groovy:com.opentaps.financials.Helpers.OperacionDiariaHelper.getEnumName(delegator, mapTransPresup.get(&quot;area&quot;))}"/>
+        		<display description="${groovy:com.opentaps.financials.Helpers.OperacionDiariaHelper.getWorkEffortName(delegator, mapTransPresup.get(&quot;actividad&quot;))}"/>
         	</field> 
         	<field name="subProgramaPresupuestario">
         		<display description="${groovy:com.opentaps.financials.Helpers.OperacionDiariaHelper.getEnumName(delegator, mapTransPresup.get(&quot;subProgramaPresupuestario&quot;))}"/>
