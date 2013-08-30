@@ -123,7 +123,7 @@ public class OperacionDiariaEgresosManual {
 	        String tipoAsiento = UtilOperacionDiariaServices.obtenTipoAsiento(mapCuentas);
 	        
 	        //Generamos la transaccion
-	        acctgTransId = (refDoc == null ? "" :refDoc)+(sec == null ? "" :sec)+(tipoAsiento == null ? "" :tipoAsiento);
+	        acctgTransId = (refDoc == null ? "" :refDoc)+"-"+(sec == null ? "" :sec)+"-"+(tipoAsiento == null ? "" :tipoAsiento);
 	        
 	        acctgtrans = GenericValue.create(delegator.getModelEntity("AcctgTrans"));
 //	        acctgtrans.setNextSeqId();
@@ -134,6 +134,7 @@ public class OperacionDiariaEgresosManual {
 	        acctgtrans.set("isPosted", "Y");
 	        acctgtrans.set("postedDate", fecContable);
 	        acctgtrans.set("glFiscalTypeId", tipoFis);
+	        acctgtrans.set("workEffortId", actividad);
 	        acctgtrans.set("partyId", uniEjec);
 	        acctgtrans.set("createdByUserLogin", userLog);
 	        acctgtrans.set("postedAmount", monto);
