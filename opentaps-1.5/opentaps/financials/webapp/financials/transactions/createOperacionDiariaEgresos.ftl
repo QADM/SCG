@@ -104,7 +104,7 @@
         <@inputSelectCell list=listAreas?if_exists displayField="description" name="Area" default=enumId?if_exists key="enumId"/>
       </tr>      
      <tr>
-      	<@displayTitleCell title=uiLabelMap.FinancialsIdLeviedH />
+      	<@displayTitleCell title=uiLabelMap.FinancialsIdLeviedC />
       	<@inputSelectCell list=listPayments?if_exists name="Id_RecaudadoH" displayField="description" default=paymentMethodId?if_exists key="paymentMethodId" required=false/>
       </tr>                                                                  
       <tr>                             

@@ -523,6 +523,11 @@ public class UtilOperacionDiariaServices {
 							
 						} else if(matrizId.equalsIgnoreCase("B.2") || matrizId.equalsIgnoreCase("A.2")){
 							
+							if(idPago == null || idPago.isEmpty()){
+								Debug.logError("Error, debe ingresar el id Pago ",MODULE);
+								return UtilMessage.createAndLogServiceError("Error, debe ingresar el id Pago", MODULE);
+							}
+							
 							cuentaCargo = verificarBancos(dctx, dispatcher, cuentaCargo, idPago);
 							cuentaAbono = verificarAuxiliarProducto(dctx, dispatcher, cuentaAbono, idProdAbono);
 						}
