@@ -329,6 +329,66 @@ public class UtilOperacionDiariaServices {
         return results;
     }
     
+    /**
+     *  Obtiene el mapa de las cuentas
+     * @param dctx
+     * @param dispatcher
+     * @param context
+     * @param acctgTransId
+     * @param monto
+     * @param fecContable
+     * @param acctgTransTypeId
+     * @param clasificaEco
+     * @param tipoFiscal
+     * @param idProdAbono
+     * @param idProdCargo
+     * @param idPago
+     * @param tipoClasiEco
+     * @return
+     * @throws GenericServiceException
+     */
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	public static Map<String,String> regresaMapa(DispatchContext dctx,LocalDispatcher dispatcher,
+			Map context,BigDecimal monto,Timestamp fecContable,
+			String acctgTransTypeId, String clasificaEco , String tipoFiscal, 
+			String idProdAbono, String idProdCargo, String idPago,String tipoClasiEco) throws GenericServiceException{
+    	
+	        Map input = new HashMap(context);
+	        input.put("acctgTransTypeId", acctgTransTypeId);
+	        input.put("clasificaEco", clasificaEco);
+	        input.put("tipoFis", tipoFiscal);
+	        input.put("idProdAbono", idProdAbono);
+	        input.put("idProdCargo", idProdCargo);
+	        input.put("idPago",idPago);
+	        input.put("tipoClasiEco",tipoClasiEco);
+	        input = dctx.getModelService("obtenerCuentasOpDiaria").makeValid(input, ModelService.IN_PARAM);
+	        Map tmpResult = dispatcher.runSync("obtenerCuentasOpDiaria", input);
+	        
+        return (Map<String, String>) tmpResult.get("mapCuentas");
+        
+    }
+    
+    /**
+     * Obtiene el tipo de asiento a registrar (Presupuestal 'P' o Contable 'C')
+     * @param mapCuentas
+     * @return
+     */
+    public static String obtenTipoAsiento(Map<String,String> mapCuentas){
+    	
+        String tipoAsiento = new String();
+        if(mapCuentas != null ){
+        	if(mapCuentas.containsKey("Cuenta_Cargo_Presupuesto") || 
+        			mapCuentas.containsKey("Cuenta_Abono_Presupuesto")){
+        		tipoAsiento = "P";
+        	} else if (mapCuentas.containsKey("Cuenta_Cargo_Contable") || 
+        			mapCuentas.containsKey("Cuenta_Abono_Contable")){
+        		tipoAsiento = "C";
+        	}
+        }
+        
+		return tipoAsiento;
+    	
+    }
     
 	/**
 	 * Metodo que se utiliza para registrar los entries relacionados a una operacion de ingresos
@@ -340,27 +400,12 @@ public class UtilOperacionDiariaServices {
 	 * @throws GenericEntityException 
 	 * @throws GenericServiceException 
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "rawtypes" })
 	public static List<GenericValue> registraEntries(DispatchContext dctx,LocalDispatcher dispatcher,Map context,
-						String organizationPartyId,String acctgTransId,BigDecimal monto,Timestamp fecContable,
-						String acctgTransTypeId, String clasificaEco , String tipoFiscal, 
-						String idProdAbono, String idProdCargo, String idPago,String tipoClasiEco,
-						Map<String, String> mapaAcctgEnums) throws GenericEntityException, GenericServiceException{
+						String organizationPartyId,String acctgTransId,BigDecimal monto,Timestamp fecContable,String acctgTransTypeId,
+						Map<String, String> mapaAcctgEnums,Map<String, String> mapCuentas) throws GenericEntityException, GenericServiceException{
 		
 		Delegator delegator = dctx.getDelegator();
-		
-        Map input = new HashMap(context);
-        input.put("acctgTransTypeId", acctgTransTypeId);
-        input.put("clasificaEco", clasificaEco);
-        input.put("tipoFis", tipoFiscal);
-        input.put("idProdAbono", idProdAbono);
-        input.put("idProdCargo", idProdCargo);
-        input.put("idPago",idPago);
-        input.put("tipoClasiEco",tipoClasiEco);
-        input.put("mapaAcctgEnums", mapaAcctgEnums);
-        input = dctx.getModelService("obtenerCuentasOpDiaria").makeValid(input, ModelService.IN_PARAM);
-        Map tmpResult = dispatcher.runSync("obtenerCuentasOpDiaria", input);
-        Map<String,String> mapCuentas = (Map<String, String>) tmpResult.get("mapCuentas");
         
         List<GenericValue> listCuentas = UtilOperacionDiariaServices.guardaEntries(delegator, mapCuentas, 
         									acctgTransId, organizationPartyId, monto,mapaAcctgEnums);
@@ -808,8 +853,7 @@ public class UtilOperacionDiariaServices {
 	    				else 
 	    					montoAnt = ZERO;
 	    				accountHistory.set("postedDebits", monto.add(montoAnt));
-	    			}
-	    			else {
+	    			} else {
 	    				if(actHistoryBusca != null)
 	    					montoAnt = actHistoryBusca.getBigDecimal("postedCredits") == null ? ZERO : actHistoryBusca.getBigDecimal("postedCredits");
 	    				else 
