@@ -420,6 +420,12 @@ public class UtilOperacionDiariaServices {
 		
         try {
         	
+        	//Buscar identificador del clasificador economico para la matriz
+        	GenericValue objectEconom = delegator.findByPrimaryKey("ProductCategory",UtilMisc.toMap("productCategoryId", clasificaEco));
+        	String idClasEconomico = new String();
+        	if(objectEconom != null && !objectEconom.isEmpty())
+        		idClasEconomico = objectEconom.getString("categoryName");
+        	
 			GenericValue miniGuia = delegator.findByPrimaryKey("MiniGuiaContable", UtilMisc.toMap("acctgTransTypeId", acctgTransTypeId));
 
 			
@@ -447,7 +453,7 @@ public class UtilOperacionDiariaServices {
 		    	if(referencia.equalsIgnoreCase("M")){
 		    		
 			        EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
-			                EntityCondition.makeCondition(campoClasi, EntityOperator.EQUALS,clasificaEco),
+			                EntityCondition.makeCondition(campoClasi, EntityOperator.EQUALS,idClasEconomico),
 			                EntityCondition.makeCondition("matrizId", EntityOperator.EQUALS,matrizId));
 			
 					List<GenericValue> listMatriz = delegator.findByCondition(tablaClasi, conditions, null, null);
