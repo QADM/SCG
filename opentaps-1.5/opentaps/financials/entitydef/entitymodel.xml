@@ -1434,7 +1434,7 @@ under the License.
 	   <alias name="agrupador" entity-alias="ATP"/>
 	   <alias name="postedDate" entity-alias="ATR"/>
 	   <alias name="idTipoDoc" entity-alias="TDC"/>
-	   <alias name="clavePres" entity-alias="ATP"/>
+	   <!-- <alias name="clavePres" entity-alias="ATP"/>-->
 	   <alias name="tipoPoliza" entity-alias="TDC"/>	   
 	   <alias name="organizationPartyId" entity-alias="ATE"/>
        
@@ -1446,6 +1446,26 @@ under the License.
        </view-link>
        <view-link entity-alias="ATP" rel-entity-alias="TDC" rel-optional="true">
            <key-map field-name="idTipoDoc"/>
+       </view-link>
+    </view-entity>
+    
+    <view-entity entity-name="AcctgPolizasDetalleListado"
+                 package-name="com.opensourcestrategies.financials.transactions"
+                 title="Arroja el detalle de las pólizas contables, a nivel transacción">
+       <member-entity entity-alias="ATP" entity-name="AcctgTransPresupuestal"/>
+       <member-entity entity-alias="ATE" entity-name="AcctgTransEntry"/>
+       <member-entity entity-alias="GLA" entity-name="GlAccount"/>       
+
+	   <alias name="agrupador" entity-alias="ATP"/>	   
+	   <alias name="accountName" entity-alias="GLA" group-by="true"/>	   
+	   <alias name="debitCreditFlag" entity-alias="ATE" group-by="true"/>	   
+	   <alias name="amount" entity-alias="ATE" function="sum"/>	   	   	   
+              
+       <view-link entity-alias="ATE" rel-entity-alias="ATP">
+           <key-map field-name="acctgTransId"/>
+       </view-link>
+       <view-link entity-alias="ATE" rel-entity-alias="GLA" rel-optional="true">
+           <key-map field-name="glAccountId"/>
        </view-link>
     </view-entity>
     
