@@ -14,16 +14,14 @@
         <@navigationHeader/>
         <table class="listTable">
             <tr class="listTableHeader">
-                <@headerCell title="Número de Póliza" orderBy="agrupador"/>
-                <@headerCell title="Código de Transacción" orderBy="acctgTransId"/>
+                <@headerCell title="Número de Póliza" orderBy="agrupador"/>                
                 <@headerCell title="Tipo de Transacción" orderBy="description"/>
                 <@headerCell title="Fecha Contable" orderBy="postedDate DESC"/>
-                <@displayCell text="Monto" blockClass="textright" />
+                <@headerCell title="Monto" orderBy="amount"/>
             </tr>
             <#list pageRows as row>
             <tr class="${tableRowClass(row_index)}">
-                <@displayCell text=row.agrupador  />
-				<@displayLinkCell text=row.acctgTransId href="viewAcctgTransPolizas?acctgTransId=${row.acctgTransId}"/>
+                <@displayLinkCell text=row.agrupador href="viewAcctgTransPolizasLista?agrupador=${row.agrupador}"/>				
                 <@displayCell text=row.description/>
                 <@displayDateCell date=row.postedDate/>
                 <@displayCurrencyCell amount=row.amount currencyUomId=parameters.orgCurrencyUomId class="textright"/>
