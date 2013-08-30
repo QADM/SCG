@@ -46,7 +46,8 @@
     <entity-resource type="model" reader-name="main" loader="main" location="entitydef/entitymodel_geo.xml"/>
     <entity-resource type="model" reader-name="main" loader="main" location="entitydef/entitymodel_category.xml"/>
     <entity-resource type="model" reader-name="main" loader="main" location="entitydef/entitymodel_presupuesto.xml"/>
-    <entity-resource type="model" reader-name="main" loader="main" location="entitydef/entitymodel_tipoDocumento.xml"/>    
+    <entity-resource type="model" reader-name="main" loader="main" location="entitydef/entitymodel_tipoDocumento.xml"/>
+    <entity-resource type="model" reader-name="main" loader="main" location="entitydef/entitymodel_tipoPoliza.xml"/>    
 	<entity-resource type="model" reader-name="main" loader="main" location="entitydef/entitymodel_ContableGuide.xml"/>
     <entity-resource type="model" reader-name="main" loader="main" location="entitydef/entitymodel_matrizEgr.xml"/>
     <entity-resource type="model" reader-name="main" loader="main" location="entitydef/entitymodel_matrizIng.xml"/>
