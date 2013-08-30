@@ -528,8 +528,18 @@ public class UtilOperacionDiariaServices {
 								return UtilMessage.createAndLogServiceError("Error, debe ingresar el id Pago", MODULE);
 							}
 							
-							cuentaCargo = verificarBancos(dctx, dispatcher, cuentaCargo, idPago);
-							cuentaAbono = verificarAuxiliarProducto(dctx, dispatcher, cuentaAbono, idProdAbono);
+							if(tipoClasiEco.equalsIgnoreCase("CRI")){
+								
+								cuentaCargo = verificarBancos(dctx, dispatcher, cuentaCargo, idPago);
+								cuentaAbono = verificarAuxiliarProducto(dctx, dispatcher, cuentaAbono, idProdAbono);
+								
+							} else {
+								
+								cuentaCargo = verificarAuxiliarProducto(dctx, dispatcher, cuentaCargo, idProdCargo);
+								cuentaAbono = verificarBancos(dctx, dispatcher, cuentaCargo, idPago);
+								
+							}
+							
 						}
 						
 						mapCuentas.put("Cuenta_Cargo_Contable",cuentaCargo);
@@ -622,18 +632,18 @@ public class UtilOperacionDiariaServices {
             	input.put("glAccountId", glAccountId);
             	input = dctx.getModelService("getAuxiliarProd").makeValid(input, ModelService.IN_PARAM);
             	Map tmpResult = dispatcher.runSync("getAuxiliarProd", input);
-            	List<GenericValue> resultados = (List<GenericValue>) tmpResult.get("resultadoPrdCat");
+            	List<GenericValue> resultadosAux = (List<GenericValue>) tmpResult.get("resultadoPrdCat");
             	
-            	Debug.logWarning("glAccountId  "+glAccountId+"  getAuxiliarProd   *[ "+resultados+"*]", MODULE);
+            	Debug.logWarning("glAccountId  "+glAccountId+"  getAuxiliarProd   *[ "+resultadosAux+"*]", MODULE);
             	
-            	if(resultados != null && !resultados.isEmpty()){
+            	if(resultadosAux != null && !resultadosAux.isEmpty()){
             		
             		if(productId != null && !productId.isEmpty()){
             			
-            			resultados.contains(glAccountId);
+            			resultadosAux.contains(glAccountId);
             			
             			//Iteramos ProductCategory
-            			for (GenericValue genericValue : resultados) {
+            			for (GenericValue genericValue : resultadosAux) {
             				if(genericValue.getString("productCategoryId").equalsIgnoreCase(productId))
             					cuentaRegresa = genericValue.getString("glAccountId");
 						}
@@ -663,14 +673,14 @@ public class UtilOperacionDiariaServices {
      * @throws ServiceException
      * @throws GenericServiceException
      */
-	public static String verificarBancos(DispatchContext dctx,LocalDispatcher dispatcher,String glAccountId,String recaudadoD) throws ServiceException, GenericEntityException{
+	public static String verificarBancos(DispatchContext dctx,LocalDispatcher dispatcher,String glAccountId,String idPago) throws ServiceException, GenericEntityException{
 		Delegator delegator = dctx.getDelegator();
 		
     	String cuentaRegresa = glAccountId;
     	
     	if(glAccountId != null && !glAccountId.isEmpty()){
     		
-    		GenericValue paymenthMet = delegator.findByPrimaryKey("PaymentMethod", UtilMisc.toMap("paymentMethodId",recaudadoD));
+    		GenericValue paymenthMet = delegator.findByPrimaryKey("PaymentMethod", UtilMisc.toMap("paymentMethodId",idPago));
     		if(paymenthMet != null && !paymenthMet.isEmpty())
     			cuentaRegresa = paymenthMet.getString("glAccountId");
     		
