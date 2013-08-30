@@ -1557,6 +1557,14 @@
         <security https="true" auth="true"/>
         <response name="success" type="view" value="viewAcctgTransPolizas"/>
     </request-map>
+    <request-map uri="viewAcctgTransPolizasLista">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="viewAcctgTransPolizasLista"/>
+    </request-map>
+    <request-map uri="viewAcctgTransPolizasListado">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="viewAcctgTransPolizasListado"/>
+    </request-map>
      <request-map uri="viewAcctgTransIng"> 
         <security https="true" auth="true"/> 
         <response name="success" type="view" value="viewAcctgTransIng"/> 
