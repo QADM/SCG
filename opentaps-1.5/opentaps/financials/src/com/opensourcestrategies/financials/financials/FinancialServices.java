@@ -2449,4 +2449,17 @@ public final class FinancialServices {
         }
 
     }
+    
+    public static Map uneMapas(Map m1, Map m2){
+    	Map regreso = new HashMap();
+    	if(m1!=null){
+    		Debug.logWarning("m1.- "+m1, MODULE);
+    	regreso.putAll(m1);
+    	}
+    	if(m2!=null){
+    		Debug.logWarning("m2.- "+m2, MODULE);
+    	regreso.putAll(m2);
+    	}
+    	return regreso;
+    }
 }
