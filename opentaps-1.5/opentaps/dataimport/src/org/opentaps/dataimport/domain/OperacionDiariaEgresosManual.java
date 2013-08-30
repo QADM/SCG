@@ -115,8 +115,19 @@ public class OperacionDiariaEgresosManual {
 	        if(fecContable != null)
 		        ciclo = String.valueOf(UtilDateTime.getYear(fecContable, timeZone, locale)).substring(2);
 	        
+	        //Obtiene el mapa que se utiliza para guardar las cuentas correspondientes y para validaciones
+	        Map<String,String> mapCuentas = UtilOperacionDiariaServices.regresaMapa(dctx, dispatcher, context, 
+	        										monto, fecContable, acctgTransTypeId, partEspec, 
+	        										tipoFis, idProdAbono, idProdCargo, idPago, "COG");
+	        
+	        String tipoAsiento = UtilOperacionDiariaServices.obtenTipoAsiento(mapCuentas);
+	        
+	        //Generamos la transaccion
+	        acctgTransId = (refDoc == null ? "" :refDoc)+(sec == null ? "" :sec)+(tipoAsiento == null ? "" :tipoAsiento);
+	        
 	        acctgtrans = GenericValue.create(delegator.getModelEntity("AcctgTrans"));
-	        acctgtrans.setNextSeqId();
+//	        acctgtrans.setNextSeqId();
+	        acctgtrans.set("acctgTransId", acctgTransId);
 	        acctgtrans.set("acctgTransTypeId", acctgTransTypeId);
 	        acctgtrans.set("description", descripcion);
 	        acctgtrans.set("transactionDate", fecTrans);
@@ -128,7 +139,7 @@ public class OperacionDiariaEgresosManual {
 	        acctgtrans.set("postedAmount", monto);
 	        acctgtrans.create();
 	        
-	        acctgTransId = acctgtrans.getString("acctgTransId");
+//	        acctgTransId = acctgtrans.getString("acctgTransId");
 	        //Se registra en AcctTransPresupuestal
 	        acctgtransPres = GenericValue.create(delegator.getModelEntity("AcctgTransPresupuestal"));
 	        acctgtransPres.set("acctgTransId", acctgTransId);
@@ -193,10 +204,9 @@ public class OperacionDiariaEgresosManual {
 	        mapaAcctgEnums.put("acctgTagEnumId4",area);
 	        
 	        //Se realiza el registro de trans entries
-	        UtilOperacionDiariaServices.registraEntries(dctx, dispatcher, context, organizationPartyId,
-		        			acctgTransId, monto, fecContable,
-		        			acctgTransTypeId, partEspec, tipoFis, 
-		        			idProdAbono, idProdCargo, idPago,"COG",mapaAcctgEnums);
+	        UtilOperacionDiariaServices.registraEntries(dctx, dispatcher, context,
+					organizationPartyId, acctgTransId, monto,
+					fecContable, acctgTransTypeId, mapaAcctgEnums, mapCuentas);
 			
         
         } catch (ParseException e) {

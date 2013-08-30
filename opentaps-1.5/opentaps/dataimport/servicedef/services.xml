@@ -364,7 +364,6 @@
         <attribute name="idProdAbono" mode="IN" type="String" optional="true"/>
         <attribute name="idProdCargo" mode="IN" type="String" optional="true"/>
         <attribute name="idPago" mode="IN" type="String" optional="true"/>
-        <attribute name="mapaAcctgEnums" mode="IN" type="java.util.Map"/>
         <attribute name="mapCuentas" mode="OUT" type="java.util.Map"/>               
     </service>
     <service name="obtenProdCategoryPadreId" engine="java" 
