@@ -745,7 +745,9 @@ public final class FinancialReports {
             Map<String, Object> set1IncomeStatement = (Map<String, Object>) results.get("set1IncomeStatement");
             Map<String, Object> set2IncomeStatement = (Map<String, Object>) results.get("set2IncomeStatement");
             BigDecimal netIncome1 = (BigDecimal) set1IncomeStatement.get("netIncome");
+            Debug.logWarning("netIncome1.- "+netIncome1, MODULE);
             BigDecimal netIncome2 = (BigDecimal) set2IncomeStatement.get("netIncome");
+            Debug.logWarning("netIncome2.- "+netIncome2, MODULE);
             Map<GenericValue, BigDecimal> accountBalances = (Map<GenericValue, BigDecimal>) results.get("accountBalances");
             Map<GenericValue, BigDecimal> set1Accounts = (Map<GenericValue, BigDecimal>) set1IncomeStatement.get("glAccountSumsFlat");
             Map<GenericValue, BigDecimal> set2Accounts = (Map<GenericValue, BigDecimal>) set2IncomeStatement.get("glAccountSumsFlat");

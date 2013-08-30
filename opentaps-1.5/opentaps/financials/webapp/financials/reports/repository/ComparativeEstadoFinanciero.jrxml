@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Estado de Situacion Financiera" pageWidth="792" pageHeight="612" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="721" leftMargin="43" rightMargin="28" topMargin="28" bottomMargin="28" whenResourceMissingType="Empty">
 	<property name="net.sf.jasperreports.export.xls.exclude.origin.band.1" value="pageFooter"/>
 	<property name="ireport.zoom" value="1.0"/>
-	<property name="ireport.x" value="38"/>
+	<property name="ireport.x" value="81"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="organizationPartyId" class="java.lang.String" isForPrompting="false"/>
 	<parameter name="organizationName" class="java.lang.String" isForPrompting="false">
@@ -49,7 +49,7 @@
 					<textElement lineSpacing="Single">
 						<font size="9" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="false"/>
 					</textElement>
-					<textFieldExpression class="java.lang.String"><![CDATA[$F{accountType}]]></textFieldExpression>
+					<textFieldExpression class="java.lang.String"><![CDATA["Total "+$F{accountType}]]></textFieldExpression>
 				</textField>
 				<textField pattern="#,##0.000;-#,##0.000" isBlankWhenNull="true">
 					<reportElement x="611" y="2" width="110" height="16"/>
@@ -136,7 +136,7 @@
 		<band/>
 	</pageHeader>
 	<columnHeader>
-		<band height="33">
+		<band height="19">
 			<textField pattern="M/d/yy" isBlankWhenNull="true">
 				<reportElement x="391" y="1" width="110" height="16"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle" lineSpacing="Single">
@@ -145,21 +145,7 @@
 				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$P{fromDate}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="391" y="17" width="110" height="16"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle" lineSpacing="Single">
-					<font isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$P{fiscalTypeLeft}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement x="501" y="17" width="110" height="16"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle" lineSpacing="Single">
-					<font isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$P{fiscalTypeRight}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement x="611" y="17" width="110" height="16"/>
+				<reportElement x="611" y="1" width="110" height="16"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle" lineSpacing="Single">
 					<font isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
@@ -173,7 +159,7 @@
 				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$P{thruDate}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="0" y="17" width="391" height="16"/>
+				<reportElement x="0" y="2" width="391" height="16"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
 					<font isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
