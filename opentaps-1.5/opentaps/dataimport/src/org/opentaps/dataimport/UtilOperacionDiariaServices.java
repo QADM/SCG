@@ -34,28 +34,28 @@ public class UtilOperacionDiariaServices {
 	 * Metodo para obtener workeffortid Padre
 	 * @param dctx
 	 * @param dispatcher
-	 * @param workEffortTypeId
+	 * @param workEffortId
 	 * @return
 	 * @throws GenericServiceException
 	 */
     @SuppressWarnings({ "unchecked", "rawtypes" })
-	public static String obtenPadreWorkEffort(DispatchContext dctx,LocalDispatcher dispatcher,String workEffortTypeId) throws GenericServiceException{
+	public static String obtenPadreWorkEffort(DispatchContext dctx,LocalDispatcher dispatcher,String workEffortId) throws GenericServiceException{
     	
-    	String padreWorkEffortTypeId = null;
+    	String padreWorkEffortId = null;
     	
-    	if(workEffortTypeId != null && !workEffortTypeId.isEmpty()){
+    	if(workEffortId != null && !workEffortId.isEmpty()){
 
         	Map input = FastMap.newInstance();
-        	input.put("workEffortTypeId", workEffortTypeId);
+        	input.put("workEffortId", workEffortId);
         	input = dctx.getModelService("obtenWorkEffortPadreId").makeValid(input, ModelService.IN_PARAM);
         	Map tmpResult = dispatcher.runSync("obtenWorkEffortPadreId", input);
-            padreWorkEffortTypeId = (String) tmpResult.get("workEffortTypeIdPadre");
+            padreWorkEffortId = (String) tmpResult.get("workEffortIdPadre");
             
-            Debug.logWarning("workEffortTypeId "+workEffortTypeId+"   PADRE  "+padreWorkEffortTypeId, MODULE);
+            Debug.logWarning("workEffortId "+workEffortId+"   PADRE  "+padreWorkEffortId, MODULE);
     		
     	}
     	
-    	return padreWorkEffortTypeId;
+    	return padreWorkEffortId;
     	
     }	
 	
@@ -68,27 +68,29 @@ public class UtilOperacionDiariaServices {
     @SuppressWarnings({ "rawtypes", "unchecked" })
 	public static Map obtenWorkEffortPadreId(DispatchContext dctx, Map context) {
         Delegator delegator = dctx.getDelegator();
-        String workEffortTypeId = (String) context.get("workEffortTypeId");
+        String workEffortId = (String) context.get("workEffortId");
         
-        String workEffortTypeIdPadre = null;
+        String workEffortIdPadre = null;
       
 		try {        
 			
-	    	EntityCondition condicionWork = EntityCondition.makeCondition("workEffortTypeId", EntityOperator.EQUALS, workEffortTypeId);
-	    	List<GenericValue> resultadoWorkEff = delegator.findByCondition("WorkEffort", condicionWork , UtilMisc.toList("workEffortTypeId","workEffortParentId"), null);
+	    	EntityCondition condicionWork = EntityCondition.makeCondition("workEffortId", EntityOperator.EQUALS, workEffortId);
+	    	List<GenericValue> resultadoWorkEff = delegator.findByCondition("WorkEffort", condicionWork , UtilMisc.toList("workEffortId","workEffortParentId"), null);
 	    	
 	    	if(resultadoWorkEff != null && !resultadoWorkEff.isEmpty()){
 	    		
-	    		workEffortTypeIdPadre = resultadoWorkEff.get(0).getString("workEffortParentId");
+	    		workEffortIdPadre = resultadoWorkEff.get(0).getString("workEffortParentId");
 	    		
 	    	}
-			
+	    	
 		} catch (GenericEntityException e) {
 			return UtilMessage.createAndLogServiceError(e, MODULE);
 		}
         
+		Debug.logWarning("[obtenWorkEffortPadreId] workEffortId "+workEffortId+"   PADRE  "+workEffortIdPadre, MODULE);
+		
         Map results = ServiceUtil.returnSuccess();
-        results.put("workEffortTypeIdPadre", workEffortTypeIdPadre);
+        results.put("workEffortIdPadre", workEffortIdPadre);
         return results;
     }
 	

@@ -194,13 +194,11 @@
 <OpentapsShortcut shortcutId="PresupuestoEgreso" groupId="financialsTransactions" sequenceNum="140" uiLabel="Presupuesto Egreso"
                   linkUrl="createPresupuestoEgresoForm" securityModule="" securityAction=""/>   
                   
+<!-- Operacion Diaria @JSCF -->
 <OpentapsShortcut shortcutId="ODIngresos" groupId="financialsTransactions" sequenceNum="150" uiLabel="FinancialsDailyOperIncome"
                   linkUrl="ODIngresos" securityModule="" securityAction=""/>
 <OpentapsShortcut shortcutId="ODEgresos" groupId="financialsTransactions" sequenceNum="160" uiLabel="FinancialsDailyOperExpens"
-                  linkUrl="ODEgresos" securityModule="" securityAction=""/>                                        
-                  
-                  
-
+                  linkUrl="ODEgresos" securityModule="" securityAction=""/>
 
 <!-- Configuration shortcuts -->
 <OpentapsShortcutGroup applicationId="financials" tabId="configuration" groupId="financialsConfiguration" sequenceNum="010"/>

@@ -376,8 +376,8 @@
     <service name="obtenWorkEffortPadreId" engine="java" 
     	location="org.opentaps.dataimport.UtilOperacionDiariaServices" invoke="obtenWorkEffortPadreId">
     <description>Servicio obtiene WorkEffortId Padre a partir de uno dado.</description>
-    	<attribute name="workEffortTypeId" mode="IN" type="String" optional="false"/>
-    	<attribute name="workEffortTypeIdPadre" mode="OUT" type="String" optional="true"/>
+    	<attribute name="workEffortId" mode="IN" type="String" optional="false"/>
+    	<attribute name="workEffortIdPadre" mode="OUT" type="String" optional="true"/>
     </service>    
     <service name="obtenPartyIdPadre" engine="java" 
     	location="org.opentaps.dataimport.UtilOperacionDiariaServices" invoke="obtenPartyIdPadre">
