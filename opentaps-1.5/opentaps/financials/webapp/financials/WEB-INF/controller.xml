@@ -1592,7 +1592,7 @@
 		<response name="success" type="request-redirect" value="viewAcctPresupuestal">
           <redirect-parameter name="acctgTransId"/>
         </response>
-        <response name="error" type="view" value="createOperacionDiariaEgresos" />
+        <response name="error" type="view" value="ODEgresos" />
 	</request-map>
     <!-- @JSCF -->        
     
