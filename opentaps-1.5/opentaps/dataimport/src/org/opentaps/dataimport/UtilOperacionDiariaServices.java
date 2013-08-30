@@ -141,7 +141,7 @@ public class UtilOperacionDiariaServices {
 	    		productCategoryIdPadre = resultadoProdCa.get(0).getString("primaryParentCategoryId");
 	    		
 	    	}
-			
+	    	
 		} catch (GenericEntityException e) {
 			return UtilMessage.createAndLogServiceError(e, MODULE);
 		}
