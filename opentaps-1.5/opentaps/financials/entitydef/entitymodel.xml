@@ -1398,14 +1398,16 @@ under the License.
        <member-entity entity-alias="ATE" entity-name="AcctgTransEntry"/>
        <member-entity entity-alias="ATP" entity-name="AcctgTransPresupuestal"/>
        <member-entity entity-alias="ATT" entity-name="AcctgTransType"/>
+       <member-entity entity-alias="TDC" entity-name="TipoDocumento"/>
 
-       <alias name="agrupador" entity-alias="ATP"/>
-       <alias name="acctgTransId" entity-alias="ATR"/>
-       <alias name="description" entity-alias="ATT"/>
-       <alias name="postedDate" entity-alias="ATR"/>
-       <alias name="amount" entity-alias="ATE"/>
-       <alias name="acctgTransTypeId" entity-alias="ATT"/>
-       <alias name="organizationPartyId" entity-alias="ATE" group-by="true"/>       
+       <alias name="agrupador" entity-alias="ATP" group-by="true"/>
+       <alias name="amount" entity-alias="ATE" function="sum"/>       
+       <alias name="description" entity-alias="ATT" group-by="true"/>
+       <alias name="postedDate" entity-alias="ATR" group-by="true"/>              
+       <alias name="acctgTransTypeId" entity-alias="ATT" group-by="true"/>
+       <alias name="idTipoDoc" entity-alias="TDC" group-by="true"/>
+       <alias name="tipoPoliza" entity-alias="TDC" group-by="true"/>
+       <alias name="organizationPartyId" entity-alias="ATE" group-by="true"/>
 
        <view-link entity-alias="ATR" rel-entity-alias="ATE">
            <key-map field-name="acctgTransId"/>
@@ -1415,6 +1417,35 @@ under the License.
        </view-link>
        <view-link entity-alias="ATR" rel-entity-alias="ATT">
            <key-map field-name="acctgTransTypeId"/>
+       </view-link>
+       <view-link entity-alias="ATP" rel-entity-alias="TDC">
+           <key-map field-name="idTipoDoc"/>
+       </view-link>
+    </view-entity>
+    
+     <view-entity entity-name="AcctgPolizasDetalleLista"
+                 package-name="com.opensourcestrategies.financials.transactions"
+                 title="Arroja el detalle de las pólizas contables">
+       <member-entity entity-alias="ATR" entity-name="AcctgTrans"/>
+       <member-entity entity-alias="ATP" entity-name="AcctgTransPresupuestal"/>
+       <member-entity entity-alias="TDC" entity-name="TipoDocumento"/>
+       <member-entity entity-alias="ATE" entity-name="AcctgTransEntry"/>
+
+	   <alias name="agrupador" entity-alias="ATP"/>
+	   <alias name="postedDate" entity-alias="ATR"/>
+	   <alias name="idTipoDoc" entity-alias="TDC"/>
+	   <alias name="clavePres" entity-alias="ATP"/>
+	   <alias name="tipoPoliza" entity-alias="TDC"/>	   
+	   <alias name="organizationPartyId" entity-alias="ATE"/>
+       
+       <view-link entity-alias="ATR" rel-entity-alias="ATP" rel-optional="true">
+           <key-map field-name="acctgTransId"/>
+       </view-link>
+       <view-link entity-alias="ATE" rel-entity-alias="ATP">
+           <key-map field-name="acctgTransId"/>
+       </view-link>
+       <view-link entity-alias="ATP" rel-entity-alias="TDC" rel-optional="true">
+           <key-map field-name="idTipoDoc"/>
        </view-link>
     </view-entity>
     

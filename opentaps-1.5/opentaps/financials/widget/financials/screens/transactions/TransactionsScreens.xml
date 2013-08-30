@@ -651,7 +651,7 @@
                     <decorator-section name="section-body">
                     <!--
                         <frame-container title="Buscar Pólizas">
-                            <include-form name="Polizas" location="component://financials/widget/financials/forms/transactions/TransactionsForms.xml"/>
+                            <include-form name="Buscar Polizas" location="component://financials/widget/financials/forms/transactions/TransactionsForms.xml"/>
                         </frame-container>
                         -->
                         <frame-container title="Buscar Pólizas">
@@ -688,6 +688,45 @@
                          <!-- <include-form name="viewAcctgTrans" location="component://financials/widget/financials/forms/transactions/TransactionsForms.xml"/> -->
                         
 							 <include-form name="viewAcctgTransPolizas" location="component://financials/widget/financials/forms/transactions/TransactionsForms.xml"/>
+                               
+                        </container>
+                          
+                       <platform-specific><html>
+                            <html-template location="component://financials/webapp/financials/transactions/acctgTransPolizasBalance.ftl"/>
+                        </html></platform-specific>
+                        <container style="screenlet">
+                           <platform-specific><html>
+                              <html-template location="component://financials/webapp/financials/transactions/acctgTransPolizasEntries.ftl"/>
+                           </html></platform-specific>
+                          
+                           
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="viewAcctgTransPolizasLista">
+        <section>
+            <actions>
+                <set field="sectionHeaderUiLabel" value="Datos de la Póliza"/> 
+                <!--  <script location="component://financials/webapp/financials/WEB-INF/actions/transactions/viewAcctgTransMuestraPoliza.bsh"/>-->
+                <set field="viewIndex" from-field="parameters.VIEW_INDEX" type="Integer" default-value="0"/>
+                <set field="viewSize" from-field="parameters.VIEW_SIZE" type="Integer" default-value="50"/>
+                <set field="pageTitleLabel" value="Pólizas Contables"/>            
+           
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="screenlet">
+                           <platform-specific><html>
+                              <!-- <html-template location="component://financials/webapp/financials/transactions/acctgTransOptions.ftl"/> -->
+                           </html></platform-specific>
+                         <!-- <include-form name="viewAcctgTransMuestraPoliza" location="component://financials/widget/financials/forms/transactions/TransactionsForms.xml"/> -->
+                        
+							 <include-form name="viewAcctgTransPolizasLista" location="component://financials/widget/financials/forms/transactions/TransactionsForms.xml"/>
                                
                         </container>
                           
