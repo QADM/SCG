@@ -38,6 +38,7 @@ import org.ofbiz.service.ServiceUtil;
 import org.opentaps.base.entities.AcctgTrans;
 import org.opentaps.base.entities.AcctgTransAndOrg;
 import org.opentaps.base.entities.AcctgTransEntry;
+import org.opentaps.base.entities.AcctgTransEntry.Fields;
 import org.opentaps.base.entities.AcctgTransOrgPresupIng;
 import org.opentaps.base.entities.AcctgTransPresupuestal;
 import org.opentaps.base.entities.AcctgTransType;
@@ -315,6 +316,7 @@ public class TransactionBudget {
 			String monto = (String) context.get("monto");
 			String referencia = (String) context.get("referencia");
 			String descripcion = (String) context.get("description");
+			String unidadEjecutora = (String) context.get("unidadEjecutora");
 			Double amount = (Double) context.get("amount");
 			Debug.log("organizacion" + organizationPartyId);
 			Debug.log("glFiscalTypeId" + glFiscalTypeId);
@@ -341,17 +343,31 @@ public class TransactionBudget {
 
 			Date fechaTrasac = getDateTransaction(fechaTransaccion);
 			Date fechaConta = getDateTransaction(fechaContable);
+			
 			// create the accounting transaction
+			String TypeTransId = getAcctgTransTypeId("TINGRESOESTIMADO", dispatcher);
+			//AcctgTrans.Fields.postedAmount
 
-			Map createAcctgTransCtx = dctx.getModelService("createAcctgTrans")
+			Map createAcctgTransCtx = dctx.getModelService("createAcctgTransBugetManual")
 					.makeValid(context, ModelService.IN_PARAM);
 			if (UtilValidate.isEmpty(createAcctgTransCtx
 					.get("fechaTransaccion"))) {
-				createAcctgTransCtx.put("transactionDate", fechaTrasac);
+				
+				createAcctgTransCtx.put("transactionDate", fechaTransaccion);
+				createAcctgTransCtx.put("description", clave + "-" +  getFormatMes (fechaConta.getMonth()));
+				createAcctgTransCtx.put("acctgTransTypeId", "TINGRESOESTIMADO");
+				createAcctgTransCtx.put("glFiscalTypeId" ,TypeTransId);
+				createAcctgTransCtx.put("partyId" ,unidadEjecutora);
+				//createAcctgTransCtx.put("createdByUserLogin" ,"admin");
+				createAcctgTransCtx.put("postedAmount", amount);
+				//createdByUserLogin
+				//lastModifiedByUserLogin
+				//postedAmount
+				
 
 			}
 
-			Map results = dispatcher.runSync("createAcctgTrans",
+			Map results = dispatcher.runSync("createAcctgTransBugetManual",
 					createAcctgTransCtx);
 
 			if (!UtilCommon.isSuccess(results)) {
@@ -415,10 +431,11 @@ public class TransactionBudget {
 			debitCtx.put("debitCreditFlag", "D");
 			debitCtx.put("acctgTransEntryTypeId", "_NA_");
 			debitCtx.put("currencyUomId", currencyUomId);
+			debitCtx.put("description", clave + "-" +  getFormatMes (fechaConta.getMonth()));
 			debitCtx.put("acctgTagEnumId3", (String) context.get("subFuenteEsp"));
 			results = dispatcher.runSync("createAcctgTransEntryManual",
 					debitCtx);
-
+			
 			// credit entry, the tags for are prefixed by "creditTagEnumId"
 			Map creditCtx = new HashMap(createAcctgTransEntryCtx);
 			UtilAccountingTags.addTagParameters(context, creditCtx,
@@ -428,6 +445,7 @@ public class TransactionBudget {
 			creditCtx.put("debitCreditFlag", "C");
 			creditCtx.put("acctgTransEntryTypeId", "_NA_");
 			creditCtx.put("currencyUomId", currencyUomId);
+			creditCtx.put("description", clave + "-" +  getFormatMes (fechaConta.getMonth()));
 			creditCtx.put("acctgTagEnumId3", (String) context.get("subFuenteEsp"));
 			results = dispatcher.runSync("createAcctgTransEntryManual",
 					creditCtx);
@@ -879,32 +897,60 @@ public class TransactionBudget {
 		return parentParty;
 	}
 
-	public static Map createAcctgTransPresupuestalManual(DispatchContext dctx,
+	public static Map createAcctgTransBugetManual(DispatchContext dctx,
 			Map context) throws GenericServiceException {
 
 		Delegator delegator = dctx.getDelegator();
 		LocalDispatcher dispatcher = dctx.getDispatcher();
 		Locale locale = UtilCommon.getLocale(context);
 		GenericValue userLogin = (GenericValue) context.get("userLogin");
-		Debug.log("Si entro al createAcctgTransPresupuestalManual, acctgTransId "
-				+ context.get("acctgTransId"));
+		
+		Debug.log("Si entro al createAcctgTransBugetManual");
 
 		try {
 			LedgerRepositoryInterface ledgerRepository = new DomainsLoader(
 					new Infrastructure(dispatcher), new User(userLogin))
 					.loadDomainsDirectory().getLedgerDomain()
 					.getLedgerRepository();
-
-			AcctgTransPresupuestal presupuestal = new AcctgTransPresupuestal();
-			presupuestal.initRepository(ledgerRepository);
-			presupuestal.setAllFields(context);
-
+			String acctgTransId = ledgerRepository.getNextSeqId("AcctgTrans");
+			Debug.log("acctgTransId " + acctgTransId);
+			
+			AcctgTrans acctgTrans = new AcctgTrans();
+			acctgTrans.initRepository(ledgerRepository);
+			//acctgTrans.setAllFields(context);
+			Date fecha = getDateTransaction((String) context.get("transactionDate"));
+			Timestamp timestamp = new Timestamp(fecha.getTime());
+			String acctgTransTypeId = (String) context.get("acctgTransTypeId");
+			BigDecimal postedAmount = new BigDecimal((Double) context.get("postedAmount"));
+			
+			acctgTrans.setPartyId((String) context.get("partyId"));			
+			acctgTrans.setDescription((String) context.get("description"));			
+			acctgTrans.setAcctgTransTypeId(acctgTransTypeId);
+			acctgTrans.setPostedAmount(postedAmount);
+			
+			acctgTrans.setCreatedByUserLogin(userLogin.getString("userLoginId"));
+			acctgTrans.setLastModifiedByUserLogin(userLogin.getString("userLoginId"));
+			
+			acctgTrans.setTransactionDate(timestamp);
+			
+			String mes =  getFormatMes(fecha.getMonth());
+			String annio = String.valueOf(fecha.getYear() + 1900).substring(2);
+			if(acctgTransTypeId.equals("TINGRESOESTIMADO"))
+			{
+				acctgTransId = acctgTransId + " I" + annio + "-" + mes; 
+			}
+			else if(acctgTransTypeId.equals("TPRESUPAPROBADO"))
+			{
+				acctgTransId = acctgTransId + " E" + annio + "-" + mes; 
+			}
+			//acctgTrans.setDescription(description);
+			acctgTrans.setAcctgTransId(acctgTransId);
 			// create
 			// presupuestal.setNextSubSeqId(AcctgTransEntry.Fields.acctgTransEntrySeqId.name());
-			ledgerRepository.createOrUpdate(presupuestal);
+			ledgerRepository.createOrUpdate(acctgTrans);
 
 			Map results = ServiceUtil.returnSuccess();
-			results.put("acctgTransId", presupuestal.getAcctgTransId());
+			results.put("acctgTransId", acctgTrans.getAcctgTransId());
 			return results;
 		} catch (GeneralException e) {
 			return UtilMessage.createAndLogServiceError(e, MODULE);
@@ -912,6 +958,61 @@ public class TransactionBudget {
 	}
 	
 	
+	private static String getFormatMes(int month) {
+		
+		String Mes = "";
+		try {
+			
+			switch (month) {
+			case 0:	
+				Mes = "01";
+				break;
+			case 1:
+				Mes = "02";
+				break;
+			case 2:	
+				Mes = "03";
+				break;
+			case 3:	
+				Mes = "04";
+				break;
+			case 4:		
+				Mes = "05";
+				break;
+			case 5:			
+				Mes = "06";
+				break;
+			case 6:		
+				Mes = "07";
+				break;
+			case 7:		
+				Mes = "08";
+				break;
+			case 8:		
+				Mes = "09";
+				break;
+			case 9:		
+				Mes = "10";
+				break;
+			case 10:	
+				Mes = "11";
+				break;
+			case 11:	
+				Mes = "12";
+				break;
+
+			default:
+				break;
+			}
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		return Mes;
+		
+	}
+
 	/**
 	 * Create a Quick <code>AcctgTrans</code> record. IsPosted is forced to "N".
 	 * Creates an Quick AcctgTrans and two offsetting AcctgTransEntry records.
@@ -958,6 +1059,7 @@ public class TransactionBudget {
 			//String monto = (String) context.get("amount");
 			String referencia = (String) context.get("referencia");
 			String descripcion = (String) context.get("description");
+			String unidadEjecutora = (String) context.get("unidadEjecutora");
 			Double amount = (Double) context.get("amount");
 			Debug.log("organizacion" + organizationPartyId);
 			//Debug.log("glFiscalTypeId" + glFiscalTypeId);
@@ -986,18 +1088,24 @@ public class TransactionBudget {
 			Date fechaConta = getDateTransaction(fechaContable);
 			// create the accounting transaction
 			
-			
+			String TypeTransId = getAcctgTransTypeId("TPRESUPAPROBADO", dispatcher);
 
-			Map createAcctgTransCtx = dctx.getModelService("createAcctgTrans")
+			Map createAcctgTransCtx = dctx.getModelService("createAcctgTransBugetManual")
 					.makeValid(context, ModelService.IN_PARAM);
 			if (UtilValidate.isEmpty(createAcctgTransCtx
-					.get("fechaTransaccion"))) {
-				createAcctgTransCtx.put("transactionDate", fechaTrasac);
-				createAcctgTransCtx.put("glFiscalTypeId", "BUDGET");
-
+					.get("fechaTransaccion"))) {				
+				
+				
+				createAcctgTransCtx.put("transactionDate", fechaTransaccion);
+				createAcctgTransCtx.put("description", clave + "-" +  getFormatMes (fechaConta.getMonth()));
+				createAcctgTransCtx.put("acctgTransTypeId", "TPRESUPAPROBADO");
+				createAcctgTransCtx.put("glFiscalTypeId" ,TypeTransId);
+				createAcctgTransCtx.put("partyId" ,unidadEjecutora);
+				//createAcctgTransCtx.put("createdByUserLogin" ,"admin");
+				createAcctgTransCtx.put("postedAmount", amount);
 			}
 
-			Map results = dispatcher.runSync("createAcctgTrans",
+			Map results = dispatcher.runSync("createAcctgTransBugetManual",
 					createAcctgTransCtx);
 
 			if (!UtilCommon.isSuccess(results)) {
@@ -1064,6 +1172,9 @@ public class TransactionBudget {
 			debitCtx.put("acctgTagEnumId2", tipoGasto);
 			debitCtx.put("acctgTagEnumId3", (String) context.get("subFuenteEsp"));
 			debitCtx.put("acctgTagEnumId4", area);
+			debitCtx.put("partyId", organizationPartyId);
+			debitCtx.put("organizationPartyId", organizationPartyId);
+
 			results = dispatcher.runSync("createAcctgTransEntryManual",
 					debitCtx);
 
@@ -1080,6 +1191,8 @@ public class TransactionBudget {
 			creditCtx.put("acctgTagEnumId1", tipoGasto);
 			creditCtx.put("acctgTagEnumId3", (String) context.get("subFuenteEsp"));
 			creditCtx.put("acctgTagEnumId4", area);
+			creditCtx.put("partyId", organizationPartyId);
+			creditCtx.put("organizationPartyId", organizationPartyId);
 			results = dispatcher.runSync("createAcctgTransEntryManual",
 					creditCtx);
 			
@@ -1096,6 +1209,30 @@ public class TransactionBudget {
 		} catch (GeneralException e) {
 			return UtilMessage.createAndLogServiceError(e, MODULE);
 		}
+	}
+
+	private static String getAcctgTransTypeId(String tipo, LocalDispatcher dispatcher) {
+		String AcctgTransTypeId = "";
+		try {
+			
+			
+			EntityCondition condicion = EntityCondition.makeCondition(
+					"acctgTransTypeId", tipo);
+			List<GenericValue> partys = dispatcher.getDelegator()
+					.findByCondition("MiniGuiaContable", condicion,
+							UtilMisc.toList("acctgTransTypeId", "glFiscalTypeIdPres"), null);
+
+			for (GenericValue genericValue : partys) {
+				Debug.log("acctgTransTypeId" + genericValue.get("acctgTransTypeId").toString());
+				Debug.log("glFiscalTypeIdPres" + genericValue.get("glFiscalTypeIdPres").toString());
+				AcctgTransTypeId = genericValue.get("glFiscalTypeIdPres").toString();
+			}
+
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return AcctgTransTypeId;
 	}
 
 }
