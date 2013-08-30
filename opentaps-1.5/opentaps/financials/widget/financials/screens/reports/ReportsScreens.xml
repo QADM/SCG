@@ -328,7 +328,7 @@
                             <html-template location="component://financials/webapp/financials/includes/comparativeStateReportOptions.ftl"/>
                           </html></platform-specific>
                           <platform-specific><html>
-                            <html-template location="component://financials/webapp/financials/reports/comparativeBalance.ftl"/>
+                            <html-template location="component://financials/webapp/financials/reports/situacionFinanciera.ftl"/>
                           </html></platform-specific>
                         </frame-container>
                     </decorator-section>
@@ -358,7 +358,7 @@
                             <html-template location="component://financials/webapp/financials/includes/comparativeFlowReportOptions.ftl"/>
                           </html></platform-specific>
                           <platform-specific><html>
-                            <html-template location="component://financials/webapp/financials/reports/comparativeIncomeStatement.ftl"/>
+                            <html-template location="component://financials/webapp/financials/reports/estadoActividades.ftl"/>
                           </html></platform-specific>
                         </frame-container>
                     </decorator-section>

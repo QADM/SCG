@@ -4,7 +4,7 @@
 	<property name="ireport.scriptlethandling" value="0"/>
 	<property name="ireport.encoding" value="UTF-8"/>
 	<property name="ireport.zoom" value="1.0"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.x" value="38"/>
 	<property name="ireport.y" value="0"/>
 	<import value="net.sf.jasperreports.engine.*"/>
 	<import value="java.util.*"/>
@@ -48,50 +48,10 @@
 			<band/>
 		</groupHeader>
 		<groupFooter>
-			<band height="18">
-				<textField isBlankWhenNull="true">
-					<reportElement key="textField" x="0" y="2" width="391" height="16"/>
-					<box>
-						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-						<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					</box>
-					<textElement lineSpacing="Single">
-						<font size="9" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-					</textElement>
-					<textFieldExpression class="java.lang.String"><![CDATA[$F{cumulativeIncomeName}]]></textFieldExpression>
-				</textField>
-				<textField pattern="#,##0.000;-#,##0.000" isBlankWhenNull="true">
-					<reportElement key="textField" x="611" y="2" width="110" height="16"/>
-					<box>
-						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-						<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					</box>
-					<textElement textAlignment="Right" lineSpacing="Single">
-						<font size="9" isBold="false" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-					</textElement>
-					<textFieldExpression class="java.math.BigDecimal"><![CDATA[($P{netIncomeRight}.subtract($P{netIncomeLeft}))]]></textFieldExpression>
-				</textField>
+			<band height="2">
 				<line>
 					<reportElement key="line" x="0" y="0" width="721" height="1"/>
 				</line>
-				<textField pattern="#,##0.000;-#,##0.000" isBlankWhenNull="true">
-					<reportElement x="391" y="2" width="110" height="16"/>
-					<textElement textAlignment="Right" verticalAlignment="Middle" lineSpacing="Single">
-						<font size="9" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" isPdfEmbedded="true"/>
-					</textElement>
-					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{accountSumLeft_1}]]></textFieldExpression>
-				</textField>
-				<textField pattern="#,##0.000;-#,##0.000" isBlankWhenNull="true">
-					<reportElement x="501" y="2" width="109" height="16"/>
-					<textElement textAlignment="Right" verticalAlignment="Middle" lineSpacing="Single">
-						<font size="9" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" isPdfEmbedded="true"/>
-					</textElement>
-					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{accountSumRight_1}]]></textFieldExpression>
-				</textField>
 			</band>
 		</groupFooter>
 	</group>
@@ -124,7 +84,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Top" lineSpacing="Single">
 					<font isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsComparativeIncomeStatement}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$R{EdoActividades}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement key="textField" x="0" y="74" width="721" height="20"/>
@@ -190,7 +150,7 @@
 		<band/>
 	</pageHeader>
 	<columnHeader>
-		<band height="33">
+		<band height="19">
 			<textField pattern="MM/dd/yy" isBlankWhenNull="true">
 				<reportElement key="textField" x="391" y="1" width="50" height="16"/>
 				<box>
@@ -231,33 +191,7 @@
 				<text><![CDATA[-]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement key="textField" x="391" y="17" width="110" height="16"/>
-				<box>
-					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle" lineSpacing="Single">
-					<font isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$P{fiscalTypeLeft}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement key="textField" x="501" y="17" width="110" height="16"/>
-				<box>
-					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle" lineSpacing="Single">
-					<font isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$P{fiscalTypeRight}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement key="textField" x="611" y="17" width="110" height="16"/>
+				<reportElement key="textField" x="611" y="1" width="110" height="16"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -309,7 +243,7 @@
 				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$P{fromDateRight}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement key="textField" x="0" y="17" width="391" height="16"/>
+				<reportElement key="textField" x="0" y="1" width="391" height="16"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -424,25 +358,31 @@
 				<text><![CDATA[Ahorro / Desahorro Neto del Ejercicio]]></text>
 			</staticText>
 			<textField pattern="#,##0.000;-#,##0.000" isBlankWhenNull="true">
-				<reportElement x="401" y="1" width="100" height="20"/>
+				<reportElement x="504" y="1" width="110" height="16"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle" lineSpacing="Single">
-					<font isBold="true" pdfFontName="DejaVuSans-Bold.ttf" isPdfEmbedded="true"/>
+					<font isBold="true" pdfFontName="DejaVuSans.ttf" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$P{totFec1}]]></textFieldExpression>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$P{netIncomeRight}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.000;-#,##0.000">
+				<reportElement x="391" y="1" width="110" height="16"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" lineSpacing="Single">
+					<font isBold="true" pdfFontName="DejaVuSans.ttf" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$P{netIncomeLeft}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.000;-#,##0.000" isBlankWhenNull="true">
-				<reportElement x="501" y="1" width="109" height="20"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle" lineSpacing="Single">
-					<font isBold="true" pdfFontName="DejaVuSans-Bold.ttf" isPdfEmbedded="true"/>
+				<reportElement key="textField" x="611" y="2" width="110" height="16"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" lineSpacing="Single">
+					<font size="9" isBold="false" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$P{totFec2}]]></textFieldExpression>
-			</textField>
-			<textField pattern="#,##0.000;-#,##0.000" isBlankWhenNull="true">
-				<reportElement x="611" y="1" width="110" height="20"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle" lineSpacing="Single">
-					<font pdfFontName="DejaVuSans-Bold.ttf" isPdfEmbedded="true"/>
-				</textElement>
-				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$P{totFecTot}]]></textFieldExpression>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[($P{netIncomeRight}.subtract($P{netIncomeLeft}))]]></textFieldExpression>
 			</textField>
 		</band>
 	</summary>
