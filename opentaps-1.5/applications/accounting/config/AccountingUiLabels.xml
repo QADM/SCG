@@ -1311,34 +1311,50 @@
     </property>                                             
      <!-- Etiquetas para Reportes CUSTOM @JSCF -->
 	<!-- Etiquetas para Reportes CUSTOM PRESUOUESTO @CG -->
-     <property key="EjecucionIngreso">
-        <value xml:lang="en">Income budget execution - CRI</value>
-        <value xml:lang="es">Ejecución del Ingreso - Clasificador por Rubro del Ingreso</value>
+     <property key="EjecucionEgresoAdministrativa">
+        <value xml:lang="en">Administrative</value> 
+        <value xml:lang="es">Clasificación Administrativa</value>
      </property>
      <property key="EjecucionEgresoCOG">
-        <value xml:lang="en">Expenditure budget execution - COG</value> 
-        <value xml:lang="es">Ejecución del Egreso - Clasificador por Objeto del Gasto</value>
+        <value xml:lang="en">COG</value> 
+        <value xml:lang="es">Clasificador por Objeto del Gasto</value>
      </property>
      <property key="EjecucionEgresoFuente">
-        <value xml:lang="en">Expenditure budget execution - Economic</value>
-        <value xml:lang="es">Ejecución del Egreso - Clasificación por Fuente económica</value>
+        <value xml:lang="en">Economic</value>
+        <value xml:lang="es">Clasificación por Fuente económica</value>
      </property>
      <property key="EjecucionEgresoFuncion">
-        <value xml:lang="en">Expenditure budget execution - Functional</value>
-        <value xml:lang="es">Ejecución del Egreso - Clasificación Funcional</value>
+        <value xml:lang="en">Functional</value>
+        <value xml:lang="es">Clasificación Funcional</value>
      </property>
      <property key="EjecucionEgresoGeografica">
-        <value xml:lang="en">Expenditure budget execution - Geographic</value>
-        <value xml:lang="es">Ejecución del Egreso - Clasificación Geográfica</value>
+        <value xml:lang="en">Geographic</value>
+        <value xml:lang="es">Clasificación Geográfica</value>
      </property>
      <property key="EjecucionEgresoProgramatica">
-        <value xml:lang="en">Expenditure budget execution - Programmatic</value>
-        <value xml:lang="es">Ejecución del Egreso - Clasificación Programática</value>
+        <value xml:lang="en">Programmatic</value>
+        <value xml:lang="es">Clasificación Programática</value>
      </property>
      <property key="EjecucionEgresoSectorial">
-        <value xml:lang="en">Expenditure budget execution - Sectorial</value>
-        <value xml:lang="es">Ejecución del Egreso - Clasificación Sectorial</value>
+        <value xml:lang="en">Sectorial</value>
+        <value xml:lang="es">Clasificación Sectorial</value>
      </property>       
+     <property key="EjecucionIngresoAdministrativa">
+        <value xml:lang="en">Administrative</value>
+        <value xml:lang="es">Clasificación Administrativa</value>
+     </property>
+     <property key="EjecucionIngresoCRI">
+        <value xml:lang="en">CRI</value>
+        <value xml:lang="es">Clasificador por Rubro del Ingreso</value>
+     </property>
+     <property key="EjecucionIngresoFuente">
+        <value xml:lang="en">Economic</value>
+        <value xml:lang="es">Clasificación por Fuente económica</value>
+     </property>
+      <property key="EjecucionIngresoGeografica">
+        <value xml:lang="en">Geographic</value>
+        <value xml:lang="es">Clasificación Geográfica</value>
+     </property>
      <!-- Etiquetas para Reportes CUSTOM PRESUOUESTO @CG -->
     <property key="AccountingBalanceSheet">
         <value xml:lang="ar">مذكرة الميزانية</value>
