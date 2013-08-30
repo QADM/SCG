@@ -345,8 +345,10 @@ public class TransactionBudget {
 			Date fechaConta = getDateTransaction(fechaContable);
 			
 			// create the accounting transaction
-			String TypeTransId = getAcctgTransTypeId("TINGRESOESTIMADO", dispatcher);
-			//AcctgTrans.Fields.postedAmount
+			String glFiscalType = getAcctgTransTypeId("TINGRESOESTIMADO", dispatcher);
+			
+			Debug.log("Tipo glFiscalType " + glFiscalType);
+			
 
 			Map createAcctgTransCtx = dctx.getModelService("createAcctgTransBugetManual")
 					.makeValid(context, ModelService.IN_PARAM);
@@ -356,7 +358,7 @@ public class TransactionBudget {
 				createAcctgTransCtx.put("transactionDate", fechaTransaccion);
 				createAcctgTransCtx.put("description", clave + "-" +  getFormatMes (fechaConta.getMonth()));
 				createAcctgTransCtx.put("acctgTransTypeId", "TINGRESOESTIMADO");
-				createAcctgTransCtx.put("glFiscalTypeId" ,TypeTransId);
+				createAcctgTransCtx.put("glFiscalTypeId" ,glFiscalType);
 				createAcctgTransCtx.put("partyId" ,unidadEjecutora);
 				//createAcctgTransCtx.put("createdByUserLogin" ,"admin");
 				createAcctgTransCtx.put("postedAmount", amount);
@@ -927,6 +929,7 @@ public class TransactionBudget {
 			acctgTrans.setDescription((String) context.get("description"));			
 			acctgTrans.setAcctgTransTypeId(acctgTransTypeId);
 			acctgTrans.setPostedAmount(postedAmount);
+			acctgTrans.setGlFiscalTypeId((String) context.get("glFiscalTypeId"));
 			
 			acctgTrans.setCreatedByUserLogin(userLogin.getString("userLoginId"));
 			acctgTrans.setLastModifiedByUserLogin(userLogin.getString("userLoginId"));
@@ -1088,8 +1091,9 @@ public class TransactionBudget {
 			Date fechaConta = getDateTransaction(fechaContable);
 			// create the accounting transaction
 			
-			String TypeTransId = getAcctgTransTypeId("TPRESUPAPROBADO", dispatcher);
-
+			String glFiscalTypeId = getAcctgTransTypeId("TPRESUPAPROBADO", dispatcher);
+			Debug.log("Tipo glFiscalTypeId" +  glFiscalTypeId);
+			
 			Map createAcctgTransCtx = dctx.getModelService("createAcctgTransBugetManual")
 					.makeValid(context, ModelService.IN_PARAM);
 			if (UtilValidate.isEmpty(createAcctgTransCtx
@@ -1099,7 +1103,7 @@ public class TransactionBudget {
 				createAcctgTransCtx.put("transactionDate", fechaTransaccion);
 				createAcctgTransCtx.put("description", clave + "-" +  getFormatMes (fechaConta.getMonth()));
 				createAcctgTransCtx.put("acctgTransTypeId", "TPRESUPAPROBADO");
-				createAcctgTransCtx.put("glFiscalTypeId" ,TypeTransId);
+				createAcctgTransCtx.put("glFiscalTypeId" ,glFiscalTypeId);
 				createAcctgTransCtx.put("partyId" ,unidadEjecutora);
 				//createAcctgTransCtx.put("createdByUserLogin" ,"admin");
 				createAcctgTransCtx.put("postedAmount", amount);
@@ -1212,7 +1216,7 @@ public class TransactionBudget {
 	}
 
 	private static String getAcctgTransTypeId(String tipo, LocalDispatcher dispatcher) {
-		String AcctgTransTypeId = "";
+		String glFiscalTypeIdPres = "";
 		try {
 			
 			
@@ -1225,14 +1229,14 @@ public class TransactionBudget {
 			for (GenericValue genericValue : partys) {
 				Debug.log("acctgTransTypeId" + genericValue.get("acctgTransTypeId").toString());
 				Debug.log("glFiscalTypeIdPres" + genericValue.get("glFiscalTypeIdPres").toString());
-				AcctgTransTypeId = genericValue.get("glFiscalTypeIdPres").toString();
+				glFiscalTypeIdPres = genericValue.get("glFiscalTypeIdPres").toString();
 			}
 
 			
 		} catch (Exception e) {
-			// TODO: handle exception
+			Debug.log("Error al obtener glFiscalTypeIdPres tipo [" + tipo + "]" + e);
 		}
-		return AcctgTransTypeId;
+		return glFiscalTypeIdPres;
 	}
 
 }
