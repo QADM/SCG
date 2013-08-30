@@ -34,8 +34,10 @@ import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.Delegator;
+import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
+import org.ofbiz.entity.util.EntityFindOptions;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.party.party.PartyHelper;
 import org.opentaps.base.entities.AcctgTransAndOrg;
@@ -43,6 +45,7 @@ import org.opentaps.base.entities.AcctgTransType;
 import org.opentaps.base.entities.GlFiscalType;
 import org.opentaps.base.entities.AcctgPolizas;
 import org.opentaps.base.entities.PartyContactWithPurpose;
+import org.opentaps.base.entities.TipoDocumento;
 import org.opentaps.common.builder.EntityListBuilder;
 import org.opentaps.common.builder.PageBuilder;
 import org.opentaps.common.util.UtilCommon;
@@ -74,10 +77,11 @@ public class BuscarPolizas {
         String organizationPartyId = UtilCommon.getOrganizationPartyId(ac.getRequest());
         String dateFormat = UtilDateTime.getDateFormat(locale);
 
-         String acctgTransId = ac.getParameter("findAcctgTransId");
+         //String acctgTransId = ac.getParameter("findAcctgTransId");
          String acctgTransTypeId = ac.getParameter("acctgTransTypeId");
          String postedDate = ac.getParameter("postedDate");
-         String agrupador = ac.getParameter("agrupador");         
+         String agrupador = ac.getParameter("agrupador");          
+         String tipoPoliza = ac.getParameter("tipoPoliza");
 
          DomainsDirectory dd = DomainsDirectory.getDomainsDirectory(ac);
          final LedgerRepositoryInterface ledgerRepository = dd.getLedgerDomain().getLedgerRepository();
@@ -99,12 +103,21 @@ public class BuscarPolizas {
          }
          ac.put("transactionTypes", transactionTypesList);
          
+      // get the list of transactionTypes for the parametrized form ftl         
+         List<TipoDocumento> listaTipoPoliza = ledgerRepository.findAll(TipoDocumento.class);         
+         List<Map<String, Object>> listaTipoPolizaList = new FastList<Map<String, Object>>();
+         for (TipoDocumento s : listaTipoPoliza) {
+             Map<String, Object> map = s.toMap();
+             listaTipoPolizaList.add(map);
+         }
+         ac.put("listaTipoPoliza", listaTipoPolizaList);
+         
          if ("Y".equals(ac.getParameter("performFind"))) {
         	
              List<EntityCondition> searchConditions = new FastList<EntityCondition>();             
-             if (UtilValidate.isNotEmpty(acctgTransId)) {
+             /*if (UtilValidate.isNotEmpty(acctgTransId)) {
                 searchConditions.add(EntityCondition.makeCondition(AcctgPolizas.Fields.acctgTransId.name(), EntityOperator.EQUALS, acctgTransId));
-             }
+             }*/
              if (UtilValidate.isNotEmpty(agrupador)) {
                  searchConditions.add(EntityCondition.makeCondition(AcctgPolizas.Fields.agrupador.name(), EntityOperator.EQUALS, agrupador));
              }
@@ -116,13 +129,18 @@ public class BuscarPolizas {
              }
              if (UtilValidate.isNotEmpty(organizationPartyId)) {
             	 searchConditions.add(EntityCondition.makeCondition(AcctgPolizas.Fields.organizationPartyId.name(), EntityOperator.EQUALS, organizationPartyId));
+             }             
+             if (UtilValidate.isNotEmpty(tipoPoliza)) {
+            	 searchConditions.add(EntityCondition.makeCondition(AcctgPolizas.Fields.tipoPoliza.name(), EntityOperator.EQUALS, tipoPoliza));
              }
+             
             
              // fields to select
-             List<String> fieldsToSelect = UtilMisc.toList("agrupador", "acctgTransId", "description", "postedDate", "amount");
+             List<String> fieldsToSelect = UtilMisc.toList("agrupador", "description", "postedDate", "amount");
+             List<String> orderBy = UtilMisc.toList("amount");
 
              Debug.logInfo("search conditions : " + EntityCondition.makeCondition(searchConditions, EntityOperator.AND).toString(), MODULE);
-             EntityListBuilder acctgTransListBuilder = new EntityListBuilder(ledgerRepository, AcctgPolizas.class, EntityCondition.makeCondition(searchConditions, EntityOperator.AND), fieldsToSelect, UtilMisc.toList(AcctgPolizas.Fields.postedDate.desc()));
+             EntityListBuilder acctgTransListBuilder = new EntityListBuilder(ledgerRepository, AcctgPolizas.class, EntityCondition.makeCondition(searchConditions, EntityOperator.AND), fieldsToSelect, orderBy);             
              PageBuilder<AcctgPolizas> pageBuilder = new PageBuilder<AcctgPolizas>() {
                  public List<Map<String, Object>> build(List<AcctgPolizas> page) throws Exception {
                      Delegator delegator = ac.getDelegator();

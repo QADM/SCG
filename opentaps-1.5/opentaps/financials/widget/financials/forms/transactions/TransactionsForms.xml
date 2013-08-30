@@ -108,6 +108,11 @@
         default-title-style="tableheadtext" default-widget-style="tabletext" default-tooltip-style="tabletext">
         <auto-fields-entity entity-name="AcctgPolizasDetalle" default-field-type="display"/>
     </form>
+    
+    <form name="viewAcctgTransPolizasLista" type="single" target="updateAcctgTransForm" default-map-name="acctgTransPresupuestalPolizasLista"
+        default-title-style="tableheadtext" default-widget-style="tabletext" default-tooltip-style="tabletext">
+        <auto-fields-entity entity-name="AcctgPolizasDetalleLista" default-field-type="display"/>
+    </form>
 
     <form name="updateAcctgTransForm" type="single" target="updateAcctgTrans" default-map-name="acctgTrans"
         default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
@@ -477,10 +482,18 @@
 	        
 	        <field name="posted_date" entity-name="AcctgTrans" title="Fecha Contable" encode-output="false"><date-time default-value=""/></field>
 	        
-	        <field name="acctgTransTypeId" title="Tipo de Póliza">
+	        <field name="acctgTransTypeId" title="Tipo de Transaccion">
            	 <drop-down allow-empty="true" current="selected">
                 <entity-options description="${description}" entity-name="AcctgTransType">
                     <entity-order-by field-name="acctgTransTypeId"/>
+                </entity-options>
+           	 </drop-down>
+      		</field>
+      		
+      		<field name="idTipoDoc" title="Tipo de Póliza">
+           	 <drop-down allow-empty="true" current="selected">
+                <entity-options description="${tipoPoliza}" entity-name="TipoDocumento">
+                    <entity-order-by field-name="idTipoDoc"/>
                 </entity-options>
            	 </drop-down>
       		</field>

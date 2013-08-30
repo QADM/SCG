@@ -98,6 +98,7 @@ public interface LedgerRepositoryInterface extends RepositoryInterface {
     
     public AcctgPolizasDetalle getAcctgPolizasDetalle(String acctgTransId) throws RepositoryException;
     
+    public AcctgPolizasDetalleLista getAcctgPolizasDetalleLista(String agrupador) throws RepositoryException;
     
     /**
      * Finds a transaction entry by ID.

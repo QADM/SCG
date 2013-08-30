@@ -44,7 +44,6 @@
 			<td></td>			
             <td>${entry.debitCreditFlag}</td>
             <@displayCurrencyCell amount=entry.amount currencyUomId=entry.currencyUomId class="tabletext" />
-			<td>${entry.getRelatedOneCache("StatusItem").description}</td>
           </tr>
           
         </#list>
