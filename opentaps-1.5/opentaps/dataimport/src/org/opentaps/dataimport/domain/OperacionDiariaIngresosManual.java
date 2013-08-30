@@ -163,6 +163,7 @@ public class OperacionDiariaIngresosManual {
 	        acctgtransPres.set("idProductoD", idProdCargo);
 	        acctgtransPres.set("idProductoH", idProdAbono);
 	        acctgtransPres.set("idPago",idPago);
+	        acctgtransPres.set("agrupador", refDoc);
 	        acctgtransPres.create();
 
 	        Map<String,String> mapaAcctgEnums = FastMap.newInstance();
