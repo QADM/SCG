@@ -46,6 +46,7 @@ import org.opentaps.base.entities.GlFiscalType;
 import org.opentaps.base.entities.AcctgPolizas;
 import org.opentaps.base.entities.PartyContactWithPurpose;
 import org.opentaps.base.entities.TipoDocumento;
+import org.opentaps.base.entities.TipoPoliza;
 import org.opentaps.common.builder.EntityListBuilder;
 import org.opentaps.common.builder.PageBuilder;
 import org.opentaps.common.util.UtilCommon;
@@ -104,9 +105,9 @@ public class BuscarPolizas {
          ac.put("transactionTypes", transactionTypesList);
          
       // get the list of transactionTypes for the parametrized form ftl         
-         List<TipoDocumento> listaTipoPoliza = ledgerRepository.findAll(TipoDocumento.class);         
+         List<TipoPoliza> listaTipoPoliza = ledgerRepository.findAll(TipoPoliza.class);         
          List<Map<String, Object>> listaTipoPolizaList = new FastList<Map<String, Object>>();
-         for (TipoDocumento s : listaTipoPoliza) {
+         for (TipoPoliza s : listaTipoPoliza) {
              Map<String, Object> map = s.toMap();
              listaTipoPolizaList.add(map);
          }

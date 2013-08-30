@@ -25,5 +25,8 @@
 		<relation type="one" fk-name="ACCTTD" rel-entity-name="AcctgTransType">
 			<key-map field-name="acctgTransTypeId" />
 		</relation>
+		<relation type="one" fk-name="ACCTTPO" rel-entity-name="TipoPoliza">
+			<key-map field-name="tipoPoliza" />
+		</relation>
 	</entity>
 </entitymodel>
