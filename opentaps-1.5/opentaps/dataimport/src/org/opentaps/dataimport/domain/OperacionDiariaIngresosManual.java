@@ -117,7 +117,7 @@ public class OperacionDiariaIngresosManual {
 	        String tipoAsiento = UtilOperacionDiariaServices.obtenTipoAsiento(mapCuentas);
 	        
 	        //Generamos la transaccion
-	        acctgTransId = (refDoc == null ? "" :refDoc)+(sec == null ? "" :sec)+(tipoAsiento == null ? "" :tipoAsiento);
+	        acctgTransId = (refDoc == null ? "" :refDoc)+"-"+(sec == null ? "" :sec)+"-"+(tipoAsiento == null ? "" :tipoAsiento);
 	        
 	        acctgtrans = GenericValue.create(delegator.getModelEntity("AcctgTrans"));
 //	        acctgtrans.setNextSeqId();
