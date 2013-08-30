@@ -158,6 +158,10 @@ public class OperacionDiariaEgresosManual {
 	        acctgtransPres.set("partidaEspecifica", partEspec);
 	        String partGene = UtilOperacionDiariaServices.obtenPadreProductCate(dctx, dispatcher, partEspec);
 	        acctgtransPres.set("partidaGenerica", partGene);
+	        String concepto = UtilOperacionDiariaServices.obtenPadreProductCate(dctx, dispatcher, partGene);
+	        acctgtransPres.set("concepto", concepto);
+	        String capitulo = UtilOperacionDiariaServices.obtenPadreProductCate(dctx, dispatcher, concepto);
+	        acctgtransPres.set("capitulo", capitulo);
 	        acctgtransPres.set("actividad", actividad);
 	        Debug.logWarning("actividad  enviado"+actividad, MODULE);
 	        String subProg = UtilOperacionDiariaServices.obtenPadreWorkEffort(dctx, dispatcher, actividad);
