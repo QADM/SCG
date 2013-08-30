@@ -52,11 +52,11 @@
       </tr>      
       <tr>
         <@displayTitleCell title=uiLabelMap.FinancialsProductCredit />
-        <@inputSelectCell list=listProducts?if_exists displayField="description" name="Id_Producto_Abono" default=productId?if_exists key="productId"/>
+        <@inputSelectCell list=listProducts?if_exists displayField="description" name="Id_Producto_Abono" default=productId?if_exists key="productId" required=false/>
       </tr>
       <tr>
         <@displayTitleCell title=uiLabelMap.FinancialsProductDebit />
-        <@inputSelectCell list=listProducts?if_exists displayField="description" name="Id_Producto_Cargo" default=productId?if_exists key="productId"/>
+        <@inputSelectCell list=listProducts?if_exists displayField="description" name="Id_Producto_Cargo" default=productId?if_exists key="productId" required=false/>
       </tr>      
       <tr>
       	<@displayTitleCell title=uiLabelMap.FinancialsFederalEntity />
@@ -105,7 +105,7 @@
       </tr>      
      <tr>
       	<@displayTitleCell title=uiLabelMap.FinancialsIdLeviedH />
-      	<@inputSelectCell list=listPayments?if_exists name="Id_RecaudadoH" displayField="description" default=paymentMethodId?if_exists key="paymentMethodId" />
+      	<@inputSelectCell list=listPayments?if_exists name="Id_RecaudadoH" displayField="description" default=paymentMethodId?if_exists key="paymentMethodId" required=false/>
       </tr>                                                                  
       <tr>                             
       <tr>

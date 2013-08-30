@@ -5,6 +5,9 @@ import java.text.ParseException;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
+
+import javolution.util.FastMap;
+
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
@@ -172,11 +175,17 @@ public class OperacionDiariaEgresosManual {
 	        acctgtransPres.set("idPago",idPago);
 	        acctgtransPres.create();
 	        
+	        Map<String,String> mapaAcctgEnums = FastMap.newInstance();
+	        mapaAcctgEnums.put("acctgTagEnumId1",subFun);
+	        mapaAcctgEnums.put("acctgTagEnumId2",tipoGasto);
+	        mapaAcctgEnums.put("acctgTagEnumId3",suFuenteEsp);
+	        mapaAcctgEnums.put("acctgTagEnumId4",area);
+	        
 	        //Se realiza el registro de trans entries
 	        UtilOperacionDiariaServices.registraEntries(dctx, dispatcher, context, organizationPartyId,
 		        			acctgTransId, monto, fecContable,
 		        			acctgTransTypeId, partEspec, tipoFis, 
-		        			idProdAbono, idProdCargo, idPago,"COG");
+		        			idProdAbono, idProdCargo, idPago,"COG",mapaAcctgEnums);
 			
         
         } catch (ParseException e) {
