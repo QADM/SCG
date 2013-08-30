@@ -88,7 +88,7 @@
         <@inputSelectCell list=listaUnidades?if_exists displayField="groupName" name="Unidad_Ejecutora" default=partyId?if_exists key="partyId"/>
       </tr>
      <tr>
-      	<@displayTitleCell title=uiLabelMap.FinancialsIdLeviedH />
+      	<@displayTitleCell title=uiLabelMap.FinancialsIdLeviedD />
       	<@inputSelectCell list=listPayments?if_exists name="Id_RecaudadoH" displayField="description" default=paymentMethodId?if_exists key="paymentMethodId" required=false/>
       </tr>                                                                  
       <tr>                             
