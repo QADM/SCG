@@ -645,7 +645,7 @@ public class UtilImport {
 				CustomTimePeriod.class, ledger_repo.map(
 						CustomTimePeriod.Fields.organizationPartyId,
 						organizacionPartyId, CustomTimePeriod.Fields.isClosed,
-						'N'));
+						"N"));
 		List<CustomTimePeriod> periodosAplicables = new ArrayList<CustomTimePeriod>();
 		for (CustomTimePeriod periodo : periodos) {
 			if (fechaTrans.after(periodo.getFromDate())
