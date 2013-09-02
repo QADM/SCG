@@ -52,14 +52,21 @@
     </@displayReportGroup>
     
      <#-- ANALITICOS CG -->
-    <@displayReportGroup group="BUD_EXEC" nameOnly=true>
-    <li><a href="http://localhost:9090/pentaho/Pivot?solution=Analiticos&path=Ingreso&action=INGRESO_CRI.analysisview.xaction">${uiLabelMap.EjecucionIngreso}</a></li>
+    <@displayReportGroup group="BUD_EXEC_E" nameOnly=true>
+    <li><a href="http://localhost:9090/pentaho/Pivot?solution=Analiticos&path=Egreso&action=EGRESO_ADMINISTRATIVA.analysisview.xaction">${uiLabelMap.EjecucionEgresoAdministrativa}</a></li>
     <li><a href="http://localhost:9090/pentaho/Pivot?solution=Analiticos&path=Egreso&action=EGRESO_COG.analysisview.xaction">${uiLabelMap.EjecucionEgresoCOG}</a></li>
     <li><a href="http://localhost:9090/pentaho/Pivot?solution=Analiticos&path=Egreso&action=EGRESO_FUENTE.analysisview.xaction">${uiLabelMap.EjecucionEgresoFuente}</a></li>
-    <li><a href="http://localhost:9090/pentaho/Pivot?solution=Analiticos&path=Egreso&action=EGRESO_FUNCION.analysisview.xaction">${uiLabelMap.EjecucionEgresoFuncion}</a></li>
+    <li><a href="http://localhost:9090/pentaho/Pivot?solution=Analiticos&path=Egreso&action=EGRESO_FUNCIONAL.analysisview.xaction">${uiLabelMap.EjecucionEgresoFuncion}</a></li>
     <li><a href="http://localhost:9090/pentaho/Pivot?solution=Analiticos&path=Egreso&action=EGRESO_GEOGRAFICA.analysisview.xaction">${uiLabelMap.EjecucionEgresoGeografica}</a></li>
     <li><a href="http://localhost:9090/pentaho/Pivot?solution=Analiticos&path=Egreso&action=EGRESO_PROGRAMATICA.analysisview.xaction">${uiLabelMap.EjecucionEgresoProgramatica}</a></li>
     <li><a href="http://localhost:9090/pentaho/Pivot?solution=Analiticos&path=Egreso&action=EGRESO_SECTORIAL.analysisview.xaction">${uiLabelMap.EjecucionEgresoSectorial}</a></li>
+    </@displayReportGroup>
+    
+    <@displayReportGroup group="BUD_EXEC_I" nameOnly=true>
+    <li><a href="http://localhost:9090/pentaho/Pivot?solution=Analiticos&path=Ingreso&action=INGRESO_ADMINISTRATIVA.analysisview.xaction">${uiLabelMap.EjecucionIngresoAdministrativa}</a></li>
+    <li><a href="http://localhost:9090/pentaho/Pivot?solution=Analiticos&path=Ingreso&action=INGRESO_CRI.analysisview.xaction">${uiLabelMap.EjecucionIngresoCRI}</a></li>
+	<li><a href="http://localhost:9090/pentaho/Pivot?solution=Analiticos&path=Ingreso&action=INGRESO_FUENTE.analysisview.xaction">${uiLabelMap.EjecucionIngresoFuente}</a></li>
+	<li><a href="http://localhost:9090/pentaho/Pivot?solution=Analiticos&path=Ingreso&action=INGRESO_GEOGRAFICA.analysisview.xaction">${uiLabelMap.EjecucionIngresoGeografica}</a></li>
     </@displayReportGroup>
 	<#-- ANALITICOS CG -->
 

@@ -112,6 +112,7 @@
   <entity-group group="org.ofbiz" entity="DataImportPresupuestoEgreso"/>
   <entity-group group="org.ofbiz" entity="AcctgTransPresupuestal"/>
   <entity-group group="org.ofbiz" entity="TipoDocumento"/>
+  <entity-group group="org.ofbiz" entity="TipoPoliza"/>
   <entity-group group="org.ofbiz" entity="DataImportMatrizEgr"/>
   <entity-group group="org.ofbiz" entity="DataImportMatrizIng"/>
   <entity-group group="org.ofbiz" entity="DataImportContableGuide"/>

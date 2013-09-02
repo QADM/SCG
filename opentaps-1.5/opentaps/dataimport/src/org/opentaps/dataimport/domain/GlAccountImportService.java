@@ -451,20 +451,21 @@ public class GlAccountImportService extends DomainService implements GlAccountIm
  			                	BigDecimal saldofinal = BigDecimal.ZERO;
  			                	
  			                	
- 			                	if(array[2].equals("C")){
- 			                		if( glorgan.getPostedBalance()== null)
- 			                		{
- 			                			
- 			                			saldofinal = saldofinal.subtract(saldo);
- 			                		}
- 			                		else
- 			                		{
- 			                			
- 			                			saldofinal =  glorgan.getPostedBalance().subtract(saldo);
- 			                		}
- 			                		
- 			                	}	                	
- 			                	else {saldofinal = saldo;}  		                	
+// 			                	if(array[2].equals("C")){
+// 			                		if( glorgan.getPostedBalance()== null)
+// 			                		{
+// 			                			
+// 			                			saldofinal = saldofinal.subtract(saldo);
+// 			                		}
+// 			                		else
+// 			                		{
+// 			                			
+// 			                			saldofinal =  glorgan.getPostedBalance().subtract(saldo);
+// 			                		}
+// 			                		
+// 			                	}	                	
+// 			                	else {saldofinal = saldo;}
+ 			                	saldofinal = saldo;
  			                	glorgan.setPostedBalance(saldofinal);
  			                	
  			                	imp_tx5 = this.session.beginTransaction();

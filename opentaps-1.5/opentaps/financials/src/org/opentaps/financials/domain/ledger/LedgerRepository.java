@@ -48,6 +48,8 @@ import org.opentaps.base.entities.ProductGlAccount;
 import org.opentaps.base.entities.AcctgTransPresupuestalEg;
 import org.opentaps.base.entities.AcctgTransPresupuestalIng;
 import org.opentaps.base.entities.AcctgPolizasDetalle;
+import org.opentaps.base.entities.AcctgPolizasDetalleLista;
+import org.opentaps.base.entities.AcctgPolizasDetalleListado;
 import org.opentaps.domain.ledger.AccountingTransaction;
 import org.opentaps.domain.ledger.GeneralLedgerAccount;
 import org.opentaps.domain.ledger.LedgerException;
@@ -162,6 +164,22 @@ public class LedgerRepository extends Repository implements LedgerRepositoryInte
     public AcctgPolizasDetalle getAcctgPolizasDetalle(String acctgTransId) throws RepositoryException {
         try {
             return findOneNotNull(AcctgPolizasDetalle.class, map(AcctgPolizasDetalle.Fields.acctgTransId, acctgTransId), "Accounting Transaction [" + acctgTransId + "] not found.");
+        } catch (GeneralException e) {
+            throw new RepositoryException(e);
+        }
+    }
+    
+    public AcctgPolizasDetalleLista getAcctgPolizasDetalleLista(String agrupador) throws RepositoryException {
+        try {
+            return findOneNotNull(AcctgPolizasDetalleLista.class, map(AcctgPolizasDetalleLista.Fields.agrupador, agrupador), "Accounting Transaction [" + agrupador + "] not found.");
+        } catch (GeneralException e) {
+            throw new RepositoryException(e);
+        }
+    }
+    
+    public AcctgPolizasDetalleListado getAcctgPolizasDetalleListado(String agrupador) throws RepositoryException {
+        try {
+            return findOneNotNull(AcctgPolizasDetalleListado.class, map(AcctgPolizasDetalleListado.Fields.agrupador, agrupador), "Accounting Transaction [" + agrupador + "] not found.");
         } catch (GeneralException e) {
             throw new RepositoryException(e);
         }

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<entitymodel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/entitymodel.xsd">
+	<!-- ========================================================= -->
+	<!-- ======================== Defaults ======================= -->
+	<!-- ========================================================= -->
+	<title>Entidad Tipo Poliza</title>
+	<description>Define la entidad para los tipos de poliza</description>
+	<copyright>Copyright (c) Open Source Strategies, Inc.</copyright>
+	<author>Vidal Garcia Martinez</author>
+	<version>1.0</version>
+
+	<!-- =========================== -->
+	<!-- org.opentaps.dataimport -->
+	<!-- =========================== -->
+
+	<entity entity-name="TipoPoliza" package-name="org.opentaps.dataimport"
+		title="Entidad para los tipos de poliza">
+		<field name="tipoPoliza" type="id-ne"></field>
+		<field name="descripcion" type="id-vlong"></field>
+		<prim-key field="tipoPoliza" />
+	</entity>
+</entitymodel>

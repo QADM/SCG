@@ -49,6 +49,8 @@
   
   <entity-group group="org.ofbiz" entity="AcctgPolizas"/>
   <entity-group group="org.ofbiz" entity="AcctgPolizasDetalle"/>
+  <entity-group group="org.ofbiz" entity="AcctgPolizasDetalleLista"/>
+  <entity-group group="org.ofbiz" entity="AcctgPolizasDetalleListado"/>
   <entity-group group="org.ofbiz" entity="AcctgTransOrgPresupIng"/>
    
   <!-- ========================================= -->

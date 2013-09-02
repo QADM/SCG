@@ -34,6 +34,9 @@ glFiscalTypeId1 = context.get("glFiscalTypeId1");
 glFiscalTypeId2 = context.get("glFiscalTypeId2");
 fromDate = context.get("fromDate");
 thruDate = context.get("thruDate");
+fromCustomTimePeriodId = context.get("fromCustomTimePeriodId");
+thruCustomTimePeriodId = context.get("thruCustomTimePeriodId");
+
 if (fromDate == null || thruDate == null) return;
 
 // Make sure the asOfDate is the end-of-day for the two dates
@@ -44,6 +47,8 @@ input = UtilMisc.toMap("organizationPartyId", organizationPartyId, "glFiscalType
 input.put("userLogin", userLogin);
 input.put("fromDate", fromDate);
 input.put("thruDate", thruDate);
+input.put("fromCustomTimePeriodId",fromCustomTimePeriodId);
+input.put("thruCustomTimePeriodId",thruCustomTimePeriodId);
 
 // add tags from the request to the service parameters
 UtilAccountingTags.addTagParameters(request, input);

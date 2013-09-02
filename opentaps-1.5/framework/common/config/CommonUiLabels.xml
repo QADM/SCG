@@ -8557,6 +8557,14 @@
         <value xml:lang="en">Financials CONAC</value>
         <value xml:lang="es">Finanzas CONAC</value>
     </property>    
+    <property key="BudgetExecutionE">
+        <value xml:lang="en">Expenditure Budget Execution</value>
+        <value xml:lang="es">Ejercicio del Presuspuesto de Egresos</value>
+    </property>  
+    <property key="BudgetExecutionI">
+        <value xml:lang="en">Income Budget Execution</value>
+        <value xml:lang="es">Ejecución de la Ley de Ingreso</value>
+    </property>  
     <property key="FormFieldTitle_acceptButton">
         <value xml:lang="en">Accept</value>
     </property>

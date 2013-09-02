@@ -11,9 +11,11 @@ import org.opentaps.base.constants.StatusItemConstants;
 import org.opentaps.base.entities.AcctgTrans;
 import org.opentaps.base.entities.AcctgTransEntry;
 import org.opentaps.base.entities.AcctgTransPresupuestal;
+import org.opentaps.base.entities.CustomTimePeriod;
 import org.opentaps.base.entities.DataImportIngresoDiario;
 import org.opentaps.base.entities.Enumeration;
 import org.opentaps.base.entities.Geo;
+import org.opentaps.base.entities.GlAccountHistory;
 import org.opentaps.base.entities.GlAccountOrganization;
 import org.opentaps.base.entities.LoteTransaccion;
 import org.opentaps.base.entities.Party;
@@ -346,6 +348,13 @@ public class IngresoDiarioImportService extends DomainService implements
 						aux.setSecuencia(rowdata.getSecuencia());
 						aux.setLote(lote);
 						aux.setClavePres(rowdata.getClavePres());
+						
+						// History
+						Debug.log("Busca periodos");
+						List<CustomTimePeriod> periodos = UtilImport
+								.obtenPeriodos(ledger_repo,
+										rowdata.getOrganizationPartyId(),
+										ingresoDiario.getPostedDate());
 
 						if (cuentas.get("Cuenta Cargo Presupuesto") != null) {
 							Debug.log("Cuenta Presupuestal");
@@ -412,6 +421,22 @@ public class IngresoDiarioImportService extends DomainService implements
 							imp_tx7 = this.session.beginTransaction();
 							ledger_repo.createOrUpdate(glAccountOrganization);
 							imp_tx7.commit();
+							
+							// GlAccountHistory
+							Debug.log("Busca histories");
+							List<GlAccountHistory> histories = UtilImport
+									.actualizaGlAccountHistories(
+											ledger_repo,
+											periodos,
+											cuentas.get("Cuenta Cargo Presupuesto"),
+											rowdata.getMonto(), "Debit");
+
+							for (GlAccountHistory history : histories) {
+								Transaction txHistory = null;
+								txHistory = this.session.beginTransaction();
+								ledger_repo.createOrUpdate(history);
+								txHistory.commit();
+							}
 
 							acctgentry = UtilImport.generaAcctgTransEntry(
 									ingresoDiario,
@@ -433,6 +458,22 @@ public class IngresoDiarioImportService extends DomainService implements
 							imp_tx11 = this.session.beginTransaction();
 							ledger_repo.createOrUpdate(glAccountOrganization);
 							imp_tx11.commit();
+							
+							// GlAccountHistory
+							Debug.log("Busca histories");
+							histories = UtilImport
+									.actualizaGlAccountHistories(
+											ledger_repo,
+											periodos,
+											cuentas.get("Cuenta Abono Presupuesto"),
+											rowdata.getMonto(), "Credit");
+
+							for (GlAccountHistory history : histories) {
+								Transaction txHistory = null;
+								txHistory = this.session.beginTransaction();
+								ledger_repo.createOrUpdate(history);
+								txHistory.commit();
+							}
 
 						}
 
@@ -501,6 +542,22 @@ public class IngresoDiarioImportService extends DomainService implements
 							imp_tx8 = this.session.beginTransaction();
 							ledger_repo.createOrUpdate(glAccountOrganization);
 							imp_tx8.commit();
+							
+							// GlAccountHistory
+							Debug.log("Busca histories");
+							List<GlAccountHistory> histories = UtilImport
+									.actualizaGlAccountHistories(
+											ledger_repo,
+											periodos,
+											cuentas.get("Cuenta Cargo Contable"),
+											rowdata.getMonto(), "Debit");
+
+							for (GlAccountHistory history : histories) {
+								Transaction txHistory = null;
+								txHistory = this.session.beginTransaction();
+								ledger_repo.createOrUpdate(history);
+								txHistory.commit();
+							}
 
 							acctgentry = UtilImport.generaAcctgTransEntry(
 									ingresoDiario,
@@ -521,6 +578,22 @@ public class IngresoDiarioImportService extends DomainService implements
 							imp_tx12 = this.session.beginTransaction();
 							ledger_repo.createOrUpdate(glAccountOrganization);
 							imp_tx12.commit();
+							
+							// GlAccountHistory
+							Debug.log("Busca histories");
+							histories = UtilImport
+									.actualizaGlAccountHistories(
+											ledger_repo,
+											periodos,
+											cuentas.get("Cuenta Abono Contable"),
+											rowdata.getMonto(), "Credit");
+
+							for (GlAccountHistory history : histories) {
+								Transaction txHistory = null;
+								txHistory = this.session.beginTransaction();
+								ledger_repo.createOrUpdate(history);
+								txHistory.commit();
+							}
 						}
 
 						if (mensaje.isEmpty()) {

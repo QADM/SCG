@@ -108,6 +108,16 @@
         default-title-style="tableheadtext" default-widget-style="tabletext" default-tooltip-style="tabletext">
         <auto-fields-entity entity-name="AcctgPolizasDetalle" default-field-type="display"/>
     </form>
+    
+    <form name="viewAcctgTransPolizasLista" type="single" target="updateAcctgTransForm" default-map-name="acctgTransPresupuestalPolizasLista"
+        default-title-style="tableheadtext" default-widget-style="tabletext" default-tooltip-style="tabletext">
+        <auto-fields-entity entity-name="AcctgPolizasDetalleLista" default-field-type="display"/>
+    </form>
+    
+    <form name="viewAcctgTransPolizasListado" type="single" target="updateAcctgTransForm" default-map-name="acctgTransPresupuestalPolizasListado"
+        default-title-style="tableheadtext" default-widget-style="tabletext" default-tooltip-style="tabletext">
+        <auto-fields-entity entity-name="AcctgPolizasDetalleListado" default-field-type="display"/>
+    </form>
 
     <form name="updateAcctgTransForm" type="single" target="updateAcctgTrans" default-map-name="acctgTrans"
         default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
@@ -477,10 +487,18 @@
 	        
 	        <field name="posted_date" entity-name="AcctgTrans" title="Fecha Contable" encode-output="false"><date-time default-value=""/></field>
 	        
-	        <field name="acctgTransTypeId" title="Tipo de Póliza">
+	        <field name="acctgTransTypeId" title="Tipo de Transaccion">
            	 <drop-down allow-empty="true" current="selected">
                 <entity-options description="${description}" entity-name="AcctgTransType">
                     <entity-order-by field-name="acctgTransTypeId"/>
+                </entity-options>
+           	 </drop-down>
+      		</field>
+      		
+      		<field name="idTipoDoc" title="Tipo de Póliza">
+           	 <drop-down allow-empty="true" current="selected">
+                <entity-options description="${tipoPoliza}" entity-name="TipoDocumento">
+                    <entity-order-by field-name="idTipoDoc"/>
                 </entity-options>
            	 </drop-down>
       		</field>
@@ -606,7 +624,7 @@
      <form name="viewAcctgTransIngreso" type="single" target="updateAcctgTransForm" default-map-name="acctgTransPresupuestal" 
         default-title-style="tableheadtext" default-widget-style="tabletext" default-tooltip-style="tabletext">        
 		<auto-fields-entity entity-name="AcctgTransPresupuestal" default-field-type="display"/>    
-		 <field name="unidadResponsable">
+		<field name="unidadResponsable">
             	<display description="${groovy:org.ofbiz.party.party.PartyHelper.getPartyName(delegator, acctgTransPresupuestal.get(&quot;unidadResponsable&quot;), false)} (${mapTransPresup.unidadResponsable})" />
         	</field>			
 	        <field name="unidadOrganizacional">
@@ -653,7 +671,67 @@
         	</field>
        		<field name="idTipoDoc">
             	<display description="${groovy:com.opentaps.financials.Helpers.OperacionDiariaHelper.getTipoDocName(delegator, acctgTransPresupuestal.get(&quot;idTipoDoc&quot;))}" />
-        	</field>     
+        	</field>
+        	<field name="finalidad">
+        		<display description="${groovy:com.opentaps.financials.Helpers.OperacionDiariaHelper.getEnumName(delegator, acctgTransPresupuestal.get(&quot;finalidad&quot;))}"/>
+        	</field>         	
+        	<field name="funcion">
+        		<display description="${groovy:com.opentaps.financials.Helpers.OperacionDiariaHelper.getEnumName(delegator, acctgTransPresupuestal.get(&quot;funcion&quot;))}"/>
+        	</field>          	
+        	<field name="subFuncion">
+        		<display description="${groovy:com.opentaps.financials.Helpers.OperacionDiariaHelper.getEnumName(delegator, acctgTransPresupuestal.get(&quot;subFuncion&quot;))}"/>
+        	</field> 
+        	<field name="capitulo">
+        		<display description="${groovy:com.opentaps.financials.Helpers.OperacionDiariaHelper.getProductCategoryName(delegator, acctgTransPresupuestal.get(&quot;capitulo&quot;))}"/>
+        	</field>         	        	
+        	<field name="concepto">
+        		<display description="${groovy:com.opentaps.financials.Helpers.OperacionDiariaHelper.getProductCategoryName(delegator, acctgTransPresupuestal.get(&quot;concepto&quot;))}"/>
+        	</field>         	
+        	<field name="partidaGenerica">
+        		<display description="${groovy:com.opentaps.financials.Helpers.OperacionDiariaHelper.getProductCategoryName(delegator, acctgTransPresupuestal.get(&quot;partidaGenerica&quot;))}"/>
+        	</field>            	
+        	<field name="partidaEspecifica">
+        		<display description="${groovy:com.opentaps.financials.Helpers.OperacionDiariaHelper.getProductCategoryName(delegator, acctgTransPresupuestal.get(&quot;partidaEspecifica&quot;))}"/>
+        	</field>
+        	<field name="tipoGasto">
+        		<display description="${groovy:com.opentaps.financials.Helpers.OperacionDiariaHelper.getEnumName(delegator, acctgTransPresupuestal.get(&quot;tipoGasto&quot;))}"/>
+        	</field>	
+        	<field name="funcion">
+        		<display description="${groovy:com.opentaps.financials.Helpers.OperacionDiariaHelper.getEnumName(delegator, acctgTransPresupuestal.get(&quot;funcion&quot;))}"/>
+        	</field>
+        	<field name="subFuncion">
+        		<display description="${groovy:com.opentaps.financials.Helpers.OperacionDiariaHelper.getEnumName(delegator, acctgTransPresupuestal.get(&quot;subFuncion&quot;))}"/>
+        	</field>
+        	<field name="sector">
+        		<display description="${groovy:com.opentaps.financials.Helpers.OperacionDiariaHelper.getEnumName(delegator, acctgTransPresupuestal.get(&quot;sector&quot;))}"/>
+        	</field>
+        	<field name="subSector">
+        		<display description="${groovy:com.opentaps.financials.Helpers.OperacionDiariaHelper.getEnumName(delegator, acctgTransPresupuestal.get(&quot;subSector&quot;))}"/>
+        	</field>         	        
+        	<field name="area">
+        		<display description="${groovy:com.opentaps.financials.Helpers.OperacionDiariaHelper.getEnumName(delegator, acctgTransPresupuestal.get(&quot;area&quot;))}"/>
+        	</field>
+        	<field name="programaPlan">
+        		<display description="${groovy:com.opentaps.financials.Helpers.OperacionDiariaHelper.getWorkEffortName(delegator, acctgTransPresupuestal.get(&quot;programaPlan&quot;))}"/>
+        	</field>         	
+        	<field name="programaPresupuestario">
+        		<display description="${groovy:com.opentaps.financials.Helpers.OperacionDiariaHelper.getWorkEffortName(delegator, acctgTransPresupuestal.get(&quot;programaPresupuestario&quot;))}"/>
+        	</field>         	 	
+        	<field name="subProgramaPresupuestario">
+        		<display description="${groovy:com.opentaps.financials.Helpers.OperacionDiariaHelper.getWorkEffortName(delegator, acctgTransPresupuestal.get(&quot;subProgramaPresupuestario&quot;))}"/>
+        	</field>         	     
+        	<field name="actividad">
+        		<display description="${groovy:com.opentaps.financials.Helpers.OperacionDiariaHelper.getWorkEffortName(delegator, acctgTransPresupuestal.get(&quot;actividad&quot;))}"/>
+        	</field> 
+        	<field name="idPago">
+        		<display description="${groovy:com.opentaps.financials.Helpers.OperacionDiariaHelper.getPaymenthMethodName(delegator, acctgTransPresupuestal.get(&quot;idPago&quot;))}"/>
+        	</field>        	   
+        	<field name="idProductoD">
+        		<display description="${groovy:com.opentaps.financials.Helpers.OperacionDiariaHelper.getProductName(delegator, acctgTransPresupuestal.get(&quot;idProductoD&quot;))}"/>
+        	</field>
+        	<field name="idProductoH">
+        		<display description="${groovy:com.opentaps.financials.Helpers.OperacionDiariaHelper.getProductName(delegator, acctgTransPresupuestal.get(&quot;idProductoH&quot;))}"/>
+        	</field> 		       		        	
     </form>
     
 </forms>

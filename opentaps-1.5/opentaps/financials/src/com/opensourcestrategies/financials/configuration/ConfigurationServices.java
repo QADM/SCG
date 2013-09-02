@@ -422,8 +422,19 @@ public final class ConfigurationServices {
 	@SuppressWarnings("unchecked")
 	public static Map createAccountingTag(DispatchContext dctx, Map context) {
 		Delegator delegator = dctx.getDelegator();
+		String nivelId = (String) context.get("nivelId");
+		String glAccountTypeId =(String) context.get("enumTypeId");
 
 		try {
+			if(glAccountTypeId.equals(" ")){
+				return UtilMessage.createAndLogServiceError(
+						"El parametro Tipo  no puede estar vacio", MODULE);
+			}
+			if(nivelId.equals(" ")){
+				return UtilMessage.createAndLogServiceError(
+						"El parametro Nivel no puede estar vacio", MODULE);
+			}
+
 			String enumId = (String) context.get("enumId");
 			GenericValue enumeration = delegator.makeValue("Enumeration");
 			// if an id was given, check for duplicate
