@@ -31,6 +31,79 @@ public class UtilOperacionDiariaServices {
 	private static final BigDecimal ZERO = BigDecimal.ZERO;
 	
 	/**
+	 * Regresa una lista que contiene uno o dos registros (tipos Fiscales) de la mini guia contable
+	 * buscandolo por el tipo de transaccion (tipo documento)
+	 * @param dctx
+	 * @param context
+	 * @return
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public static Map obtenTiposFiscalesDoc(DispatchContext dctx, Map context){
+        Delegator delegator = dctx.getDelegator();
+        String idTipoDoc = (String) context.get("idTipoDoc");
+        
+        List<String> tiposFiscales = FastList.newInstance();
+
+        try{
+        	
+        	GenericValue tipoDocumento = delegator.findByPrimaryKey("TipoDocumento", UtilMisc.toMap("idTipoDoc", idTipoDoc));
+        	
+        	if(tipoDocumento != null && !tipoDocumento.isEmpty()){
+        		
+        		String acctgTransTypeId = tipoDocumento.getString("acctgTransTypeId");
+        		
+        		GenericValue miniGuia = delegator.findByPrimaryKey("MiniGuiaContable", UtilMisc.toMap("acctgTransTypeId", acctgTransTypeId));
+        		
+				if(miniGuia != null && !miniGuia.isEmpty()){
+					
+					String fiscalTypePres = miniGuia.getString("glFiscalTypeIdPres");
+					String fiscalTypeCont = miniGuia.getString("glFiscalTypeIdCont");
+				  
+					if(fiscalTypePres != null && !fiscalTypePres.isEmpty())
+						tiposFiscales.add(fiscalTypePres);
+					if(fiscalTypeCont != null && !fiscalTypeCont.isEmpty())
+						tiposFiscales.add(fiscalTypeCont);
+				  
+				}
+        		
+        	}
+        	
+        } catch (GenericEntityException e) {
+        	return UtilMessage.createAndLogServiceError(e, MODULE);
+        }
+        
+        Map results = ServiceUtil.returnSuccess();
+        results.put("tiposFiscales", tiposFiscales);
+        return results;
+	}
+	
+	/**
+	 * 
+	 * @param idTipoDoc
+	 * @return
+	 * @throws GenericServiceException 
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public static List<String> obtenTiposFiscalDoc(DispatchContext dctx,LocalDispatcher dispatcher,String idTipoDoc) throws GenericServiceException{
+		
+		List<String> tiposFiscales = FastList.newInstance();
+		
+			if(idTipoDoc != null && !idTipoDoc.isEmpty()){
+				
+	        	Map input = FastMap.newInstance();
+	        	input.put("idTipoDoc", idTipoDoc);
+	        	input = dctx.getModelService("obtenTiposFiscalesDoc").makeValid(input, ModelService.IN_PARAM);
+	        	Map tmpResult = dispatcher.runSync("obtenTiposFiscalesDoc", input);
+	        	tiposFiscales = (List<String>) tmpResult.get("tiposFiscales");
+	            
+	            Debug.logWarning("tiposFiscales --> "+tiposFiscales, MODULE);
+				
+			}
+			
+		return tiposFiscales;
+	}
+	
+	/**
 	 * Metodo para obtener workeffortid Padre
 	 * @param dctx
 	 * @param dispatcher
@@ -767,7 +840,7 @@ public class UtilOperacionDiariaServices {
         		
         		GenericValue gTransEntryConC = GenericValue.create(delegator.getModelEntity("AcctgTransEntry"));
         		gTransEntryConC.set("acctgTransId", acctgTransId);
-        		gTransEntryConC.set("acctgTransEntrySeqId", String.format("%05d",3));
+        		gTransEntryConC.set("acctgTransEntrySeqId", String.format("%05d",1));
         		gTransEntryConC.set("acctgTransEntryTypeId", "_NA_");
         		gTransEntryConC.set("description", "Operación  diaria Contable Abono"+acctgTransId);
         		gTransEntryConC.set("glAccountId", cargoCont);
@@ -785,7 +858,7 @@ public class UtilOperacionDiariaServices {
         		
         		GenericValue gTransEntryConA = GenericValue.create(delegator.getModelEntity("AcctgTransEntry"));
         		gTransEntryConA.set("acctgTransId", acctgTransId);
-        		gTransEntryConA.set("acctgTransEntrySeqId", String.format("%05d",4));
+        		gTransEntryConA.set("acctgTransEntrySeqId", String.format("%05d",2));
         		gTransEntryConA.set("acctgTransEntryTypeId", "_NA_");
         		gTransEntryConA.set("description", "Operación  diaria Contable Abono"+acctgTransId);
         		gTransEntryConA.set("glAccountId", abonoCont);

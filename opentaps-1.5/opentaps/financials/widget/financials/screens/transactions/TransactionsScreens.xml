@@ -755,8 +755,6 @@
     <screen name="viewAcctPresupuestal">
         <section>
             <actions>
-            	<entity-one entity-name="AcctgTrans" value-field="acctgTrans"/>
-                <entity-one entity-name="AcctgTransEntry" value-field="acctgTransEntry"/>
                 <script location="component://financials/webapp/financials/WEB-INF/actions/transactions/viewAcctgTransOperaDiaIngresos.bsh"/>
  				<script location="component://financials/webapp/financials/WEB-INF/actions/transactions/viewAcctgTrans.bsh"/>
                 <set field="viewIndex" from-field="parameters.VIEW_INDEX" type="Integer" default-value="0"/>
