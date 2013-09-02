@@ -18,8 +18,9 @@
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
     <script  languaje="JavaScript">
     <!--
-	     provincias = new Array();
-	     provincias[0] = new Array();
+    	var uno=0;
+	     provincias = new Array(' ');
+	     provincias[0] = new Array(' ');
 	     niveles=new Array();
 	     niveles[0] = new Array();
 	     <#assign contador=1/>
@@ -34,10 +35,20 @@
 					</#if>
 	     		</#if>
 	     	</#list>
-	     	provincias[${contador}]=new Array('${valor}');
+	     	<#assign valor=valor?replace("&aacute;","á")/>
+	     	<#assign valor=valor?replace("&eacute;","é")/>
+	     	<#assign valor=valor?replace("&iacute;","í")/>
+	     	<#assign valor=valor?replace("&oacute;","ó")/>
+	     	<#assign valor=valor?replace("&uacute;","ú")/>
+	     	<#assign valor=valor?replace("&Aacute;","Á")/>
+	     	<#assign valor=valor?replace("&Eacute;","É")/>
+	     	<#assign valor=valor?replace("&Iacute;","Í")/>
+	     	<#assign valor=valor?replace("&Oacute;","Ó")/>
+	     	<#assign valor=valor?replace("&Uacute;","Ú")/>
+	     	provincias[${contador}]=new Array('${valor?j_string}');
 	     	niveles[${contador}]=new Array('${valor2}');
 	     	<#assign contador=contador+1/>
-	     </#list>
+	     </#list>	   
 	     function cambiar(formulario){
 			  var i = 0;
 			  var select1 = formulario['enumTypeId'];
@@ -56,12 +67,12 @@
 
 		-->
     </script> 
-<#assign Nodo = {"R": "Rama", "H": "Rama"} />
+<#assign Nodo = {"R": "Rama", "H": "Hoja"} />
 <@frameSection title=uiLabelMap.FinancialsCreateAccountingTag>
   <form method="post" action="<@ofbizUrl>createAccountingTag</@ofbizUrl>" name="createAccountingTag"  onsubmint="valida(this.form)">
     <table class="twoColumnForm" style="border:0">
     <tr>
-    	<td align=center width="20"><b>Tipo<b>
+    	<td align=center width="20" ><b><font color=#B40404>Tipo</font><b>
     	</td>
 	    <td>
      <select name="enumTypeId" size="1"  onchange="cambiar(this.form)">
@@ -73,7 +84,7 @@
 	    </td>
     </tr>
       <tr>
-   <td align=center><b>Nivel<b>
+   <td align=center><b><font color=#B40404>Nivel</font><b>
     	</td>
 	    <td>  
       <select name="nivelId">
