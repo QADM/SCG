@@ -289,7 +289,7 @@
         </required-permissions>
         <attribute name="organizationPartyId" mode="IN" type="String" optional="false"/>
         <attribute name="Tipo_Documento" mode="IN" type="String" optional="true"/>
-        <attribute name="Tipo_Fiscal" mode="IN" type="String" optional="false" />
+        <!-- <attribute name="Tipo_Fiscal" mode="IN" type="String" optional="false" /> -->
         <attribute name="Fecha_Transaccion" mode="IN" type="String" optional="true"/>
         <attribute name="Fecha_Contable" mode="IN" type="String" optional="true" />
 		<attribute name="Referencia_Documento" mode="IN" type="String" optional="true"/>
@@ -311,10 +311,7 @@
         <attribute name="Unidad_Ejecutora" mode="IN" type="String" optional="true"/>
         <attribute name="Id_RecaudadoH" mode="IN" type="String" optional="true"/>  
         <attribute name="Monto" mode="IN" type="String" optional="false"/>
-        <attribute name="acctgTrans" mode="OUT" type="org.ofbiz.entity.GenericValue"/>
-        <attribute name="acctgTransPres" mode="OUT" type="org.ofbiz.entity.GenericValue"/>
-        <attribute name="acctgTransId" mode="OUT" type="String"/>
-                       
+        <attribute name="listTransId" mode="OUT" type="java.util.List"/>
     </service>
     
     <service name="createOperacionDiariaEgresos" engine="java"
@@ -325,7 +322,6 @@
         </required-permissions>
         <attribute name="organizationPartyId" mode="IN" type="String" optional="false"/>
         <attribute name="Tipo_Documento" mode="IN" type="String" optional="true"/>
-        <attribute name="Tipo_Fiscal" mode="IN" type="String" optional="false	" />
         <attribute name="Fecha_Transaccion" mode="IN" type="String" optional="true"/>
         <attribute name="Fecha_Contable" mode="IN" type="String" optional="true" />
 		<attribute name="Referencia_Documento" mode="IN" type="String" optional="true"/>
@@ -346,9 +342,7 @@
         <attribute name="Area" mode="IN" type="String" optional="true"/>
         <attribute name="Id_RecaudadoH" mode="IN" type="String" optional="true"/>  
         <attribute name="Monto" mode="IN" type="String" optional="false"/>
-        <attribute name="acctgTrans" mode="OUT" type="org.ofbiz.entity.GenericValue"/>
-        <attribute name="acctgTransPres" mode="OUT" type="org.ofbiz.entity.GenericValue"/>
-        <attribute name="acctgTransId" mode="OUT" type="String"/>
+        <attribute name="listTransId" mode="OUT" type="java.util.List"/>
     </service>    
     
     <service name="obtenerCuentasOpDiaria" engine="java"
@@ -364,6 +358,7 @@
         <attribute name="idProdAbono" mode="IN" type="String" optional="true"/>
         <attribute name="idProdCargo" mode="IN" type="String" optional="true"/>
         <attribute name="idPago" mode="IN" type="String" optional="true"/>
+
         <attribute name="mapCuentas" mode="OUT" type="java.util.Map"/>               
     </service>
     <service name="obtenProdCategoryPadreId" engine="java" 
@@ -446,7 +441,14 @@
     	</description>	
     	<attribute name="glAccountId" mode="IN" type="String" optional="false"/>
     	<attribute name="resultadoPrdCat" mode="OUT" type="java.util.List" />
-    </service>    
+    </service>  
+    <service name="obtenTiposFiscalesDoc" engine="java"
+    	location="org.opentaps.dataimport.UtilOperacionDiariaServices" invoke="obtenTiposFiscalesDoc">
+    	<description>Regresa una lista que contiene uno o dos registros (tipos Fiscales) de la mini guia contable
+	 				 buscandolo por el tipo de transaccion (tipo documento)</description>
+    	<attribute name="idTipoDoc" mode="IN" type="String"/>
+    	<attribute name="tiposFiscales" mode="OUT" type="java.util.List"/>
+    </service>  
     
     <service name="operacionIngreso" engine="java" auth="true"
             location="org.opentaps.dataimport.domain.OperacionIngresoService" invoke="registraIngreso" export="true">

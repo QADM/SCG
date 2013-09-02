@@ -31,8 +31,7 @@ import org.opentaps.foundation.exception.FoundationException;
 import org.opentaps.foundation.repository.ofbiz.Repository;
 import org.opentaps.foundation.infrastructure.*;
 
-acctTransPresu = parameters.get("acctgTransPres");
-acctgTransId = acctTransPresu.getString("acctgTransId");
+acctgTransId = parameters.get("acctgTransId");
 
 acctTransPresu = delegator.findByPrimaryKey("AcctgTransPresupuestal", UtilMisc.toMap("acctgTransId", acctgTransId));
 mapTransPresup = new HashMap();
