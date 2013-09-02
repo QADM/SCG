@@ -23,6 +23,29 @@ import org.ofbiz.base.util.UtilMisc;
 import java.util.List;
 
 import org.opentaps.common.util.UtilMessage;
+if (UtilValidate.isNotEmpty(parameters.get("glAccountId"))) {
+    glAccount = delegator.findByPrimaryKey("GlAccount", UtilMisc.toMap("glAccountId", parameters.get("glAccountId")));
+    if (glAccount == null) {
+        UtilMessage.addError(request, "FinancialsError_GlAccountNotFound");
+        return;
+    }    
+    context.put("glAccount", glAccount);
+
+    // need both values to look up in GlAccountClassTypeMap
+    glAccountTypeId = glAccount.getString("glAccountTypeId");
+    glAccountClassId = glAccount.getString("glAccountClassId");
+    if(glAccountTypeId == null || glAccountClassId == null)
+	    return;
+
+    list = delegator.findByAnd("GlAccountClassTypeMap", UtilMisc.toMap("glAccountTypeId", glAccountTypeId, "glAccountClassId", glAccountClassId));
+
+    // the combination glAccountTypeId and glAccountClassId must be valid
+    if(list.size() == 0)
+	    return;
+
+    glAccountClassTypeMap = list.get(0);
+    context.put("glAccountClassTypeMap",glAccountClassTypeMap);
+}
 
 //  try to find the GL account
 if (UtilValidate.isNotEmpty(parameters.get("glAccountId"))) {
@@ -32,36 +55,19 @@ if (UtilValidate.isNotEmpty(parameters.get("glAccountId"))) {
         return;
     }    
     context.put("glAccount", glAccount);
-
-
-    // need both values to look up in GlAccountClassTypeMap
-    glAccountTypeId = glAccount.getString("glAccountTypeId");
-    glAccountClassId = glAccount.getString("glAccountClassId");
-    
-    
-
-    if(glAccountTypeId == null || glAccountClassId == null)
-	    return;
-	glAccountId= glAccount.getString("glAccountId");
-    if(glAccountId==null)
+glAccountId= glAccount.getString("glAccountId");
+  if(glAccountId==null)
     	return;
    glId = delegator.findByPrimaryKey("GlAccountCategoryRelation", UtilMisc.toMap("glAccountId",glAccountId));
+   if(glId==null)
+   	return;
    productCategory=glId.getString("productCategoryId");
    if(productCategory==null)
    	return;
    	list1=delegator.findByAnd("ProductCategory", UtilMisc.toMap("productCategoryId",productCategory));
-    list = delegator.findByAnd("GlAccountClassTypeMap", UtilMisc.toMap("glAccountTypeId", glAccountTypeId, "glAccountClassId", glAccountClassId));
-
-    // the combination glAccountTypeId and glAccountClassId must be valid
-    if(list.size() == 0)
-	    return;
 	if(list1.size()==0)
 		return;
-
-    glAccountClassTypeMap = list.get(0);
     productCategoryId= list1.get(0);
-    
-    context.put("glAccountClassTypeMap",glAccountClassTypeMap);
     context.put("ProductCategory",productCategoryId);
 }
 

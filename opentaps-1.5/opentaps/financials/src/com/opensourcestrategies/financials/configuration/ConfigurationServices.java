@@ -217,7 +217,6 @@ public final class ConfigurationServices {
 
 			context.put("glAccountTypeId", glAccountTypeId);
 			context.put("glAccountClassId", glAccountClassId);
-
 			// Add a new Gl Account
 			Map addNewGlAccountContext = UtilMisc.toMap("glAccountId",
 					glAccountId, "accountCode", accountCode, "accountName",
@@ -306,9 +305,22 @@ public final class ConfigurationServices {
 			Map addNewRelationContext = UtilMisc.toMap("productCategoryId",
 					categoria, "glAccountId", glAccountId,"fromDate",fecha,
 					"userLogin", userLogin);
-			Map addNewRelationResult = dispatcher.runSync(
-					"updateGlAccountCategoryRelation", addNewRelationContext,
-					-1, false);
+			
+			
+			GenericValue gv1 = delegator.findByPrimaryKeyCache(
+					"GlAccountCategoryRelation", UtilMisc.toMap(
+							"glAccountId", glAccountClassTypeKey));
+			if(gv1==null){
+
+				Map addNewRelationResult = dispatcher.runSync(
+						"createGlAccountCategoryRelation", addNewRelationContext,
+						-1, false);
+			}else{
+				String productId = gv1.getString("productCategoryId");
+				Map addNewRelationResult = dispatcher.runSync(
+						"updateGlAccountCategoryRelation", addNewRelationContext,
+						-1, false);
+			}
 
 			// forward to the original updateGlAccount service
 			return dispatcher.runSync("updateGlAccount", context, -1, false);
