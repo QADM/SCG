@@ -113,6 +113,7 @@ public class IngresoDiarioImportService extends DomainService implements
 			Transaction imp_tx12 = null;
 
 			if (UtilImport.validaLote(ledger_repo, lote, "IngresoDiario")) {
+				boolean loteValido=true;
 				for (DataImportIngresoDiario rowdata : dataforimp) {
 					// Empieza bloque de validaciones
 					String mensaje = "";
@@ -169,6 +170,7 @@ public class IngresoDiarioImportService extends DomainService implements
 							mensaje);
 
 					if (!mensaje.isEmpty()) {
+						loteValido=false;
 						String message = "Failed to import Ingreso Diario ["
 								+ rowdata.getClavePres()
 								+ "], Error message : " + mensaje;
@@ -228,6 +230,7 @@ public class IngresoDiarioImportService extends DomainService implements
 							rowdata.getFechaContable());
 
 					if (!mensaje.isEmpty()) {
+						loteValido=false;
 						String message = "Failed to import Ingreso Diario ["
 								+ rowdata.getClavePres()
 								+ "], Error message : " + mensaje;
@@ -280,6 +283,7 @@ public class IngresoDiarioImportService extends DomainService implements
 							rowdata.getIdProductoD(), rowdata.getIdProductoH());
 
 					if (cuentas.get("Mensaje") != null) {
+						loteValido=false;
 						String message = "Failed to import Ingreso Diario ["
 								+ rowdata.getClavePres()
 								+ "], Error message : "
@@ -374,6 +378,7 @@ public class IngresoDiarioImportService extends DomainService implements
 											ingresoDiario.getAcctgTransId()));
 
 							if (trans != null) {
+								loteValido=false;
 								Debug.log("Trans Modif");
 								String message = "La transaccion con id: "
 										+ ingresoDiario.getAcctgTransId()
@@ -657,7 +662,7 @@ public class IngresoDiarioImportService extends DomainService implements
 				}
 
 				// Se inserta el Lote.
-				if (!lote.equalsIgnoreCase("X")) {
+				if (!lote.equalsIgnoreCase("X")&&loteValido) {
 					LoteTransaccion loteTrans = new LoteTransaccion();
 					loteTrans.setIdLote(lote);
 					loteTrans.setTipoTransaccion("IngresoDiario");
