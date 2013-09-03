@@ -435,7 +435,8 @@ public class IngresoDiarioImportService extends DomainService implements
 											periodos,
 											cuentas.get("Cuenta Cargo Presupuesto"),
 											rowdata.getMonto(), "Debit");
-
+							
+							Debug.log("Se impactan las histories regresadas");
 							for (GlAccountHistory history : histories) {
 								Transaction txHistory = null;
 								txHistory = this.session.beginTransaction();
@@ -472,7 +473,8 @@ public class IngresoDiarioImportService extends DomainService implements
 											periodos,
 											cuentas.get("Cuenta Abono Presupuesto"),
 											rowdata.getMonto(), "Credit");
-
+							
+							Debug.log("Se impactan las histories regresadas");
 							for (GlAccountHistory history : histories) {
 								Transaction txHistory = null;
 								txHistory = this.session.beginTransaction();
@@ -557,6 +559,7 @@ public class IngresoDiarioImportService extends DomainService implements
 											cuentas.get("Cuenta Cargo Contable"),
 											rowdata.getMonto(), "Debit");
 
+							Debug.log("Se impactan las histories regresadas");
 							for (GlAccountHistory history : histories) {
 								Transaction txHistory = null;
 								txHistory = this.session.beginTransaction();
@@ -593,6 +596,7 @@ public class IngresoDiarioImportService extends DomainService implements
 											cuentas.get("Cuenta Abono Contable"),
 											rowdata.getMonto(), "Credit");
 
+							Debug.log("Se impactan las histories regresadas");
 							for (GlAccountHistory history : histories) {
 								Transaction txHistory = null;
 								txHistory = this.session.beginTransaction();

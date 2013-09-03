@@ -574,7 +574,7 @@ public class PresupuestoEgresoImportService extends DomainService implements
 												presupuestoEgreso
 														.getPostedAmount(),
 												tipo);
-
+								Debug.log("Se impactan las histories regresadas");
 								for (GlAccountHistory history : histories) {
 									Transaction txHistory = null;
 									txHistory = this.session.beginTransaction();

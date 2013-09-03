@@ -113,7 +113,7 @@ public class EgresoDiarioImportService extends DomainService implements
 			Transaction imp_tx12 = null;
 
 			if (UtilImport.validaLote(ledger_repo, lote, "EgresoDiario")) {
-				boolean loteValido=true;
+				boolean loteValido = true;
 				for (DataImportEgresoDiario rowdata : dataforimp) {
 					// Empieza bloque de validaciones
 					String mensaje = "";
@@ -212,7 +212,7 @@ public class EgresoDiarioImportService extends DomainService implements
 							mensaje);
 
 					if (!mensaje.isEmpty()) {
-						loteValido=false;
+						loteValido = false;
 						String message = "Failed to import Egreso Diario ["
 								+ rowdata.getClavePres()
 								+ "], Error message : " + mensaje;
@@ -313,7 +313,7 @@ public class EgresoDiarioImportService extends DomainService implements
 							area, rowdata.getFechaContable());
 
 					if (!mensaje.isEmpty()) {
-						loteValido=false;
+						loteValido = false;
 						String message = "Failed to import Egreso Diario ["
 								+ rowdata.getClavePres()
 								+ "], Error message : " + mensaje;
@@ -377,7 +377,7 @@ public class EgresoDiarioImportService extends DomainService implements
 							rowdata.getIdProductoH());
 
 					if (cuentas.get("Mensaje") != null) {
-						loteValido=false;
+						loteValido = false;
 						String message = "Failed to import Egreso Diario ["
 								+ rowdata.getClavePres()
 								+ "], Error message : "
@@ -484,7 +484,7 @@ public class EgresoDiarioImportService extends DomainService implements
 
 							if (trans != null) {
 								Debug.log("Trans Modif");
-								loteValido=false;
+								loteValido = false;
 								String message = "La transaccion con id: "
 										+ egresoDiario.getAcctgTransId()
 										+ "ya existe.";
@@ -549,6 +549,7 @@ public class EgresoDiarioImportService extends DomainService implements
 											cuentas.get("Cuenta Cargo Presupuesto"),
 											rowdata.getMonto(), "Debit");
 
+							Debug.log("Se impactan las histories regresadas");
 							for (GlAccountHistory history : histories) {
 								Transaction txHistory = null;
 								txHistory = this.session.beginTransaction();
@@ -586,13 +587,12 @@ public class EgresoDiarioImportService extends DomainService implements
 
 							// GlAccountHistory
 							Debug.log("Busca histories");
-							histories = UtilImport
-									.actualizaGlAccountHistories(
-											ledger_repo,
-											periodos,
-											cuentas.get("Cuenta Abono Presupuesto"),
-											rowdata.getMonto(), "Credit");
-
+							histories = UtilImport.actualizaGlAccountHistories(
+									ledger_repo, periodos,
+									cuentas.get("Cuenta Abono Presupuesto"),
+									rowdata.getMonto(), "Credit");
+							
+							Debug.log("Se impactan las histories regresadas");
 							for (GlAccountHistory history : histories) {
 								Transaction txHistory = null;
 								txHistory = this.session.beginTransaction();
@@ -669,7 +669,7 @@ public class EgresoDiarioImportService extends DomainService implements
 							imp_tx8 = this.session.beginTransaction();
 							ledger_repo.createOrUpdate(glAccountOrganization);
 							imp_tx8.commit();
-							
+
 							// GlAccountHistory
 							Debug.log("Busca histories");
 							List<GlAccountHistory> histories = UtilImport
@@ -678,7 +678,7 @@ public class EgresoDiarioImportService extends DomainService implements
 											periodos,
 											cuentas.get("Cuenta Cargo Contable"),
 											rowdata.getMonto(), "Debit");
-							
+
 							for (GlAccountHistory history : histories) {
 								Transaction txHistory = null;
 								txHistory = this.session.beginTransaction();
@@ -710,16 +710,14 @@ public class EgresoDiarioImportService extends DomainService implements
 							imp_tx12 = this.session.beginTransaction();
 							ledger_repo.createOrUpdate(glAccountOrganization);
 							imp_tx12.commit();
-							
+
 							// GlAccountHistory
 							Debug.log("Busca histories");
-							histories = UtilImport
-									.actualizaGlAccountHistories(
-											ledger_repo,
-											periodos,
-											cuentas.get("Cuenta Abono Contable"),
-											rowdata.getMonto(), "Credit");
-							
+							histories = UtilImport.actualizaGlAccountHistories(
+									ledger_repo, periodos,
+									cuentas.get("Cuenta Abono Contable"),
+									rowdata.getMonto(), "Credit");
+
 							for (GlAccountHistory history : histories) {
 								Transaction txHistory = null;
 								txHistory = this.session.beginTransaction();
@@ -788,7 +786,7 @@ public class EgresoDiarioImportService extends DomainService implements
 				}
 
 				// Se inserta el Lote.
-				if (!lote.equalsIgnoreCase("X")&&loteValido) {
+				if (!lote.equalsIgnoreCase("X") && loteValido) {
 					LoteTransaccion loteTrans = new LoteTransaccion();
 					loteTrans.setIdLote(lote);
 					loteTrans.setTipoTransaccion("EgresoDiario");
