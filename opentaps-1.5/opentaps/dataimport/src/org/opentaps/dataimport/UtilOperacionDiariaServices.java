@@ -419,12 +419,19 @@ public class UtilOperacionDiariaServices {
      * @param tipoClasiEco
      * @return
      * @throws GenericServiceException
+     * @throws ServiceException 
      */
     @SuppressWarnings({ "unchecked", "rawtypes" })
 	public static Map<String,String> regresaMapa(DispatchContext dctx,LocalDispatcher dispatcher,
 			Map context,BigDecimal monto,Timestamp fecContable,
 			String acctgTransTypeId, String clasificaEco , String tipoFiscal, 
-			String idProdAbono, String idProdCargo, String idPago,String tipoClasiEco) throws GenericServiceException{
+			String idProdAbono, String idProdCargo, String idPago,String tipoClasiEco) throws GenericServiceException, ServiceException{
+    	
+    		if(monto.compareTo(ZERO) <= 0){
+				Debug.logError("El monto debe ser MAYOR A CERO",MODULE);
+				throw new ServiceException(String.format("El monto debe ser MAYOR A CERO"));
+    			
+    		}
     	
 	        Map input = new HashMap(context);
 	        input.put("acctgTransTypeId", acctgTransTypeId);
@@ -591,8 +598,8 @@ public class UtilOperacionDiariaServices {
 						
 						if(matrizId.equalsIgnoreCase("B.1") || matrizId.equalsIgnoreCase("A.1")){
 							
-							cuentaCargo = verificarAuxiliarProducto(dctx, dispatcher, cuentaCargo, idProdCargo);
-							cuentaAbono = verificarAuxiliarProducto(dctx, dispatcher, cuentaAbono, idProdAbono);
+							cuentaCargo = verificarAuxiliarProducto(dctx, dispatcher, cuentaCargo, idProdCargo,"Cargo");
+							cuentaAbono = verificarAuxiliarProducto(dctx, dispatcher, cuentaAbono, idProdAbono,"Abono");
 							
 						} else if(matrizId.equalsIgnoreCase("B.2") || matrizId.equalsIgnoreCase("A.2")){
 							
@@ -604,11 +611,11 @@ public class UtilOperacionDiariaServices {
 							if(tipoClasiEco.equalsIgnoreCase("CRI")){
 								
 								cuentaCargo = verificarBancos(dctx, dispatcher, cuentaCargo, idPago);
-								cuentaAbono = verificarAuxiliarProducto(dctx, dispatcher, cuentaAbono, idProdAbono);
+								cuentaAbono = verificarAuxiliarProducto(dctx, dispatcher, cuentaAbono, idProdAbono,"Abono");
 								
 							} else {
 								
-								cuentaCargo = verificarAuxiliarProducto(dctx, dispatcher, cuentaCargo, idProdCargo);
+								cuentaCargo = verificarAuxiliarProducto(dctx, dispatcher, cuentaCargo, idProdCargo,"Cargo");
 								cuentaAbono = verificarBancos(dctx, dispatcher, cuentaCargo, idPago);
 								
 							}
@@ -690,12 +697,13 @@ public class UtilOperacionDiariaServices {
      * @param dispatcher
      * @param glAccountId
      * @param productId
+     * @param tipoProducto 
      * @return
      * @throws ServiceException
      * @throws GenericServiceException
      */
     @SuppressWarnings({ "rawtypes", "unchecked" })
-	public static String verificarAuxiliarProducto(DispatchContext dctx,LocalDispatcher dispatcher,String glAccountId,String productId) throws ServiceException, GenericServiceException{
+	public static String verificarAuxiliarProducto(DispatchContext dctx,LocalDispatcher dispatcher,String glAccountId,String productId, String tipoProducto) throws ServiceException, GenericServiceException{
     	
     	String cuentaRegresa = glAccountId;
     	
@@ -721,11 +729,11 @@ public class UtilOperacionDiariaServices {
             					cuentaRegresa = genericValue.getString("glAccountId");
 						}
             			
-            		} else {
-    					Debug.logError("Debe de proporcionar el Producto",MODULE);
-    					throw new ServiceException(String.format("Debe de proporcionar el Producto"));
+            		} else {      			
+    					Debug.logError("Debe de proporcionar el Producto ("+tipoProducto+")",MODULE);
+    					throw new ServiceException(String.format("Debe de proporcionar el Producto ("+tipoProducto+")"));
             		}
-            	} 
+            	}
                 
                 Debug.logWarning("Cuenta Entrada {{ "+glAccountId+"   cuenta Salida ]{ "+cuentaRegresa, MODULE);
     			
