@@ -154,8 +154,8 @@
         <attribute name="description" type="String" mode="IN" optional="false"/>
         <attribute name="niv" type="String" mode="IN" optional="false"/>
         <attribute name="parentEnumId" type="String" mode="IN"  optional="true"/>
-        <attribute name="fechaIn" type="String" mode="IN" optional="true"/>
-        <attribute name="fechaF" type="String" mode="IN"  optional="true"/>
+        <attribute name="fechaIn" type="String" mode="IN" optional="false"/>
+        <attribute name="fechaF" type="String" mode="IN"  optional="false"/>
     </service>
     
     <service name="deleteAccountingTag" default-entity-name="Enumeration" engine="java"
