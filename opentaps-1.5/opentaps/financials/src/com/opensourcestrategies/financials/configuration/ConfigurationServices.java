@@ -36,6 +36,8 @@ import org.ofbiz.service.ServiceUtil;
 import org.opentaps.base.entities.GlAccountCategoryRelation;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
+import java.util.StringTokenizer;
+
 
 /**
  * ConfigurationServices - Services for configuring GL Accounts.
@@ -545,24 +547,15 @@ public final class ConfigurationServices {
 				  if ((nivelId.charAt(x) != ' ')&&(nivelId.charAt(x) != '[')&&(nivelId.charAt(x) != ']'))
 				    sCadenaSinBlancos += nivelId.charAt(x);
 				}
-			for (int x=0; x<sCadenaSinBlancos.length(); x++) {
-				cadena1="";
-				cadena2="";
-				if(sCadenaSinBlancos.charAt(x)!=',')
-				     cadena1+=sCadenaSinBlancos.charAt(x);
-				     cadena1+=sCadenaSinBlancos.charAt(x+1);
-				     cadena1+=sCadenaSinBlancos.charAt(x+2);
-				     cadena1+=sCadenaSinBlancos.charAt(x+3);
-				     cadena1+=sCadenaSinBlancos.charAt(x+4);
-				     cadena2+=sCadenaSinBlancos.charAt(x+6);
-				     cadena2+=sCadenaSinBlancos.charAt(x+7);
-				     cadena2+=sCadenaSinBlancos.charAt(x+8);
-				     cadena2+=sCadenaSinBlancos.charAt(x+9);
-				     cadena2+=sCadenaSinBlancos.charAt(x+10);	
-					 x+=11;
-				if(!(cadena1.equals(cadena2)))
-					nivel=cadena1;
-			}
+			
+			StringTokenizer st = new StringTokenizer(sCadenaSinBlancos, ",");
+			 while(st.hasMoreTokens()) {
+				   String Nivel1 = st.nextToken();
+				   String Nivel2 = st.nextToken();
+				   if(!(Nivel1.equals(Nivel2)))
+					   nivel=Nivel1;
+			 }
+			
 			context.put("nivelId", nivel);
 			if (enumeration == null) {
 				return UtilMessage.createAndLogServiceError(

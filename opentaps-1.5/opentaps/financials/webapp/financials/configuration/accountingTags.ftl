@@ -53,7 +53,7 @@
           <#list tagsByType.get(type) as tag>
             <tr class="${tableRowClass(tag_index)}">
               <@inputHidden name="enumId" value=tag.enumId index=tag_index />
-              <@inputTextCell name="sequenceId" default=tag.sequenceId! size=3 maxlength=3 index=tag_index />
+              <@displayCell text=tag.sequenceId/>
               <@displayCell text=tag.enumId />
 
               <@inputTextCell name="enumCode" default=tag.enumCode! size=12 maxlength=30 index=tag_index />
