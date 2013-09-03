@@ -1581,14 +1581,18 @@
 	<request-map uri="createOperacionDiariaIngresos">
 		<security https="true" auth="true"/>
 		<event type="service" invoke="createOperacionDiariaIngresos"/>
-		<response name="success" type="request-redirect" value="viewAcctPresupuestal">
-          <redirect-parameter name="acctgTransId"/>
+		<response name="success" type="request-redirect" value="viewGlFiscalType">
+          <redirect-parameter name="listTransId"/>
         </response>
-        <response name="error" type="view" value="createOperacionDiariaIngresos" />
+        <response name="error" type="view" value="ODIngresos" />
 	</request-map>
      <request-map uri="viewAcctPresupuestal">
         <security https="true" auth="true"/>
         <response name="success" type="view" value="viewAcctPresupuestal"/>
+    </request-map> 	
+     <request-map uri="viewGlFiscalType">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="viewGlFiscalType"/>
     </request-map> 	
      <request-map uri="ODEgresos">
         <security https="true" auth="true"/>
@@ -1597,8 +1601,8 @@
 	<request-map uri="createOperacionDiariaEgresos">
 		<security https="true" auth="true"/>
 		<event type="service" invoke="createOperacionDiariaEgresos"/>
-		<response name="success" type="request-redirect" value="viewAcctPresupuestal">
-          <redirect-parameter name="acctgTransId"/>
+		<response name="success" type="request-redirect" value="viewGlFiscalType">
+          <redirect-parameter name="listTransId"/>
         </response>
         <response name="error" type="view" value="ODEgresos" />
 	</request-map>
@@ -2454,6 +2458,7 @@
 	<!-- Nuevas pantallas @JSCF -->
 	<view-map name="ODIngresos" type="screen" page="component://financials/widget/financials/screens/transactions/TransactionsScreens.xml#ODIngresos"/>
 	<view-map name="ODEgresos" type="screen" page="component://financials/widget/financials/screens/transactions/TransactionsScreens.xml#ODEgresos"/>
+	<view-map name="viewGlFiscalType" type="screen" page="component://financials/widget/financials/screens/transactions/TransactionsScreens.xml#viewGlFiscalType"/>
 	<!-- Nuevas pantallas @JSCF -->
     
 
