@@ -44,6 +44,7 @@ under the License.
                 <set field="newEntity.workEffortId" from-field="parameters.workEffortId"/>
             </else>
         </if-empty>
+         <set field="newEntity.externalId" from-field="parameters.workEffortName"/>
         <field-to-result field="newEntity.workEffortId" result-name="workEffortId"/>
         <set-nonpk-fields map="parameters" value-field="newEntity"/>
 
