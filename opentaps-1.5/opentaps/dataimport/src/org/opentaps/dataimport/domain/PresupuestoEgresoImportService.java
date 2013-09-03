@@ -91,6 +91,7 @@ public class PresupuestoEgresoImportService extends DomainService implements
 			Transaction imp_tx4 = null;
 
 			if (UtilImport.validaLote(ledger_repo, lote, "PresupuestoEgreso")) {
+				boolean loteValido=true;
 				for (DataImportPresupuestoEgreso rowdata : dataforimp) {
 					// Validaciones
 					String mensaje = "";
@@ -183,6 +184,7 @@ public class PresupuestoEgresoImportService extends DomainService implements
 							"SECTORIAL");
 
 					if (!mensaje.isEmpty()) {
+						loteValido=false;
 						String message = "Failed to import Presupuesto Egreso ["
 								+ rowdata.getClavePres()
 								+ "], Error message : " + mensaje;
@@ -330,6 +332,7 @@ public class PresupuestoEgresoImportService extends DomainService implements
 									"SECTORIAL", area, cal.getTime());
 
 							if (!mensaje.isEmpty()) {
+								loteValido=false;
 								String message = "Failed to import Presupuesto Egreso ["
 										+ rowdata.getClavePres()
 										+ "], Error message : " + mensaje;
@@ -407,6 +410,7 @@ public class PresupuestoEgresoImportService extends DomainService implements
 									mensaje);
 
 							if (!mensaje.isEmpty()) {
+								loteValido=false;
 								String message = "Failed to import Presupuesto Egreso ["
 										+ rowdata.getClavePres()
 										+ "], Error message : " + mensaje;
@@ -425,6 +429,7 @@ public class PresupuestoEgresoImportService extends DomainService implements
 																	.getAcctgTransTypeId()));
 
 							if (miniguia == null) {
+								loteValido=false;
 								String message = "Failed to import Presupuesto Egreso ["
 										+ rowdata.getClavePres()
 										+ "], Error message : "
@@ -615,7 +620,7 @@ public class PresupuestoEgresoImportService extends DomainService implements
 				}
 
 				// Se inserta el Lote.
-				if (!lote.equalsIgnoreCase("X")) {
+				if (!lote.equalsIgnoreCase("X")&&loteValido) {
 					LoteTransaccion loteTrans = new LoteTransaccion();
 					loteTrans.setIdLote(lote);
 					loteTrans.setTipoTransaccion("PresupuestoEgreso");
