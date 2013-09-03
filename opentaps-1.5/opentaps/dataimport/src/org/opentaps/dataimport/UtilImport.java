@@ -640,7 +640,7 @@ public class UtilImport {
 	public static List<CustomTimePeriod> obtenPeriodos(
 			LedgerRepositoryInterface ledger_repo, String organizacionPartyId,
 			Date fechaTrans) throws RepositoryException {
-		Debug.log("Fecha.- " + fechaTrans);
+		Debug.log("Fecha.- "+fechaTrans);
 		List<CustomTimePeriod> periodos = ledger_repo.findList(
 				CustomTimePeriod.class, ledger_repo.map(
 						CustomTimePeriod.Fields.organizationPartyId,
@@ -653,7 +653,7 @@ public class UtilImport {
 				periodosAplicables.add(periodo);
 			}
 		}
-		Debug.log("Periodos regresados.- " + periodosAplicables.size());
+		Debug.log("Periodos regresados.- "+periodosAplicables.size());
 		return periodosAplicables;
 	}
 
@@ -662,7 +662,7 @@ public class UtilImport {
 			List<CustomTimePeriod> periodos, String cuenta, BigDecimal monto,
 			String tipo) throws RepositoryException {
 		List<GlAccountHistory> glAccountHistories = new ArrayList<GlAccountHistory>();
-
+		
 		for (CustomTimePeriod periodo : periodos) {
 			GlAccountHistory glAccountHistory = ledger_repo.findOne(
 					GlAccountHistory.class, ledger_repo.map(
@@ -680,15 +680,21 @@ public class UtilImport {
 						.getOrganizationPartyId());
 				glAccountHistory.setCustomTimePeriodId(periodo
 						.getCustomTimePeriodId());
+				
+				if (tipo.equalsIgnoreCase("Credit")) {
+					glAccountHistory.setPostedCredits(monto);
+				} else {
+					glAccountHistory.setPostedDebits(monto);
+				}
 			} else {
 				Debug.log("Existe History");
-			}
-			if (tipo.equalsIgnoreCase("Credit")) {
-				glAccountHistory.setPostedCredits(glAccountHistory
-						.getPostedCredits().add(monto));
-			} else {
-				glAccountHistory.setPostedDebits(glAccountHistory
-						.getPostedDebits().add(monto));
+				if (tipo.equalsIgnoreCase("Credit")) {
+					glAccountHistory.setPostedCredits(glAccountHistory
+							.getPostedCredits().add(monto));
+				} else {
+					glAccountHistory.setPostedDebits(glAccountHistory
+							.getPostedDebits().add(monto));
+				}
 			}
 			
 			glAccountHistories.add(glAccountHistory);
