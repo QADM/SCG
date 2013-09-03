@@ -89,6 +89,7 @@ public class PresupuestoIngresoImportService extends DomainService implements
 			Transaction imp_tx4 = null;
 
 			if (UtilImport.validaLote(ledger_repo, lote, "PresupuestoIngreso")) {
+				boolean loteValido=true;
 				for (DataImportPresupuestoIngreso rowdata : dataforimp) {
 					// Empieza bloque de validaciones
 					Debug.log("Empieza bloque de validaciones");
@@ -138,6 +139,7 @@ public class PresupuestoIngresoImportService extends DomainService implements
 							rowdata.getLoc(), "GEOGRAFICA");
 
 					if (!mensaje.isEmpty()) {
+						loteValido=false;
 						String message = "Failed to import Presupuesto Ingreso ["
 								+ rowdata.getClavePres()
 								+ "], Error message : " + mensaje;
@@ -249,6 +251,7 @@ public class PresupuestoIngresoImportService extends DomainService implements
 									cal.getTime());
 
 							if (!mensaje.isEmpty()) {
+								loteValido=false;
 								String message = "Failed to import Presupuesto Ingreso ["
 										+ rowdata.getClavePres()
 										+ "], Error message : " + mensaje;
@@ -325,6 +328,7 @@ public class PresupuestoIngresoImportService extends DomainService implements
 									mensaje);
 
 							if (!mensaje.isEmpty()) {
+								loteValido=false;
 								String message = "Failed to import Presupuesto Egreso ["
 										+ rowdata.getClavePres()
 										+ "], Error message : " + mensaje;
@@ -343,6 +347,7 @@ public class PresupuestoIngresoImportService extends DomainService implements
 																	.getAcctgTransTypeId()));
 
 							if (miniguia == null) {
+								loteValido=false;
 								String message = "Failed to import Presupuesto Ingreso ["
 										+ rowdata.getClavePres()
 										+ "], Error message : "
@@ -505,7 +510,7 @@ public class PresupuestoIngresoImportService extends DomainService implements
 					}
 				}
 				// Se inserta el Lote.
-				if (!lote.equalsIgnoreCase("X")) {
+				if (!lote.equalsIgnoreCase("X")&&loteValido) {
 					LoteTransaccion loteTrans = new LoteTransaccion();
 					loteTrans.setIdLote(lote);
 					loteTrans.setTipoTransaccion("PresupuestoIngreso");

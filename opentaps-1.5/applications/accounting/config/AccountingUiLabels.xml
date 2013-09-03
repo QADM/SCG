@@ -1942,7 +1942,7 @@
     </property>
     <property key="AccountingCashFlow">
         <value xml:lang="en">Cash Flow</value>
-        <value xml:lang="es">Flujo de Efectivo</value>
+        <value xml:lang="es">Flujo del Periodo</value>
     </property>    
     <property key="AccountingCashFlowStatement">
         <value xml:lang="en">Cash Flow Statement</value>
@@ -10408,7 +10408,7 @@
     </property>
     <property key="FormFieldTitle_credit">
         <value xml:lang="en">Credit</value>
-        <value xml:lang="es">Crédito</value>
+        <value xml:lang="es">Abono</value>
         <value xml:lang="fr">Crédit</value>
         <value xml:lang="hi_IN">जमा</value>
         <value xml:lang="it">Credito</value>
@@ -10525,7 +10525,7 @@
     </property>
     <property key="FormFieldTitle_debit">
         <value xml:lang="en">Debit</value>
-        <value xml:lang="es">Debito</value>
+        <value xml:lang="es">Cargo</value>
         <value xml:lang="fr">Débit</value>
         <value xml:lang="hi_IN">नामे</value>
         <value xml:lang="it">Debito</value>

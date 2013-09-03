@@ -37,13 +37,13 @@
 		    	<#assign montoIni = 0.0>
 		    </#if>
 		    <#if cuentasCredito.get(account.glAccountId)?exists>
-		    	<#assign montoAbono = cuentasCredito.get(account.glAccountId)>
+		    	<#assign montoAbono = cuentasCredito.get(account.glAccountId)>		    	
 		    	<#assign totAbono = totAbono + montoAbono>
 		    <#else>
 		    	<#assign montoAbono = 0.0>
 		    </#if>   
 		    <#if cuentasDebito.get(account.glAccountId)?exists>
-		    	<#assign montoCargo = cuentasDebito.get(account.glAccountId)>
+		    	<#assign montoCargo = cuentasDebito.get(account.glAccountId)- montoIni>
 		    	<#assign totCargo = totCargo + montoCargo>
 		    <#else>
 		    	<#assign montoCargo = 0.0>
@@ -51,11 +51,12 @@
 		    <#assign montoFin = montoIni + montoCargo - montoAbono>
 			<#assign montoFlujo = montoIni - montoFin>
 			<#assign totalFinal = totalFinal + montoFin>
-			<#assign totalFlujo = totalFlujo + montoFlujo>    
+			<#assign totalFlujo = totalFlujo + montoFlujo>			   
       <tr>
         <td class="tabletext">${account.accountCode?if_exists}: ${account.accountName?if_exists} (<a href="<@ofbizUrl>AccountActivitiesDetail?glAccountId=${account.glAccountId?if_exists}&organizationPartyId=${organizationPartyId}</@ofbizUrl>" class="buttontext">${account.glAccountId?if_exists}</a>) </td>
         <td class="tabletext" align="right"><@ofbizCurrency amount=fromDateAccounts.get(account) isoCode=currencyUomId/></td>
-        <td class="tabletext" align="right"><@ofbizCurrency amount=cuentasDebito.get(account.glAccountId) isoCode=currencyUomId/></td>
+        <!--<td class="tabletext" align="right"><@ofbizCurrency amount=cuentasDebito.get(account.glAccountId) isoCode=currencyUomId/></td>-->
+        <td class="tabletext" align="right"><@ofbizCurrency amount=montoCargo isoCode=currencyUomId/></td>
         <td class="tabletext" align="right"><@ofbizCurrency amount=cuentasCredito.get(account.glAccountId) isoCode=currencyUomId/></td>
         <td class="tabletext" align="right"><@ofbizCurrency amount=montoFin isoCode=currencyUomId/></td>
         <td class="tabletext" align="right"><@ofbizCurrency amount=montoFlujo isoCode=currencyUomId/></td>
