@@ -94,7 +94,7 @@ public final class ExcelImportServices extends DomainService {
 	private static final String EXCEL_PARTY_TAB = "Clasificacion administrativa";
 	private static final String EXCEL_PROJECT_TAB = "Clasificacion programatica";
 	private static final String EXCEL_GEO_TAB = "Clasificacion geografica";
-	private static final String EXCEL_CATEGORY_TAB = "CRI / COG / CA";
+	private static final String EXCEL_CATEGORY_TAB = "CRI, COG, CA";
 	private static final String EXCEL_PRESUPUESTO_INGRESO_TAB = "Presupuesto Ingreso";
 	private static final String EXCEL_PRESUPUESTO_EGRESO_TAB = "Presupuesto Egreso";
 	private static final String EXCEL_EGRESO_DIARIO_TAB = "OD Egreso";
