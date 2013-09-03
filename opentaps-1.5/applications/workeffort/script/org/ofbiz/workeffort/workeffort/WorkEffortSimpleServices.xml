@@ -37,6 +37,7 @@ under the License.
         <make-value value-field="newEntity" entity-name="WorkEffort"/>
         <if-empty field="parameters.workEffortId">
             <sequenced-id sequence-name="WorkEffort" field="newEntity.workEffortId"/>
+            <set field="newEntity.externalId" from-field="newEntity.workEffortId"/>
             <else>
                 <check-id field="parameters.workEffortId"/>
                 <check-errors/>
