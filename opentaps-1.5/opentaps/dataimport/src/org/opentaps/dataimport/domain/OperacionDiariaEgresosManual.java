@@ -23,6 +23,7 @@ import org.ofbiz.service.ServiceUtil;
 import org.opentaps.common.util.UtilMessage;
 import org.opentaps.dataimport.UtilOperacionDiariaServices;
 import org.opentaps.foundation.action.ActionContext;
+import org.opentaps.foundation.service.ServiceException;
 
 public class OperacionDiariaEgresosManual {
 	
@@ -226,6 +227,8 @@ public class OperacionDiariaEgresosManual {
         } catch (GenericEntityException e) {
         	return UtilMessage.createAndLogServiceError(e, MODULE);
 		} catch (GenericServiceException e) {
+			return UtilMessage.createAndLogServiceError(e, MODULE);
+		} catch (ServiceException e) {
 			return UtilMessage.createAndLogServiceError(e, MODULE);
 		}
 		
