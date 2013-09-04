@@ -240,5 +240,16 @@ public interface LedgerRepositoryInterface extends RepositoryInterface {
      * @throws RepositoryException
      */
     public AcctgTransPresupuestal getAcctgTransPresupuestal(String acctgTransId) throws RepositoryException;
+    
+    /**
+     * Returns list accounting transactions.
+     *
+     * @param List glAccountIds 
+     * @return
+     *   List of <code>AcctgTrans</code>
+     * @throws RepositoryException
+     */
+    public List<AcctgTrans> getTransactions(List<String> glAccountIds) throws RepositoryException;
+    
 
 }
