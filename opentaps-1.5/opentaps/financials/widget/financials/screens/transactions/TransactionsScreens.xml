@@ -668,6 +668,39 @@
         </section>
     </screen>
     
+    <screen name="viewAcctgTransPolizasListado">
+        <section>
+        	<actions>
+                <set field="sectionHeaderUiLabel" value="Datos de la Póliza"/> 
+                <script location="component://financials/webapp/financials/WEB-INF/actions/transactions/viewAcctgTransMuestraPoliza.bsh"/>
+                <set field="viewIndex" from-field="parameters.VIEW_INDEX" type="Integer" default-value="0"/>
+                <set field="viewSize" from-field="parameters.VIEW_SIZE" type="Integer" default-value="50"/>
+                <set field="pageTitleLabel" value="Pólizas Contables"/>
+        	</actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                    <!--
+                        <frame-container title="Buscar Pólizas">
+                            <include-form name="viewAcctgTransPolizasLista" location="component://financials/widget/financials/forms/transactions/TransactionsForms.xml"/>
+                        </frame-container>
+                        -->
+                        <frame-container title="Buscar Pólizas">
+                            <platform-specific><html>
+                                <!-- <html-template location="component://financials/webapp/financials/transactions/findPolizas.ftl"/>-->
+                            </html></platform-specific>
+                        </frame-container>
+                        <frame-container title="Cuentas">
+                        <platform-specific>
+                           <html><html-template location="component://financials/webapp/financials/transactions/acctgTransPolizasDetalle.ftl"/></html>
+                        </platform-specific>
+                        </frame-container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    
     <screen name="viewAcctgTransPolizasLista">
         <section>
         	<actions>
@@ -686,17 +719,21 @@
                            </html></platform-specific>
                          
                         
-							 <include-form name="viewAcctgTransPolizasLista" location="component://financials/widget/financials/forms/transactions/TransactionsForms.xml"/>
+							 <!--<include-form name="viewAcctgTransPolizasLista" location="component://financials/widget/financials/forms/transactions/TransactionsForms.xml"/>-->
                                
                         </container>
+                        
+                        <frame-container title="Detalles de la Póliza">
+                        <platform-specific>
+                           <html><html-template location="component://financials/webapp/financials/transactions/acctgTransDatosPoliza.ftl"/></html>
+                        </platform-specific>
+                        </frame-container>
                                                  
-                        <container style="screenlet">
-                           <platform-specific><html>
-                              <html-template location="component://financials/webapp/financials/transactions/acctgTransPolizasDetalle.ftl"/>
-                           </html></platform-specific>
-                          
-                           
-                        </container>
+                        <frame-container title="Cuentas">
+                        <platform-specific>
+                           <html><html-template location="component://financials/webapp/financials/transactions/acctgTransPolizasDetalle.ftl"/></html>
+                        </platform-specific>
+                        </frame-container>
                     </decorator-section>
                 </decorator-screen>
             </widgets>

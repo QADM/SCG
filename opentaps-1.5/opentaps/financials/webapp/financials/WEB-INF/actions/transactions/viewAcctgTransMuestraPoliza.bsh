@@ -21,8 +21,20 @@ import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.base.util.UtilMisc;
 import java.util.List;
+import org.ofbiz.base.util.*;
+import org.opentaps.common.util.UtilMessage;
+import org.opentaps.common.util.UtilCommon;
+import org.opentaps.common.util.UtilAccountingTags;
+import org.opentaps.domain.DomainsLoader;
+import org.opentaps.domain.ledger.AccountingTransaction;
+import org.opentaps.foundation.exception.FoundationException;
+import org.opentaps.foundation.repository.ofbiz.Repository;
+import org.opentaps.foundation.infrastructure.*;
 
 import org.opentaps.common.util.UtilMessage;
+
+agrupador = UtilCommon.getParameter(context, "agrupador");
+
 if (UtilValidate.isNotEmpty(parameters.get("agrupador"))) {
     acctgPolizasDetalleListado = delegator.findByAnd("AcctgPolizasDetalleListado", UtilMisc.toMap("agrupador", parameters.get("agrupador")), UtilMisc.toList("amount"));
     if (acctgPolizasDetalleListado == null) {
@@ -31,5 +43,28 @@ if (UtilValidate.isNotEmpty(parameters.get("agrupador"))) {
     }    
     context.put("acctgPolizasDetalleListado", acctgPolizasDetalleListado);
 }
+
+dl = new DomainsLoader(new Infrastructure(dispatcher), new User(userLogin));
+ledgerDomain = dl.loadDomainsDirectory().getLedgerDomain();
+ledgerRepository = ledgerDomain.getLedgerRepository();
+ledgerSpecification = ledgerRepository.getSpecification();
+
+try 
+{	//AcctgPolizasDetalleLista = ledgerRepository.getAcctgPolizasDetalleLista(agrupador);
+	acctgPolizasDetalleLista = delegator.findByAnd("AcctgPolizasDetalleLista", UtilMisc.toMap("agrupador", parameters.get("agrupador"), "debitCreditFlag", "D"), UtilMisc.toList("postedDate"));	
+	print("acctgPolizasDetalleLista: " + acctgPolizasDetalleLista);             
+} 
+catch (FoundationException e) {
+}
+
+
+//context.put("acctgPolizasDetalleLista", Repository.genericValueFromEntity(delegator, acctgPolizasDetalleLista));
+context.put("acctgPolizasDetalleLista", acctgPolizasDetalleLista);
+
+
+
     
+
+
+
 

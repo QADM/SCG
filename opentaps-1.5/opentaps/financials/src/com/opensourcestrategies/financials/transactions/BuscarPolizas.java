@@ -131,7 +131,10 @@ public class BuscarPolizas {
              }
              if (UtilValidate.isNotEmpty(organizationPartyId)) {
             	 searchConditions.add(EntityCondition.makeCondition(AcctgPolizas.Fields.organizationPartyId.name(), EntityOperator.EQUALS, organizationPartyId));
-             }             
+             }
+             if (UtilValidate.isNotEmpty("D")) {
+            	 searchConditions.add(EntityCondition.makeCondition(AcctgPolizas.Fields.debitCreditFlag.name(), EntityOperator.EQUALS, "D"));
+             }
              if (UtilValidate.isNotEmpty(tipoPoliza)) {
             	 searchConditions.add(EntityCondition.makeCondition(AcctgPolizas.Fields.tipoPoliza.name(), EntityOperator.EQUALS, tipoPoliza));
              }
