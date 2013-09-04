@@ -1431,20 +1431,20 @@ under the License.
        <member-entity entity-alias="TDC" entity-name="TipoDocumento"/>
        <member-entity entity-alias="ATE" entity-name="AcctgTransEntry"/>
 
-	   <alias name="agrupador" entity-alias="ATP"/>
-	   <alias name="postedDate" entity-alias="ATR"/>
-	   <alias name="idTipoDoc" entity-alias="TDC"/>
+	   <alias name="agrupador" entity-alias="ATP" group-by="true"/>
+	   <alias name="postedDate" entity-alias="ATR" group-by="true"/>
+	   <alias name="idTipoDoc" entity-alias="TDC" group-by="true"/>
 	   <!-- <alias name="clavePres" entity-alias="ATP"/>-->
-	   <alias name="tipoPoliza" entity-alias="TDC"/>	   
-	   <alias name="organizationPartyId" entity-alias="ATE"/>
+	   <alias name="tipoPoliza" entity-alias="TDC" group-by="true"/>	   
+	   <alias name="organizationPartyId" entity-alias="ATE" group-by="true"/>
        
-       <view-link entity-alias="ATR" rel-entity-alias="ATP" rel-optional="true">
+       <view-link entity-alias="ATR" rel-entity-alias="ATP">
            <key-map field-name="acctgTransId"/>
        </view-link>
        <view-link entity-alias="ATE" rel-entity-alias="ATP">
            <key-map field-name="acctgTransId"/>
        </view-link>
-       <view-link entity-alias="ATP" rel-entity-alias="TDC" rel-optional="true">
+       <view-link entity-alias="ATP" rel-entity-alias="TDC">
            <key-map field-name="idTipoDoc"/>
        </view-link>
     </view-entity>
@@ -1456,7 +1456,7 @@ under the License.
        <member-entity entity-alias="ATE" entity-name="AcctgTransEntry"/>
        <member-entity entity-alias="GLA" entity-name="GlAccount"/>       
 
-	   <alias name="agrupador" entity-alias="ATP"/>	   
+	   <alias name="agrupador" entity-alias="ATP" group-by="true"/>	   
 	   <alias name="accountName" entity-alias="GLA" group-by="true"/>	   
 	   <alias name="debitCreditFlag" entity-alias="ATE" group-by="true"/>	   
 	   <alias name="amount" entity-alias="ATE" function="sum"/>	   	   	   
