@@ -2446,6 +2446,8 @@
     <view-map name="Egresos" type="screen" page="component://financials/widget/financials/screens/transactions/TransactionsScreens.xml#Egresos"/>
     <view-map name="Polizas" type="screen" page="component://financials/widget/financials/screens/transactions/TransactionsScreens.xml#Polizas"/>
     <view-map name="viewAcctgTransPolizas" type="screen" page="component://financials/widget/financials/screens/transactions/TransactionsScreens.xml#viewAcctgTransPolizas"/>
+    <view-map name="viewAcctgTransPolizasLista" type="screen" page="component://financials/widget/financials/screens/transactions/TransactionsScreens.xml#viewAcctgTransPolizasLista"/>
+    <view-map name="viewAcctgTransPolizasListado" type="screen" page="component://financials/widget/financials/screens/transactions/TransactionsScreens.xml#viewAcctgTransPolizasListado"/>    
     <view-map name="viewAcctgTransIng" type="screen" page="component://financials/widget/financials/screens/transactions/TransactionsScreens.xml#viewAcctgTransIng"/>
     <view-map name="viewAcctgTransEg" type="screen" page="component://financials/widget/financials/screens/transactions/TransactionsScreens.xml#viewAcctgTransEg"/>
 
