@@ -182,7 +182,7 @@ exclude-result-prefixes="fo">
                             font-weight="bold"
                             font-size="8pt"
                             text-align="center">
-                    <fo:inline font-style="italic"> INSERT FOOTER TEXT HERE</fo:inline>
+                    <fo:inline font-style="italic">AB Consultoríá y Soluciones estratégicas</fo:inline>
                   </fo:block>
                 </fo:static-content>
 
@@ -200,14 +200,14 @@ exclude-result-prefixes="fo">
                                     <fo:table-row>
                                       <fo:table-cell>
                                         <fo:block text-align="left">
-                                           HEADER TEXT (e.g Company Name)
+                                           AB Consultoríá y Soluciones estratégicas
                                         </fo:block>
                                       </fo:table-cell>
                                       <fo:table-cell>
                                         <fo:block text-align="right">
-                                          Page
+                                          Página
                                           <fo:page-number/>
-                                          of
+                                          de
                                           <fo:page-number-citation ref-id="EndOfDocument"/>
                                         </fo:block>
                                       </fo:table-cell>
