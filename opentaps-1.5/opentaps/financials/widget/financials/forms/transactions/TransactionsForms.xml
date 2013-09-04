@@ -109,7 +109,7 @@
         <auto-fields-entity entity-name="AcctgPolizasDetalle" default-field-type="display"/>
     </form>
     
-    <form name="viewAcctgTransPolizasLista" type="single" target="updateAcctgTransForm" default-map-name="acctgTransPresupuestalPolizasLista"
+    <form name="viewAcctgTransPolizasLista" type="single" target="updateAcctgTransForm" default-map-name="acctgPolizasDetalleLista"
         default-title-style="tableheadtext" default-widget-style="tabletext" default-tooltip-style="tabletext">
         <auto-fields-entity entity-name="AcctgPolizasDetalleLista" default-field-type="display"/>
     </form>
