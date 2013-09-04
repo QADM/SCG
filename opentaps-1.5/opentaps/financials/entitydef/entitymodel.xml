@@ -1408,6 +1408,7 @@ under the License.
        <alias name="idTipoDoc" entity-alias="TDC" group-by="true"/>
        <alias name="tipoPoliza" entity-alias="TDC" group-by="true"/>
        <alias name="organizationPartyId" entity-alias="ATE" group-by="true"/>
+       <alias name="debitCreditFlag" entity-alias="ATE" group-by="true"/>
 
        <view-link entity-alias="ATR" rel-entity-alias="ATE">
            <key-map field-name="acctgTransId"/>
@@ -1426,26 +1427,31 @@ under the License.
      <view-entity entity-name="AcctgPolizasDetalleLista"
                  package-name="com.opensourcestrategies.financials.transactions"
                  title="Arroja el detalle de las pólizas contables">
-       <member-entity entity-alias="ATR" entity-name="AcctgTrans"/>
        <member-entity entity-alias="ATP" entity-name="AcctgTransPresupuestal"/>
-       <member-entity entity-alias="TDC" entity-name="TipoDocumento"/>
        <member-entity entity-alias="ATE" entity-name="AcctgTransEntry"/>
+       <member-entity entity-alias="ATR" entity-name="AcctgTrans"/>       
+       <member-entity entity-alias="TDC" entity-name="TipoDocumento"/>
+       <member-entity entity-alias="PAG" entity-name="PartyGroup"/>                     
 
 	   <alias name="agrupador" entity-alias="ATP" group-by="true"/>
 	   <alias name="postedDate" entity-alias="ATR" group-by="true"/>
-	   <alias name="idTipoDoc" entity-alias="TDC" group-by="true"/>
-	   <!-- <alias name="clavePres" entity-alias="ATP"/>-->
+	   <alias name="descripcion" entity-alias="TDC" group-by="true"/>	   
 	   <alias name="tipoPoliza" entity-alias="TDC" group-by="true"/>	   
-	   <alias name="organizationPartyId" entity-alias="ATE" group-by="true"/>
+	   <alias name="groupName" entity-alias="PAG" group-by="true"/>	 
+	   <alias name="amount" entity-alias="ATE" function="sum"/>
+	   <alias name="debitCreditFlag" entity-alias="ATE" group-by="true"/>	   	     
        
-       <view-link entity-alias="ATR" rel-entity-alias="ATP">
+       <view-link entity-alias="ATP" rel-entity-alias="ATE">
            <key-map field-name="acctgTransId"/>
        </view-link>
-       <view-link entity-alias="ATE" rel-entity-alias="ATP">
+       <view-link entity-alias="ATP" rel-entity-alias="ATR">
            <key-map field-name="acctgTransId"/>
        </view-link>
        <view-link entity-alias="ATP" rel-entity-alias="TDC">
            <key-map field-name="idTipoDoc"/>
+       </view-link>                                       
+       <view-link entity-alias="ATE" rel-entity-alias="PAG">
+           <key-map field-name="organizationPartyId" rel-field-name="partyId"/>
        </view-link>
     </view-entity>
     
