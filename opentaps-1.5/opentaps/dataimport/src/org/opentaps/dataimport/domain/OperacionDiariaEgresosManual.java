@@ -64,8 +64,8 @@ public class OperacionDiariaEgresosManual {
         	
 	        String userLog = userLogin.getString("userLoginId");
 	        String tipoDoc = (String) context.get("Tipo_Documento");
-	        fecTrans = (Timestamp) UtilDateTime.stringToTimeStamp((String)context.get("Fecha_Transaccion"), dateFormat, timeZone, locale);
-			fecContable = (Timestamp) UtilDateTime.stringToTimeStamp((String)context.get("Fecha_Contable"), dateFormat, timeZone, locale);
+	        fecTrans = (Timestamp) context.get("Fecha_Transaccion");
+			fecContable = (Timestamp) context.get("Fecha_Contable");
 	        String refDoc = (String) context.get("Referencia_Documento");
 	        String sec = (String) context.get("Secuencia");
 	        String cvePrespues = (String) context.get("Cve_Presupuestal");
@@ -222,8 +222,6 @@ public class OperacionDiariaEgresosManual {
 			
 	        }
         
-        } catch (ParseException e) {
-			return UtilMessage.createAndLogServiceError(e, MODULE);
         } catch (GenericEntityException e) {
         	return UtilMessage.createAndLogServiceError(e, MODULE);
 		} catch (GenericServiceException e) {
