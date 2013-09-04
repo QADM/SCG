@@ -72,7 +72,7 @@
   <form method="post" action="<@ofbizUrl>createAccountingTag</@ofbizUrl>" name="createAccountingTag"  onsubmint="valida(this.form)">
     <table class="twoColumnForm" style="border:0">
     <tr>
-    	<td align=center width="20" ><b><font color=#B40404>Tipo</font><b>
+    	<td class="titleCell"><span><b><font  size=1 color=#B40404>Tipo</font><b></span>
     	</td>
 	    <td>
      <select name="enumTypeId" size="1"  onchange="cambiar(this.form)">
@@ -84,7 +84,7 @@
 	    </td>
     </tr>
       <tr>
-   <td align=center><b><font color=#B40404>Nivel</font><b>
+  <td class="titleCell"><span><b><font  size=1 color=#B40404>Nivel<font><b></span>
     	</td>
 	    <td>  
       <select name="nivelId">
