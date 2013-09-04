@@ -13,14 +13,36 @@ import org.opentaps.foundation.exception.FoundationException;
 import org.opentaps.foundation.repository.ofbiz.Repository;
 import org.opentaps.foundation.infrastructure.*;
 
-transIds = parameters.get("listTransId"); 
+transIds = null;
 
-dl = new DomainsLoader(new Infrastructure(dispatcher), new User(userLogin));
+try {
 
-ledgerDomain = dl.loadDomainsDirectory().getLedgerDomain();
-ledgerRepository = ledgerDomain.getLedgerRepository();
-ledgerSpecification = ledgerRepository.getSpecification();
+	
+	
+	transIds = parameters.get("listTransId"); 
+	
+	dl = new DomainsLoader(new Infrastructure(dispatcher), new User(userLogin));
+	
+	
+	
+	ledgerDomain = dl.loadDomainsDirectory().getLedgerDomain();
+	ledgerRepository = ledgerDomain.getLedgerRepository();
+	ledgerSpecification = ledgerRepository.getSpecification();
+	
+	if (transIds == null) return;
+	
+	listTransIds = null;
+	listTransIds = ledgerRepository.getTransactions(transIds); 
+	
+	
+	print("Lista parametros: listTransIds " + listTransIds);
+	context.put("listTransIds", Repository.genericValueFromEntity(delegator, listTransIds));
+	
 
-if (transIds == null) return;
-print("lo que sea " + transIds);
-context.put("listTransIds", transIds);
+   
+} catch ( e ) { 
+    print( "caught exception: "+e );
+}
+
+
+
