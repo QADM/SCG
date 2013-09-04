@@ -289,9 +289,8 @@
         </required-permissions>
         <attribute name="organizationPartyId" mode="IN" type="String" optional="false"/>
         <attribute name="Tipo_Documento" mode="IN" type="String" optional="true"/>
-        <!-- <attribute name="Tipo_Fiscal" mode="IN" type="String" optional="false" /> -->
-        <attribute name="Fecha_Transaccion" mode="IN" type="String" optional="true"/>
-        <attribute name="Fecha_Contable" mode="IN" type="String" optional="true" />
+        <attribute name="Fecha_Transaccion" mode="IN" type="java.sql.Timestamp" optional="true"/>
+        <attribute name="Fecha_Contable" mode="IN" type="java.sql.Timestamp" optional="true" />
 		<attribute name="Referencia_Documento" mode="IN" type="String" optional="true"/>
         <attribute name="Secuencia" mode="IN" type="String" optional="true" />
         <attribute name="Cve_Presupuestal" mode="IN" type="String" />
@@ -322,8 +321,8 @@
         </required-permissions>
         <attribute name="organizationPartyId" mode="IN" type="String" optional="false"/>
         <attribute name="Tipo_Documento" mode="IN" type="String" optional="true"/>
-        <attribute name="Fecha_Transaccion" mode="IN" type="String" optional="true"/>
-        <attribute name="Fecha_Contable" mode="IN" type="String" optional="true" />
+        <attribute name="Fecha_Transaccion" mode="IN" type="java.sql.Timestamp" optional="true"/>
+        <attribute name="Fecha_Contable" mode="IN" type="java.sql.Timestamp" optional="true" />
 		<attribute name="Referencia_Documento" mode="IN" type="String" optional="true"/>
         <attribute name="Secuencia" mode="IN" type="String" optional="true" />
         <attribute name="Cve_Presupuestal" mode="IN" type="String"/>
