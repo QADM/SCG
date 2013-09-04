@@ -77,10 +77,10 @@
    <@listBalances type="cuentasImpuestoList" accounts=cuentasImpuestoList balances1=cuentasImpuestoFr balances2=cuentasImpuestoTr balances3=difCuentasImpuesto/>
    <@displaySummary summary=uiLabelMap.Impuestos/>
  
-   <@listBalances type="cuentasContribuList" accounts=cuentasContribuList balances1=cuentasContribuFr balances2=cuentasContribuTr balances3=difCuentasImpuesto/>
+   <@listBalances type="cuentasContribuList" accounts=cuentasContribuList balances1=cuentasContribuFr balances2=cuentasContribuTr balances3=difCuentasContribu/>
    <@displaySummary summary=uiLabelMap.ContribucionesMejoras/>
 
-   <@listBalances type="cuentasParticipaList" accounts=cuentasParticipaList balances1=cuentasContribuFr balances2=cuentasContribuTr balances3=difCuentasImpuesto/>
+   <@listBalances type="cuentasParticipaList" accounts=cuentasParticipaList balances1=cuentasParticipaFr balances2=cuentasParticipaTr balances3=difCuentasParticipa/>
    <@displaySummary summary=uiLabelMap.ParticipacionesAportaciones/>
    
    <@listBalances type="cuentasTransfeList" accounts=cuentasTransfeList balances1=cuentasTransfeFr balances2=cuentasTransfeTr balances3=difCuentasTransfe/>
