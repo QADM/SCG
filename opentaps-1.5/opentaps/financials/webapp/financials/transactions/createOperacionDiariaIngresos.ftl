@@ -26,12 +26,6 @@
         <@inputSelectCell list=listDocumentos?if_exists displayField="descripcion" name="Tipo_Documento" default=idTipoDoc?if_exists key="idTipoDoc" 
         			onChange="opentaps.getTipoFiscalByDoc(this,'Tipo_Fiscal');" />
       </tr>
-<#--
-      <tr>
-        <@displayTitleCell title=uiLabelMap.FinancialsGlFiscalType />
-        <@inputSelectCell list="" name="Tipo_Fiscal" />
-      </tr>
--->
       <tr>
         <@displayTitleCell title=uiLabelMap.FinancialsTransactionDate />
         <@inputDateTimeCell name="Fecha_Transaccion" default=Static["org.ofbiz.base.util.UtilDateTime"].nowTimestamp() />
