@@ -532,17 +532,19 @@ public final class ConfigurationServices {
 		
 
 		try {
-			SimpleDateFormat formatoFecha = new SimpleDateFormat("dd-MMM-yyyy", new Locale("es","ES"));
+			SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yy");
 			Date fecInicio;
-			fecInicio = formatoFecha.parse(inicio);
-			context.put("fechaInicio",fecInicio);
 			Date fecFinal;
-			fecFinal = formatoFecha.parse(fin);
-			context.put("fechaFin", fecFinal);
+			
 			GenericValue pk = delegator.makeValue("Enumeration");
 			pk.setPKFields(context);
 			GenericValue enumeration = delegator.findByPrimaryKey(
 					"Enumeration", pk);
+			if (enumeration == null) {
+				return UtilMessage.createAndLogServiceError(
+						"Did not find Accounting tag Enumeration value for PK ["
+								+ pk.getPrimaryKey() + "]", MODULE);
+			}
 			for (int x=0; x < nivelId.length(); x++) {
 				  if ((nivelId.charAt(x) != ' ')&&(nivelId.charAt(x) != '[')&&(nivelId.charAt(x) != ']'))
 				    sCadenaSinBlancos += nivelId.charAt(x);
@@ -555,17 +557,36 @@ public final class ConfigurationServices {
 				   if(!(Nivel1.equals(Nivel2)))
 					   nivel=Nivel1;
 			 }
+			if(!(nivel.equals("")))
+				context.put("nivelId", nivel);
+			inicio=inicio.replace("[","").replace("]","").replace(" ","");
 			
-			context.put("nivelId", nivel);
-			if (enumeration == null) {
-				return UtilMessage.createAndLogServiceError(
-						"Did not find Accounting tag Enumeration value for PK ["
-								+ pk.getPrimaryKey() + "]", MODULE);
+			StringTokenizer st1 = new StringTokenizer(inicio, ",");
+			while(st1.hasMoreTokens()) {
+				   String FI1 = st1.nextToken();
+				   String FI2 = st1.nextToken();
+				   if(!(FI1.equals(FI2)))
+					   cadena1=FI1;
+			 }
+			if(!(cadena1.isEmpty())){
+				fecInicio = formatoFecha.parse(cadena1);
+				context.put("fechaInicio",fecInicio);
+			}
+			fin=fin.replace("[","").replace("]","").replace(" ","");
+			StringTokenizer st2 = new StringTokenizer(fin, ",");
+			while(st2.hasMoreTokens()) {
+				   String FF1 = st2.nextToken();
+				   String FF2 = st2.nextToken();
+				   if(!(FF1.equals(FF2)))
+					   cadena2=FF1;
+			}
+			if(!(cadena2.isEmpty())){
+				fecFinal = formatoFecha.parse(cadena2);
+				context.put("fechaFin", fecFinal);
 			}
 			enumeration.setNonPKFields(context);
 			delegator.store(enumeration);
 			return ServiceUtil.returnSuccess();
-
 		} catch (GeneralException e) {
 			return UtilMessage.createAndLogServiceError(e, MODULE);
 		}
