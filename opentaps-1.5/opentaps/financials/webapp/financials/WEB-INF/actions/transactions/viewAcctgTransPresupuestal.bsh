@@ -69,3 +69,4 @@ if (!acctgTrans.isPosted()) {
 // get the accounting tags
 context.put("tagTypes", UtilAccountingTags.getAccountingTagsForOrganization(organizationPartyId, UtilAccountingTags.TRANSACTION_ENTRY_TAG, delegator));
 
+/////get 

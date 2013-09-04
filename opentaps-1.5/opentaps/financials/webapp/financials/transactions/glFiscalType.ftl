@@ -18,35 +18,34 @@
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 <#-- display the list of transactions -->
 	
-   	<#if listTransIds?exists>
-   		<#if listTransIds?has_content>
-	        <#list listTransIds as entry>
-	        	<#if entry?contains("P")>         	  
-		        	<div class="screenlet-header"> 	
-		 				<span class="boxhead">${uiLabelMap.FinancialsTransactionPresupuesto}</span>  
-					</div>
-				<#else>
-					<div class="screenlet-header"> 	
-		 				<span class="boxhead">${uiLabelMap.FinancialsTransactionContable}</span>  
-					</div>
-				</#if>
-	        	<table class="listTable" cellspacing="0" style="border:none;">          	  
-			      <tr class="listTableHeader">
-			        <td><span>${uiLabelMap.Transaction}</span></td>
-			        <td><span>${uiLabelMap.Description}</span></td>       
-			        <td></td>
-			      </tr>
-			      <tr class="${tableRowClass(entry_index)}">
-			            <td><a class="linktext" href="<@ofbizUrl>viewAcctPresupuestal?acctgTransId=${entry}</@ofbizUrl>">${entry}</a></td>
-			                                               
-			      </tr> 
-			      <tr class="${tableRowClass(entry_index)}">
-			                                 
-			      </tr> 
-	     	  </table>
-	        </#list>  
-        </#if>  
-     </#if> 
+<#if listTransIds?has_content>
+	<#assign acctTrans = listTransIds>
+	   <#list acctTrans as mapAcctTrans>
+        	<#if mapAcctTrans.acctgTransId?contains("P")>         	  
+	        	<div class="screenlet-header"> 	
+	 				<span class="boxhead">${uiLabelMap.FinancialsTransactionPresupuesto}</span>  
+				</div>
+			<#else>
+				<div class="screenlet-header"> 	
+	 				<span class="boxhead">${uiLabelMap.FinancialsTransactionContable}</span>  
+				</div>
+			</#if>
+        	<table class="listTable" cellspacing="0" style="border:none;">          	  
+		      <tr class="listTableHeader">
+		        <td><span>${uiLabelMap.Transaction}</span></td>
+		        <td><span>${uiLabelMap.Description}</span></td>       
+		        <td></td>
+		      </tr>
+		      <tr class="${tableRowClass(entry_index)}">
+		            <td><a class="linktext" href="<@ofbizUrl>viewAcctPresupuestal?acctgTransId=${mapAcctTrans.acctgTransId}</@ofbizUrl>">${mapAcctTrans.acctgTransId}</a></td>
+		            <td>${mapAcctTrans.description}</td>			                                               
+		      </tr> 
+		      <tr class="${tableRowClass(entry_index)}">			                                 
+		      </tr> 
+     	  </table>
+        </#list>  	       
+  </#if>  
+
      
    
 
