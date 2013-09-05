@@ -9,70 +9,50 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
 import javolution.util.FastList;
-import javolution.util.FastMap;
 
-import org.apache.commons.net.ntp.TimeStamp;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.Delegator;
-import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
-import org.ofbiz.party.party.PartyHelper;
-import org.ofbiz.security.Security;
 import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ModelService;
 import org.ofbiz.service.ServiceUtil;
 import org.opentaps.base.entities.AcctgTrans;
-import org.opentaps.base.entities.AcctgTransAndOrg;
-import org.opentaps.base.entities.AcctgTransEntry;
-import org.opentaps.base.entities.AcctgTransEntry.Fields;
-import org.opentaps.base.entities.AcctgTransOrgPresupIng;
 import org.opentaps.base.entities.AcctgTransPresupuestal;
-import org.opentaps.base.entities.AcctgTransType;
 import org.opentaps.base.entities.CustomTimePeriod;
 import org.opentaps.base.entities.Enumeration;
-import org.opentaps.base.entities.GlAccount;
 import org.opentaps.base.entities.GlAccountHistory;
 import org.opentaps.base.entities.GlAccountOrganization;
-import org.opentaps.base.entities.GlFiscalType;
-import org.opentaps.base.entities.MiniGuiaContable;
 import org.opentaps.base.entities.NivelPresupuestal;
 import org.opentaps.base.entities.Party;
 import org.opentaps.base.entities.PartyAcctgPreference;
 import org.opentaps.base.entities.PartyGroup;
 import org.opentaps.base.entities.ProductCategory;
 import org.opentaps.base.entities.WorkEffort;
-import org.opentaps.base.entities.bridge.GlAccountTypeDefaultPkBridge;
-import org.opentaps.base.services.CreateQuickAcctgTransService;
-import org.opentaps.base.services.PostAcctgTransService;
-import org.opentaps.common.builder.EntityListBuilder;
-import org.opentaps.common.builder.PageBuilder;
 import org.opentaps.common.util.UtilAccountingTags;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
 import org.opentaps.domain.DomainsDirectory;
 import org.opentaps.domain.DomainsLoader;
 import org.opentaps.domain.ledger.LedgerRepositoryInterface;
-import org.opentaps.domain.organization.AccountingTagConfigurationForOrganizationAndUsage;
 import org.opentaps.domain.organization.Organization;
 import org.opentaps.domain.organization.OrganizationRepositoryInterface;
 import org.opentaps.foundation.action.ActionContext;
 import org.opentaps.foundation.infrastructure.Infrastructure;
 import org.opentaps.foundation.infrastructure.User;
 import org.opentaps.foundation.repository.RepositoryException;
+import org.opentaps.foundation.service.ServiceException;
 
 
 /**
@@ -81,6 +61,7 @@ import org.opentaps.foundation.repository.RepositoryException;
 public class TransactionBudget {
 
 	private static final String MODULE = TransactionBudget.class.getName();
+	private static final Double ZERO = Double.valueOf(0);
 
 	/**
 	 * Action for the find / list transactions screen.
@@ -337,6 +318,12 @@ public class TransactionBudget {
 			Debug.log("referencia" + referencia);
 			Debug.log("descripcion" + descripcion);
 			Debug.log("amount" + amount);
+			
+    		if(amount.compareTo(ZERO) <= 0){
+				Debug.logError("El monto debe ser MAYOR A CERO",MODULE);
+				throw new ServiceException(String.format("El monto debe ser MAYOR A CERO"));
+    			
+    		}
 
 			Organization organization = organizationRepository
 					.getOrganizationById(organizationPartyId);
@@ -1083,6 +1070,12 @@ public class TransactionBudget {
 			Debug.log("referencia" + referencia);
 			Debug.log("descripcion" + descripcion);
 			Debug.log("amount" + amount);
+			
+    		if(amount.compareTo(ZERO) <= 0){
+				Debug.logError("El monto debe ser MAYOR A CERO",MODULE);
+				throw new ServiceException(String.format("El monto debe ser MAYOR A CERO"));
+    			
+    		}
 
 			Organization organization = organizationRepository
 					.getOrganizationById(organizationPartyId);
