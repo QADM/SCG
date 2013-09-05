@@ -728,6 +728,12 @@
                            <html><html-template location="component://financials/webapp/financials/transactions/acctgTransDatosPoliza.ftl"/></html>
                         </platform-specific>
                         </frame-container>
+                        
+                        <frame-container title="Claves Presupuestales">
+                        <platform-specific>
+                           <html><html-template location="component://financials/webapp/financials/transactions/acctgTransClavesPresup.ftl"/></html>
+                        </platform-specific>
+                        </frame-container>
                                                  
                         <frame-container title="Cuentas">
                         <platform-specific>
@@ -738,7 +744,7 @@
                 </decorator-screen>
             </widgets>
         </section>
-    </screen>
+    </screen>                
     
     <screen name="viewAcctgTransPolizas">
         <section>

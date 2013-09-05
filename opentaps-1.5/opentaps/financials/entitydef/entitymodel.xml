@@ -1475,6 +1475,14 @@ under the License.
        </view-link>
     </view-entity>
     
+    <view-entity entity-name="AcctgPolizasClavesPresup"
+                 package-name="com.opensourcestrategies.financials.transactions"
+                 title="Arroja el listado de Claves Presupuestales de la Póliza">
+       <member-entity entity-alias="ATP" entity-name="AcctgTransPresupuestal"/>                           
+	   <alias name="agrupador" entity-alias="ATP" group-by="true"/>	   
+	   <alias name="clavePres" entity-alias="ATP" group-by="true"/>	   	   	                  
+    </view-entity>        
+    
     <view-entity entity-name="AcctgPolizasDetalle"
                  package-name="com.opensourcestrategies.financials.transactions"
                  title="Arroja el detalle de las pólizas contables">
