@@ -68,9 +68,6 @@ function mascara(d,sep,pat,nums){
 	}
 }
 </script>
-	  
-
-
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
 <#assign disableSelectValues = {"Y": uiLabelMap.CommonDisabled, "N": uiLabelMap.CommonEnabled} />
@@ -161,3 +158,4 @@ function mascara(d,sep,pat,nums){
     </div>
   </#list>
 </@frameSection>
+ection>

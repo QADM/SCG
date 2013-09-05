@@ -138,8 +138,8 @@
         <attribute name="description" type="String" mode="IN" optional="false"/>
         <attribute name="nivelId" type="String" mode="IN" optional="false"/>
         <attribute name="parentEnumId" type="String" mode="IN" optional="true"/>
-        <attribute name="fechaInicio" type="String" mode="IN" optional="false"/>
-        <attribute name="fechaFin" type="String" mode="IN" optional="false"/>
+        <attribute name="fechaIni" type="String" mode="IN" optional="false"/>
+        <attribute name="fechaFi" type="String" mode="IN" optional="false"/>
     </service>
 
     <service name="updateAccountingTag" default-entity-name="Enumeration" engine="java"
@@ -187,3 +187,4 @@
         <auto-attributes include="nonpk" mode="IN" optional="true"/>
     </service>
 </services>
+s>
