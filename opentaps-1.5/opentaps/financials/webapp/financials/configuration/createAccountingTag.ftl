@@ -99,9 +99,10 @@
        <@inputSelectHashRow  title="Nodo" name="node"  hash=Nodo />
 
       <@inputTextRow title=uiLabelMap.ParentId  size=10 name="parentEnumId" size=10  />
-      <@inputDateRow title="Fecha inicio"  name="fechaInicio" size=12 default="" titleClass="requiredField" />
-      <@inputDateRow title="Fecha fin" name="fechaFin"   size=12 default="" titleClass="requiredField" />
+      <@inputDateRow title="Fecha inicio"  name="fechaIni" size=12 default="" titleClass="requiredField" />
+      <@inputDateRow title="Fecha fin" name="fechaFi"   size=12 default="" titleClass="requiredField" />
       <@inputSubmitRow title=uiLabelMap.CommonCreate />
     </table>
   </form>
 </@frameSection>
+n>
