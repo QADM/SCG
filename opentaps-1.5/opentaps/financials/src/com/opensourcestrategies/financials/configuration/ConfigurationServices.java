@@ -432,12 +432,22 @@ public final class ConfigurationServices {
 	 * @param context
 	 *            a <code>Map</code> value
 	 * @return a service response <code>Map</code> value
+	 * @throws ParseException 
 	 */
 	@SuppressWarnings("unchecked")
-	public static Map createAccountingTag(DispatchContext dctx, Map context) {
+	public static Map createAccountingTag(DispatchContext dctx, Map context) throws ParseException {
 		Delegator delegator = dctx.getDelegator();
 		String nivelId = (String) context.get("nivelId");
 		String glAccountTypeId =(String) context.get("enumTypeId");
+		String fechaIn =(String) context.get("fechaIni");
+		String fechaF =(String) context.get("fechaFi");
+		SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yy");
+		Date fecInicio;
+		Date fecFinal;
+		fecFinal = formatoFecha.parse(fechaF);
+		fecInicio = formatoFecha.parse(fechaIn);
+		context.put("fechaFin", fecFinal);
+		context.put("fechaInicio", fecInicio);
 
 		try {
 			if(glAccountTypeId.equals(" ")){
