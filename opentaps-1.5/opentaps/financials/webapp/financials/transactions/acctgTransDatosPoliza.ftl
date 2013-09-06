@@ -19,7 +19,16 @@
 	                	<tr><td class="titleCell"></span><font size=2><b>${uiLabelMap.FinancialDocumentType}</b></td><td></span><font size=1>${row.descripcion}</td></tr>
 	                	<tr><td class="titleCell"></span><font size=2><b>${uiLabelMap.FinancialsTipoPoliza}</b></td><td></span><font size=1>${row.tipoPoliza}</td></tr>
 	                	<tr><td class="titleCell"></span><font size=2><b>${uiLabelMap.Organizacion}</b></td><td></span><font size=1>${row.groupName}</td></tr>	                		                	                		 	              
-	                	<tr><td class="titleCell"></span><font size=2><b>${uiLabelMap.Monto}</b></td><td></span><font size=1>$ ${row.amount}</td></tr>	                		                	
+	                	<tr><td class="titleCell"></span><font size=2><b>${uiLabelMap.MontoTotalCarAbo}</b></td><td></span><font size=1>$ ${row.amount}</td></tr>
+	                	<#list acctgPolizasMontoOperacion as rowOperacion>
+            				<tr class="${tableRowClass(row_index)}">
+            				
+            				<#assign glAccount = rowOperacion.glAccountId.toString().substring(0,1)/>                    			
+							<#if (glAccount == "8")>
+		                			<tr><td class="titleCell"></span><font size=2><b>${uiLabelMap.MontoOperacion}</b></td><td></span><font size=1>$ ${rowOperacion.amount}</td></tr>	                		                	
+		                	</#if>	
+            				</tr>
+            			</#list>	                		                	
             		</tr>
             	</#list>
         	</table>

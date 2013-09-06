@@ -55,6 +55,7 @@ import org.opentaps.base.entities.AcctgPolizasDetalle;
 import org.opentaps.base.entities.AcctgPolizasDetalleLista;
 import org.opentaps.base.entities.AcctgPolizasDetalleListado;
 import org.opentaps.base.entities.AcctgPolizasClavesPresup;
+import org.opentaps.base.entities.AcctgPolizasMontoOperacion;
 import org.opentaps.domain.ledger.AccountingTransaction;
 import org.opentaps.domain.ledger.GeneralLedgerAccount;
 import org.opentaps.domain.ledger.LedgerException;
@@ -193,6 +194,14 @@ public class LedgerRepository extends Repository implements LedgerRepositoryInte
     public AcctgPolizasClavesPresup getAcctgPolizasClavesPresup(String agrupador) throws RepositoryException {
         try {
             return findOneNotNull(AcctgPolizasClavesPresup.class, map(AcctgPolizasClavesPresup.Fields.agrupador, agrupador), "Accounting Transaction [" + agrupador + "] not found.");
+        } catch (GeneralException e) {
+            throw new RepositoryException(e);
+        }
+    }
+    
+    public AcctgPolizasMontoOperacion getAcctgPolizasMontoOperacion(String agrupador) throws RepositoryException {
+        try {
+            return findOneNotNull(AcctgPolizasMontoOperacion.class, map(AcctgPolizasMontoOperacion.Fields.agrupador, agrupador), "Accounting Transaction [" + agrupador + "] not found.");
         } catch (GeneralException e) {
             throw new RepositoryException(e);
         }

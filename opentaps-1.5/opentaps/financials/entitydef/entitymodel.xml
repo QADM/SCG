@@ -1481,6 +1481,22 @@ under the License.
        <member-entity entity-alias="ATP" entity-name="AcctgTransPresupuestal"/>                           
 	   <alias name="agrupador" entity-alias="ATP" group-by="true"/>	   
 	   <alias name="clavePres" entity-alias="ATP" group-by="true"/>	   	   	                  
+    </view-entity>
+    
+    <view-entity entity-name="AcctgPolizasMontoOperacion"
+                 package-name="com.opensourcestrategies.financials.transactions"
+                 title="Arroja el monto de operacion dado un agrupador de Poliza">
+       <member-entity entity-alias="ATP" entity-name="AcctgTransPresupuestal"/>
+       <member-entity entity-alias="ATE" entity-name="AcctgTransEntry"/>                           
+
+	   <alias name="agrupador" entity-alias="ATP" group-by="true"/>
+	   <alias name="glAccountId" entity-alias="ATE" group-by="true"/>	   	 
+	   <alias name="amount" entity-alias="ATE" function="sum"/>
+	   <alias name="debitCreditFlag" entity-alias="ATE" group-by="true"/>	   	   	    
+       
+       <view-link entity-alias="ATP" rel-entity-alias="ATE">
+           <key-map field-name="acctgTransId"/>
+       </view-link>       
     </view-entity>        
     
     <view-entity entity-name="AcctgPolizasDetalle"
