@@ -105,6 +105,8 @@ public interface LedgerRepositoryInterface extends RepositoryInterface {
     
     public AcctgPolizasClavesPresup getAcctgPolizasClavesPresup(String agrupador) throws RepositoryException;
     
+    public AcctgPolizasMontoOperacion getAcctgPolizasMontoOperacion(String agrupador) throws RepositoryException;        
+    
     
     /**
      * Finds a transaction entry by ID.
