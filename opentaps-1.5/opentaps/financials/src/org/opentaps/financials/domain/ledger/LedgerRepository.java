@@ -30,6 +30,7 @@ import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.opentaps.common.util.UtilAccountingTags;
@@ -450,6 +451,28 @@ public class LedgerRepository extends Repository implements LedgerRepositoryInte
     			AcctgTrans acctgTrans = findOneNotNull(AcctgTrans.class, map(AcctgTrans.Fields.acctgTransId, glAccountId));    			
     			ListAcctgTrans.add(acctgTrans);
     		}
+			
+		} catch (Exception e) {
+			Debug.log("MODULE: LedgerRepository - Error al consultar glAccountId [" +  glAccountIds.get(0).toString() + "] -excepcion  " + e);
+			throw new RepositoryException(e);
+			
+		}       
+        //List<AcctgTrans> transAndEntries = findList(AcctgTransAndEntries.class, EntityCondition.makeCondition(conditions, EntityOperator.AND), Arrays.asList("acctgTransId"));
+
+        return (UtilValidate.isEmpty(ListAcctgTrans) ? FastList.<AcctgTrans>newInstance() : ListAcctgTrans);
+    }
+    
+    
+    /** {@inheritDoc} */
+    public List<AcctgTrans> getTransactionsAcctgTrans(List<GenericValue> glAccountIds) throws RepositoryException {
+    	
+    	List<AcctgTrans> ListAcctgTrans = FastList.newInstance();;
+    	try {  	
+            Debug.log("MODULE: LedgerRepository getTransactionsAcctgTrans" );
+            for (GenericValue acctgTransPresupuestal : glAccountIds) {
+            	AcctgTrans acctgTrans = findOneNotNull(AcctgTrans.class, map(AcctgTrans.Fields.acctgTransId, acctgTransPresupuestal.get("acctgTransId") ));    			
+    			ListAcctgTrans.add(acctgTrans);
+			} 
 			
 		} catch (Exception e) {
 			Debug.log("MODULE: LedgerRepository - Error al consultar glAccountId [" +  glAccountIds.get(0).toString() + "] -excepcion  " + e);

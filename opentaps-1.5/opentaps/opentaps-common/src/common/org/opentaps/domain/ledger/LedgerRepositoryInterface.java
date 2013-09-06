@@ -21,6 +21,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 import org.ofbiz.base.util.GeneralException;
+import org.ofbiz.entity.GenericValue;
 import org.opentaps.base.entities.*;
 import org.opentaps.domain.organization.AccountingTagConfigurationForOrganizationAndUsage;
 import org.opentaps.foundation.entity.EntityNotFoundException;
@@ -253,6 +254,17 @@ public interface LedgerRepositoryInterface extends RepositoryInterface {
      * @throws RepositoryException
      */
     public List<AcctgTrans> getTransactions(List<String> glAccountIds) throws RepositoryException;
+    
+    /**
+     * Returns list accounting transactions.
+     *
+     * @param List glAccountIds 
+     * @return
+     *   List of <code>AcctgTrans</code>
+     * @throws RepositoryException
+     */
+    public List<AcctgTrans> getTransactionsAcctgTrans(List<GenericValue> glAccountIds) throws RepositoryException;
+    
     
 
 }
