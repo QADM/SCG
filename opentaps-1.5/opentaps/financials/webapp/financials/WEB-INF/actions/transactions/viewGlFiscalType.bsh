@@ -12,14 +12,21 @@ import org.opentaps.domain.ledger.AccountingTransaction;
 import org.opentaps.foundation.exception.FoundationException;
 import org.opentaps.foundation.repository.ofbiz.Repository;
 import org.opentaps.foundation.infrastructure.*;
+import javolution.util.FastMap;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.entity.util.EntityUtil;
+import javolution.util.FastList;
 
 transIds = null;
 
 try {
-
-	
-	
 	transIds = parameters.get("listTransId"); 
+	
+	clavePresupuestal = UtilCommon.getParameter(context, "clavePres"); 
+	agrupador = UtilCommon.getParameter(context, "agrupador");
+	
+	print("clave Presupuestal: " + clavePresupuestal);
+	print("agrupador: " + agrupador);
 	
 	dl = new DomainsLoader(new Infrastructure(dispatcher), new User(userLogin));
 	
@@ -29,13 +36,31 @@ try {
 	ledgerRepository = ledgerDomain.getLedgerRepository();
 	ledgerSpecification = ledgerRepository.getSpecification();
 	
-	if (transIds == null) return;
+	//// Busqueda de Polizas
+	if(clavePresupuestal!=null || agrupador!=null)
+	{
+		subConditions = UtilMisc.toList(
+		new EntityExpr("agrupador", EntityOperator.EQUALS, agrupador),
+		new EntityExpr("clavePres", EntityOperator.EQUALS, clavePresupuestal)
+		);
+		
+		transIds = delegator.findByCondition("AcctgTransPresupuestal", new EntityConditionList(subConditions, EntityOperator.AND) , UtilMisc.toList("acctgTransId"), null);
+		listTransIds = ledgerRepository.getTransactionsAcctgTrans(transIds); 
+		//context.put("listaSubfuente", resultadoSub);
+	}
+	//////Busqueda por Operacion diaria Ingresos y Egresos
+	else
+	{	
 	
-	listTransIds = null;
-	listTransIds = ledgerRepository.getTransactions(transIds); 
-	
-	
-	print("Lista parametros: listTransIds " + listTransIds);
+		print("transIds: " + transIds);
+		if (transIds == null) return;
+		
+		listTransIds = null;
+		listTransIds = ledgerRepository.getTransactions(transIds); 
+		
+		
+		print("Lista parametros: listTransIds " + listTransIds);
+	}
 	context.put("listTransIds", Repository.genericValueFromEntity(delegator, listTransIds));
 	
 
