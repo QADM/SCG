@@ -680,23 +680,24 @@ public class UtilImport {
 						.getOrganizationPartyId());
 				glAccountHistory.setCustomTimePeriodId(periodo
 						.getCustomTimePeriodId());
-				
-				if (tipo.equalsIgnoreCase("Credit")) {
-					if (glAccountHistory.getPostedCredits() == null) {
-						glAccountHistory.setPostedCredits(monto);
-					} else {
-						glAccountHistory.setPostedCredits(glAccountHistory
-								.getPostedCredits().add(monto));
-					}
-
+			}
+			
+			if (tipo.equalsIgnoreCase("Credit")) {
+				if (glAccountHistory.getPostedCredits() == null) {
+					glAccountHistory.setPostedCredits(monto);
 				} else {
-					if (glAccountHistory.getPostedDebits() == null) {
-						glAccountHistory.setPostedDebits(monto);
-					} else {
-						glAccountHistory.setPostedDebits(glAccountHistory
-								.getPostedDebits().add(monto));
-					}
+					glAccountHistory.setPostedCredits(glAccountHistory
+							.getPostedCredits().add(monto));
 				}
+
+			} else {
+				if (glAccountHistory.getPostedDebits() == null) {
+					glAccountHistory.setPostedDebits(monto);
+				} else {
+					glAccountHistory.setPostedDebits(glAccountHistory
+							.getPostedDebits().add(monto));
+				}
+			}
 			
 			glAccountHistories.add(glAccountHistory);
 		}
