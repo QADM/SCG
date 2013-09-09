@@ -117,7 +117,7 @@
     <!-- Add and Update Gl Account Type Default -->
     <form name="addPaymentMethod" type="single" title="Add new Payment Method" target="${targetNameToUse}"
         default-widget-style="inputBox" default-title-style="tableheadtext">
-        <auto-fields-service service-name="financials.createPaymentMethod"/>
+       <!--  <auto-fields-service service-name="financials.createPaymentMethod"/>-->
         <field name="partyId"><hidden value="${organizationPartyId}"/></field>        
         <field name="paymentMethodTypeId" title="${uiLabelMap.FinancialsPaymentMethodType}">
             <drop-down allow-empty="false">
