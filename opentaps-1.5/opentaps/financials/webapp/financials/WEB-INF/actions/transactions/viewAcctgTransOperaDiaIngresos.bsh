@@ -34,10 +34,23 @@ import org.opentaps.foundation.infrastructure.*;
 acctgTransId = parameters.get("acctgTransId");
 
 acctTransPresu = delegator.findByPrimaryKey("AcctgTransPresupuestal", UtilMisc.toMap("acctgTransId", acctgTransId));
+tdoc=acctTransPresu.getString("idTipoDoc");
+rubro=acctTransPresu.getString("rubro");
 mapTransPresup = new HashMap();
+mapTransPresupPol = new HashMap();
 mapTransPresup.putAll(acctTransPresu.getAllFields());
+mapTransPresupPol.putAll(acctTransPresu.getAllFields());
 
 acctgTrans = delegator.findByPrimaryKey("AcctgTrans", UtilMisc.toMap("acctgTransId", acctgTransId));
 mapTransPresup.putAll(acctgTrans.getAllFields());
+mapTransPresupPol.putAll(acctgTrans.getAllFields());
+
+tipoDoc= delegator.findByPrimaryKey("TipoDocumento",UtilMisc.toMap("idTipoDoc", tdoc));
+mapTransPresupPol.putAll(tipoDoc.getAllFields());
+
+ProductCategory= delegator.findByPrimaryKey("ProductCategory",UtilMisc.toMap("productCategoryId", rubro));
+if(ProductCategory!=null)
+	mapTransPresupPol.putAll(ProductCategory.getAllFields());
 
 context.put("mapTransPresup", mapTransPresup);
+context.put("mapTransPresupPol", mapTransPresupPol);
