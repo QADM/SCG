@@ -342,6 +342,11 @@
         <field name="glXbrlClassId"><hidden value=""/></field>
         <field name="productId"><hidden value=""/></field>
         <field name="glResourceTypeId"><hidden value="MONEY"/></field>
+        <field name="glAccountId"><hidden value=""/></field>
+        <field name="organizationPartyId"><hidden value="${organizationPartyId}"/></field>
+        <field name="glXbrlClassId"><hidden value=""/></field>
+        <field name="productId"><hidden value=""/></field>
+        <field name="glResourceTypeId"><hidden value="MONEY"/></field>
         <field name="glAccountClassTypeKey">            
             <drop-down>
                 <entity-options entity-name="GlAccountClassTypeMap" description="${description}">
@@ -349,27 +354,65 @@
                 </entity-options>
             </drop-down>  
         </field>    
-        <field name="parentGlAccountId" title="${uiLabelMap.FinancialsParentGLAccount}" >            
+ 		<field name="parentGlAccountId" title="${uiLabelMap.FinancialsParentGLAccount}" >            
             <display description="${parameters.parentGlAccountId}"/>
         </field>
         <field name="accountCode" title="${uiLabelMap.FinancialsGLAccountCode}" >            
-            <text default-value="${defaultAccountCode}"/>
+            <text/>
         </field>
         <field name="accountName" title="${uiLabelMap.FinancialsGLAccountName}" >            
-            <text default-value="${defaultAccountName}" size="60"/>
+            <text size="60"/>
         </field>
         <field name="description">
             <textarea rows="2" cols="60"/>
+        </field>      
+        <field name="codificacion" title="${uiLabelMap.Codificacion}" >            
+            <drop-down>
+				<option key="Cuenta" description="Cuenta"/>
+				<option key="Génereo" description="Génereo"/>
+				<option key="Grupo" description="Grupo"/>
+				<option key="N6" description="N6"/>
+				<option key="N7" description="N7"/>
+				<option key="N8" description="N8"/>
+				<option key="N9" description="N9"/>
+				<option key="Rubro" description="Rubro"/>
+            </drop-down>  
+        </field> 
+       <field name="naturaleza" title="${uiLabelMap.Naturaleza}" >            
+            <drop-down>
+                <option key="A" description="Acredora"/>
+                <option key="D" description="Deudora"/>
+            </drop-down>  
+        </field> 
+      <field name="tipoCuenta" title="${uiLabelMap.TipoCuenta}" >            
+            <drop-down>
+                <option key="A" description="Acumulativa"/>
+                <option key="R" description="Registro"/>
+                <option key="T" description="Totalizadora"/>
+            </drop-down>  
+        </field> 
+     <!--    <field name="node" title="${uiLabelMap.Nodo}" >            
+            <text size="10"/>
+        </field>-->
+        <field name="node" title="${uiLabelMap.Nodo}" >            
+            <drop-down>
+                <option key="R" description="Rama"/>
+                <option key="H" description="Hoja"/>
+            </drop-down>  
+        </field> 
+       <field name="majorGlAccount" title="${uiLabelMap.CuentaMayor}" >            
+            <drop-down>
+                <option key="N" description="No"/>
+                <option key="Y" description="Si"/>
+            </drop-down>  
+        </field>   
+       <field name="productCategoryId" title="Categoria" >
+           	 <drop-down allow-empty="true" current="selected">
+                <entity-options description="${description}" entity-name="ProductCategory" key-field-name="productCategoryId">
+                    <entity-order-by field-name="description"/>
+                </entity-options>
+           	 </drop-down>
         </field>
-         <field name="codificacion">            
-            <text/>
-        </field>
-         <field name="naturaleza">            
-            <text/>
-         </field>
-       	 <field name="tipoCuenta">            
-            <text/>
-         </field>
         <field name="submitButton" title="Add"><submit/></field>
     </form>
     <!-- Update PartyAcctgPreference.refundPaymentMethodId -->
