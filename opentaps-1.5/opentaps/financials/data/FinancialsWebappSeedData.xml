@@ -18,7 +18,7 @@
 <entity-engine-xml>
 
 <!-- The Web Application -->
-<OpentapsWebApps applicationId="financials" shortName="Financials" sequenceNum="20" applicationName="AR, AP, General Ledger, Financial Reports" description="Invoices and Payments for your customers and suppliers.  AR/AP statements and reports.  Sales commissions.  General ledger entries and reconciliations.  Financial reports."
+<OpentapsWebApps applicationId="financials" shortName="Operación" sequenceNum="20" applicationName="Operación" description="Invoices and Payments for your customers and suppliers.  AR/AP statements and reports.  Sales commissions.  General ledger entries and reconciliations.  Financial reports."
              imageUrl="/opentaps_images/integratingweb/financials.png" imageHoverUrl="/opentaps_images/integratingweb/financialsHover.png" linkUrl="/financials/control/main" lastUpdatedStamp="2009-07-18 16:41:58.415"
              lastUpdatedTxStamp="2009-07-18 16:41:58.415" createdStamp="2009-07-18 16:12:28.395" createdTxStamp="2009-07-18 16:12:28.395"/>
 
@@ -36,9 +36,9 @@
                    linkUrl="partnersMain"      securityModule="FINANCIALS" securityAction="PARTNER_VIEW" handlerMethod=""/>
 <OpentapsWebAppTab applicationId="financials"  sequenceNum="060" tabId="transactions" uiLabel="FinancialsLedger"
                    linkUrl="transactionsMain"  securityModule="FINANCIALS" securityAction="TX_VIEW" handlerMethod=""/>
-<OpentapsWebAppTab applicationId="financials"  sequenceNum="070" tabId="reports" uiLabel="CommonReports"
+<OpentapsWebAppTab applicationId="financials"  sequenceNum="070" tabId="reports" uiLabel="Reportes"
                    linkUrl="reportsMain"       securityModule="FINANCIALS" securityAction="RPT_VIEW" handlerMethod=""/>
-<OpentapsWebAppTab applicationId="financials"  sequenceNum="080" tabId="configuration" uiLabel="FinancialsConfigure"
+<OpentapsWebAppTab applicationId="financials"  sequenceNum="080" tabId="configuration" uiLabel="Administración contable"
                    linkUrl="configurationMain" securityModule="FINANCIALS" securityAction="CONFIG" handlerMethod=""/>
 <OpentapsWebAppTab applicationId="financials"  sequenceNum="500" tabId="ofbiz" uiLabel="opentaps"
                    linkUrl="/opentaps" isExternal="Y" securityModule="" securityAction="" handlerMethod=""/>
@@ -166,9 +166,9 @@
 <OpentapsShortcutGroup applicationId="financials" tabId="transactions" groupId="financialsTransactions" sequenceNum="010"/>
 <OpentapsShortcut shortcutId="findTransactions" groupId="financialsTransactions" sequenceNum="010" uiLabel="FinancialsFindTransactions"
                   linkUrl="transactions" securityModule="" securityAction=""/>
-<OpentapsShortcut shortcutId="quickCreateTransaction" groupId="financialsTransactions" sequenceNum="020" uiLabel="FinancialsCreateQuickTransaction"
+<OpentapsShortcut shortcutId="quickCreateTransaction" groupId="financialsTransactions" sequenceNum="020" uiLabel="Crear transacción"
                   linkUrl="createQuickAcctgTransForm" securityModule="" securityAction=""/>
-<OpentapsShortcut shortcutId="createTransaction" groupId="financialsTransactions" sequenceNum="030" uiLabel="FinancialsCreateTransaction"
+<OpentapsShortcut shortcutId="createTransaction" groupId="financialsTransactions" sequenceNum="030" uiLabel="Crear transacción detallada"
                   linkUrl="createAcctgTransForm" securityModule="" securityAction=""/>
 <OpentapsShortcut shortcutId="settlePaymentsOptions" groupId="financialsTransactions" sequenceNum="040" uiLabel="FinancialsSettlePayments"
                   linkUrl="settlePaymentsOptions" securityModule="" securityAction=""/>
@@ -182,22 +182,22 @@
                   linkUrl="invoiceRecurrence" securityModule="FINANCIALS" securityAction="RECUR_INV"/>
 <OpentapsShortcut shortcutId="adjustInventoryValues" groupId="financialsTransactions" sequenceNum="090" uiLabel="FinancialsAdjustInventoryValues"
                   linkUrl="adjustInventoryValues" securityModule="" securityAction=""/>
-<OpentapsShortcut shortcutId="Ingresos" groupId="financialsTransactions" sequenceNum="100" uiLabel="Ingresos"
+<OpentapsShortcut shortcutId="Ingresos" groupId="financialsTransactions" sequenceNum="100" uiLabel="Buscar por ingresos"
                   linkUrl="Ingresos" securityModule="" securityAction=""/>
-<OpentapsShortcut shortcutId="Egresos" groupId="financialsTransactions" sequenceNum="110" uiLabel="Egresos"
+<OpentapsShortcut shortcutId="Egresos" groupId="financialsTransactions" sequenceNum="110" uiLabel="Buscar por egresos"
                   linkUrl="Egresos" securityModule="" securityAction=""/>
 <OpentapsShortcut shortcutId="Polizas" groupId="financialsTransactions" sequenceNum="120" uiLabel="Buscar Pólizas"
                   linkUrl="Polizas" securityModule="" securityAction=""/>
 <!-- Presupuesto Ingreso Egreso -->                  
-<OpentapsShortcut shortcutId="PresupuestoIngreso" groupId="financialsTransactions" sequenceNum="130" uiLabel="Presupuesto Ingreso"
+<OpentapsShortcut shortcutId="PresupuestoIngreso" groupId="financialsTransactions" sequenceNum="130" uiLabel="Crear clave  presupuestal de Ingresos"
                   linkUrl="createPresupuestoIngresoForm" securityModule="" securityAction=""/>
-<OpentapsShortcut shortcutId="PresupuestoEgreso" groupId="financialsTransactions" sequenceNum="140" uiLabel="Presupuesto Egreso"
+<OpentapsShortcut shortcutId="PresupuestoEgreso" groupId="financialsTransactions" sequenceNum="140" uiLabel="Crear clave  presupuestal de Egresos"
                   linkUrl="createPresupuestoEgresoForm" securityModule="" securityAction=""/>   
                   
 <!-- Operacion Diaria @JSCF -->
-<OpentapsShortcut shortcutId="ODIngresos" groupId="financialsTransactions" sequenceNum="150" uiLabel="FinancialsDailyOperIncome"
+<OpentapsShortcut shortcutId="ODIngresos" groupId="financialsTransactions" sequenceNum="150" uiLabel="Operaciones de Ingresos"
                   linkUrl="ODIngresos" securityModule="" securityAction=""/>
-<OpentapsShortcut shortcutId="ODEgresos" groupId="financialsTransactions" sequenceNum="160" uiLabel="FinancialsDailyOperExpens"
+<OpentapsShortcut shortcutId="ODEgresos" groupId="financialsTransactions" sequenceNum="160" uiLabel="Operaciones de Egresos"
                   linkUrl="ODEgresos" securityModule="" securityAction=""/>
 
 <!-- Configuration shortcuts -->
@@ -219,7 +219,7 @@
 
 <!-- Reports shortcuts -->
 <OpentapsShortcutGroup applicationId="financials" tabId="reports" groupId="financialsReports" sequenceNum="010"/>
-<OpentapsShortcut shortcutId="financialsReportsMain" groupId="financialsReports" sequenceNum="010" uiLabel="CommonReports"
+<OpentapsShortcut shortcutId="financialsReportsMain" groupId="financialsReports" sequenceNum="010" uiLabel="Reportes"
                   linkUrl="reportsMain" securityModule="" securityAction=""/>
 
 
