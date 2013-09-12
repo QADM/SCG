@@ -40,4 +40,5 @@
             ${uiLabelMap.FinancialsTransaction}
         </div>
     </div>
+    
 </#if>
