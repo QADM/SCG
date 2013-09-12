@@ -1974,7 +1974,7 @@
         <value xml:lang="ar">بيان الحسابات</value>
         <value xml:lang="de">Kontenübersicht</value>
         <value xml:lang="en">Chart of Accounts</value>
-        <value xml:lang="es">Carta de cuentas</value>
+        <value xml:lang="es">Lista de cuentas</value>
         <value xml:lang="fr">Plan comptable</value>
         <value xml:lang="hi_IN">खातों का  लेखा-चित्र</value>
         <value xml:lang="it">Piano dei Conti</value>
@@ -9143,7 +9143,7 @@
     <property key="AccountingTimePeriod">
         <value xml:lang="ar">الفترة</value>
         <value xml:lang="en">Time Period</value>
-        <value xml:lang="es">Periodo de tiempo</value>
+        <value xml:lang="es">Periodos de tiempo</value>
         <value xml:lang="fr">Période</value>
         <value xml:lang="hi_IN">समय अवधि</value>
         <value xml:lang="it">Periodo Fiscale</value>
