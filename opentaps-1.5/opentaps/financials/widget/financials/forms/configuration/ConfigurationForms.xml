@@ -415,6 +415,25 @@
         </field>
         <field name="submitButton" title="Add"><submit/></field>
     </form>
+	 <form name="addExistingGlAccount" type="single" title="Add an existing Gl Account" target="addExistingGlAccount" default-widget-style="tabletext" default-title-style="tableheadtext">
+		 <field name="organizationPartyId">
+		  	<hidden value="${organizationPartyId}" /> 
+		  </field>
+		 <field name="roleTypeId">
+		 	 <hidden value="" /> 
+		  </field>
+		 <field name="glAccountId" title="${uiLabelMap.AccountingGlAccount}">
+			 <drop-down>
+				 <entity-options entity-name="GlAccount" description="${accountCode}: ${accountName} (${glAccountId})">
+				  	<entity-order-by field-name="accountCode" /> 
+				  </entity-options>
+			  </drop-down>
+		  </field>
+		 <field name="submitButton" title="Add">
+		  	<submit /> 
+		  </field>
+	 </form>
+    
     <!-- Update PartyAcctgPreference.refundPaymentMethodId -->
     <form name="refundPaymentMethod" type="single" title="Update PartyAcctgPreference.refundPaymentMethodId" target="updatePartyAcctgPreference"
         default-widget-style="inputBox" default-title-style="tableheadtext">
