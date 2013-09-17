@@ -91,7 +91,7 @@
                  label=uiLabelMap.DataImportImportTag
                  submitLabel=uiLabelMap.DataImportImport
                  processed=tagProcessed notProcessed=tagNotProcessed
-                 reportHref="setupReport?reportId=Tag_IMP&amp;sectionName=myHome"
+                 reportHref="setupReport?reportId=TAG_IMP&amp;sectionName=myHome"
                  reportLabel=uiLabelMap.OpentapsReport/>
   </tr>
   <tr>
