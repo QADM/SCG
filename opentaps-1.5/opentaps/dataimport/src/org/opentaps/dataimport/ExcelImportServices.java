@@ -729,8 +729,6 @@ public final class ExcelImportServices extends DomainService {
 		try {
 			switch (celda.getCellType()) {
 			case HSSFCell.CELL_TYPE_BLANK:
-				Calendar c1 = GregorianCalendar.getInstance();
-				fecha = new java.sql.Date(c1.getTime().getTime());
 				break;
 
 			default:
