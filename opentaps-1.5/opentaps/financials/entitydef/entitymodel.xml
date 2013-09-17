@@ -1343,6 +1343,7 @@ under the License.
                  title="Allows looking up AcctgTrans by organizationPartyId">
        <member-entity entity-alias="ATR" entity-name="AcctgTrans"/>
        <member-entity entity-alias="ATP" entity-name="AcctgTransPresupuestal"/>
+       <member-entity entity-alias="TD" entity-name="TipoDocumento" />
        <alias name="transactionDate" entity-alias="ATR"/>
        <alias name="acctgTransId" entity-alias="ATR"/>
        <alias name="acctgTransTypeId" entity-alias="ATR"/>
@@ -1354,8 +1355,12 @@ under the License.
        <alias name="postedDate" entity-alias="ATR"/>
        <alias name="postedAmount" entity-alias="ATR"/>
        <alias name="ciclo" entity-alias="ATP"/>
-       
-       <view-link entity-alias="ATR" rel-entity-alias="ATP" rel-optional="true">
+       <alias name="idTipoDoc"	entity-alias="ATP"/>
+       <alias name="tipoPoliza"	entity-alias="TD"/>
+       <view-link entity-alias="ATP" rel-entity-alias="TD" rel-optional="true">
+           <key-map field-name="idTipoDoc"/>
+       </view-link>
+	   <view-link entity-alias="ATP" rel-entity-alias="ATR" rel-optional="true">
            <key-map field-name="acctgTransId"/>
        </view-link>
     </view-entity>
