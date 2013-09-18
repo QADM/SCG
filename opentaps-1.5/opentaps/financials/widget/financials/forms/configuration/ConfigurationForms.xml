@@ -32,10 +32,10 @@
         <field name="glAccountTypeId" title="${uiLabelMap.FinancialsGlAccountType}">
             <display-entity entity-name="GlAccountType" description="${description}" key-field-name="glAccountTypeId"/>
         </field>
-        <field name="glAccountId" title="${uiLabelMap.GlAccount}">
+        <field name="glAccountId" title="${uiLabelMap.FinancialsGlAccount}">
             <display-entity entity-name="GlAccount" description="${accountCode}: ${accountName} (${glAccountId})" key-field-name="glAccountId"/>
         </field>
-        <field name="Update" widget-style="buttontext">            
+        <field name="Update" widget-style="buttontext" title="${uiLabelMap.FinancialsGlAccountAddd}">            
             <hyperlink description="${uiLabelMap.CommonEdit}" target="updateGlAccountTypeDefaultScreen">
                 <parameter param-name="glAccountTypeId" from-field="glAccountTypeId"/>
                 <parameter param-name="glAccountId" from-field="glAccountId"/>
@@ -49,7 +49,7 @@
         default-widget-style="tabletext" default-title-style="tableheadtext">
         <auto-fields-service service-name="createGlAccountTypeDefault"/>
         <field name="organizationPartyId"><hidden value="${organizationPartyId}"/></field>        
-        <field use-when="glAccountTypeId==void || glAccountTypeId==null" name="glAccountTypeId" title="Gl Account Type">
+        <field use-when="glAccountTypeId==void || glAccountTypeId==null" name="glAccountTypeId" title="${uiLabelMap.FinancialsGlAccountType}">
             <drop-down>
                 <entity-options entity-name="GlAccountType" description="${description}" key-field-name="glAccountTypeId">
                     <entity-constraint name="needsConfiguration" operator="equals" value="Y"  />
@@ -57,7 +57,7 @@
                 </entity-options>
             </drop-down>
         </field>
-        <field use-when="glAccountTypeId!=void &amp;&amp; glAccountTypeId!=null" name="glAccountTypeId" title="Gl Account Type">
+        <field use-when="glAccountTypeId!=void &amp;&amp; glAccountTypeId!=null" name="glAccountTypeId" title="${uiLabelMap.FinancialsGlAccountType}">
             <drop-down>
                 <entity-options entity-name="GlAccountType" description="${description}" key-field-name="glAccountTypeId">
                     <entity-constraint name="needsConfiguration" operator="equals" value="Y"  />
@@ -79,8 +79,8 @@
           <lookup target-form-name="LookupGlAccount" size="20" maxlength="20"/>
         </field>
         -->        
-        <field use-when="glAccountTypeId==void || glAccountTypeId==null" name="submitButton" title="Add"><submit/></field>
-        <field use-when="glAccountTypeId!=void &amp;&amp; glAccountTypeId!=null" name="submitButton" title="Update"><submit/></field>
+        <field use-when="glAccountTypeId==void || glAccountTypeId==null" name="submitButton" title="${uiLabelMap.FinancialsGlAccountAdd}"><submit/></field>
+        <field use-when="glAccountTypeId!=void &amp;&amp; glAccountTypeId!=null" name="submitButton" title="${uiLabelMap.FinancialsGlAccountUpdate}"><submit/></field>
     </form>
     
     <!-- list Payment Methods -->
@@ -163,14 +163,10 @@
 
 
     <!-- update an existing Gl Account -->
-    <form  name="updateGlAccount" type="single" title="Update an existing Gl Account" target="updateExistingGlAccount" default-map-name="glAccount"
+<form  name="updateGlAccount" type="single" title="Update an existing Gl Account" target="updateExistingGlAccount" default-map-name="glAccount"
         default-widget-style="tabletext" default-title-style="tableheadtext">
-<field name="glAccountId"><display/></field>
-        
-        
-        
-        
-        <field name="glAccountClassTypeKey" map-name="glAccountClassTypeMap">            
+		<field name="glAccountId" title="${uiLabelMap.FinancialsGlAccountCodigo}"><display/></field>
+        <field name="glAccountClassTypeKey" map-name="glAccountClassTypeMap" title="${uiLabelMap.ClaseContable}">            
             <drop-down allow-empty="true">
                 <entity-options entity-name="GlAccountClassTypeMap" description="${description}">
                     <entity-order-by field-name="description"/>
@@ -179,7 +175,7 @@
         </field>
             
 
-        <field name="parentGlAccountId">            
+        <field name="parentGlAccountId" title="${uiLabelMap.FinancialsParentGLAccount}">            
             <text/>
   <!-- TODO: make this lookup the parent gl account           
      <drop-down>
@@ -189,13 +185,13 @@
                 </entity-options>
             </drop-down>  
 -->        </field>
-        <field name="accountName">
+        <field name="accountName" title="${uiLabelMap.FinancialsGLAccountName}" >
             <text size="100"></text>
         </field>
-        <field name="description">
+        <field name="description"  title="${uiLabelMap.FinancialsGlAccountDescription}">
             <textarea rows="2" cols="60"/>
         </field>        
-        <field name="codificacion" title="${uiLabelMap.Codificacion}" >            
+        <field name="codificacion" title="${uiLabelMap.FinancialsGlAccountCodificacion}" >            
             <drop-down>
 				<option key="Cuenta" description="Cuenta"/>
 				<option key="Génereo" description="Génereo"/>
@@ -207,13 +203,13 @@
 				<option key="Rubro" description="Rubro"/>
             </drop-down>  
         </field> 
-       <field name="naturaleza" title="${uiLabelMap.Naturaleza}" >            
+       <field name="naturaleza" title="${uiLabelMap.FinancialsGlAccountNaturaleza}" >            
             <drop-down>
                 <option key="A" description="Acredora"/>
                 <option key="D" description="Deudora"/>
             </drop-down>  
         </field> 
-       <field name="tipoCuenta" title="${uiLabelMap.TipoCuenta}" >            
+       <field name="tipoCuenta" title="${uiLabelMap.FinancialsGlAccountTCuenta}" >            
             <drop-down>
                 <option key="A" description="Acumulativa"/>
                 <option key="R" description="Registro"/>
@@ -223,30 +219,27 @@
      <!--    <field name="node" title="${uiLabelMap.Nodo}" >            
             <text size="10"/>
         </field>-->
-        <field name="node" title="${uiLabelMap.Nodo}" >            
+        <field name="node" title="${uiLabelMap.FinancialsGlAccountNodo}" >            
             <drop-down>
                 <option key="R" description="Rama"/>
                 <option key="H" description="Hoja"/>
             </drop-down>  
         </field> 
-       <field name="majorGlAccount" title="${uiLabelMap.CuentaMayor}" >            
+       <field name="majorGlAccount"  title="${uiLabelMap.FinancialsGlAccountCuentaMayor}"  >            
             <drop-down>
                 <option key="N" description="No"/>
                 <option key="Y" description="Si"/>
             </drop-down>  
         </field>   
         
-         <field name="productCategoryId" map-name="ProductCategory"  >            
+         <field name="productCategoryId" map-name="ProductCategory" title="${uiLabelMap.FinancialsGlAccountCategoria}"  >            
             <drop-down allow-empty="true">
                 <entity-options entity-name="ProductCategory" description="${description}"  >
                     <entity-order-by field-name="description"/>
                 </entity-options>
             </drop-down>  
         </field>
-        
-        
-
-        <field name="submitButton" title="Update"><submit/></field>
+        <field name="submitButton" title="${uiLabelMap.FinancialsGlAccountUpdate}"><submit/></field>
     </form>
     
     <!-- add an existing Gl Account to an Organization -->
@@ -257,7 +250,7 @@
         <field name="glXbrlClassId"><hidden value=""/></field>
         <field name="productId"><hidden value=""/></field>
         <field name="glResourceTypeId"><hidden value="MONEY"/></field>
-        <field name="glAccountClassTypeKey">            
+        <field name="glAccountClassTypeKey" title="${uiLabelMap.ClaseContable}">            
             <drop-down>
                 <entity-options entity-name="GlAccountClassTypeMap" description="${description}">
                     <entity-order-by field-name="description"/>
@@ -279,10 +272,10 @@
         <field name="accountName" title="${uiLabelMap.FinancialsGLAccountName}" >            
             <text size="60"/>
         </field>
-        <field name="description">
+        <field name="description"  title="${uiLabelMap.FinancialsGlAccountDescription}">
             <textarea rows="2" cols="60"/>
         </field>      
-        <field name="codificacion" title="${uiLabelMap.Codificacion}" >            
+        <field name="codificacion" title="${uiLabelMap.FinancialsGlAccountCodificacion}" >            
             <drop-down>
 				<option key="Cuenta" description="Cuenta"/>
 				<option key="Génereo" description="Génereo"/>
@@ -294,13 +287,13 @@
 				<option key="Rubro" description="Rubro"/>
             </drop-down>  
         </field> 
-       <field name="naturaleza" title="${uiLabelMap.Naturaleza}" >            
+       <field name="naturaleza" title="${uiLabelMap.FinancialsGlAccountNaturaleza}" >            
             <drop-down>
                 <option key="A" description="Acredora"/>
                 <option key="D" description="Deudora"/>
             </drop-down>  
         </field> 
-      <field name="tipoCuenta" title="${uiLabelMap.TipoCuenta}" >            
+      <field name="tipoCuenta" title="${uiLabelMap.FinancialsGlAccountTCuenta}" >            
             <drop-down>
                 <option key="A" description="Acumulativa"/>
                 <option key="R" description="Registro"/>
@@ -310,26 +303,26 @@
      <!--    <field name="node" title="${uiLabelMap.Nodo}" >            
             <text size="10"/>
         </field>-->
-        <field name="node" title="${uiLabelMap.Nodo}" >            
+        <field name="node" title="${uiLabelMap.FinancialsGlAccountNodo}" >            
             <drop-down>
                 <option key="R" description="Rama"/>
                 <option key="H" description="Hoja"/>
             </drop-down>  
         </field> 
-       <field name="majorGlAccount" title="${uiLabelMap.CuentaMayor}" >            
+       <field name="majorGlAccount" title="${uiLabelMap.FinancialsGlAccountCuentaMayor}" >            
             <drop-down>
                 <option key="N" description="No"/>
                 <option key="Y" description="Si"/>
             </drop-down>  
         </field>   
-       <field name="productCategoryId" title="Categoria" >
+       <field name="productCategoryId" title="${uiLabelMap.FinancialsGlAccountCategoria}" >
            	 <drop-down allow-empty="true" current="selected">
                 <entity-options description="${description}" entity-name="ProductCategory" key-field-name="productCategoryId">
                     <entity-order-by field-name="description"/>
                 </entity-options>
            	 </drop-down>
         </field>
-        <field name="submitButton" title="Add"><submit/></field>
+        <field name="submitButton" title="${uiLabelMap.FinancialsGlAccountAdd}"><submit/></field>
         
     </form>
     
@@ -347,7 +340,7 @@
         <field name="glXbrlClassId"><hidden value=""/></field>
         <field name="productId"><hidden value=""/></field>
         <field name="glResourceTypeId"><hidden value="MONEY"/></field>
-        <field name="glAccountClassTypeKey">            
+ 		<field name="glAccountClassTypeKey" title="${uiLabelMap.ClaseContable}">            
             <drop-down>
                 <entity-options entity-name="GlAccountClassTypeMap" description="${description}">
                     <entity-order-by field-name="description"/>
@@ -357,16 +350,17 @@
  		<field name="parentGlAccountId" title="${uiLabelMap.FinancialsParentGLAccount}" >            
             <display description="${parameters.parentGlAccountId}"/>
         </field>
+
         <field name="accountCode" title="${uiLabelMap.FinancialsGLAccountCode}" >            
             <text/>
         </field>
         <field name="accountName" title="${uiLabelMap.FinancialsGLAccountName}" >            
             <text size="60"/>
         </field>
-        <field name="description">
+        <field name="description"  title="${uiLabelMap.FinancialsGlAccountDescription}">
             <textarea rows="2" cols="60"/>
         </field>      
-        <field name="codificacion" title="${uiLabelMap.Codificacion}" >            
+        <field name="codificacion" title="${uiLabelMap.FinancialsGlAccountCodificacion}" >            
             <drop-down>
 				<option key="Cuenta" description="Cuenta"/>
 				<option key="Génereo" description="Génereo"/>
@@ -378,13 +372,13 @@
 				<option key="Rubro" description="Rubro"/>
             </drop-down>  
         </field> 
-       <field name="naturaleza" title="${uiLabelMap.Naturaleza}" >            
+       <field name="naturaleza" title="${uiLabelMap.FinancialsGlAccountNaturaleza}" >            
             <drop-down>
                 <option key="A" description="Acredora"/>
                 <option key="D" description="Deudora"/>
             </drop-down>  
         </field> 
-      <field name="tipoCuenta" title="${uiLabelMap.TipoCuenta}" >            
+      <field name="tipoCuenta" title="${uiLabelMap.FinancialsGlAccountTCuenta}" >            
             <drop-down>
                 <option key="A" description="Acumulativa"/>
                 <option key="R" description="Registro"/>
@@ -394,26 +388,27 @@
      <!--    <field name="node" title="${uiLabelMap.Nodo}" >            
             <text size="10"/>
         </field>-->
-        <field name="node" title="${uiLabelMap.Nodo}" >            
+        <field name="node" title="${uiLabelMap.FinancialsGlAccountNodo}" >            
             <drop-down>
                 <option key="R" description="Rama"/>
                 <option key="H" description="Hoja"/>
             </drop-down>  
         </field> 
-       <field name="majorGlAccount" title="${uiLabelMap.CuentaMayor}" >            
+       <field name="majorGlAccount" title="${uiLabelMap.FinancialsGlAccountCuentaMayor}" >            
             <drop-down>
                 <option key="N" description="No"/>
                 <option key="Y" description="Si"/>
             </drop-down>  
         </field>   
-       <field name="productCategoryId" title="Categoria" >
+       <field name="productCategoryId" title="${uiLabelMap.FinancialsGlAccountCategoria}" >
            	 <drop-down allow-empty="true" current="selected">
                 <entity-options description="${description}" entity-name="ProductCategory" key-field-name="productCategoryId">
                     <entity-order-by field-name="description"/>
                 </entity-options>
            	 </drop-down>
         </field>
-        <field name="submitButton" title="Add"><submit/></field>
+        <field name="submitButton" title="${uiLabelMap.FinancialsGlAccountAdd}"><submit/></field>
+        
     </form>
 	 <form name="addExistingGlAccount" type="single" title="Add an existing Gl Account" target="addExistingGlAccount" default-widget-style="tabletext" default-title-style="tableheadtext">
 		 <field name="organizationPartyId">
@@ -429,7 +424,7 @@
 				  </entity-options>
 			  </drop-down>
 		  </field>
-		 <field name="submitButton" title="Add">
+		 <field name="submitButton" title="${uiLabelMap.FinancialsGlAccountAdd}">
 		  	<submit /> 
 		  </field>
 	 </form>

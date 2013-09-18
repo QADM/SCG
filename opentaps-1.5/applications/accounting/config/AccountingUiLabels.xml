@@ -4611,8 +4611,8 @@
     <property key="AccountingGlAccount">
         <value xml:lang="ar">حساب محاسبي</value>
         <value xml:lang="de">Hauptbuchkonto</value>
-        <value xml:lang="en">GL Account</value>
-        <value xml:lang="es">Cuenta de LM</value>
+        <value xml:lang="en">Cuenta</value>
+        <value xml:lang="es">Cuenta</value>
         <value xml:lang="fr">Compte</value>
         <value xml:lang="hi_IN">जीएल(GL) खाता</value>
         <value xml:lang="it">Conto Contabilità Generale</value>
