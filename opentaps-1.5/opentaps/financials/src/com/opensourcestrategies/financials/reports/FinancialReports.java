@@ -271,13 +271,6 @@ public final class FinancialReports {
         		return UtilMessage.createAndLogEventError(request, "FinancialsError_asOfDateOrPeriod", locale, MODULE);
         	}
         	
-//            if (mapDatos.get("fromDate") == null){
-//            	mapDatos.put("fromDate", UtilDateTime.toTimestamp(1, 1, 1980, 0, 0, 0));//Se coloca una fecha antigua para no obtener resultados
-//            }
-//            if (mapDatos.get("thruDate") == null) {
-//                return UtilMessage.createAndLogEventError(request, "FinancialsError_FromOrThruDateMissing", locale, MODULE);
-//            }
-
             Map<String, Object> results = dispatcher.runSync("getComparativeVariacionPatrimonio", dispatcher.getDispatchContext().makeValidContext("getComparativeVariacionPatrimonio", ModelService.IN_PARAM, mapDatos));
 
             Map<String, Object> secondLastDateResults = (Map<String, Object>) results.get("secondLastDateResults");
@@ -289,6 +282,8 @@ public final class FinancialReports {
             listDates.add(nextLastDateResults);
             listDates.add(lastDateResults);
             
+          List<Map<String, Object>> rows = FastList.newInstance(); 
+            
             for (Map<String, Object> mapResults : listDates) {
             	
             	Map<GenericValue,BigDecimal> cuentasPatContribuido = (Map<GenericValue, BigDecimal>) mapResults.get("cuentasPatContribuido");
@@ -299,6 +294,12 @@ public final class FinancialReports {
             	List<GenericValue> cuentasPatGeneradoList = EntityUtil.orderBy(((Map<GenericValue, BigDecimal>) mapResults.get("cuentasPatGenerado")).keySet(), UtilMisc.toList("glAccountId"));        	
             	Map<GenericValue,BigDecimal> cuentasPatrimonio = (Map<GenericValue, BigDecimal>) mapResults.get("cuentasPatrimonio");
             	List<GenericValue> cuentasPatrimonioList = EntityUtil.orderBy(((Map<GenericValue, BigDecimal>) mapResults.get("cuentasPatrimonio")).keySet(), UtilMisc.toList("glAccountId"));
+            	
+            	//Primera etapa (encabezado)
+            	for (Map.Entry<GenericValue,BigDecimal> cuentasPatGenAnt : cuentasPatGenAnterior.entrySet())
+            	{
+//            		System.out.println(cuentasPatGenAnt.getKey() + "/" + cuentasPatGenAnt.getValue());
+            	}
             	
             	
 			}
@@ -331,7 +332,6 @@ public final class FinancialReports {
 //        	List<GenericValue> cuentasPatGeneradoLdList = EntityUtil.orderBy(((Map<GenericValue, BigDecimal>) nextLastDateResults.get("cuentasPatGenerado")).keySet(), UtilMisc.toList("glAccountId"));        	
 //        	
 
-//            List<Map<String, Object>> rows = FastList.newInstance(); 
 //            
 //            Map<Integer, BigDecimal> primerBloque = FastMap.newInstance();
 //            String nombre = null;
@@ -476,7 +476,9 @@ public final class FinancialReports {
 //                    return c;
 //                }
 //            });
-//            request.setAttribute("jrDataSource", new JRMapCollectionDataSource(rows));
+            
+            
+            request.setAttribute("jrDataSource", new JRMapCollectionDataSource(rows));
 
             // prepare report parameters
             Map<String, Object> jrParameters = FastMap.newInstance();
