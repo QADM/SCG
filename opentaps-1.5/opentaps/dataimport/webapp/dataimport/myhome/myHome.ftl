@@ -100,7 +100,7 @@
                  label="Clasificación administrativa"
                  submitLabel=uiLabelMap.DataImportImport
                  processed=partyProcessed notProcessed=partyNotProcessed
-                 reportHref="setupReport?reportId=CUST_IMP&amp;sectionName=myHome"
+                 reportHref="setupReport?reportId=CLAS_ADMON_IMP&amp;sectionName=myHome"
                  reportLabel=uiLabelMap.OpentapsReport/>
   </tr>
   

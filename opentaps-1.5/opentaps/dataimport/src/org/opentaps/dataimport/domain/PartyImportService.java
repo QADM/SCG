@@ -24,7 +24,9 @@ import net.fortuna.ical4j.model.property.Contact;
 import org.apache.batik.util.EventDispatcher.Dispatcher;
 import org.apache.log4j.Logger;
 import org.ofbiz.base.util.Debug;
+
 import java.util.Locale;
+
 import org.ofbiz.base.util.UtilDateTime;
 import org.opentaps.base.constants.StatusItemConstants;
 import org.opentaps.base.entities.DataImportParty;
@@ -112,113 +114,117 @@ public class PartyImportService extends DomainService implements
 
 				try {
 					imp_tx1 = null;
-
+					imp_tx2 = null;
 					// begin importing raw data item
-					Party party = new Party();
-					party.setExternalId(rowdata.getExternalId());
-					party.setNivel_id(rowdata.getNivel());
-					party.setPartyTypeId("PARTY_GROUP");
-					party.setPartyId(rowdata.getExternalId());
-					party.setNode(rowdata.getNode());
+					if(rowdata.getGroupName()!=null)
+					{
+						if(rowdata.getExternalId()!=null)
+						{
+							if(rowdata.getNivel()!=null)
+							{
+								if(rowdata.getRol()!=null)
+								{
+									Party party = new Party();
+									
+									if(!UtilImport.validaNivel(ledger_repo, rowdata.getNivel()))
+										throw new ServiceException(String.format("Nivel no valido - No se encuentra registrado"));
+									
+									party.setExternalId(rowdata.getExternalId());
+									party.setNivel_id(rowdata.getNivel());
+									party.setPartyTypeId("PARTY_GROUP");
+									party.setPartyId(rowdata.getExternalId());
+									party.setNode(rowdata.getNode());
 
-					if (rowdata.getMoneda() != null) {
-						// Buscar Tipo Moneda
-						List<Uom> tipomoneda = ledger_repo.findList(Uom.class,
-								ledger_repo.map(Uom.Fields.abbreviation,
-										rowdata.getMoneda()));
+									if (rowdata.getMoneda() != null) {
+										// Buscar Tipo Moneda
+										List<Uom> tipomoneda = ledger_repo.findList(Uom.class,
+												ledger_repo.map(Uom.Fields.abbreviation,
+														rowdata.getMoneda()));
 
-						party.setPreferredCurrencyUomId(tipomoneda.get(0)
-								.getUomId());
-						Debug.log("Tipo moneda " + tipomoneda.get(0).getUomId());
-					}
+										party.setPreferredCurrencyUomId(tipomoneda.get(0)
+												.getUomId());
+										Debug.log("Tipo moneda " + tipomoneda.get(0).getUomId());
+									}
 
-					imp_tx1 = this.session.beginTransaction();
-					ledger_repo.createOrUpdate(party);
-					imp_tx1.commit();
+									imp_tx1 = this.session.beginTransaction();
+									ledger_repo.createOrUpdate(party);
+									imp_tx1.commit();
 
-					PartyGroup partygroup = new PartyGroup();
-					partygroup.setGroupName(rowdata.getGroupName());
-					partygroup.setGroupNameLocal(rowdata.getGroupNameLocal());
-					if (rowdata.getParentExternalId() != null) {
-						if (UtilImport.validaPadreParty(ledger_repo,
-								rowdata.getNivel(),
-								rowdata.getParentExternalId())) {
-							Debug.log("Padre valido");
-							partygroup.setParent_id(rowdata
-									.getParentExternalId());
+									PartyGroup partygroup = new PartyGroup();
+									
+									if (!UtilImport.validaPadreParty(
+											ledger_repo, rowdata.getNivel(),
+											rowdata.getParentExternalId()))
+										throw new ServiceException(String.format("Padre no valido"));
+									
+									partygroup.setGroupName(rowdata.getGroupName());
+									partygroup.setGroupNameLocal(rowdata.getGroupNameLocal());	
+									partygroup.setParent_id(rowdata
+												.getParentExternalId());							
+									partygroup.setPartyId(rowdata.getExternalId());
+									partygroup.setFederalTaxId(rowdata.getRfc());
 
-						} else {
-							Debug.log("Padre no valido");
-							String message = "Failed to import Party ["
-									+ rowdata.getExternalId()
-									+ "], Error message : " + "Padre no valido";
-							storeImportPartyError(rowdata, message, imp_repo);
+									imp_tx2 = this.session.beginTransaction();
+									ledger_repo.createOrUpdate(partygroup);
+									imp_tx2.commit();
 
-							// rollback all if there was an error when importing
-							// item
-							if (imp_tx1 != null) {
-								imp_tx1.rollback();
+									// / Validar rol
+									if (rowdata.getRol() != null) {
+										List<String> listaRol = new ArrayList<String>();
+										// Valores por default
+										listaRol.add("ORGANIZATION_UNIT");
+										listaRol.add("PARENT_ORGANIZATION");
+
+										if (rowdata.getRol().trim().equals("Organization")
+												|| rowdata.getRol().trim()
+														.equals("Organizacion")) {
+											// Valores por default
+											listaRol.add("ORGANIZATION_ROLE");
+											listaRol.add("MAIN_ROLE");
+										} else {
+											// Buscar Id Rol para las Organizaciones(party)
+											List<RoleType> rolTipo = ledger_repo.findList(
+													RoleType.class, ledger_repo.map(
+															RoleType.Fields.description,
+															rowdata.getRol().trim()));
+											listaRol.add(rolTipo.get(0).getRoleTypeId().trim());
+										}
+
+										for (Object rol : listaRol) {
+
+											getRolOrganization(ledger_repo, rowdata,
+													rol.toString());
+										}
+									}
+
+									// /Relacion entre cuentas
+									if (rowdata.getParentExternalId() != null) {
+										getRelationshipOrganization(ledger_repo, rowdata);
+									}
+
+									String message = "Successfully imported Party ["
+											+ rowdata.getExternalId() + "].";
+									this.storeImportPartySuccess(rowdata, imp_repo);
+									Debug.logInfo(message, MODULE);
+
+									imported = imported + 1;
+								}
+								else
+									throw new ServiceException(String.format("Falta Ingresar Rol"));
 							}
-							if (imp_tx2 != null) {
-								imp_tx2.rollback();
-							}
-							// Debug.logError(ex, message, MODULE);
-							throw new ServiceException(message);
+							else
+								throw new ServiceException(String.format("Falta Ingresar Nivel"));
 						}
+						else
+							throw new ServiceException(String.format("Falta Ingresar External Id" ));
 					}
+					else
+						throw new ServiceException(String.format("Falta ingresar Nombre" ));
 					
-					partygroup.setPartyId(rowdata.getExternalId());
-					partygroup.setFederalTaxId(rowdata.getRfc());
-
-					imp_tx2 = this.session.beginTransaction();
-					ledger_repo.createOrUpdate(partygroup);
-					imp_tx2.commit();
-
-					// / Validar rol
-					if (rowdata.getRol() != null) {
-						List<String> listaRol = new ArrayList<String>();
-						// Valores por default
-						listaRol.add("ORGANIZATION_UNIT");
-						listaRol.add("PARENT_ORGANIZATION");
-
-						if (rowdata.getRol().trim().equals("Organization")
-								|| rowdata.getRol().trim()
-										.equals("Organizacion")) {
-							// Valores por default
-							listaRol.add("ORGANIZATION_ROLE");
-							listaRol.add("MAIN_ROLE");
-						} else {
-							// Buscar Id Rol para las Organizaciones(party)
-							List<RoleType> rolTipo = ledger_repo.findList(
-									RoleType.class, ledger_repo.map(
-											RoleType.Fields.description,
-											rowdata.getRol().trim()));
-							listaRol.add(rolTipo.get(0).getRoleTypeId().trim());
-						}
-
-						for (Object rol : listaRol) {
-
-							getRolOrganization(ledger_repo, rowdata,
-									rol.toString());
-						}
-					}
-
-					// /Relacion entre cuentas
-					if (rowdata.getParentExternalId() != null) {
-						getRelationshipOrganization(ledger_repo, rowdata);
-					}
-
-					String message = "Successfully imported Party ["
-							+ rowdata.getExternalId() + "].";
-					this.storeImportPartySuccess(rowdata, imp_repo);
-					Debug.logInfo(message, MODULE);
-
-					imported = imported + 1;
+				
 
 				} catch (Exception ex) {
-					String message = "Failed to import Party ["
-							+ rowdata.getExternalId() + "], Error message : "
-							+ ex.getMessage();
+					String message = ex.getMessage();
 					storeImportPartyError(rowdata, message, imp_repo);
 
 					// rollback all if there was an error when importing item
