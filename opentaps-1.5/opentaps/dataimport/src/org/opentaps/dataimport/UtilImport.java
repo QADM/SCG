@@ -703,5 +703,31 @@ public class UtilImport {
 		}
 		return glAccountHistories;
 	}
+	
+	
+	/**
+	 * Autor: Esmeralda Cercas Ortiz
+	 * 
+	 * @param ledger_repo
+	 * @param nivel
+	 * @return true = nivel valido, false = nivel no valido
+	 */
+	public static boolean validaNivel(LedgerRepositoryInterface ledger_repo,
+			String nivel) throws RepositoryException {
+
+		Debug.log("Buscando Nivel");
+		List<NivelPresupuestal> nivelP = ledger_repo.findList(
+				NivelPresupuestal.class,
+				ledger_repo.map(NivelPresupuestal.Fields.nivelId, nivel));
+
+		if (nivelP.isEmpty()) {
+			Debug.log("Nivel no valido");
+			return false;
+		} else {
+			Debug.log("Nivel valido");
+			return true;
+		}
+	}
+	
 
 }

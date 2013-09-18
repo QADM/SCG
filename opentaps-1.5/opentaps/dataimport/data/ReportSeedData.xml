@@ -31,7 +31,7 @@
     <ReportRegistry reportId="MATRIZ_EGR" shortName="Matriz de Conversion de Egresos" description="" reportLocation="component://dataimport/webapp/dataimport/reports/repository/MatrizConversionEgresosImportReport.jrxml"/>
     <ReportRegistry reportId="MATRIZ_ING" shortName="Matriz de Conversion de Ingresos" description="" reportLocation="component://dataimport/webapp/dataimport/reports/repository/MatrizConversionIngresosImportReport.jrxml"/>  
     <ReportRegistry reportId="TAG_IMP" shortName="Tag" description="" reportLocation="component://dataimport/webapp/dataimport/reports/repository/TagImportReport.jrxml"/>
-    <ReportRegistry reportId="CLAS_ADMON_IMP" shortName="Clasificacion Administrativa" description="" reportLocation="component://dataimport/webapp/dataimport/reports/repository/MatrizConversionEgresosImportReport.jrxml"/>
+    <ReportRegistry reportId="CLAS_ADMON_IMP" shortName="Clasificacion Administrativa" description="" reportLocation="component://dataimport/webapp/dataimport/reports/repository/AdministrativeClassificationImportReport.jrxml"/>
     <ReportRegistry reportId="CLAS_PROG_IMP" shortName="Clasificacion Programatica" description="" reportLocation="component://dataimport/webapp/dataimport/reports/repository/MatrizConversionEgresosImportReport.jrxml"/>
     
     <ReportGroupMember reportGroupId="DATAIMP_FORM" reportId="CUST_IMP" sequenceNum="1"/>
