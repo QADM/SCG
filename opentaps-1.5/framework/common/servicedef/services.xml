@@ -158,6 +158,8 @@ under the License.
         <description>Create a CustomTimePeriod record</description>
         <auto-attributes mode="OUT" include="pk" optional="false"/>
         <auto-attributes mode="IN" include="nonpk" optional="true"/>
+        <override name="periodNum" optional="false"/>
+        <override name="periodName" optional="false"/>
         <override name="fromDate" optional="false"/>
         <override name="thruDate" optional="false"/>
         <override name="organizationPartyId" optional="false"/>
