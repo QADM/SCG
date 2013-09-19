@@ -72,7 +72,7 @@
   <form method="post" action="<@ofbizUrl>createAccountingTag</@ofbizUrl>" name="createAccountingTag"  onsubmint="valida(this.form)">
     <table class="twoColumnForm" style="border:0">
     <tr>
-    	<td class="titleCell"><span><b><font  size=1 color=#B40404>Tipo</font><b></span>
+    	<td class="titleCell"><span><b><font  size=1 color=#B40404>Clasificación</font><b></span>
     	</td>
 	    <td>
      <select name="enumTypeId" size="1"  onchange="cambiar(this.form)">
@@ -98,9 +98,9 @@
       <@inputTextRow title=uiLabelMap.CommonDescription name="description" size=60  titleClass="requiredField"/>	
        <@inputSelectHashRow  title="Nodo" name="node"  hash=Nodo />
 
-      <@inputTextRow title=uiLabelMap.ParentId  size=10 name="parentEnumId" size=10  />
-      <@inputDateRow title="Fecha inicio"  name="fechaIni" size=12 default="" titleClass="requiredField" />
-      <@inputDateRow title="Fecha fin" name="fechaFi"   size=12 default="" titleClass="requiredField" />
+      <@inputTextRow title="Clave superior"  size=10 name="parentEnumId" size=10  />
+      <@inputDateRow title="Desde"  name="fechaIni" size=12 default="" titleClass="requiredField" />
+      <@inputDateRow title="Hasta" name="fechaFi"   size=12 default="" titleClass="requiredField" />
       <@inputSubmitRow title=uiLabelMap.CommonCreate />
     </table>
   </form>
