@@ -29,7 +29,7 @@
                 <@headerCell title=uiLabelMap.FinancialsTransactionType orderBy="acctgTransTypeId"/>
                 <@headerCell title=uiLabelMap.CommonDescription orderBy="description"/>
                 <@headerCell title=uiLabelMap.FinancialsIsPosted orderBy="isPosted"/>
-                <@headerCell title=uiLabelMap.PartyParty orderBy="partyId"/>
+                <@headerCell title=uiLabelMap.FinancialsTransactionsAreaEjecutora orderBy="partyId"/>
                 <@headerCell title=uiLabelMap.FinancialsTransactionDate orderBy="transactionDate DESC"/>
                 <@headerCell title=uiLabelMap.FinancialsScheduledPostingDate orderBy="scheduledPostingDate DESC"/>
                 <@headerCell title=uiLabelMap.FinancialsPostedDate orderBy="postedDate DESC"/>
