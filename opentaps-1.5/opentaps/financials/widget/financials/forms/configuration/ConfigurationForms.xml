@@ -97,9 +97,9 @@
             <display-entity entity-name="PaymentMethodType" description="${description}" key-field-name="paymentMethodTypeId"/>
         </field>
         <field name="description" widget-style="inputBox"><text size="30" maxlength="100"/></field>              
-        <field name="glAccountId" title="${uiLabelMap.AccountingGlAccount}">            
-            <drop-down>
-                <entity-options entity-name="GlAccountOrganizationAndClass" description="${accountCode}: ${accountName} (${glAccountId})">
+        <field name="glAccountId" title="${uiLabelMap.AccountingGlAccount}" >            
+            <drop-down >
+                <entity-options entity-name="GlAccountOrganizationAndClass" description="${accountCode}: ${accountName} (${glAccountId})" >
                     <entity-constraint name="organizationPartyId" operator="equals" env-name="parameters.organizationPartyId"  />
                     <entity-order-by field-name="accountCode"/>
                 </entity-options>
@@ -107,7 +107,7 @@
         </field>
         <field name="Update" widget-style="buttontext" title="${uiLabelMap.FinancialsGlAccountUpdated}" ><submit button-type="text-link"/></field>        
         <field name="Expire" widget-style="buttontext" title="${uiLabelMap.FinancialsGlAccountDisable}">
-            <hyperlink description="${uiLabelMap.FinancialsPaymentMethodExpire}" target="updatePaymentMethod">
+            <hyperlink description="${uiLabelMap.FinancialsGlAccountDisable}" target="updatePaymentMethod">
                 <parameter param-name="paymentMethodId"/>
                 <parameter param-name="expirePaymentMethod" value="expPM"/>
             </hyperlink>
@@ -136,7 +136,7 @@
         <field name="fromDate"><hidden/></field>      
         <field name="thruDate"><hidden/></field>     
         <field name="emailAddress"><hidden/></field>
-        <field name="submitButton" title="Add" widget-style="buttontext"><submit/></field>
+        <field name="submitButton" title="${uiLabelMap.FinancialsGlAccountAddd}" widget-style="buttontext"><submit/></field>
     </form>
     
     <!-- add new Time Period -->
