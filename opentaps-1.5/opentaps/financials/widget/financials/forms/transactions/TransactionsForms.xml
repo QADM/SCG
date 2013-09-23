@@ -33,18 +33,17 @@
             <display-entity entity-name="AcctgTransType" cache="true"/>
         </field>
         <field name="isPosted" title="${uiLabelMap.FinancialsIsPosted}"><display/></field>
-        <field name="partyId" title="${uiLabelMap.PartyParty}">
+        <field name="partyId" title="${uiLabelMap.FinancialsTransactionsAreaEjecutora}">
             <display-entity entity-name="PartyNameView" description="${groupName} ${firstName} ${lastName} (${partyId})"/>
         </field>
         <field name="transactionDate" title="${uiLabelMap.FinancialsTransactionDate}"><display/></field>
         <field name="scheduledPostingDate" title="${uiLabelMap.FinancialsScheduledPostingDate}"><display/></field>
-        <field name="Post" title="Post" widget-style="buttontext" use-when="isPosted!=void&amp;&amp;isPosted!=null&amp;&amp;isPosted.equals(&quot;N&quot;)">
-            <hyperlink target="postAcctgTrans" description="Post">
+        <field name="Post" title="${uiLabelMap.FinancialsTransactionsAplicar}" widget-style="buttontext" use-when="isPosted!=void&amp;&amp;isPosted!=null&amp;&amp;isPosted.equals(&quot;N&quot;)">
+            <hyperlink target="postAcctgTrans" description="${uiLabelMap.FinancialsTransactionsAplicar}" >
                 <parameter param-name="acctgTransId" from-field="acctgTransId"/>
             </hyperlink>
         </field>
     </form>
-
     <!-- as above, but specify isPosted=N explicitly -->
     <form name="findUnpostedAcctgTransForm" type="single" target=""
         default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
@@ -388,123 +387,8 @@
     
     
 <!--  Formas  custom para  el  ingresos de  transacciones  por ley de ingreso o egresos  -->    
-    <form name="Ingresos" type="single" target="Ingresos"
-        default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
-     <!--  -   <auto-fields-service service-name="createAcctgTransPresupuestal"/> -->
-        <field name="acctgTransId" title="${uiLabelMap.FinancialsTransactionType}">
-            <drop-down allow-empty="false" current="selected">
-                <entity-options description="${description}" entity-name="AcctgTrans">
-                    <entity-order-by field-name="acctgTransId"/>
-                </entity-options>
-            </drop-down>
-        </field>
-         <field name="description" title="${uiLabelMap.Descripcion}">
-            <drop-down allow-empty="false" current="selected">
-                <entity-options description="${description}" entity-name="AcctgTrans">
-                    <entity-order-by field-name="description"/>
-                </entity-options>
-            </drop-down>
-        </field>
-        <field name="transactionDate" encode-output="false"><date-time default-value="${groovy:org.ofbiz.base.util.UtilDateTime.nowTimestamp()}"/></field>
-        
-        <field name="glFiscalTypeId" title="${uiLabelMap.FinancialsGlFiscalType}">
-            <drop-down allow-empty="false" current="selected">
-                <entity-options description="${description}" entity-name="GlFiscalType">
-                    <entity-order-by field-name="description"/>
-                </entity-options>
-            </drop-down>
-        </field>
-      <!--  <field name="postedAmount" title="${uiLabelMap.PostedAmount}">
-            <drop-down allow-empty="false" current="selected">
-                <entity-options description="${description}" entity-name="AcctgTrans">
-                    <entity-order-by field-name="postedAmount"/>
-                </entity-options>
-            </drop-down>
-        </field> -->
-        
-        
-        <field name="partyId" title="${uiLabelMap.PartyPartyId}">
-            <lookup target-form-name="LookupPartyName" size="20" maxlength="20"/>
-        </field>
-        <field name="submitButton" title="${uiLabelMap.CommonCreate}" widget-style="smallSubmit">
-            <submit button-type="button"/>
-        </field>
-    </form>
     
-    
-    
-    
-    
-    <form name="Egresos" type="single" target="Egresos"
-        default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
-     <!--  -   <auto-fields-service service-name="createAcctgTransPresupuestal"/> -->
-        <field name="acctgTransId" title="${uiLabelMap.FinancialsTransactionType}">
-            <drop-down allow-empty="false" current="selected">
-                <entity-options description="${description}" entity-name="AcctgTrans">
-                    <entity-order-by field-name="acctgTransId"/>
-                </entity-options>
-            </drop-down>
-        </field>
-         <field name="description" title="${uiLabelMap.Descripcion}">
-            <drop-down allow-empty="false" current="selected">
-                <entity-options description="${description}" entity-name="AcctgTrans">
-                    <entity-order-by field-name="description"/>
-                </entity-options>
-            </drop-down>
-        </field>
-        <field name="transactionDate" encode-output="false"><date-time default-value="${groovy:org.ofbiz.base.util.UtilDateTime.nowTimestamp()}"/></field>
-        
-        <field name="glFiscalTypeId" title="${uiLabelMap.FinancialsGlFiscalType}">
-            <drop-down allow-empty="false" current="selected">
-                <entity-options description="${description}" entity-name="GlFiscalType">
-                    <entity-order-by field-name="description"/>
-                </entity-options>
-            </drop-down>
-        </field>
-       <!--  <field name="postedAmount" title="${uiLabelMap.PostedAmount}">
-            <drop-down allow-empty="false" current="selected">
-                <entity-options description="${description}" entity-name="AcctgTrans">
-                    <entity-order-by field-name="postedAmount"/>
-                </entity-options>
-            </drop-down>
-        </field> -->
-        
-        
-        <field name="partyId" title="${uiLabelMap.PartyPartyId}">
-            <lookup target-form-name="LookupPartyName" size="20" maxlength="20"/>
-        </field>
-        <field name="submitButton" title="${uiLabelMap.CommonCreate}" widget-style="smallSubmit">
-            <submit button-type="button"/>
-        </field>
-    </form>
-    
-    <form name="Polizas" type="single" target="Polizas"
-        default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext"> 
-        
-            <field name="agrupador" entity-name="AcctgTransPresupuestal" title="${uiLabelMap.FinancialsAgrupador}">
-	        <text/>
-	        </field>
-	        
-	        <field name="posted_date" entity-name="AcctgTrans" title="Fecha Contable" encode-output="false"><date-time default-value=""/></field>
-	        
-	        <field name="acctgTransTypeId" title="Tipo de Transaccion">
-           	 <drop-down allow-empty="true" current="selected">
-                <entity-options description="${description}" entity-name="AcctgTransType">
-                    <entity-order-by field-name="acctgTransTypeId"/>
-                </entity-options>
-           	 </drop-down>
-      		</field>
-      		
-      		<field name="idTipoDoc" title="Tipo de Póliza">
-           	 <drop-down allow-empty="true" current="selected">
-                <entity-options description="${tipoPoliza}" entity-name="TipoDocumento">
-                    <entity-order-by field-name="idTipoDoc"/>
-                </entity-options>
-           	 </drop-down>
-      		</field>
-        
-            <field name="submitButton" title="${uiLabelMap.CommonFind}" widget-style="smallSubmit"><submit button-type="button"/></field>
-    </form>
+
     
     <form name="viewAcctPresupuestal" type="single" target="updateAcctgTransEntryForm" default-map-name="mapTransPresup"
         default-title-style="tableheadtext" default-widget-style="tabletext" default-tooltip-style="tabletext">

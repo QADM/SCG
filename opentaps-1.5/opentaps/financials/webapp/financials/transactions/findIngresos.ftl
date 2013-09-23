@@ -23,10 +23,10 @@
     <tbody>
        <@inputTextRow title=uiLabelMap.FinancialsTransactionId name="findAcctgTransId" size="20" maxlength="20"/>
       
-      <@inputAutoCompletePartyRow title="${uiLabelMap.PartyPartyId}" name="partyId" />
+      <@inputAutoCompletePartyRow title="${uiLabelMap.FinancialsTransactionsAreaEjecutora}" name="partyId" />
       <@inputSelectRow title=uiLabelMap.FinancialsGlFiscalType required=false list=glFiscalTypes  displayField="glFiscalTypeId" name="glFiscalTypeId" default=glFiscalTypeId?if_exists />
-     <!-- <@inputRangeRow title=uiLabelMap.FinancialsPostedAmount fromName="postedAmountFrom" thruName="postedAmountThru" size=10/>-->
-        <@displayTitleCell title="Posted Date" />
+     <!-- <@inputRangeRow title=uiLabelMap.FinancialsPostedDate fromName="postedAmountFrom" thruName="postedAmountThru" size=10/>-->
+        <@displayTitleCell title="${uiLabelMap.FinancialsPostedDate}" />
         <@inputDateRangeCell fromName="desde" thruName="hasta" />
 
       <@inputSubmitRow title=uiLabelMap.CommonFind />
