@@ -22,7 +22,8 @@ under the License.
 <head>
   <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
     <title>${uiLabelMap.OfbizTitle}</title>
-    <link rel="shortcut icon" href="/ofbiz/images/favicon.ico">
+    <!--
+    <link rel="shortcut icon" href="/ofbiz/images/favicon.ico">-->
     <script language="javascript" src="/images/prototypejs/prototype.js" type="text/javascript"></script>
     <script language="javascript" src="/images/fieldlookup.js" type="text/javascript"></script>
     <script language="javascript" src="/images/selectall.js" type="text/javascript"></script>

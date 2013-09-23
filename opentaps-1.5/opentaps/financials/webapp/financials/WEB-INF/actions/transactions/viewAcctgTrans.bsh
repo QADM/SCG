@@ -41,19 +41,10 @@ ledgerDomain = dl.loadDomainsDirectory().getLedgerDomain();
 ledgerRepository = ledgerDomain.getLedgerRepository();
 ledgerSpecification = ledgerRepository.getSpecification();
 try {
-    acctgTrans = ledgerRepository.getAccountingTransaction(acctgTransId);
-   
-   
-      acctgTransPresupuestalEg = ledgerRepository.getAcctgTransPresupuestalEg(acctgTransId);
+    acctgTrans = ledgerRepository.getAccountingTransaction(acctgTransId);    
       acctgTransPresupuestalIng = ledgerRepository.getAcctgTransPresupuestalIng(acctgTransId);
+      acctgTransPresupuestalEg = ledgerRepository.getAcctgTransPresupuestalEg(acctgTransId);
       acctgTransPresupuestalPolizas = ledgerRepository.getAcctgPolizasDetalle(acctgTransId);
-   
-
-    
- 
-    
-   
-    
 } catch (FoundationException e) {
 }
 
@@ -61,12 +52,9 @@ if (acctgTrans == null) return;
 context.put("accountingTransaction", acctgTrans);
 // for compatibility with the ofbiz form
 context.put("acctgTrans", Repository.genericValueFromEntity(delegator, acctgTrans));
-context.put("acctgTransPresupuestalEg", Repository.genericValueFromEntity(delegator, acctgTransPresupuestalEg));
 context.put("acctgTransPresupuestalIng", Repository.genericValueFromEntity(delegator, acctgTransPresupuestalIng));
+context.put("acctgTransPresupuestalEg", Repository.genericValueFromEntity(delegator, acctgTransPresupuestalEg));
 context.put("acctgTransPresupuestalPolizas", Repository.genericValueFromEntity(delegator, acctgTransPresupuestalPolizas));
-
-
-
 
 // for the documentation system
 if (acctgTrans.isPosted()) {
