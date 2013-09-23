@@ -40,7 +40,7 @@
                    linkUrl="reportsMain"       securityModule="FINANCIALS" securityAction="RPT_VIEW" handlerMethod=""/>
 <OpentapsWebAppTab applicationId="financials"  sequenceNum="080" tabId="configuration" uiLabel="Administración contable"
                    linkUrl="configurationMain" securityModule="FINANCIALS" securityAction="CONFIG" handlerMethod=""/>
-<OpentapsWebAppTab applicationId="financials"  sequenceNum="500" tabId="ofbiz" uiLabel="opentaps"
+<OpentapsWebAppTab applicationId="financials"  sequenceNum="500" tabId="ofbiz" uiLabel="Menú principal"
                    linkUrl="/opentaps" isExternal="Y" securityModule="" securityAction="" handlerMethod=""/>
 
 <!-- Shortcut groups -->
@@ -163,6 +163,15 @@
 
 
 <!-- Transactions shortcuts -->
+<!-- <OpentapsShortcut shortcutId="reconcileAccounts" groupId="financialsTransactions" sequenceNum="050" uiLabel="FinancialsReconcile"
+                  linkUrl="reconcileAccounts" securityModule="" securityAction=""/>
+ <OpentapsShortcut shortcutId="exchangeRates" groupId="financialsTransactions" sequenceNum="060" uiLabel="FinancialsExchangeRates"
+                  linkUrl="exchangeRates" securityModule="" securityAction=""/>
+ <OpentapsShortcut shortcutId="settlePaymentsOptions" groupId="financialsTransactions" sequenceNum="040" uiLabel="FinancialsSettlePayments"
+                  linkUrl="settlePaymentsOptions" securityModule="" securityAction=""/>
+ <OpentapsShortcut shortcutId="adjustInventoryValues" groupId="financialsTransactions" sequenceNum="090" uiLabel="FinancialsAdjustInventoryValues"
+                  linkUrl="adjustInventoryValues" securityModule="" securityAction=""/>
+-->
 <OpentapsShortcutGroup applicationId="financials" tabId="transactions" groupId="financialsTransactions" sequenceNum="010"/>
 <OpentapsShortcut shortcutId="findTransactions" groupId="financialsTransactions" sequenceNum="010" uiLabel="FinancialsFindTransactions"
                   linkUrl="transactions" securityModule="" securityAction=""/>
@@ -170,34 +179,26 @@
                   linkUrl="createQuickAcctgTransForm" securityModule="" securityAction=""/>
 <OpentapsShortcut shortcutId="createTransaction" groupId="financialsTransactions" sequenceNum="030" uiLabel="Crear transacción detallada"
                   linkUrl="createAcctgTransForm" securityModule="" securityAction=""/>
-<OpentapsShortcut shortcutId="settlePaymentsOptions" groupId="financialsTransactions" sequenceNum="040" uiLabel="FinancialsSettlePayments"
-                  linkUrl="settlePaymentsOptions" securityModule="" securityAction=""/>
-<OpentapsShortcut shortcutId="listUnpostedTransactions" groupId="financialsTransactions" sequenceNum="050" uiLabel="FinancialsUnpostedTransactions"
+<OpentapsShortcut shortcutId="listUnpostedTransactions" groupId="financialsTransactions" sequenceNum="040" uiLabel="FinancialsUnpostedTransactions"
                   linkUrl="ListUnpostedAcctgTrans" securityModule="" securityAction=""/>
-<OpentapsShortcut shortcutId="reconcileAccounts" groupId="financialsTransactions" sequenceNum="060" uiLabel="FinancialsReconcile"
-                  linkUrl="reconcileAccounts" securityModule="" securityAction=""/>
-<OpentapsShortcut shortcutId="exchangeRates" groupId="financialsTransactions" sequenceNum="070" uiLabel="FinancialsExchangeRates"
-                  linkUrl="exchangeRates" securityModule="" securityAction=""/>
-<OpentapsShortcut shortcutId="invoiceRecurrence" groupId="financialsTransactions" sequenceNum="080" uiLabel="FinancialsRecurringInvoices"
+<OpentapsShortcut shortcutId="invoiceRecurrence" groupId="financialsTransactions" sequenceNum="050" uiLabel="FinancialsRecurringInvoices"
                   linkUrl="invoiceRecurrence" securityModule="FINANCIALS" securityAction="RECUR_INV"/>
-<OpentapsShortcut shortcutId="adjustInventoryValues" groupId="financialsTransactions" sequenceNum="090" uiLabel="FinancialsAdjustInventoryValues"
-                  linkUrl="adjustInventoryValues" securityModule="" securityAction=""/>
-<OpentapsShortcut shortcutId="Ingresos" groupId="financialsTransactions" sequenceNum="100" uiLabel="Buscar por ingresos"
+<OpentapsShortcut shortcutId="Ingresos" groupId="financialsTransactions" sequenceNum="060" uiLabel="Buscar por ingresos"
                   linkUrl="Ingresos" securityModule="" securityAction=""/>
-<OpentapsShortcut shortcutId="Egresos" groupId="financialsTransactions" sequenceNum="110" uiLabel="Buscar por egresos"
+<OpentapsShortcut shortcutId="Egresos" groupId="financialsTransactions" sequenceNum="070" uiLabel="Buscar por egresos"
                   linkUrl="Egresos" securityModule="" securityAction=""/>
-<OpentapsShortcut shortcutId="Polizas" groupId="financialsTransactions" sequenceNum="120" uiLabel="Buscar Pólizas"
+<OpentapsShortcut shortcutId="Polizas" groupId="financialsTransactions" sequenceNum="080" uiLabel="Buscar Pólizas"
                   linkUrl="Polizas" securityModule="" securityAction=""/>
 <!-- Presupuesto Ingreso Egreso -->                  
-<OpentapsShortcut shortcutId="PresupuestoIngreso" groupId="financialsTransactions" sequenceNum="130" uiLabel="Crear clave  presupuestal de Ingresos"
+<OpentapsShortcut shortcutId="PresupuestoIngreso" groupId="financialsTransactions" sequenceNum="090" uiLabel="Crear clave  presupuestal de Ingresos"
                   linkUrl="createPresupuestoIngresoForm" securityModule="" securityAction=""/>
-<OpentapsShortcut shortcutId="PresupuestoEgreso" groupId="financialsTransactions" sequenceNum="140" uiLabel="Crear clave  presupuestal de Egresos"
+<OpentapsShortcut shortcutId="PresupuestoEgreso" groupId="financialsTransactions" sequenceNum="100" uiLabel="Crear clave  presupuestal de Egresos"
                   linkUrl="createPresupuestoEgresoForm" securityModule="" securityAction=""/>   
                   
 <!-- Operacion Diaria @JSCF -->
-<OpentapsShortcut shortcutId="ODIngresos" groupId="financialsTransactions" sequenceNum="150" uiLabel="Operaciones de Ingresos"
+<OpentapsShortcut shortcutId="ODIngresos" groupId="financialsTransactions" sequenceNum="110" uiLabel="Operaciones de Ingresos"
                   linkUrl="ODIngresos" securityModule="" securityAction=""/>
-<OpentapsShortcut shortcutId="ODEgresos" groupId="financialsTransactions" sequenceNum="160" uiLabel="Operaciones de Egresos"
+<OpentapsShortcut shortcutId="ODEgresos" groupId="financialsTransactions" sequenceNum="120" uiLabel="Operaciones de Egresos"
                   linkUrl="ODEgresos" securityModule="" securityAction=""/>
 
 <!-- Configuration shortcuts -->
