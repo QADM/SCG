@@ -188,7 +188,7 @@ For more information, please see documentation/opentapsFormMacros.html
 </#macro>
 
 <#macro displayCurrencyCell currencyUomId="" amount=0 class="tabletext">
-  <td class="currencyCell"><@displayCurrency currencyUomId=currencyUomId amount=amount class=class /></td>
+  <td><@displayCurrency currencyUomId=currencyUomId amount=amount class=class /></td>
 </#macro>
 
 <#macro displayCurrencyRow title currencyUomId="" amount=0 class="tabletext" titleClass="tableheadtext">

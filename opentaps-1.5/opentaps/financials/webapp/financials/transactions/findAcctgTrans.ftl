@@ -23,7 +23,7 @@
     <tbody>
       <@inputTextRow title=uiLabelMap.FinancialsTransactionId name="findAcctgTransId" size="20" maxlength="20"/>
       <@inputSelectRow title=uiLabelMap.FinancialsTransactionType required=false list=transactionTypes  displayField="description" name="acctgTransTypeId" default=acctgTransTypeId?if_exists />
-      <@inputAutoCompletePartyRow title="${uiLabelMap.PartyPartyId}" name="partyId" />
+      <@inputAutoCompletePartyRow title="${uiLabelMap.FinancialsTransactionsAreaEjecutora}" name="partyId" />
       <@inputSelectRow title=uiLabelMap.FinancialsGlFiscalType required=false list=glFiscalTypes  displayField="description" name="glFiscalTypeId" default=glFiscalTypeId?if_exists />
       <@inputRangeRow title=uiLabelMap.FinancialsPostedAmount fromName="postedAmountFrom" thruName="postedAmountThru" size=10/>
       <@inputIndicatorRow name="isPosted" title=uiLabelMap.FinancialsIsPosted required=true default=isPosted?if_exists />
