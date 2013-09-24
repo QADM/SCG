@@ -18,18 +18,26 @@
             	<tr class="listTableHeader">	
             		<@displayCell text="Número de Póliza"/>                
                 	<@displayCell text="Cuenta"/>
-                	<@displayCell text="Débito/Crédito"/>
-                	<@displayCell text="Monto"/>             			                           
+                	<@displayCell text="Cargo"/>
+                	<@displayCell text="Abono"/>             			                           
 	            </tr>
     	        <#list acctgPolizasDetalleListado as row>
             		<tr class="${tableRowClass(row_index)}">
-	                	<@displayCell text=row.agrupador/>				
-                		<@displayCell text=row.accountName/>
-                		<@displayCell text=row.debitCreditFlag/>
-                		<@displayCurrencyCell amount=row.amount currencyUomId=parameters.orgCurrencyUomId class="textleft"/> 	                
+	                	<@displayCell text=row.agrupador/>	
+	                	<td>${row.glAccountId} ${row.accountName}</td>			
+                		<#if row.debitCreditFlag=="D">
+			            	<td><@displayCurrency amount=row.amount currencyUomId=parameters.orgCurrencyUomId class="tabletext" /></td>
+			            	<td></td>
+			          	<#elseif row.debitCreditFlag=="C">
+			           		<td></td>	
+			           		<td><@displayCurrency amount=row.amount currencyUomId=parameters.orgCurrencyUomId class="tabletext" /></td>
+			            </#if> 
+	                
             		</tr>
             	</#list>
         	</table>
+
+
 
 
 
