@@ -1438,6 +1438,7 @@ under the License.
        <member-entity entity-alias="TDC" entity-name="TipoDocumento"/>
        <member-entity entity-alias="PAG" entity-name="PartyGroup"/>                     
 
+	   
 	   <alias name="agrupador" entity-alias="ATP" group-by="true"/>
 	   <alias name="postedDate" entity-alias="ATR" group-by="true"/>
 	   <alias name="descripcion" entity-alias="TDC" group-by="true"/>	   
@@ -1467,6 +1468,7 @@ under the License.
        <member-entity entity-alias="ATE" entity-name="AcctgTransEntry"/>
        <member-entity entity-alias="GLA" entity-name="GlAccount"/>       
 
+	   <alias name="glAccountId" entity-alias="ATE" group-by="true"/>
 	   <alias name="agrupador" entity-alias="ATP" group-by="true"/>	   
 	   <alias name="accountName" entity-alias="GLA" group-by="true"/>	   
 	   <alias name="debitCreditFlag" entity-alias="ATE" group-by="true"/>	   

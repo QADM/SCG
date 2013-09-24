@@ -1,8 +1,8 @@
 <#--
- * Lista de resultados preliminares de pólizas contables
- * Author: Vidal García
- * Versión 1.0
- * Fecha de Creación: Julio 2013
+ * Lista de resultados preliminares de pï¿½lizas contables
+ * Author: Vidal Garcï¿½a
+ * Versiï¿½n 1.0
+ * Fecha de Creaciï¿½n: Julio 2013
 -->
 
 <#-- Parametrized find form for transactions. -->
@@ -15,9 +15,6 @@
 
         
         	<table class="listTable">
-            	<tr class="listTableHeader">	
-            		<@displayCell text="Claves"/>                                	             			                           
-	            </tr>
     	        <#list acctgPolizasClavesPresup as row>
             		<tr>            		
 	                	<@displayLinkCell text=row.clavePres href="viewGlFiscalType?clavePres=${row.clavePres}&agrupador=${row.agrupador}"/>	                					                		 	              
