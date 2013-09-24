@@ -17,8 +17,11 @@
 package org.opentaps.dataimport.domain;
 
 import java.util.List;
+
 import org.ofbiz.base.util.Debug;
+
 import java.util.Locale;
+
 import org.ofbiz.base.util.UtilDateTime;
 import org.opentaps.base.constants.StatusItemConstants;
 import org.opentaps.base.entities.DataImportCategory;
@@ -78,11 +81,25 @@ public class CategoryImportService extends DomainService implements
 
 			int imported = 0;
 			Transaction imp_tx1 = null;
+			
 			for (DataImportCategory rowdata : dataforimp) {
 				// import categories as many as possible
 				try {
 					imp_tx1 = null;
-
+					
+					//Validacion para los datos obligatorios
+					if (rowdata.getProductCategoryTypeId()==null) 
+						throw new ServiceException(String.format("Falta ingresar tipo"));
+					if (rowdata.getCategoryName()==null) 
+						 throw new ServiceException(String.format("Falta ingresar nombre"));
+						
+						
+					//Validar tipo de ProductCategory
+					if(!UtilImport.validaTipoProductCategory(ledger_repo, rowdata
+							.getProductCategoryTypeId()))
+						throw new ServiceException(String.format("Tipo no valido"));
+					
+					
 					// begin importing row data item
 					ProductCategory category = new ProductCategory();
 
@@ -112,17 +129,17 @@ public class CategoryImportService extends DomainService implements
 					imp_tx1 = this.session.beginTransaction();
 					ledger_repo.createOrUpdate(category);
 					imp_tx1.commit();
-					String message = "Successfully imported Category ["
+					
+					String message = "Se ha importado correctamente, Category Id ["
 							+ rowdata.getProductCategoryId() + "].";
 					this.storeImportCategorySuccess(rowdata, imp_repo);
 					Debug.logInfo(message, MODULE);
 
 					imported = imported + 1;
-
+					
+					
 				} catch (Exception ex) {
-					String message = "Failed to import Category ["
-							+ rowdata.getProductCategoryId()
-							+ "], Error message : " + ex.getMessage();
+					String message = ex.getMessage();
 					storeImportCategoryError(rowdata, message, imp_repo);
 
 					// rollback all if there was an error when importing item
@@ -164,69 +181,67 @@ public class CategoryImportService extends DomainService implements
 		try {
 
 			for (DataImportCategory dataImportCategory : dataforimp) {
+				try {
+					imp_tx1 = null;
+					
+					if (dataImportCategory.getPrimaryParentCategoryId() != null) {
+						List<ProductCategory> listcategory = ledger_repo
+								.findList(
+										ProductCategory.class,
+										ledger_repo
+												.map(ProductCategory.Fields.productCategoryId,
+														dataImportCategory
+																.getProductCategoryId(),
+														ProductCategory.Fields.productCategoryTypeId,
+														dataImportCategory
+																.getProductCategoryTypeId()));
 
-				if (dataImportCategory.getPrimaryParentCategoryId() != null) {
-					List<ProductCategory> listcategory = ledger_repo
-							.findList(
-									ProductCategory.class,
-									ledger_repo
-											.map(ProductCategory.Fields.productCategoryId,
-													dataImportCategory
-															.getProductCategoryId(),
-													ProductCategory.Fields.productCategoryTypeId,
-													dataImportCategory
-															.getProductCategoryTypeId()));
+						if (!listcategory.isEmpty()) {
+							for (ProductCategory productCategory : listcategory) {
 
-					if (!listcategory.isEmpty()) {
-						for (ProductCategory productCategory : listcategory) {
-
-							if (UtilImport.validaPadreProductCategory(
-									ledger_repo, dataImportCategory
-											.getProductCategoryTypeId(),
-									dataImportCategory
-											.getPrimaryParentCategoryId())) {
-								Debug.log("Padre valido");
+								if (!UtilImport.validaPadreProductCategory(
+										ledger_repo, dataImportCategory
+												.getProductCategoryTypeId(),
+										dataImportCategory
+												.getPrimaryParentCategoryId())) 
+									throw new ServiceException("Padre no valido");
+								
+									
 								productCategory
 										.setPrimaryParentCategoryId(dataImportCategory
-												.getPrimaryParentCategoryId());
-							} else {
-								Debug.log("Padre no valido");
-								String message = "Failed to import Category ["
-										+ dataImportCategory
-												.getProductCategoryTypeId()
-										+ "], Error message : "
-										+ "Padre no valido";
-								storeImportCategoryError(dataImportCategory,
-										message, imp_repo);
+												.getPrimaryParentCategoryId());								
 
-								// rollback all if there was an error when
-								// importing item
-								if (imp_tx1 != null) {
-									imp_tx1.rollback();
-								}
-								// Debug.logError(ex, message, MODULE);
-								throw new ServiceException(message);
+								imp_tx1 = this.session.beginTransaction();
+								ledger_repo.createOrUpdate(productCategory);
+								imp_tx1.commit();
+
+								String message = "Se ha importado correctamente padre, CategoryId ["
+										+ productCategory.getProductCategoryId()
+										+ "].";
+								Debug.logInfo(message, MODULE);
 							}
-
-							imp_tx1 = this.session.beginTransaction();
-							ledger_repo.createOrUpdate(productCategory);
-							imp_tx1.commit();
-
-							String message = "Successfully to import Parent Category Id ["
-									+ productCategory.getProductCategoryId()
-									+ "].";
-							Debug.logInfo(message, MODULE);
 						}
 					}
+					
+				} catch (Exception e) {					
+					
+					storeImportCategoryError(dataImportCategory,
+							e.getMessage(), imp_repo);
+
+					// rollback all if there was an error when
+					// importing item
+					if (imp_tx1 != null) {
+						imp_tx1.rollback();
+					}
+					// Debug.logError(ex, message, MODULE);
+					throw new ServiceException(e.getMessage());
 				}
+				
 			}
 		} catch (Exception e) {
-			String message = "Failed to import Parent Category Id, Error message : "
+			String message = "Error al importar padre Category, Error : "
 					+ e.getMessage();
 
-			if (imp_tx1 != null) {
-				imp_tx1.rollback();
-			}
 			Debug.logError(e, message, MODULE);
 		}
 
