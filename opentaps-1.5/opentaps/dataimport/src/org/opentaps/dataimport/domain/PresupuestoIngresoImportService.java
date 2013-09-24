@@ -140,10 +140,8 @@ public class PresupuestoIngresoImportService extends DomainService implements
 
 					if (!mensaje.isEmpty()) {
 						loteValido=false;
-						String message = "Failed to import Presupuesto Ingreso ["
-								+ rowdata.getClavePres()
-								+ "], Error message : " + mensaje;
-						storeImportPresupuestoIngresoError(rowdata, message,
+						
+						storeImportPresupuestoIngresoError(rowdata, mensaje,
 								imp_repo);
 						continue;
 					}
@@ -234,10 +232,7 @@ public class PresupuestoIngresoImportService extends DomainService implements
 												.getUsuario());
 							} else {
 								Debug.log("Trans Modif");
-								String message = "Failed to import Presupuesto Ingreso ["
-										+ rowdata.getClavePres()
-										+ "], Error message : "
-										+ "La transaccion ya existe";
+								String message = "La transaccion ya existe";
 								storeImportPresupuestoIngresoError(rowdata,
 										message, imp_repo);
 								continue;
@@ -252,11 +247,9 @@ public class PresupuestoIngresoImportService extends DomainService implements
 
 							if (!mensaje.isEmpty()) {
 								loteValido=false;
-								String message = "Failed to import Presupuesto Ingreso ["
-										+ rowdata.getClavePres()
-										+ "], Error message : " + mensaje;
+								
 								storeImportPresupuestoIngresoError(rowdata,
-										message, imp_repo);
+										mensaje, imp_repo);
 								continue;
 							}
 
@@ -329,11 +322,9 @@ public class PresupuestoIngresoImportService extends DomainService implements
 
 							if (!mensaje.isEmpty()) {
 								loteValido=false;
-								String message = "Failed to import Presupuesto Egreso ["
-										+ rowdata.getClavePres()
-										+ "], Error message : " + mensaje;
+								
 								storeImportPresupuestoIngresoError(rowdata,
-										message, imp_repo);
+										mensaje, imp_repo);
 								continue;
 							}
 
@@ -348,10 +339,7 @@ public class PresupuestoIngresoImportService extends DomainService implements
 
 							if (miniguia == null) {
 								loteValido=false;
-								String message = "Failed to import Presupuesto Ingreso ["
-										+ rowdata.getClavePres()
-										+ "], Error message : "
-										+ "Tipo de transaccion no registrada en MiniGuia";
+								String message = "Tipo de transaccion no registrada en MiniGuia";
 								storeImportPresupuestoIngresoError(rowdata,
 										message, imp_repo);
 								continue;
@@ -476,7 +464,7 @@ public class PresupuestoIngresoImportService extends DomainService implements
 						}
 
 						if (mensaje.isEmpty()) {
-							String message = "Successfully imported Presupuesto Egreso ["
+							String message = "Se importo correctamente Presupuesto Egreso ["
 									+ rowdata.getClavePres() + "].";
 							this.storeImportPresupuestoIngresoSuccess(rowdata,
 									imp_repo);
@@ -484,9 +472,7 @@ public class PresupuestoIngresoImportService extends DomainService implements
 							imported = imported + 1;
 						}
 					} catch (Exception ex) {
-						String message = "Failed to import Presupuesto Ingreso ["
-								+ rowdata.getClavePres()
-								+ "], Error message : " + ex.getMessage();
+						String message = ex.getMessage();
 						storeImportPresupuestoIngresoError(rowdata, message,
 								imp_repo);
 

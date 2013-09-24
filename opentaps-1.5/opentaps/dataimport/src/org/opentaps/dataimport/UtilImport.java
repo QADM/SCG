@@ -729,5 +729,55 @@ public class UtilImport {
 		}
 	}
 	
+	
+	/**
+	 * Autor: Esmeralda Cercas Ortiz
+	 * entitie GeoType 
+	 * @param ledger_repo
+	 * @param Type
+	 * @return true = Tipo valido, false = Tipo no valido
+	 */
+	public static boolean validaTipoGeo(LedgerRepositoryInterface ledger_repo,
+			String Type) throws RepositoryException {
+
+		Debug.log("Buscando Tipo");
+		List<GeoType> type = ledger_repo.findList(
+				GeoType.class,
+				ledger_repo.map(GeoType.Fields.geoTypeId, Type));
+
+		if (type.isEmpty()) {
+			Debug.log("Tipo no valido");
+			return false;
+		} else {
+			Debug.log("Tipo valido");
+			return true;
+		}
+	}
+	
+	/**
+	 * Autor: Esmeralda Cercas Ortiz
+	 * entitie ProductCategoryType
+	 * @param ledger_repo
+	 * @param nivel
+	 * @return true = Tipo valido, false = tipo no valido
+	 */
+	public static boolean validaTipoProductCategory(LedgerRepositoryInterface ledger_repo,
+			String type) throws RepositoryException {
+
+		Debug.log("Buscando Tipo ProductCategory");
+		List<ProductCategoryType> nivelP = ledger_repo.findList(
+				ProductCategoryType.class,
+				ledger_repo.map(ProductCategoryType.Fields.productCategoryTypeId, type));
+
+		if (nivelP.isEmpty()) {
+			Debug.log("Tipo no valido");
+			return false;
+		} else {
+			Debug.log("Tipo valido");
+			return true;
+		}
+	}
+	
+	
 
 }
