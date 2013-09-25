@@ -57,14 +57,14 @@
 <title>${uiLabelMap.OpentapsProductName}</title>
 </head>
 
-<body>
-<div id="top"></div>
+<body><!--
+<div id="top"></div>-->
 <div id="container">
 	<div id="header">
     	<div id="logo"><img src="<@ofbizContentUrl>${configProperties.get("opentaps.logo")}</@ofbizContentUrl>" /></div>
         <div id="title">
         	<h1>
-                <span id="appId" style="color:#FF3300">${uiLabelMap.opentaps}</span>
+                <!--<span id="appId" style="color:#FF3300">${uiLabelMap.opentaps}</span>-->
                 <span id="appName">${uiLabelMap.OpentapsProductName}</span>
             </h1>
         </div>

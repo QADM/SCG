@@ -869,8 +869,8 @@
     <screen name="createPresupuestoIngresoForm">
         <section>
             <actions>
-                <set field="pageTitleLabel" value="Presupuesto Ingreso"/>  
-                <set field="sectionHeaderUiLabel" value="Presupuestos"/> 
+                <set field="pageTitleLabel" value="Ley de Ingresos"/>  
+                <set field="sectionHeaderUiLabel" value="Ley de Ingresos"/> 
                 <set field="createAcctgPresupuestoIngresoFormTarget" value="createAcctgTransPresupuestoIngreso"/>
                 <script location="component://financials/webapp/financials/WEB-INF/actions/transactions/getDatosOperacionDiariaIng.bsh"/> 
                 <java location="com.opensourcestrategies.financials.transactions.TransactionBudget" invoke="buscarCatalogos"/>             
@@ -881,7 +881,7 @@
             <widgets>
                 <decorator-screen name="main-section-decorator">
                     <decorator-section name="section-body">
-                        <frame-container title="Presupuesto Ingreso">
+                        <frame-container title="Presupuesto de ingresos">
                             <platform-specific><html>
                                 <html-template location="component://financials/webapp/financials/transactions/crearPresupuestoIngresoForm.ftl"/>                               										 
                             </html></platform-specific>
@@ -927,8 +927,8 @@
     <screen name="createPresupuestoEgresoForm">
         <section>
             <actions>
-                <set field="pageTitleLabel" value="Presupuesto Egreso"/>  
-                <set field="sectionHeaderUiLabel" value="Presupuestos"/> 
+                <set field="pageTitleLabel" value="Ley de Egresos"/>  
+                <set field="sectionHeaderUiLabel" value="Ley de Egresos"/> 
                 <set field="createAcctgPresupuestoEgresoFormTarget" value="createAcctgTransPresupuestoEgreso"/>
                 <script location="component://financials/webapp/financials/WEB-INF/actions/transactions/getDatosOperacionDiariaIng.bsh"/> 
                 <java location="com.opensourcestrategies.financials.transactions.TransactionBudget" invoke="buscarCatalogos"/>             
@@ -939,7 +939,7 @@
             <widgets>
                 <decorator-screen name="main-section-decorator">
                     <decorator-section name="section-body">
-                        <frame-container title="Presupuesto Ingreso">
+                        <frame-container title="Presupuesto de egresos">
                             <platform-specific><html>
                                 <html-template location="component://financials/webapp/financials/transactions/crearPresupuestoEgresoForm.ftl"/>                               										 
                             </html></platform-specific>
