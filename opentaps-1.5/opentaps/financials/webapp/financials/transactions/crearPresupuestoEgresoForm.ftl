@@ -23,7 +23,7 @@
         <@inputDateTimeCell name="fechaTransaccion" default=Static["org.ofbiz.base.util.UtilDateTime"].nowTimestamp() />
       </tr>
       <tr>
-        <@displayTitleCell title=uiLabelMap.FinancialsAccountigDate />
+        <@displayTitleCell title=uiLabelMap.FinancialsTransactionDateContable />
         <@inputDateTimeCell name="fechaContable" default=Static["org.ofbiz.base.util.UtilDateTime"].nowTimestamp() />
       </tr>
       <tr>
