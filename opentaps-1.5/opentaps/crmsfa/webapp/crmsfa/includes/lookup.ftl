@@ -117,9 +117,11 @@
 <body class="lookupBody">
 
   <#if gwtScripts?exists>
+  <!--
     <#list gwtScripts as gwtScript>
       <@gwtModule widget=gwtScript />
     </#list>
+   -->
     <#-- Bridge between server data and GWT widgets -->
     <script type="text/javascript" language="javascript">
       <#-- expose base permissions to GWT -->
