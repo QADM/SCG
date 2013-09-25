@@ -112,11 +112,13 @@ ul.sectionTabBar li.sectionTabButtonUnselected .x-panel-tc { background-image:ur
 <body>
   <#assign callInEventIcon = Static["org.ofbiz.base.util.UtilProperties"].getPropertyValue("voip.properties", "voip.icon.callInEvent")>
   <#if gwtScripts?exists>
+  <!--
     <#list gwtScripts as gwtScript>
       <#if !gwtBlockScripts?has_content || !gwtBlockScripts.contains(gwtScript)>
         <@gwtModule widget=gwtScript />
       </#if>
     </#list>
+    -->
     <#-- Bridge between server data and GWT widgets -->
     <script type="text/javascript" language="javascript">
       <#-- expose base permissions to GWT -->
