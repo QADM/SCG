@@ -104,11 +104,11 @@
 </tr>
 
 <tr>
-  <td style="vertical-align: top;">
+<!--  <td style="vertical-align: top;">
 
     <@displayReportGroup group="FIN_BUDGETING" runtimeData="ENCUMB_GL_ENTRY" updater="CreateGlAccountTransEntryFacts" nameOnly=true/>
 
-  </td>
+  </td>-->
   <td style="vertical-align: top;">
 
     <@displayReportGroup group="FIN_CONFIGURATION" nameOnly=true />
