@@ -164,7 +164,7 @@ border: 1px solid #999999;
         <#if (!app.hide?exists || app.hide != "Y") && app.linkUrl?has_content>
         
           <#assign appIndex = appIndex + 1 />
-           <#if app.applicationId!= "ecommerce" && app.applicationId!="documentation">
+           <#if app.applicationId!= "ecommerce" && app.applicationId!="documentation" && app.applicationId!="catalog" &&app.applicationId!="webtools">
           <div id="button" class="${app.applicationId}" onmouseover="javascript:writeAppDetails('${app.shortName!app.applicationId}','${app.applicationName!app.applicationId}','${app.description!app.applicationId}')">
          
 	            <#if app.imageUrl?has_content>
