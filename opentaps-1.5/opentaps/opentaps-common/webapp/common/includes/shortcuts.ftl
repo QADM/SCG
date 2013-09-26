@@ -22,7 +22,7 @@
     <@frameSection title=uiLabelMap.get(sg.uiLabel?default("OpentapsShortcuts"))>
       <ul class="shortcuts">
         <#list sg.allowedShortcuts as shortcut>
-	        <#if shortcut.shortcutId!="settlePaymentsOptions"&& shortcut.shortcutId!="exchangeRates"&& shortcut.shortcutId!="adjustInventoryValues">
+	        <#if shortcut.shortcutId!="settlePaymentsOptions"&& shortcut.shortcutId!="exchangeRates"&& shortcut.shortcutId!="adjustInventoryValues" && shortcut.shortcutId!="configureOrganization">
 	          <#if sg.showAsDisabled() || shortcut.showAsDisabled()>
 	            <li class="disabled"><div>${uiLabelMap.get(shortcut.uiLabel!)}</div></li>
 	          <#else>
