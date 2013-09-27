@@ -213,10 +213,8 @@ public class EgresoDiarioImportService extends DomainService implements
 
 					if (!mensaje.isEmpty()) {
 						loteValido = false;
-						String message = "Failed to import Egreso Diario ["
-								+ rowdata.getClavePres()
-								+ "], Error message : " + mensaje;
-						storeImportEgresoDiarioError(rowdata, message, imp_repo);
+						
+						storeImportEgresoDiarioError(rowdata, mensaje, imp_repo);
 						continue;
 					}
 
@@ -314,10 +312,8 @@ public class EgresoDiarioImportService extends DomainService implements
 
 					if (!mensaje.isEmpty()) {
 						loteValido = false;
-						String message = "Failed to import Egreso Diario ["
-								+ rowdata.getClavePres()
-								+ "], Error message : " + mensaje;
-						storeImportEgresoDiarioError(rowdata, message, imp_repo);
+						
+						storeImportEgresoDiarioError(rowdata, mensaje, imp_repo);
 						continue;
 					}
 
@@ -378,10 +374,7 @@ public class EgresoDiarioImportService extends DomainService implements
 
 					if (cuentas.get("Mensaje") != null) {
 						loteValido = false;
-						String message = "Failed to import Egreso Diario ["
-								+ rowdata.getClavePres()
-								+ "], Error message : "
-								+ cuentas.get("Mensaje");
+						String message = cuentas.get("Mensaje");
 						storeImportEgresoDiarioError(rowdata, message, imp_repo);
 						continue;
 					}
@@ -727,7 +720,7 @@ public class EgresoDiarioImportService extends DomainService implements
 						}
 
 						if (mensaje.isEmpty()) {
-							String message = "Successfully imported Egreso Diario ["
+							String message = "Se importo correctamente Egreso Diario ["
 									+ rowdata.getClavePres() + "].";
 							this.storeImportEgresoDiarioSuccess(rowdata,
 									imp_repo);
@@ -736,9 +729,7 @@ public class EgresoDiarioImportService extends DomainService implements
 						}
 
 					} catch (Exception ex) {
-						String message = "Failed to import Egreso Diario ["
-								+ rowdata.getClavePres()
-								+ "], Error message : " + ex.getMessage();
+						String message = ex.getMessage();
 						storeImportEgresoDiarioError(rowdata, message, imp_repo);
 
 						// rollback all if there was an error when importing
