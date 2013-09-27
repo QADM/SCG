@@ -90,5 +90,12 @@
   <entity-group group="org.ofbiz" entity="PaymentAndApplication"/>
   <entity-group group="org.ofbiz" entity="PaymentAndPaymentApplication"/>
   <entity-group group="org.ofbiz" entity="PaymentApplicationSum"/>
+  
+  <!-- =========================================== -->
+  <!-- com.opensourcestrategies.financials.payment -->  
+  <!-- =========================================== -->
+  
+  <entity-group group="org.ofbiz" entity="WebToolsManejo"/>
+  
 
 </entitygroup>
