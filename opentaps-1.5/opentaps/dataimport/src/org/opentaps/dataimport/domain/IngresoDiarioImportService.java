@@ -171,10 +171,8 @@ public class IngresoDiarioImportService extends DomainService implements
 
 					if (!mensaje.isEmpty()) {
 						loteValido=false;
-						String message = "Failed to import Ingreso Diario ["
-								+ rowdata.getClavePres()
-								+ "], Error message : " + mensaje;
-						storeImportIngresoDiarioError(rowdata, message,
+						
+						storeImportIngresoDiarioError(rowdata, mensaje,
 								imp_repo);
 						continue;
 					}
@@ -231,10 +229,8 @@ public class IngresoDiarioImportService extends DomainService implements
 
 					if (!mensaje.isEmpty()) {
 						loteValido=false;
-						String message = "Failed to import Ingreso Diario ["
-								+ rowdata.getClavePres()
-								+ "], Error message : " + mensaje;
-						storeImportIngresoDiarioError(rowdata, message,
+						
+						storeImportIngresoDiarioError(rowdata, mensaje,
 								imp_repo);
 						continue;
 					}
@@ -284,10 +280,7 @@ public class IngresoDiarioImportService extends DomainService implements
 
 					if (cuentas.get("Mensaje") != null) {
 						loteValido=false;
-						String message = "Failed to import Ingreso Diario ["
-								+ rowdata.getClavePres()
-								+ "], Error message : "
-								+ cuentas.get("Mensaje");
+						String message = cuentas.get("Mensaje");
 						storeImportIngresoDiarioError(rowdata, message,
 								imp_repo);
 						continue;
@@ -606,7 +599,7 @@ public class IngresoDiarioImportService extends DomainService implements
 						}
 
 						if (mensaje.isEmpty()) {
-							String message = "Successfully imported Ingreso Diario ["
+							String message = "Se importo correctamente Ingreso Diario ["
 									+ rowdata.getClavePres() + "].";
 							this.storeImportIngresoDiarioSuccess(rowdata,
 									imp_repo);
@@ -615,9 +608,7 @@ public class IngresoDiarioImportService extends DomainService implements
 						}
 
 					} catch (Exception ex) {
-						String message = "Failed to import Ingreso Diario ["
-								+ rowdata.getClavePres()
-								+ "], Error message : " + ex.getMessage();
+						String message =  ex.getMessage();
 						storeImportIngresoDiarioError(rowdata, message,
 								imp_repo);
 
