@@ -46,15 +46,15 @@ under the License.
   <br />
   <div class="label">${uiLabelMap.CommonOr}: <a href="<@ofbizUrl>EditProduct</@ofbizUrl>" class="buttontext">${uiLabelMap.ProductCreateNewProduct}</a></div>
   <br />
-  <div class="label">${uiLabelMap.CommonOr}: <a href="<@ofbizUrl>CreateVirtualWithVariantsForm</@ofbizUrl>" class="buttontext">${uiLabelMap.ProductQuickCreateVirtualFromVariants}</a></div>
-  <br />
+ <!-- <div class="label">${uiLabelMap.CommonOr}: <a href="<@ofbizUrl>CreateVirtualWithVariantsForm</@ofbizUrl>" class="buttontext">${uiLabelMap.ProductQuickCreateVirtualFromVariants}</a></div>
+  <br />-->
   <div class="label">${uiLabelMap.ProductFindProductWithIdValue}:</div>
   <form method="post" action="<@ofbizUrl>FindProductById</@ofbizUrl>" style="margin: 0;">
     <input type="text" size="20" maxlength="20" name="idValue" value=""/>
     <input type="submit" value=" ${uiLabelMap.ProductFindProduct}" class="smallSubmit"/>
   </form>
   <br />
-  <div><a href="<@ofbizUrl>UpdateAllKeywords</@ofbizUrl>" class="buttontext"> ${uiLabelMap.ProductAutoCreateKeywordsForAllProducts}</a></div>
+  <!--<div><a href="<@ofbizUrl>UpdateAllKeywords</@ofbizUrl>" class="buttontext"> ${uiLabelMap.ProductAutoCreateKeywordsForAllProducts}</a></div>
   <div><a href="<@ofbizUrl>FastLoadCache</@ofbizUrl>" class="buttontext"> ${uiLabelMap.ProductFastLoadCatalogIntoCache}</a></div>
-  <br />
+  <br />-->
 </#if>
