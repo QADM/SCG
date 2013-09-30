@@ -2997,9 +2997,9 @@ public final class LedgerServices {
             // figure out the current time period's type (year, quarter, month)
             GenericValue timePeriod = delegator.findByPrimaryKeyCache("CustomTimePeriod", UtilMisc.toMap("customTimePeriodId", customTimePeriodId));
             if (timePeriod == null) {
-                return ServiceUtil.returnError("Cannot find a time period for " + organizationPartyId + " and time period id " + customTimePeriodId);
+                return ServiceUtil.returnError("No se encuentra periodo para  " + organizationPartyId + " y id de periodo " + customTimePeriodId);
             }
-
+            
             // get the organization's accounts for profit and loss (net income) and retained earnings
             String retainedEarningsGlAccountId = UtilAccounting.getProductOrgGlAccountId(null, "RETAINED_EARNINGS", organizationPartyId, delegator);
             String profitLossGlAccountId =  UtilAccounting.getProductOrgGlAccountId(null, "PROFIT_LOSS_ACCOUNT", organizationPartyId, delegator);
@@ -3028,7 +3028,7 @@ public final class LedgerServices {
             Set<GenericValue> debitAccounts = accountBalancesToDebit.keySet();
             Set<GenericValue> creditAccounts = accountBalancesToCredit.keySet();
             List<GenericValue> closingEntries = new ArrayList();
-
+            
             // create a Debit transaction entry for each debit account item
             for (GenericValue debitAccount: debitAccounts) {
                 BigDecimal amount = accountBalancesToDebit.get(debitAccount);
@@ -3051,7 +3051,7 @@ public final class LedgerServices {
                 closingEntries.add(delegator.makeValue("AcctgTransEntry", entry.toMap()));  // convert back to GenericValue for the createAcctgTransAndEntries service call below
                 closingNetIncome = closingNetIncome.add(amount);
             }
-
+            
             // create a Credit transaction entry for each credit account item
             for (GenericValue creditAccount: creditAccounts) {
                 BigDecimal amount = accountBalancesToCredit.get(creditAccount);
@@ -3069,7 +3069,7 @@ public final class LedgerServices {
                 closingEntries.add(delegator.makeValue("AcctgTransEntry", entry.toMap()));
                 closingNetIncome = closingNetIncome.subtract(amount);
             }
-
+            
             closingNetIncome = closingNetIncome.setScale(decimals, rounding); // round after all the add/subtract is done
             
             // add an entry to credit the retained earnings account
@@ -3080,7 +3080,7 @@ public final class LedgerServices {
             Map tmpResult = dispatcher.runSync("createAcctgTransAndEntries", UtilMisc.toMap("acctgTransEntries", closingEntries,
                       "glFiscalTypeId", "ACTUAL", "transactionDate", new Timestamp(timePeriod.getDate("thruDate").getTime() - 1000), "acctgTransTypeId", "PERIOD_CLOSING", "userLogin", userLogin));
             
-
+            
             // find the previous closed time period, in case we need to carry a balance forward.
             // NOTE: It is very important that we specify the same periodTypeId.  Otherwise, when each transaction entry is posted, it will update the
             // GlAccountHistory of all time periods which are current -- ie, the year, the quarter, the month, etc., and then when you close the end of the year
@@ -3097,7 +3097,7 @@ public final class LedgerServices {
             // we do this by creating a Map of the current period's GlAccountHistory and then adding in those from the previous period
 
             // the first step is to find all GlAccountHistory of the current time period
-
+            
             List<GenericValue> glAccountHistories = delegator.findByAnd("GlAccountHistory", UtilMisc.toMap("organizationPartyId", organizationPartyId,
                             "customTimePeriodId", timePeriod.getString("customTimePeriodId")));
 
@@ -3108,7 +3108,7 @@ public final class LedgerServices {
                 glAccountHistory.set("endingBalance", netBalance);
                 updatedGlAccountHistories.put(glAccountHistory.getString("glAccountId"), glAccountHistory);
             }
-
+            
             // is there a previously closed time period?  If so, then find all of its GlAccountHistory and add their ending balances in
             if (lastClosedTimePeriodId != null) {
                 // find the previous period GL account histories.  We are ONLY carrying forward ASSET, LIABILITY, EQUITY accounts
@@ -3142,7 +3142,7 @@ public final class LedgerServices {
                     }
                 }
             }
-
+           
             // store all of these
             List<GenericValue> toBeStored = new ArrayList<GenericValue>();
             toBeStored.addAll(updatedGlAccountHistories.values());
@@ -3419,9 +3419,9 @@ public final class LedgerServices {
                     Map tmpResult = dispatcher.runSync("closeTimePeriod", UtilMisc.toMap("organizationPartyId", organizationPartyId,
                             "customTimePeriodId", timePeriod.getString("customTimePeriodId"), "userLogin", userLogin));
                     if (tmpResult == null) {
-                        throw new GenericServiceException("Failed to close time period for " + organizationPartyId + " and time period " + timePeriod.getString("customTimePeriodId"));
+                        throw new GenericServiceException("No pude cerrar el periodo de tiempo para " + organizationPartyId + " y periodo de tiempo " + timePeriod.getString("customTimePeriodId"));
                     } else if (!tmpResult.get(ModelService.RESPONSE_MESSAGE).equals(ModelService.RESPOND_SUCCESS)) {
-                        throw new GenericServiceException("Failed to close time period for " + organizationPartyId + " and time period " + timePeriod.getString("customTimePeriodId")
+                        throw new GenericServiceException("No pude cerrar el periodo de tiempo para " + organizationPartyId + " y periodo de tiempo " + timePeriod.getString("customTimePeriodId")
                                 + ": " + tmpResult.get(ModelService.ERROR_MESSAGE));
                     }
                 }

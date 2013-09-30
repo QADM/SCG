@@ -279,23 +279,24 @@ public class TransactionUtil implements Status {
                     clearSetRollbackOnlyCause();
 
                     Debug.logError(e, "Rollback Only was set when trying to commit transaction here; throwing rollbackOnly cause exception", module);
-                    throw new GenericTransactionException("Roll back error, could not commit transaction, was rolled back instead because of: " + rollbackOnlyCause.getCauseMessage(), rollbackOnlyCause.getCauseThrowable());
+                    throw new GenericTransactionException("Error al revertir, no se puede realizar transaccion, se deshace cambio debido a: " + rollbackOnlyCause.getCauseMessage(), rollbackOnlyCause.getCauseThrowable());
                 } else {
                     Throwable t = e.getCause() == null ? e : e.getCause();
-                    throw new GenericTransactionException("Roll back error (with no rollbackOnly cause found), could not commit transaction, was rolled back instead: " + t.toString(), t);
+                    throw new GenericTransactionException("Error al revertir (with no rollbackOnly cause found), no se puede realizar transaccion, se deshace cambio debido a: " + t.toString(), t);
                 }
             } catch (IllegalStateException e) {
                 Throwable t = e.getCause() == null ? e : e.getCause();
-                throw new GenericTransactionException("Could not commit transaction, IllegalStateException exception: " + t.toString(), t);
+                throw new GenericTransactionException("No se puede realizar transaccion, excepcion IllegalStateException: " + t.toString(), t);
             } catch (HeuristicMixedException e) {
                 Throwable t = e.getCause() == null ? e : e.getCause();
-                throw new GenericTransactionException("Could not commit transaction, HeuristicMixed exception: " + t.toString(), t);
+                throw new GenericTransactionException("No se puede realizar transaccion, excepcion HeuristicMixed: " + t.toString(), t);
             } catch (HeuristicRollbackException e) {
                 Throwable t = e.getCause() == null ? e : e.getCause();
-                throw new GenericTransactionException("Could not commit transaction, HeuristicRollback exception: " + t.toString(), t);
+                throw new GenericTransactionException("No se puede realizar transaccion, excepcion HeuristicRollback: " + t.toString(), t);
             } catch (SystemException e) {
                 Throwable t = e.getCause() == null ? e : e.getCause();
-                throw new GenericTransactionException("System error, could not commit transaction: " + t.toString(), t);
+                throw new GenericTransactionException("Error de sistema, no se puede realizar transaccion: " + t.toString(), t);
+                //throw new GenericTransactionException("System error, could not commit transaction: " + t.toString(), t);
             }
         } else {
             Debug.logInfo("[TransactionUtil.commit] UserTransaction is null, not commiting", module);
@@ -348,10 +349,11 @@ public class TransactionUtil implements Status {
                 }
             } catch (IllegalStateException e) {
                 Throwable t = e.getCause() == null ? e : e.getCause();
-                throw new GenericTransactionException("Could not rollback transaction, IllegalStateException exception: " + t.toString(), t);
+                throw new GenericTransactionException("No se puede revertir transaccion, excepcion IllegalStateException: " + t.toString(), t);
             } catch (SystemException e) {
                 Throwable t = e.getCause() == null ? e : e.getCause();
-                throw new GenericTransactionException("System error, could not rollback transaction: " + t.toString(), t);
+                throw new GenericTransactionException("Error de sistema, no se puede revertir transaccion: " + t.toString(), t);
+                //throw new GenericTransactionException("System error, could not rollback transaction: " + t.toString(), t);
             }
         } else {
             Debug.logInfo("[TransactionUtil.rollback] No UserTransaction, transaction not rolled back", module);
@@ -379,10 +381,11 @@ public class TransactionUtil implements Status {
                 }
             } catch (IllegalStateException e) {
                 Throwable t = e.getCause() == null ? e : e.getCause();
-                throw new GenericTransactionException("Could not set rollback only on transaction, IllegalStateException exception: " + t.toString(), t);
+                throw new GenericTransactionException("No se puede revertir los cambios sobre las transacciones, excepcion IllegalStateException: " + t.toString(), t);
+                //throw new GenericTransactionException("Could not set rollback only on transaction, IllegalStateException exception: " + t.toString(), t);
             } catch (SystemException e) {
                 Throwable t = e.getCause() == null ? e : e.getCause();
-                throw new GenericTransactionException("System error, could not set rollback only on transaction: " + t.toString(), t);
+                throw new GenericTransactionException("Error de sistema, no se puede revertir los cambios sobre las transacciones: " + t.toString(), t);
             }
         } else {
             Debug.logInfo("[TransactionUtil.setRollbackOnly] No UserTransaction, transaction rollback only not set", module);
@@ -407,7 +410,7 @@ public class TransactionUtil implements Status {
                 return null;
             }
         } catch (SystemException e) {
-            throw new GenericTransactionException("System error, could not suspend transaction", e);
+            throw new GenericTransactionException("Error del sistema, no se puede suspender la transaccion", e);
         }
     }
 
@@ -434,9 +437,10 @@ public class TransactionUtil implements Status {
                 throw new GenericTransactionException("System error, could not resume transaction", e);
             }
             */
-            throw new GenericTransactionException("System error, could not resume transaction", e);
+            throw new GenericTransactionException("Error de sistema, no se puede reanudar transaccion", e);
         } catch (SystemException e) {
-            throw new GenericTransactionException("System error, could not resume transaction", e);
+            throw new GenericTransactionException("Error de sistema, no se puede reanudar transaccion", e);
+            //throw new GenericTransactionException("System error, could not resume transaction", e);
         }
     }
 
@@ -447,7 +451,7 @@ public class TransactionUtil implements Status {
             try {
                 ut.setTransactionTimeout(seconds);
             } catch (SystemException e) {
-                throw new GenericTransactionException("System error, could not set transaction timeout", e);
+                throw new GenericTransactionException("Error del sistema, no se pudo establecer el tiempo de transaccion", e);
             }
         }
     }
@@ -462,7 +466,7 @@ public class TransactionUtil implements Status {
             TransactionUtil.enlistResource(resource);
             return xacon.getConnection();
         } catch (SQLException e) {
-            throw new GenericTransactionException("SQL error, could not enlist connection in transaction even though transactions are available", e);
+            throw new GenericTransactionException("Error SQL, no puede dar de alta la conexion en la transaccion a pesar de que las transacciones estan disponibles", e);
         }
     }
 
@@ -481,10 +485,11 @@ public class TransactionUtil implements Status {
             }
         } catch (RollbackException e) {
             //This is Java 1.4 only, but useful for certain debuggins: Throwable t = e.getCause() == null ? e : e.getCause();
-            throw new GenericTransactionException("Roll Back error, could not enlist resource in transaction even though transactions are available, current transaction rolled back", e);
+            throw new GenericTransactionException("Error al revertir, no pudo dar de alta los recursos en una transaccion realizada a pesar de que las transacciones esten disponibles, transaccion actual deshace", e);
+            //throw new GenericTransactionException("Roll Back error, could not enlist resource in transaction even though transactions are available, current transaction rolled back", e);
         } catch (SystemException e) {
             //This is Java 1.4 only, but useful for certain debuggins: Throwable t = e.getCause() == null ? e : e.getCause();
-            throw new GenericTransactionException("System error, could not enlist resource in transaction even though transactions are available", e);
+            throw new GenericTransactionException("Error de sistema, no se pudo dar de alta los recursos en la transaccion a pesar de que las transacciones estan disponibles", e);
         }
     }
 

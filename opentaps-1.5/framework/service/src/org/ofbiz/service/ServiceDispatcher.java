@@ -357,7 +357,7 @@ public class ServiceDispatcher {
                     GenericValue userLogin = (GenericValue) context.get("userLogin");
 
                     if (modelService.auth && userLogin == null) {
-                        throw new ServiceAuthException("User authorization is required for this service: " + modelService.name + modelService.debugInfo());
+                        throw new ServiceAuthException("Se requiere la autorizacion del usuario para este servicio: " + modelService.name + modelService.debugInfo());
                     }
 
                     // now that we have authed, if there is a userLogin, set the EE userIdentifier
@@ -406,7 +406,7 @@ public class ServiceDispatcher {
                         if (invokeResult != null) {
                             result.putAll(invokeResult);
                         } else {
-                            Debug.logWarning("Service (in runSync : " + modelService.name + ") returns null result", module);
+                            Debug.logWarning("Service (in runSync : " + modelService.name + ") sin resultados", module);
                         }
                     }
 
@@ -554,7 +554,7 @@ public class ServiceDispatcher {
                     try {
                         TransactionUtil.commit(beganTrans);
                     } catch (GenericTransactionException e) {
-                        String errMsg = "Could not commit transaction for service [" + modelService.name + "] call";
+                        String errMsg = "No se pudo realizar transaccion para el servicio [" + modelService.name + "] call";
                         Debug.logError(e, errMsg, module);
                         if (e.getMessage() != null) {
                             errMsg = errMsg + ": " + e.getMessage();
@@ -584,7 +584,7 @@ public class ServiceDispatcher {
                     TransactionUtil.resume(parentTransaction);
                 } catch (GenericTransactionException ite) {
                     Debug.logWarning(ite, "Transaction error, not resumed", module);
-                    throw new GenericServiceException("Resume transaction exception, see logs");
+                    throw new GenericServiceException("Reanudar excepcion de transaccion, consulte logs");
                 }
             }
         }
@@ -755,12 +755,12 @@ public class ServiceDispatcher {
                     TransactionUtil.commit(beganTrans);
                 } catch (GenericTransactionException e) {
                     Debug.logError(e, "Could not commit transaction", module);
-                    throw new GenericServiceException("Commit transaction failed");
+                    throw new GenericServiceException("Fallo al realizar transaccion");
                 }
             }
         } catch (GenericTransactionException se) {
             Debug.logError(se, "Problems with the transaction", module);
-            throw new GenericServiceException("Problems with the transaction: " + se.getMessage() + "; See logs for more detail");
+            throw new GenericServiceException("Problemas con la transaccion: " + se.getMessage() + "; Consulte logs para obtener mas detalle");
         } finally {
             // resume the parent transaction
             if (parentTransaction != null) {
@@ -768,7 +768,7 @@ public class ServiceDispatcher {
                     TransactionUtil.resume(parentTransaction);
                 } catch (GenericTransactionException ise) {
                     Debug.logError(ise, "Trouble resuming parent transaction", module);
-                    throw new GenericServiceException("Resume transaction exception: " + ise.getMessage() + "; See logs for more detail");
+                    throw new GenericServiceException("Excepcion al reanudar transaccion: " + ise.getMessage() + "; Consulte logs para obtener mas detalle");
                 }
             }
         }
@@ -877,7 +877,8 @@ public class ServiceDispatcher {
         String service = ServiceConfigUtil.getElementAttr("authorization", "service-name");
 
         if (service == null) {
-            throw new GenericServiceException("No Authentication Service Defined");
+            throw new GenericServiceException("No se ha definido el servicio de autentificacion");
+            //throw new GenericServiceException("No Authentication Service Defined");
         }
         if (service.equals(origService.name)) {
             // manually calling the auth service, don't continue...
@@ -932,7 +933,7 @@ public class ServiceDispatcher {
             Map<String, Object> permResp = origService.evalPermission(dctx, context);
             Boolean hasPermission = (Boolean) permResp.get("hasPermission");
             if (hasPermission == null) {
-                throw new ServiceAuthException("ERROR: the permission-service [" + origService.permissionServiceName + "] did not return a result. Not running the service [" + origService.name + "]");
+                throw new ServiceAuthException("ERROR: el servicio de permisos [" + origService.permissionServiceName + "] no arrojo resultado. No se ejecuto el servicio [" + origService.name + "]");
             }
             if (hasPermission.booleanValue()) {
                 context.putAll(permResp);
@@ -943,13 +944,13 @@ public class ServiceDispatcher {
                     message = ServiceUtil.getErrorMessage(permResp);
                 }
                 if (UtilValidate.isEmpty(message)) {
-                    message = "You do not have permission to invoke the service [" + origService.name + "]";
+                    message = "Usted no tiene permiso para invocar el servicio [" + origService.name + "]";
                 }
                 throw new ServiceAuthException(message);
             }
         } else {
             if (!origService.evalPermissions(dctx, context)) {
-                throw new ServiceAuthException("You do not have permission to invoke the service [" + origService.name + "]");
+                throw new ServiceAuthException("Usted no tiene permiso para invocar el servicio [" + origService.name + "]");
             }
         }
 

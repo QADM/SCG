@@ -135,7 +135,11 @@ public final class TransactionServices{
             return results;
 
         } catch (GeneralException e) {
-            return UtilMessage.createAndLogServiceError(e, MODULE);
+        	Debug.log("Exception Esmeralda 1 " + e.getMessage());
+        	Exception message = e;
+        	if(e.getMessage().contains("You do not have permission to invoke the service"))        	
+        		message = new Exception("No tiene permiso para invocar el servicio [createAcctgTransEntryManual]");
+            return UtilMessage.createAndLogServiceError(message, MODULE);
         }
     }
 
@@ -439,6 +443,7 @@ public final class TransactionServices{
             ledgerRepository.update(entry);
             return ServiceUtil.returnSuccess();
         } catch (GeneralException e) {
+        	
             return UtilMessage.createAndLogServiceError(e, MODULE);
         }
     }
@@ -527,6 +532,7 @@ public final class TransactionServices{
             return results;
 
         } catch (Exception e) {
+        	Debug.log("Excepcion esme " + e.getMessage());
             return UtilMessage.createAndLogServiceError(e, MODULE);
         }
     }
