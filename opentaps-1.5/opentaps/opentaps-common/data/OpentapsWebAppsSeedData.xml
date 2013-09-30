@@ -43,6 +43,8 @@ like the ofbiz Party, Catalog, Webtools, etc ...
              imageUrl="/opentaps_images/homeapps/webtools.png" imageHoverUrl="/opentaps_images/homeapps/webtools_hover.png" linkUrl="/webtools/control/main" lastUpdatedStamp="2009-07-18 16:41:58.415"
              lastUpdatedTxStamp="2009-07-18 16:41:58.415" createdStamp="2009-07-18 16:12:28.395" createdTxStamp="2009-07-18 16:12:28.395"/>
 
+
+<!--  
 <OpentapsWebApps applicationId="documentation" shortName="Docs Wiki" sequenceNum="90" applicationName="Online Manuals" description="Your online reference for users manuals, reference guides, and developer information."
              imageUrl="/opentaps_images/homeapps/docs.png" imageHoverUrl="/opentaps_images/homeapps/docs_hover.png" linkUrl="http://www.opentaps.org/docs/" lastUpdatedStamp="2009-07-18 16:41:58.415"
              lastUpdatedTxStamp="2009-07-18 16:41:58.415" createdStamp="2009-07-18 16:12:28.395" createdTxStamp="2009-07-18 16:12:28.395"/>
@@ -54,6 +56,6 @@ like the ofbiz Party, Catalog, Webtools, etc ...
              imageUrl="/opentaps_images/integratingweb/ecommerce.png" imageHoverUrl="/opentaps_images/integratingweb/ecommerceHover.png" linkUrl="/ecommerce/control/main" lastUpdatedStamp="2009-07-16 16:41:58.415"
              lastUpdatedTxStamp="2009-07-16 16:41:58.415" createdStamp="2009-07-16 16:12:28.395" createdTxStamp="2009-07-16 16:12:28.395"/>
 
-
+-->
 </entity-engine-xml>
 

@@ -34,7 +34,7 @@
 						</#if>
 						<#if poliza=="fuente"||poliza=="subFuente"||poliza=="subFuenteEspecifica">
 							<#assign fuenteRecursos=fuenteRecursos+poliza+": "+mapTransPresupPol.get(poliza)+"," />
-							<#assign fuenteRecursos=fuenteRecursos?replace("fuente","<b>Fuente</b>")?replace("subFuente","<b>Subfuente</b>")?replace("subFuenteEspecifica","<b>Subfuente Específica</b>") />
+							<#assign fuenteRecursos=fuenteRecursos?replace("fuente","<b>Fuente</b>")?replace("subFuenteEspecifica","<b>Subfuente Específica</b>")?replace("subFuente","<b>Subfuente</b>") />
 						</#if>
 						<#if poliza=="entidadFederativa"||poliza=="region"||poliza=="municipio"||poliza=="localidad">
 							<#assign geografica=geografica+poliza+": "+mapTransPresupPol.get(poliza)+"," />

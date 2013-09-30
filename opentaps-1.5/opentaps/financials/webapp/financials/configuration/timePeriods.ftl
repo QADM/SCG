@@ -35,7 +35,7 @@ function submitViewBalance(form) {
 </script>
 
 <#if closedTimePeriods?has_content>
-<p>The following time periods have been closed:
+<p>Periodos cerrados:
 <ul type="circle">
 <#list closedTimePeriods as timePeriod>
 <li>${timePeriod.periodName?if_exists} <#if timePeriod.periodNum?has_content>${timePeriod.periodNum?string("####")}</#if> (${timePeriod.getRelatedOne("PeriodType").description} ${uiLabelMap.CommonFrom} ${timePeriod.fromDate} ${uiLabelMap.CommonTo} ${timePeriod.thruDate})
@@ -43,20 +43,20 @@ function submitViewBalance(form) {
 </ul></p>
 <p>
 <#else>
-<p>There are currently no closed time periods.</p>
+<p>Sin periodos cerrados.</p>
 </#if>
 
 <#if (openTimePeriodsSortedByThruDate?has_content) && (openTimePeriodsSortedByThruDate.size() gt 0)>
 <#assign timePeriod = openTimePeriodsSortedByThruDate.get(0)>
 <@form name="closeAllTimePeriodsAction" url="closeAllTimePeriods" organizationPartyId=organizationPartyId customTimePeriodId=timePeriod.customTimePeriodId />
-<@submitFormLink form="closeAllTimePeriodsAction" text="Close time periods ending ${timePeriod.thruDate}" />
+<@submitFormLink form="closeAllTimePeriodsAction" text="Cerrar periodos de  tiempo hasta ${timePeriod.thruDate}" />
 </p>
 <#else>
-<p>There are no time periods which can be closed.</p>
+<p>Sin periodos para cerrar.</p>
 </#if>
 
 <#if openTimePeriods?has_content>
-<p>The following time periods are open:
+<p>Periodos cerrados:
 <ul type="circle">
 <#list openTimePeriods as timePeriod>
 <li>${timePeriod.periodName?if_exists} <#if timePeriod.periodNum?has_content>${timePeriod.periodNum?string("####")}</#if> (${timePeriod.getRelatedOne("PeriodType").description} ${uiLabelMap.CommonFrom} ${getLocalizedDate(timePeriod.fromDate, "DATE_ONLY")} ${uiLabelMap.CommonTo} ${getLocalizedDate(timePeriod.thruDate, "DATE_ONLY")})

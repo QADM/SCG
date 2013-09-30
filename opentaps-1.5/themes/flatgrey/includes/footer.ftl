@@ -16,7 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
-
+<!--
 <#assign nowTimestamp = Static["org.ofbiz.base.util.UtilDateTime"].nowTimestamp()>
 
 <#if (requestAttributes.externalLoginKey)?exists><#assign externalKeyParam = "?externalLoginKey=" + requestAttributes.externalLoginKey?if_exists></#if>
@@ -53,9 +53,9 @@ under the License.
   </div>
 </center>
 </#if>
-
+-->
 <div id="footer">
-  <p>${nowTimestamp?datetime?string.short} -
+ <!-- <p>${nowTimestamp?datetime?string.short} -
   <a href="<@ofbizUrl>ListTimezones</@ofbizUrl>">${timeZone.getDisplayName(timeZone.useDaylightTime(), Static["java.util.TimeZone"].LONG, locale)}</a>
   </p>
   <p><a href="http://jigsaw.w3.org/css-validator/"><img src="<@ofbizContentUrl>/images/vcss.gif</@ofbizContentUrl>" alt="Valid CSS!"/></a>
@@ -74,7 +74,8 @@ under the License.
     <script src="<@ofbizContentUrl>${StringUtil.wrapString(javaScript)}</@ofbizContentUrl>" type="text/javascript"></script>
   </#list>
 </#if>
-
+-->
+<center><b>Powered by Opentaps</b></center>
 </div>
 </body>
 </html>

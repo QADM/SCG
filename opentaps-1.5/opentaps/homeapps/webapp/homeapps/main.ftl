@@ -153,7 +153,7 @@ border: 1px solid #999999;
 
     </#if>
     <br/><br/>
-    <@include location="component://opentaps-common/webapp/common/includes/latestnews.ftl"/>
+  <!--  <@include location="component://opentaps-common/webapp/common/includes/latestnews.ftl"/>-->
   </div>
 
 
@@ -162,20 +162,23 @@ border: 1px solid #999999;
       <#assign appIndex = 0 />
       <#list apps as app>
         <#if (!app.hide?exists || app.hide != "Y") && app.linkUrl?has_content>
+        
           <#assign appIndex = appIndex + 1 />
+           <#if app.applicationId!= "ecommerce" && app.applicationId!="documentation" && app.applicationId!="catalog" &&app.applicationId!="webtools">
           <div id="button" class="${app.applicationId}" onmouseover="javascript:writeAppDetails('${app.shortName!app.applicationId}','${app.applicationName!app.applicationId}','${app.description!app.applicationId}')">
-            <#if app.imageUrl?has_content>
-              <a href="${app.linkUrl}<#if externalKeyParam?exists>?${externalKeyParam}</#if>">
-                <img src="${app.imageUrl}" onmouseover="this.src='${app.imageHoverUrl!app.imageUrl}'" onmouseout="this.src='${app.imageUrl}'" />
-              </a>
-            </#if>
-            <div id="label" style="margin-left: 34px;" for="${app.applicationId}">
-              <a style="color: black;" href="${app.linkUrl}<#if externalKeyParam?exists>?${externalKeyParam}</#if>" >
-                ${app.shortName}
-              </a>
-            </div>
+         
+	            <#if app.imageUrl?has_content>
+	              <a href="${app.linkUrl}<#if externalKeyParam?exists>?${externalKeyParam}</#if>">
+	                <img src="${app.imageUrl}" onmouseover="this.src='${app.imageHoverUrl!app.imageUrl}'" onmouseout="this.src='${app.imageUrl}'" />
+	              </a>
+	            </#if>
+	            <div id="label" style="margin-left: 34px;" for="${app.applicationId}">
+	              <a style="color: black;" href="${app.linkUrl}<#if externalKeyParam?exists>?${externalKeyParam}</#if>" >
+	                ${app.shortName}
+	              </a>
+	            </div>
           </div>
-
+          </#if>
           <#if !app_has_next>
             </div> <#-- close row-->
           <#elseif appIndex % 4 == 0>

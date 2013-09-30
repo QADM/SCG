@@ -309,10 +309,7 @@ public class PresupuestoEgresoImportService extends DomainService implements
 								presupuestoEgreso.setCreatedByUserLogin(rowdata
 										.getUsuario());
 							} else {
-								String message = "Failed to import Presupuesto Egreso ["
-										+ rowdata.getClavePres()
-										+ "], Error message : "
-										+ "La transaccion ya existe";
+								String message = "La transaccion ya existe";
 								storeImportPresupuestoEgresoError(rowdata,
 										message, imp_repo);
 								continue;
@@ -333,11 +330,9 @@ public class PresupuestoEgresoImportService extends DomainService implements
 
 							if (!mensaje.isEmpty()) {
 								loteValido=false;
-								String message = "Failed to import Presupuesto Egreso ["
-										+ rowdata.getClavePres()
-										+ "], Error message : " + mensaje;
+								
 								storeImportPresupuestoEgresoError(rowdata,
-										message, imp_repo);
+										mensaje, imp_repo);
 								continue;
 							}
 
@@ -411,11 +406,9 @@ public class PresupuestoEgresoImportService extends DomainService implements
 
 							if (!mensaje.isEmpty()) {
 								loteValido=false;
-								String message = "Failed to import Presupuesto Egreso ["
-										+ rowdata.getClavePres()
-										+ "], Error message : " + mensaje;
+								
 								storeImportPresupuestoEgresoError(rowdata,
-										message, imp_repo);
+										mensaje, imp_repo);
 								continue;
 							}
 
@@ -430,10 +423,7 @@ public class PresupuestoEgresoImportService extends DomainService implements
 
 							if (miniguia == null) {
 								loteValido=false;
-								String message = "Failed to import Presupuesto Egreso ["
-										+ rowdata.getClavePres()
-										+ "], Error message : "
-										+ "Tipo de transaccion no registrada en MiniGuia";
+								String message = "Tipo de transaccion no registrada en MiniGuia";
 								storeImportPresupuestoEgresoError(rowdata,
 										message, imp_repo);
 								continue;
@@ -593,9 +583,7 @@ public class PresupuestoEgresoImportService extends DomainService implements
 							imported = imported + 1;
 						}
 					} catch (Exception ex) {
-						String message = "Failed to import Presupuesto Egreso ["
-								+ rowdata.getClavePres()
-								+ "], Error message : " + ex.getMessage();
+						String message =  ex.getMessage();
 						storeImportPresupuestoEgresoError(rowdata, message,
 								imp_repo);
 

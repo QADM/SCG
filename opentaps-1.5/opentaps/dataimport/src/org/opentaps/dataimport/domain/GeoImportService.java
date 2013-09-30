@@ -17,8 +17,11 @@
 package org.opentaps.dataimport.domain;
 
 import java.util.List;
+
 import org.ofbiz.base.util.Debug;
+
 import java.util.Locale;
+
 import org.ofbiz.base.util.UtilDateTime;
 import org.opentaps.base.constants.StatusItemConstants;
 import org.opentaps.base.entities.DataImportGeo;
@@ -82,32 +85,52 @@ public class GeoImportService extends DomainService implements
 			for (DataImportGeo rowdata : dataforimp) {
 				// import geo as many as possible
 				try {
+					
 					imp_tx1 = null;
+					//Validar Datos Obligatorios
+					if(rowdata.getGeoTypeId()!=null)
+					{
+						if(rowdata.getGeoName()!=null)
+						{
+							if (rowdata.getGeoCode()!=null) {
+								
+								//Validar GeoType								
+								if(!UtilImport.validaTipoGeo(ledger_repo, rowdata.getGeoTypeId()))
+									throw new ServiceException(String.format("Tipo no valido"));
 
-					// begin importing row data item
+								
+								// begin importing row data item
 
-					Geo geo = new Geo();
-					geo.setGeoId(rowdata.getGeoId());
-					geo.setGeoTypeId(rowdata.getGeoTypeId());
-					geo.setGeoName(rowdata.getGeoName());
-					// geo.setGeoCode(rowdata.getGeoCode());
-					geo.setAbbreviation(rowdata.getAbbreviation());
-					geo.setNode(rowdata.getNode());
+								Geo geo = new Geo();		
+								geo.setGeoId(rowdata.getGeoId());
+								geo.setGeoTypeId(rowdata.getGeoTypeId());
+								geo.setGeoName(rowdata.getGeoName());
+								// geo.setGeoCode(rowdata.getGeoCode());
+								geo.setAbbreviation(rowdata.getAbbreviation());
+								geo.setNode(rowdata.getNode());
 
-					imp_tx1 = this.session.beginTransaction();
-					ledger_repo.createOrUpdate(geo);
-					imp_tx1.commit();
-					String message = "Successfully imported GEO ["
-							+ rowdata.getGeoId() + "].";
-					this.storeImportGeoSuccess(rowdata, imp_repo);
-					Debug.logInfo(message, MODULE);
+								imp_tx1 = this.session.beginTransaction();
+								ledger_repo.createOrUpdate(geo);
+								imp_tx1.commit();
+								
+								String message = "Se ha importado correctamente, Geo Id ["
+										+ rowdata.getGeoId() + "].";
+								this.storeImportGeoSuccess(rowdata, imp_repo);
+								Debug.logInfo(message, MODULE);
 
-					imported = imported + 1;
+								imported = imported + 1;
+							}
+							else
+								throw new ServiceException(String.format("Falta Código Geográfico"));
+						}
+						else
+							throw new ServiceException(String.format("Falta ingresar Nombre"));
+					}
+					else
+						throw new ServiceException(String.format("Falta ingresar Tipo"));
 
 				} catch (Exception ex) {
-					String message = "Failed to import GEO ["
-							+ rowdata.getGeoId() + "], Error message : "
-							+ ex.getMessage();
+					String message = ex.getMessage();
 					storeImportGeoError(rowdata, message, imp_repo);
 
 					// rollback all if there was an error when importing item
@@ -141,65 +164,59 @@ public class GeoImportService extends DomainService implements
 			List<DataImportGeo> dataforimp, GeoDataImportRepositoryInterface imp_repo) {
 
 		Transaction imp_tx1 = null;
+		Debug.log("Impactar y validar parent Geo");
 		try {
 
 			for (DataImportGeo dataImportGeo : dataforimp) {
+				
+				try {
+					
+					if (dataImportGeo.getGeoCode() != null) {
+						List<Geo> listGeo = ledger_repo.findList(Geo.class,
+								ledger_repo.map(Geo.Fields.geoId,
+										dataImportGeo.getGeoId(),
+										Geo.Fields.geoName,
+										dataImportGeo.getGeoName()));
+						if (!listGeo.isEmpty()) {
 
-				if (dataImportGeo.getGeoCode() != null) {
-					List<Geo> listGeo = ledger_repo.findList(Geo.class,
-							ledger_repo.map(Geo.Fields.geoId,
-									dataImportGeo.getGeoId(),
-									Geo.Fields.geoName,
-									dataImportGeo.getGeoName()));
-					if (!listGeo.isEmpty()) {
+							for (Geo geo : listGeo) {
 
-						for (Geo geo : listGeo) {
-
-							if (UtilImport.validaPadreGeo(ledger_repo,
-									dataImportGeo.getGeoTypeId(),
-									dataImportGeo.getGeoCode())) {
-								Debug.log("Padre valido");
-								geo.setGeoCode(dataImportGeo.getGeoCode());
-							} else {
-								Debug.log("Padre no valido");
-								String message = "Failed to import Geo ["
-										+ dataImportGeo.getGeoId()
-										+ "], Error message : "
-										+ "Padre no valido";
-								storeImportGeoError(dataImportGeo, message,
-										imp_repo);
-
-								// rollback all if there was an error when
-								// importing item
-								if (imp_tx1 != null) {
-									imp_tx1.rollback();
+								if (UtilImport.validaPadreGeo(ledger_repo,
+										dataImportGeo.getGeoTypeId(),
+										dataImportGeo.getGeoCode())) {
+									Debug.log("Padre valido");
+									geo.setGeoCode(dataImportGeo.getGeoCode());
+								} else {
+									throw new ServiceException("Padre no valido");
 								}
-								// Debug.logError(ex, message, MODULE);
-								throw new ServiceException(message);
+
+								imp_tx1 = this.session.beginTransaction();
+								ledger_repo.createOrUpdate(geo);
+								imp_tx1.commit();
+
+								String message = "Se ha importado correctamente padre, Geo Id ["
+										+ geo.getGeoId() + "].";
+								Debug.logInfo(message, MODULE);
 							}
 
-							imp_tx1 = this.session.beginTransaction();
-							ledger_repo.createOrUpdate(geo);
-							imp_tx1.commit();
-
-							String message = "Successfully to import Geo Code ["
-									+ geo.getGeoId() + "].";
-							Debug.logInfo(message, MODULE);
 						}
 
 					}
-
+					
+				} catch (Exception e) {
+					String message = e.getMessage();
+					storeImportGeoError(dataImportGeo, message, imp_repo);
+					
+					if (imp_tx1 != null) {
+						imp_tx1.rollback();
+					}
 				}
+
+				
 			}
 
-		} catch (Exception e) {
-			String message = "Failed to import Geo Code, Error message : "
-					+ e.getMessage();
-
-			if (imp_tx1 != null) {
-				imp_tx1.rollback();
-			}
-			Debug.logError(e, message, MODULE);
+		} catch (Exception e) {			
+			Debug.logError(e, MODULE);
 		}
 
 	}

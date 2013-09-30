@@ -97,17 +97,17 @@
             <display-entity entity-name="PaymentMethodType" description="${description}" key-field-name="paymentMethodTypeId"/>
         </field>
         <field name="description" widget-style="inputBox"><text size="30" maxlength="100"/></field>              
-        <field name="glAccountId" title="${uiLabelMap.AccountingGlAccount}">            
-            <drop-down>
-                <entity-options entity-name="GlAccountOrganizationAndClass" description="${accountCode}: ${accountName} (${glAccountId})">
+        <field name="glAccountId" title="${uiLabelMap.AccountingGlAccount}" >            
+            <drop-down >
+                <entity-options entity-name="GlAccountOrganizationAndClass" description="${accountCode}: ${accountName} (${glAccountId})" >
                     <entity-constraint name="organizationPartyId" operator="equals" env-name="parameters.organizationPartyId"  />
                     <entity-order-by field-name="accountCode"/>
                 </entity-options>
             </drop-down>  
         </field>
-        <field name="Update" widget-style="buttontext" ><submit button-type="text-link"/></field>        
-        <field name="Expire" widget-style="buttontext">
-            <hyperlink description="${uiLabelMap.FinancialsPaymentMethodExpire}" target="updatePaymentMethod">
+        <field name="Update" widget-style="buttontext" title="${uiLabelMap.FinancialsGlAccountUpdated}" ><submit button-type="text-link"/></field>        
+        <field name="Expire" widget-style="buttontext" title="${uiLabelMap.FinancialsGlAccountDisable}">
+            <hyperlink description="${uiLabelMap.FinancialsGlAccountDisable}" target="updatePaymentMethod">
                 <parameter param-name="paymentMethodId"/>
                 <parameter param-name="expirePaymentMethod" value="expPM"/>
             </hyperlink>
@@ -124,7 +124,7 @@
                 <entity-options entity-name="PaymentMethodType" description="${description}"/>
             </drop-down>
         </field>
-        <field name="glAccountId" title="${uiLabelMap.AccountingGlAccount}">            
+        <field name="glAccountId" title="${uiLabelMap.FinancialsGlAccountLmAccount}">            
             <drop-down>
                 <entity-options entity-name="GlAccountOrganizationAndClass" description="${accountCode}: ${accountName} (${glAccountId})">
                     <entity-constraint name="organizationPartyId" operator="equals" env-name="parameters.organizationPartyId"  />
@@ -136,20 +136,23 @@
         <field name="fromDate"><hidden/></field>      
         <field name="thruDate"><hidden/></field>     
         <field name="emailAddress"><hidden/></field>
-        <field name="submitButton" title="Add" widget-style="buttontext"><submit/></field>
+        <field name="submitButton" title="${uiLabelMap.FinancialsGlAccountAddd}" widget-style="buttontext"><submit/></field>
     </form>
     
     <!-- add new Time Period -->
     <form name="createCustomTimePeriod" type="single" title="Add a new Time Period" target="createCustomTimePeriod"
         default-widget-style="tabletext" default-title-style="tableheadtext">
         <auto-fields-service service-name="createCustomTimePeriod"/>
+        <field name="periodNum"  title="${uiLabelMap.FinancialsGlAccountPeriodNum}"><text/></field>   
+        <field name="periodName" title="${uiLabelMap.FinancialsGlAccountPeriodName}"><text/></field>    
         <field name="organizationPartyId"><hidden value="${organizationPartyId}"/></field>    
         <field name="isClosed"><hidden value="N"/></field> 
-        <field name="parentPeriodId">
+        <field name="parentPeriodId" title="${uiLabelMap.FinancialsGlAccountPeriodoSup}">
             <drop-down allow-empty="true">
                 <list-options list-name="openTimePeriods" key-name="customTimePeriodId" description="${periodName} ${periodNum} ${uiLabelMap.CommonFrom} ${fromDate} ${uiLabelMap.CommonTo} ${thruDate}"/>
             </drop-down>
         </field>
+
         <field name="periodTypeId" title="${uiLabelMap.FinancialsTimePeriodType}">            
             <drop-down>
                 <entity-options entity-name="PeriodType" description="${description}">
@@ -322,7 +325,7 @@
                 </entity-options>
            	 </drop-down>
         </field>
-        <field name="submitButton" title="${uiLabelMap.FinancialsGlAccountAdd}"><submit/></field>
+        <field name="submitButton" title="${uiLabelMap.FinancialsGlAccountAddd}"><submit/></field>
         
     </form>
     
@@ -438,7 +441,7 @@
                 <list-options list-name="paymentMethods" key-name="paymentMethodId" description="${description}"/>
             </drop-down>
         </field>
-        <field name="submitButton" title="${uiLabelMap.CommonUpdate}" widget-style="buttontext"><submit/></field>
+        <field name="submitButton" title="${uiLabelMap.FinancialsGlAccountUpdate}" widget-style="buttontext"><submit/></field>
     </form>
 </forms>
  
