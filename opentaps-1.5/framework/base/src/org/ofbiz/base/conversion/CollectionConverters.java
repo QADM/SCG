@@ -162,7 +162,8 @@ public class CollectionConverters implements ConverterLoader {
             if (obj.startsWith("{") && obj.endsWith("}")) {
                 return StringUtil.toMap(obj);
             }
-            throw new ConversionException("Could not convert " + obj + " to Map: ");
+            throw new ConversionException("No se puede convertir " + obj + " a Map: ");
+            //throw new ConversionException("Could not convert " + obj + " to Map: ");
         }
     }
 

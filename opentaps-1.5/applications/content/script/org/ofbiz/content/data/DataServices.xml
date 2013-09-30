@@ -666,7 +666,7 @@ under the License.
                         </or>
                     </condition>
                     <then>
-                        <add-error><fail-message message="No uploaded content found in context"/></add-error>
+                        <add-error><fail-message message="No se pudo cargar el contenido, se encontro en contexto"/></add-error>
                     </then>
                     <else>
                         <!-- if not upload is found on an update; its okay, don't do anything just return -->
@@ -726,7 +726,7 @@ under the License.
                         </or>
                     </condition>
                     <then>
-                        <add-error><fail-message message="No uploaded content found in context"/></add-error>
+                        <add-error><fail-message message="No se pudo cargar el contenido, se encontro en contexto"/></add-error>
                     </then>
                     <else>
                         <!-- if not upload is found on an update; its okay, don't do anything just return -->
@@ -782,7 +782,8 @@ under the License.
                         </or>
                     </condition>
                     <then>
-                        <add-error><fail-message message="No uploaded content found in context"/></add-error>
+                        <add-error><fail-message message="No se pudo cargar el contenido, se encontro en contexto"/></add-error>
+                        <!-- <add-error><fail-message message="No uploaded content found in context"/></add-error> -->
                     </then>
                     <else>
                         <!-- if not upload is found on an update; its okay, don't do anything just return -->
@@ -838,7 +839,7 @@ under the License.
                         </or>
                     </condition>
                     <then>
-                        <add-error><fail-message message="No uploaded content found in context"/></add-error>
+                        <add-error><fail-message message="No se pudo cargar el contenido, se encontro en contexto"/></add-error>
                     </then>
                     <else>
                         <!-- if not upload is found on an update; its okay, don't do anything just return -->
@@ -894,7 +895,7 @@ under the License.
                         </or>
                     </condition>
                     <then>
-                        <add-error><fail-message message="No uploaded content found in context"/></add-error>
+                        <add-error><fail-message message="No se pudo cargar el contenido, se encontro en contexto"/></add-error>
                     </then>
                     <else>
                         <!-- if not upload is found on an update; its okay, don't do anything just return -->

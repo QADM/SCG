@@ -535,12 +535,12 @@ public class ServiceDispatcher {
                 } else if (t instanceof GenericServiceException) {
                     throw (GenericServiceException) t;
                 } else {
-                    throw new GenericServiceException("Service [" + modelService.name + "] Failed" + modelService.debugInfo() , t);
+                    throw new GenericServiceException("Servicio [" + modelService.name + "] Fallo " + modelService.debugInfo() , t);
                 }
             } finally {
                 // if there was an error, rollback transaction, otherwise commit
                 if (isError) {
-                    String errMsg = "Error in Service [" + modelService.name + "]: " + ServiceUtil.getErrorMessage(result);
+                    String errMsg = "Error en el servicio [" + modelService.name + "]: " + ServiceUtil.getErrorMessage(result);
                     Debug.logError(errMsg, module);
 
                     // rollback the transaction
@@ -571,7 +571,7 @@ public class ServiceDispatcher {
             }
         } catch (GenericTransactionException te) {
             Debug.logError(te, "Problems with the transaction", module);
-            throw new GenericServiceException("Problems with the transaction.", te.getNested());
+            throw new GenericServiceException("Problemas con la transaccion.", te.getNested());
         } finally {
             // release the semaphore lock
             if (lock != null) {
@@ -747,7 +747,7 @@ public class ServiceDispatcher {
                 } else if (t instanceof GenericServiceException) {
                     throw (GenericServiceException) t;
                 } else {
-                    throw new GenericServiceException("Service [" + service.name + "] Failed" + service.debugInfo() , t);
+                    throw new GenericServiceException("Servicio [" + service.name + "] Fallo " + service.debugInfo() , t);
                 }
             } finally {
                 // always try to commit the transaction since we don't know in this case if its was an error or not
