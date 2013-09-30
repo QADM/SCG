@@ -58,6 +58,7 @@ import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilTimer;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.collections.ResourceBundleMapWrapper;
 import org.ofbiz.entity.Delegator;
@@ -288,66 +289,13 @@ public final class FinancialReports {
             int anioIni = UtilDateTime.getYear(fromDate, timeZone, locale);
             anioIni = anioIni - 2;
             
-            //Lista principal de datos a enviar
-            List<Map<String, Object>> rows = FastList.newInstance();
-          	
-            /**
-             * Comienza reporte
-             */
             List<Map<String, Object>> listDatesAll = new ArrayList<Map<String, Object>>();
             listDatesAll.add(secondLastDateResults);
             listDatesAll.add(nextLastDateResults);
             listDatesAll.add(lastDateResults);
             
-            List<Map<String, Object>> rowsInicialEjercicio = FastList.newInstance();
-
-            BigDecimal montoTraspaso = ZERO;
-            
-          	//Se arma completamente el reporte
-            int i = 0;
-          	for (Map<String, Object> mapResults : listDatesAll) {
-          		
-          		Debug.logWarning("listDates  + "+i+" "+mapResults, MODULE);
-          		
-            	Map<GenericValue,BigDecimal> cuentasPatContribuido = (Map<GenericValue, BigDecimal>) mapResults.get("cuentasPatContribuido");
-            	List<GenericValue> cuentasPatContribuidoList = EntityUtil.orderBy(((Map<GenericValue, BigDecimal>) mapResults.get("cuentasPatContribuido")).keySet(), UtilMisc.toList("glAccountId"));
-            	Map<GenericValue,BigDecimal> cuentasPatGenAnterior = (Map<GenericValue, BigDecimal>) mapResults.get("cuentasPatGenAnterior");
-            	List<GenericValue> cuentasPatGenAnteriorList = EntityUtil.orderBy(((Map<GenericValue, BigDecimal>) mapResults.get("cuentasPatGenAnterior")).keySet(), UtilMisc.toList("glAccountId"));        	
-            	Map<GenericValue,BigDecimal> cuentasPatGenerado = (Map<GenericValue, BigDecimal>) mapResults.get("cuentasPatGenerado");
-            	List<GenericValue> cuentasPatGeneradoList = EntityUtil.orderBy(((Map<GenericValue, BigDecimal>) mapResults.get("cuentasPatGenerado")).keySet(), UtilMisc.toList("glAccountId"));        	
-            	Map<GenericValue,BigDecimal> cuentasPatrimonio = (Map<GenericValue, BigDecimal>) mapResults.get("cuentasPatrimonio");
-            	List<GenericValue> cuentasPatrimonioList = EntityUtil.orderBy(((Map<GenericValue, BigDecimal>) mapResults.get("cuentasPatrimonio")).keySet(), UtilMisc.toList("glAccountId"));
-            	
-            	if(i>0){
-                	//Agregamos las filas de ejecicios anteriores
-                	armaVariacionPatri(rows, cuentasPatGenAnteriorList, null, cuentasPatGenAnterior, null, null, Integer.valueOf(i),uiLabelMap,montoTraspaso);
-                	//Se agrega el patrimonio inicial del ejercicio
-                	armaVariacionInicial(rows,rowsInicialEjercicio.get(i-1),cuentasPatGenAnteriorList);
-                	//Agregamos las filas de patrimonio contribuido
-                	armaVariacionPatri(rows, cuentasPatContribuidoList, cuentasPatContribuido, null, null, null, Integer.valueOf(i),uiLabelMap,montoTraspaso);
-                	//Agregamos las filas de patrimonio generado en el ejercicio
-                	armaVariacionPatri(rows, cuentasPatGeneradoList, null, null, cuentasPatGenerado, null, Integer.valueOf(i),uiLabelMap,montoTraspaso);
-                	//Agregamos las filas de patrimonio generado en el ejercicio
-                	armaVariacionPatri(rows, cuentasPatrimonioList, null, null, null, cuentasPatrimonio, Integer.valueOf(i),uiLabelMap,montoTraspaso);
-            	}
-            	
-                //Patrimonio al final del ejercicicio
-            	montoTraspaso = armaVariacionFinal(rows,rowsInicialEjercicio, mapResults,uiLabelMap,anioIni,i);
-            	
-          		i++;
-          		anioIni++;
-          	}
-          	
-            // sort records by account code
-            Collections.sort(rows, new Comparator<Map<String, Object>>() {
-                public int compare(Map<String, Object> o1, Map<String, Object> o2) {
-                    Integer accountTypeSeqNum1 = (Integer) o1.get("accountTypeSeqNum");
-                    Integer accountTypeSeqNum2 = (Integer) o2.get("accountTypeSeqNum");
-                    int c = accountTypeSeqNum1.compareTo(accountTypeSeqNum2);
-                    return c;
-                }
-            });
-            
+          //Lista principal de datos a enviar
+            List<Map<String, Object>> rows = generaReporteVariacion(listDatesAll,uiLabelMap,anioIni);
             
             request.setAttribute("jrDataSource", new JRMapCollectionDataSource(rows));
 
@@ -377,6 +325,71 @@ public final class FinancialReports {
     } 
     
     /**
+     * Genera el reporte y regresa una lista con mapas con los datos correspondientes
+     * @param listDatesAll
+     * @param uiLabelMap
+     * @param anioIni
+     * @return
+     */
+    private static List<Map<String, Object>> generaReporteVariacion(
+			List<Map<String, Object>> listDatesAll, ResourceBundleMapWrapper uiLabelMap, int anioIni) {
+    	
+    	List<Map<String, Object>> rows = FastList.newInstance();
+
+        List<Map<String, Object>> rowsInicialEjercicio = FastList.newInstance();
+
+        BigDecimal montoTraspaso = ZERO;
+        
+      	//Se arma completamente el reporte
+        int i = 0;
+      	for (Map<String, Object> mapResults : listDatesAll) {
+      		
+      		Debug.logWarning("listDates  + "+i+" "+mapResults, MODULE);
+      		
+        	Map<GenericValue,BigDecimal> cuentasPatContribuido = (Map<GenericValue, BigDecimal>) mapResults.get("cuentasPatContribuido");
+        	List<GenericValue> cuentasPatContribuidoList = EntityUtil.orderBy(((Map<GenericValue, BigDecimal>) mapResults.get("cuentasPatContribuido")).keySet(), UtilMisc.toList("glAccountId"));
+        	Map<GenericValue,BigDecimal> cuentasPatGenAnterior = (Map<GenericValue, BigDecimal>) mapResults.get("cuentasPatGenAnterior");
+        	List<GenericValue> cuentasPatGenAnteriorList = EntityUtil.orderBy(((Map<GenericValue, BigDecimal>) mapResults.get("cuentasPatGenAnterior")).keySet(), UtilMisc.toList("glAccountId"));        	
+        	Map<GenericValue,BigDecimal> cuentasPatGenerado = (Map<GenericValue, BigDecimal>) mapResults.get("cuentasPatGenerado");
+        	List<GenericValue> cuentasPatGeneradoList = EntityUtil.orderBy(((Map<GenericValue, BigDecimal>) mapResults.get("cuentasPatGenerado")).keySet(), UtilMisc.toList("glAccountId"));        	
+        	Map<GenericValue,BigDecimal> cuentasPatrimonio = (Map<GenericValue, BigDecimal>) mapResults.get("cuentasPatrimonio");
+        	List<GenericValue> cuentasPatrimonioList = EntityUtil.orderBy(((Map<GenericValue, BigDecimal>) mapResults.get("cuentasPatrimonio")).keySet(), UtilMisc.toList("glAccountId"));
+        	
+        	if(i>0){
+            	//Agregamos las filas de ejecicios anteriores
+            	armaVariacionPatri(rows, cuentasPatGenAnteriorList, null, cuentasPatGenAnterior, null, null, Integer.valueOf(i),uiLabelMap,montoTraspaso);
+            	//Se agrega el patrimonio inicial del ejercicio
+            	armaVariacionInicial(rows,rowsInicialEjercicio.get(i-1),cuentasPatGenAnteriorList);
+            	//Agregamos las filas de patrimonio contribuido
+            	armaVariacionPatri(rows, cuentasPatContribuidoList, cuentasPatContribuido, null, null, null, Integer.valueOf(i),uiLabelMap,montoTraspaso);
+            	//Agregamos las filas de patrimonio generado en el ejercicio
+            	armaVariacionPatri(rows, cuentasPatGeneradoList, null, null, cuentasPatGenerado, null, Integer.valueOf(i),uiLabelMap,montoTraspaso);
+            	//Agregamos las filas de patrimonio generado en el ejercicio
+            	armaVariacionPatri(rows, cuentasPatrimonioList, null, null, null, cuentasPatrimonio, Integer.valueOf(i),uiLabelMap,montoTraspaso);
+        	}
+        	
+            //Patrimonio al final del ejercicicio
+        	montoTraspaso = armaVariacionFinal(rows,rowsInicialEjercicio, mapResults,uiLabelMap,anioIni,i);
+        	
+      		i++;
+      		anioIni++;
+      	}
+      	
+        // sort records by account code
+        Collections.sort(rows, new Comparator<Map<String, Object>>() {
+            public int compare(Map<String, Object> o1, Map<String, Object> o2) {
+                Integer accountTypeSeqNum1 = (Integer) o1.get("accountTypeSeqNum");
+                Integer accountTypeSeqNum2 = (Integer) o2.get("accountTypeSeqNum");
+                int c = accountTypeSeqNum1.compareTo(accountTypeSeqNum2);
+                return c;
+            }
+        });
+        
+        return rows;
+		
+	}
+
+	/**
      * Arma el renglon de patrimonio inicial
      * @param rows
      * @param rowsInicialEjercicio
@@ -1791,8 +1804,15 @@ public final class FinancialReports {
             	
             	String asOfDate = UtilCommon.getParameter(request, "asOfDate");
             	Timestamp asOfDateTimeLast = UtilDateTime.getDayEnd(UtilDate.toTimestamp(asOfDate, timeZone, locale), timeZone, locale);
-            	Timestamp asOfDateTimeNextLast = UtilDateTime.addDaysToTimestamp(asOfDateTimeLast, -365);
-            	Timestamp asOfDateTime2ndLast = UtilDateTime.addDaysToTimestamp(asOfDateTimeNextLast, -365);
+            	//Obtenemos los datos de la fecha final
+            	int year = UtilDateTime.getYear(asOfDateTimeLast, timeZone, locale);
+            	int month = UtilDateTime.getMonth(asOfDateTimeLast, timeZone, locale);
+            	int day = UtilDateTime.getDayOfMonth(asOfDateTimeLast, timeZone, locale);
+            	int hour = UtilDateTime.getHour(asOfDateTimeLast, timeZone, locale);
+            	int minute = UtilDateTime.getMinute(asOfDateTimeLast, timeZone, locale);
+            	int second = UtilDateTime.getSecond(asOfDateTimeLast, timeZone, locale);
+            	Timestamp asOfDateTimeNextLast = UtilDateTime.toTimestamp(month, day, (year-1), hour, minute, second);
+            	Timestamp asOfDateTime2ndLast = UtilDateTime.toTimestamp(month, day, (year-2), hour, minute, second);
             	
             	datos.put("asOfDateTimeLast", asOfDateTimeLast);
             	datos.put("asOfDateTimeNextLast", asOfDateTimeNextLast);
@@ -1819,7 +1839,7 @@ public final class FinancialReports {
             	datos.put("customTimePeriodId2ndLast", customTimePeriodId2ndLast);
             	
             	datos.put("fromDate", UtilDateTime.getDayStart(UtilDateTime.toTimestamp(customPeriod.getDate("fromDate"))));
-            	datos.put("thruDate", UtilDateTime.getDayEnd(UtilDateTime.toTimestamp(customPeriod.getDate("thruDate"))));
+            	datos.put("thruDate", UtilDateTime.getDayStart(UtilDateTime.toTimestamp(customPeriod.getDate("thruDate"))));
             	
             	Debug.logWarning("customTimePeriodId   "+customTimePeriodId, MODULE);
             	Debug.logWarning("customTimePeriodIdNextLast   "+customTimePeriodIdNextLast, MODULE);

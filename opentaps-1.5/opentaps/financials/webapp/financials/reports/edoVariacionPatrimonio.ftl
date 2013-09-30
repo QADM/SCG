@@ -25,14 +25,13 @@
       <tr>
         <td class="tabletext">${account.accountName?if_exists}</td>
         <td class="tabletext" align="right"><@ofbizCurrency amount=account.contribuido isoCode=currencyUomId/></td>
-        <td class="tabletext" align="right"><@ofbizCurrency amount=account.ejercicio isoCode=currencyUomId/></td>
         <td class="tabletext" align="right"><@ofbizCurrency amount=account.anteriores isoCode=currencyUomId/></td>
+        <td class="tabletext" align="right"><@ofbizCurrency amount=account.ejercicio isoCode=currencyUomId/></td>
         <td class="tabletext" align="right"><@ofbizCurrency amount=account.ajustes isoCode=currencyUomId/></td>
         <td class="tabletext" align="right"><@ofbizCurrency amount=account.total isoCode=currencyUomId/></td>
       </tr>
      </#if>
     </#list>
-    <tr><td colspan="6"><hr/></td></tr>
 </#macro>
 
 <#if listaReporte?has_content>
