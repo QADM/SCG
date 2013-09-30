@@ -48,7 +48,7 @@
     <!--
     <link rel="shortcut icon" href="<@ofbizContentUrl>/opentaps_images/favicon.ico</@ofbizContentUrl>">
     -->
-    <title><#if pageTitleLabel?exists>${uiLabelMap.get(pageTitleLabel)} |</#if> ${configProperties.get(opentapsApplicationName+".title")}</title>
+    <title><#if pageTitleLabel?exists>${uiLabelMap.get(pageTitleLabel)} </#if> </title>
 
     <#assign appName = Static["org.ofbiz.base.util.UtilHttp"].getApplicationName(request)/>
 
