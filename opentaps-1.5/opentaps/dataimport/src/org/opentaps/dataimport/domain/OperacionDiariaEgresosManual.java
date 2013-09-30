@@ -223,7 +223,13 @@ public class OperacionDiariaEgresosManual {
 	        }
         
         } catch (GenericEntityException e) {
-        	return UtilMessage.createAndLogServiceError(e, MODULE);
+        	Debug.log( e.getMessage(), MODULE);
+			Exception message = e;
+			if(e.getMessage().contains("Violation of PRIMARY KEY constraint"))
+			{
+				 message = new Exception("Error: No se puede insertar registro duplicado");
+			}
+        	return UtilMessage.createAndLogServiceError(message, MODULE);
 		} catch (GenericServiceException e) {
 			return UtilMessage.createAndLogServiceError(e, MODULE);
 		} catch (ServiceException e) {
