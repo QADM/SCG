@@ -40,8 +40,12 @@
                    linkUrl="reportsMain"       securityModule="FINANCIALS" securityAction="RPT_VIEW" handlerMethod=""/>
 <OpentapsWebAppTab applicationId="financials"  sequenceNum="080" tabId="configuration" uiLabel="Administración contable"
                    linkUrl="configurationMain" securityModule="FINANCIALS" securityAction="CONFIG" handlerMethod=""/>
+<OpentapsWebAppTab applicationId="financials"  sequenceNum="090" tabId="MantenimientoCat" uiLabel="Mantenimiento de catálogos"
+                   linkUrl="MantenimientoCat" securityModule="FINANCIALS" securityAction="" handlerMethod=""/>
 <OpentapsWebAppTab applicationId="financials"  sequenceNum="500" tabId="ofbiz" uiLabel="Menú principal"
                    linkUrl="/opentaps" isExternal="Y" securityModule="" securityAction="" handlerMethod=""/>
+                   
+
 
 <!-- Shortcut groups -->
 <!-- Receivables shortcuts -->

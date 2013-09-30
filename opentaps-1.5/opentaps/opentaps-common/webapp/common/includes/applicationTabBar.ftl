@@ -49,6 +49,7 @@
 <ul class="sectionTabBar">
   <#list applicationSections as section>
 	<#if section.tabId!="myHome">
+
 	    <#if section.isExternal?exists && "Y" == section.isExternal?upper_case>
 	      <#assign url=section.linkUrl + "?" + response.encodeURL(externalKeyParam)/>
 	    <#else>
