@@ -18,11 +18,16 @@
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
 <#-- TODO: probably some kind of permission checking to see that this userLogin can view such and such reports -->
+<b>Lista de catálogos</b>
+<div style="margin-left: 40px;">
 
-
-
-<#list Catalogo as cat>
-	<br>
-	<a href='http://localhost:8080/webtools/control/FindGeneric?find=true&VIEW_SIZE=50&VIEW_INDEX=0&entityName=${cat.name}'>${cat.uiLabel}</a>
-	</br>
-</#list>
+	<ul>
+		<#list Catalogo as cat>
+		 	<li type= disc>
+		 		<font size=1>
+		 			<a href='http://localhost:8080/webtools/control/FindGeneric?find=true&VIEW_SIZE=50&VIEW_INDEX=0&entityName=${cat.name}'>${cat.uiLabel}</a>
+				</font>	 	
+		 	</li>
+		</#list>
+	</ul>
+<div>
