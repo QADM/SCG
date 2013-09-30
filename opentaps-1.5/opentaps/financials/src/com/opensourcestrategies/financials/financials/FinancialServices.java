@@ -114,7 +114,7 @@ public final class FinancialServices {
 			"TASyOA","OTROS IyB","IVI","GASTO DE FUNCION","TASyOA DE GASTOS","PARTICIPyA DE GASTOS","ICyOGDP","OGPE");
     
     /** Clases para buscar los datos del estado de Variacion en la hacienda publica / patrimonio. */
-    public static final List<String> ESTADO_VARIACION_PATRIMONIO = Arrays.asList("HPPC","HPPGE","HPPGEA","HPP");
+    public static final List<String> ESTADO_VARIACION_PATRIMONIO = Arrays.asList("HPPC","HPPGEA","HPPGE","HPPAJ");
         
 
     /**
@@ -1451,7 +1451,7 @@ public final class FinancialServices {
         	cuentasPatGenerado = getEntriesGlOrganizationAmount(organizationPartyId,desdeFecha,asOfDate,glFiscalTypeId,ESTADO_VARIACION_PATRIMONIO.get(2),userLogin, dispatcher,delegator);
         	cuentasPatrimonio = getEntriesGlOrganizationAmount(organizationPartyId,desdeFecha,asOfDate,glFiscalTypeId,ESTADO_VARIACION_PATRIMONIO.get(3),userLogin, dispatcher,delegator);
         	    		
-    		
+    		Debug.logWarning("cuentasPatGenAnterior Justo despues de buscar y ordenar "+cuentasPatGenAnterior, MODULE);
     	}
 
         Map results = ServiceUtil.returnSuccess();
@@ -1481,21 +1481,121 @@ public final class FinancialServices {
     	Map<GenericValue,BigDecimal> cuentasPatrimonio = FastMap.newInstance();
     	
     	cuentasPatrimonio = getAcctgTransAndEntriesForClass(cuentasPatrimonio, organizationPartyId, desdeFecha, asOfDate, glFiscalTypeId, tipoVariacion, null, true, userLogin, dispatcher);
-    		
-    	for (Iterator<GenericValue> iterCuentas = cuentasPatrimonio.keySet().iterator(); iterCuentas.hasNext();) {
-    		
-    		GenericValue acctEntrie = (GenericValue) iterCuentas.next();
-    		
-    		String acctId = acctEntrie.getString("glAccountId");
-    		GenericValue glAccountOrg = delegator.findByPrimaryKey("GlAccountOrganization", UtilMisc.toMap("organizationPartyId",organizationPartyId,"glAccountId",acctId));
-
-    		Debug.logWarning("Se cambia la catidad : "+acctEntrie.get("postedBalance")+" por la canitdad de  --> "+glAccountOrg.getBigDecimal("sumPostedBalance"), MODULE);
-    		
-    		acctEntrie.set("postedBalance", glAccountOrg.getBigDecimal("sumPostedBalance"));
-    		
-    	}
     	
+		Debug.logWarning("cuentasPatrimonio %% "+cuentasPatrimonio, MODULE);
+		
+		Map<GenericValue,BigDecimal> cuentasPatrimonioCopyMap = FastMap.newInstance();
+		cuentasPatrimonioCopyMap.putAll(cuentasPatrimonio);
+    	
+		for (Map.Entry<GenericValue,BigDecimal> cuentasPat : cuentasPatrimonioCopyMap.entrySet())
+		{
+
+			GenericValue acctEntrie = (GenericValue) cuentasPat.getKey();
+			
+			Debug.logWarning("acctEntrie "+acctEntrie, MODULE);
+			
+			BigDecimal acumulado = ZERO;
+			
+			if(cuentasPat.getValue() == null){
+				cuentasPatrimonio.put(acctEntrie, ZERO);
+				acumulado = ZERO;
+			} else{
+				acumulado = cuentasPat.getValue();
+			}
+				
+    		String acctId = acctEntrie.getString("glAccountId");
+    		BigDecimal montoPadre = ZERO;
+			
+    		//Calculamos las cantidades en los padres de las cuentas, y si es necesario (no existe) se agrega la cuenta al mapa
+    		while(obtenPadreAccount(acctId, delegator) != null){
+    			
+    			GenericValue accountPadre = obtenPadreAccount(acctId, delegator);
+    			
+    			acctId = accountPadre.getString("glAccountId");
+    			
+    			Debug.logWarning("acctId Padre"+acctId, MODULE);
+    			Debug.logWarning("acumulado "+acumulado, MODULE);
+    			
+    			if(existeEnMapa(acctId, cuentasPatrimonio) != null){
+    				
+    				accountPadre = existeEnMapa(acctId, cuentasPatrimonio);
+    				montoPadre = cuentasPatrimonio.get(accountPadre);
+    				Debug.logWarning("montoPadre "+montoPadre, MODULE);
+    				acumulado = acumulado.add(montoPadre == null? ZERO :montoPadre);
+    				cuentasPatrimonio.put(accountPadre, acumulado);
+
+    			} else {
+    				
+    				cuentasPatrimonio.put(accountPadre, acumulado);
+    			}
+    			
+    			Debug.logWarning("accountPadre "+accountPadre, MODULE);
+    		} 
+    		
+			
+		}
+		
+		for (Iterator<GenericValue> iterCuentas = cuentasPatrimonio.keySet().iterator(); iterCuentas.hasNext();) {
+			GenericValue glAccount = iterCuentas.next();
+			BigDecimal monto = cuentasPatrimonio.get(glAccount);
+			Debug.logWarning("Monto iteracion  "+monto+"   Monto original  "+glAccount.getString("postedBalance"), MODULE);
+			monto = (monto == null ? ZERO : monto);
+			glAccount.set("postedBalance", monto);
+		}
+    	
+		Debug.logWarning("cuentasPatrimonio  Debug .... ", MODULE);
+		for (Map.Entry<GenericValue,BigDecimal> cuentasPat : cuentasPatrimonio.entrySet())
+		{
+			Debug.logWarning("Llave :::  "+cuentasPat.getKey()+"   Valor ::: "+cuentasPat.getValue(),MODULE);
+		}
+		
     	return cuentasPatrimonio;
+    }
+    
+    /**
+     * Verifica si el id de cuenta existe en los objetos de un mapa 
+     * @param glAccountId
+     * @param mapaBusca
+     * @return
+     */
+    public static GenericValue existeEnMapa(String glAccountId , Map<GenericValue, BigDecimal> mapaBusca){
+    	
+    	GenericValue encontrado = null;
+    	
+	    	for (Iterator<GenericValue> iterCuentas = mapaBusca.keySet().iterator(); iterCuentas.hasNext();) {
+	    		GenericValue cuenta = iterCuentas.next();
+	    		String idCuenta = cuenta.getString("glAccountId");
+	    		
+	    		if(idCuenta.equalsIgnoreCase(glAccountId)){
+	    			encontrado = cuenta;
+	    			break;
+	    		}
+	    			
+	    	}
+	    	
+	    	Debug.logWarning("Existe en mapa "+glAccountId+"   encontrado "+encontrado, MODULE);
+    	
+    	return encontrado;
+    }
+    
+    /**
+     * metodo para obtener el padre de una cuenta
+     * @param glAccountId
+     * @param delegator
+     * @return
+     * @throws GenericEntityException
+     */
+    public static GenericValue obtenPadreAccount(String glAccountId, Delegator delegator) throws GenericEntityException{
+    	
+    	GenericValue padre = null;
+    	
+    		GenericValue glAccount = delegator.findByPrimaryKey("GlAccount", UtilMisc.toMap("glAccountId",glAccountId));
+    		if(glAccount != null && !glAccount.isEmpty()){
+    			String idPadre = glAccount.getString("parentGlAccountId");
+    			padre = delegator.findByPrimaryKey("GlAccount", UtilMisc.toMap("glAccountId",idPadre));
+    		}
+    		
+    	return padre;
     }
     
     /**

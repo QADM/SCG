@@ -2114,7 +2114,6 @@ under the License.
       <field name="fromDate" type="date-time"></field>
       <field name="thruDate" type="date-time"></field>
       <field name="postedBalance" type="currency-amount"></field>
-      <field name="sumPostedBalance" type="currency-amount"></field>
       <prim-key field="glAccountId"/>
       <prim-key field="organizationPartyId"/>
       <relation type="one" fk-name="GLACCT_ORG_GLA" rel-entity-name="GlAccount">

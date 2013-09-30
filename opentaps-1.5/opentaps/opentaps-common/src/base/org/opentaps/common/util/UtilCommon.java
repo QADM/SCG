@@ -1939,4 +1939,18 @@ public abstract class UtilCommon {
         }
         
     }
+    
+    /**
+     * Valida si el monto pasado es nulo , si es asi regresa ZERO 
+     * @param monto
+     * @return 
+     */
+    public static BigDecimal getBigdecimal(BigDecimal monto){
+    	
+    	if(monto == null)
+    		return BigDecimal.ZERO;
+    	else
+    		return monto;
+    	
+    }
 }

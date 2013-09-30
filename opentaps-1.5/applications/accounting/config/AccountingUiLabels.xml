@@ -1281,10 +1281,10 @@
         <value xml:lang="es">Estado de Variación en la Hacienda Pública y Patrimonio</value>
     </property>     
 	<property key="PatrimonioNetoAnterior">
-        <value xml:lang="es">Hacienda Pública/Patrimonio Neto al Final del Ejercicio Anterior</value>
+        <value xml:lang="es">Patrimonio Neto al Final del Ejercicio Anterior</value>
     </property> 
 	<property key="PatrimonioNeto">
-        <value xml:lang="es">Hacienda Pública/Patrimonio Neto al Final del Ejercicio</value>
+        <value xml:lang="es">Patrimonio Neto al Final del Ejercicio</value>
     </property>   
 	<property key="RectificacionesPatrimonio">
         <value xml:lang="es">Rectificaciones de Resultados de Ejercicios Anteriores</value>
@@ -1309,7 +1309,10 @@
     </property>                         
 	<property key="Concepto">
         <value xml:lang="es">Concepto</value>
-    </property>                                             
+    </property> 
+    <property key="TraspasoResultados">
+        <value xml:lang="es">Traspaso de Resultados</value>
+    </property>                                                     
      <!-- Etiquetas para Reportes CUSTOM @JSCF -->
 	<!-- Etiquetas para Reportes CUSTOM PRESUOUESTO @CG -->
      <property key="EjecucionEgresoAdministrativa">

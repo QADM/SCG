@@ -28,6 +28,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -108,11 +109,12 @@ import com.opensourcestrategies.financials.util.UtilFinancial;
 public final class FinancialReports {
 
     private static final String MODULE = FinancialReports.class.getName();
-    private static final BigDecimal ZERO = BigDecimal.ZERO;
     /**
-     * Variable utilizada para mostrar las cantidades en miles de pesos
+     * Variable Bigdecimal utiles para operaciones
      */
+    private static final BigDecimal ZERO = BigDecimal.ZERO;
 	private static final BigDecimal MIL = new BigDecimal(1000);
+	private static final BigDecimal UNOMs = new BigDecimal(-1);
 
     private FinancialReports() { }
 
@@ -262,6 +264,7 @@ public final class FinancialReports {
         Locale locale = UtilHttp.getLocale(request);
         ResourceBundleMapWrapper uiLabelMap = UtilMessage.getUiLabels(locale);
         String reportType = UtilCommon.getParameter(request, "type");
+        TimeZone timeZone = UtilHttp.getTimeZone(request);
 
         try {
         	
@@ -277,15 +280,35 @@ public final class FinancialReports {
             Map<String, Object> nextLastDateResults = (Map<String, Object>) results.get("nextLastDateResults");
             Map<String, Object> lastDateResults = (Map<String, Object>) results.get("lastDateResults");
             
-            List<Map<String, Object>> listDates = new ArrayList<Map<String, Object>>();
-            listDates.add(secondLastDateResults);
-            listDates.add(nextLastDateResults);
-            listDates.add(lastDateResults);
+            Debug.logWarning(" secondLastDateResults "+secondLastDateResults, MODULE);
+            Debug.logWarning(" nextLastDateResults "+nextLastDateResults, MODULE);
+            Debug.logWarning(" lastDateResults "+lastDateResults, MODULE);
             
-          List<Map<String, Object>> rows = FastList.newInstance(); 
+            Timestamp fromDate = (Timestamp) mapDatos.get("fromDate");
+            int anioIni = UtilDateTime.getYear(fromDate, timeZone, locale);
+            anioIni = anioIni - 2;
             
-            for (Map<String, Object> mapResults : listDates) {
-            	
+            //Lista principal de datos a enviar
+            List<Map<String, Object>> rows = FastList.newInstance();
+          	
+            /**
+             * Comienza reporte
+             */
+            List<Map<String, Object>> listDatesAll = new ArrayList<Map<String, Object>>();
+            listDatesAll.add(secondLastDateResults);
+            listDatesAll.add(nextLastDateResults);
+            listDatesAll.add(lastDateResults);
+            
+            List<Map<String, Object>> rowsInicialEjercicio = FastList.newInstance();
+
+            BigDecimal montoTraspaso = ZERO;
+            
+          	//Se arma completamente el reporte
+            int i = 0;
+          	for (Map<String, Object> mapResults : listDatesAll) {
+          		
+          		Debug.logWarning("listDates  + "+i+" "+mapResults, MODULE);
+          		
             	Map<GenericValue,BigDecimal> cuentasPatContribuido = (Map<GenericValue, BigDecimal>) mapResults.get("cuentasPatContribuido");
             	List<GenericValue> cuentasPatContribuidoList = EntityUtil.orderBy(((Map<GenericValue, BigDecimal>) mapResults.get("cuentasPatContribuido")).keySet(), UtilMisc.toList("glAccountId"));
             	Map<GenericValue,BigDecimal> cuentasPatGenAnterior = (Map<GenericValue, BigDecimal>) mapResults.get("cuentasPatGenAnterior");
@@ -295,187 +318,35 @@ public final class FinancialReports {
             	Map<GenericValue,BigDecimal> cuentasPatrimonio = (Map<GenericValue, BigDecimal>) mapResults.get("cuentasPatrimonio");
             	List<GenericValue> cuentasPatrimonioList = EntityUtil.orderBy(((Map<GenericValue, BigDecimal>) mapResults.get("cuentasPatrimonio")).keySet(), UtilMisc.toList("glAccountId"));
             	
-            	//Primera etapa (encabezado)
-            	for (Map.Entry<GenericValue,BigDecimal> cuentasPatGenAnt : cuentasPatGenAnterior.entrySet())
-            	{
-//            		System.out.println(cuentasPatGenAnt.getKey() + "/" + cuentasPatGenAnt.getValue());
+            	if(i>0){
+                	//Agregamos las filas de ejecicios anteriores
+                	armaVariacionPatri(rows, cuentasPatGenAnteriorList, null, cuentasPatGenAnterior, null, null, Integer.valueOf(i),uiLabelMap,montoTraspaso);
+                	//Se agrega el patrimonio inicial del ejercicio
+                	armaVariacionInicial(rows,rowsInicialEjercicio.get(i-1),cuentasPatGenAnteriorList);
+                	//Agregamos las filas de patrimonio contribuido
+                	armaVariacionPatri(rows, cuentasPatContribuidoList, cuentasPatContribuido, null, null, null, Integer.valueOf(i),uiLabelMap,montoTraspaso);
+                	//Agregamos las filas de patrimonio generado en el ejercicio
+                	armaVariacionPatri(rows, cuentasPatGeneradoList, null, null, cuentasPatGenerado, null, Integer.valueOf(i),uiLabelMap,montoTraspaso);
+                	//Agregamos las filas de patrimonio generado en el ejercicio
+                	armaVariacionPatri(rows, cuentasPatrimonioList, null, null, null, cuentasPatrimonio, Integer.valueOf(i),uiLabelMap,montoTraspaso);
             	}
             	
+                //Patrimonio al final del ejercicicio
+            	montoTraspaso = armaVariacionFinal(rows,rowsInicialEjercicio, mapResults,uiLabelMap,anioIni,i);
             	
-			}
-            
-//        	Map<GenericValue,BigDecimal> cuentasPatrimonioSld = (Map<GenericValue, BigDecimal>) secondLastDateResults.get("cuentasPatrimonio");
-//        	List<GenericValue> cuentasPatrimonioSldList = EntityUtil.orderBy(((Map<GenericValue, BigDecimal>) secondLastDateResults.get("cuentasPatrimonio")).keySet(), UtilMisc.toList("glAccountId"));
-//        	Map<GenericValue,BigDecimal> cuentasPatContribuidoSld = (Map<GenericValue, BigDecimal>) secondLastDateResults.get("cuentasPatContribuido");
-//        	List<GenericValue> cuentasPatContribuidoSldList = EntityUtil.orderBy(((Map<GenericValue, BigDecimal>) secondLastDateResults.get("cuentasPatContribuido")).keySet(), UtilMisc.toList("glAccountId"));
-//        	Map<GenericValue,BigDecimal> cuentasPatGenAnteriorSld = (Map<GenericValue, BigDecimal>) secondLastDateResults.get("cuentasPatGenAnterior");
-//        	List<GenericValue> cuentasPatGenAnteriorSldList = EntityUtil.orderBy(((Map<GenericValue, BigDecimal>) secondLastDateResults.get("cuentasPatGenAnterior")).keySet(), UtilMisc.toList("glAccountId"));        	
-//        	Map<GenericValue,BigDecimal> cuentasPatGeneradoSld = (Map<GenericValue, BigDecimal>) secondLastDateResults.get("cuentasPatGenerado");
-//        	List<GenericValue> cuentasPatGeneradoSldList = EntityUtil.orderBy(((Map<GenericValue, BigDecimal>) secondLastDateResults.get("cuentasPatGenerado")).keySet(), UtilMisc.toList("glAccountId"));        	
-//        	
-//        	Map<GenericValue,BigDecimal> cuentasPatrimonioNl = (Map<GenericValue, BigDecimal>) nextLastDateResults.get("cuentasPatrimonio");
-//        	List<GenericValue> cuentasPatrimonioNlList = EntityUtil.orderBy(((Map<GenericValue, BigDecimal>) nextLastDateResults.get("cuentasPatrimonio")).keySet(), UtilMisc.toList("glAccountId"));
-//        	Map<GenericValue,BigDecimal> cuentasPatContribuidoNl = (Map<GenericValue, BigDecimal>) nextLastDateResults.get("cuentasPatContribuido");
-//        	List<GenericValue> cuentasPatContribuidoNlList = EntityUtil.orderBy(((Map<GenericValue, BigDecimal>) nextLastDateResults.get("cuentasPatContribuido")).keySet(), UtilMisc.toList("glAccountId"));
-//        	Map<GenericValue,BigDecimal> cuentasPatGenAnteriorNl = (Map<GenericValue, BigDecimal>) nextLastDateResults.get("cuentasPatGenAnterior");
-//        	List<GenericValue> cuentasPatGenAnteriorNlList = EntityUtil.orderBy(((Map<GenericValue, BigDecimal>) nextLastDateResults.get("cuentasPatGenAnterior")).keySet(), UtilMisc.toList("glAccountId"));        	
-//        	Map<GenericValue,BigDecimal> cuentasPatGeneradoNl = (Map<GenericValue, BigDecimal>) nextLastDateResults.get("cuentasPatGenerado");
-//        	List<GenericValue> cuentasPatGeneradoNlList = EntityUtil.orderBy(((Map<GenericValue, BigDecimal>) nextLastDateResults.get("cuentasPatGenerado")).keySet(), UtilMisc.toList("glAccountId"));
-//        	
-//        	Map<GenericValue,BigDecimal> cuentasPatrimonioLd = (Map<GenericValue, BigDecimal>) nextLastDateResults.get("cuentasPatrimonio");
-//        	List<GenericValue> cuentasPatrimonioLdList = EntityUtil.orderBy(((Map<GenericValue, BigDecimal>) nextLastDateResults.get("cuentasPatrimonio")).keySet(), UtilMisc.toList("glAccountId"));
-//        	Map<GenericValue,BigDecimal> cuentasPatContribuidoLd = (Map<GenericValue, BigDecimal>) nextLastDateResults.get("cuentasPatContribuido");
-//        	List<GenericValue> cuentasPatContribuidoLdList = EntityUtil.orderBy(((Map<GenericValue, BigDecimal>) nextLastDateResults.get("cuentasPatContribuido")).keySet(), UtilMisc.toList("glAccountId"));
-//        	Map<GenericValue,BigDecimal> cuentasPatGenAnteriorLd = (Map<GenericValue, BigDecimal>) nextLastDateResults.get("cuentasPatGenAnterior");
-//        	List<GenericValue> cuentasPatGenAnteriorLdList = EntityUtil.orderBy(((Map<GenericValue, BigDecimal>) nextLastDateResults.get("cuentasPatGenAnterior")).keySet(), UtilMisc.toList("glAccountId"));        	
-//        	Map<GenericValue,BigDecimal> cuentasPatGeneradoLd = (Map<GenericValue, BigDecimal>) nextLastDateResults.get("cuentasPatGenerado");
-//        	List<GenericValue> cuentasPatGeneradoLdList = EntityUtil.orderBy(((Map<GenericValue, BigDecimal>) nextLastDateResults.get("cuentasPatGenerado")).keySet(), UtilMisc.toList("glAccountId"));        	
-//        	
-
-//            
-//            Map<Integer, BigDecimal> primerBloque = FastMap.newInstance();
-//            String nombre = null;
-//            
-//            //Estas cuentas se ordenan para mostrarse en la columna correspondiente
-//        	for (GenericValue account : cuentasPatrimonioFrList) {
-//        		
-//        		String cuenta = account.getString("glAccountId");
-//        		BigDecimal monto = cuentasPatrimonioFr.get(account) == null ? null : cuentasPatrimonioFr.get(account).divide(MIL);
-//        		
-//        		if(cuenta.equals("3.1")){
-//        			primerBloque.put(Integer.valueOf(1), monto);
-//        		} else if(cuenta.equals("3.2.2")){
-//        			primerBloque.put(Integer.valueOf(2), monto);
-//        		} else if(cuenta.equals("3.2.1")){
-//        			primerBloque.put(Integer.valueOf(3), monto);
-//        		} else if(cuenta.equals("3.3")){
-//        			primerBloque.put(Integer.valueOf(4), monto);
-//        			nombre = account.getString("accountName");
-//        		}
-//			}
-//        	
-//        	BigDecimal total = ZERO;
-//        	total = (primerBloque.get(Integer.valueOf(1)) == null ? ZERO : primerBloque.get(Integer.valueOf(1))).add(
-//        			(primerBloque.get(Integer.valueOf(2)) == null ? ZERO : primerBloque.get(Integer.valueOf(2)))).add(
-//        			(primerBloque.get(Integer.valueOf(3)) == null ? ZERO : primerBloque.get(Integer.valueOf(3)))).add(
-//        			(primerBloque.get(Integer.valueOf(4)) == null ? ZERO : primerBloque.get(Integer.valueOf(4))));
-//        	
-//        	//Agregamos la primer fila
-//        	Map<String, Object> row = FastMap.newInstance();
-//        	row.put("accountName", uiLabelMap.get("PatrimonioNetoAnterior"));
-//        	row.put("contribuido", primerBloque.get(Integer.valueOf(1)) == null ? null : primerBloque.get(Integer.valueOf(1)).divide(MIL));
-//        	row.put("ejercicio", primerBloque.get(Integer.valueOf(2)) == null ? null : primerBloque.get(Integer.valueOf(2)).divide(MIL));
-//        	row.put("anteriores", primerBloque.get(Integer.valueOf(3)) == null ? null : primerBloque.get(Integer.valueOf(3)).divide(MIL));
-//        	row.put("ajustes", primerBloque.get(Integer.valueOf(4)) == null ? null : primerBloque.get(Integer.valueOf(4)).divide(MIL));
-//        	row.put("total", total == null ? null : total.divide(MIL));
-//        	row.put("accountTypeSeqNum", Integer.valueOf(1));
-//        	rows.add(row);
-//        	
-//        	Debug.logWarning("rows 1  }"+row, MODULE);
-//        	
-//        	//Agregamos las filas de ejecicios anteriores
-//        	armaVariacionPatri(rows, cuentasPatGenAnteriorFrList, null, null, cuentasPatGenAnteriorFr, null, Integer.valueOf(2));
-//        	//Agregamos las filas de patrimonio contribuido
-//        	armaVariacionPatri(rows, cuentasPatContribuidoFrList, cuentasPatContribuidoFr, null, null, null, Integer.valueOf(3));
-//        	//Agregamos las filas de patrimonio generado en el ejercicio
-//        	armaVariacionPatri(rows, cuentasPatGeneradoFrList, null, cuentasPatGeneradoFr, null, null, Integer.valueOf(4));
-//        	
-//        	
-//        	//Agregamos las filas de patrimonio ajustes (Ultimo registro de el primer bloque)
-//    		row = FastMap.newInstance();
-//        	row.put("accountName", nombre);
-//        	row.put("contribuido", null);
-//        	row.put("ejercicio", null);
-//        	row.put("anteriores", null);
-//        	row.put("ajustes", primerBloque.get(Integer.valueOf(4))  == null ? null : primerBloque.get(Integer.valueOf(4)).divide(MIL));
-//        	row.put("total", primerBloque.get(Integer.valueOf(4))  == null ? null : primerBloque.get(Integer.valueOf(4)).divide(MIL));
-//        	row.put("accountTypeSeqNum", Integer.valueOf(5));
-//        	rows.add(row);
-//
-//        	Map<Integer, BigDecimal> segundoBloque = FastMap.newInstance();
-//            String nombre1 = null;
-//            
-//            //Estas cuentas se ordenan para mostrarse en la columna correspondiente
-//        	for (GenericValue account : cuentasPatrimonioTrList) {
-//        		
-//        		String cuenta = account.getString("glAccountId");
-//        		BigDecimal monto = cuentasPatrimonioTr.get(account) == null ? null : cuentasPatrimonioTr.get(account).divide(MIL);
-//        		if(cuenta.equals("3.1")){
-//        			segundoBloque.put(Integer.valueOf(1), monto);
-//        		} else if(cuenta.equals("3.2.2")){
-//        			segundoBloque.put(Integer.valueOf(2), monto);
-//        		} else if(cuenta.equals("3.2.1")){
-//        			segundoBloque.put(Integer.valueOf(3), monto);
-//        		} else if(cuenta.equals("3.3")){
-//        			segundoBloque.put(Integer.valueOf(4), monto);
-//        			nombre1 = account.getString("accountName");
-//        		}
-//        		
-//			}
-//        	
-//        	total = ZERO;
-//        	total = (segundoBloque.get(Integer.valueOf(1)) == null ? ZERO : segundoBloque.get(Integer.valueOf(1))).add(
-//        			(segundoBloque.get(Integer.valueOf(2)) == null ? ZERO : segundoBloque.get(Integer.valueOf(2)))).add(
-//        			(segundoBloque.get(Integer.valueOf(3)) == null ? ZERO : segundoBloque.get(Integer.valueOf(3)))).add(
-//        			(segundoBloque.get(Integer.valueOf(4)) == null ? ZERO : segundoBloque.get(Integer.valueOf(4))));
-//        	
-//        	//Agregamos la primer fila
-//        	row = FastMap.newInstance();
-//        	row.put("accountName", uiLabelMap.get("PatrimonioNeto"));
-//        	row.put("contribuido", segundoBloque.get(Integer.valueOf(1)) == null ? null : segundoBloque.get(Integer.valueOf(1)).divide(MIL));
-//        	row.put("ejercicio", segundoBloque.get(Integer.valueOf(2)) == null ? null : segundoBloque.get(Integer.valueOf(2)).divide(MIL));
-//        	row.put("anteriores", segundoBloque.get(Integer.valueOf(3)) == null ? null : segundoBloque.get(Integer.valueOf(3)).divide(MIL));
-//        	row.put("ajustes", segundoBloque.get(Integer.valueOf(4)) == null ? null : segundoBloque.get(Integer.valueOf(4)).divide(MIL));
-//        	row.put("total", total == null ? null : total.divide(MIL));
-//        	row.put("accountTypeSeqNum", Integer.valueOf(6));
-//        	rows.add(row);
-//        	
-//        	Debug.logWarning("row 1  #"+row, MODULE);
-//        	
-//        	//Agregamos las filas de ejecicios anteriores
-//        	armaVariacionPatri(rows, cuentasPatGenAnteriorTrList, null, null, cuentasPatGenAnteriorTr, null, Integer.valueOf(7));
-//        	//Agregamos las filas de patrimonio contribuido
-//        	armaVariacionPatri(rows, cuentasPatContribuidoTrList, cuentasPatContribuidoTr, null, null, null, Integer.valueOf(8));
-//        	//Agregamos las filas de patrimonio generado en el ejercicio
-//        	armaVariacionPatri(rows, cuentasPatGeneradoTrList, null, cuentasPatGeneradoTr, null, null, Integer.valueOf(9));
-//        	
-//        	//Agregamos las filas de patrimonio ajustes
-//        		row = FastMap.newInstance();
-//            	row.put("accountName", nombre1);
-//            	row.put("contribuido", null);
-//            	row.put("ejercicio", null);
-//            	row.put("anteriores", null);
-//            	row.put("ajustes", segundoBloque.get(Integer.valueOf(4)) == null ? null : segundoBloque.get(Integer.valueOf(4)).divide(MIL));
-//            	row.put("total", segundoBloque.get(Integer.valueOf(4)) == null ? null : segundoBloque.get(Integer.valueOf(4)).divide(MIL));
-//            	row.put("accountTypeSeqNum", Integer.valueOf(10));
-//            	rows.add(row);
-//        	
-//            	
-//            Debug.logWarning("row 5 #"+row, MODULE);            
-
+          		i++;
+          		anioIni++;
+          	}
+          	
             // sort records by account code
-//            Collections.sort(rows, new Comparator<Map<String, Object>>() {
-//                public int compare(Map<String, Object> o1, Map<String, Object> o2) {
-//                    Integer accountTypeSeqNum1 = (Integer) o1.get("accountTypeSeqNum");
-//                    Integer accountTypeSeqNum2 = (Integer) o2.get("accountTypeSeqNum");
-//                    int c = accountTypeSeqNum1.compareTo(accountTypeSeqNum2);
-//                    if (c == 0) {
-//                        String accountCode1 = (String) o1.get("accountCode");
-//                        String accountCode2 = (String) o2.get("accountCode");
-//                        if (accountCode1 == null && accountCode2 == null) {
-//                            return 0;
-//                        }
-//                        if (accountCode1 == null && accountCode2 != null) {
-//                            return -1;
-//                        }
-//                        if (accountCode1 != null && accountCode2 == null) {
-//                            return 1;
-//                        }
-//                        return accountCode1.compareTo(accountCode2);
-//                    }
-//                    return c;
-//                }
-//            });
+            Collections.sort(rows, new Comparator<Map<String, Object>>() {
+                public int compare(Map<String, Object> o1, Map<String, Object> o2) {
+                    Integer accountTypeSeqNum1 = (Integer) o1.get("accountTypeSeqNum");
+                    Integer accountTypeSeqNum2 = (Integer) o2.get("accountTypeSeqNum");
+                    int c = accountTypeSeqNum1.compareTo(accountTypeSeqNum2);
+                    return c;
+                }
+            });
             
             
             request.setAttribute("jrDataSource", new JRMapCollectionDataSource(rows));
@@ -496,14 +367,162 @@ public final class FinancialReports {
 
         } catch (GenericServiceException e) {
             return UtilMessage.createAndLogEventError(request, e, locale, MODULE);
-//        } catch (GenericEntityException e) {
-//            return UtilMessage.createAndLogEventError(request, e, locale, MODULE);
+        } catch (GenericEntityException e) {
+            return UtilMessage.createAndLogEventError(request, e, locale, MODULE);
         } catch (RepositoryException e) {
             return UtilMessage.createAndLogEventError(request, e, locale, MODULE);
         }
 
         return reportType;
     } 
+    
+    /**
+     * Arma el renglon de patrimonio inicial
+     * @param rows
+     * @param rowsInicialEjercicio
+     * @param cuentasPatGenAnteriorList
+     */
+    private static void armaVariacionInicial(List<Map<String, Object>> rows,
+			Map<String, Object> rowsInicialEjercicio, List<GenericValue> cuentasPatGenAnteriorList) {
+    	
+    	BigDecimal montoEjerAnt = ZERO;
+    	String idCuenta = "";
+    	
+    	for (GenericValue genericValue : cuentasPatGenAnteriorList) {
+    		idCuenta = genericValue.getString("glAccountId");
+			if(idCuenta.equalsIgnoreCase("3.2.5")){
+				montoEjerAnt = genericValue.getBigDecimal("postedBalance");
+				montoEjerAnt = montoEjerAnt.divide(MIL);
+				break;
+			}
+		}
+    	
+    	BigDecimal montoAnterior = (BigDecimal) rowsInicialEjercicio.get("anteriores");
+    	BigDecimal montoAntTotal = montoEjerAnt.add(montoAnterior);
+    	
+    	rowsInicialEjercicio.put("anteriores", montoAntTotal);
+    	//Se recalcula el total de patrimonio inicial ajustado del ejercicio
+    	BigDecimal total = ZERO;
+    	total = total.add((BigDecimal) rowsInicialEjercicio.get("contribuido"));
+    	total = total.add(montoAntTotal);
+    	total = total.add((BigDecimal) rowsInicialEjercicio.get("ejercicio"));
+    	total = total.add((BigDecimal) rowsInicialEjercicio.get("ajustes"));
+    	rowsInicialEjercicio.put("total", total);
+    	rows.add(rowsInicialEjercicio);
+	}
+
+	/**
+     * Arma el renglon con los datos finales del ejercicio (anioIni)
+     * @param listaPrl
+     * @param rowsInicialEjercicio 
+     * @param listDatesAll
+     * @param uiLabelMap
+     * @param anioIni
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+	public static BigDecimal armaVariacionFinal(List<Map<String, Object>> listaPrl,
+			List<Map<String, Object>> rowsInicialEjercicio, Map<String, Object> mapResults,
+			ResourceBundleMapWrapper uiLabelMap, int anioIni,int i){            
+    
+	    BigDecimal montoTrans = ZERO;
+	    	
+	    Map<String, Object> row = FastMap.newInstance();
+	    //Se separan los encabezados para meterlos, posteriormente para mostrarlos
+      	List<GenericValue> cuentasPatContribuidoList = EntityUtil.orderBy(((Map<GenericValue, BigDecimal>) mapResults.get("cuentasPatContribuido")).keySet(), UtilMisc.toList("glAccountId"));
+      	List<GenericValue> cuentasPatGenAnteriorList = EntityUtil.orderBy(((Map<GenericValue, BigDecimal>) mapResults.get("cuentasPatGenAnterior")).keySet(), UtilMisc.toList("glAccountId"));
+      	List<GenericValue> cuentasPatGeneradoList = EntityUtil.orderBy(((Map<GenericValue, BigDecimal>) mapResults.get("cuentasPatGenerado")).keySet(), UtilMisc.toList("glAccountId"));
+      	List<GenericValue> cuentasPatrimonioList = EntityUtil.orderBy(((Map<GenericValue, BigDecimal>) mapResults.get("cuentasPatrimonio")).keySet(), UtilMisc.toList("glAccountId"));
+      	
+      	Debug.logWarning("cuentasPatContribuidoList "+cuentasPatContribuidoList, MODULE);
+      	Debug.logWarning("cuentasPatGenAnteriorList "+cuentasPatGenAnteriorList, MODULE);
+      	Debug.logWarning("cuentasPatGeneradoList "+cuentasPatGeneradoList, MODULE);
+      	Debug.logWarning("cuentasPatrimonioList "+cuentasPatrimonioList, MODULE);
+      	
+      //Primera etapa (encabezado)
+      	BigDecimal monto = ZERO;
+      	BigDecimal totalMonto = ZERO;
+      	String acctId = "";
+      	row.put("accountName", uiLabelMap.get("PatrimonioNetoAnterior")+" "+(anioIni));
+      	for (GenericValue patContr : cuentasPatContribuidoList) {
+      		acctId = patContr.getString("glAccountId");
+				if(acctId.equalsIgnoreCase("3.1")){
+					//Se agrega el monto del patrimonio contribuido
+//					monto = cuentasPatContribuido.get(patContr);
+					monto = patContr.getBigDecimal("postedBalance");
+					monto = (monto == null ? ZERO : monto);
+					Debug.logWarning("Monto 3.1 "+monto,MODULE);
+					break;
+				}
+			}
+      	row.put("contribuido",monto.divide(MIL));
+      	totalMonto = totalMonto.add(monto.divide(MIL));
+      	monto = ZERO;
+      	for (GenericValue patGenAnt : cuentasPatGenAnteriorList) {
+      		acctId = patGenAnt.getString("glAccountId");
+				if(acctId.equalsIgnoreCase("3.2.2") || acctId.equalsIgnoreCase("3.2.5")){
+//					BigDecimal auxMonto = cuentasPatGenAnterior.get(patGenAnt);
+					BigDecimal auxMonto = patGenAnt.getBigDecimal("postedBalance");
+					monto = monto.add(auxMonto == null ? ZERO : auxMonto);
+					Debug.logWarning("Monto 3.2.2 || 3.2.5 "+monto,MODULE);
+				}
+			}
+			//Se agrega el monto del patrimonio de ejercicios anteriores
+      	row.put("anteriores",monto.divide(MIL));
+      	totalMonto = totalMonto.add(monto.divide(MIL));
+      	monto = ZERO;
+      	for (GenericValue patGen : cuentasPatGeneradoList) {		
+      		acctId = patGen.getString("glAccountId");
+				if(acctId.equalsIgnoreCase("3.2.1") || acctId.equalsIgnoreCase("3.2.3")){
+//					BigDecimal auxMonto = cuentasPatGenerado.get(patGen);
+					BigDecimal auxMonto = patGen.getBigDecimal("postedBalance");
+					monto = monto.add(auxMonto == null ? ZERO : auxMonto);
+					Debug.logWarning("Monto 3.2.1 || 3.2.3 "+monto,MODULE);
+				}
+			}
+			//Se agrega el monto del patrimonio de ejercicios
+      	row.put("ejercicio",monto.divide(MIL));    
+      	totalMonto = totalMonto.add(monto.divide(MIL));
+      	monto = ZERO;
+      	for (GenericValue patrimonio : cuentasPatrimonioList) {
+      		acctId = patrimonio.getString("glAccountId");
+				if(acctId.equalsIgnoreCase("3.3")){
+//					BigDecimal auxMonto = cuentasPatrimonio.get(patrimonio);
+          		BigDecimal auxMonto = patrimonio.getBigDecimal("postedBalance");
+					monto = monto.add(auxMonto == null ? ZERO : auxMonto);
+					Debug.logWarning("Monto patrimonio "+monto,MODULE);
+				}
+			}
+			//Se agrega el monto del patrimonio de ejercicios
+      	row.put("ajustes",monto.divide(MIL));    
+      	totalMonto = totalMonto.add(monto.divide(MIL));            	
+      	//Se agreaga la suma total del renglon
+      	row.put("total",totalMonto);
+      	row.put("accountTypeSeqNum", Integer.valueOf(i));
+      	//Primera etapa (encabezado)            	
+    	
+    	listaPrl.add(row);
+    	
+    	Map<String, Object> rowCopy = new HashMap<String, Object>();
+    	rowCopy.putAll(row);
+    	rowCopy.put("accountName", uiLabelMap.get("PatrimonioNetoAjustado"));
+    	rowCopy.put("accountTypeSeqNum", Integer.valueOf(i+1));
+    	if(rowsInicialEjercicio != null && rowsInicialEjercicio.size()>0){
+    		Map<String, Object> rowPrev = rowsInicialEjercicio.get(i-1);
+    		BigDecimal contribuido = (BigDecimal) rowPrev.get("contribuido");
+    		BigDecimal anteriores = (BigDecimal) rowPrev.get("anteriores");
+    		BigDecimal ejercicio = (BigDecimal) rowPrev.get("ejercicio");
+    		BigDecimal ajustes = (BigDecimal) rowPrev.get("ajustes");
+    		rowCopy.put("contribuido", contribuido.add((BigDecimal) rowCopy.get("contribuido")));
+    		rowCopy.put("anteriores", anteriores.add((BigDecimal) rowCopy.get("anteriores")));
+    		rowCopy.put("ejercicio", ejercicio.add((BigDecimal) rowCopy.get("ejercicio")));
+    		rowCopy.put("ajustes", ajustes.add((BigDecimal) rowCopy.get("ajustes")));
+    	}
+    	rowsInicialEjercicio.add(rowCopy);	
+    	
+    	montoTrans = (BigDecimal) row.get("ejercicio");
+    	return montoTrans;
+    }
     
     /**
      * Metodo que se utiliza para armar el reporte variaciones del patrimonio
@@ -517,34 +536,93 @@ public final class FinancialReports {
      */
     public static void armaVariacionPatri(List<Map<String, Object>> listaPrl, 
     					List<GenericValue> listaItera , Map<GenericValue, BigDecimal> contribuido ,
-    					Map<GenericValue, BigDecimal> ejercicio , Map<GenericValue, BigDecimal> anteriores,
-    					Map<GenericValue, BigDecimal> ajustes ,Integer secuencia){
+    					Map<GenericValue, BigDecimal> anteriores, Map<GenericValue, BigDecimal> ejercicio , 
+    					Map<GenericValue, BigDecimal> ajustes ,Integer secuencia,
+    					ResourceBundleMapWrapper uiLabelMap,BigDecimal montoTraspaso){
     	
+   	 	String acctId = new String();
+   	 	Map<String,BigDecimal> idMapContribuido = FastMap.newInstance();
+   	 	if(contribuido != null)
+   	 	{
+	 		for (Map.Entry<GenericValue, BigDecimal> entry : contribuido.entrySet())
+	 		{
+		   	    acctId = entry.getKey().getString("glAccountId");
+				idMapContribuido.put(acctId, entry.getValue());
+	 		}
+   	 	}
+   	 	Map<String,BigDecimal> idMapEjercicio = FastMap.newInstance();
+   	 	if(ejercicio != null)
+   	 	{
+	 		for (Map.Entry<GenericValue, BigDecimal> entry : ejercicio.entrySet())
+	 		{
+		   	    acctId = entry.getKey().getString("glAccountId");
+		   	    idMapEjercicio.put(acctId, entry.getValue());
+	 		}
+   	 	}
+   	 	Map<String,BigDecimal> idMapAnteriores = FastMap.newInstance();
+   	 	if(anteriores != null)
+   	 	{
+   	 		for (Map.Entry<GenericValue, BigDecimal> entry : anteriores.entrySet())
+   	 		{
+   		   	    acctId = entry.getKey().getString("glAccountId");
+	   		   	idMapAnteriores.put(acctId, entry.getValue());
+   	 		}
+   	 	}
+
+   	 	Map<String,BigDecimal> idMapAjustes = FastMap.newInstance();
+   	 	if(ajustes != null)
+   	 	{
+   	 		for (Map.Entry<GenericValue, BigDecimal> entry : ajustes.entrySet())
+   	 		{
+   		   	    acctId = entry.getKey().getString("glAccountId");
+   		   	    idMapAjustes.put(acctId, entry.getValue());
+   	 		} 		
+   	 	}
+   	 	
+    	if(ejercicio != null){
+    		
+    		Map<String,Object> row = FastMap.newInstance();
+	        	row.put("accountName", uiLabelMap.get("TraspasoResultados"));
+	        	row.put("contribuido", ZERO );
+	        	row.put("anteriores", montoTraspaso);
+	        	row.put("ejercicio", montoTraspaso.multiply(UNOMs));
+	        	row.put("ajustes", ZERO);
+	        	row.put("total", ZERO);
+	        	row.put("accountTypeSeqNum", secuencia);
+	        	listaPrl.add(row);
+    	}
+   	 	
     	BigDecimal total = ZERO;
     	
     	for (GenericValue account : listaItera) {
     		
-        	total = (contribuido == null || contribuido.get(account) == null ? ZERO : contribuido.get(account)).add(
-        			(ejercicio == null || ejercicio.get(account) == null ? ZERO : ejercicio.get(account))).add(
-        			(anteriores == null || anteriores.get(account) == null ? ZERO : anteriores.get(account))).add(
-        			(ajustes == null || ajustes.get(account) == null ? ZERO : ajustes.get(account)));
+    		String idCuenta = account.getString("glAccountId");
     		
-    		Map<String,Object> row = FastMap.newInstance();
-        	row.put("accountName", account.getString("accountName"));
-        	row.put("contribuido", contribuido == null || contribuido.get(account) == null ? null : contribuido.get(account).divide(MIL));
-        	row.put("ejercicio", ejercicio == null || ejercicio.get(account) == null ? null : ejercicio.get(account).divide(MIL));
-        	row.put("anteriores", anteriores == null || anteriores.get(account) == null ? null : anteriores.get(account).divide(MIL));
-        	row.put("ajustes", ajustes == null || ajustes.get(account) == null ? null : ajustes.get(account).divide(MIL));
-        	row.put("total", total.divide(MIL));
-        	row.put("accountTypeSeqNum", secuencia);
+    		if(!idCuenta.equalsIgnoreCase("3") && !idCuenta.equalsIgnoreCase("3.1") && !idCuenta.equalsIgnoreCase("3.2")){
+    			
+	        	total = (contribuido == null || idMapContribuido.get(idCuenta) == null ? ZERO : idMapContribuido.get(idCuenta)).add(
+	        			(ejercicio == null || idMapEjercicio.get(idCuenta) == null ? ZERO : idMapEjercicio.get(idCuenta))).add(
+	        			(anteriores == null || idMapAnteriores.get(idCuenta) == null ? ZERO : idMapAnteriores.get(idCuenta))).add(
+	        			(ajustes == null || idMapAjustes.get(idCuenta) == null ? ZERO : idMapAjustes.get(idCuenta)));
+	        	
+	    		Map<String,Object> row = FastMap.newInstance();
+	        	row.put("accountName", account.getString("accountName"));
+	        	row.put("contribuido", contribuido == null || idMapContribuido.get(idCuenta) == null ? ZERO : idMapContribuido.get(idCuenta).divide(MIL));
+	        	row.put("anteriores", anteriores == null || idMapAnteriores.get(idCuenta) == null ? ZERO : idMapAnteriores.get(idCuenta).divide(MIL));
+	        	row.put("ejercicio", ejercicio == null || idMapEjercicio.get(idCuenta) == null ? ZERO : idMapEjercicio.get(idCuenta).divide(MIL));
+	        	row.put("ajustes", ajustes == null || idMapAjustes.get(idCuenta) == null ? ZERO : idMapAjustes.get(idCuenta).divide(MIL));
+	        	row.put("total", total.divide(MIL));
+	        	row.put("accountTypeSeqNum", secuencia);
+	        	
+	        	listaPrl.add(row);
+	        	
+	        	Debug.logWarning("ROW   "+row, MODULE);
+	        	
+	        	Debug.logWarning("idMapContribuido.get(idCuenta)   "+idMapContribuido.get(idCuenta), MODULE);
         	
-        	listaPrl.add(row);
+    		}
         	
-       	 	Debug.logWarning("row "+secuencia+"     % "+row, MODULE);
-       	 	
-    	}    	
-    	
-
+    	}
     	
     }
     
@@ -1688,7 +1766,7 @@ public final class FinancialReports {
         return reportType;
     }
     
-    public static Map<String,Object> preparaDatosVariacion(HttpServletRequest request) throws GenericServiceException{
+    public static Map<String,Object> preparaDatosVariacion(HttpServletRequest request) throws GenericServiceException, GenericEntityException{
     	Delegator delegator = (Delegator) request.getAttribute("delegator");
     	LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
     	GenericValue userLogin = (GenericValue) request.getSession().getAttribute("userLogin");
@@ -1698,6 +1776,12 @@ public final class FinancialReports {
     	String organizationPartyId = UtilCommon.getOrganizationPartyId(request);
         String glFiscalTypeId = UtilCommon.getParameter(request, "glFiscalTypeId");
         String customTimePeriodId = UtilCommon.getParameter(request, "customTimePeriodId");
+        
+        EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
+                EntityCondition.makeCondition("customTimePeriodId", customTimePeriodId),
+                EntityCondition.makeCondition("organizationPartyId", organizationPartyId));
+        
+        GenericValue customPeriod = EntityUtil.getFirst(delegator.findByCondition("CustomTimePeriod", conditions, null, null));
         
         Map<String, Object> datos = FastMap.newInstance();
         
@@ -1714,22 +1798,34 @@ public final class FinancialReports {
             	datos.put("asOfDateTimeNextLast", asOfDateTimeNextLast);
             	datos.put("asOfDateTime2ndLast", asOfDateTime2ndLast);
             	
+            	datos.put("fromDate", UtilDateTime.getDayStart(UtilDateTime.getYearStart(asOfDateTimeLast)));
+            	datos.put("thruDate", asOfDateTimeLast);
+            	
             	Debug.logWarning("asOfDateTimeLast   "+asOfDateTimeLast, MODULE);
             	Debug.logWarning("asOfDateTimeNextLast   "+asOfDateTimeNextLast, MODULE);
             	Debug.logWarning("asOfDateTime2ndLast   "+asOfDateTime2ndLast, MODULE);
+            	Debug.logWarning("fromDate   "+UtilDateTime.getDayStart(UtilDateTime.getYearStart(asOfDateTimeLast)), MODULE);
+            	Debug.logWarning("thruDate   "+asOfDateTimeLast, MODULE);
             	
             } else if (dateOption.equals("byTimePeriod")) {
             	
+            	String customTimePeriodId2ndLast = "";
             	
             	String customTimePeriodIdNextLast = FinancialServices.getPreviousCustomPeriodId(dispatcher, organizationPartyId, customTimePeriodId, userLogin);
-            	String customTimePeriodId2ndLast = FinancialServices.getPreviousCustomPeriodId(dispatcher, organizationPartyId, customTimePeriodIdNextLast, userLogin);
+            	if(customTimePeriodIdNextLast != null && !customTimePeriodIdNextLast.isEmpty())
+            		customTimePeriodId2ndLast = FinancialServices.getPreviousCustomPeriodId(dispatcher, organizationPartyId, customTimePeriodIdNextLast, userLogin);
             	
             	datos.put("customTimePeriodIdNextLast", customTimePeriodIdNextLast);
             	datos.put("customTimePeriodId2ndLast", customTimePeriodId2ndLast);
             	
+            	datos.put("fromDate", UtilDateTime.getDayStart(UtilDateTime.toTimestamp(customPeriod.getDate("fromDate"))));
+            	datos.put("thruDate", UtilDateTime.getDayEnd(UtilDateTime.toTimestamp(customPeriod.getDate("thruDate"))));
+            	
             	Debug.logWarning("customTimePeriodId   "+customTimePeriodId, MODULE);
             	Debug.logWarning("customTimePeriodIdNextLast   "+customTimePeriodIdNextLast, MODULE);
             	Debug.logWarning("customTimePeriodId2ndLast   "+customTimePeriodId2ndLast, MODULE);
+            	Debug.logWarning("fromDate   "+UtilDateTime.getDayStart(UtilDateTime.toTimestamp(customPeriod.getDate("fromDate"))), MODULE);
+            	Debug.logWarning("thruDate   "+UtilDateTime.getDayEnd(UtilDateTime.toTimestamp(customPeriod.getDate("thruDate"))), MODULE);
             	
             }
             
