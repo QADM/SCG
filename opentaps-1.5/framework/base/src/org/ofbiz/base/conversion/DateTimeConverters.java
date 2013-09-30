@@ -306,7 +306,7 @@ public class DateTimeConverters implements ConverterLoader {
         }
 
         public java.sql.Time convert(java.sql.Date obj) throws ConversionException {
-            throw new ConversionException("Conversion from Date to Time not supported");
+            throw new ConversionException("Conversion de Date to Time no se admite");
        }
     }
 
@@ -316,7 +316,7 @@ public class DateTimeConverters implements ConverterLoader {
         }
 
         public java.sql.Date convert(java.sql.Time obj) throws ConversionException {
-            throw new ConversionException("Conversion from Time to Date not supported");
+            throw new ConversionException("Conversion de Time a Date no se admite");
         }
     }
 
@@ -410,7 +410,7 @@ public class DateTimeConverters implements ConverterLoader {
 
             String dateFormat = UtilValidate.isEmpty(formatString) ? UtilDateTime.getDateFormat(locale) : formatString;
             if (!UtilValidate.isDateTime(str, dateFormat, locale, timeZone)) {
-                throw new ConversionException("Invalid format. Could not convert " + str + " to Date");
+                throw new ConversionException("Formato no valido. No se puede convertir " + str + " a Date");
             }
             df = UtilDateTime.toDateFormat(dateFormat, timeZone, locale);
            try {
@@ -470,7 +470,7 @@ public class DateTimeConverters implements ConverterLoader {
 
             String dateFormat = UtilValidate.isEmpty(formatString) ? UtilDateTime.getDateFormat(locale) : formatString;
             if (!UtilValidate.isDateTime(str, dateFormat, locale, timeZone)) {
-                throw new ConversionException("Invalid format. Could not convert " + str + " to Date");
+                throw new ConversionException("Formato no valido. No se puede convertir " + str + " a Date");
             }
             df = UtilDateTime.toDateFormat(dateFormat, timeZone, locale);
            try {
@@ -542,19 +542,19 @@ public class DateTimeConverters implements ConverterLoader {
                     try {
                         String dateTimeFormat = UtilDateTime.getDateTimeFormat(locale);
                         if (!UtilValidate.isDateTime(str, dateTimeFormat, locale, timeZone)) {
-                            throw new ParseException("Invalid format. Could not convert " + str + " to Timestamp", 0);
+                            throw new ParseException("Formato no valido. No se puede convertir " + str + " a Timestamp", 0);
                         }
                         df = UtilDateTime.toDateTimeFormat(dateTimeFormat, timeZone, null);
                     } catch (ParseException e) {
                         String dateFormat = UtilDateTime.getDateFormat(locale);
                         if (!UtilValidate.isDateTime(str, dateFormat, locale, timeZone)) {
-                        	throw new ConversionException("Invalid format. Could not convert " + str + " to Timestamp");
+                        	throw new ConversionException("Formato no valido. No se puede convertir " + str + " a Timestamp");
                         }
                         df = UtilDateTime.toDateTimeFormat(dateFormat, timeZone, locale);
                     }
                 } else {
                     if (!UtilValidate.isDateTime(str, formatString, locale, timeZone)) {
-                    	throw new ConversionException("Invalid format. Could not convert " + str + " to Timestamp");
+                    	throw new ConversionException("Formato no valido. No se puede convertir " + str + " a Timestamp");
                     }
                     df = UtilDateTime.toDateTimeFormat(formatString, timeZone, null);
                 }
@@ -575,7 +575,7 @@ public class DateTimeConverters implements ConverterLoader {
             if (tz != null) {
                 return tz;
             } else {
-                throw new ConversionException("Could not convert " + obj + " to TimeZone: ");
+                throw new ConversionException("No se puede convertir " + obj + " a TimeZone: ");
             }
         }
     }
