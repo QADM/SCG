@@ -461,7 +461,7 @@ under the License.
                         <label style="h1" text="${uiLabelMap[titleProperty]}"/>
                     </fail-widgets>
                 </section>
-                <decorator-section-include name="menu-bar"/>
+               <!--  <decorator-section-include name="menu-bar"/>-->
                 <container style="clear"/>
                 <screenlet id="searchOptions" name="findScreenlet" collapsible="true">
                     <label style="h2" text="${uiLabelMap.CommonSearchOptions}"/>
