@@ -351,7 +351,7 @@ public class ServiceEventHandler implements EventHandler {
             return "error";
         } catch (GenericServiceException e) {
             Debug.logError(e, "Service invocation error", module);
-            throw new EventHandlerException("Service invocation error", e.getNested());
+            throw new EventHandlerException("Error al invocar el servicio", e.getNested());
         }
 
         String responseString = null;

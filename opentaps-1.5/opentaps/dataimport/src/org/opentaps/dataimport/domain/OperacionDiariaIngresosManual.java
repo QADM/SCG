@@ -1,5 +1,6 @@
 package org.opentaps.dataimport.domain;
 
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.List;
@@ -141,6 +142,7 @@ public class OperacionDiariaIngresosManual {
 		        acctgtrans.set("partyId", uniEjec);
 		        acctgtrans.set("createdByUserLogin", userLog);
 		        acctgtrans.set("postedAmount", monto);
+		        Debug.log("Esmeralda si entro ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ " );
 		        acctgtrans.create();
 		        
 	//	        acctgTransId = acctgtrans.getString("acctgTransId");
@@ -198,13 +200,20 @@ public class OperacionDiariaIngresosManual {
 	        
 			}
 	        
-		} catch (GenericServiceException e) {
+		}catch (GenericServiceException e) {			
 			return UtilMessage.createAndLogServiceError(e, MODULE);
 		} catch (GenericEntityException e) {
+			Debug.log( e.getMessage(), MODULE);
+			Exception message = e;
+			if(e.getMessage().contains("Violation of PRIMARY KEY constraint"))
+			{
+				 message = new Exception("Error: No se puede insertar registro duplicado");
+			}
+			return UtilMessage.createAndLogServiceError(message, MODULE);
+		} catch (ServiceException e) {			
 			return UtilMessage.createAndLogServiceError(e, MODULE);
-		} catch (ServiceException e) {
-			return UtilMessage.createAndLogServiceError(e, MODULE);
-		}
+		} 
+        
     	
         Map results = ServiceUtil.returnSuccess();
         results.put("listTransId", listTransId);

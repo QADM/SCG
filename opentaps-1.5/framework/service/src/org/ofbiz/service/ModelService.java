@@ -901,7 +901,7 @@ public class ModelService extends AbstractMap<String, Object> implements Seriali
                                 // no need to fail on type conversion; the validator will catch this
                                 value = ObjectType.simpleTypeConvert(value, param.type, null, timeZone, locale, false);
                             } catch (GeneralException e) {
-                                String errMsg = "Type conversion of field [" + key + "] to type [" + param.type + "] failed for value \"" + value + "\": " + e.toString();
+                                String errMsg = "Conversion de campo [" + key + "] de tipo [" + param.type + "] fallo por el valor \"" + value + "\": " + e.toString();
                                 Debug.logWarning("[ModelService.makeValid] : " + errMsg, module);
                                 if (errorMessages != null) {
                                     errorMessages.add(errMsg);

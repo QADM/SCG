@@ -35,15 +35,15 @@
         <@inputDateTimeCell name="Fecha_Contable" default=Static["org.ofbiz.base.util.UtilDateTime"].nowTimestamp() />
       </tr>      
       <tr>
-        <@displayTitleCell title=uiLabelMap.FinancialsReferenceDocument />
+        <@displayTitleCell title=uiLabelMap.FinancialsReferenceDocument titleClass="requiredField"/>
         <@inputTextCell name="Referencia_Documento" maxlength=60  />
       </tr>
       <tr>
-        <@displayTitleCell title=uiLabelMap.FinancialsSequence />
+        <@displayTitleCell title=uiLabelMap.FinancialsSequence titleClass="requiredField"/>
         <@inputTextCell name="Secuencia" maxlength=20  />
       </tr>
       <tr>
-        <@displayTitleCell title=uiLabelMap.FinancialsKeyBudget />
+        <@displayTitleCell title=uiLabelMap.FinancialsKeyBudget titleClass="requiredField"/>
         <@inputTextCell name="Cve_Presupuestal" maxlength=100   />
       </tr>      
       <tr>
@@ -89,7 +89,7 @@
       </tr>                                                                  
       <tr>                             
       <tr>
-        <@displayTitleCell title=uiLabelMap.CommonAmount  />
+        <@displayTitleCell title=uiLabelMap.CommonAmount  titleClass="requiredField"/>
         <@inputTextCell size="10" name="Monto" />
       </tr>
       <@inputSubmitRow title=uiLabelMap.CommonCreate />
