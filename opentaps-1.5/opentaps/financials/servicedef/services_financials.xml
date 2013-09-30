@@ -231,12 +231,15 @@
         </description>
         <attribute name="organizationPartyId" mode="IN" type="String" optional="false"/>
         <attribute name="glFiscalTypeId" mode="IN" type="String" optional="true"/>
-        <attribute name="fromDate" mode="IN" type="Timestamp" optional="false"/>
-        <attribute name="thruDate" mode="IN" type="Timestamp" optional="false"/>
-        <attribute name="fromCustomTimePeriodId" mode="IN" type="String" optional="true"/>
-        <attribute name="thruCustomTimePeriodId" mode="IN" type="String" optional="true"/>
-        <attribute name="fromDateAccountBalances" mode="OUT" type="java.util.Map"/>
-        <attribute name="thruDateAccountBalances" mode="OUT" type="java.util.Map"/>
+        <attribute name="asOfDateTimeLast" mode="IN" type="java.sql.Timestamp" optional="true"/>
+        <attribute name="asOfDateTimeNextLast" mode="IN" type="java.sql.Timestamp" optional="true"/>
+        <attribute name="asOfDateTime2ndLast" mode="IN" type="java.sql.Timestamp" optional="true"/>
+        <attribute name="customTimePeriodId" mode="IN" type="java.lang.String" optional="true"/>
+        <attribute name="customTimePeriodIdNextLast" mode="IN" type="java.lang.String" optional="true"/>
+        <attribute name="customTimePeriodId2ndLast" mode="IN" type="java.lang.String" optional="true"/>        
+        <attribute name="secondLastDateResults" mode="OUT" type="java.util.Map" optional="true"/>
+        <attribute name="nextLastDateResults" mode="OUT" type="java.util.Map" optional="true"/>
+        <attribute name="lastDateResults" mode="OUT" type="java.util.Map" optional="true"/>
 	</service>	        
     <service name="getEdoVariacionHaciendaForDate" engine="java"
             location="com.opensourcestrategies.financials.financials.FinancialServices" invoke="getEdoVariacionHaciendaForDate" auth="true" use-transaction="false">
@@ -246,13 +249,13 @@
             sheet from a closed time period and other types of AcctgTrans and AcctgTransEntries.</description>	
             <implements service="accountingTagsInterface"/>
 			<attribute name="organizationPartyId" mode="IN" type="String" optional="false"/>
-			<attribute name="asOfDate" mode="IN" type="Timestamp" optional="false"/>
+			<attribute name="asOfDate" mode="IN" type="Timestamp" optional="true"/>
 			<attribute name="glFiscalTypeId" mode="IN" type="String" optional="false"/>
-			<attribute name="customTimePeriodId" mode="IN" type="String" optional="true"></attribute>
-			<attribute name="cuentasPatrimonio" mode="OUT" type="java.util.Map"/>
+			<attribute name="customTimePeriodId" mode="IN" type="String" optional="true"/>
 			<attribute name="cuentasPatContribuido" mode="OUT" type="java.util.Map"/>
 			<attribute name="cuentasPatGenAnterior" mode="OUT" type="java.util.Map"/>
 			<attribute name="cuentasPatGenerado" mode="OUT" type="java.util.Map"/>
+			<attribute name="cuentasPatrimonio" mode="OUT" type="java.util.Map"/>
 	</service> 		         
     <!-- @JSCF -->       
     <service name="getComparativeBalanceSheet" engine="java"
