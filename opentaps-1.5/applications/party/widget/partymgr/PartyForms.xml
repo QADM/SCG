@@ -145,14 +145,16 @@ under the License.
     </form>
 
     <form name="ViewPartyGroup" type="single" default-map-name="lookupGroup">
-        <auto-fields-entity entity-name="PartyGroup" default-field-type="display"/>
-       
+     <!--  <auto-fields-entity entity-name="PartyGroup" default-field-type="display"/>
+        --> 
         <field name="partyTypeId"><ignored/></field>
         <field name="comments"><ignored/></field>
         <field name="logoImageUrl"><ignored/></field>
-        
-        
-        <field name="description" title="${uiLabelMap.CommonDescription}"><display/></field>
+        <field name="partyId" title="${uiLabelMap.PartyId}"><display/></field>
+        <field name="parentId" title="${uiLabelMap.ParentId}"><display/></field>
+        <field name="groupName" title="${uiLabelMap.NombreGrupo}"><display/></field>
+        <field name="groupNameLocal" title="${uiLabelMap.NombreGrupoLocal}"><display/></field>
+
         <field name="preferredCurrencyUomId" title="${uiLabelMap.CommonCurrency}"><display-entity entity-name="Uom" key-field-name="uomId" description="${description}"/></field>
 	     <field name="node" title="${uiLabelMap.Nodo}"><display-entity entity-name="Party" key-field-name="partyId" description="${node}"/></field>
 	

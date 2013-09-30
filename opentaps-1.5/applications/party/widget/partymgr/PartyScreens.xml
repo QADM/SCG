@@ -90,7 +90,7 @@ under the License.
                             </actions>
                             <widgets/>
                         </section>
-                        <section>
+                       <section>
                             <condition>
                                 <and>
                                     <if-empty field="partyId"/>
@@ -108,7 +108,7 @@ under the License.
                             </actions>
                             <widgets/>
                         </section>
-                        <section>
+                          <section>
                             <condition>
                                 <not><if-empty field="party"/></not>
                             </condition>
@@ -133,6 +133,7 @@ under the License.
                                         </container>
                                     </fail-widgets>
                                 </section>
+                             
                                 <section>
                                     <widgets>
                                         <include-screen name="PortalPageScreen" location="component://common/widget/CommonScreens.xml"/>
