@@ -246,7 +246,7 @@
          <field name="participante"   title="Participante"><display/></field>        	
         <field name="projectName" title="${uiLabelMap.ProjectMgrProjectName}"><display/></field>
         <field name="projectDescription" title="Descripcion"><display/></field>      
-        <field name="currentStatusId" title="${uiLabelMap.CommonStatus}">
+       <!--  <field name="currentStatusId" title="${uiLabelMap.CommonStatus}">
             <display-entity entity-name="StatusItem" key-field-name="statusId" description="${description}"/>
         </field>
         <field name="priority" title="${uiLabelMap.CommonPriority}"><display/></field>
@@ -263,7 +263,7 @@
         <field name="actualCompletionDate"><display type="date"/></field>
         <field name="plannedHours"><display/></field>
         <field name="originalActualHours"><display/></field>
-        <field name="actualHours"><display/></field>
+        <field name="actualHours"><display/></field>-->
         <field name="emailAddress" title="${uiLabelMap.FormFieldTitle_mailingListEmail}"><display/></field>        
         
     </form>
