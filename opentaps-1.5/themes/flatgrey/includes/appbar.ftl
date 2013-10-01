@@ -48,7 +48,10 @@ under the License.
           <#if layoutSettings.suppressTab?exists && display.name == layoutSettings.suppressTab>
             <!-- do not display this component-->
             <#else>
-            <li<#if selected> class="selected"</#if>><a href="${thisURL}${externalKeyParam}" <#if uiLabelMap?exists> title="${uiLabelMap[display.description]}">${uiLabelMap[display.title]}<#else> title="${display.description}">${display.title}</#if></a></li>
+            	<#if display.title!="Setup" || display.description!="Setup" >
+            		
+           			 <li<#if selected> class="selected"</#if>><a href="${thisURL}${externalKeyParam}" <#if uiLabelMap?exists>  title="${uiLabelMap[display.description]}"><#if uiLabelMap[display.title]="Data Import">Carga de catálogos<#elseif uiLabelMap[display.title]="opentaps">Menú principal <#else>${uiLabelMap[display.title]}</#if><#else> title="${display.description}"><#if display.title="Data Import">Carga de catálogos<#elseif display.title="Data Import">Menú principal<#else>${display.title}</#if></#if></a></li>
+         		</#if>
           </#if>
         </#if>
       </#list>

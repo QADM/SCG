@@ -166,12 +166,12 @@ public final class ExcelImportServices extends DomainService {
 			if (file.canRead()) {
 				return file;
 			} else {
-				Debug.logWarning("File not found or can't be read " + name,
+				Debug.logWarning("El archivo no se puede leer" + name,
 						MODULE);
 				return null;
 			}
 		} else {
-			Debug.logWarning("No path specified, doing nothing", MODULE);
+			Debug.logWarning("La Ruta especificada, no existe ", MODULE);
 			return null;
 		}
 	}
@@ -355,9 +355,9 @@ public final class ExcelImportServices extends DomainService {
 				if (UtilValidate.isEmpty(id) || id.indexOf(" ") > -1
 						|| id.equalsIgnoreCase("productId")) {
 					Debug.logWarning(
-							"Row number "
+							"Fila : "
 									+ rowNum
-									+ " not imported from Products tab: invalid ID value ["
+									+ " no se importo correctamente, tab Productos. Id no valido ["
 									+ id + "].", MODULE);
 					continue;
 				}
@@ -629,9 +629,9 @@ public final class ExcelImportServices extends DomainService {
 				if (UtilValidate.isEmpty(id) || id.indexOf(" ") > -1
 						|| id.equalsIgnoreCase("glAccountId")) {
 					Debug.logWarning(
-							"Row number "
+							"Fila no. "
 									+ rowNum
-									+ " not imported from GL Accounts tab: invalid ID value ["
+									+ " no se importo correctamente, tab Cuentas. Id no valido ["
 									+ id + "].", MODULE);
 					continue;
 				}
@@ -690,7 +690,7 @@ public final class ExcelImportServices extends DomainService {
 						Debug.logWarning(
 								"Row number "
 										+ rowNum
-										+ " not imported from Catalogos tab: invalid ID value ["
+										+ " no se importo correctamente, tab Tag. Id no valido ["
 										+ id + "].", MODULE);
 						continue;
 					}
@@ -729,8 +729,6 @@ public final class ExcelImportServices extends DomainService {
 		try {
 			switch (celda.getCellType()) {
 			case HSSFCell.CELL_TYPE_BLANK:
-				Calendar c1 = GregorianCalendar.getInstance();
-				fecha = new java.sql.Date(c1.getTime().getTime());
 				break;
 
 			default:
@@ -793,9 +791,9 @@ public final class ExcelImportServices extends DomainService {
 				if (UtilValidate.isEmpty(id) || id.indexOf(" ") > -1
 						|| id.equalsIgnoreCase("catalogoId")) {
 					Debug.logWarning(
-							"Row number "
+							"Fila no. "
 									+ rowNum
-									+ " not imported from Catalogos tab: invalid ID value ["
+									+ " no se importo correctamente, tab Clasificacion Administrativa. Id no valido ["
 									+ id + "].", MODULE);
 					continue;
 				}
@@ -848,7 +846,7 @@ public final class ExcelImportServices extends DomainService {
 					Debug.logWarning(
 							"Row number "
 									+ rowNum
-									+ " not imported from Project tab: invalid ID value ["
+									+ " no se importo correctamente, tab Clasificación Programática. Id no valido ["
 									+ id + "].", MODULE);
 					continue;
 				}
@@ -900,9 +898,9 @@ public final class ExcelImportServices extends DomainService {
 				if (UtilValidate.isEmpty(id) || id.indexOf(" ") > -1
 						|| id.equalsIgnoreCase("geoId")) {
 					Debug.logWarning(
-							"Row number "
+							"Fila no. "
 									+ rowNum
-									+ " not imported from Catalogos tab: invalid ID value ["
+									+ " no se importo correctamente, tab Clasificación Geográfica. Id no valido ["
 									+ id + "].", MODULE);
 					continue;
 				}
@@ -998,9 +996,9 @@ public final class ExcelImportServices extends DomainService {
 				if (UtilValidate.isEmpty(tipo) || tipo.indexOf(" ") > -1
 						|| tipo.equalsIgnoreCase("Tipo Documento")) {
 					Debug.logWarning(
-							"Row number "
+							"Fila no. "
 									+ rowNum
-									+ " not imported from Ingreso Diario tab: invalid ID value ["
+									+ " no se importo correctamente, tab Ingreso Diario. Id no valido ["
 									+ tipo + "].", MODULE);
 					continue;
 				}
@@ -1057,9 +1055,9 @@ public final class ExcelImportServices extends DomainService {
 				if (UtilValidate.isEmpty(tipo) || tipo.indexOf(" ") > -1
 						|| tipo.equalsIgnoreCase("Tipo Documento")) {
 					Debug.logWarning(
-							"Row number "
+							"Fila no. "
 									+ rowNum
-									+ " not imported from Ingreso Diario tab: invalid ID value ["
+									+ " no se importo correctamente, tab Egreso Diario. Id no valido ["
 									+ tipo + "].", MODULE);
 					continue;
 				}
@@ -1121,9 +1119,9 @@ public final class ExcelImportServices extends DomainService {
 				if (UtilValidate.isEmpty(tipo) || tipo.indexOf(" ") > -1
 						|| tipo.equalsIgnoreCase("Tipo Documento")) {
 					Debug.logWarning(
-							"Row number "
+							"Fila no. "
 									+ rowNum
-									+ " not imported from Ingreso Diario tab: invalid ID value ["
+									+ " no se importo correctamente, tab Operacion Diaria. Id no valido ["
 									+ tipo + "].", MODULE);
 					continue;
 				}
@@ -1179,9 +1177,9 @@ public final class ExcelImportServices extends DomainService {
 				if (UtilValidate.isEmpty(id) || id.indexOf(" ") > -1
 						|| id.equalsIgnoreCase("id")) {
 					Debug.logWarning(
-							"Row number "
+							"Fila no "
 									+ rowNum
-									+ " not imported from GL Accounts tab: invalid ID value ["
+									+ " no se importo correctamente, tab Guia Contable. Id no valido ["
 									+ id + "].", MODULE);
 					continue;
 				}
@@ -1218,9 +1216,9 @@ public final class ExcelImportServices extends DomainService {
 				if (UtilValidate.isEmpty(id) || id.indexOf(" ") > -1
 						|| id.equalsIgnoreCase("id")) {
 					Debug.logWarning(
-							"Row number "
+							"Fila no. "
 									+ rowNum
-									+ " not imported from GL Accounts tab: invalid ID value ["
+									+ " no se importo correctamente, tab Conceptos. Id no valido ["
 									+ id + "].", MODULE);
 					continue;
 				}
@@ -1253,9 +1251,9 @@ public final class ExcelImportServices extends DomainService {
 				if (UtilValidate.isEmpty(id) || id.indexOf(" ") > -1
 						|| id.equalsIgnoreCase("id")) {
 					Debug.logWarning(
-							"Row number "
+							"Fila no. "
 									+ rowNum
-									+ " not imported from GL Accounts tab: invalid ID value ["
+									+ " no se importo correctamente, tab Catalogo Subconceptos. Id no valido ["
 									+ id + "].", MODULE);
 					continue;
 				}
@@ -1287,9 +1285,9 @@ public final class ExcelImportServices extends DomainService {
 				if (UtilValidate.isEmpty(id) || id.indexOf(" ") > -1
 						|| id.equalsIgnoreCase("idRegistroEgr")) {
 					Debug.logInfo(
-							"Row number "
+							"Fila no. "
 									+ rowNum
-									+ " not imported from DataImport Matriz Egresos tab: invalid ID value ["
+									+ " no se importo correctamente, tab Matriz de conversión Egresos. Id no valido ["
 									+ id + "].", MODULE);
 					continue;
 				}
@@ -1346,7 +1344,7 @@ public final class ExcelImportServices extends DomainService {
 					Debug.logInfo(
 							"Row number "
 									+ rowNum
-									+ " not imported from DataImport Matriz Ingresos tab: invalid ID value ["
+									+ " no se importo correctamente, tab Matriz de conversión Ingresos. Id no valido ["
 									+ id + "].", MODULE);
 					continue;
 				}
@@ -1400,9 +1398,9 @@ public final class ExcelImportServices extends DomainService {
 						|| ciclo.equalsIgnoreCase("CICLO")
 						|| ciclo.equalsIgnoreCase("AÑO")) {
 					Debug.logWarning(
-							"Row number "
+							"Fila no. "
 									+ rowNum
-									+ " not imported from Presupuesto Ingreso tab: invalid ID value ["
+									+ " no se importo correctamente, tab Presupuesto Ingreso. Id no valido ["
 									+ ciclo + "].", MODULE);
 					continue;
 				}
@@ -1462,9 +1460,9 @@ public final class ExcelImportServices extends DomainService {
 						|| ciclo.equalsIgnoreCase("CICLO")
 						|| ciclo.equalsIgnoreCase("AÑO")) {
 					Debug.logWarning(
-							"Row number "
+							"Fila no. "
 									+ rowNum
-									+ " not imported from Presupuesto Egreso tab: invalid ID value ["
+									+ " no se importo correctamente, tab Presupuesto Egreso. Id no valido["
 									+ ciclo + "].", MODULE);
 					continue;
 				}
@@ -1525,7 +1523,7 @@ public final class ExcelImportServices extends DomainService {
 			wb = new HSSFWorkbook(fs);
 		} catch (IOException e) {
 			throw new ServiceException(
-					"Unable to read or create workbook from file ["
+					"No se puede leer el archivo ["
 							+ getUploadedFileName() + "] " + e.getMessage());
 		}
 
@@ -1539,9 +1537,9 @@ public final class ExcelImportServices extends DomainService {
 			for (String excelTab : EXCEL_TABS) {
 				HSSFSheet sheet = wb.getSheet(excelTab);
 				if (sheet == null) {
-					Debug.logWarning("Did not find a sheet named " + excelTab
-							+ " in " + file.getName()
-							+ ".  Will not be importing anything.", MODULE);
+					Debug.logWarning("No se ha encontrado la hoja con el nombre " + excelTab
+							+ " en " + file.getName()
+							+ ". No se va a importar", MODULE);
 				} else {
 					if (EXCEL_PRODUCT_TAB.equals(excelTab)) {
 						deleteEntities("DataImportProduct");
@@ -1652,7 +1650,7 @@ public final class ExcelImportServices extends DomainService {
 			// session.createQuery("delete from DataImportGlAccount");
 			Query query = session.createQuery("delete from " + entity);
 			int rowCount = query.executeUpdate();
-			logger.debug("Rows affected: " + rowCount + " ," + entity);
+			logger.debug("Filas afectadas: " + rowCount + " ," + entity);
 			tx.commit();
 
 		} catch (Exception e) {

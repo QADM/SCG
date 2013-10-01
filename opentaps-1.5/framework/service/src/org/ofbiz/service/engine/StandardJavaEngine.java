@@ -58,7 +58,7 @@ public final class StandardJavaEngine extends GenericAsyncEngine {
         Object result = serviceInvoker(localName, modelService, context);
 
         if (result == null || !(result instanceof Map)) {
-            throw new GenericServiceException("Service [" + modelService.name + "] did not return a Map object");
+            throw new GenericServiceException("Servicio [" + modelService.name + "] No se puedo regresar el objeto Map");
         }
         return UtilGenerics.checkMap(result);
     }
@@ -82,7 +82,7 @@ public final class StandardJavaEngine extends GenericAsyncEngine {
 
         // check the package and method names
         if (modelService.location == null || modelService.invoke == null) {
-            throw new GenericServiceException("Service [" + modelService.name + "] is missing location and/or invoke values which are required for execution.");
+            throw new GenericServiceException("Servicio [" + modelService.name + "] falta de ubicacion y / o invocar a los valores que son necesarios para la ejecucion.");
         }
 
         // get the classloader to use
@@ -103,23 +103,23 @@ public final class StandardJavaEngine extends GenericAsyncEngine {
                 result = m.invoke(c.newInstance(), dctx, context);
             }
         } catch (ClassNotFoundException cnfe) {
-            throw new GenericServiceException("Cannot find service [" + modelService.name + "] location class", cnfe);
+            throw new GenericServiceException("No se puede encontrar servicio [" + modelService.name + "] ubicacion de la clase", cnfe);
         } catch (NoSuchMethodException nsme) {
-            throw new GenericServiceException("Service [" + modelService.name + "] specified Java method (invoke attribute) does not exist", nsme);
+            throw new GenericServiceException("Servicio [" + modelService.name + "] metodo Java especificado (invocar atributo) no existe", nsme);
         } catch (SecurityException se) {
-            throw new GenericServiceException("Service [" + modelService.name + "] Access denied", se);
+            throw new GenericServiceException("Servicio [" + modelService.name + "] Acceso denegado", se);
         } catch (IllegalAccessException iae) {
-            throw new GenericServiceException("Service [" + modelService.name + "] Method not accessible", iae);
+            throw new GenericServiceException("Servicio [" + modelService.name + "] Metodo no accesible", iae);
         } catch (IllegalArgumentException iarge) {
-            throw new GenericServiceException("Service [" + modelService.name + "] Invalid parameter match", iarge);
+            throw new GenericServiceException("Servicio [" + modelService.name + "] Parametro no valido", iarge);
         } catch (InvocationTargetException ite) {
-            throw new GenericServiceException("Service [" + modelService.name + "] target threw an unexpected exception", ite.getTargetException());
+            throw new GenericServiceException("Servicio [" + modelService.name + "] se produjo una excepcion inesperada", ite.getTargetException());
         } catch (NullPointerException npe) {
-            throw new GenericServiceException("Service [" + modelService.name + "] ran into an unexpected null object", npe);
+            throw new GenericServiceException("Servicio [" + modelService.name + "] se encontro con un objeto nulo inesperado", npe);
         } catch (ExceptionInInitializerError eie) {
-            throw new GenericServiceException("Service [" + modelService.name + "] Initialization failed", eie);
+            throw new GenericServiceException("Servicio [" + modelService.name + "] Error de inicializacion", eie);
         } catch (Throwable th) {
-            throw new GenericServiceException("Service [" + modelService.name + "] Error or unknown exception", th);
+            throw new GenericServiceException("Servicio [" + modelService.name + "] Error o excepcion desconocida", th);
         }
 
         return result;

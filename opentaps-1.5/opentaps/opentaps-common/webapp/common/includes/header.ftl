@@ -45,8 +45,10 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta http-equiv="Content-Script-Type" content="text/javascript"/>
     <meta http-equiv="Content-Style-Type" content="text/css"/>
+    <!--
     <link rel="shortcut icon" href="<@ofbizContentUrl>/opentaps_images/favicon.ico</@ofbizContentUrl>">
-    <title><#if pageTitleLabel?exists>${uiLabelMap.get(pageTitleLabel)} |</#if> ${configProperties.get(opentapsApplicationName+".title")}</title>
+    -->
+    <title><#if pageTitleLabel?exists>${uiLabelMap.get(pageTitleLabel)} </#if> </title>
 
     <#assign appName = Static["org.ofbiz.base.util.UtilHttp"].getApplicationName(request)/>
 
@@ -110,11 +112,13 @@ ul.sectionTabBar li.sectionTabButtonUnselected .x-panel-tc { background-image:ur
 <body>
   <#assign callInEventIcon = Static["org.ofbiz.base.util.UtilProperties"].getPropertyValue("voip.properties", "voip.icon.callInEvent")>
   <#if gwtScripts?exists>
+  <!--
     <#list gwtScripts as gwtScript>
       <#if !gwtBlockScripts?has_content || !gwtBlockScripts.contains(gwtScript)>
         <@gwtModule widget=gwtScript />
       </#if>
     </#list>
+    -->
     <#-- Bridge between server data and GWT widgets -->
     <script type="text/javascript" language="javascript">
       <#-- expose base permissions to GWT -->

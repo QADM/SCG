@@ -132,6 +132,7 @@
     </property>
     <property key="AccountingAccounting">
         <value xml:lang="en">Accounting</value>
+        <value xml:lang="es">Contables</value>
         <value xml:lang="de">Buchhaltung</value>
         <value xml:lang="fr">Comptabilité</value>
         <value xml:lang="hi_IN">लेखांकन</value>
@@ -1280,10 +1281,10 @@
         <value xml:lang="es">Estado de Variación en la Hacienda Pública y Patrimonio</value>
     </property>     
 	<property key="PatrimonioNetoAnterior">
-        <value xml:lang="es">Hacienda Pública/Patrimonio Neto al Final del Ejercicio Anterior</value>
+        <value xml:lang="es">Patrimonio Neto al Final del Ejercicio Anterior</value>
     </property> 
 	<property key="PatrimonioNeto">
-        <value xml:lang="es">Hacienda Pública/Patrimonio Neto al Final del Ejercicio</value>
+        <value xml:lang="es">Patrimonio Neto al Final del Ejercicio</value>
     </property>   
 	<property key="RectificacionesPatrimonio">
         <value xml:lang="es">Rectificaciones de Resultados de Ejercicios Anteriores</value>
@@ -1308,7 +1309,10 @@
     </property>                         
 	<property key="Concepto">
         <value xml:lang="es">Concepto</value>
-    </property>                                             
+    </property> 
+    <property key="TraspasoResultados">
+        <value xml:lang="es">Traspaso de Resultados</value>
+    </property>                                                     
      <!-- Etiquetas para Reportes CUSTOM @JSCF -->
 	<!-- Etiquetas para Reportes CUSTOM PRESUOUESTO @CG -->
      <property key="EjecucionEgresoAdministrativa">
@@ -1974,7 +1978,7 @@
         <value xml:lang="ar">بيان الحسابات</value>
         <value xml:lang="de">Kontenübersicht</value>
         <value xml:lang="en">Chart of Accounts</value>
-        <value xml:lang="es">Carta de cuentas</value>
+        <value xml:lang="es">Lista de cuentas</value>
         <value xml:lang="fr">Plan comptable</value>
         <value xml:lang="hi_IN">खातों का  लेखा-चित्र</value>
         <value xml:lang="it">Piano dei Conti</value>
@@ -4611,8 +4615,8 @@
     <property key="AccountingGlAccount">
         <value xml:lang="ar">حساب محاسبي</value>
         <value xml:lang="de">Hauptbuchkonto</value>
-        <value xml:lang="en">GL Account</value>
-        <value xml:lang="es">Cuenta de LM</value>
+        <value xml:lang="en">Cuenta</value>
+        <value xml:lang="es">Cuenta</value>
         <value xml:lang="fr">Compte</value>
         <value xml:lang="hi_IN">जीएल(GL) खाता</value>
         <value xml:lang="it">Conto Contabilità Generale</value>
@@ -9143,7 +9147,7 @@
     <property key="AccountingTimePeriod">
         <value xml:lang="ar">الفترة</value>
         <value xml:lang="en">Time Period</value>
-        <value xml:lang="es">Periodo de tiempo</value>
+        <value xml:lang="es">Periodos de tiempo</value>
         <value xml:lang="fr">Période</value>
         <value xml:lang="hi_IN">समय अवधि</value>
         <value xml:lang="it">Periodo Fiscale</value>
@@ -9295,7 +9299,7 @@
     <property key="AccountingTrialBalance">
         <value xml:lang="ar">الميزانية التجريبية</value>
         <value xml:lang="en">Trial Balance</value>
-        <value xml:lang="es">Balance de Comprobación</value>
+        <value xml:lang="es">Balanza de comprobación</value>
         <value xml:lang="fr">Balance comptable</value>
         <value xml:lang="hi_IN">तल पट</value>
         <value xml:lang="it">Bilancio di Prova</value>

@@ -70,14 +70,14 @@
                 &quot;projectId&quot;, projectId));
                 return result.get(&quot;hasPermission&quot;); }" type="Boolean"/>
         </actions>
-        <menu-item name="ganttchart" title="${uiLabelMap.ProjectMgrGanttChart}">
+       <!--  <menu-item name="ganttchart" title="${uiLabelMap.ProjectMgrGanttChart}">
             <condition>
                 <if-compare field="hasViewPermission" operator="equals" value="true"/>
             </condition>
             <link target="ganttChart">
                 <parameter param-name="projectId"/>
             </link>
-        </menu-item>
+        </menu-item>-->
         <menu-item name="projectView" title="${uiLabelMap.ProjectMgrProjectSummary}">
             <condition>
                 <if-compare field="hasViewPermission" operator="equals" value="true"/>
@@ -86,7 +86,7 @@
                 <parameter param-name="projectId"/>
             </link>
         </menu-item>
-        <menu-item name="editproject" title="${uiLabelMap.ProjectMgrEditProject}">
+         <menu-item name="editproject" title="${uiLabelMap.ProjectMgrEditProject}">
             <condition>
                 <and>
                     <if-compare field="hasUpdatePermission" operator="equals" value="true"/>
@@ -100,14 +100,14 @@
                 <parameter param-name="projectId"/>
             </link>
         </menu-item>
-        <menu-item name="mailing" title="${uiLabelMap.ProjectMgrMailingList}">
+        <!-- <menu-item name="mailing" title="${uiLabelMap.ProjectMgrMailingList}">
             <condition>
                 <if-compare field="hasViewPermission" operator="equals" value="true"/>
             </condition>
             <link target="FindMailingList">
                 <parameter param-name="projectId"/>
             </link>
-        </menu-item>
+        </menu-item>-->
         <menu-item name="phases" title="${uiLabelMap.ProjectMgrPhases}">
             <condition>
                 <and>
@@ -122,7 +122,7 @@
                 <parameter param-name="projectId"/>
             </link>
         </menu-item>
-        <menu-item name="tasks" title="${uiLabelMap.ProjectMgrTasks}">
+        <!-- <menu-item name="tasks" title="${uiLabelMap.ProjectMgrTasks}">
             <condition>
                 <and>
                     <if-compare field="hasUpdatePermission" operator="equals" value="true"/>
@@ -216,7 +216,7 @@
             <link target="projectBilling">
                 <parameter param-name="projectId"/>
             </link>
-        </menu-item>
+        </menu-item>-->
     </menu>
     <menu name="ProjectSubTabBar" extends="CommonTabBarMenu" extends-resource="component://common/widget/CommonMenus.xml"
           menu-container-style="button-bar button-style-2">
@@ -238,7 +238,7 @@
             </condition>
             <link target="EditProject"/>
         </menu-item>
-        <menu-item name="copyProject" title="${uiLabelMap.ProjectMgrCopyProject}">
+       <!-- <menu-item name="copyProject" title="${uiLabelMap.ProjectMgrCopyProject}">
             <condition>
                 <and>
                     <not>
@@ -292,7 +292,7 @@
                 <parameter param-name="workEffortId" from-field="parameters.projectId"/>
                 <parameter param-name="currentStatusId" value="PRJ_CLOSED"/>
             </link>
-        </menu-item>
+        </menu-item>-->
     </menu>
     <menu name="TaskTabBar" extends="CommonTabBarMenu" extends-resource="component://common/widget/CommonMenus.xml">
         <menu-item name="taskView" title="${uiLabelMap.ProjectMgrTaskSummary}">

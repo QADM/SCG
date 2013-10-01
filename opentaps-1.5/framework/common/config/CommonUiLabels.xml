@@ -8543,7 +8543,7 @@
         <value xml:lang="ar">المالية</value>
         <value xml:lang="de">Finanzen</value>
         <value xml:lang="en">Financials</value>
-        <value xml:lang="es">Finanzas</value>
+        <value xml:lang="es">Operación</value>
         <value xml:lang="fr">Financier</value>
         <value xml:lang="hi_IN">वित्तीय</value>
         <value xml:lang="it">Finanza</value>
@@ -9839,6 +9839,6 @@
     </property>
 
     <property key="OpentapsProductName">
-        <value xml:lang="en">Opentaps Open Source ERP + CRM</value>
+        <value xml:lang="en">SCG Sistema de Contabilidad Gubernamental</value>
     </property>
 </resource>

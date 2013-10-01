@@ -323,7 +323,7 @@ under the License.
                 <set field="layoutSettings.javaScripts[]" value="/images/calendarDateSelect/locale/${initialLocale}.js" global="true"/>
                 <set field="layoutSettings.javaScripts[]" value="/images/GooglemapSimple.js" global="true"/>
                 <!-- The default (global) shortcut icon -->
-                <set field="layoutSettings.shortcutIcon" value="/opentaps_images/favicon.ico" global="true"/>
+              <!--   <set field="layoutSettings.shortcutIcon" value="/opentaps_images/favicon.ico" global="true"/>-->
                 <!-- The settings below are used for xsl-fo screens -->
                 <property-map resource="CommonUiLabels" map-name="uiLabelMap" global="true"/>
                 <set field="logoImageUrl" value="/opentaps_images/opentaps_logo.png"/>
@@ -461,7 +461,7 @@ under the License.
                         <label style="h1" text="${uiLabelMap[titleProperty]}"/>
                     </fail-widgets>
                 </section>
-                <decorator-section-include name="menu-bar"/>
+               <!--  <decorator-section-include name="menu-bar"/>-->
                 <container style="clear"/>
                 <screenlet id="searchOptions" name="findScreenlet" collapsible="true">
                     <label style="h2" text="${uiLabelMap.CommonSearchOptions}"/>
@@ -536,7 +536,7 @@ under the License.
                 </entity-and>
             </actions>
             <widgets>
-                <platform-specific>
+                 <platform-specific>
                     <html><html-template location="component://common/webcommon/portal/showPortalPage.ftl"/></html>
                 </platform-specific>
             </widgets>

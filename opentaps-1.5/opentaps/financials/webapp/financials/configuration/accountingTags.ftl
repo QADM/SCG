@@ -68,9 +68,6 @@ function mascara(d,sep,pat,nums){
 	}
 }
 </script>
-	  
-
-
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
 <#assign disableSelectValues = {"Y": uiLabelMap.CommonDisabled, "N": uiLabelMap.CommonEnabled} />
@@ -94,15 +91,15 @@ function mascara(d,sep,pat,nums){
         <table class="listTable" style="border:0">
           <tr class="listTableHeader">
             <@displayCell text=uiLabelMap.Codigo />
-            <@displayCell text=uiLabelMap.Id />
+            <@displayCell text="Consecutivo" />
             <@displayCell text=uiLabelMap.Nombre />
             <@displayCell text=uiLabelMap.CommonDescription />
       		<@displayCell text=uiLabelMap.Nivel />
-      		<@displayCell text=uiLabelMap.ParentId />
-			<@displayCell text="Fecha Inicio"/>
-			<@displayCell text="Fecha Fin"/>
+      		<@displayCell text="Clave superior" />
+			<@displayCell text="Desde"/>
+			<@displayCell text="Hasta"/>
 			<@displayCell text="Nodo"/>
-            <@displayCell text=uiLabelMap.CommonEnabled />
+            <@displayCell text="Estado" />
             <td/>
             <td/>
           </tr>
@@ -161,3 +158,4 @@ function mascara(d,sep,pat,nums){
     </div>
   </#list>
 </@frameSection>
+

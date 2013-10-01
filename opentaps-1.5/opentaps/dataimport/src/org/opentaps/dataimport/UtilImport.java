@@ -680,17 +680,19 @@ public class UtilImport {
 						.getOrganizationPartyId());
 				glAccountHistory.setCustomTimePeriodId(periodo
 						.getCustomTimePeriodId());
-				
-				if (tipo.equalsIgnoreCase("Credit")) {
+			}
+			
+			if (tipo.equalsIgnoreCase("Credit")) {
+				if (glAccountHistory.getPostedCredits() == null) {
 					glAccountHistory.setPostedCredits(monto);
 				} else {
-					glAccountHistory.setPostedDebits(monto);
-				}
-			} else {
-				Debug.log("Existe History");
-				if (tipo.equalsIgnoreCase("Credit")) {
 					glAccountHistory.setPostedCredits(glAccountHistory
 							.getPostedCredits().add(monto));
+				}
+
+			} else {
+				if (glAccountHistory.getPostedDebits() == null) {
+					glAccountHistory.setPostedDebits(monto);
 				} else {
 					glAccountHistory.setPostedDebits(glAccountHistory
 							.getPostedDebits().add(monto));
@@ -701,5 +703,81 @@ public class UtilImport {
 		}
 		return glAccountHistories;
 	}
+	
+	
+	/**
+	 * Autor: Esmeralda Cercas Ortiz
+	 * 
+	 * @param ledger_repo
+	 * @param nivel
+	 * @return true = nivel valido, false = nivel no valido
+	 */
+	public static boolean validaNivel(LedgerRepositoryInterface ledger_repo,
+			String nivel) throws RepositoryException {
+
+		Debug.log("Buscando Nivel");
+		List<NivelPresupuestal> nivelP = ledger_repo.findList(
+				NivelPresupuestal.class,
+				ledger_repo.map(NivelPresupuestal.Fields.nivelId, nivel));
+
+		if (nivelP.isEmpty()) {
+			Debug.log("Nivel no valido");
+			return false;
+		} else {
+			Debug.log("Nivel valido");
+			return true;
+		}
+	}
+	
+	
+	/**
+	 * Autor: Esmeralda Cercas Ortiz
+	 * entitie GeoType 
+	 * @param ledger_repo
+	 * @param Type
+	 * @return true = Tipo valido, false = Tipo no valido
+	 */
+	public static boolean validaTipoGeo(LedgerRepositoryInterface ledger_repo,
+			String Type) throws RepositoryException {
+
+		Debug.log("Buscando Tipo");
+		List<GeoType> type = ledger_repo.findList(
+				GeoType.class,
+				ledger_repo.map(GeoType.Fields.geoTypeId, Type));
+
+		if (type.isEmpty()) {
+			Debug.log("Tipo no valido");
+			return false;
+		} else {
+			Debug.log("Tipo valido");
+			return true;
+		}
+	}
+	
+	/**
+	 * Autor: Esmeralda Cercas Ortiz
+	 * entitie ProductCategoryType
+	 * @param ledger_repo
+	 * @param nivel
+	 * @return true = Tipo valido, false = tipo no valido
+	 */
+	public static boolean validaTipoProductCategory(LedgerRepositoryInterface ledger_repo,
+			String type) throws RepositoryException {
+
+		Debug.log("Buscando Tipo ProductCategory");
+		List<ProductCategoryType> nivelP = ledger_repo.findList(
+				ProductCategoryType.class,
+				ledger_repo.map(ProductCategoryType.Fields.productCategoryTypeId, type));
+
+		if (nivelP.isEmpty()) {
+			Debug.log("Tipo no valido");
+			return false;
+		} else {
+			Debug.log("Tipo valido");
+			return true;
+		}
+	}
+	
+	
 
 }

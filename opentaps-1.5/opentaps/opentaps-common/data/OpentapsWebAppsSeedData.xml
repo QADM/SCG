@@ -31,18 +31,20 @@ like the ofbiz Party, Catalog, Webtools, etc ...
 -->
 <entity-engine-xml>
 
-<OpentapsWebApps applicationId="party" shortName="Party Admin" sequenceNum="60" applicationName="Parties and Users" description="Set up Parties, Users, and Security Permissions"
+<OpentapsWebApps applicationId="party" shortName="Administración del sistema" sequenceNum="60" applicationName="Administración del sistema" description="Set up Parties, Users, and Security Permissions"
              imageUrl="/opentaps_images/integratingweb/party.png" imageHoverUrl="/opentaps_images/integratingweb/partyHover.png" linkUrl="/partymgr/control/main" lastUpdatedStamp="2009-07-18 16:41:58.415"
              lastUpdatedTxStamp="2009-07-18 16:41:58.415" createdStamp="2009-07-18 16:12:28.395" createdTxStamp="2009-07-18 16:12:28.395"/>
 
-<OpentapsWebApps applicationId="catalog" shortName="Catalog" sequenceNum="70" applicationName="Product Catalog" description="Manage your Products, Catalogs, and Stores"
+<OpentapsWebApps applicationId="catalog" shortName="Catálogos" sequenceNum="70" applicationName="Catálogos" description="Manage your Products, Catalogs, and Stores"
              imageUrl="/opentaps_images/integratingweb/catalog.png" imageHoverUrl="/opentaps_images/integratingweb/catalogHover.png" linkUrl="/catalog/control/main" lastUpdatedStamp="2009-07-18 16:41:58.415"
              lastUpdatedTxStamp="2009-07-18 16:41:58.415" createdStamp="2009-07-18 16:12:28.395" createdTxStamp="2009-07-18 16:12:28.395"/>
 
-<OpentapsWebApps applicationId="webtools" shortName="Webtools" sequenceNum="80" applicationName="Administrative Web Tools" description="Manage the in-memory cache, database tables, run services, schedule jobs"
+<OpentapsWebApps applicationId="webtools" shortName="Herramientas web" sequenceNum="80" applicationName="Herramientas web" description="Manage the in-memory cache, database tables, run services, schedule jobs"
              imageUrl="/opentaps_images/homeapps/webtools.png" imageHoverUrl="/opentaps_images/homeapps/webtools_hover.png" linkUrl="/webtools/control/main" lastUpdatedStamp="2009-07-18 16:41:58.415"
              lastUpdatedTxStamp="2009-07-18 16:41:58.415" createdStamp="2009-07-18 16:12:28.395" createdTxStamp="2009-07-18 16:12:28.395"/>
 
+
+<!--  
 <OpentapsWebApps applicationId="documentation" shortName="Docs Wiki" sequenceNum="90" applicationName="Online Manuals" description="Your online reference for users manuals, reference guides, and developer information."
              imageUrl="/opentaps_images/homeapps/docs.png" imageHoverUrl="/opentaps_images/homeapps/docs_hover.png" linkUrl="http://www.opentaps.org/docs/" lastUpdatedStamp="2009-07-18 16:41:58.415"
              lastUpdatedTxStamp="2009-07-18 16:41:58.415" createdStamp="2009-07-18 16:12:28.395" createdTxStamp="2009-07-18 16:12:28.395"/>
@@ -54,6 +56,6 @@ like the ofbiz Party, Catalog, Webtools, etc ...
              imageUrl="/opentaps_images/integratingweb/ecommerce.png" imageHoverUrl="/opentaps_images/integratingweb/ecommerceHover.png" linkUrl="/ecommerce/control/main" lastUpdatedStamp="2009-07-16 16:41:58.415"
              lastUpdatedTxStamp="2009-07-16 16:41:58.415" createdStamp="2009-07-16 16:12:28.395" createdTxStamp="2009-07-16 16:12:28.395"/>
 
-
+-->
 </entity-engine-xml>
 

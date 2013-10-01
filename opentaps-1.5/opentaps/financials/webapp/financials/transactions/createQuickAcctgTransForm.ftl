@@ -25,15 +25,15 @@
   <div class="form" style="border:0">
     <table class="fourColumnForm" style="border:0">
       <tr>
-        <@displayTitleCell title=uiLabelMap.FinancialsTransactionType />
+        <@displayTitleCell title=uiLabelMap.FinancialsTransactionType1 />
         <@inputSelectCell list=transactionTypes displayField="description" name="acctgTransTypeId" default=acctgTransTypeId?if_exists />
       </tr>
       <tr>
-        <@displayTitleCell title=uiLabelMap.FinancialsTransactionDate />
+        <@displayTitleCell title=uiLabelMap.FinancialsTransactionDateRegistry />
         <@inputDateTimeCell name="transactionDate" default=Static["org.ofbiz.base.util.UtilDateTime"].nowTimestamp() />
       </tr>
       <tr>
-        <@displayTitleCell title=uiLabelMap.PartyPartyId />
+        <@displayTitleCell title=uiLabelMap.FinancialsTransactionsAreaEjecutora />
         <@inputLookupCell lookup="LookupPartyName" form="reconcileForm" name="partyId" />
       </tr>
       <tr>
@@ -41,9 +41,11 @@
         <@inputTextCell name="description" />
       </tr>
       <tr>
-        <@displayTitleCell title=uiLabelMap.FinancialsDebitAccount titleClass="requiredField" />
+        <@displayTitleCell title=uiLabelMap.FinancialsTransactionsCargo titleClass="requiredField" />
         <@inputAutoCompleteGlAccountCell name="debitGlAccountId" default=debitGlAccountId?if_exists />
-        <@displayTitleCell title=uiLabelMap.FinancialsCreditAccount titleClass="requiredField" />
+     </tr>
+     <tr>
+        <@displayTitleCell title=uiLabelMap.FinancialsTransactionsAbono titleClass="requiredField" />
         <@inputAutoCompleteGlAccountCell name="creditGlAccountId" default=creditGlAccountId?if_exists />
       </tr>
 

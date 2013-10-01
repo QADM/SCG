@@ -146,19 +146,19 @@
                     <decorator-section name="section-body">
                         <container style="screenlet">
                             <container style="screenlet-header">
-                                <label style="boxhead" text="${uiLabelMap.FinancialsPaymentMethodsFor} ${parameters.organizationName}"/>
+                                <label style="boxhead" text="${uiLabelMap.FinancialsPaymentMethodsFor}"/>
                             </container>
                             <container style="screenlet-body">
                                 <include-form name="listPaymentMethods" location="component://financials/widget/financials/forms/configuration/ConfigurationForms.xml"/>
                             </container>
                             <container style="screenlet-header">
-                                <label style="boxhead" text="${uiLabelMap.FinancialsAddPaymentMethodsFor} ${parameters.organizationName}"/>
+                                <label style="boxhead" text="${uiLabelMap.FinancialsAddPaymentMethodsFor} "/>
                             </container>
                             <container style="screenlet-body">
                                 <include-form name="addPaymentMethod" location="component://financials/widget/financials/forms/configuration/ConfigurationForms.xml"/>
                             </container>
                             <container style="screenlet-header">
-                                <label style="boxhead" text="${uiLabelMap.FinancialsSelectRefundPaymentMethod} ${parameters.organizationName}"/>
+                                <label style="boxhead" text="${uiLabelMap.FinancialsSelectRefundPaymentMethod} "/>
                             </container>
                             <container style="screenlet-body">
                                 <include-form name="refundPaymentMethod" location="component://financials/widget/financials/forms/configuration/ConfigurationForms.xml"/>

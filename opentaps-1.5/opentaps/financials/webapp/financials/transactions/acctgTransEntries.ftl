@@ -26,13 +26,26 @@
 
   <#if acctgTrans?exists>
     <table class="listTable" cellspacing="0" style="border:none;">
-      <tr class="listTableHeader">
+     
+    <#if acctgTrans.isPosted != "Y"> 
+     <tr class="listTableHeader">
         <td><span>${uiLabelMap.PartySequenceId}</span></td>
         <td><span>${uiLabelMap.GlAccount}</span></td>
         <td><span>${uiLabelMap.FinancialsDebitCredit}</span></td>
         <td><span>${uiLabelMap.CommonAmount}</span></td>
         <td></td>
       </tr>
+     <#else>
+      <tr class="listTableHeader">
+        <td><span>${uiLabelMap.PartySequenceId}</span></td>
+        <td><span>${uiLabelMap.GlAccount}</span></td>
+       	<td><span>${uiLabelMap.FinancialsTransactionsCargo}</span></td>
+       	<td><span>${uiLabelMap.FinancialsTransactionsAbono}</span></td>
+       <!-- <td><span>${uiLabelMap.FinancialsDebitCredit}</span></td>-->
+
+        <td></td>
+      </tr>
+     </#if>
       
       <#-- for posted transactions just display the list of entries -->
       <#if acctgTrans.isPosted == "Y">
@@ -40,9 +53,13 @@
           <tr class="${tableRowClass(entry_index)}">
             <td><a class="linktext" href="<@ofbizUrl>viewAcctgTransEntry?acctgTransId=${entry.acctgTransId}&amp;acctgTransEntrySeqId=${entry.acctgTransEntrySeqId}</@ofbizUrl>">${entry.acctgTransEntrySeqId}</a></td>
             <td><#assign glAccount = entry.getRelatedOneCache("GlAccount")/><a class="linktext" href="<@ofbizUrl>AccountActivitiesDetail?glAccountId=${glAccount.glAccountId}&amp;organizationPartyId=${session.getAttribute("organizationPartyId")}</@ofbizUrl>">${glAccount.accountCode?default(glAccount.glAccountId)}</a>: ${glAccount.accountName?default("")}</td>
-            <td>${entry.debitCreditFlag}</td>
-            <@displayCurrencyCell amount=entry.amount currencyUomId=entry.currencyUomId class="tabletext" />
-            <td>${entry.getRelatedOneCache("StatusItem").description}</td>
+            <#if entry.debitCreditFlag=="D">
+            	<td><@displayCurrency amount=entry.amount currencyUomId=entry.currencyUomId class="tabletext" /></td>
+            	<td></td>
+           	<#elseif entry.debitCreditFlag=="C">
+           		<td></td>	
+           		<td><@displayCurrency amount=entry.amount currencyUomId=entry.currencyUomId class="tabletext" /></td>
+            </#if> 
           </tr>
           <#-- List possible tags in separate lines -->
           <#list tagTypes as tag>
@@ -116,7 +133,7 @@
             <td><@inputAutoCompleteGlAccount name="glAccountId" id="glAccountId" /></td>
             <@inputSelectCell name="debitCreditFlag" list=debitCreditFlags key="debitCreditFlag" displayField="description"/>
             <@inputTextCell name="amount" size="8"/>
-            <@inputSubmitCell title="${uiLabelMap.CommonAdd}"/>
+            <@inputSubmitCell title="${uiLabelMap.FinanciasButonAdd}"/>
           </tr>
           <#-- List possible tags in separate lines -->
           <#list tagTypes as tag>

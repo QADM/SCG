@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<entitymodel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/entitymodel.xsd">
+	<!-- ========================================================= -->
+	<!-- ======================== Defaults ======================= -->
+	<!-- ========================================================= -->
+	<title>Entidad de  manejo de catálogos</title>
+	<description>Catálogo que contiene todas las  entidades que pueden ser editadas </description>
+	<copyright>Copyright (c) Open Source Strategies, Inc.</copyright>
+	<author>Armando Raúl Búdez Arce</author>
+	<version>1.0</version>
+
+	<!-- =========================== -->
+	<!-- org.opentaps.dataimport -->
+	<!-- =========================== -->
+
+	<entity entity-name="WebToolsManejo" package-name="org.opentaps.dataimport"
+		title="Entidad que  maneja  los catalogos  creados  en  la  BD">
+		<field name="uiLabel" type="id-long"></field>
+		<field name="name" type="id-long"></field>
+		<field name="secuenceNum" type="id-ne"></field>
+		<prim-key field="secuenceNum" />
+	</entity>
+</entitymodel>

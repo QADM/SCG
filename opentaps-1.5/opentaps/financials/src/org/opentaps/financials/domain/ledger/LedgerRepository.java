@@ -30,6 +30,7 @@ import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.opentaps.common.util.UtilAccountingTags;
@@ -53,6 +54,8 @@ import org.opentaps.base.entities.AcctgTransPresupuestalIng;
 import org.opentaps.base.entities.AcctgPolizasDetalle;
 import org.opentaps.base.entities.AcctgPolizasDetalleLista;
 import org.opentaps.base.entities.AcctgPolizasDetalleListado;
+import org.opentaps.base.entities.AcctgPolizasClavesPresup;
+import org.opentaps.base.entities.AcctgPolizasMontoOperacion;
 import org.opentaps.domain.ledger.AccountingTransaction;
 import org.opentaps.domain.ledger.GeneralLedgerAccount;
 import org.opentaps.domain.ledger.LedgerException;
@@ -188,6 +191,22 @@ public class LedgerRepository extends Repository implements LedgerRepositoryInte
         }
     }
     
+    public AcctgPolizasClavesPresup getAcctgPolizasClavesPresup(String agrupador) throws RepositoryException {
+        try {
+            return findOneNotNull(AcctgPolizasClavesPresup.class, map(AcctgPolizasClavesPresup.Fields.agrupador, agrupador), "Accounting Transaction [" + agrupador + "] not found.");
+        } catch (GeneralException e) {
+            throw new RepositoryException(e);
+        }
+    }
+    
+    public AcctgPolizasMontoOperacion getAcctgPolizasMontoOperacion(String agrupador) throws RepositoryException {
+        try {
+            return findOneNotNull(AcctgPolizasMontoOperacion.class, map(AcctgPolizasMontoOperacion.Fields.agrupador, agrupador), "Accounting Transaction [" + agrupador + "] not found.");
+        } catch (GeneralException e) {
+            throw new RepositoryException(e);
+        }
+    }
+                   
     
     /** {@inheritDoc} */
     public AcctgTransEntry getTransactionEntry(String acctgTransId, String acctgTransEntrySeqId) throws RepositoryException {
@@ -441,6 +460,28 @@ public class LedgerRepository extends Repository implements LedgerRepositoryInte
     			AcctgTrans acctgTrans = findOneNotNull(AcctgTrans.class, map(AcctgTrans.Fields.acctgTransId, glAccountId));    			
     			ListAcctgTrans.add(acctgTrans);
     		}
+			
+		} catch (Exception e) {
+			Debug.log("MODULE: LedgerRepository - Error al consultar glAccountId [" +  glAccountIds.get(0).toString() + "] -excepcion  " + e);
+			throw new RepositoryException(e);
+			
+		}       
+        //List<AcctgTrans> transAndEntries = findList(AcctgTransAndEntries.class, EntityCondition.makeCondition(conditions, EntityOperator.AND), Arrays.asList("acctgTransId"));
+
+        return (UtilValidate.isEmpty(ListAcctgTrans) ? FastList.<AcctgTrans>newInstance() : ListAcctgTrans);
+    }
+    
+    
+    /** {@inheritDoc} */
+    public List<AcctgTrans> getTransactionsAcctgTrans(List<GenericValue> glAccountIds) throws RepositoryException {
+    	
+    	List<AcctgTrans> ListAcctgTrans = FastList.newInstance();;
+    	try {  	
+            Debug.log("MODULE: LedgerRepository getTransactionsAcctgTrans" );
+            for (GenericValue acctgTransPresupuestal : glAccountIds) {
+            	AcctgTrans acctgTrans = findOneNotNull(AcctgTrans.class, map(AcctgTrans.Fields.acctgTransId, acctgTransPresupuestal.get("acctgTransId") ));    			
+    			ListAcctgTrans.add(acctgTrans);
+			} 
 			
 		} catch (Exception e) {
 			Debug.log("MODULE: LedgerRepository - Error al consultar glAccountId [" +  glAccountIds.get(0).toString() + "] -excepcion  " + e);

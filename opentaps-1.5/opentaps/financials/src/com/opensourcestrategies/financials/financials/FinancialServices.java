@@ -114,7 +114,7 @@ public final class FinancialServices {
 			"TASyOA","OTROS IyB","IVI","GASTO DE FUNCION","TASyOA DE GASTOS","PARTICIPyA DE GASTOS","ICyOGDP","OGPE");
     
     /** Clases para buscar los datos del estado de Variacion en la hacienda publica / patrimonio. */
-    public static final List<String> ESTADO_VARIACION_PATRIMONIO = Arrays.asList("HPP", "HPPC","HPPGE","HPPGEA");
+    public static final List<String> ESTADO_VARIACION_PATRIMONIO = Arrays.asList("HPPC","HPPGEA","HPPGE","HPPAJ");
         
 
     /**
@@ -595,6 +595,31 @@ public final class FinancialServices {
         } catch (GeneralException ex) {
             return ServiceUtil.returnError(ex.getMessage());
         }
+    }
+    
+    /**
+     * Simplifica la forma de obtener el CustomIdPeriod Previo de uno dado
+     * @param dispatcher
+     * @param organizationPartyId
+     * @param customTimePeriodId
+     * @return
+     * @throws GenericServiceException
+     */
+    public static String getPreviousCustomPeriodId(LocalDispatcher dispatcher, 
+    						String organizationPartyId , String customTimePeriodId,GenericValue userLogin) throws GenericServiceException{
+    	
+    	Map<String, Object> mapPeriodo = FastMap.newInstance();
+    	mapPeriodo.put("organizationPartyId", organizationPartyId);
+    	mapPeriodo.put("customTimePeriodId", customTimePeriodId);
+    	mapPeriodo.put("userLogin", userLogin);
+    	
+    	String prevCustomTimePeriodId = "";
+    	
+    		Map<String, Object> resultPeriod = dispatcher.runSync("obtenPeriodoAnterior", 
+    					dispatcher.getDispatchContext().makeValidContext("obtenPeriodoAnterior", ModelService.IN_PARAM, mapPeriodo));
+    		prevCustomTimePeriodId = (String) resultPeriod.get("customPeriodFromId");
+    	
+    	return prevCustomTimePeriodId;
     }
     
     /**
@@ -1315,46 +1340,55 @@ public final class FinancialServices {
 
         // input parameters
         String organizationPartyId = (String) context.get("organizationPartyId");
-        Timestamp fromDate = (Timestamp) context.get("fromDate");
-        Timestamp thruDate = (Timestamp) context.get("thruDate");
-        String fromPeriodId = (String) context.get("fromCustomTimePeriodId");
-        String thruPeriodId = (String) context.get("thruCustomTimePeriodId");
+        Timestamp asOfDateTimeLast = (Timestamp) context.get("asOfDateTimeLast");
+        Timestamp asOfDateTimeNextLast = (Timestamp) context.get("asOfDateTimeNextLast");
+        Timestamp asOfDateTime2ndLast = (Timestamp) context.get("asOfDateTime2ndLast");
+        String customTimePeriodId = (String) context.get("customTimePeriodId");
+        String customTimePeriodIdNextLast = (String) context.get("customTimePeriodIdNextLast");
+        String customTimePeriodId2ndLast = (String) context.get("customTimePeriodId2ndLast");
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         String glFiscalTypeId = (String) context.get("glFiscalTypeId");
         
-        Debug.logWarning("glFiscalTypeId  }"+glFiscalTypeId, MODULE);
-        Debug.logWarning("fromDate   getComparativeVariacionPatrimonio  "+fromDate, MODULE);
-        Debug.logWarning("thruDate   getComparativeVariacionPatrimonio  "+thruDate, MODULE);
-        Debug.logWarning("fromCustomTimePeriodId   getComparativeVariacionPatrimonio  "+fromPeriodId, MODULE);
-        Debug.logWarning("thruCustomTimePeriodId   getComparativeVariacionPatrimonio  "+thruPeriodId, MODULE);
+        
 
         try {
-            // create the balance sheet for the fromDate
-            Map input = UtilMisc.toMap("organizationPartyId", organizationPartyId, "glFiscalTypeId", glFiscalTypeId, "asOfDate", fromDate,
-            						"userLogin", userLogin,"customTimePeriodId",fromPeriodId);
-            UtilAccountingTags.addTagParameters(context, input);
-            Map fromDateResults = dispatcher.runSync("getEdoVariacionHaciendaForDate", input);
-            if (ServiceUtil.isError(fromDateResults)) {
-                return UtilMessage.createAndLogServiceError(fromDateResults, "FinancialsError_CannotCreateComparativeBalanceSheet", locale, MODULE);
+            // Busca datos de N-2 anios 
+            Map input = UtilMisc.toMap("organizationPartyId", organizationPartyId, "glFiscalTypeId", glFiscalTypeId, "asOfDate", asOfDateTime2ndLast,
+            						"userLogin", userLogin,"customTimePeriodId",customTimePeriodId2ndLast);
+//            UtilAccountingTags.addTagParameters(context, input);
+            Map secondLastDateResults = dispatcher.runSync("getEdoVariacionHaciendaForDate", input);
+            if (ServiceUtil.isError(secondLastDateResults)) {
+                return UtilMessage.createAndLogServiceError(secondLastDateResults, "FinancialsError_CannotCreateComparativeBalanceSheet", locale, MODULE);
             }
 
-            // create the balance sheet for the thruDate
-            input = UtilMisc.toMap("organizationPartyId", organizationPartyId, "glFiscalTypeId", glFiscalTypeId, "asOfDate", thruDate,
-					"userLogin", userLogin,"customTimePeriodId",thruPeriodId);
-            UtilAccountingTags.addTagParameters(context, input);
-            Map thruDateResults = dispatcher.runSync("getEdoVariacionHaciendaForDate", input);
-            if (ServiceUtil.isError(thruDateResults)) {
-                return UtilMessage.createAndLogServiceError(thruDateResults, "FinancialsError_CannotCreateComparativeBalanceSheet", locale, MODULE);
+            // Busca datos de N-1 anios 
+            input = UtilMisc.toMap("organizationPartyId", organizationPartyId, "glFiscalTypeId", glFiscalTypeId, "asOfDate", asOfDateTimeNextLast,
+					"userLogin", userLogin,"customTimePeriodId",customTimePeriodIdNextLast);
+//            UtilAccountingTags.addTagParameters(context, input);
+            Map nextLastDateResults = dispatcher.runSync("getEdoVariacionHaciendaForDate", input);
+            if (ServiceUtil.isError(nextLastDateResults)) {
+                return UtilMessage.createAndLogServiceError(nextLastDateResults, "FinancialsError_CannotCreateComparativeBalanceSheet", locale, MODULE);
+            }
+
+            // Busca datos de N anios 
+            input = UtilMisc.toMap("organizationPartyId", organizationPartyId, "glFiscalTypeId", glFiscalTypeId, "asOfDate", asOfDateTimeLast,
+					"userLogin", userLogin,"customTimePeriodId",customTimePeriodId);
+//            UtilAccountingTags.addTagParameters(context, input);
+            Map lastDateResults = dispatcher.runSync("getEdoVariacionHaciendaForDate", input);
+            if (ServiceUtil.isError(lastDateResults)) {
+                return UtilMessage.createAndLogServiceError(lastDateResults, "FinancialsError_CannotCreateComparativeBalanceSheet", locale, MODULE);
             }
 
             Map results = ServiceUtil.returnSuccess();
 
             // include the two balance sheets in the results
-            results.put("fromDateAccountBalances", fromDateResults);
-            results.put("thruDateAccountBalances", thruDateResults);
+            results.put("secondLastDateResults", secondLastDateResults);
+            results.put("nextLastDateResults", nextLastDateResults);
+            results.put("lastDateResults", lastDateResults);
             
-            Debug.logWarning("fromDateAccountBalances  === "+fromDateResults.toString(),MODULE);
-            Debug.logWarning("thruDateAccountBalances  === "+thruDateResults.toString(),MODULE);
+            Debug.logWarning("secondLastDateResults  === "+secondLastDateResults,MODULE);
+            Debug.logWarning("nextLastDateResults  === "+nextLastDateResults,MODULE);
+            Debug.logWarning("lastDateResults  === "+lastDateResults,MODULE);
 
             return results;
         } catch (GenericServiceException e) {
@@ -1383,44 +1417,186 @@ public final class FinancialServices {
         Debug.logWarning("glFiscalTypeId  [ "+glFiscalTypeId+"]", MODULE);
         Debug.logWarning("customTimePeriodId  [ "+customTimePeriodId+"]", MODULE);
         Debug.logWarning("asOfDate  [ "+asOfDate+"]", MODULE);
-        
-        Timestamp desdeFecha = null;
-        
-        if(customTimePeriodId != null && !customTimePeriodId.isEmpty()){
-        	
-        	GenericValue timePeriod = delegator.findByPrimaryKeyCache("CustomTimePeriod", UtilMisc.toMap("customTimePeriodId", customTimePeriodId));
-        		
-        	desdeFecha = UtilDateTime.getDayEnd(UtilDateTime.toTimestamp(timePeriod.getDate("fromDate")));
-        	asOfDate = UtilDateTime.getDayEnd(UtilDateTime.toTimestamp(timePeriod.getDate("thruDate")));
-        		
-        } else {
-        	
-        	desdeFecha = UtilDateTime.getYearStart(asOfDate);
-        	
-        }
-        
-        
-        Debug.logWarning("desdeFecha  [ "+desdeFecha+"]", MODULE);
-        Debug.logWarning("asOfDate  [ "+asOfDate+"]", MODULE);
-        
+
         
     	Map<GenericValue,BigDecimal> cuentasPatrimonio = FastMap.newInstance();
     	Map<GenericValue,BigDecimal> cuentasPatContribuido = FastMap.newInstance();
     	Map<GenericValue,BigDecimal> cuentasPatGenAnterior = FastMap.newInstance();
     	Map<GenericValue,BigDecimal> cuentasPatGenerado = FastMap.newInstance();
     	
-    	cuentasPatrimonio = getAcctgTransAndEntriesForClass(cuentasPatrimonio, organizationPartyId, desdeFecha, asOfDate, glFiscalTypeId, ESTADO_VARIACION_PATRIMONIO.get(0), null, true, userLogin, dispatcher);
-    	cuentasPatContribuido = getAcctgTransAndEntriesForClass(cuentasPatContribuido, organizationPartyId, desdeFecha, asOfDate, glFiscalTypeId, ESTADO_VARIACION_PATRIMONIO.get(1), null, true, userLogin, dispatcher);
-    	cuentasPatGenAnterior = getAcctgTransAndEntriesForClass(cuentasPatGenAnterior, organizationPartyId, desdeFecha, asOfDate, glFiscalTypeId, ESTADO_VARIACION_PATRIMONIO.get(2), null, true, userLogin, dispatcher);
-    	cuentasPatGenerado = getAcctgTransAndEntriesForClass(cuentasPatGenerado, organizationPartyId, desdeFecha, asOfDate, glFiscalTypeId, ESTADO_VARIACION_PATRIMONIO.get(3), null, true, userLogin, dispatcher);
-    	
+    	if((customTimePeriodId != null && !customTimePeriodId.isEmpty()) || 
+    			(asOfDate != null && !asOfDate.toString().isEmpty())){
+    		
+            Timestamp desdeFecha = null;
+            
+            if(customTimePeriodId != null && !customTimePeriodId.isEmpty()){
+            	
+            	GenericValue timePeriod = delegator.findByPrimaryKeyCache("CustomTimePeriod", UtilMisc.toMap("customTimePeriodId", customTimePeriodId));
+            		
+            	desdeFecha = UtilDateTime.getDayStart(UtilDateTime.toTimestamp(timePeriod.getDate("fromDate")));
+            	asOfDate = UtilDateTime.getDayEnd(UtilDateTime.toTimestamp(timePeriod.getDate("thruDate")));
+            		
+            } else {
+            	
+            	desdeFecha = UtilDateTime.getYearStart(asOfDate);
+            	
+            }
+            
+            
+            Debug.logWarning("desdeFecha  [ "+desdeFecha+"]", MODULE);
+            Debug.logWarning("asOfDate  [ "+asOfDate+"]", MODULE);
+            
+        	cuentasPatContribuido = getEntriesGlOrganizationAmount(organizationPartyId,desdeFecha,asOfDate,glFiscalTypeId,ESTADO_VARIACION_PATRIMONIO.get(0),userLogin, dispatcher,delegator); 
+        	cuentasPatGenAnterior = getEntriesGlOrganizationAmount(organizationPartyId,desdeFecha,asOfDate,glFiscalTypeId,ESTADO_VARIACION_PATRIMONIO.get(1),userLogin, dispatcher,delegator);
+        	cuentasPatGenerado = getEntriesGlOrganizationAmount(organizationPartyId,desdeFecha,asOfDate,glFiscalTypeId,ESTADO_VARIACION_PATRIMONIO.get(2),userLogin, dispatcher,delegator);
+        	cuentasPatrimonio = getEntriesGlOrganizationAmount(organizationPartyId,desdeFecha,asOfDate,glFiscalTypeId,ESTADO_VARIACION_PATRIMONIO.get(3),userLogin, dispatcher,delegator);
+        	    		
+    		Debug.logWarning("cuentasPatGenAnterior Justo despues de buscar y ordenar "+cuentasPatGenAnterior, MODULE);
+    	}
+
         Map results = ServiceUtil.returnSuccess();
-        results.put("cuentasPatrimonio",cuentasPatrimonio);
         results.put("cuentasPatContribuido",cuentasPatContribuido);
         results.put("cuentasPatGenAnterior",cuentasPatGenAnterior);
         results.put("cuentasPatGenerado",cuentasPatGenerado);
+        results.put("cuentasPatrimonio",cuentasPatrimonio);
         return results;
     }    
+    
+    /**
+     * Obtiene las transacciones de un tipo de clase de cuentas y le sustituye los amount por la suma de las cuentas
+     * @param organizationPartyId
+     * @param desdeFecha
+     * @param asOfDate
+     * @param glFiscalTypeId
+     * @param tipoVariacion
+     * @param userLogin
+     * @param dispatcher
+     * @param delegator
+     * @return
+     * @throws GenericEntityException
+     */
+    public static Map<GenericValue, BigDecimal>  getEntriesGlOrganizationAmount(String organizationPartyId , Timestamp desdeFecha, Timestamp asOfDate,
+    				String glFiscalTypeId, String tipoVariacion , GenericValue userLogin ,LocalDispatcher dispatcher, Delegator delegator) throws GenericEntityException{
+
+    	Map<GenericValue,BigDecimal> cuentasPatrimonio = FastMap.newInstance();
+    	
+    	cuentasPatrimonio = getAcctgTransAndEntriesForClass(cuentasPatrimonio, organizationPartyId, desdeFecha, asOfDate, glFiscalTypeId, tipoVariacion, null, true, userLogin, dispatcher);
+    	
+		Debug.logWarning("cuentasPatrimonio %% "+cuentasPatrimonio, MODULE);
+		
+		Map<GenericValue,BigDecimal> cuentasPatrimonioCopyMap = FastMap.newInstance();
+		cuentasPatrimonioCopyMap.putAll(cuentasPatrimonio);
+    	
+		for (Map.Entry<GenericValue,BigDecimal> cuentasPat : cuentasPatrimonioCopyMap.entrySet())
+		{
+
+			GenericValue acctEntrie = (GenericValue) cuentasPat.getKey();
+			
+			Debug.logWarning("acctEntrie "+acctEntrie, MODULE);
+			
+			BigDecimal acumulado = ZERO;
+			
+			if(cuentasPat.getValue() == null){
+				cuentasPatrimonio.put(acctEntrie, ZERO);
+				acumulado = ZERO;
+			} else{
+				acumulado = cuentasPat.getValue();
+			}
+				
+    		String acctId = acctEntrie.getString("glAccountId");
+    		BigDecimal montoPadre = ZERO;
+			
+    		//Calculamos las cantidades en los padres de las cuentas, y si es necesario (no existe) se agrega la cuenta al mapa
+    		while(obtenPadreAccount(acctId, delegator) != null){
+    			
+    			GenericValue accountPadre = obtenPadreAccount(acctId, delegator);
+    			
+    			acctId = accountPadre.getString("glAccountId");
+    			
+    			Debug.logWarning("acctId Padre"+acctId, MODULE);
+    			Debug.logWarning("acumulado "+acumulado, MODULE);
+    			
+    			if(existeEnMapa(acctId, cuentasPatrimonio) != null){
+    				
+    				accountPadre = existeEnMapa(acctId, cuentasPatrimonio);
+    				montoPadre = cuentasPatrimonio.get(accountPadre);
+    				Debug.logWarning("montoPadre "+montoPadre, MODULE);
+    				acumulado = acumulado.add(montoPadre == null? ZERO :montoPadre);
+    				cuentasPatrimonio.put(accountPadre, acumulado);
+
+    			} else {
+    				
+    				cuentasPatrimonio.put(accountPadre, acumulado);
+    			}
+    			
+    			Debug.logWarning("accountPadre "+accountPadre, MODULE);
+    		} 
+    		
+			
+		}
+		
+		for (Iterator<GenericValue> iterCuentas = cuentasPatrimonio.keySet().iterator(); iterCuentas.hasNext();) {
+			GenericValue glAccount = iterCuentas.next();
+			BigDecimal monto = cuentasPatrimonio.get(glAccount);
+			Debug.logWarning("Monto iteracion  "+monto+"   Monto original  "+glAccount.getString("postedBalance"), MODULE);
+			monto = (monto == null ? ZERO : monto);
+			glAccount.set("postedBalance", monto);
+		}
+    	
+		Debug.logWarning("cuentasPatrimonio  Debug .... ", MODULE);
+		for (Map.Entry<GenericValue,BigDecimal> cuentasPat : cuentasPatrimonio.entrySet())
+		{
+			Debug.logWarning("Llave :::  "+cuentasPat.getKey()+"   Valor ::: "+cuentasPat.getValue(),MODULE);
+		}
+		
+    	return cuentasPatrimonio;
+    }
+    
+    /**
+     * Verifica si el id de cuenta existe en los objetos de un mapa 
+     * @param glAccountId
+     * @param mapaBusca
+     * @return
+     */
+    public static GenericValue existeEnMapa(String glAccountId , Map<GenericValue, BigDecimal> mapaBusca){
+    	
+    	GenericValue encontrado = null;
+    	
+	    	for (Iterator<GenericValue> iterCuentas = mapaBusca.keySet().iterator(); iterCuentas.hasNext();) {
+	    		GenericValue cuenta = iterCuentas.next();
+	    		String idCuenta = cuenta.getString("glAccountId");
+	    		
+	    		if(idCuenta.equalsIgnoreCase(glAccountId)){
+	    			encontrado = cuenta;
+	    			break;
+	    		}
+	    			
+	    	}
+	    	
+	    	Debug.logWarning("Existe en mapa "+glAccountId+"   encontrado "+encontrado, MODULE);
+    	
+    	return encontrado;
+    }
+    
+    /**
+     * metodo para obtener el padre de una cuenta
+     * @param glAccountId
+     * @param delegator
+     * @return
+     * @throws GenericEntityException
+     */
+    public static GenericValue obtenPadreAccount(String glAccountId, Delegator delegator) throws GenericEntityException{
+    	
+    	GenericValue padre = null;
+    	
+    		GenericValue glAccount = delegator.findByPrimaryKey("GlAccount", UtilMisc.toMap("glAccountId",glAccountId));
+    		if(glAccount != null && !glAccount.isEmpty()){
+    			String idPadre = glAccount.getString("parentGlAccountId");
+    			padre = delegator.findByPrimaryKey("GlAccount", UtilMisc.toMap("glAccountId",idPadre));
+    		}
+    		
+    	return padre;
+    }
     
     /**
      * Generates balance sheet for two dates and determines the balance difference between the two. The balances are in BigDecimal.

@@ -172,7 +172,7 @@ public class GenericDAO {
             return retVal;
         } catch (GenericEntityException e) {
             Debug.logError("Error while inserting " + entity.toString(), module);
-            throw new GenericEntityException("Error while inserting " + entity.getEntityName(), e);
+            throw new GenericEntityException("Error al insertar " + entity.getEntityName(), e);
         } finally {
             sqlP.close();
         }
@@ -182,7 +182,7 @@ public class GenericDAO {
         ModelEntity modelEntity = entity.getModelEntity();
 
         if (modelEntity == null) {
-            throw new GenericModelException("Could not find ModelEntity record for entityName: " + entity.getEntityName());
+            throw new GenericModelException("No se pudo encontrar el registro ModelEntity para entityName: " + entity.getEntityName());
         }
 
         return customUpdate(entity, modelEntity, modelEntity.getNopksCopy());
@@ -192,7 +192,7 @@ public class GenericDAO {
         ModelEntity modelEntity = entity.getModelEntity();
 
         if (modelEntity == null) {
-            throw new GenericModelException("Could not find ModelEntity record for entityName: " + entity.getEntityName());
+            throw new GenericModelException("No se pudo encontrar el registro ModelEntity para entityName: " + entity.getEntityName());
         }
 
         // we don't want to update ALL fields, just the nonpk fields that are in the passed GenericEntity

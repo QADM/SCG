@@ -104,17 +104,17 @@ under the License.
                                 <container style="lefthalf">
                                     <include-screen name="Party" location="component://party/widget/partymgr/ProfileScreens.xml"/>
                                     <include-screen name="Contact" location="component://party/widget/partymgr/ProfileScreens.xml"/>
-                                    <include-screen name="contactsAndAccounts" location="component://party/widget/partymgr/ProfileScreens.xml"/>
+                                   <!--  <include-screen name="contactsAndAccounts" location="component://party/widget/partymgr/ProfileScreens.xml"/>
                                     <screenlet title="${uiLabelMap.PartyMemberRoles}" navigation-form-name="ViewPartyRoles">
                                         <include-form name="ViewPartyRoles" location="component://party/widget/partymgr/PartyForms.xml"/>
-                                    </screenlet>
+                                   </screenlet> -->
                                 </container>
                                 <container style="righthalf">
                                     <include-screen name="UserLogin" location="component://party/widget/partymgr/ProfileScreens.xml"/>
-                                    <include-screen name="Content" location="component://party/widget/partymgr/ProfileScreens.xml"/>
+                                   <!--  <include-screen name="Content" location="component://party/widget/partymgr/ProfileScreens.xml"/>
                                     <include-screen name="Notes" location="component://party/widget/partymgr/ProfileScreens.xml"/>
                                     <include-screen name="Visits" location="component://party/widget/partymgr/ProfileScreens.xml"/>
-                                </container>
+                                --></container>
                             </widgets>
                         </section>
                     </decorator-section>

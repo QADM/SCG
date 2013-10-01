@@ -480,8 +480,8 @@
     <screen name="contactsAndAccounts">
         <section>
             <widgets>
-                <include-screen name="partyRelContacts"/>
-                <include-screen name="partyRelAccounts"/>
+              <!--   <include-screen name="partyRelContacts"/>-->
+               <!--  <include-screen name="partyRelAccounts"/> -->
             </widgets>
         </section>
     </screen>
@@ -547,8 +547,8 @@
                                     <include-form name="AddAccount" location="component://party/widget/partymgr/PartyForms.xml"/>
                                 </widgets>
                             </section>
-                            <include-form name="ListRelatedAccounts" location="component://party/widget/partymgr/PartyForms.xml"/>
-                        </screenlet>
+                           <!--   <include-form name="ListRelatedAccounts" location="component://party/widget/partymgr/PartyForms.xml"/>
+                       --> </screenlet>
                     </widgets>
                 </section>
             </widgets>

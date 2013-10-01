@@ -151,6 +151,10 @@
         <security https="true" auth="true"/>
         <response name="success" type="view" value="configurationMain"/>
     </request-map>
+      <request-map uri="MantenimientoCat">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="MantenimientoCat"/>
+    </request-map>
  
 
     <!-- ======================== -->
@@ -851,6 +855,11 @@
     <!-- Reports Request Maps -->
     <!-- ==================== -->
 
+    <request-map uri="MantenimientoCat">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="MantenimientoCat"/>
+    </request-map>
+ 
     <request-map uri="reports">
         <security https="true" auth="true"/>
         <response name="success" type="view" value="reportsMain"/>
@@ -1565,6 +1574,14 @@
         <security https="true" auth="true"/>
         <response name="success" type="view" value="viewAcctgTransPolizasListado"/>
     </request-map>
+    <request-map uri="viewAcctgTransPolizasClavesPresup">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="viewAcctgTransPolizasClavesPresup"/>        
+    </request-map>
+    <request-map uri="viewAcctgTransPolizasMontoOperacion">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="viewAcctgTransPolizasMontoOperacion"/>        
+    </request-map>       
      <request-map uri="viewAcctgTransIng"> 
         <security https="true" auth="true"/> 
         <response name="success" type="view" value="viewAcctgTransIng"/> 
@@ -2261,7 +2278,8 @@
     <view-map name="transactionsMain" type="screen" page="component://financials/widget/financials/screens/transactions/TransactionsScreens.xml#transactions"/>
     <view-map name="reportsMain" type="screen" page="component://financials/widget/financials/screens/reports/ReportsScreens.xml#reports"/>
     <view-map name="configurationMain" type="screen" page="component://financials/widget/financials/screens/configuration/ConfigurationScreens.xml#listGlAccounts"/>
-
+	<view-map name="MantenimientoCat" type="screen" page="component://financials/widget/financials/screens/ManCat/ManejoCatalogos.xml#ManejoCatalogos"/>
+	
     <!-- Payment Common -->
     <view-map name="editPayment" type="screen" page="component://financials/widget/financials/screens/common/PaymentScreens.xml#EditPayment"/>
     <view-map name="viewPayment" type="screen" page="component://financials/widget/financials/screens/common/PaymentScreens.xml#ViewPayment"/>
@@ -2447,7 +2465,9 @@
     <view-map name="Polizas" type="screen" page="component://financials/widget/financials/screens/transactions/TransactionsScreens.xml#Polizas"/>
     <view-map name="viewAcctgTransPolizas" type="screen" page="component://financials/widget/financials/screens/transactions/TransactionsScreens.xml#viewAcctgTransPolizas"/>
     <view-map name="viewAcctgTransPolizasLista" type="screen" page="component://financials/widget/financials/screens/transactions/TransactionsScreens.xml#viewAcctgTransPolizasLista"/>
-    <view-map name="viewAcctgTransPolizasListado" type="screen" page="component://financials/widget/financials/screens/transactions/TransactionsScreens.xml#viewAcctgTransPolizasListado"/>    
+    <view-map name="viewAcctgTransPolizasListado" type="screen" page="component://financials/widget/financials/screens/transactions/TransactionsScreens.xml#viewAcctgTransPolizasListado"/>
+    <view-map name="viewAcctgTransPolizasClavesPresup" type="screen" page="component://financials/widget/financials/screens/transactions/TransactionsScreens.xml#viewAcctgTransPolizasClavesPresup"/>
+    <view-map name="viewAcctgTransPolizasMontoOperacion" type="screen" page="component://financials/widget/financials/screens/transactions/TransactionsScreens.xml#viewAcctgTransPolizasMontoOperacion"/>            
     <view-map name="viewAcctgTransIng" type="screen" page="component://financials/widget/financials/screens/transactions/TransactionsScreens.xml#viewAcctgTransIng"/>
     <view-map name="viewAcctgTransEg" type="screen" page="component://financials/widget/financials/screens/transactions/TransactionsScreens.xml#viewAcctgTransEg"/>
 

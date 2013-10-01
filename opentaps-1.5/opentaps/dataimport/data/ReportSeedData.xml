@@ -28,8 +28,18 @@
     <ReportRegistry reportId="ORDER_H_IMP" shortName="Order Header Lines Import Report" description="" reportLocation="component://dataimport/webapp/dataimport/reports/repository/OrderHeaderLinesImportReport.jrxml"/>
     <ReportRegistry reportId="ORDER_I_IMP" shortName="Order Item Lines Import Report" description="" reportLocation="component://dataimport/webapp/dataimport/reports/repository/OrderItemLinesImportReport.jrxml"/>    
     
-    <ReportRegistry reportId="MATRIZ_EGR" shortName="Matriz de Conversion de Egresos" description="" reportLocation="component://dataimport/webapp/dataimport/reports/repository/MatrizConversionEgresosImportReport.jrxml"/>
-    <ReportRegistry reportId="MATRIZ_ING" shortName="Matriz de Conversion de Ingresos" description="" reportLocation="component://dataimport/webapp/dataimport/reports/repository/MatrizConversionIngresosImportReport.jrxml"/>  
+    <ReportRegistry reportId="MATRIZ_EGR" shortName="Matriz de Conversión de Egresos" description="" reportLocation="component://dataimport/webapp/dataimport/reports/repository/MatrizConversionEgresosImportReport.jrxml"/>
+    <ReportRegistry reportId="MATRIZ_ING" shortName="Matriz de Conversión de Ingresos" description="" reportLocation="component://dataimport/webapp/dataimport/reports/repository/MatrizConversionIngresosImportReport.jrxml"/>  
+    <ReportRegistry reportId="TAG_IMP" shortName="Tag" description="" reportLocation="component://dataimport/webapp/dataimport/reports/repository/TagImportReport.jrxml"/>
+    <ReportRegistry reportId="CLAS_ADMON_IMP" shortName="Clasificación Administrativa" description="" reportLocation="component://dataimport/webapp/dataimport/reports/repository/AdministrativeClassificationImportReport.jrxml"/>
+    <ReportRegistry reportId="CLAS_PROG_IMP" shortName="Clasificación Programática" description="" reportLocation="component://dataimport/webapp/dataimport/reports/repository/ProgrammaticClassificationImportReport.jrxml"/>
+    <ReportRegistry reportId="CLAS_GEO_IMP" shortName="Clasificación Geográfica" description="" reportLocation="component://dataimport/webapp/dataimport/reports/repository/GeographicClassificationImportReport.jrxml"/>
+    <ReportRegistry reportId="CRI_COG_CA_IMP" shortName="CRI / COG / CA" description="" reportLocation="component://dataimport/webapp/dataimport/reports/repository/CriCogCaImportReport.jrxml"/>
+    <ReportRegistry reportId="PRES_ING_IMP" shortName="Presupuesto Ingreso" description="" reportLocation="component://dataimport/webapp/dataimport/reports/repository/EntryBudgetImportReport.jrxml"/>
+    <ReportRegistry reportId="PRES_EGR_IMP" shortName="Presupuesto Egreso" description="" reportLocation="component://dataimport/webapp/dataimport/reports/repository/EgressBudgetImportReport.jrxml"/>
+    <ReportRegistry reportId="ING_DIA_IMP" shortName="Ingreso Diario" description="" reportLocation="component://dataimport/webapp/dataimport/reports/repository/DailyEntryImportReport.jrxml"/>
+    <ReportRegistry reportId="EGR_DIA_IMP" shortName="Egreso Diario" description="" reportLocation="component://dataimport/webapp/dataimport/reports/repository/DailyEgressImportReport.jrxml"/>
+    <ReportRegistry reportId="OPER_DIA_IMP" shortName="Operación Diaria" description="" reportLocation="component://dataimport/webapp/dataimport/reports/repository/DailyOperationImportReport.jrxml"/>
     
     <ReportGroupMember reportGroupId="DATAIMP_FORM" reportId="CUST_IMP" sequenceNum="1"/>
     <ReportGroupMember reportGroupId="DATAIMP_FORM" reportId="SUPPL_IMP" sequenceNum="2"/>
@@ -38,7 +48,18 @@
     <ReportGroupMember reportGroupId="DATAIMP_FORM" reportId="GL_ACCTS_IMP" sequenceNum="5"/>
     <ReportGroupMember reportGroupId="DATAIMP_FORM" reportId="ORDER_H_IMP" sequenceNum="6"/>
     <ReportGroupMember reportGroupId="DATAIMP_FORM" reportId="ORDER_I_IMP" sequenceNum="7"/>
+    
     <ReportGroupMember reportGroupId="DATAIMP_FORM" reportId="MATRIZ_EGR" sequenceNum="8"/>
-    <ReportGroupMember reportGroupId="DATAIMP_FORM" reportId="MATRIZ_ING" sequenceNum="9"/>
+    <ReportGroupMember reportGroupId="DATAIMP_FORM" reportId="MATRIZ_ING" sequenceNum="9"/>    
+    <ReportGroupMember reportGroupId="DATAIMP_FORM" reportId="TAG_IMP" sequenceNum="10"/>
+    <ReportGroupMember reportGroupId="DATAIMP_FORM" reportId="CLAS_ADMON_IMP" sequenceNum="11"/>
+    <ReportGroupMember reportGroupId="DATAIMP_FORM" reportId="CLAS_PROG_IMP" sequenceNum="12"/>
+    <ReportGroupMember reportGroupId="DATAIMP_FORM" reportId="CLAS_GEO_IMP" sequenceNum="13"/>
+    <ReportGroupMember reportGroupId="DATAIMP_FORM" reportId="CRI_COG_CA_IMP" sequenceNum="14"/>
+    <ReportGroupMember reportGroupId="DATAIMP_FORM" reportId="PRES_ING_IMP" sequenceNum="15"/>
+    <ReportGroupMember reportGroupId="DATAIMP_FORM" reportId="PRES_EGR_IMP" sequenceNum="16"/>
+    <ReportGroupMember reportGroupId="DATAIMP_FORM" reportId="ING_DIA_IMP" sequenceNum="17"/>
+    <ReportGroupMember reportGroupId="DATAIMP_FORM" reportId="EGR_DIA_IMP" sequenceNum="18"/>
+    <ReportGroupMember reportGroupId="DATAIMP_FORM" reportId="OPER_DIA_IMP" sequenceNum="19"/>
     
 </entity-engine-xml>

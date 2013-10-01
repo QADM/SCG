@@ -91,7 +91,7 @@
                  label=uiLabelMap.DataImportImportTag
                  submitLabel=uiLabelMap.DataImportImport
                  processed=tagProcessed notProcessed=tagNotProcessed
-                 reportHref="setupReport?reportId=Tag_IMP&amp;sectionName=myHome"
+                 reportHref="setupReport?reportId=TAG_IMP&amp;sectionName=myHome"
                  reportLabel=uiLabelMap.OpentapsReport/>
   </tr>
   <tr>
@@ -100,7 +100,7 @@
                  label="Clasificación administrativa"
                  submitLabel=uiLabelMap.DataImportImport
                  processed=partyProcessed notProcessed=partyNotProcessed
-                 reportHref="setupReport?reportId=CUST_IMP&amp;sectionName=myHome"
+                 reportHref="setupReport?reportId=CLAS_ADMON_IMP&amp;sectionName=myHome"
                  reportLabel=uiLabelMap.OpentapsReport/>
   </tr>
   
@@ -110,7 +110,7 @@
                  label="Clasificación programática"
                  submitLabel=uiLabelMap.DataImportImport
                  processed=projectProcessed notProcessed=projectNotProcessed
-                 reportHref="setupReport?reportId=CUST_IMP&amp;sectionName=myHome"
+                 reportHref="setupReport?reportId=CLAS_PROG_IMP&amp;sectionName=myHome"
                  reportLabel=uiLabelMap.OpentapsReport/>
   </tr>
   <tr>
@@ -119,7 +119,7 @@
                  label="Clasificación geográfica"
                  submitLabel=uiLabelMap.DataImportImport
                  processed=geoProcessed notProcessed=geoNotProcessed
-                 reportHref="setupReport?reportId=CUST_IMP&amp;sectionName=myHome"
+                 reportHref="setupReport?reportId=CLAS_GEO_IMP&amp;sectionName=myHome"
                  reportLabel=uiLabelMap.OpentapsReport/>
   </tr>
   <tr>
@@ -128,7 +128,7 @@
                  label="CRI / COG / CA"
                  submitLabel=uiLabelMap.DataImportImport
                  processed=categoryProcessed notProcessed=categoryNotProcessed
-                 reportHref="setupReport?reportId=CUST_IMP&amp;sectionName=myHome"
+                 reportHref="setupReport?reportId=CRI_COG_CA_IMP&amp;sectionName=myHome"
                  reportLabel=uiLabelMap.OpentapsReport/>
   </tr>
   <tr>
@@ -137,7 +137,7 @@
                  label=uiLabelMap.DataImportPresupuestoIngreso
                  submitLabel=uiLabelMap.DataImportImport
                  processed=presupuestoIngresoProcessed notProcessed=presupuestoIngresoNotProcessed
-                 reportHref="setupReport?reportId=CUST_IMP&amp;sectionName=myHome"
+                 reportHref="setupReport?reportId=PRES_ING_IMP&amp;sectionName=myHome"
                  reportLabel=uiLabelMap.OpentapsReport/>
   </tr>
   <tr>
@@ -146,7 +146,7 @@
                  label=uiLabelMap.DataImportPresupuestoEgreso
                  submitLabel=uiLabelMap.DataImportImport
                  processed=presupuestoEgresoProcessed notProcessed=presupuestoEgresoNotProcessed
-                 reportHref="setupReport?reportId=CUST_IMP&amp;sectionName=myHome"
+                 reportHref="setupReport?reportId=PRES_EGR_IMP&amp;sectionName=myHome"
                  reportLabel=uiLabelMap.OpentapsReport/>
   </tr>
     <tr>
@@ -155,7 +155,7 @@
                  label=uiLabelMap.DataImportImportIngresoDiario
                  submitLabel=uiLabelMap.DataImportImport
                  processed=ingresoDiarioProcessed notProcessed=ingresoDiarioNotProcessed
-                 reportHref="setupReport?reportId=CUST_IMP&amp;sectionName=myHome"
+                 reportHref="setupReport?reportId=ING_DIA_IMP&amp;sectionName=myHome"
                  reportLabel=uiLabelMap.OpentapsReport/>
   </tr>
     <tr>
@@ -164,7 +164,7 @@
                  label=uiLabelMap.DataImportImportEgresoDiario
                  submitLabel=uiLabelMap.DataImportImport
                  processed=egresoDiarioProcessed notProcessed=egresoDiarioNotProcessed
-                 reportHref="setupReport?reportId=CUST_IMP&amp;sectionName=myHome"
+                 reportHref="setupReport?reportId=EGR_DIA_IMP&amp;sectionName=myHome"
                  reportLabel=uiLabelMap.OpentapsReport/>
   </tr>
     <tr>
@@ -173,7 +173,7 @@
                  label=uiLabelMap.DataImportImportOperacionDiaria
                  submitLabel=uiLabelMap.DataImportImport
                  processed=operacionDiariaProcessed notProcessed=operacionDiariaNotProcessed
-                 reportHref="setupReport?reportId=CUST_IMP&amp;sectionName=myHome"
+                 reportHref="setupReport?reportId=OPER_DIA_IMP&amp;sectionName=myHome"
                  reportLabel=uiLabelMap.OpentapsReport/>
   </tr>
   <tr>

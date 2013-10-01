@@ -58,15 +58,15 @@ border: 1px solid #999999;
   <div id="form">
     <#-- if user is authenticated -->
     <#if userLogin?exists>
-      <h2>${uiLabelMap.CommonWelcome} <br />${firstName} ${lastName}</h2>
+      <h2>${uiLabelMap.CommonWelcome} </h2>
       <br />
       <form id="logout" method="post" action="<@ofbizUrl>logout${previousParams?if_exists}</@ofbizUrl>">
-        <input class="decorativeSubmit" style="width:65px; margin-left:1px;" type="submit"  value="${uiLabelMap.CommonLogout}" />
+        <input class="decorativeSubmit"  type="submit"  value="${uiLabelMap.CommonLogout}" />
       </form>
 
       <#-- if user IS NOT authenticated, shows login form -->
     <#else>
-      <h2>${uiLabelMap.OpentapsLoginGreeting}</h2>
+      <h2>Acceso al Sistema</h2>
 
       <#-- handles service error messages -->
 
@@ -127,16 +127,16 @@ border: 1px solid #999999;
 
       <form id="login" method="post" action="<@ofbizUrl>login${previousParams?if_exists}</@ofbizUrl>">
         <p class="top">
-          <label for="username">${uiLabelMap.CommonUsername}</label>
+          <label for="username">Usuario</label>
           <input class="inputLogin" type="text" id="username" name="USERNAME" size="50"/>
         </p>
         <p>
-          <label for="password">${uiLabelMap.CommonPassword}</label>
+          <label for="password">Contraseña</label>
           <input class="inputLogin" type="password" id="password" name="PASSWORD" size="50"/>
         </p>
 
         <p>
-          <input class="decorativeSubmit" type="submit"  value="${uiLabelMap.CommonLogin}" />
+          <input class="decorativeSubmit" type="submit"  value="Conectar" />
         </p>
       </form>
       <h3><a href="javascript:forgotPasswd()">${uiLabelMap.CommonForgotYourPassword}?</a></h3>
@@ -153,7 +153,7 @@ border: 1px solid #999999;
 
     </#if>
     <br/><br/>
-    <@include location="component://opentaps-common/webapp/common/includes/latestnews.ftl"/>
+  <!--  <@include location="component://opentaps-common/webapp/common/includes/latestnews.ftl"/>-->
   </div>
 
 
@@ -162,20 +162,23 @@ border: 1px solid #999999;
       <#assign appIndex = 0 />
       <#list apps as app>
         <#if (!app.hide?exists || app.hide != "Y") && app.linkUrl?has_content>
+        
           <#assign appIndex = appIndex + 1 />
+           <#if app.applicationId!= "ecommerce" && app.applicationId!="documentation" && app.applicationId!="catalog" &&app.applicationId!="webtools">
           <div id="button" class="${app.applicationId}" onmouseover="javascript:writeAppDetails('${app.shortName!app.applicationId}','${app.applicationName!app.applicationId}','${app.description!app.applicationId}')">
-            <#if app.imageUrl?has_content>
-              <a href="${app.linkUrl}<#if externalKeyParam?exists>?${externalKeyParam}</#if>">
-                <img src="${app.imageUrl}" onmouseover="this.src='${app.imageHoverUrl!app.imageUrl}'" onmouseout="this.src='${app.imageUrl}'" />
-              </a>
-            </#if>
-            <div id="label" style="margin-left: 34px;" for="${app.applicationId}">
-              <a style="color: black;" href="${app.linkUrl}<#if externalKeyParam?exists>?${externalKeyParam}</#if>" >
-                ${app.shortName!app.applicationId}
-              </a>
-            </div>
+         
+	            <#if app.imageUrl?has_content>
+	              <a href="${app.linkUrl}<#if externalKeyParam?exists>?${externalKeyParam}</#if>">
+	                <img src="${app.imageUrl}" onmouseover="this.src='${app.imageHoverUrl!app.imageUrl}'" onmouseout="this.src='${app.imageUrl}'" />
+	              </a>
+	            </#if>
+	            <div id="label" style="margin-left: 34px;" for="${app.applicationId}">
+	              <a style="color: black;" href="${app.linkUrl}<#if externalKeyParam?exists>?${externalKeyParam}</#if>" >
+	                ${app.shortName}
+	              </a>
+	            </div>
           </div>
-
+          </#if>
           <#if !app_has_next>
             </div> <#-- close row-->
           <#elseif appIndex % 4 == 0>

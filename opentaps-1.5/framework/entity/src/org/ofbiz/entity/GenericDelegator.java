@@ -890,13 +890,13 @@ public class GenericDelegator implements Delegator {
 
             return value;
         } catch (GenericEntityException e) {
-            String errMsg = "Failure in create operation for entity [" + value.getEntityName() + "]: " + e.toString() + ". Rolling back transaction.";
+            String errMsg = "Fallo en la creacion de la entidad [" + value.getEntityName() + "]: " + e.toString() + ". Se anulo transaccion.";
             Debug.logError(e, errMsg, module);
             try {
                 // only rollback the transaction if we started one...
                 TransactionUtil.rollback(beganTransaction, errMsg, e);
             } catch (GenericEntityException e2) {
-                Debug.logError(e2, "[GenericDelegator] Could not rollback transaction: " + e2.toString(), module);
+                Debug.logError(e2, "[GenericDelegator] No se pudo revertir transaccion: " + e2.toString(), module);
             }
             // after rolling back, rethrow the exception
             throw e;
@@ -2441,7 +2441,7 @@ public class GenericDelegator implements Delegator {
         ModelRelation relation = modelEntity.getRelation(relationName);
 
         if (relation == null) {
-            throw new GenericModelException("Could not find relation for relationName: " + relationName + " for value " + value);
+            throw new GenericModelException("No se encontro relacion de relationName: " + relationName + " para el valor " + value);
         }
 
         // put the byAndFields (if not null) into the hash map first,
@@ -2464,7 +2464,7 @@ public class GenericDelegator implements Delegator {
         ModelRelation relation = modelEntity.getRelation(relationName);
 
         if (relation == null) {
-            throw new GenericModelException("Could not find relation for relationName: " + relationName + " for value " + value);
+            throw new GenericModelException("No se encontro relacion de relationName: " + relationName + " para el valor " + value);
         }
         ModelEntity relatedEntity = getModelReader().getModelEntity(relation.getRelEntityName());
 
@@ -2488,7 +2488,7 @@ public class GenericDelegator implements Delegator {
         ModelRelation relation = modelEntity.getRelation(relationName);
 
         if (relation == null) {
-            throw new GenericModelException("Could not find relation for relationName: " + relationName + " for value " + value);
+            throw new GenericModelException("No se encontro relacion de relationName: " + relationName + " para el valor " + value);
         }
 
         Map<String, Object> fields = FastMap.newInstance();
@@ -2507,7 +2507,7 @@ public class GenericDelegator implements Delegator {
         ModelRelation relation = value.getModelEntity().getRelation(relationName);
 
         if (relation == null) {
-            throw new GenericModelException("Could not find relation for relationName: " + relationName + " for value " + value);
+            throw new GenericModelException("No se encontro relacion de relationName: " + relationName + " para el valor " + value);
         }
         if (!"one".equals(relation.getType()) && !"one-nofk".equals(relation.getType())) {
             throw new GenericModelException("Relation is not a 'one' or a 'one-nofk' relation: " + relationName + " of entity " + value.getEntityName());
@@ -2530,7 +2530,7 @@ public class GenericDelegator implements Delegator {
         ModelRelation relation = modelEntity.getRelation(relationName);
 
         if (relation == null) {
-            throw new GenericModelException("Could not find relation for relationName: " + relationName + " for value " + value);
+            throw new GenericModelException("No se encontro relacion de relationName: " + relationName + " for value " + value);
         }
         if (!"one".equals(relation.getType()) && !"one-nofk".equals(relation.getType())) {
             throw new GenericModelException("Relation is not a 'one' or a 'one-nofk' relation: " + relationName + " of entity " + value.getEntityName());
@@ -2594,7 +2594,7 @@ public class GenericDelegator implements Delegator {
 
         ModelEntity entity = this.getModelEntity(entityName);
         if (entity == null) {
-            throw new IllegalArgumentException("[GenericDelegator.clearCacheLine] could not find entity for entityName: " + entityName);
+            throw new IllegalArgumentException("[GenericDelegator.clearCacheLine] no se pudo encontrar entityName: " + entityName);
         }
         //if never cached, then don't bother clearing
         if (entity.getNeverCache()) return;
@@ -2913,7 +2913,8 @@ public class GenericDelegator implements Delegator {
 
         if (nextSeqLong == null) {
             // NOTE: the getNextSeqIdLong method SHOULD throw a runtime exception when no sequence value is found, which means we should never see it get here
-            throw new IllegalArgumentException("Could not get next sequenced ID for sequence name: " + seqName);
+            throw new IllegalArgumentException("No se pudo obtener el ID de secuencia por el siguiente nombre: " + seqName);
+            //throw new IllegalArgumentException("Could not get next sequenced ID for sequence name: " + seqName);
         }
 
         if (UtilValidate.isNotEmpty(this.getDelegatorInfo().sequencedIdPrefix)) {

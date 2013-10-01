@@ -133,7 +133,7 @@ public class TransactionsFindIng {
             	 searchConditions.add(EntityCondition.makeCondition(AcctgTransOrgPresupIng.Fields.acctgTransId.name(), EntityOperator.EQUALS, acctgTransId));
             }
             
-            searchConditions.add(EntityCondition.makeCondition(AcctgTransOrgPresupIng.Fields.acctgTransTypeId.name(), EntityOperator.EQUALS, "TINGRESOESTIMADO"));
+            searchConditions.add(EntityCondition.makeCondition(AcctgTransOrgPresupIng.Fields.tipoPoliza.name(), EntityOperator.EQUALS, "INGRESO"));
             if (UtilValidate.isNotEmpty(partyId)) {
                 searchConditions.add(EntityCondition.makeCondition(AcctgTransOrgPresupIng.Fields.partyId.name(), EntityOperator.EQUALS, partyId));
             }
@@ -265,7 +265,7 @@ public class TransactionsFindIng {
             	 searchConditions.add(EntityCondition.makeCondition(AcctgTransOrgPresupIng.Fields.acctgTransId.name(), EntityOperator.EQUALS, acctgTransId));
             }
             
-            searchConditions.add(EntityCondition.makeCondition(AcctgTransOrgPresupIng.Fields.acctgTransTypeId.name(), EntityOperator.EQUALS, "TPRESUPAPROBADO"));
+            searchConditions.add(EntityCondition.makeCondition(AcctgTransOrgPresupIng.Fields.tipoPoliza.name(), EntityOperator.EQUALS, "EGRESO"));
             if (UtilValidate.isNotEmpty(partyId)) {
                 searchConditions.add(EntityCondition.makeCondition(AcctgTransOrgPresupIng.Fields.partyId.name(), EntityOperator.EQUALS, partyId));
             }

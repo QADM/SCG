@@ -51,8 +51,18 @@ ledgerSpecification = ledgerRepository.getSpecification();
 
 try 
 {	//AcctgPolizasDetalleLista = ledgerRepository.getAcctgPolizasDetalleLista(agrupador);
-	acctgPolizasDetalleLista = delegator.findByAnd("AcctgPolizasDetalleLista", UtilMisc.toMap("agrupador", parameters.get("agrupador"), "debitCreditFlag", "D"), UtilMisc.toList("postedDate"));	
+	acctgPolizasDetalleLista = delegator.findByAnd("AcctgPolizasDetalleLista", UtilMisc.toMap("agrupador", parameters.get("agrupador"), "debitCreditFlag", "D"), UtilMisc.toList("postedDate"));
+	acctgPolizasClavesPresup = delegator.findByAnd("AcctgPolizasClavesPresup", UtilMisc.toMap("agrupador", parameters.get("agrupador")), UtilMisc.toList("clavePres"));
+	//acctgPolizasClaPreTrans = delegator.findByAnd("AcctgTransPresupuestal", UtilMisc.toMap("agrupador", parameters.get("agrupador")), UtilMisc.toList("agrupador"));
+	//acctgPolizasClaPreTrans = ledgerRepository.getAcctgTransPresupuestal(agrupador);	
+	acctgPolizasMontoOperacion = delegator.findByAnd("AcctgPolizasMontoOperacion", UtilMisc.toMap("agrupador", parameters.get("agrupador"), "debitCreditFlag", "D"), UtilMisc.toList("agrupador"));
+	
+	
 	print("acctgPolizasDetalleLista: " + acctgPolizasDetalleLista);             
+	print("acctgPolizasClavesPresup: " + acctgPolizasClavesPresup);
+	print("acctgPolizasClaPreTrans: " + acctgPolizasClaPreTrans);
+	print("acctgPolizasMontoOperacion: " + acctgPolizasMontoOperacion);
+	
 } 
 catch (FoundationException e) {
 }
@@ -60,6 +70,8 @@ catch (FoundationException e) {
 
 //context.put("acctgPolizasDetalleLista", Repository.genericValueFromEntity(delegator, acctgPolizasDetalleLista));
 context.put("acctgPolizasDetalleLista", acctgPolizasDetalleLista);
+context.put("acctgPolizasClavesPresup", acctgPolizasClavesPresup);
+context.put("acctgPolizasMontoOperacion", acctgPolizasMontoOperacion);
 
 
 

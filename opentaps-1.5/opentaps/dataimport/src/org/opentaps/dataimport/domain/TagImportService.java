@@ -94,21 +94,42 @@ public class TagImportService extends DomainService implements
 							enumeration.setEnumId(id);
 						} else {
 							enumeration.setEnumId(enums1.get(0).getEnumId());
+						}						
+						
+						if(rawdata.getFechaInicio()!=null)
+						{
+							if(rawdata.getFechaFin()!=null)
+							{
+								if(rawdata.getName()!=null)
+								{
+									if(rawdata.getNivel()!=null)
+									{
+										enumeration.setEnumTypeId(types.get(0).getEnumTypeId());
+										enumeration.setSequenceId(rawdata.getSequenceNum());
+										enumeration.setEnumCode(rawdata.getName());
+										enumeration.setFechaInicio(rawdata.getFechaInicio());
+										enumeration.setFechaFin(rawdata.getFechaFin());
+										enumeration.setDescription(rawdata.getDescription());
+										enumeration.setNivelId(rawdata.getNivel());
+										enumeration.setNode(rawdata.getNode());
+
+										imp_tx1 = this.session.beginTransaction();
+										ledger_repo.createOrUpdate(enumeration);
+										imp_tx1.commit();
+									}
+									else
+										throw new ServiceException(String.format("Falta Ingresar Nivel"));
+									
+								}
+								else
+									throw new ServiceException(String.format("Falta Ingresar Nombre" , MODULE));								
+							}
+							else
+								throw new ServiceException(String.format("Falta Ingresar Fecha Fin" , MODULE));	
 						}
-
-						enumeration.setEnumTypeId(types.get(0).getEnumTypeId());
-						enumeration.setSequenceId(rawdata.getSequenceNum());
-						enumeration.setEnumCode(rawdata.getName());
-						enumeration.setFechaInicio(rawdata.getFechaInicio());
-						enumeration.setFechaFin(rawdata.getFechaFin());
-						enumeration.setDescription(rawdata.getDescription());
-						enumeration.setNivelId(rawdata.getNivel());
-						enumeration.setNode(rawdata.getNode());
-
-						imp_tx1 = this.session.beginTransaction();
-						ledger_repo.createOrUpdate(enumeration);
-						imp_tx1.commit();
-
+						
+						else
+							throw new ServiceException(String.format("Falta Ingresar Fecha Inicio" , MODULE));	
 					}
 
 					String message = "Successfully imported Tag ["
@@ -119,8 +140,7 @@ public class TagImportService extends DomainService implements
 					imported = imported + 1;
 
 				} catch (Exception ex) {
-					String message = "Failed to import Tag [" + rawdata.getId()
-							+ "], Error message : " + ex.getMessage();
+					String message = ex.getMessage();
 					storeImportTagError(rawdata, message, imp_repo);
 
 					// rollback all if there was an error when importing item
@@ -188,10 +208,11 @@ public class TagImportService extends DomainService implements
 							enumeration.setParentEnumId(enums.get(0)
 									.getEnumId());
 						} else {
-							Debug.log("Padre no valido");
-							String message = "Failed to import Tag ["
-									+ rowdata.getSequenceNum()
-									+ "], Error message : " + "Padre no valido";
+							Debug.log("Failed to import Tag ["
+									+ rowdata.getId()
+									+ "], Error message : " + "Padre no valido");
+							
+							String message = "Padre no valido";
 							storeImportTagError(rowdata, message, imp_repo);
 
 							// rollback all if there was an error when importing
@@ -222,7 +243,7 @@ public class TagImportService extends DomainService implements
 			}
 
 		} catch (Exception e) {
-			logger.debug("No se logro impactar parent " + e);
+			logger.debug("No se logro impactar padre " + e);
 		}
 	}
 

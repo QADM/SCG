@@ -26,6 +26,8 @@
 
     <entity-resource type="model" reader-name="main" loader="main" location="entitydef/entitymodel.xml"/>
     <entity-resource type="group" reader-name="main" loader="main" location="entitydef/entitygroup.xml"/>
+    <entity-resource type="model" reader-name="main" loader="main" location="entitydef/entitymodel_manCant.xml"/>
+    <entity-resource type="group" reader-name="main" loader="main" location="entitydef/entitygroup_manCant.xml"/>
     <entity-resource type="model" reader-name="main" loader="main" location="entitydef/entitymodel_payroll.xml"/>
     <entity-resource type="group" reader-name="main" loader="main" location="entitydef/entitygroup_payroll.xml"/>
     <entity-resource type="model" reader-name="main" loader="main" location="entitydef/entitymodel_reporting.xml"/>

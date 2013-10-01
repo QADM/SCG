@@ -32,6 +32,11 @@
 </style>
 
 <script type="text/javascript">
+	function replaceAll(text, search, newstring ){
+    while (text.toString().indexOf(search) != -1)
+        text = text.toString().replace(search,newstring);
+    return text;
+}
 
 // Extend opentaps.GLAccountTree to provide formatting specific to this page
 dojo.declare("opentaps.TrialBalanceAccountTree", opentaps.GLAccountTree, {
@@ -40,7 +45,10 @@ dojo.declare("opentaps.TrialBalanceAccountTree", opentaps.GLAccountTree, {
         // cells for values, starting with posted balance followed by links
         var glAccountId = this.tree.store.getIdentity(node.item);
         cells = '<table class="trialBalanceSummary"><tr>';
-        cells += '<td class="postedBalance">' + value + '</td>';
+        value=value.replace("MXN","$ ").replace(",",")");
+        value=replaceAll(value,".",",");
+        value=value.replace(")",".")
+        cells += '<td class="postedBalance">' +value + '</td>';
         cells += '<td><a href="reconcileAccounts?glAccountId=' + glAccountId + '" class="buttontext">${uiLabelMap.FinancialsReconcile}</a></td>';
         cells += '<td><a href="updateGlAccountScreen?glAccountId=' + glAccountId + '" class="buttontext">${uiLabelMap.CommonEdit}</a></td>';
         cells += '<td><a href="addSubAccountScreen?parentGlAccountId=' + glAccountId + '" class="buttontext">${uiLabelMap.FinancialsAddSubAccount}</a></td>';

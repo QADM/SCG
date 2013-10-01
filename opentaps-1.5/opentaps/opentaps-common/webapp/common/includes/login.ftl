@@ -101,12 +101,12 @@ border: 1px solid #999999;
 <div class="form" style="padding-top: 125px; padding-bottom: 125px;">
 
   <div align="center">
-    <@frameSection title="${uiLabelMap.get(greetingLabel)}" style="width: 300px; margin-left: auto; margin-right: auto;text-align: center;" innerStyle="text-align: center;">
+    <@frameSection title="Acceso al sistema" style="width: 300px; margin-left: auto; margin-right: auto;text-align: center;" innerStyle="text-align: center;">
         <form method="post" action="<@ofbizUrl>login${previousParams?if_exists}</@ofbizUrl>" name="loginform" style="margin: 0;">
           <table width="100%" border="0" cellpadding="0" cellspacing="2">
             <tr>
               <td align="right">
-                <span class="tabletext">${uiLabelMap.CommonUsername}&nbsp;</span>
+                <span class="tabletext">Usuario</span>
               </td>
               <td align="left">
                 <input type="text" class="inputBox" name="USERNAME" value="${username}" size="20"/>
@@ -114,7 +114,7 @@ border: 1px solid #999999;
             </tr>
             <tr>
               <td align="right">
-                <span class="tabletext">${uiLabelMap.CommonPassword}&nbsp;</span>
+                <span class="tabletext">Contraseña</span>
               </td>
               <td align="left">
                 <input type="password" class="inputBox" name="PASSWORD" value="" size="20"/>
@@ -148,5 +148,5 @@ border: 1px solid #999999;
     </#if>
   /*]]>*/
   </script>
-</div>
-<@include location="component://opentaps-common/webapp/common/includes/latestnews.ftl"/>
+</div><!--
+<@include location="component://opentaps-common/webapp/common/includes/latestnews.ftl"/>-->

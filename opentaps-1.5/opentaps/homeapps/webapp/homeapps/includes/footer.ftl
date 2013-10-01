@@ -19,8 +19,7 @@
 
 </div><#-- end of container-->
 <div id="footer">
-  <div id="appDescr">Welcome to opentaps Open Source ERP + CRM, 
-    the open source alternative for your business.  Please login to see the applications available to you.</div>
+  <div id="appDescr">Powered by Opentaps</div>
 </div>
 
 </body>
