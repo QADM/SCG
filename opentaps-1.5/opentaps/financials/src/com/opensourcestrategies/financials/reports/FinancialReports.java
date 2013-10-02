@@ -866,7 +866,7 @@ public final class FinancialReports {
             }
 
             UtilAccountingTags.addTagParameters(request, ctxt);
-            Map<String, Object> results = dispatcher.runSync("getComparativeIncomeStatement", dispatcher.getDispatchContext().makeValidContext("getComparativeIncomeStatement", ModelService.IN_PARAM, ctxt));
+            Map<String, Object> results = dispatcher.runSync("getEstadoDeActividades", dispatcher.getDispatchContext().makeValidContext("getEstadoDeActividades", ModelService.IN_PARAM, ctxt));
 
             Map<String, Object> set1IncomeStatement = (Map<String, Object>) results.get("set1IncomeStatement");
             Map<String, Object> set2IncomeStatement = (Map<String, Object>) results.get("set2IncomeStatement");
