@@ -44,7 +44,7 @@
   <div style="border: 1px solid #999999; margin-top: 20px; margin-bottom: 20px;"></div>
   <div class="treeViewContainer">
     <div class="treeViewHeader">
-      <div class="tableheadtext">${uiLabelMap.FinancialsCashFlowStatement} for ${parameters.organizationName?if_exists} (${organizationPartyId})</div>
+      <div class="tableheadtext">${uiLabelMap.FinancialsCashFlowStatement} de  ${parameters.organizationName?if_exists} (${organizationPartyId})</div>
       <div class="tabletext">
         <#if customTimePeriod?has_content>
           ${uiLabelMap.CommonFrom} ${getLocalizedDate(customTimePeriod.fromDate, "DATE")} ${uiLabelMap.CommonThru} ${getLocalizedDate(customTimePeriod.thruDate, "DATE")}
