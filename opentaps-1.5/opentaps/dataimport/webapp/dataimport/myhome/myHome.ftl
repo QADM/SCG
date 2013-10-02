@@ -40,7 +40,7 @@
     <@displayCell text=uiLabelMap.DataImportNumberNotProcessed/>
     <#if hasFullPermissions?default(false)><td>&nbsp;</td></#if>
   </tr>
-  <tr>
+  <!--<tr>
     <@importForm importService="importCustomers"
                  sectionLabel="DataImportImportCustomers"
                  label=uiLabelMap.FinancialsCustomers
@@ -57,7 +57,7 @@
                  processed=suppliersProcessed notProcessed=suppliersNotProcessed
                  reportHref="setupReport?reportId=SUPPL_IMP&amp;sectionName=myHome"
                  reportLabel=uiLabelMap.OpentapsReport/>
-  </tr>
+  </tr>-->
   <tr>
     <@importForm importService="importProducts"
                  sectionLabel="DataImportImportProducts"
@@ -67,7 +67,7 @@
                  reportHref="setupReport?reportId=PROD_IMP&amp;sectionName=myHome"
                  reportLabel=uiLabelMap.OpentapsReport/>
   </tr>
-  <tr>
+<!--  <tr>
     <@importForm importService="importProductInventory"
                  sectionLabel="DataImportImportInventory"
                  label=uiLabelMap.ProductInventoryItems
@@ -75,7 +75,7 @@
                  processed=inventoryProcessed notProcessed=inventoryNotProcessed
                  reportHref="setupReport?reportId=INVENT_IMP&amp;sectionName=myHome"
                  reportLabel=uiLabelMap.OpentapsReport/>
-  </tr>
+  </tr>-->
   <tr>
     <@importForm importService="importGlAccounts"
                  sectionLabel="DataImportImportGlAccounts"
@@ -186,7 +186,7 @@
                  reportLabel=uiLabelMap.OpentapsReport/>
   </tr>
   
-  <tr>
+ <tr>
     <@importForm importService="importMatrizIng"
                  sectionLabel="DataImportMatrizIng"
                  label=uiLabelMap.DataImportMatrizIng
@@ -198,7 +198,7 @@
   
   
   
-  <tr>
+  <!-- <tr>
     <@importForm importService="importOrders"
                  sectionLabel="DataImportImportOrders"
                  label=uiLabelMap.DataImportOrderLines
@@ -206,7 +206,7 @@
                  processed=orderHeadersProcessed notProcessed=orderHeadersNotProcessed
                  reportHref="setupReport?reportId=ORDER_H_IMP&amp;sectionName=myHome"
                  reportLabel=uiLabelMap.OpentapsReport/>
-  </tr>   
+  </tr>  
    
   <tr>
     <@displayCell text="${uiLabelMap.DataImportOrderItemLines}:"/>
@@ -214,7 +214,7 @@
     <@displayCell text="${orderItemsNotProcessed}"/>
     <td>&nbsp;</td>
     <@displayLinkCell href="setupReport?reportId=ORDER_I_IMP&amp;sectionName=myHome" text=uiLabelMap.OpentapsReport class="buttontext" />
-  </tr>
+  </tr> -->
 </table>
 
 <br/>
@@ -240,7 +240,7 @@
   </@frameSection>
 </#if>
 
-<#if hasOrgConfigPermissions?default(false)>
+<!--<#if hasOrgConfigPermissions?default(false)>
   <@frameSection title=uiLabelMap.DataImportCopyLedgerSetup>
     <form name="copyOrganizationLedgerSetupForm" method="post" action="scheduleService">
       <@inputHidden name="SERVICE_NAME" value="copyOrganizationLedgerSetup"/>
@@ -259,4 +259,4 @@
       </table>
     </form>
   </@frameSection>
-</#if>
+</#if>-->

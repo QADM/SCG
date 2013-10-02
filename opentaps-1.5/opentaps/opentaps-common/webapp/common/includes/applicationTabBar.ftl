@@ -61,13 +61,19 @@
 	    <#else>
 	      <#assign tabClass = "sectionTabButtonUnselected"/>
 	    </#if>
-	    
-	    <#if section.showAsDisabled()>
-	      <#assign title="<span class=\"disabled\">${uiLabelMap.get(section.uiLabel)}</span>" />
-	    <#else>
-	      <#assign title="<a href=\"${url}\">${uiLabelMap.get(section.uiLabel)}</a>" />
-	    </#if>
-	
+	    <#if section.uiLabel="opentaps">
+		    <#if section.showAsDisabled()>
+		      <#assign title="<span class=\"disabled\">Menú principal</span>" />
+		    <#else>
+		      <#assign title="<a href=\"${url}\">Menú pincipal</a>" />
+		    </#if>
+		<#else>
+			<#if section.showAsDisabled()>
+		      <#assign title="<span class=\"disabled\">${uiLabelMap.get(section.uiLabel)}</span>" />
+		    <#else>
+		      <#assign title="<a href=\"${url}\">${uiLabelMap.get(section.uiLabel)}</a>" />
+		    </#if>
+		</#if>
 	    <li class="${tabClass}"><@frameSectionHeader title=title/></li>
 	</#if>
   </#list>
