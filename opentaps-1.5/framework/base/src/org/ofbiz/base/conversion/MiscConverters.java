@@ -233,7 +233,8 @@ public class MiscConverters implements ConverterLoader {
             if (loc != null) {
                 return loc;
             } else {
-                throw new ConversionException("Could not convert " + obj + " to Locale: ");
+                throw new ConversionException("No se puede convertir " + obj + " a: ");
+                //throw new ConversionException("Could not convert " + obj + " to Locale: ");
             }
         }
     }
