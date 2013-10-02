@@ -179,12 +179,14 @@ border: 1px solid #999999;
 	            </div>
           </div>
           </#if>
+          <!--
           <#if !app_has_next>
-            </div> <#-- close row-->
+            </div>
           <#elseif appIndex % 4 == 0>
-            </div> <#-- close row-->
-            <div id="row" style="margin-top: 3px;" > <#-- create a new row-->
+            </div> 
+            <div id="row" style="margin-top: 3px;" > 
           </#if>
+          -->
         </#if>
       </#list>
     </#if>

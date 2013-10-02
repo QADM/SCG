@@ -60,13 +60,13 @@
        (${toGlFiscalType.description})
      <td class="tableheadtext" align="right">${uiLabelMap.OpentapsDifference}</td>
    </tr>
-   <tr><td class="tableheadtext" align="left">${uiLabelMap.AccountingAssets}</td></tr>
+   <tr><td class="tableheadtext" align="left">${uiLabelMap.FinancialsReportsAccountingAssets}</td></tr>
    <@listBalances type="assetAccountBalances" accounts=assetAccounts balances=assetAccountBalances/>
    
-   <tr><td class="tableheadtext" align="left">${uiLabelMap.AccountingLiabilities}</td></tr>
+   <tr><td class="tableheadtext" align="left">${uiLabelMap.FinancialsReportsAccountingLiabilities}</td></tr>
    <@listBalances type="liabilityAccountBalances" accounts=liabilityAccounts balances=liabilityAccountBalances/>
 
-   <tr><td class="tableheadtext" align="left">${uiLabelMap.AccountingEquities}</td></tr>
+   <tr><td class="tableheadtext" align="left">${uiLabelMap.FinancialsReportsAccountingEquities}</td></tr>
    <@listBalances type="equityAccountBalances" accounts=equityAccounts balances=equityAccountBalances/>
 </table>
 </#if>
