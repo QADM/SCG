@@ -48,7 +48,7 @@ input.put("thruDate2", thruDate2);
 UtilAccountingTags.addTagParameters(request, input);
 
 context.put("input",input);
-result = dispatcher.runSync("getComparativeIncomeStatement", input);
+result = dispatcher.runSync("getEstadoDeActividades", input);
 if (ServiceUtil.isError(result)) return;
 
 set1IncomeStatement = result.get("set1IncomeStatement");
