@@ -126,7 +126,7 @@ To use these macros in your page, first put this at the top:
   <table>
     <tr>
       <td><input type="radio" name="reportDateOption" value="byDate" onClick="javascript:selectReportDateOption(this)" ${byDateChecked}></input></td>
-      <td class="tableheadtext">${uiLabelMap.FinancialsCompareDate}</td>
+      <td class="tableheadtext">${uiLabelMap.FinancialsCompareDates}</td>
       <td><@inputDate name="fromDate" default=getDefaultValue("fromDate", defaultFromDate)/><@displayError name="fromDate" /></td>
       <td class="tableheadtext">${uiLabelMap.FinancialsCompareDateTo}</td>
       <td><@inputDate name="thruDate" default=getDefaultValue("thruDate", defaultThruDate)/><@displayError name="thruDate" /></td>
@@ -138,9 +138,9 @@ To use these macros in your page, first put this at the top:
   <table>
     <tr>
       <td><input type="radio" name="reportDateOption" value="byDate" onClick="javascript:selectReportDateOption(this)" ${byDateChecked}/></td>
-      <td class="tableheadtext">${uiLabelMap.CommonFromDate}</td>
+      <td class="tableheadtext">${uiLabelMap.FinancialsReportsCommonFromDate}</td>
       <td><@inputDate name="fromDate" default=getDefaultValue("fromDate", defaultFromDate)/><@displayError name="fromDate" /></td>
-      <td class="tableheadtext">${uiLabelMap.CommonThruDate}</td>
+      <td class="tableheadtext">${uiLabelMap.FinancialsReportsCommonThruDate}</td>
       <td><@inputDate name="thruDate" default=getDefaultValue("thruDate", defaultThruDate)/><@displayError name="thruDate" /></td>
     </tr>
   </table>
@@ -152,11 +152,11 @@ To use these macros in your page, first put this at the top:
       <td><input type="radio" name="reportDateOption" value="byDate" onClick="javascript:selectReportDateOption(this)" ${byDateChecked}></input></td>
       <td class="tableheadtext">${uiLabelMap.FinancialsCompareDates}:</td>
       <td class="tabletext">
-        ${uiLabelMap.CommonFrom}
+        ${uiLabelMap.FinancialsCommonFrom}
         <@inputDate name="fromDate1" default=getDefaultValue("fromDate1", defaultFromDate1)/><@displayError name="fromDate2" />
       </td>
       <td class="tabletext">
-        ${uiLabelMap.CommonThru}
+        ${uiLabelMap.FinancialsCommonThru}
         <@inputDate name="thruDate1" default=getDefaultValue("thruDate1", defaultThruDate1)/><@displayError name="thruDate1" />
       </td>
     </tr>
