@@ -1312,11 +1312,11 @@ public final class FinancialServices {
 
             // compute the balance difference for each type of account
             results.put("liabilityAccountBalances",
-                    calculateDifferenceBalance((Map) fromDateResults.get("liabilityAccountBalances"), (Map) thruDateResults.get("liabilityAccountBalances")));
+                    calculateDifferenceBalance((Map) thruDateResults.get("liabilityAccountBalances"),(Map) fromDateResults.get("liabilityAccountBalances")));
             results.put("assetAccountBalances",
-                    calculateDifferenceBalance((Map) fromDateResults.get("assetAccountBalances"), (Map) thruDateResults.get("assetAccountBalances")));
+                    calculateDifferenceBalance((Map) thruDateResults.get("assetAccountBalances"), (Map) fromDateResults.get("assetAccountBalances")));
             results.put("equityAccountBalances",
-                    calculateDifferenceBalance((Map) fromDateResults.get("equityAccountBalances"), (Map) thruDateResults.get("equityAccountBalances")));
+                    calculateDifferenceBalance((Map) thruDateResults.get("equityAccountBalances"), (Map) fromDateResults.get("equityAccountBalances")));
             	
 
             return results;
@@ -1717,6 +1717,65 @@ public final class FinancialServices {
             return UtilMessage.createAndLogServiceError(e, "FinancialsError_CannotCreateComparativeIncomeStatement", locale, MODULE);
         }
     }
+    
+    /**
+     * Genera el estado de actividades 
+     *
+     * @param dctx a <code>DispatchContext</code> value
+     * @param context a <code>Map</code> value
+     * @return a <code>Map</code> value
+     */
+    @SuppressWarnings("unchecked")
+    public static Map getEstadoDeActividades(DispatchContext dctx, Map context) {
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Locale locale = UtilCommon.getLocale(context);
+
+        // input parameters
+        String organizationPartyId = (String) context.get("organizationPartyId");
+        String glFiscalTypeId1 = (String) context.get("glFiscalTypeId1");
+        String glFiscalTypeId2 = (String) context.get("glFiscalTypeId2");
+        Timestamp fromDate1 = (Timestamp) context.get("fromDate1");
+        Timestamp thruDate1 = (Timestamp) context.get("thruDate1");
+        Timestamp fromDate2 = (Timestamp) context.get("fromDate2");
+        Timestamp thruDate2 = (Timestamp) context.get("thruDate2");
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+
+        // validate the from/thru dates
+        if (fromDate1.after(thruDate1) || fromDate2.after(thruDate2)) {
+            return UtilMessage.createAndLogServiceError("FinancialsError_CannotCreateComparativeIncomeStatementFromDateAfterThruDate", locale, MODULE);
+        }
+
+        try {
+            // create the income statement for the fromDate
+            Map input = UtilMisc.toMap("organizationPartyId", organizationPartyId, "glFiscalTypeId", glFiscalTypeId1, "fromDate", fromDate1, "thruDate", thruDate1, "userLogin", userLogin);
+            UtilAccountingTags.addTagParameters(context, input);
+            Map set1Results = dispatcher.runSync("getIncomeStatementByDates", input);
+            if (ServiceUtil.isError(set1Results)) {
+                return UtilMessage.createAndLogServiceError(set1Results, "FinancialsError_CannotCreateComparativeIncomeStatement", locale, MODULE);
+            }
+
+            // create the balance sheet for the thruDate
+            input = UtilMisc.toMap("organizationPartyId", organizationPartyId, "glFiscalTypeId", glFiscalTypeId2, "fromDate", fromDate2, "thruDate", thruDate2, "userLogin", userLogin);
+            UtilAccountingTags.addTagParameters(context, input);
+            Map set2Results = dispatcher.runSync("getIncomeStatementByDates", input);
+            if (ServiceUtil.isError(set2Results)) {
+                return UtilMessage.createAndLogServiceError(set2Results, "FinancialsError_CannotCreateComparativeIncomeStatement", locale, MODULE);
+            }
+
+            Map results = ServiceUtil.returnSuccess();
+
+            // include the two income statements in the results
+            results.put("set1IncomeStatement", set1Results);
+            results.put("set2IncomeStatement", set2Results);
+
+            // compute the balance difference
+            results.put("accountBalances", calculateDifferenceBalance((Map) set2Results.get("glAccountSumsFlat"), (Map) set1Results.get("glAccountSumsFlat")));
+
+            return results;
+        } catch (GenericServiceException e) {
+            return UtilMessage.createAndLogServiceError(e, "FinancialsError_CannotCreateComparativeIncomeStatement", locale, MODULE);
+        }
+    }    
 
     /**
      * Generates cash flow statement for two sets of dates and glFiscalTypeIds and determines the difference between the two. The balances are in BigDecimal.
@@ -1838,17 +1897,17 @@ public final class FinancialServices {
             
             
             // compute the balance difference
-            results.put("difCuentasImpuesto", calculateDifferenceBalance((Map) set1Results.get("cuentasImpuesto"), (Map) set2Results.get("cuentasImpuesto")));
-            results.put("difCuentasContribu", calculateDifferenceBalance((Map) set1Results.get("cuentasContribu"), (Map) set2Results.get("cuentasContribu")));
-            results.put("difCuentasParticipa", calculateDifferenceBalance((Map) set1Results.get("cuentasParticipa"), (Map) set2Results.get("cuentasParticipa")));
-            results.put("difCuentasTransfe", calculateDifferenceBalance((Map) set1Results.get("cuentasTransfe"), (Map) set2Results.get("cuentasTransfe")));
-            results.put("difCuentasOtrosIng", calculateDifferenceBalance((Map) set1Results.get("cuentasOtrosIng"), (Map) set2Results.get("cuentasOtrosIng")));
-            results.put("difCuentasIcreVaria", calculateDifferenceBalance((Map) set1Results.get("cuentasIcreVaria"), (Map) set2Results.get("cuentasIcreVaria")));
-            results.put("difCuentasGastosFun", calculateDifferenceBalance((Map) set1Results.get("cuentasGastosFun"), (Map) set2Results.get("cuentasGastosFun")));
-            results.put("difCuentasTransGastos", calculateDifferenceBalance((Map) set1Results.get("cuentasTransGastos"), (Map) set2Results.get("cuentasTransGastos")));
-            results.put("difCuentaPartiAporta", calculateDifferenceBalance((Map) set1Results.get("cuentaPartiAporta"), (Map) set2Results.get("cuentaPartiAporta")));
-            results.put("difCuentaInteComis", calculateDifferenceBalance((Map) set1Results.get("cuentaInteComis"), (Map) set2Results.get("cuentaInteComis")));
-            results.put("difCuentasOtrosGastos", calculateDifferenceBalance((Map) set1Results.get("cuentasOtrosGastos"), (Map) set2Results.get("cuentasOtrosGastos")));
+            results.put("difCuentasImpuesto", calculateDifferenceBalance((Map) set2Results.get("cuentasImpuesto"), (Map) set1Results.get("cuentasImpuesto")));
+            results.put("difCuentasContribu", calculateDifferenceBalance((Map) set2Results.get("cuentasContribu"), (Map) set1Results.get("cuentasContribu")));
+            results.put("difCuentasParticipa", calculateDifferenceBalance((Map) set2Results.get("cuentasParticipa"), (Map) set1Results.get("cuentasParticipa")));
+            results.put("difCuentasTransfe", calculateDifferenceBalance((Map) set2Results.get("cuentasTransfe"), (Map) set1Results.get("cuentasTransfe")));
+            results.put("difCuentasOtrosIng", calculateDifferenceBalance((Map) set2Results.get("cuentasOtrosIng"), (Map) set1Results.get("cuentasOtrosIng")));
+            results.put("difCuentasIcreVaria", calculateDifferenceBalance((Map) set2Results.get("cuentasIcreVaria"), (Map) set1Results.get("cuentasIcreVaria")));
+            results.put("difCuentasGastosFun", calculateDifferenceBalance((Map) set2Results.get("cuentasGastosFun"), (Map) set1Results.get("cuentasGastosFun")));
+            results.put("difCuentasTransGastos", calculateDifferenceBalance((Map) set2Results.get("cuentasTransGastos"), (Map) set1Results.get("cuentasTransGastos")));
+            results.put("difCuentaPartiAporta", calculateDifferenceBalance((Map) set2Results.get("cuentaPartiAporta"), (Map) set1Results.get("cuentaPartiAporta")));
+            results.put("difCuentaInteComis", calculateDifferenceBalance((Map) set2Results.get("cuentaInteComis"), (Map) set1Results.get("cuentaInteComis")));
+            results.put("difCuentasOtrosGastos", calculateDifferenceBalance((Map) set2Results.get("cuentasOtrosGastos"), (Map) set1Results.get("cuentasOtrosGastos")));
 
             return results;
         } catch (GenericServiceException e) {
