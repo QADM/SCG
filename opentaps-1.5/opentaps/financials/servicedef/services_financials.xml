@@ -292,6 +292,11 @@
         <attribute name="set2IncomeStatement" mode="OUT" type="java.util.Map"/>
         <attribute name="accountBalances" mode="OUT" type="java.util.Map"/>
     </service>
+    <service name="getEstadoDeActividades" engine="java"
+    		location="com.opensourcestrategies.financials.financials.FinancialServices" invoke="getEstadoDeActividades" auth="true" use-transaction="false">
+        <description>Genera el estado de actividades.</description>
+        <implements service="getComparativeIncomeStatement"/>    		
+    </service>
     <service name="getComparativeCashFlowStatement" engine="java"
             location="com.opensourcestrategies.financials.financials.FinancialServices" invoke="getComparativeCashFlowStatement" auth="true" use-transaction="false">
         <description>Generates cash flow statement for two sets of dates and glFiscalTypeIds and determines the difference between the two. The balances are in BigDecimal.
