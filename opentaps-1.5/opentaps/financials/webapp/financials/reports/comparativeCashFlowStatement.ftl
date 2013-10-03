@@ -49,7 +49,7 @@
   <div style="border: 1px solid #999999; margin-top: 20px; margin-bottom: 20px;"></div>
   <table>
     <tr>
-       <td colspan="2" class="tableheadtext" align="right">${uiLabelMap.FinancialsComparativeCashFlowStatement} for ${parameters.organizationName?if_exists} (${organizationPartyId})</td>
+       <td colspan="2" class="tableheadtext" align="right">${uiLabelMap.FinancialsComparativeCashFlowStatement} de ${parameters.organizationName?if_exists} (${organizationPartyId})</td>
     </tr>
     <tr><td>&nbsp;</td></tr>
     <tr>
