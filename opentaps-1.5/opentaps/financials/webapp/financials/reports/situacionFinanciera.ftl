@@ -46,11 +46,11 @@
 <div class="tabletext">
 <table>
    <tr>
-      <td colspan="4" class="tableheadtext" align="center">${uiLabelMap.FinancialsComparativeBalanceSheet} for ${parameters.organizationName?if_exists} (${organizationPartyId})</td>
+      <td colspan="4" class="tableheadtext" align="center">${uiLabelMap.FinancialsComparativeBalanceSheet1} de ${parameters.organizationName?if_exists} (${organizationPartyId})</td>
    </tr>
    <tr><td colspan="4">&nbsp;</td></tr>
    <tr>
-     <td class="tableheadtext" align="left">${uiLabelMap.Account}</td>
+     <td class="tableheadtext" align="left">${uiLabelMap.FinancialsReportsAccount}</td>
      <td class="tableheadtext" align="right" style="white-space:nowrap">
        ${getLocalizedDate(fromDate, "DATE")}<br/>
      </td>
@@ -58,13 +58,13 @@
        ${getLocalizedDate(thruDate, "DATE")}<br/>
      <td class="tableheadtext" align="right">${uiLabelMap.OpentapsDifference}</td>
    </tr>
-   <tr><td class="tableheadtext" align="left">${uiLabelMap.AccountingAssets}</td></tr>
+   <tr><td class="tableheadtext" align="left">${uiLabelMap.FinancialsReportsAccountingAssets}</td></tr>
    <@listBalances type="assetAccountBalances" accounts=assetAccounts balances=assetAccountBalances/>
    
-   <tr><td class="tableheadtext" align="left">${uiLabelMap.AccountingLiabilities}</td></tr>
+   <tr><td class="tableheadtext" align="left">${uiLabelMap.FinancialsReportsAccountingLiabilities}</td></tr>
    <@listBalances type="liabilityAccountBalances" accounts=liabilityAccounts balances=liabilityAccountBalances/>
 
-   <tr><td class="tableheadtext" align="left">${uiLabelMap.AccountingEquities}</td></tr>
+   <tr><td class="tableheadtext" align="left">${uiLabelMap.FinancialsReportsAccountingEquities}</td></tr>
    <@listBalances type="equityAccountBalances" accounts=equityAccounts balances=equityAccountBalances/>
 </table>
 </#if>
