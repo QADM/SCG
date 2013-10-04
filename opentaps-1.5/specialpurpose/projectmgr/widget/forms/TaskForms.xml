@@ -146,10 +146,10 @@
         <field name="workEffortParentId"><hidden value="${parameters.projectId}"/></field>
         <field name="workEffortTypeId"><hidden value="PHASE"/></field>
         <field name="currentStatusId"><hidden value="_NA_"/></field>
-        <field name="sequenceNum"><text size="3"/></field>
-        <field name="phaseName"  parameter-name="workEffortName" title="${uiLabelMap.ProjectMgrPhaseName}*" tooltip="${uiLabelMap.CommonRequired}"><text/></field>
+        <field name="sequenceNum" title="Número de secuencia"><text size="3"/></field>
+        <field name="phaseName"  parameter-name="workEffortName" title="Nombre*" tooltip="${uiLabelMap.CommonRequired}"><text/></field>
         <field name="phaseDdescription" parameter-name="description" title="${uiLabelMap.CommonDescription}"><text/></field>
-        <field name="codificacion" title="${uiLabelMap.Codificacion}"><text/></field>
+        <field name="codificacion" title="Código"><text/></field>
 	  	   <field name="nivelId" title="Nivel" >
            	 <drop-down allow-empty="false" current="selected" >
                 <entity-options description="${descripcion}" entity-name="NivelPresup" key-field-name="clasificacionId">
@@ -158,7 +158,7 @@
                 </entity-options>
            	 </drop-down>
         </field>
-        <field name="node" title="${uiLabelMap.Nodo}" >            
+        <field name="node" title="Nodo" >            
             <drop-down>
                 <option key="R" description="Rama"/>
                 <option key="H" description="Hoja"/>

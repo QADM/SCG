@@ -20,8 +20,8 @@
 
 <menus xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
  xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/widget-menu.xsd">
-    <menu name="ProjectMgrAppBar" title="${uiLabelMap.ProjectMgr}" extends="CommonAppBarMenu" extends-resource="component://common/widget/CommonMenus.xml">
-
+    <menu name="ProjectMgrAppBar" title="Administración  de  programas" extends="CommonAppBarMenu" extends-resource="component://common/widget/CommonMenus.xml">
+	<!-- 
         <menu-item name="mytasks" title="${uiLabelMap.WorkEffortMyTasks}"><link target="MyTasks"/></menu-item>
         <menu-item name="mytime" title="${uiLabelMap.WorkEffortTimesheetMyTime}"><link target="MyTimesheet"/></menu-item>
         <menu-item name="projects" title="${uiLabelMap.WorkEffortProjects}"><link target="FindProject"/></menu-item>
@@ -44,13 +44,13 @@
             </condition>
             <link target="findSkillTypes"/>
         </menu-item>
-        <!--menu-item name="calendar" title="${uiLabelMap.WorkEffortCalendar}"><link target="day"/></menu-item-->
+      menu-item name="calendar" title="${uiLabelMap.WorkEffortCalendar}"><link target="day"/></menu-item
         <menu-item name="request" title="${uiLabelMap.WorkEffortRequestList}">
             <condition>
                 <if-has-permission permission="PROJECTMGR_ADMIN"/>
             </condition>
             <link target="requestlist"/>
-        </menu-item>
+        </menu-item>-->
     </menu>
     <menu name="ProjectTabBar" extends="CommonTabBarMenu" extends-resource="component://common/widget/CommonMenus.xml">
         <actions>
@@ -230,7 +230,7 @@
                 &quot;projectId&quot;, projectId));
                 return result.get(&quot;hasPermission&quot;); }" type="Boolean"/>
         </actions>
-        <menu-item name="newProject" title="${uiLabelMap.ProjectMgrNewProject}">
+        <menu-item name="newProject" title="Nevo programa">
             <condition>
                 <and>
                     <if-compare field="hasUpdatePermission" operator="equals" value="true"/>
