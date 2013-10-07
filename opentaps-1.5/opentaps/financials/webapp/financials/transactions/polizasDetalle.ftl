@@ -10,50 +10,142 @@
 <#assign sectorial=""/>
 <#assign catAux=""/>
 <#assign rIngresos=""/>
+<#assign ur=""/>
+<#assign uo=""/>
+<#assign ue=""/>
+<#assign funcion=""/>
+<#assign subfun=""/>
+<#assign final=""/>
+<#assign pp=""/>
+<#assign ppl=""/>
+<#assign spp=""/>
+<#assign act=""/>
+<#assign tg=""/>
+<#assign cap=""/>
+<#assign con=""/>
+<#assign pg=""/>
+<#assign pe=""/>
+<#assign fu=""/>
+<#assign sfu=""/>
+<#assign sfue=""/>
+<#assign ef=""/>
+<#assign reg=""/>
+<#assign mun=""/>
+<#assign loc=""/>
+<#assign rub=""/>
+<#assign clas=""/>
+<#assign conrub=""/>
+<#assign n5=""/>
+<#assign desc=""/>
+<#assign ip=""/>
+<#assign iph=""/>
+<#assign ipd=""/>
+<#assign sec=""/>
+<#assign subsec=""/>
+<#assign ar=""/>
 <#list mapTransPresupPol?keys as poliza>
 		<#if mapTransPresupPol.get(poliza)??>
 						<#if poliza=="tipoPoliza">
 							<#assign poliza=mapTransPresupPol.get(poliza) />
+						</#if>	
+									
+						<#if poliza=="unidadOrganizacional">
+							<#assign uo=poliza?replace("unidadOrganizacional","<b>Unidad Organizacional</b>")+": "+ mapTransPresupPol.get(poliza) />
+						<#elseif poliza=="unidadEjecutora">
+							<#assign ue=poliza?replace("unidadEjecutora","<b>Unidad Ejecutora</b>")+": "+mapTransPresupPol.get(poliza) />
+						<#elseif poliza=="unidadResponsable">
+							<#assign ur=poliza?replace("unidadResponsable","<b>Unidad Responsable</b>")+": "+mapTransPresupPol.get(poliza) />
 						</#if>
-						<#if poliza=="unidadOrganizacional"||poliza=="unidadEjecutora"||poliza=="unidadResponsable">
-							<#assign administrativa=administrativa+poliza+": "+mapTransPresupPol.get(poliza)+"," />
-							
-							<#assign administrativa=administrativa?replace("unidadOrganizacional","<b>Unidad Organizacional</b>")?replace("unidadEjecutora","<b>Unidad Ejecutora</b>")?replace("unidadResponsable","<b>Unidad Responsable</b>")/>
+						
+						<#if poliza=="funcion">
+							<#assign funcion= poliza?replace("funcion","<b>Funcion</b>")+": "+mapTransPresupPol.get(poliza) />
+						<#elseif poliza=="subFuncion">
+							<#assign subfun= poliza?replace("subFuncion","<b>Subfunción</b>")+":"+ mapTransPresupPol.get(poliza) />
+						<#elseif poliza=="finalidad" >
+							<#assign final=poliza?replace("finalidad","<b>Finalidad</b>")+": "+ mapTransPresupPol.get(poliza)/>
 						</#if>
-						<#if poliza=="funcion"||poliza=="subFuncion"||poliza=="finalidad">
-							<#assign funcional=funcional+poliza+": "+mapTransPresupPol.get(poliza)+"," />
-							<#assign funcional=funcional?replace("funcion","<b>Funcion</b>")?replace("subFuncion","<b>Subfunción</b>")?replace("finalidad","<b>Finalidad</b>") />
+						
+						<#if poliza=="actividad">
+							<#assign act=poliza?replace("actividad","<b>Actividad</b>")+":"+ mapTransPresupPol.get(poliza)/>
+						<#elseif poliza=="programaPlan">
+							<#assign ppl=poliza?replace("programaPlan","<b>Programa del Plan</b>")+":"+ mapTransPresupPol.get(poliza) />
+						<#elseif poliza=="subProgramaPresupuestario" >
+							<#assign spp=poliza?replace("subProgramaPresupuestario","<b>SubPrograma Presupuestario</b>")+":"+ mapTransPresupPol.get(poliza) />
+						<#elseif poliza=="programaPresupuestario" >
+							<#assign pp=poliza?replace("programaPresupuestario","<b>Programa Presupuestario</b>")+": "+ mapTransPresupPol.get(poliza)/>
 						</#if>
-						<#if poliza=="actividad"||poliza=="programaPlan"||poliza=="subProgramaPresupuestario"||poliza=="programaPresupuestario">
-							<#assign programatica=programatica+poliza+": "+mapTransPresupPol.get(poliza)+"," />
-							<#assign programatica=programatica?replace("actividad","<b>actividad</b>")?replace("programaPlan","<b>Programa del Plan</b>")?replace("subProgramaPresupuestario","<b>SubPrograma Presupuestario</b>")?replace("programaPresupuestario","<b>Programa Presupuestario</b>") />
+						
+					    <#if poliza=="tipoGasto">
+							<#assign tg=poliza?replace("tipoGasto","<b>Tipo de  gasto</b>")+":"+ mapTransPresupPol.get(poliza)/>
+						<#elseif poliza=="capitulo">
+							<#assign cap=poliza?replace("capitulo","<b>Capítulo</b>")+":"+ mapTransPresupPol.get(poliza) />
+						<#elseif poliza=="concepto" >
+							<#assign con=poliza?replace("concepto","<b>Concepto</b>")+":"+ mapTransPresupPol.get(poliza) />
+						<#elseif poliza=="partidaGenerica" >
+							<#assign pg=poliza?replace("partidaGenerica","<b>Partida Generica</b>")+": "+ mapTransPresupPol.get(poliza)/>
+					    <#elseif poliza=="partidaEspecifica" >
+							<#assign pe=poliza?replace("partidaEspecifica","<b>Partida Específica</b>")+": "+ mapTransPresupPol.get(poliza)/>
 						</#if>
-						<#if poliza=="tipoGasto"||poliza=="capitulo"||poliza=="concepto"||poliza=="concepto"||poliza="partidaGenerica"||poliza="partidaEspecifica">
-							<#assign TOG=TOG+poliza+": "+mapTransPresupPol.get(poliza)+"," />
-							<#assign TOG=TOG?replace("tipoGasto","<b>Tipo de  gasto</b>")?replace("capitulo","<b>Capítulo</b>")?replace("concepto","<b>Concepto</b>")?replace("partidaGenerica","<b>Partida Generica</b>")?replace("partidaEspecifica","<b>Partida Específica</b>") />
+						
+						<#if poliza=="fuente">
+							<#assign fu=poliza?replace("fuente","<b>Fuente</b>")+":"+ mapTransPresupPol.get(poliza)/>
+						<#elseif poliza=="subFuenteEspecifica" >
+							<#assign sfue=poliza?replace("subFuenteEspecifica","<b>Subfuente Específica</b>")+":"+ mapTransPresupPol.get(poliza) />
+						<#elseif poliza=="subFuente">
+							<#assign sfu=poliza?replace("subFuente","<b>Subfuente</b>")+":"+ mapTransPresupPol.get(poliza) />
+				
+							</#if>
+						
+						<#if poliza=="entidadFederativa">
+							<#assign ef=poliza?replace("entidadFederativa","<b>Entidad Federativa</b>")+":"+ mapTransPresupPol.get(poliza)/>
+						<#elseif poliza=="region">
+							<#assign reg=poliza?replace("region","<b>Región</b>")+":"+ mapTransPresupPol.get(poliza) />
+						<#elseif poliza=="municipio" >
+							<#assign mun=poliza?replace("municipio","<b>Municipio</b>")+":"+ mapTransPresupPol.get(poliza) />
+						<#elseif poliza=="localidad" >
+							<#assign loc=poliza?replace("localidad","<b>Localidad</b>")+":"+ mapTransPresupPol.get(poliza) />
 						</#if>
-						<#if poliza=="fuente"||poliza=="subFuente"||poliza=="subFuenteEspecifica">
-							<#assign fuenteRecursos=fuenteRecursos+poliza+": "+mapTransPresupPol.get(poliza)+"," />
-							<#assign fuenteRecursos=fuenteRecursos?replace("fuente","<b>Fuente</b>")?replace("subFuenteEspecifica","<b>Subfuente Específica</b>")?replace("subFuente","<b>Subfuente</b>") />
+						
+						<#if poliza=="sector">
+							<#assign sec=poliza?replace("sector","<b>Sector</b>")+":"+ mapTransPresupPol.get(poliza)/>
+						<#elseif poliza=="subSector">
+							<#assign subsec=poliza?replace("subSector","<b>Subsector</b>")+":"+ mapTransPresupPol.get(poliza) />
+						<#elseif poliza=="area" >
+							<#assign ar=poliza?replace("area","<b>Area</b>")+":"+ mapTransPresupPol.get(poliza) />
 						</#if>
-						<#if poliza=="entidadFederativa"||poliza=="region"||poliza=="municipio"||poliza=="localidad">
-							<#assign geografica=geografica+poliza+": "+mapTransPresupPol.get(poliza)+"," />
-							<#assign geografica=geografica?replace("entidadFederativa","<b>Entidad Federativa</b>")?replace("region","<b>Región</b>")?replace("localidad","<b>Localidad</b>")?replace("municipio","<b>Municipio</b>") />
+						
+						<#if poliza=="idPago">
+							<#assign ip=poliza?replace("idPago","<b>Id de Pago</b>")+":"+ mapTransPresupPol.get(poliza)/>
+						<#elseif poliza=="idProductoH">
+							<#assign iph=poliza?replace("idProductoH","<b>Id de Producto H</b>")+":"+ mapTransPresupPol.get(poliza) />
+						<#elseif poliza=="idProductoD" >
+							<#assign ipd=poliza?replace("idProductoD","<b>Id de producto D</b>")+":"+ mapTransPresupPol.get(poliza) />
 						</#if>
-						<#if poliza=="sector"||poliza=="subSector"||poliza=="area">
-							<#assign sectorial=sectorial+poliza+": "+mapTransPresupPol.get(poliza)+"," />
-							<#assign sectorial=sectorial?replace("sector","<b>Sector</b>")?replace("subSector","<b>Subsector</b>")?replace("area","<b>Area</b>") />
+						
+						<#if poliza=="rubro">
+							<#assign rub=poliza?replace("rubro","<b>Rubro</b>")+":"+ mapTransPresupPol.get(poliza)/>
+						<#elseif poliza=="clase">
+							<#assign clas=poliza?replace("clase","<b>Clase</b>")+":"+ mapTransPresupPol.get(poliza) />
+						<#elseif poliza=="conceptoRub" >
+							<#assign conrub=poliza?replace("conceptoRub","<b>Concepto Rubro</b>")+":"+ mapTransPresupPol.get(poliza) />
+						<#elseif poliza=="nivel5" >
+							<#assign n5=poliza?replace("nivel5","<b>Nivel 5</b>")+": "+ mapTransPresupPol.get(poliza)/>
+					    <#elseif poliza=="description" >
+							<#assign desc=poliza?replace("description","<b>Tipo</b>")+": "+ mapTransPresupPol.get(poliza)/>
 						</#if>
-						<#if poliza=="idPago"||poliza=="idProductoH"||poliza=="idProductoD">
-							<#assign catAux=catAux+poliza+": "+mapTransPresupPol.get(poliza)+"," />
-							<#assign catAux=catAux?replace("idPago","<b>Id de Pago</b>")?replace("idProductoH","<b>Id de Producto H</b>")?replace("idProductoD","<b>Id de producto D</b>") />
-						</#if>
-						<#if poliza=="rubro"||poliza=="clase"||poliza=="conceptoRub"||poliza=="nivel5"||poliza="description">
-							<#assign rIngresos=rIngresos+poliza+": "+mapTransPresupPol.get(poliza)+"," />
-							<#assign rIngresos=rIngresos?replace("rubro","<b>Rubro</b>")?replace("clase","<b>Clase</b>")?replace("conceptoRub","<b>Concepto Rubro</b>")?replace("nivel5","<b>Nivel 5</b>")?replace("description","<b>Tipo</b>") />
-						</#if>
+						
 		</#if>
 </#list>
+	<#assign administrativa=ur+","+uo+","+ue+","/>
+	<#assign funcional=funcion+","+subfun+","+final+","/>
+	<#assign programatica=pp+","+ppl+","+spp+","+act+","/>
+	<#assign TOG=tg+","+cap+","+con+","+pg+","+pe+","/>
+	<#assign fuenteRecursos=fu+","+sfu+","+sfue+","/>
+	<#assign geografica=ef+","+reg+","+mun+","+loc+","/>
+	<#assign sectorial=sec+","+subsec+","+ar+","/>
+	<#assign catAux=ip+","+iph+","+ipd+","/>
+	<#assign rIngresos=rub+","+clas+","+conrub+","+n5+","+desc+","/>
+
 
 <!--
 	<#list mapTransPresupPol?keys as poliza>
