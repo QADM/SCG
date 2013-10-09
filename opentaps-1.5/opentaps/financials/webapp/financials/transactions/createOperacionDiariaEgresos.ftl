@@ -55,48 +55,48 @@
         <@inputSelectCell list=listProducts?if_exists displayField="description" name="Id_Producto_Cargo" default=productId?if_exists key="productId" required=false/>
       </tr>      
       <tr>
-      	<@displayTitleCell title=uiLabelMap.FinancialsFederalEntity />
+      	<@displayTitleCell title=uiLabelMap.FinancialsFederalEntity titleClass="requiredField"/>
       	<@padresGeo name="EntidadFederativa" geoCode="MEX" hijoName="Region" nietos="Municipio,Localidad"/>
       </tr>
       <tr>
-      	<@displayTitleCell title=uiLabelMap.FinancialsRegion />
+      	<@displayTitleCell title=uiLabelMap.FinancialsRegion titleClass="requiredField"/>
       	<@padresGeo name="Region" hijoName="Municipio" nietos="Localidad"/>
       </tr>
       <tr>
-      	<@displayTitleCell title=uiLabelMap.FinancialsTown />
+      	<@displayTitleCell title=uiLabelMap.FinancialsTown titleClass="requiredField"/>
       	<@padresGeo name="Municipio" hijoName="Localidad"/>
       </tr>
       <tr>
-      	<@displayTitleCell title=uiLabelMap.FinancialsLocality />
+      	<@displayTitleCell title=uiLabelMap.FinancialsLocality titleClass="requiredField"/>
       	<@padresGeo name="Localidad" />
       </tr>  
       </tr>
       <tr>
-      	<@displayTitleCell title=uiLabelMap.FinancialsUnderSpecificSource />
+      	<@displayTitleCell title=uiLabelMap.FinancialsUnderSpecificSource titleClass="requiredField"/>
         <@inputSelectCell list=listaSubfuente?if_exists displayField="description" name="Sub_Fuente_Especifica" default=enumId?if_exists key="enumId"/>
       </tr>
       <tr>
-      	<@displayTitleCell title=uiLabelMap.FinancialsExecutingUnit />
+      	<@displayTitleCell title=uiLabelMap.FinancialsExecutingUnit titleClass="requiredField"/>
         <@inputSelectCell list=listaUnidades?if_exists displayField="groupName" name="Unidad_Ejecutora" default=partyId?if_exists key="partyId"/>
       </tr>
       <tr>
-      	<@displayTitleCell title=uiLabelMap.FinancialsSubfunction />
+      	<@displayTitleCell title=uiLabelMap.FinancialsSubfunction titleClass="requiredField"/>
         <@inputSelectCell list=listSubfunciones?if_exists displayField="description" name="Subfuncion" default=enumId?if_exists key="enumId"/>
       </tr>
       <tr>
-      	<@displayTitleCell title=uiLabelMap.FinancialsExpenseType />
+      	<@displayTitleCell title=uiLabelMap.FinancialsExpenseType titleClass="requiredField"/>
         <@inputSelectCell list=listTipoGastos?if_exists displayField="description" name="Tipo_Gasto" default=enumId?if_exists key="enumId"/>
       </tr>      
       <tr>
-      	<@displayTitleCell title=uiLabelMap.FinancialsSpecifiedItem />
+      	<@displayTitleCell title=uiLabelMap.FinancialsSpecifiedItem titleClass="requiredField"/>
         <@inputSelectCell list=listPartidasEsp?if_exists displayField="description" name="Partida_Especifica" default=productCategoryId?if_exists key="productCategoryId"/>
       </tr>      
       <tr>
-      	<@displayTitleCell title=uiLabelMap.FinancialsActivity />
+      	<@displayTitleCell title=uiLabelMap.FinancialsActivity titleClass="requiredField"/>
         <@inputSelectCell list=listaActividades?if_exists displayField="description" name="Actividad" default=workEffortId?if_exists key="workEffortId"/>
       </tr>      
       <tr>
-      	<@displayTitleCell title=uiLabelMap.FinancialsArea />
+      	<@displayTitleCell title=uiLabelMap.FinancialsArea titleClass="requiredField"/>
         <@inputSelectCell list=listAreas?if_exists displayField="description" name="Area" default=enumId?if_exists key="enumId"/>
       </tr>      
      <tr>

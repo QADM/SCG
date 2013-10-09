@@ -276,13 +276,13 @@ public class GenericDAO {
             entity.synchronizedWithDatasource();
         } catch (GenericEntityException e) {
             Debug.logError("Error while updating " + entity.toString(), module);
-            throw new GenericEntityException("Error while updating " + entity.getEntityName(), e);
+            throw new GenericEntityException("Error al actualizar " + entity.getEntityName(), e);
         } finally {
             sqlP.close();
         }
 
         if (retVal == 0) {
-            throw new GenericEntityNotFoundException("Tried to update an entity that does not exist.");
+            throw new GenericEntityNotFoundException("Se intenta actualizar una entidad que no existe.");
         }
         return retVal;
     }
@@ -370,7 +370,7 @@ public class GenericDAO {
             try {
                 memberModelEntity = delegator.getModelReader().getModelEntity(meName);
             } catch (GenericEntityException e) {
-                throw new GenericEntityException("Failed to get model entity for " + meName, e);
+                throw new GenericEntityException("No se pudo obtener model entity para " + meName, e);
             }
 
             Map<String, Object> findByMap = FastMap.newInstance();
