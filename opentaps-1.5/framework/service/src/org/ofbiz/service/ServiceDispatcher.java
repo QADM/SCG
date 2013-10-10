@@ -540,7 +540,7 @@ public class ServiceDispatcher {
             } finally {
                 // if there was an error, rollback transaction, otherwise commit
                 if (isError) {
-                    String errMsg = "Error en el servicio [" + modelService.name + "]: " + ServiceUtil.getErrorMessage(result);
+                    String errMsg = "Error in Service [" + modelService.name + "]: " + ServiceUtil.getErrorMessage(result);
                     Debug.logError(errMsg, module);
 
                     // rollback the transaction

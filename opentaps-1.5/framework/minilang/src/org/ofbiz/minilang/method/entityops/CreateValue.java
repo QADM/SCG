@@ -82,7 +82,7 @@ public class CreateValue extends MethodOperation {
         } catch (GenericEntityException e) {
 
             Debug.logError(e, module);
-            String errMsg = "ERROR: Could not complete the " + simpleMethod.getShortDescription() + " process [problem creating the " + valueAcsr + " value: " + e.getMessage() + "]";
+            String errMsg = "ERROR: No se pudo completar el proceso " + simpleMethod.getShortDescription() + " [problema al crear el valor " + valueAcsr + " : " + e.getMessage() + "]";
             if (methodContext.getMethodType() == MethodContext.EVENT) {
                 methodContext.putEnv(simpleMethod.getEventErrorMessageName(), errMsg);
                 methodContext.putEnv(simpleMethod.getEventResponseCodeName(), simpleMethod.getDefaultErrorCode());

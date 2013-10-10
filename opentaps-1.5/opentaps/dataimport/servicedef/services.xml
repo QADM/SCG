@@ -302,10 +302,10 @@
 		<attribute name="Clase" mode="IN" type="String" optional="true"/>
         <attribute name="Concepto" mode="IN" type="String" optional="true"/>
         <attribute name="N5" mode="IN" type="String" optional="true"/>
-        <attribute name="EntidadFederativa" mode="IN" type="String" optional="true"/>
-        <attribute name="Region" mode="IN" type="String" optional="true"/>
-        <attribute name="Municipio" mode="IN" type="String" optional="true"/>
-        <attribute name="Localidad" mode="IN" type="String" optional="true"/>
+        <attribute name="EntidadFederativa" mode="IN" type="String" optional="false"/>
+        <attribute name="Region" mode="IN" type="String" optional="false"/>
+        <attribute name="Municipio" mode="IN" type="String" optional="false"/>
+        <attribute name="Localidad" mode="IN" type="String" optional="false"/>
         <attribute name="Sub_Fuente_Especifica" mode="IN" type="String" optional="true"/>
         <attribute name="Unidad_Ejecutora" mode="IN" type="String" optional="true"/>
         <attribute name="Id_RecaudadoH" mode="IN" type="String" optional="true"/>  
@@ -328,10 +328,10 @@
         <attribute name="Cve_Presupuestal" mode="IN" type="String"/>
         <attribute name="Id_Producto_Abono" mode="IN" type="String" optional="true"/>
         <attribute name="Id_Producto_Cargo" mode="IN" type="String" optional="true"/>
-        <attribute name="EntidadFederativa" mode="IN" type="String" optional="true"/>
-        <attribute name="Region" mode="IN" type="String" optional="true"/>
-        <attribute name="Municipio" mode="IN" type="String" optional="true"/>
-        <attribute name="Localidad" mode="IN" type="String" optional="true"/>
+        <attribute name="EntidadFederativa" mode="IN" type="String" optional="false"/>
+        <attribute name="Region" mode="IN" type="String" optional="false"/>
+        <attribute name="Municipio" mode="IN" type="String" optional="false"/>
+        <attribute name="Localidad" mode="IN" type="String" optional="false"/>
         <attribute name="Sub_Fuente_Especifica" mode="IN" type="String" optional="true"/>
         <attribute name="Unidad_Ejecutora" mode="IN" type="String" optional="true"/>
         <attribute name="Subfuncion" mode="IN" type="String" optional="true"/>
@@ -491,9 +491,8 @@
         <attribute type="String" mode="IN" name="subf" optional="false"/>
         <attribute type="String" mode="IN" name="act" optional="false"/>
         <attribute type="String" mode="IN" name="tg" optional="false"/>
-        <attribute type="String" mode="IN" name="pe" optional="false"/>
-        <attribute type="String" mode="IN" name="sfe" optional="false"/>
-        <attribute type="String" mode="IN" name="loc" optional="false"/>
+        <attribute type="String" mode="IN" name="pe" optional="false"/>              
+        <attribute type="String" mode="IN" name="loc" optional="true"/>
         <attribute type="String" mode="IN" name="area" optional="false"/>
         <attribute type="String" mode="IN" name="concatenacion" optional="false"/>
         <attribute type="Integer" mode="OUT" name="messageOut" optional="true"/>

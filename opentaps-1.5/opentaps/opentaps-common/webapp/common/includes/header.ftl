@@ -197,7 +197,7 @@ ul.sectionTabBar li.sectionTabButtonUnselected .x-panel-tc { background-image:ur
     </#if>
   
       <#-- live help link and search link.  -->
-      <#if (infrastructure.getConfigurationValueAsBoolean("UI_HELP_LINK_SHOW"))!true>
+     <!-- <#if (infrastructure.getConfigurationValueAsBoolean("UI_HELP_LINK_SHOW"))!true>
         <#assign helpUrl = Static["org.opentaps.common.util.UtilCommon"].getUrlContextHelpResource(delegator, appName, parameters._CURRENT_VIEW_, screenState?default(""))!/>
       </#if>
       <div class="liveHelp">
@@ -212,7 +212,7 @@ ul.sectionTabBar li.sectionTabButtonUnselected .x-panel-tc { background-image:ur
         <#if (infrastructure.getConfigurationValueAsBoolean("UI_SUPPORT_LINK_SHOW"))!true>
           <a href="http://www.opentaps.org/contact" target="_blank" title="${uiLabelMap.OpentapsGetHelpFromAnOpentapsPartner}"><img src="<@ofbizContentUrl>/opentaps_images/openclipart.org/dholler_ok_16x16.png</@ofbizContentUrl>" alt="${uiLabelMap.OpentapsGetHelpFromAnOpentapsPartner}" width="16" height="16"/></a>
         </#if>
-      </div>   
+      </div>   -->
       
     <#-- voip notification -->
     <div class="gwtVoipNotification" id="gwtVoipNotification"></div>

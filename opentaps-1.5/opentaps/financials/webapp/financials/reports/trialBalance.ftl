@@ -22,7 +22,7 @@
   <div style="border: 1px solid #999999; margin-top: 20px; margin-bottom: 20px;"></div>
   <div class="treeViewContainer">
     <div class="treeViewHeader">
-      <div class="tableheadtext">${uiLabelMap.AccountingTrialBalance} for ${parameters.organizationName?if_exists} (${organizationPartyId})</div>
+      <div class="tableheadtext">${uiLabelMap.AccountingTrialBalance} de ${parameters.organizationName?if_exists} (${organizationPartyId})</div>
       <div class="tabletext">
         <#if customTimePeriod?has_content>
           ${uiLabelMap.CommonFor} ${customTimePeriod.getRelatedOne("PeriodType").get("description")}

@@ -1056,7 +1056,7 @@
     <property key="FormFieldTitle_partyRelationshipTypeId">
         <value xml:lang="de">Akteur Beziehungstyp ID</value>
         <value xml:lang="en">Party Relationship Type Id</value>
-        <value xml:lang="es">Código de relación</value>
+        <value xml:lang="es">Código del tipo</value>
         <value xml:lang="fr">Type de relation</value>
         <value xml:lang="hi_IN">पार्टी के संबंध प्रकार का क्रमांक</value>
         <value xml:lang="it">Tipo Rapporto Soggetto</value>
@@ -1239,7 +1239,7 @@
         <value xml:lang="ar">تعريف نوع الدور</value>
         <value xml:lang="de">Rolle Typ ID</value>
         <value xml:lang="en">Role Type Id</value>
-        <value xml:lang="es">Codigo Tipo de rol</value>
+        <value xml:lang="es">Tipo de rol</value>
         <value xml:lang="fr">Type de rôle</value>
         <value xml:lang="hi_IN">भूमिका प्रकार क्रमांक</value>
         <value xml:lang="it">Tipo Ruolo</value>
@@ -6164,6 +6164,7 @@
     <property key="PartyIsA">
         <value xml:lang="de">Ist ein</value>
         <value xml:lang="en">is A</value>
+        <value xml:lang="es">Tipo de relación</value>
         <value xml:lang="fr">est un</value>
         <value xml:lang="hi_IN">एक है</value>
         <value xml:lang="it">è un</value>
@@ -6591,6 +6592,7 @@
     <property key="PartyMainRole">
         <value xml:lang="en">Main Role</value>
         <value xml:lang="fr">Rôle principal</value>
+        <value xml:lang="es">Rol principal</value>
         <value xml:lang="it">Ruolo principale</value>
         <value xml:lang="nl">Hoofdrol</value>
         <value xml:lang="pt_BR">Pepel principal</value>
@@ -6831,7 +6833,7 @@
     <property key="PartyMemberRoles">
         <value xml:lang="de">Mitglied Rollen</value>
         <value xml:lang="en">Member Roles</value>
-        <value xml:lang="es">Rol de miembros</value>
+        <value xml:lang="es">Rol</value>
         <value xml:lang="fr">Membre des rôles</value>
         <value xml:lang="hi_IN">सदस्य की भूमिकाए</value>
         <value xml:lang="it">Ruoli Membro</value>
@@ -7221,7 +7223,7 @@
     <property key="PartyNewRelationshipType">
         <value xml:lang="de">Neuer Beziehungstyp</value>
         <value xml:lang="en">New Relationship Type</value>
-        <value xml:lang="es">Nuevo tipo de relación</value>
+        <value xml:lang="es">Crear tipo de relación</value>
         <value xml:lang="fr">Nouveau type de relation</value>
         <value xml:lang="hi_IN">नए रिश्ते का प्रकार</value>
         <value xml:lang="it">Nuovo Tipo Rapporto</value>
@@ -7725,6 +7727,7 @@
     <property key="PartyOfParty">
         <value xml:lang="en">of Party</value>
         <value xml:lang="fr">de l'acteur</value>
+        <value xml:lang="es">Participante destino</value>
         <value xml:lang="hi_IN">पार्टी के</value>
         <value xml:lang="it">del soggetto</value>
         <value xml:lang="nl">van relatie</value>
@@ -8026,7 +8029,7 @@
         <value xml:lang="ar">دليل الصلة</value>
         <value xml:lang="de">Akteur ID</value>
         <value xml:lang="en">Party ID</value>
-        <value xml:lang="es">Código de participante</value>
+        <value xml:lang="es">Participante origen</value>
         <value xml:lang="fr">Acteur</value>
         <value xml:lang="hi_IN">पार्टी क्रमांक</value>
         <value xml:lang="it">Codice soggetto</value>
@@ -8072,7 +8075,7 @@
     <property key="PartyPartyInTheRoleOf">
         <value xml:lang="de">in der Rolle als</value>
         <value xml:lang="en">in the role of</value>
-        <value xml:lang="es">en el rol de</value>
+        <value xml:lang="es">Rol</value>
         <value xml:lang="fr">dans le Rôle de</value>
         <value xml:lang="hi_IN">इस भूमिका में</value>
         <value xml:lang="it">nel ruolo di</value>
@@ -8953,6 +8956,7 @@
     <property key="PartyRelatedCompany">
         <value xml:lang="en">Related Company</value>
         <value xml:lang="fr">Société associée</value>
+        <value xml:lang="es">Organización relacionada</value>
         <value xml:lang="it">Azienda relativa</value>
         <value xml:lang="nl">Gerelateerd bedrijf</value>
         <value xml:lang="pt_BR">Empresa relacionada</value>
@@ -9228,7 +9232,7 @@
     <property key="PartyRoleType">
         <value xml:lang="de">Rolle Typ</value>
         <value xml:lang="en">Role Type</value>
-        <value xml:lang="es">Tipo de rol</value>
+        <value xml:lang="es">Tipo</value>
         <value xml:lang="fr">Type de rôle</value>
         <value xml:lang="hi_IN">भूमिका प्रकार</value>
         <value xml:lang="it">Tipo Ruolo</value>

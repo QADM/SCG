@@ -23,6 +23,7 @@
     <property key="FormFieldTitle_actualHours">
         <value xml:lang="de">Ist-Stunden</value>
         <value xml:lang="en">Actual Hours</value>
+        <value xml:lang="es">Horas reales</value>
         <value xml:lang="fr">Heures réelles</value>
         <value xml:lang="it">Ore attuali</value>
         <value xml:lang="nl">Werk. uren</value>
@@ -62,6 +63,7 @@
     </property>
     <property key="FormFieldTitle_mailingListEmail">
         <value xml:lang="de">Mailing List E-Mail</value>
+        <value xml:lang="es">Correo electónico</value>
         <value xml:lang="en">Mailing List E-mail</value>
         <value xml:lang="fr">Adresse de la liste de diffusion</value>
         <value xml:lang="nl">Mailinglijst E-mail</value>
@@ -100,6 +102,7 @@
     </property>
     <property key="FormFieldTitle_phase">
         <value xml:lang="de">Phase</value>
+        <value xml:lang="de">Fase</value>
         <value xml:lang="en">Phase</value>
         <value xml:lang="fr">Phase</value>
         <value xml:lang="it">Fase</value>
@@ -125,6 +128,7 @@
     <property key="FormFieldTitle_plannedHours">
         <value xml:lang="de">Geplante Stunden</value>
         <value xml:lang="en">Planned Hours</value>
+        <value xml:lang="es">Horas planeadas</value>
         <value xml:lang="fr">Heures planifiées</value>
         <value xml:lang="it">Orari pianificati</value>
         <value xml:lang="nl">Geplande uren</value>
@@ -217,6 +221,7 @@
     <property key="PageTitleAddPhase">
         <value xml:lang="de">Phase hinzufügen</value>
         <value xml:lang="en">Add Phase</value>
+         <value xml:lang="es">Crear fase</value>
         <value xml:lang="fr">Ajouter une phase</value>
         <value xml:lang="it">Aggiungi fase</value>
         <value xml:lang="nl">Fase toevoegen</value>
@@ -385,6 +390,7 @@
     <property key="PageTitleEditProject">
         <value xml:lang="de">Projekt editieren</value>
         <value xml:lang="en">Edit Project</value>
+        <value xml:lang="es">Editar programa</value>
         <value xml:lang="fr">Modifier le projet</value>
         <value xml:lang="it">Aggiorna progetto</value>
         <value xml:lang="nl">Project wijzigen</value>
@@ -623,6 +629,7 @@
     <property key="PageTitleProjectInformation">
         <value xml:lang="de">Projektinformationen</value>
         <value xml:lang="en">Project Information</value>
+         <value xml:lang="es">Información del programa</value>
         <value xml:lang="fr">Informations du projet</value>
         <value xml:lang="it">Informazione progetto</value>
         <value xml:lang="nl">Informatie</value>
@@ -710,6 +717,7 @@
     <property key="ProjectMgr">
         <value xml:lang="de">Projektmanager</value>
         <value xml:lang="en">Project Manager</value>
+        <value xml:lang="es">Administración de proyectos</value>
         <value xml:lang="fr">Application de gestion de projet</value>
         <value xml:lang="it">Gestione progetti</value>
         <value xml:lang="nl">Projectmanager</value>
@@ -727,6 +735,7 @@
     <property key="ProjectMgrActualHours">
         <value xml:lang="de">Ist-Stunden</value>
         <value xml:lang="en">Actual Hours</value>
+        <value xml:lang="es">Horas reales</value>
         <value xml:lang="fr">Heures réelles</value>
         <value xml:lang="it">Ore attuali</value>
         <value xml:lang="nl">Werk. uren</value>
@@ -939,6 +948,7 @@
     <property key="ProjectMgrEditProject">
         <value xml:lang="de">Projekt bearbeiten</value>
         <value xml:lang="en">Edit Project</value>
+        <value xml:lang="es">Editar programa</value>
         <value xml:lang="fr">Modifier le projet</value>
         <value xml:lang="it">Aggiorna progetto</value>
         <value xml:lang="nl">Project wijzigen</value>
@@ -1096,6 +1106,7 @@
     <property key="ProjectMgrNewProject">
         <value xml:lang="de">Neues Projekt</value>
         <value xml:lang="en">New Project</value>
+        <value xml:lang="es">Nuevo proyecto</value>
         <value xml:lang="fr">Nouveau projet</value>
         <value xml:lang="it">Nuovo progetto</value>
         <value xml:lang="nl">Nieuw project</value>
@@ -1176,6 +1187,7 @@
     <property key="ProjectMgrNonBilledActualHours">
         <value xml:lang="de">Ist-Stunden sind nicht fakturiert</value>
         <value xml:lang="en">Act Hrs not billed</value>
+        <value xml:lang="es">Horas reales no facturadas</value>
         <value xml:lang="fr">Heures réelles non facturées</value>
         <value xml:lang="it">Ore attuali non fatturate</value>
         <value xml:lang="nl">Werk. uren niet gefakt.</value>
@@ -1265,6 +1277,7 @@
     <property key="ProjectMgrPhases">
         <value xml:lang="de">Phasen</value>
         <value xml:lang="en">Phases</value>
+        <value xml:lang="es">Fases</value>
         <value xml:lang="fr">Phases</value>
         <value xml:lang="it">Fasi</value>
         <value xml:lang="nl">Fases</value>
@@ -1282,6 +1295,7 @@
     <property key="ProjectMgrPlannedHours">
         <value xml:lang="de">Geplante Stunden</value>
         <value xml:lang="en">Planned Hours</value>
+        <value xml:lang="es">Horas planeadas</value>
         <value xml:lang="fr">Heures planifiées</value>
         <value xml:lang="it">Ore pianificate</value>
         <value xml:lang="nl">Gepl. uren</value>
@@ -1319,6 +1333,7 @@
     <property key="ProjectMgrProjectCurrent">
         <value xml:lang="de">Aktuelles Projekt</value>
         <value xml:lang="en">Current Project</value>
+        <value xml:lang="es">Proyecto actual</value>
         <value xml:lang="fr">Projet courant</value>
         <value xml:lang="it">Progetto attuale</value>
         <value xml:lang="nl">Huidig project</value>
@@ -1336,6 +1351,7 @@
     </property>
     <property key="ProjectMgrProjectName">
         <value xml:lang="de">Projektname</value>
+        <value xml:lang="es">Nombre</value>
         <value xml:lang="en">Project Name</value>
         <value xml:lang="fr">Nom du projet</value>
         <value xml:lang="it">Nome progetto</value>
@@ -1355,6 +1371,7 @@
     <property key="ProjectMgrProjectSummary">
         <value xml:lang="de">Projektzusammenfassung</value>
         <value xml:lang="en">Project Summary</value>
+        <value xml:lang="es">Programas</value>
         <value xml:lang="fr">Résumé des projets</value>
         <value xml:lang="it">Sommario progetto</value>
         <value xml:lang="nl">Samenvatting</value>
@@ -1604,6 +1621,7 @@
     <property key="ProjectMgrSubProjects">
         <value xml:lang="de">Teilprojekte</value>
         <value xml:lang="en">Sub Projects</value>
+        <value xml:lang="es">Sub-programas</value>
         <value xml:lang="fr">Sous-projets</value>
         <value xml:lang="it">Sotto-progetti</value>
         <value xml:lang="nl">Subprojecten</value>
@@ -1893,7 +1911,8 @@
     </property>
     <property key="ProjectMgrWorkEffortActualCompletionDate">
         <value xml:lang="de">Ist-Fertigstellungssdatum</value>
-        <value xml:lang="en">Actual Completion Date</value>
+        <value xml:lang="en">Fecha de terminación real</value>
+        <value xml:lang="es">Horas planeadas</value>
         <value xml:lang="fr">Date réelle d'achèvement</value>
         <value xml:lang="it">Data fine attuale</value>
         <value xml:lang="nl">Datum gereed</value>

@@ -545,7 +545,7 @@ public class StringUtil {
 
         // check for "<", ">"
         if (value.indexOf("<") >= 0 || value.indexOf(">") >= 0) {
-            errorMessageList.add("In field [" + valueName + "] less-than (<) and greater-than (>) symbols are not allowed.");
+            errorMessageList.add("En el campo [" + valueName + "] los simbolos menor que (<) y mayor que (>) no estan permitidos.");
         }
 
         /* NOTE DEJ 20090311: After playing with this more this doesn't seem to be necessary; the canonicalize will convert all such characters into actual text before this check is done, including other illegal chars like &lt; which will canonicalize to < and then get caught

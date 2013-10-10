@@ -24,7 +24,7 @@
     <div class="treeViewHeader">
       <div class="tableheadtext">${uiLabelMap.FinancialsPostedBalancesByGlAccount}</div>
       <div class="tabletext">${organizationName?if_exists} (${organizationPartyId})</div>
-      <div class="tabletext">${uiLabelMap.CommonFor} ${getLocalizedDate(Static["org.ofbiz.base.util.UtilDateTime"].nowTimestamp(), "DATE_TIME")}</div>
+      <div class="tabletext">${uiLabelMap.Al} ${getLocalizedDate(Static["org.ofbiz.base.util.UtilDateTime"].nowTimestamp(), "DATE_TIME")}</div>
     </div>
     <div class="tableheadtext" style="margin-top: 20px;">
         <span style="float:left">&nbsp;</span>
