@@ -4,7 +4,7 @@
 	<property name="ireport.scriptlethandling" value="0"/>
 	<property name="ireport.encoding" value="UTF-8"/>
 	<property name="ireport.zoom" value="1.0"/>
-	<property name="ireport.x" value="38"/>
+	<property name="ireport.x" value="18"/>
 	<property name="ireport.y" value="0"/>
 	<import value="net.sf.jasperreports.engine.*"/>
 	<import value="java.util.*"/>
@@ -36,25 +36,6 @@
 	<field name="cumulativeIncomeValue" class="java.math.BigDecimal"/>
 	<field name="accountSumRight" class="java.math.BigDecimal"/>
 	<field name="accountSumDiff" class="java.math.BigDecimal"/>
-	<variable name="accountSumLeft_1" class="java.math.BigDecimal" resetType="Group" resetGroup="CumulativeIncome" calculation="Sum">
-		<variableExpression><![CDATA[$F{accountSumLeft}]]></variableExpression>
-	</variable>
-	<variable name="accountSumRight_1" class="java.math.BigDecimal" resetType="Group" resetGroup="CumulativeIncome" calculation="Sum">
-		<variableExpression><![CDATA[$F{accountSumRight}]]></variableExpression>
-	</variable>
-	<group name="CumulativeIncome">
-		<groupExpression><![CDATA[$F{cumulativeIncomeName}]]></groupExpression>
-		<groupHeader>
-			<band/>
-		</groupHeader>
-		<groupFooter>
-			<band height="2">
-				<line>
-					<reportElement key="line" x="0" y="0" width="721" height="1"/>
-				</line>
-			</band>
-		</groupFooter>
-	</group>
 	<background>
 		<band/>
 	</background>
