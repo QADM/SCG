@@ -4,7 +4,7 @@
 	<property name="ireport.scriptlethandling" value="0"/>
 	<property name="ireport.encoding" value="UTF-8"/>
 	<property name="ireport.zoom" value="1.0"/>
-	<property name="ireport.x" value="1"/>
+	<property name="ireport.x" value="43"/>
 	<property name="ireport.y" value="0"/>
 	<import value="net.sf.jasperreports.engine.*"/>
 	<import value="java.util.*"/>
@@ -36,6 +36,53 @@
 	<field name="cumulativeIncomeValue" class="java.math.BigDecimal"/>
 	<field name="accountSumRight" class="java.math.BigDecimal"/>
 	<field name="accountSumDiff" class="java.math.BigDecimal"/>
+	<variable name="accountSumLeft_1" class="java.math.BigDecimal" resetType="Group" resetGroup="grupoClase" calculation="Sum">
+		<variableExpression><![CDATA[$F{accountSumLeft}]]></variableExpression>
+	</variable>
+	<variable name="accountSumRight_1" class="java.math.BigDecimal" resetType="Group" resetGroup="grupoClase" calculation="Sum">
+		<variableExpression><![CDATA[$F{accountSumRight}]]></variableExpression>
+	</variable>
+	<variable name="accountSumDiff_1" class="java.math.BigDecimal" resetType="Group" resetGroup="grupoClase" calculation="Sum">
+		<variableExpression><![CDATA[$F{accountSumDiff}]]></variableExpression>
+	</variable>
+	<group name="grupoClase">
+		<groupExpression><![CDATA[$F{cumulativeIncomeName}]]></groupExpression>
+		<groupFooter>
+			<band height="18">
+				<line>
+					<reportElement x="0" y="0" width="721" height="1"/>
+				</line>
+				<textField pattern="#,##0.000;-#,##0.000" isBlankWhenNull="true">
+					<reportElement x="610" y="0" width="111" height="17"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle" lineSpacing="Single">
+						<font pdfFontName="DejaVuSans-Bold.ttf" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{accountSumDiff_1}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.000;-#,##0.000" isBlankWhenNull="true">
+					<reportElement x="500" y="0" width="110" height="17"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle" lineSpacing="Single">
+						<font pdfFontName="DejaVuSans-Bold.ttf" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{accountSumRight_1}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.000;-#,##0.000" isBlankWhenNull="true">
+					<reportElement x="394" y="1" width="107" height="17"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle" lineSpacing="Single">
+						<font pdfFontName="DejaVuSans-Bold.ttf" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{accountSumLeft_1}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="0" y="2" width="391" height="16"/>
+					<textElement lineSpacing="Single">
+						<font size="9" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="false"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["Total "+$F{cumulativeIncomeName}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
 	<background>
 		<band/>
 	</background>
@@ -239,7 +286,7 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="20">
+		<band height="17">
 			<textField isBlankWhenNull="true">
 				<reportElement key="textField" x="0" y="0" width="75" height="16"/>
 				<box>
