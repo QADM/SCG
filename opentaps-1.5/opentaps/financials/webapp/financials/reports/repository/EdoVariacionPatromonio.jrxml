@@ -77,32 +77,44 @@
 		<band height="54">
 			<textField>
 				<reportElement x="0" y="35" width="222" height="19"/>
-				<textElement lineSpacing="Single"/>
+				<textElement lineSpacing="Single">
+					<font pdfFontName="DejaVuSans-Bold.ttf" isPdfEmbedded="true"/>
+				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{Concepto}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="222" y="0" width="118" height="54"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
+					<font pdfFontName="DejaVuSans-Bold.ttf" isPdfEmbedded="true"/>
+				</textElement>
 				<text><![CDATA[Hacienda Pública/Patrimonio Contribuido ]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="340" y="0" width="118" height="54"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
+					<font pdfFontName="DejaVuSans-Bold.ttf" isPdfEmbedded="true"/>
+				</textElement>
 				<text><![CDATA[Hacienda Pública/Patrimonio Generado de Ejercicios Anteriores]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="458" y="0" width="118" height="54"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single"/>
+				<reportElement x="458" y="0" width="130" height="54"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
+					<font pdfFontName="DejaVuSans-Bold.ttf" isPdfEmbedded="true"/>
+				</textElement>
 				<text><![CDATA[Hacienda Pública/Patrimonio Generado del Ejercicio]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="576" y="0" width="118" height="54"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single"/>
+				<reportElement x="588" y="0" width="106" height="54"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
+					<font pdfFontName="DejaVuSans-Bold.ttf" isPdfEmbedded="true"/>
+				</textElement>
 				<text><![CDATA[Ajustes por Cambio de Valor]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="694" y="0" width="108" height="54"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle" lineSpacing="Single"/>
+				<reportElement x="706" y="0" width="96" height="54"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" lineSpacing="Single">
+					<font pdfFontName="DejaVuSans-Bold.ttf" isPdfEmbedded="true"/>
+				</textElement>
 				<text><![CDATA[TOTAL]]></text>
 			</staticText>
 		</band>
