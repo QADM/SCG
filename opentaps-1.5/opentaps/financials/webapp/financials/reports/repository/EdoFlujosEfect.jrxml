@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Estado de Flujos de Efectivo" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
 	<property name="ireport.zoom" value="1.0"/>
-	<property name="ireport.x" value="85"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="fromDateLeft" class="java.sql.Timestamp">
 		<parameterDescription><![CDATA[]]></parameterDescription>
@@ -31,37 +31,34 @@
 	</variable>
 	<group name="GruposCuentas">
 		<groupExpression><![CDATA[$F{accountType}]]></groupExpression>
-		<groupHeader>
-			<band height="3"/>
-		</groupHeader>
 		<groupFooter>
-			<band height="23">
+			<band height="18">
 				<textField>
-					<reportElement x="0" y="3" width="377" height="20"/>
+					<reportElement x="0" y="1" width="377" height="17"/>
 					<textElement verticalAlignment="Middle" lineSpacing="Single">
 						<font isBold="true" pdfFontName="DejaVuSans-Bold.ttf" isPdfEmbedded="true"/>
 					</textElement>
 					<textFieldExpression class="java.lang.String"><![CDATA[$F{accountType}]]></textFieldExpression>
 				</textField>
 				<line>
-					<reportElement x="0" y="2" width="802" height="1"/>
+					<reportElement x="0" y="0" width="802" height="1"/>
 				</line>
 				<textField pattern="#,##0.000;-#,##0.000" isBlankWhenNull="true">
-					<reportElement x="377" y="3" width="140" height="20"/>
+					<reportElement x="377" y="1" width="140" height="17"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle" lineSpacing="Single">
 						<font isBold="true" pdfFontName="DejaVuSans-Bold.ttf" isPdfEmbedded="true"/>
 					</textElement>
 					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{accountLeft_1}]]></textFieldExpression>
 				</textField>
 				<textField pattern="#,##0.000;-#,##0.000" isBlankWhenNull="true">
-					<reportElement x="517" y="3" width="140" height="20"/>
+					<reportElement x="517" y="1" width="140" height="17"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle" lineSpacing="Single">
 						<font isBold="true" pdfFontName="DejaVuSans-Bold.ttf" isPdfEmbedded="true"/>
 					</textElement>
 					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{accountRight_1}]]></textFieldExpression>
 				</textField>
 				<textField pattern="#,##0.000;-#,##0.000" isBlankWhenNull="true">
-					<reportElement x="657" y="3" width="145" height="20"/>
+					<reportElement x="657" y="1" width="145" height="17"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle" lineSpacing="Single">
 						<font isBold="true" pdfFontName="DejaVuSans-Bold.ttf" isPdfEmbedded="true"/>
 					</textElement>
@@ -167,44 +164,23 @@
 		</band>
 	</title>
 	<columnHeader>
-		<band height="34">
+		<band height="17">
 			<textField pattern="yyyy">
-				<reportElement x="377" y="17" width="140" height="17"/>
+				<reportElement x="377" y="0" width="140" height="17"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle" lineSpacing="Single">
 					<font isBold="true" pdfFontName="DejaVuSans-Bold.ttf" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$P{fromDateLeft}]]></textFieldExpression>
 			</textField>
 			<textField pattern="yyyy">
-				<reportElement x="517" y="17" width="140" height="17"/>
+				<reportElement x="516" y="0" width="140" height="17"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle" lineSpacing="Single">
 					<font isBold="true" pdfFontName="DejaVuSans-Bold.ttf" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$P{fromDateRight}]]></textFieldExpression>
 			</textField>
-			<textField pattern="yyyy">
-				<reportElement x="667" y="17" width="56" height="17"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
-					<font isBold="true" pdfFontName="DejaVuSans-Bold.ttf" isPdfEmbedded="true"/>
-				</textElement>
-				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$P{fromDateLeft}]]></textFieldExpression>
-			</textField>
-			<textField pattern="yyyy">
-				<reportElement x="743" y="17" width="59" height="17"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
-					<font isBold="true" pdfFontName="DejaVuSans-Bold.ttf" isPdfEmbedded="true"/>
-				</textElement>
-				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$P{fromDateRight}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="723" y="17" width="20" height="17"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
-					<font isBold="true" pdfFontName="DejaVuSans-Bold.ttf" isPdfEmbedded="true"/>
-				</textElement>
-				<text><![CDATA[-]]></text>
-			</staticText>
 			<textField>
-				<reportElement x="0" y="1" width="377" height="17"/>
+				<reportElement x="0" y="0" width="377" height="17"/>
 				<textElement verticalAlignment="Middle" lineSpacing="Single">
 					<font isBold="true" pdfFontName="DejaVuSans-Bold.ttf" isPdfEmbedded="true"/>
 				</textElement>
@@ -212,29 +188,15 @@
 			</textField>
 			<textField>
 				<reportElement x="657" y="1" width="145" height="16"/>
-				<textElement textAlignment="Center" lineSpacing="Single">
+				<textElement textAlignment="Right" lineSpacing="Single">
 					<font isBold="true" pdfFontName="DejaVuSans-Bold.ttf" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{OpentapsDifference}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="377" y="1" width="139" height="16"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
-					<font isBold="true" pdfFontName="DejaVuSans-Bold.ttf" isPdfEmbedded="true"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[($P{fiscalTypeLeft})]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="516" y="1" width="140" height="18"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
-					<font isBold="true" pdfFontName="DejaVuSans-Bold.ttf" isPdfEmbedded="true"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[($P{fiscalTypeRight})]]></textFieldExpression>
-			</textField>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="22">
+		<band height="20">
 			<textField>
 				<reportElement x="0" y="0" width="122" height="20"/>
 				<textElement verticalAlignment="Middle" lineSpacing="Single"/>
@@ -263,7 +225,7 @@
 		</band>
 	</detail>
 	<pageFooter>
-		<band height="21">
+		<band height="16">
 			<textField evaluationTime="Report" isBlankWhenNull="false">
 				<reportElement key="textField" x="417" y="0" width="40" height="16"/>
 				<box>
@@ -292,7 +254,4 @@
 			</textField>
 		</band>
 	</pageFooter>
-	<summary>
-		<band height="21"/>
-	</summary>
 </jasperReport>
