@@ -62,10 +62,7 @@
        
       <tr>
 	  	<@inputTextRow title=uiLabelMap.FinancialsBudgetReferencia name="referencia" titleClass="requiredField" />
-	  </tr>   
-      <tr>
-      	<@inputTextRow title=uiLabelMap.FinancialsBudgetClave name="clave" titleClass="requiredField" />
-	  </tr>
+	  </tr>  
 	  <tr>
 	  	<@inputTextRow title=uiLabelMap.FinancialsPostedAmount name="amount" titleClass="requiredField" />
 	  </tr>	  

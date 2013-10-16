@@ -41,11 +41,7 @@
       <tr>
         <@displayTitleCell title=uiLabelMap.FinancialsSequence titleClass="requiredField"/>
         <@inputTextCell name="Secuencia" maxlength=20  />
-      </tr>
-      <tr>
-        <@displayTitleCell title=uiLabelMap.FinancialsKeyBudget titleClass="requiredField"/>
-        <@inputTextCell name="Cve_Presupuestal" maxlength=100   />
-      </tr>      
+      </tr>          
       <tr>
         <@displayTitleCell title=uiLabelMap.FinancialsProductCredit />
         <@inputSelectCell list=listProducts?if_exists displayField="description" name="Id_Producto_Abono" default=productId?if_exists key="productId" required=false/>
