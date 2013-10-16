@@ -71,11 +71,7 @@
       <tr>
         <@displayTitleCell title=uiLabelMap.FinancialsReferenceDocument titleClass="requiredField"/>
         <@inputTextCell name="referencia" maxlength=60   />
-      </tr>     
-      <tr>
-        <@displayTitleCell title=uiLabelMap.FinancialsKeyBudget titleClass="requiredField" />
-        <@inputTextCell name="clave" maxlength=100   />
-      </tr>                             
+      </tr>                     
       <tr>       
         <@inputTextRow title=uiLabelMap.FinancialsPostedAmount name="amount" titleClass="requiredField" />
       </tr>
