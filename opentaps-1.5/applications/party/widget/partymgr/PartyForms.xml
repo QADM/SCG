@@ -99,14 +99,31 @@ under the License.
 
     <form name="EditPartyGroup" type="single" target="updatePartyGroup" default-map-name="partyGroup"
         focus-field-name="groupName" header-row-style="header-row" default-table-style="basic-table">
-        <alt-target use-when="partyGroup==null" target="createPartyGroup"/>
-        <auto-fields-service service-name="updatePartyGroup"/>
+      <!--   <alt-target use-when="partyGroup==null" target="createPartyGroup"/>
+         <auto-fields-service service-name="updatePartyGroup"/> 
         <field use-when="partyGroup!=null" name="partyId" title="${uiLabelMap.PartyPartyId}" tooltip="${uiLabelMap.CommonNotModifRecreat}"><display/></field>
         <field use-when="partyGroup==null&amp;&amp;partyId==null" name="partyId" title="${uiLabelMap.PartyPartyId}"><ignored/></field>
         <field use-when="partyGroup==null&amp;&amp;partyId!=null" name="partyId" title="${uiLabelMap.PartyPartyId}" tooltip="${uiLabelMap.CommonCannotBeFound}: [${partyId}]"><display also-hidden="false"/></field>
         <field name="groupName" tooltip="${uiLabelMap.CommonRequired}" widget-style="required"></field>
         <field name="partyTypeId"><ignored/></field>
-        <field name="description" title="${uiLabelMap.CommonDescription}"><text/></field>
+        <field name="description" title="${uiLabelMap.CommonDescription}"><text/></field>-->
+
+        
+        
+	   <field name="externalId"  ><text/></field>
+	   <field name="Parent_id" title="Cuenta de la que depende" ><text/></field>
+	   
+	   <field name="partyId"  ><text/></field>	   
+	       
+	   <field name="groupName"  ><text/></field>
+	   <field name="groupNameLocal" ><text/></field>
+       <field name="preferredCurrencyUomId" title="${uiLabelMap.CommonCurrency}"><display-entity entity-name="Uom" key-field-name="uomId" description="${description}"/></field>
+	   <field name="node" title="${uiLabelMap.Nodo}"><display-entity entity-name="Party" key-field-name="partyId" description="${node}"/></field>
+  
+	   <field name="Nivel_id" title="${uiLabelMap.Nivel}" ><display-entity entity-name="NivelPresupuestal" key-field-name="nivelId"  description="${descripcion}"/></field>
+        
+        
+        
         <field name="preferredCurrencyUomId">
             <drop-down allow-empty="true" no-current-selected-key="${defaultOrganizationPartyCurrencyUomId}">
                 <entity-options key-field-name="uomId" description="${description} - ${abbreviation}" entity-name="Uom">
@@ -145,22 +162,24 @@ under the License.
     </form>
 
     <form name="ViewPartyGroup" type="single" default-map-name="lookupGroup">
-     <!--  <auto-fields-entity entity-name="PartyGroup" default-field-type="display"/>
-        --> 
+      <!--  <auto-fields-entity entity-name="PartyGroup" default-field-type="display"/>
+       --> 
         <field name="partyTypeId"><ignored/></field>
+        <field name="externalId"><display/></field>
+        <field name="Parent_id"><display/></field>
         <field name="comments"><ignored/></field>
         <field name="logoImageUrl"><ignored/></field>
         <field name="partyId" title="${uiLabelMap.PartyId}"><display/></field>
-        <field name="parentId" title="${uiLabelMap.ParentId}"><display/></field>
-        <field name="groupName" title="${uiLabelMap.NombreGrupo}"><display/></field>
-        <field name="groupNameLocal" title="${uiLabelMap.NombreGrupoLocal}"><display/></field>
+        <field name="groupName" title="Nombre del grupo"><display/></field>
+        <field name="groupNameLocal" title="Nombre del grupo local"><display/></field>
+        <field name="federalTaxId" title="Federal Tax"><display/></field>
 
         <field name="preferredCurrencyUomId" title="${uiLabelMap.CommonCurrency}"><display-entity entity-name="Uom" key-field-name="uomId" description="${description}"/></field>
 	     <field name="node" title="${uiLabelMap.Nodo}"><display-entity entity-name="Party" key-field-name="partyId" description="${node}"/></field>
-	
+  
 	   <field name="Nivel_id" title="${uiLabelMap.Nivel}" ><display-entity entity-name="NivelPresupuestal" key-field-name="nivelId"  description="${descripcion}"/></field>
-     <field name="statusId"><display-entity entity-name="StatusItem" key-field-name="statusId" description="${description}"/></field>
-    </form>
+    <!--  <field name="statusId"><display-entity entity-name="StatusItem" key-field-name="statusId" description="${description}"/></field>
+    --></form>
 
     <form name="ViewPartyPerson" type="single" default-map-name="lookupPerson">
         <field name="partyId"><display/></field>

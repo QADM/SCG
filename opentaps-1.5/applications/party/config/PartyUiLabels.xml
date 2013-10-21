@@ -2528,6 +2528,7 @@
     </property>
     <property key="PartyAddOtherRelationship">
         <value xml:lang="en">Add other party relationship</value>
+        <value xml:lang="es">Agregar otra relación</value>
         <value xml:lang="fr">Ajouter une autre relation entre acteurs</value>
         <value xml:lang="hi_IN">अन्य पार्टी के रिश्ते जोड़ें</value>
         <value xml:lang="it">Aggiungi altro rapporto soggetti</value>
@@ -9355,6 +9356,10 @@
         <value xml:lang="ru">Группа безопасности</value>
         <value xml:lang="th">กลุ่มความปลอดภัย</value>
         <value xml:lang="zh">安全组</value>
+    </property>
+        <property key="partyAddDestino1">
+        <value xml:lang="en">Participante origen</value>
+        <value xml:lang="es">Participante origen</value>
     </property>
     <property key="PartySecurityGroupId">
         <value xml:lang="de">Sicherheitsgruppe ID</value>
