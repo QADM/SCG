@@ -125,9 +125,9 @@ public class TransactionsFindIng {
         
         
         // construct search conditions
-       //if ("Y".equals(ac.getParameter("performFind"))) {
+       if ("Y".equals(ac.getParameter("performFind"))) {
             // build search conditions
-            List<EntityCondition> searchConditions = new FastList<EntityCondition>();
+    	   List<EntityCondition> searchConditions = new FastList<EntityCondition>();
             // this needs to allow null organizationPartyId for new AcctgTrans which have no AcctgTransEntries yet
             if (UtilValidate.isNotEmpty(acctgTransId)) {
             	 searchConditions.add(EntityCondition.makeCondition(AcctgTransOrgPresupIng.Fields.acctgTransId.name(), EntityOperator.EQUALS, acctgTransId));
@@ -155,7 +155,7 @@ public class TransactionsFindIng {
             if (hasta != null) {
             	searchConditions.add(EntityCondition.makeCondition(AcctgTransOrgPresupIng.Fields.postedDate.name(), EntityOperator.LESS_THAN_EQUAL_TO, UtilDateTime.getDayStart(UtilDateTime.stringToTimeStamp(hasta, dateFormat, timeZone, locale), timeZone, locale)));
             }
-           
+         
            
            /*
             
@@ -191,7 +191,7 @@ public class TransactionsFindIng {
             };
             acctgTransListBuilder.setPageBuilder(pageBuilder);
             ac.put("acctgTransListBuilder", acctgTransListBuilder);
-        //}
+        }
     }
     public static void findTransactionsEgre(Map<String, Object> context) throws GeneralException, ParseException {
 
@@ -257,9 +257,9 @@ public class TransactionsFindIng {
         
         
         // construct search conditions
-       //if ("Y".equals(ac.getParameter("performFind"))) {
+       if ("Y".equals(ac.getParameter("performFind"))) {
             // build search conditions
-            List<EntityCondition> searchConditions = new FastList<EntityCondition>();
+    	   List<EntityCondition> searchConditions = new FastList<EntityCondition>();
             // this needs to allow null organizationPartyId for new AcctgTrans which have no AcctgTransEntries yet
             if (UtilValidate.isNotEmpty(acctgTransId)) {
             	 searchConditions.add(EntityCondition.makeCondition(AcctgTransOrgPresupIng.Fields.acctgTransId.name(), EntityOperator.EQUALS, acctgTransId));
@@ -297,7 +297,7 @@ public class TransactionsFindIng {
             */
             // fields to select
             
-        
+       
             
             List<String> fieldsToSelect = UtilMisc.toList("acctgTransId", "acctgTransTypeId", "isPosted", "partyId", "transactionDate", "scheduledPostingDate");
             fieldsToSelect.add("postedDate");
@@ -324,7 +324,7 @@ public class TransactionsFindIng {
             };
             acctgTransListBuilder.setPageBuilder(pageBuilder);
             ac.put("acctgTransListBuilder", acctgTransListBuilder);
-        //}
+        }
     }
 
     public static void findTrans(Map<String, Object> context) throws GeneralException, ParseException {

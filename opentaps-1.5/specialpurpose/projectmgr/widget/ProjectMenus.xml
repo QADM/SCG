@@ -23,9 +23,9 @@
     <menu name="ProjectMgrAppBar" title="Administración  de  programas" extends="CommonAppBarMenu" extends-resource="component://common/widget/CommonMenus.xml">
 	<!-- 
         <menu-item name="mytasks" title="${uiLabelMap.WorkEffortMyTasks}"><link target="MyTasks"/></menu-item>
-        <menu-item name="mytime" title="${uiLabelMap.WorkEffortTimesheetMyTime}"><link target="MyTimesheet"/></menu-item>
-        <menu-item name="projects" title="${uiLabelMap.WorkEffortProjects}"><link target="FindProject"/></menu-item>
-        <menu-item name="task" title="${uiLabelMap.ProjectMgrTasks}"><link target="FindTask"/></menu-item>
+       <menu-item name="mytime" title="${uiLabelMap.WorkEffortTimesheetMyTime}"><link target="MyTimesheet"/></menu-item>
+      -->  <menu-item name="projects" title="${uiLabelMap.WorkEffortProjects}"><link target="FindProject"/></menu-item>
+       <!--   <menu-item name="task" title="${uiLabelMap.ProjectMgrTasks}"><link target="FindTask"/></menu-item>
         <menu-item name="resources" title="${uiLabelMap.ProjectMgrResources}">
             <condition>
                 <if-has-permission permission="PROJECTMGR_ADMIN"/>
@@ -187,7 +187,7 @@
             <link target="EditWorkEffortNotes">
                 <parameter param-name="projectId"/>
             </link>
-        </menu-item>
+        </menu-item>-->
         <menu-item name="subprojects" title="${uiLabelMap.ProjectMgrSubProjects}">
             <condition>
                 <and>
@@ -202,7 +202,7 @@
                 <parameter param-name="projectId"/>
                 <parameter param-name="subProjects" value="true"/>
             </link>
-        </menu-item>
+        </menu-item><!--
         <menu-item name="billing" title="${uiLabelMap.ProjectMgrBilling}">
             <condition>
                 <and>
@@ -230,7 +230,7 @@
                 &quot;projectId&quot;, projectId));
                 return result.get(&quot;hasPermission&quot;); }" type="Boolean"/>
         </actions>
-        <menu-item name="newProject" title="Nevo programa">
+        <menu-item name="newProject" title="Nuevo proyecto">
             <condition>
                 <and>
                     <if-compare field="hasUpdatePermission" operator="equals" value="true"/>
