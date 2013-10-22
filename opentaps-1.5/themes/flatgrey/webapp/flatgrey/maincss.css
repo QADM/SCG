@@ -310,7 +310,7 @@ background:url(/images/bg_bullet_full_2.gif) no-repeat 0px 0.5em;
 }
 
 A.browsecategorybutton {
-color: #000099;
+color: #999999;
 }
 
 .browsecategorybuttondisabled {
@@ -329,7 +329,7 @@ padding: 0.1em 0.4em 0.1em 0.4em;
 }
 
 A.buttontext {
-color: #000099;
+color: #999999;
 }
 
 A.buttontext:hover {
@@ -337,11 +337,11 @@ color: #ff0000;
 }
 
 A.linktext {
-color: #000099;
+color: #999999;
 }
 
 A.linktext:hover {
-color: #ff0000;
+color: #999999;
 }
 
 .buttontextdisabled {
@@ -349,7 +349,7 @@ color: #333333;
 }
 
 A.headerbuttontext {
-color: #000099;
+color: #999999;
 }
 
 A.headerbuttontext:hover {
@@ -367,7 +367,7 @@ padding-right: 0.5em;
 
 .submenutext, A.submenutext, A.submenutext:visited {
 border-right: 0.1em solid #5886C6;
-color: #ffff00;
+color: #999999;
 font-size: 0.9em;
 font-weight: bold;
 padding-left: 0.2em;
@@ -410,14 +410,14 @@ color: #ffff00;
 }
 
 .submenutextrightdisabled, A.submenutextrightdisabled {
-color: #CCCCCC;
+color: #999999;
 font-size: 0.9em;
 font-weight: bold;
 padding-left: 0.2em;
 }
 
 A.submenutextrightdisabled:hover {
-color: #ffff00;
+color: #999999;
 }
 
 A.lightbuttontext {
@@ -1007,13 +1007,13 @@ background-image: url(/images/tabs/main_sel_left.gif);
 }
 
 #main-navigation ul li.selected {
-background-image: url(/images/tabs/main_sel_left.gif);
+/*background-image: url(/images/tabs/main_sel_left.gif);*/
 }
 
 #main-navigation ul a {
-background-image: url(/images/tabs/main_uns_right.gif);
+/*background-image: url(/images/tabs/main_uns_right.gif);
 background-position: top right;
-background-repeat: no-repeat;
+background-repeat: no-repeat;*/
 border-bottom: solid #989898 0.01em;
 color: #000000;
 display: block;
@@ -1029,9 +1029,9 @@ color: #D4D0C8;
 #main-navigation ul a:hover,
 #main-navigation ul .selected a,
 #main-navigation ui .selected a:hover {
-background-image: url(/images/tabs/main_sel_right.gif);
+/*background-image: url(/images/tabs/main_sel_right.gif);
 background-position: top right;
-background-repeat: no-repeat;
+background-repeat: no-repeat;*/
 border-bottom: solid #D4D0C8 0.01em;
 color: #000099;
 text-decoration: none;
@@ -1048,8 +1048,8 @@ text-decoration: none;
 padding: 0 1em 0 1em;
 border: 0.05em solid #000099;
 color: #ffff66;
-background-image: url(/images/gradient_sub_uns.gif);
-background-repeat: repeat-x;
+/*background-image: url(/images/gradient_sub_uns.gif);
+background-repeat: repeat-x;*/
 }
 
 #secondary-navigation .disabled {
@@ -1062,9 +1062,9 @@ color: #D4D0C8;
 
 #secondary-navigation a.selected,
 #secondary-navigation a:hover {
-background-color: #2626c1;
+/*background-color: #2626c1;
 background-image: url(/images/gradient_sub_sel.gif);
-background-repeat: repeat-x;
+background-repeat: repeat-x;*/
 border-bottom: 0.05em solid #2626c1;
 text-decoration: none;
 color: #ffffff;
@@ -1075,8 +1075,8 @@ color: #ffffff;
 /* ========================================================= */
 
 #app-navigation {
-background-color: #5f9fcf;
-background-image: url(/images/gradient_main.gif);
+background-color: #669933;
+/*background-image: url(/images/gradient_main.gif);*/
 background-repeat: repeat-y;
 border: 0.1em solid #69a9d9;
 height: 1%; /* IE fix */
@@ -1095,8 +1095,8 @@ display: inline; /* IE Fix */
 }
 
 #app-navigation ul li ul li {
-background-color: #000099;
-background-image: url(/images/gradient_sub_uns.gif);
+background-color: #669933;
+/*background-image: url(/images/gradient_sub_uns.gif);*/
 background-repeat: repeat-x;
 border-right: 0.1em solid #69a9d9;
 border-top: 0.1em solid #69a9d9;
@@ -1146,8 +1146,8 @@ color: #ffffff;
 /* ================================================= */
 
 .screenlet-title-bar {
-background-color: #000099;
-background-image: url(/images/gradient_sub_uns.gif);
+background-color: #669933;
+/*background-image: url(/images/gradient_sub_uns.gif);*/
 background-repeat: repeat-x;
 color: #ffffff;
 height: 1%; /* IE fix */
@@ -1160,7 +1160,7 @@ min-height: 1.5em;
 .screenlet-title-bar h1,
 .screenlet-title-bar h2,
 .screenlet-title-bar h3 {
-background: none;
+background: #669933;
 color: #ffffff;
 font-weight: bold;
 padding: 0.1em 0.5em 0.2em 0.5em;
@@ -1186,6 +1186,7 @@ padding: 0.1em 0.5em 0.2em 0.5em;
 .screenlet-title-bar ul .h1,
 .screenlet-title-bar ul .h2,
 .screenlet-title-bar ul .h3 {
+background: 669933;
 border-left: none;
 float: left;
 }
@@ -1256,7 +1257,7 @@ cursor: default;
 .screenlet-title-bar ul .h2:hover,
 .screenlet-title-bar ul .h3:hover {
 background-color: #000099;
-background-image: url(/images/gradient_sub_uns.gif);
+/*background-image: url(/images/gradient_sub_uns.gif);*/
 }
 
 /* login screenlet decorator */
@@ -1385,33 +1386,35 @@ color: #0000ff;
 float: right;
 }
 
+
+
 /* ===== Button style decorator ===== */
 
 .button-style-1 ul li,
 .tabContainer ul li {
 background-color: #ffffff;
-color: #000099;
+color: #669933;
 }
 
 .button-style-1 a,
 .button-style-1 ul a,
 a.button-style-1 {
 background-color: #D4D0C8;
-border: solid #000099 0.1em;
+
 color: #000099;
 }
 
 .button-style-1 .selected,
 .button-style-1 ul .selected,
 .button-style-1 ul .selected a {
-background-color: #000099;
+background-color: #669939;
 color: #ffffff;
 }
 
 .button-style-1 a:hover,
 .button-style-1 ul a:hover,
 a.button-style-1:hover {
-background-color: #000099;
+background-color: #669939;
 color: #ffffff;
 text-decoration: none;
 }
@@ -1436,14 +1439,14 @@ color: #000099;
 
 .button-style-2 ul .selected a,
 .button-style-2 .selected {
-background-color: #000099;
+background-color: #669933;
 color: #ffffff;
 }
 
 .button-style-2 ul a:hover,
 .button-style-2 a:hover,
 a.button-style-2:hover {
-background-color: #000099;
+background-color: #669933;
 color: #ffffff;
 text-decoration: none;
 }
@@ -1624,7 +1627,7 @@ white-space: nowrap;
 .basic-table tr .button-col a:active,
 .basic-table tr .smallSubmit:hover,
 .basic-table tr .smallSubmit:active {
-color: #ff0000;
+color: #999999;
 text-decoration: none;
 }
 
@@ -1980,11 +1983,11 @@ iframe.ie6_blocker {
 .calendar_date_select .cds_buttons {
   text-align:center;
   padding:5px 0px;
-  background-color: #4682B4;
+  background-color: #999999;
 }
 
 .calendar_date_select .cds_footer {
-  background-color: #4682B4;
+  background-color: #999999;
   padding:3px;
   font-size:12px;
   text-align:center;
@@ -2248,7 +2251,7 @@ Lookups
  }
 
  .fieldLookupHeader span div{
-     background-image: url(header_close_button.png);
+     background: 999999;
      float: right;
      width: 16px;
      height: 16px;

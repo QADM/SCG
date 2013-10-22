@@ -79,11 +79,12 @@ public class TransactionsFindIng {
         String partyId = ac.getParameter("partyId");
         String acctgTransId = ac.getParameter("findAcctgTransId");
         String glFiscalTypeId = ac.getParameter("glFiscalTypeId");
-        if (UtilValidate.isEmpty(glFiscalTypeId)) {
-        	glFiscalTypeId = "ACTUAL";
-        }
- 
-        ac.put("glFiscalTypeId", glFiscalTypeId);
+
+        /* if (UtilValidate.isEmpty(glFiscalTypeId)) {
+    	glFiscalTypeId = "ACTUAL";
+    }
+
+    ac.put("glFiscalTypeId", glFiscalTypeId);*/
 
         String desde = ac.getParameter("desde");
         String hasta = ac.getParameter("hasta");
@@ -193,6 +194,13 @@ public class TransactionsFindIng {
             ac.put("acctgTransListBuilder", acctgTransListBuilder);
         }
     }
+    
+    
+    
+    
+    
+    
+    
     public static void findTransactionsEgre(Map<String, Object> context) throws GeneralException, ParseException {
 
         final ActionContext ac = new ActionContext(context);
@@ -204,11 +212,11 @@ public class TransactionsFindIng {
         String partyId = ac.getParameter("partyId");
         String acctgTransId = ac.getParameter("findAcctgTransId");
         String glFiscalTypeId = ac.getParameter("glFiscalTypeId");
-        if (UtilValidate.isEmpty(glFiscalTypeId)) {
+       /* if (UtilValidate.isEmpty(glFiscalTypeId)) {
         	glFiscalTypeId = "ACTUAL";
         }
  
-        ac.put("glFiscalTypeId", glFiscalTypeId);
+        ac.put("glFiscalTypeId", glFiscalTypeId);*/
 
         String desde = ac.getParameter("desde");
         String hasta = ac.getParameter("hasta");
@@ -326,6 +334,14 @@ public class TransactionsFindIng {
             ac.put("acctgTransListBuilder", acctgTransListBuilder);
         }
     }
+    
+   
+    
+    
+    
+    
+    
+    
 
     public static void findTrans(Map<String, Object> context) throws GeneralException, ParseException {
 
