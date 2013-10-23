@@ -510,6 +510,7 @@
     <property key="WebtoolsBackToEntityList">
         <value xml:lang="de">Zurück zur Entitätenliste</value>
         <value xml:lang="en">Back To Entity List</value>
+        <value xml:lang="es">Volver a listado de entidades</value>
         <value xml:lang="fr">Revenir à la liste d'entités</value>
         <value xml:lang="it">Ritorna alla lista entità</value>
         <value xml:lang="ro">Intoarcete inapoi la Lista Entitate</value>
@@ -3683,6 +3684,7 @@
     <property key="WebtoolsViewRelations">
         <value xml:lang="de">Beziehungen ansehen</value>
         <value xml:lang="en">View Relations</value>
+        <value xml:lang="es">Ver relaciones</value>
         <value xml:lang="fr">Voir les relations</value>
         <value xml:lang="it">Mostra relazioni</value>
         <value xml:lang="ro">Afiseaza Relatii</value>

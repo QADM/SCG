@@ -82,7 +82,7 @@ under the License.
             <set field="aggregatedPartyAcctgPreference" from-field="result.partyAccountingPreference" type="Object"/>
         </actions>
         <alt-target use-when="partyAcctgPreference!=null" target="updatePartyAcctgPreference"/>
-        <auto-fields-service service-name="createPartyAcctgPreference"/>
+      <auto-fields-service service-name="createPartyAcctgPreference"/>
         <field name="organizationPartyId"><hidden value="${parameters.organizationPartyId}"/></field>
         <!-- the partyId is always displayed -->
         <field name="partyId" title="${uiLabelMap.AccountingOrganizationPartyId}"><display/></field>
@@ -225,7 +225,7 @@ under the License.
                 (UtilProperties.getMessage('AccountingUiLabels', 'AccountingInheritedValue', locale);)}">
             <display/>
         </field>
-        <field name="invoiceIdPrefix" use-when="partyAcctgPreference!=null" tooltip="${groovy: import org.ofbiz.base.util.UtilProperties;
+        <field name="invoiceIdPrefix"  title="Código prefijo factura" use-when="partyAcctgPreference!=null" tooltip="${groovy: import org.ofbiz.base.util.UtilProperties;
                 if(partyAcctgPreference!= null&amp;&amp;partyAcctgPreference.get('invoiceIdPrefix')==null&amp;&amp;aggregatedPartyAcctgPreference!= null&amp;&amp;aggregatedPartyAcctgPreference.get('invoiceIdPrefix')!=null)return
                 (UtilProperties.getMessage('AccountingUiLabels', 'AccountingInheritedValue', locale);)}">
             <display/>
@@ -245,7 +245,7 @@ under the License.
                 (UtilProperties.getMessage('AccountingUiLabels', 'AccountingInheritedValue', locale);)}">
             <display-entity entity-name="Enumeration" key-field-name="enumId"/>
         </field>
-        <field name="quoteIdPrefix" use-when="partyAcctgPreference!=null" tooltip="${groovy: import org.ofbiz.base.util.UtilProperties;
+        <field name="quoteIdPrefix"  title="Código prefijo de presupuesto" use-when="partyAcctgPreference!=null" tooltip="${groovy: import org.ofbiz.base.util.UtilProperties;
                 if(partyAcctgPreference!= null&amp;&amp;partyAcctgPreference.get('quoteIdPrefix')==null&amp;&amp;aggregatedPartyAcctgPreference!= null&amp;&amp;aggregatedPartyAcctgPreference.get('quoteIdPrefix')!=null)return
                 (UtilProperties.getMessage('AccountingUiLabels', 'AccountingInheritedValue', locale);)}">
             <display/>
@@ -260,7 +260,7 @@ under the License.
                 (UtilProperties.getMessage('AccountingUiLabels', 'AccountingInheritedValue', locale);)}">
             <display-entity entity-name="Enumeration" key-field-name="enumId"/>
         </field>
-        <field name="orderIdPrefix" use-when="partyAcctgPreference!=null" tooltip="${groovy: import org.ofbiz.base.util.UtilProperties;
+        <field name="orderIdPrefix"  title="Código prefijo de orden" use-when="partyAcctgPreference!=null" tooltip="${groovy: import org.ofbiz.base.util.UtilProperties;
                 if(partyAcctgPreference!= null&amp;&amp;partyAcctgPreference.get('orderIdPrefix')==null&amp;&amp;aggregatedPartyAcctgPreference!= null&amp;&amp;aggregatedPartyAcctgPreference.get('orderIdPrefix')!=null)return
                 (UtilProperties.getMessage('AccountingUiLabels', 'AccountingInheritedValue', locale);)}">
             <display/>
@@ -284,7 +284,7 @@ under the License.
             <display/>
         </field>
         <!-- these 2 are always can be updated -->
-        <field name="refundPaymentMethodId" tooltip="${groovy: import org.ofbiz.base.util.UtilProperties;
+        <field name="refundPaymentMethodId"  title="Código de método de pago para reembolsos" tooltip="${groovy: import org.ofbiz.base.util.UtilProperties;
                 if((partyAcctgPreference==null&amp;&amp;aggregatedPartyAcctgPreference!= null&amp;&amp;aggregatedPartyAcctgPreference.get('refundPaymentMethodId')!=null) ||
                 (partyAcctgPreference!=null&amp;&amp;partyAcctgPreference.get('refundPaymentMethodId')==null&amp;&amp;aggregatedPartyAcctgPreference!= null&amp;&amp;aggregatedPartyAcctgPreference.get('refundPaymentMethodId')!=null))return
                 (UtilProperties.getMessage('AccountingUiLabels', 'AccountingInheritedValue', locale);)}">
@@ -294,7 +294,7 @@ under the License.
                 </entity-options>
             </drop-down>
         </field>
-        <field name="errorGlJournalId" tooltip="${groovy: import org.ofbiz.base.util.UtilProperties;
+        <field name="errorGlJournalId"  title="Código de error en transacciones contables" tooltip="${groovy: import org.ofbiz.base.util.UtilProperties;
             if((partyAcctgPreference==null&amp;&amp;aggregatedPartyAcctgPreference!= null&amp;&amp;aggregatedPartyAcctgPreference.get('errorGlJournalId')!=null) ||
             (partyAcctgPreference!=null&amp;&amp;partyAcctgPreference.get('errorGlJournalId')==null&amp;&amp;aggregatedPartyAcctgPreference!= null&amp;&amp;aggregatedPartyAcctgPreference.get('errorGlJournalId')!=null))return 
             (UtilProperties.getMessage('AccountingUiLabels', 'AccountingInheritedValue', locale))}">
@@ -305,6 +305,34 @@ under the License.
                 </entity-options>
             </drop-down>
         </field>
+                <field name="costingMethodId" title="Código de método de costeo" >
+            <text size="100"></text>
+        </field>
+                 <field name="salesInvoiceFooterText" title="Texto para pie de página de facturas de venta" >
+            <text size="100"></text>
+        </field>
+        
+        
+   <field name="groupSalesTaxOnInvoicePdf" title="Agrupa impuestos en el PDF de las facturas de venta?" >            
+            <drop-down>
+                <option key="Y" description="S"/>
+                <option key="N" description="N"/>
+            </drop-down>  
+        </field> 
+               <field name="allocPaymentTagsToAppl" title="Utiliza las etiquetas de pago en la aplicación?" >            
+            <drop-down>
+                <option key="Y" description="S"/>
+                <option key="N" description="N"/>
+            </drop-down>  
+        </field> 
+               <field name="autoPostReverseAcctgTrans" title="Aplicación automática de reversa de transacciones contables?" >            
+            <drop-down>
+                <option key="Y" description="S"/>
+                <option key="N" description="N"/>
+            </drop-down>  
+        </field> 
+        
+        
     </form>
 
     <!-- forms for managing FX rates -->
