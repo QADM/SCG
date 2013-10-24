@@ -491,7 +491,8 @@
         <attribute type="String" mode="IN" name="subf" optional="false"/>
         <attribute type="String" mode="IN" name="act" optional="false"/>
         <attribute type="String" mode="IN" name="tg" optional="false"/>
-        <attribute type="String" mode="IN" name="pe" optional="false"/>              
+        <attribute type="String" mode="IN" name="pe" optional="false"/>
+        <attribute type="String" mode="IN" name="sfe" optional="false"/>             
         <attribute type="String" mode="IN" name="loc" optional="true"/>
         <attribute type="String" mode="IN" name="area" optional="false"/>
         <attribute type="String" mode="IN" name="concatenacion" optional="false"/>
