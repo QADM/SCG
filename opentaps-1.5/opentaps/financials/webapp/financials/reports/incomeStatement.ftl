@@ -22,7 +22,7 @@
   <div style="border: 1px solid #999999; margin-top: 20px; margin-bottom: 20px;"></div>
   <div class="treeViewContainer">
     <div class="treeViewHeader">
-      <div class="tableheadtext">${uiLabelMap.AccountingIncomeStatement} for ${parameters.organizationName?if_exists} (${organizationPartyId})</div>
+      <div class="tableheadtext">${uiLabelMap.AccountingIncomeStatement} de ${parameters.organizationName?if_exists} (${organizationPartyId})</div>
       <div class="tabletext">${uiLabelMap.CommonFrom} ${getLocalizedDate(fromDate, "DATE")} ${uiLabelMap.CommonThru} ${getLocalizedDate(thruDate, "DATE")}
         <#if isClosed>
           (${uiLabelMap.FinancialsTimePeriodIsClosed})

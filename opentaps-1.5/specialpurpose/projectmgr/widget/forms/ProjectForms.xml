@@ -41,7 +41,7 @@
         <field name="workEffortTypeId"><hidden value="PROJECT"/></field>
         <field name="workEffortId"><hidden value="${projectId}"/></field>
         <field name="projectId"><hidden/></field>
-        <field name="templateId" use-when="projectId==null">
+        <field name="templateId" title="Código de la pantalla" use-when="projectId==null">
             <drop-down allow-empty="true">
                 <entity-options entity-name="WorkEffort" description="${workEffortName}" key-field-name="workEffortId">
                     <entity-constraint name="workEffortTypeId" value="PROJECT_TEMPLATE"/>
@@ -50,22 +50,22 @@
         </field>
         <field name="projectName" parameter-name="workEffortName" title="${uiLabelMap.ProjectMgrProjectName}*"><text/></field>
         <field name="projectDescription" parameter-name="description" title="${uiLabelMap.CommonDescription}"><text/></field>
-        <field name="currentStatusId" use-when="projectId!=null" title="${uiLabelMap.CommonStatus}" parameter-name="dummy"><display-entity entity-name="StatusItem" key-field-name="statusId"/></field>
+       <!--  <field name="currentStatusId" use-when="projectId!=null" title="${uiLabelMap.CommonStatus}" parameter-name="dummy"><display-entity entity-name="StatusItem" key-field-name="statusId"/></field>
         <field name="currentStatusId" use-when="projectId==null"><hidden value="_NA_"/></field>
         
-        <field name="clientBillingPartyId">
+        <field name="clientBillingPartyId" title="Cliente">
             <lookup target-form-name="LookupPartyGroup">
                 <sub-hyperlink target="viewprofile" description="${partyGroup.groupName}">
                     <parameter param-name="partyId"/>
                 </sub-hyperlink>
             </lookup>
         </field>
-        <!--<field name="partyId">
+        <field name="partyId">
             <drop-down current="selected">
                 <entity-options entity-name="PartyGroup" description="${groupName}" key-field-name="partyId"/>
             </drop-down>
-        </field>-->
-        <field name="priority" title="${uiLabelMap.CommonPriority}"><display/></field>
+        </field>
+        <field name="priority" title="Prioridad"><display/></field>-->
        <!-- 
         <field name="codificacion" title="${uiLabelMap.Codificacion}"><text/></field>
         -->
@@ -77,21 +77,21 @@
                 </entity-options>
            	 </drop-down>
         </field>
-        <field name="node" title="${uiLabelMap.Nodo}" >            
+        <field name="node" title="Nodo" >            
             <drop-down>
                 <option key="R" description="Rama"/>
                 <option key="H" description="Hoja"/>
             </drop-down>  
         </field> 
-        <field name="scopeEnumId" title="${uiLabelMap.ProjectMgrWorkEffortScopeEnumId}">
+       <!--  <field name="scopeEnumId" title="Nivel de acceso">
             <drop-down allow-empty="false" no-current-selected-key="WES_PRIVATE">
                 <entity-options entity-name="Enumeration" description="${description}" key-field-name="enumId">
                     <entity-constraint name="enumTypeId" value="WORK_EFF_SCOPE"/>
                     <entity-order-by field-name="description"/>
                 </entity-options>
             </drop-down>
-        </field>
-        <field name="workEffortParentId" parameter-name="workEffortParentId">
+        </field>-->
+        <field name="workEffortParentId"  title="Programa del que depende" parameter-name="workEffortParentId">
             <drop-down allow-empty="true">
                 <entity-options entity-name="WorkEffort" description="${workEffortName}" key-field-name="workEffortId">
                     <entity-constraint name="workEffortTypeId" value="PROJECT"/>
@@ -99,13 +99,13 @@
                 </entity-options>
             </drop-down>
         </field>
-        <field use-when="projectId!=null" name="estimatedStartDate" title="${uiLabelMap.FormFieldTitle_estimatedStartDate}"><display type="date"/></field>
-        <field use-when="projectId!=null" name="estimatedCompletionDate" title="${uiLabelMap.FormFieldTitle_estimatedCompletionDate}"><display type="date"/></field>
-        <field use-when="projectId!=null" name="actualStartDate" title="${uiLabelMap.FormFieldTitle_actualStartDate}"><display type="date"/></field>
-        <field use-when="projectId!=null" name="actualCompletionDate" title="${uiLabelMap.FormFieldTitle_actualCompletionDate}"><display type="date"/></field>
-        <field name="emailAddress" title="${uiLabelMap.FormFieldTitle_mailingListEmail}"><text/></field>
+       <!--  <field use-when="projectId!=null" name="estimatedStartDate" title="Fecha de comienzo estimada"><display type="date"/></field>
+        <field use-when="projectId!=null" name="estimatedCompletionDate" title="Fecha de terminación estimada"><display type="date"/></field>
+        <field use-when="projectId!=null" name="actualStartDate" title="Fecha de comienzo real"><display type="date"/></field>
+        <field use-when="projectId!=null" name="actualCompletionDate" title="Fecha de terminación real"><display type="date"/></field>
+       <field name="emailAddress" title="Correo electronico"><text/></field>
         
-        <field name="save" title="${uiLabelMap.CommonSave}"><submit/></field>
+        --> <field name="save" title="${uiLabelMap.CommonSave}"><submit/></field>
     </form>
     <form name="AddSubProject" type="single" target="AddSubProject"
         header-row-style="header-row" default-table-style="basic-table">
@@ -123,7 +123,7 @@
     </form>
     <form name="FindProject" type="single" target="FindProject" title="Find and List Project"
         header-row-style="header-row" default-table-style="basic-table">
-        <field name="projectId" title="${uiLabelMap.ProjectMgrProjectId}" parameter-name="workEffortId"><text-find size="25"/></field>
+        <field name="projectId" title="Id de projecto" parameter-name="workEffortId"><text-find size="25"/></field>
         <field name="projectName" title="${uiLabelMap.ProjectMgrProjectName}" parameter-name="workEffortName"><text-find size="25"/></field>
         <field name="fromDate" title="${uiLabelMap.CommonFromDate}" parameter-name="createdStamp"><date-find/></field>
         <field name="find" title="${uiLabelMap.CommonFind}"><submit/></field>
@@ -159,34 +159,68 @@
         <field name="rateTypeId" title="${uiLabelMap.ProjectMgrRateTypeId}" position="2"><display-entity entity-name="RateType" description="${description}"/></field>
         <field name="fromDate" position="2"><display type="date"/></field>
     </form>
-    <form name="ListProjects" type="list" list-name="projects" paginate-target="main"
-        odd-row-style="alternate-row" default-table-style="basic-table hover-bar">
-        <actions>
-            <script location="component://projectmgr/webapp/projectmgr/WEB-INF/actions/ListCurrentProjects.groovy"/>
-        </actions>
-        <row-actions>
-            <script location="component://projectmgr/webapp/projectmgr/WEB-INF/actions/ProjectIsBillable.groovy"/>
-        </row-actions>
-        <field name="projectName" title="${uiLabelMap.ProjectMgrProjectName}" widget-style="buttontext">
-            <hyperlink description="${projectName}" target="projectView">
-                <parameter param-name="projectId"/>
-            </hyperlink>
-        </field>
-      <field name="projectName" title="${uiLabelMap.ProjectMgrProjectName}" widget-style="buttontext">
-            <hyperlink description="${projectName}" target="projectView">
-                <parameter param-name="projectId"/>
-            </hyperlink>
-        </field>
-        <field name="currentStatusId" title="${uiLabelMap.CommonStatus}"><display-entity entity-name="StatusItem" key-field-name="statusId" description="${description}"/></field>
-        <field name="estimatedStartDate" title="${uiLabelMap.FormFieldTitle_estimatedStartDate}"><display type="date"/></field>
-        <field name="estimatedCompletionDate" title="${uiLabelMap.FormFieldTitle_estimatedCompletionDate}"><display type="date"/></field>
-        <field name="actualStartDate" title="${uiLabelMap.FormFieldTitle_actualStartDate}"><display type="date"/></field>
-        <field name="actualCompletionDate" title="${uiLabelMap.FormFieldTitle_actualCompletionDate}"><display type="date"/></field>
-        <field name="plannedHours" title="${uiLabelMap.ProjectMgrPlannedHours}"><display/></field>
-        <field name="actualHours" title="${uiLabelMap.ProjectMgrActualHours}"><display/></field>
-        <field name="actualNonBilledTotalHours" title="${uiLabelMap.ProjectMgrNonBilledActualHours}"><display description="${bsh:isBillable&amp;&amp;actualNonBilledTotalHours!=void?actualNonBilledTotalHours:&quot;&quot;}"/></field>
-        <field name="createdStamp" title="${uiLabelMap.FormFieldTitle_createdDate}"><display type="date"/></field>
-    </form>
+	<form name="ListProjects" type="list" list-name="listIt"
+		paginate-target="FindProject" odd-row-style="alternate-row"
+		default-table-style="basic-table hover-bar">
+		<actions>
+			<set field="parameters.workEffortTypeId" value="PROJECT" />
+			<set field="fieldList[]" value="workEffortId" />
+			<set field="fieldList[]" value="lastStatusUpdate" />
+			<service service-name="performFind" result-map-list="listIt">
+				<field-map field-name="fieldList" from-field="fieldList" />
+				<field-map field-name="inputFields" from-field="parameters" />
+				<field-map field-name="entityName" value="WorkEffortAndPartyAssign" />
+				<field-map field-name="distinct" value="Y" />
+				<field-map field-name="orderBy" value="-lastStatusUpdate" />
+				<field-map field-name="viewIndex" from-field="viewIndex" />
+				<field-map field-name="viewSize" from-field="viewSize" />
+			</service>
+		</actions>
+		<row-actions>
+			<service service-name="getProject" result-map="resultProject">
+				<field-map field-name="projectId" value="${workEffortId}" />
+			</service>
+		</row-actions>
+		<field name="projectName" map-name="resultProject.projectInfo"
+			title="${uiLabelMap.ProjectMgrProjectName}" widget-style="buttontext">
+			<hyperlink description="${resultProject.projectInfo.projectName}"
+				target="projectView">
+				<parameter param-name="projectId"
+					from-field="resultProject.projectInfo.projectId" />
+			</hyperlink>
+		</field>
+		<field name="currentStatusId" map-name="resultProject.projectInfo"
+			title="${uiLabelMap.CommonStatus}">
+			<display-entity entity-name="StatusItem"
+				key-field-name="statusId" description="${description}" />
+		</field>
+		<field name="estimatedStartDate" map-name="resultProject.projectInfo"
+			title="${uiLabelMap.FormFieldTitle_estimatedStartDate}">
+			<display type="date" />
+		</field>
+		<field name="estimatedCompletionDate" map-name="resultProject.projectInfo"
+			title="${uiLabelMap.FormFieldTitle_estimatedCompletionDate}">
+			<display type="date" />
+		</field>
+		<field name="actualStartDate" map-name="resultProject.projectInfo"
+			title="${uiLabelMap.FormFieldTitle_actualStartDate}">
+			<display type="date" />
+		</field>
+		<field name="actualCompletionDate" map-name="resultProject.projectInfo"
+			title="${uiLabelMap.FormFieldTitle_actualCompletionDate}">
+			<display type="date" />
+		</field>
+		<field name="plannedHours" map-name="resultProject.projectInfo"
+			title="${uiLabelMap.ProjectMgrPlannedHours}">
+			<display />
+		</field>
+		<field name="actualHours" map-name="resultProject.projectInfo"
+			title="${uiLabelMap.ProjectMgrActualHours}">
+			<display />
+		</field>
+		<field name="createdStamp" title="${uiLabelMap.FormFieldTitle_createdDate}">
+			<display type="date" />
+		</field></form>
     <form name="ListCurrentProjects" type="list" list-name="projects" paginate-target="main"
         odd-row-style="alternate-row" default-table-style="basic-table hover-bar">
         <actions>
@@ -240,12 +274,12 @@
     <form name="ProjectInfo" type="single" default-map-name="project" paginate-target="FindProject"
         header-row-style="header-row" default-table-style="basic-table">
 		<field name="nivelId" title="${uiLabelMap.Nivel}" ><display-entity entity-name="NivelPresupuestal" key-field-name="nivelId"  description="${descripcion}"/></field>
-	     <field name="node" title="Nodo"><display/></field>
-      	<field name="enumId" title="Scope"><display-entity entity-name="Enumeration" key-field-name="enumId"  description="${description}"/></field>
-      	<field name="workEffortId" title="Proyecto Padre" ><display-entity entity-name="WorkEffort" key-field-name="workEffortId"  description="${workEffortName}"/></field>
-         <field name="participante"   title="Participante"><display/></field>        	
+	    <field name="node" title="Nodo"><display/></field>
+     <!--  	<field name="enumId" title="Tipo de acceso"><display-entity entity-name="Enumeration" key-field-name="enumId"  description="${description}"/></field>
+      	--><field name="workEffortId" title="Código de programa del que depende" ><display-entity entity-name="WorkEffort" key-field-name="workEffortId"  description="${workEffortName}"/></field>
         <field name="projectName" title="${uiLabelMap.ProjectMgrProjectName}"><display/></field>
-        <field name="projectDescription" title="Descripcion"><display/></field>      
+        <field name="participante"   title="Participante"><display/></field>        	
+        <field name="projectDescription" title="Descripción"><display/></field>      
        <!--  <field name="currentStatusId" title="${uiLabelMap.CommonStatus}">
             <display-entity entity-name="StatusItem" key-field-name="statusId" description="${description}"/>
         </field>
@@ -263,9 +297,9 @@
         <field name="actualCompletionDate"><display type="date"/></field>
         <field name="plannedHours"><display/></field>
         <field name="originalActualHours"><display/></field>
-        <field name="actualHours"><display/></field>-->
+        <field name="actualHours"><display/></field>
         <field name="emailAddress" title="${uiLabelMap.FormFieldTitle_mailingListEmail}"><display/></field>        
-        
+        -->
     </form>
     <form name="ListChildEfforts"  target="updateProjectAndAssoc" title="" list-name="projects" type="list" separate-columns="true" paginate-target="FindProject"
         odd-row-style="alternate-row" default-table-style="basic-table hover-bar">
@@ -406,35 +440,35 @@
         odd-row-style="alternate-row" header-row-style="header-row-2" default-table-style="basic-table hover-bar">
         <field name="projectId"><hidden value="${parameters.projectId}"/></field>
         <field name="phaseId" parameter-name="workEffortId"><hidden/></field>
-        <field name="phaseSeqNum" parameter-name="sequenceNum"><text size="3"/></field>
+        <field name="phaseSeqNum" parameter-name="sequenceNum" title="Número de secuencia"><text size="3"/></field>
         <field name="phaseName" parameter-name="workEffortName" title="${uiLabelMap.CommonName}*"><text/></field>
         <field name="currentStatusId" title="${uiLabelMap.CommonStatus}" parameter-name="dummy"><display-entity entity-name="StatusItem" key-field-name="statusId"/></field>
         <field name="priority" title="${uiLabelMap.CommonPriority}"><display/></field>
         <field name="plannedHours" title="${uiLabelMap.ProjectMgrPlannedHours}"><display/></field>
         <field name="actualHours" title="${uiLabelMap.ProjectMgrActualHours}"><display/></field>
-        <field name="scopeEnumId" title="${uiLabelMap.ProjectMgrWorkEffortScopeEnumId}"><display-entity entity-name="Enumeration" key-field-name="enumId"/></field>
+        <field name="scopeEnumId" title="Tipo de acceso"><display-entity entity-name="Enumeration" key-field-name="enumId"/></field>
         <field name="estimatedStartDate" title="${uiLabelMap.FormFieldTitle_estimatedStartDate}"><display type="date"/></field>
-        <field name="estimatedCompletionDate" title="${uiLabelMap.FormFieldTitle_estimatedCompletionDate}"><display type="date"/></field>
+        <field name="estimatedCompletionDate" title="Fecha de terminación estimada"><display type="date"/></field>
         <field name="actualStartDate" title="${uiLabelMap.FormFieldTitle_actualStartDate}"><display type="date"/></field>
         <field name="actualCompletionDate" title="${uiLabelMap.FormFieldTitle_actualCompletionDate}"><display type="date"/></field>
-        <field name="codificacion" title="${uiLabelMap.Codificacion}"><display/></field>
+        <field name="codificacion" title="Código"><display/></field>
         <field name="NivelId" entity-name="WorkEffort" title="${uiLabelMap.Nivel}"><display/></field>
         <field name="submitButton" title="${uiLabelMap.CommonUpdate}"><submit button-type="button"/></field>
     </form>
     <form name="ListPhaseInfo" type="list" list-name="phases"
         odd-row-style="alternate-row" default-table-style="basic-table hover-bar">
-        <field name="wbsId"><display description="${projectId}.${phaseSeqNum}"/></field>
-        <field name="phase">
+        <field name="wbsId" title="WBS"><display description="${projectId}.${phaseSeqNum}"/></field>
+        <field name="Fase">
             <hyperlink target="FindPhase" description="${phaseName}">
                 <parameter param-name="projectId"/>
             </hyperlink>
         </field>
         <field name="currentStatusId"><display-entity entity-name="StatusItem" key-field-name="statusId" description="${description}"/></field>
-        <field name="priority"><display/></field>
-        <field name="startDate"><display type="date"/></field>
-        <field name="completionDate"><display type="date"/></field>
-        <field name="plannedHours"><display/></field>
-        <field name="actualHours"><display/></field>
+        <field name="priority" title="Prioridad "><display/></field>
+        <field name="startDate" title="Fecha de comienzo"><display type="date"/></field>
+        <field name="completionDate" title="Fecha de terminación"><display type="date"/></field>
+        <field name="plannedHours" title="Horas planeadas"><display/></field>
+        <field name="actualHours" title="Horas reales"><display/></field>
     </form>
     <form name="ListTaskInfo" type="list" list-name="tasks"
         odd-row-style="alternate-row" default-table-style="basic-table hover-bar">

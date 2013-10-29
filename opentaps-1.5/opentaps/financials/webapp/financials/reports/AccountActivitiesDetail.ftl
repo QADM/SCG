@@ -37,21 +37,13 @@
           <@inputLookupCell     name="partyId" form="findAccountActivitiesDetail" lookup="LookupPartyName" />
         </tr>
         <tr>
-          <@displayTitleCell    title=uiLabelMap.FormFieldTitle_paymentId />
-          <@inputTextCell       name="paymentId" />
-          <@displayTitleCell    title=uiLabelMap.FormFieldTitle_invoiceId />
-          <@inputTextCell       name="invoiceId" />
-        </tr>
-        <tr>
-          <@displayTitleCell    title=uiLabelMap.FormFieldTitle_shipmentId />
-          <@inputTextCell       name="shipmentId" />
           <@displayTitleCell    title=uiLabelMap.FormFieldTitle_workEffortId />
           <@inputTextCell       name="workEffortId" />
         </tr>
         <tr>
           <@displayTitleCell    title=uiLabelMap.CommonFromDate />
           <@inputDateTimeCell   name="transactionFromDate" form="findAccountActivitiesDetail" default=transactionFromDate />
-          <@displayTitleCell    title=uiLabelMap.CommonThruDate />
+          <@displayTitleCell    title=uiLabelMap.CommonThru />
           <@inputDateTimeCell   name="transactionThruDate" form="findAccountActivitiesDetail" default=transactionThruDate />
         </tr>
         <tr>
@@ -86,14 +78,10 @@
       <@headerCell title=uiLabelMap.FinancialsTransactionDate      orderBy="transactionDate" />
       <@headerCell title=uiLabelMap.FinancialsTransaction          orderBy="acctgTransId" />
       <@headerCell title=uiLabelMap.CommonType                     orderBy="acctgTransTypeId" />
-      <@headerCell title=uiLabelMap.AccountingInvoice              orderBy="invoiceId" />
-      <@headerCell title=uiLabelMap.AccountingPayment              orderBy="paymentId" />
-      <@headerCell title=uiLabelMap.FormFieldTitle_shipmentId      orderBy="shipmentId" />
       <@headerCell title=uiLabelMap.ProductItem                    orderBy="inventoryItemId" />
       <@headerCell title=uiLabelMap.WorkEffortWorkEffort           orderBy="workEffortId" />
       <@headerCell title=uiLabelMap.PartyParty                     orderBy="partyId" />
       <@headerCell title=uiLabelMap.PartyName                      orderBy="partyId" />
-      <@headerCell title=uiLabelMap.OpentapsRequires1099           orderBy="requires1099" />
       <@headerCell title=uiLabelMap.ProductProduct                 orderBy="productId" />
       <@headerCell title=uiLabelMap.CommonDebit                    orderBy="debitCreditFlag DESC,amount" orderByReverse="debitCreditFlag DESC,amount DESC" />
       <@headerCell title=uiLabelMap.CommonCredit                   orderBy="debitCreditFlag ASC,amount" orderByReverse="debitCreditFlag ASC,amount DESC" />

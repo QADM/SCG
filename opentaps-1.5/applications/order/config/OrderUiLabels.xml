@@ -11473,6 +11473,7 @@
     </property>
     <property key="PageTitleProjectInformation">
         <value xml:lang="en">Project Information</value>
+        <value xml:lang="es">Información del programa</value>
         <value xml:lang="fr">Informations du projet</value>
         <value xml:lang="it">Informazione progetto</value>
         <value xml:lang="pt_BR">Informação de projeto</value>
@@ -11635,6 +11636,7 @@
     <property key="ProjectMgrActualHours">
         <value xml:lang="de">Ist-Stunden</value>
         <value xml:lang="en">Actual Hours</value>
+        <value xml:lang="es">Horas reales</value>
         <value xml:lang="fr">Heures réelles</value>
         <value xml:lang="it">Ore attuali</value>
         <value xml:lang="nl">Werk. uren</value>
@@ -11645,6 +11647,7 @@
     <property key="ProjectMgrPlannedHours">
         <value xml:lang="de">Geplante Stunden</value>
         <value xml:lang="en">Planned Hours</value>
+        <value xml:lang="es">Horas planeadas</value>
         <value xml:lang="fr">Heures planifiées</value>
         <value xml:lang="it">Ore pianificate</value>
         <value xml:lang="nl">Gepl. uren</value>

@@ -22,7 +22,7 @@
   <div style="border: 1px solid #999999; margin-top: 20px; margin-bottom: 20px;"></div>
   <div class="treeViewContainer">
     <div class="treeViewHeader">
-      <div class="tableheadtext">${uiLabelMap.AccountingBalanceSheet} for ${parameters.organizationName?if_exists} (${organizationPartyId})</div>
+      <div class="tableheadtext">${uiLabelMap.AccountingBalanceSheet}  ${parameters.organizationName?if_exists} (${organizationPartyId})</div>
       <div class="tabletext">
         <#if customTimePeriod?has_content>
           ${uiLabelMap.CommonFor} ${customTimePeriod.getRelatedOne("PeriodType").get("description")}
@@ -42,21 +42,21 @@
     </div>
 
     <div class="tableheadtext" style="margin-top: 20px;">
-      <span style="float:left">${uiLabelMap.AccountingAssets}</span>
+      <span style="float:left">${uiLabelMap.FinancialsReportsAccountingAssets}</span>
       <span style="float:right"><@ofbizCurrency amount=assetAccountBalancesTree.getTotalBalance() isoCode=assetAccountBalancesTree.getCurrencyUomId()/></span>
     </div>
     <hr class="sepbar" style="clear:both"/>
     <@glAccountTree glAccountTree=assetAccountBalancesTree treeId="assetAccountBalancesTree"/>
 
     <div class="tableheadtext" style="margin-top: 20px;">
-      <span style="float:left">${uiLabelMap.AccountingLiabilities}</span>
+      <span style="float:left">${uiLabelMap.FinancialsReportsAccountingLiabilities}</span>
       <span style="float:right"><@ofbizCurrency amount=liabilityAccountBalancesTree.getTotalBalance() isoCode=liabilityAccountBalancesTree.getCurrencyUomId()/></span>
     </div>
     <hr class="sepbar" style="clear:both"/>
     <@glAccountTree glAccountTree=liabilityAccountBalancesTree treeId="liabilityAccountBalancesTree"/>
 
     <div class="tableheadtext" style="margin-top: 20px;">
-      <span style="float:left">${uiLabelMap.AccountingEquities}</span>
+      <span style="float:left">${uiLabelMap.FinancialsReportsAccountingEquities}</span>
       <span style="float:right"><@ofbizCurrency amount=equityAccountBalancesTree.getTotalBalance() isoCode=equityAccountBalancesTree.getCurrencyUomId()/></span>
     </div>
     <hr class="sepbar" style="clear:both"/>

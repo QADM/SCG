@@ -43,7 +43,7 @@
 <table border="0" cellpadding="0">
   <tr>
      <td colspan="5" class="tableheadtext" align="center">
-     ${uiLabelMap.FinancialsTransactionSummary} for ${parameters.organizationName?if_exists} (${organizationPartyId})<br/>
+     ${uiLabelMap.FinancialsTransactionSummary} para ${parameters.organizationName?if_exists} (${organizationPartyId})<br/>
      <#if fromDate?has_content>${uiLabelMap.CommonFrom} ${getLocalizedDate(fromDate)}</#if> <#if thruDate?has_content> ${uiLabelMap.CommonThru} ${getLocalizedDate(thruDate)}</#if></td>
   </tr>
    <tr><td colspan="5">&nbsp;</td></tr>

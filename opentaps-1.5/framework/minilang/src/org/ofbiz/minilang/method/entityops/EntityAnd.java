@@ -58,7 +58,7 @@ public class EntityAnd extends MethodOperation {
             this.finder.runFind(methodContext.getEnvMap(), delegator);
         } catch (GeneralException e) {
             Debug.logError(e, module);
-            String errMsg = "ERROR: Could not complete the " + simpleMethod.getShortDescription() + " process: " + e.getMessage();
+            String errMsg = "ERROR: No se puede completar el proceso " + simpleMethod.getShortDescription() + " : " + e.getMessage();
 
             if (methodContext.getMethodType() == MethodContext.EVENT) {
                 methodContext.putEnv(simpleMethod.getEventErrorMessageName(), errMsg);

@@ -3,7 +3,7 @@
 
     Licensed to the Apache Software Foundation (ASF) under one
     or more contributor license agreements.  See the NOTICE file
-    distributed with this work for additional information
+    distributed with this work for additional informationfProduct Category Name
     regarding copyright ownership.  The ASF licenses this file
     to you under the Apache License, Version 2.0 (the
     "License"); you may not use this file except in compliance
@@ -7321,7 +7321,7 @@
         <value xml:lang="cs">Rozšířené hledání</value>
         <value xml:lang="de">Erweiterte Suche</value>
         <value xml:lang="en">Advanced Search</value>
-        <value xml:lang="es">Búsqueda Avanzada</value>
+        <value xml:lang="es">Búsqueda avanzada</value>
         <value xml:lang="fr">Recherche avancée</value>
         <value xml:lang="hi_IN">वृहद खोज</value>
         <value xml:lang="it">Ricerca avanzata</value>
@@ -7353,7 +7353,7 @@
         <value xml:lang="cs">Rozšířené hledání ve skupině výrobků</value>
         <value xml:lang="de">Erweiterte Suche in der Produktgruppe</value>
         <value xml:lang="en">Advanced Search in Category</value>
-        <value xml:lang="es">Búsqueda Avanzada en las Categorías</value>
+        <value xml:lang="es">Búsqueda avanzada en las categorías</value>
         <value xml:lang="fr">Recherche avancée dans la catégorie</value>
         <value xml:lang="hi_IN">वृहद खोज इस सूची मे</value>
         <value xml:lang="it">Ricerca avanzata in categoria</value>
@@ -7885,7 +7885,7 @@
     <property key="ProductAutoCreateKeywordsForAllProducts">
         <value xml:lang="de">Schlüsselwörter automatisch erstellen für alle Produkte</value>
         <value xml:lang="en">Auto Create Keywords for All Products</value>
-        <value xml:lang="es">Creación Automática de Palabras Clave para todos los Productos</value>
+        <value xml:lang="es">Creación automática de palabras clave para todos los productos</value>
         <value xml:lang="fr">Création automatique de mots-clés pour tout article</value>
         <value xml:lang="it">Creazione Automatica Chiavi per Tutti i Prodotti</value>
         <value xml:lang="nl">Automatisch aanmaken trefwoorden voor alle producten</value>
@@ -8496,7 +8496,7 @@
     <property key="ProductCategoryId">
         <value xml:lang="de">Kategorie ID</value>
         <value xml:lang="en">Category ID</value>
-        <value xml:lang="es">Código de Categoría</value>
+        <value xml:lang="es">Código de categoría</value>
         <value xml:lang="fr">Catég. [Réf.]</value>
         <value xml:lang="it">Codice Categoria</value>
         <value xml:lang="ro">Cod Categorie</value>
@@ -8507,7 +8507,7 @@
     <property key="ProductCategoryImageUrl">
         <value xml:lang="de">Kategorie Bild URL</value>
         <value xml:lang="en">Category Image URL</value>
-        <value xml:lang="es">URL de imagen de Categoría</value>
+        <value xml:lang="es">URL de imagen de categoría</value>
         <value xml:lang="fr">URL de l'image pour cette catégorie</value>
         <value xml:lang="it">URL Immagine Categoria</value>
         <value xml:lang="ro">URL Imagine Categorie</value>
@@ -9339,7 +9339,7 @@
     <property key="ProductCreateNewCatalog">
         <value xml:lang="de">Neuen Katalog erstellen</value>
         <value xml:lang="en">Create New Catalog</value>
-        <value xml:lang="es">Crear nuevo Catálogo</value>
+        <value xml:lang="es">Crear nuevo catálogo</value>
         <value xml:lang="fr">Création d'un nouveau catalogue</value>
         <value xml:lang="it">Creare Nuovo Catalogo</value>
         <value xml:lang="nl">Aanmaken nieuwe catalogus</value>
@@ -9351,7 +9351,7 @@
     <property key="ProductCreateNewCategory">
         <value xml:lang="de">Neue Kategorie erstellen</value>
         <value xml:lang="en">Create New Category</value>
-        <value xml:lang="es">Crear nueva Categoría</value>
+        <value xml:lang="es">Crear nueva categoría</value>
         <value xml:lang="fr">Création d'une nouvelle catégorie</value>
         <value xml:lang="it">Creare nuova categoria</value>
         <value xml:lang="nl">Aanmaken nieuwe categorie</value>
@@ -9425,7 +9425,7 @@
     <property key="ProductCreateNewProduct">
         <value xml:lang="de">Neues Produkt erstellen</value>
         <value xml:lang="en">Create New Product</value>
-        <value xml:lang="es">Crear nuevo Producto</value>
+        <value xml:lang="es">Crear nuevo producto</value>
         <value xml:lang="fr">Création d'un nouvel article</value>
         <value xml:lang="it">Creare Nuovo Prodotto</value>
         <value xml:lang="nl">Aanmaken nieuw product</value>
@@ -9952,7 +9952,7 @@
     <property key="ProductDetailScreen">
         <value xml:lang="de">Detail Anzeige (Screen)</value>
         <value xml:lang="en">Detail Screen</value>
-        <value xml:lang="es">Pantalla Detalle</value>
+        <value xml:lang="es">Pantalla detalle</value>
         <value xml:lang="fr">Canevas ftl d'affichage du détail</value>
         <value xml:lang="it">Dettaglio Videata</value>
         <value xml:lang="ro">Detaliu Videata</value>
@@ -10074,7 +10074,7 @@
     <property key="ProductEditCatalog">
         <value xml:lang="de">Katalog bearbeiten</value>
         <value xml:lang="en">Edit Catalog</value>
-        <value xml:lang="es">Editar Catálogo</value>
+        <value xml:lang="es">Editar catálogo</value>
         <value xml:lang="fr">Modification du catalogue</value>
         <value xml:lang="it">Aggiorna Catalogo</value>
         <value xml:lang="nl">Wijzig catalogus</value>
@@ -10086,7 +10086,7 @@
     <property key="ProductEditCatalogWithCatalogId">
         <value xml:lang="de">Katalog bearbeiten mit der Katalog ID</value>
         <value xml:lang="en">Edit Catalog with Catalog ID</value>
-        <value xml:lang="es">Editar Catálogo con Código</value>
+        <value xml:lang="es">Editar catálogo con código</value>
         <value xml:lang="fr">Modification de catalogue (saisir ou rechercher sa référence)</value>
         <value xml:lang="it">Aggiorna Catalogo con Codice Catalogo</value>
         <value xml:lang="nl">Wijzigen catalogus met [ID]</value>
@@ -10098,7 +10098,7 @@
     <property key="ProductEditCategory">
         <value xml:lang="de">Kategorie bearbeiten</value>
         <value xml:lang="en">Edit Category</value>
-        <value xml:lang="es">Editar Categoría</value>
+        <value xml:lang="es">Editar categoría</value>
         <value xml:lang="fr">Modification de la catégorie</value>
         <value xml:lang="it">Aggiorna Categoria</value>
         <value xml:lang="nl">Wijzig categorie</value>
@@ -10110,7 +10110,7 @@
     <property key="ProductEditCategoryWithCategoryId">
         <value xml:lang="de">Kategorie bearbeiten mit der Kategorie ID</value>
         <value xml:lang="en">Edit Category with Category ID</value>
-        <value xml:lang="es">Editar Categoría con Código</value>
+        <value xml:lang="es">Editar categoría con código</value>
         <value xml:lang="fr">Modification de la catégorie (saisir ou rechercher sa référence)</value>
         <value xml:lang="it">Aggiorna Categoria con Codice Categoria</value>
         <value xml:lang="nl">Wijzigen categorie met [ID]</value>
@@ -10199,7 +10199,7 @@
     <property key="ProductEditProduct">
         <value xml:lang="de">Produkt bearbeiten</value>
         <value xml:lang="en">Edit Product</value>
-        <value xml:lang="es">Editar Producto</value>
+        <value xml:lang="es">Editar producto</value>
         <value xml:lang="fr">Modification de l'article</value>
         <value xml:lang="it">Aggiorna Prodotto</value>
         <value xml:lang="nl">Wijzig product</value>
@@ -10229,7 +10229,7 @@
     <property key="ProductEditProductWithProductId">
         <value xml:lang="de">Produkt bearbeiten mit der Produkt ID</value>
         <value xml:lang="en">Edit Product with Product ID</value>
-        <value xml:lang="es">Editar Producto con Código</value>
+        <value xml:lang="es">Editar producto con código</value>
         <value xml:lang="fr">Modification de l'article (saisir ou rechercher sa référence)</value>
         <value xml:lang="it">Aggiorna Prodotto con Codice Prodotto</value>
         <value xml:lang="nl">Wijzigen product met [ID]</value>
@@ -11020,7 +11020,7 @@
     <property key="ProductFastLoadCatalogIntoCache">
         <value xml:lang="de">Katalog sofort in den Cache laden</value>
         <value xml:lang="en">Fast Load Catalog into Cache</value>
-        <value xml:lang="es">Carga rápida del Catálogo en el caché</value>
+        <value xml:lang="es">Carga rápida del catálogo en el caché</value>
         <value xml:lang="fr">Chargement rapide d'article dans le cache</value>
         <value xml:lang="it">Caricamento Veloce Catalogo nella Cache</value>
         <value xml:lang="nl">Catalogus in cache laden</value>
@@ -11323,7 +11323,7 @@
     <property key="ProductFindProductWithIdValue">
         <value xml:lang="de">Produkt suchen nach Artikel-Nr.</value>
         <value xml:lang="en">Find Product with ID Value</value>
-        <value xml:lang="es">Buscar producto con Código</value>
+        <value xml:lang="es">Buscar producto con código</value>
         <value xml:lang="fr">Recherche d'un article avec sa référence</value>
         <value xml:lang="it">Ricerca Prodotto con Valore Codice</value>
         <value xml:lang="nl">Zoeken product met [ID]</value>
@@ -16112,14 +16112,16 @@
     </property>
     <property key="ProductProductCategoryName">
         <value xml:lang="en">Product Category Name</value>
+        <value xml:lang="es">Nombre</value>
     </property>
     <property key="ProductProductCategoryDescription">
         <value xml:lang="en">Product Category Description</value>
+        <value xml:lang="es">Descripción</value>
     </property>
     <property key="ProductProductCategoryId">
         <value xml:lang="de">Produktkategorie ID</value>
         <value xml:lang="en">Product Category ID</value>
-        <value xml:lang="es">Código de Categoría de Productos</value>
+        <value xml:lang="es">Código de categoría de productos</value>
         <value xml:lang="fr">Réf. de la catégorie d'article</value>
         <value xml:lang="it">Codice Categoria Prodotto</value>
         <value xml:lang="ro">Cod Categorie Produs</value>
@@ -16141,7 +16143,7 @@
     <property key="ProductProductCategoryType">
         <value xml:lang="de">Produktkategorie Typ</value>
         <value xml:lang="en">Product Category Type</value>
-        <value xml:lang="es">Tipo de Categoría de productos</value>
+        <value xml:lang="es">Tipo </value>
         <value xml:lang="fr">Type de catégorie</value>
         <value xml:lang="it">Tipo Categoria Prodotto</value>
         <value xml:lang="ro">Tip Categorie Produs</value>
@@ -16233,7 +16235,7 @@
     <property key="ProductProductId">
         <value xml:lang="de">Produkt ID</value>
         <value xml:lang="en">Product ID</value>
-        <value xml:lang="es">Código de Producto</value>
+        <value xml:lang="es">Código de poducto</value>
         <value xml:lang="fr">Réf. de l'article</value>
         <value xml:lang="it">Codice Prodotto</value>
         <value xml:lang="ro">Cod Produs</value>
@@ -18417,7 +18419,7 @@
     <property key="ProductSearchProducts">
         <value xml:lang="de">Produkte suchen</value>
         <value xml:lang="en">Search Products</value>
-        <value xml:lang="es">Buscar Productos</value>
+        <value xml:lang="es">Buscar productos</value>
         <value xml:lang="fr">Rechercher l'article</value>
         <value xml:lang="it">Ricerca Prodotti</value>
         <value xml:lang="nl">Zoeken producten</value>

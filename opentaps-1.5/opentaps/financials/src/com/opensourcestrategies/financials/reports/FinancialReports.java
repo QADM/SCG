@@ -866,7 +866,7 @@ public final class FinancialReports {
             }
 
             UtilAccountingTags.addTagParameters(request, ctxt);
-            Map<String, Object> results = dispatcher.runSync("getComparativeIncomeStatement", dispatcher.getDispatchContext().makeValidContext("getComparativeIncomeStatement", ModelService.IN_PARAM, ctxt));
+            Map<String, Object> results = dispatcher.runSync("getEstadoDeActividades", dispatcher.getDispatchContext().makeValidContext("getEstadoDeActividades", ModelService.IN_PARAM, ctxt));
 
             Map<String, Object> set1IncomeStatement = (Map<String, Object>) results.get("set1IncomeStatement");
             Map<String, Object> set2IncomeStatement = (Map<String, Object>) results.get("set2IncomeStatement");
@@ -898,7 +898,7 @@ public final class FinancialReports {
                 row.put("accountCode", account.get("accountCode"));
                 row.put("accountName", account.get("accountName"));
                 row.put("accountSumLeft", montoLeft.divide(mil));
-                row.put("cumulativeIncomeName", obtenNombreCta(account.getString("glAccountClassId"),locale));
+                row.put("cumulativeIncomeName", obtenNombreCtaActiv(account.getString("glAccountClassId"),locale,delegator));
                 row.put("accountSumRight", montoRight.divide(mil));
                 row.put("accountSumDiff", montoDiff.divide(mil));
                 rows.add(row);
@@ -1062,21 +1062,27 @@ public final class FinancialReports {
      * Obtiene el nombre de los grupos de cuentas de Ingresos y Egresos
      * @param nombreClase
      * @param locale
+     * @param delegator 
      * @return
+     * @throws GenericEntityException 
      */
-    private static String obtenNombreCta(String nombreClase,Locale locale){
+    private static String obtenNombreCtaActiv(String nombreClase,Locale locale, Delegator delegator) throws GenericEntityException{
+    	
+        GenericValue glAccountClass = delegator.findByPrimaryKeyCache("GlAccountClass", UtilMisc.toMap("glAccountClassId", "EXPENSE"));
+        List<String> ids = new ArrayList<String>();
+        UtilFinancial.recurseGetGlAccountClassIds(glAccountClass, ids);
     	
     	ResourceBundleMapWrapper uiLabelMap = UtilMessage.getUiLabels(locale);
     	String nombre = new String();
     	
-    	//Ingresos
-    	if(nombreClase.equals("REVENUE") || nombreClase.equals("INCOME")){
-    		
-    		nombre = uiLabelMap.get("AccountingRevenue").toString();
-    		
-    	} else{
+    	//Egresos
+    	if(ids.contains(nombreClase)){
     		
     		nombre = uiLabelMap.get("AccountingExpenses").toString();
+    		
+    	} else{ //Ingresos
+    		
+    		nombre = uiLabelMap.get("AccountingRevenue").toString();
     		
     	}
     	

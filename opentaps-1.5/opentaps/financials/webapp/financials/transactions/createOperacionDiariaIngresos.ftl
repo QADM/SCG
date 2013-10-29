@@ -41,11 +41,7 @@
       <tr>
         <@displayTitleCell title=uiLabelMap.FinancialsSequence titleClass="requiredField"/>
         <@inputTextCell name="Secuencia" maxlength=20  />
-      </tr>
-      <tr>
-        <@displayTitleCell title=uiLabelMap.FinancialsKeyBudget titleClass="requiredField"/>
-        <@inputTextCell name="Cve_Presupuestal" maxlength=100   />
-      </tr>      
+      </tr>         
       <tr>
         <@displayTitleCell title=uiLabelMap.FinancialsProductCredit />
         <@inputSelectCell list=listProducts?if_exists displayField="description" name="Id_Producto_Abono" default=productId?if_exists key="productId" required=false />
@@ -55,32 +51,32 @@
         <@inputSelectCell list=listProducts?if_exists displayField="description" name="Id_Producto_Cargo" default=productId?if_exists key="productId" required=false />
       </tr>      
       <tr>
-        <@displayTitleCell title=uiLabelMap.FinancialsN5 />
-        <@inputSelectCell list=listN5?if_exists displayField="description" name="N5" default=productCategoryId?if_exists key="productCategoryId"/>
+        <@displayTitleCell title=uiLabelMap.FinancialsN5 titleClass="requiredField"/>
+        <@inputSelectCell list=listN5?if_exists displayField="description" name="N5" default=productCategoryId?if_exists key="productCategoryId" />
       </tr>
       <tr>
-      	<@displayTitleCell title=uiLabelMap.FinancialsFederalEntity />
+      	<@displayTitleCell title=uiLabelMap.FinancialsFederalEntity titleClass="requiredField"/>
       	<@padresGeo name="EntidadFederativa" geoCode="MEX" hijoName="Region" nietos="Municipio,Localidad"/>
       </tr>
       <tr>
-      	<@displayTitleCell title=uiLabelMap.FinancialsRegion />
+      	<@displayTitleCell title=uiLabelMap.FinancialsRegion titleClass="requiredField"/>
       	<@padresGeo name="Region" hijoName="Municipio" nietos="Localidad"/>
       </tr>
       <tr>
-      	<@displayTitleCell title=uiLabelMap.FinancialsTown />
+      	<@displayTitleCell title=uiLabelMap.FinancialsTown titleClass="requiredField"/>
       	<@padresGeo name="Municipio" hijoName="Localidad"/>
       </tr>
       <tr>
-      	<@displayTitleCell title=uiLabelMap.FinancialsLocality />
+      	<@displayTitleCell title=uiLabelMap.FinancialsLocality titleClass="requiredField"/>
       	<@padresGeo name="Localidad" />
       </tr>  
       </tr>
       <tr>
-      	<@displayTitleCell title=uiLabelMap.FinancialsUnderSpecificSource />
+      	<@displayTitleCell title=uiLabelMap.FinancialsUnderSpecificSource titleClass="requiredField"/>
         <@inputSelectCell list=listaSubfuente?if_exists displayField="description" name="Sub_Fuente_Especifica" default=enumId?if_exists key="enumId"/>
       </tr>
       <tr>
-      	<@displayTitleCell title=uiLabelMap.FinancialsExecutingUnit />
+      	<@displayTitleCell title=uiLabelMap.FinancialsExecutingUnit titleClass="requiredField"/>
         <@inputSelectCell list=listaUnidades?if_exists displayField="groupName" name="Unidad_Ejecutora" default=partyId?if_exists key="partyId"/>
       </tr>
      <tr>

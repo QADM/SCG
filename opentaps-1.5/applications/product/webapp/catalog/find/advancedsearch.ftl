@@ -114,7 +114,7 @@ under the License.
         </tr>
         <tr>
           <td class="label" align="right" valign="top">
-            ${uiLabelMap.ProductFeatureCategory} ${uiLabelMap.CommonIds}:
+            ${uiLabelMap.ProductFeatureCategory} códigos:
           </td>
           <td valign="middle">
             <div>
@@ -139,7 +139,7 @@ under the License.
         </tr>
         <tr>
           <td class="label" align="right" valign="top">
-            ${uiLabelMap.ProductFeatureGroup} ${uiLabelMap.CommonIds}:
+            ${uiLabelMap.ProductFeatureGroup} códigos:
           </td>
           <td valign="middle">
             <div>
@@ -165,7 +165,7 @@ under the License.
 
         <tr>
           <td class="label" align="right" valign="top">
-            ${uiLabelMap.ProductFeatures} ${uiLabelMap.CommonIds}:
+            ${uiLabelMap.ProductFeatures} códigos:
           </td>
           <td valign="middle">
             <div>

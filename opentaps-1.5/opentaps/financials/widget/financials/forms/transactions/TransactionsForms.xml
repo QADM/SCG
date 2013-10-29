@@ -68,29 +68,50 @@
 
      <form name="viewAcctgTrans" type="single" target="updateAcctgTransForm" default-map-name="acctgTrans"
         default-title-style="tableheadtext" default-widget-style="tabletext" default-tooltip-style="tabletext">
-        <auto-fields-entity entity-name="AcctgTrans" default-field-type="display"/>
-
+       <!--   <auto-fields-entity entity-name="AcctgTrans" default-field-type="display"/>-->
+		<field name="acctgTransId" title="${uiLabelMap.FinancialsTransactionId}">
+            <display/>
+        </field>
         <field name="acctgTransTypeId" title="${uiLabelMap.FinancialsTransactionType}">
             <display-entity entity-name="AcctgTransType" />
         </field>
-        <field name="partyId" widget-area-style="linktext">
+        <field name="transactionDate" title="${uiLabelMap.FinancialsTransactionDate1}">
+            <display/>
+        </field>
+        <field name="isPosted" title="${uiLabelMap.FinancialsTransactionPosted}">
+            <display/>
+        </field>
+        <field name="postedDate" title="${uiLabelMap.FinancialsTransactionPostedDate}">
+            <display/>
+        </field>
+        <field name="scheduledPostedDate" title="${uiLabelMap.FinancialsTransactionScheduledPostedDate}">
+            <display/>
+        </field>
+        <field name="glFiscalType" title="${uiLabelMap.FinancialsTransactionGlFiscalType}">
+            <display/>
+        </field>
+        <field name="inventoryItemId" title="${uiLabelMap.FinancialsTransactionInventoryItemId}">
+            <display/>
+        </field>
+        <field name="parentAcctgTransId" title="${uiLabelMap.FinancialsTransactionParentAcctgTransId}">
+            <display/>
+        </field>
+        <field name="postedAmount" title="${uiLabelMap.FinancialsTransactionPostedAmount}">
+            <display/>
+        </field>
+        <field name="partyId" widget-area-style="linktext" title="${uiLabelMap.FinancialsTransactionsPartyId}">
             <display description="${groovy:org.ofbiz.party.party.PartyHelper.getPartyName(delegator, acctgTrans.get(&quot;partyId&quot;), false)} (${acctgTrans.partyId})"/>
         </field>
-        <field name="invoiceId" widget-area-style="linktext">
-            <hyperlink description="${acctgTrans.invoiceId}" target="viewInvoice">
-                <parameter param-name="invoiceId" from-field="acctgTrans.invoiceId"/>
-            </hyperlink>
+        <field name="workEffortId" title="${uiLabelMap.FinancialsTransactionWorkEffortId}">
+            <display/>
         </field>
-        <field name="inventoryItemId" widget-area-style="linktext">
-            <hyperlink description="${acctgTrans.inventoryItemId}" target="/facility/control/EditInventoryItem" target-type="inter-app">
-                <parameter param-name="inventoryItemId" from-field="acctgTrans.inventoryItemId"/>
-            </hyperlink>
+        <field name="createdTxStamp" title="${uiLabelMap.FinancialsTransactionCreated}">
+            <display/>
         </field>
-        <field name="paymentId" widget-area-style="linktext">
-            <hyperlink description="${acctgTrans.paymentId}" target="viewPayment">
-                <parameter param-name="paymentId" from-field="acctgTrans.paymentId"/>
-            </hyperlink>
+        <field name="lastUpdatedTxStamp" title="${uiLabelMap.FinancialsTransactionUpdated}">
+            <display/>
         </field>
+
     </form>
     
     <form name="viewAcctgTransIng" type="single" target="updateAcctgTransForm" default-map-name="acctgTransPresupuestalIng"
@@ -129,7 +150,7 @@
                 </entity-options>
             </drop-down>
         </field>
-        <field name="transactionDate" encode-output="false"><date-time/></field>
+        <field name="transactionDate"  title="${uiLabelMap.FinancialsTransactionDate1}" encode-output="false"><date-time/></field>
         <field name="partyId" title="${uiLabelMap.PartyPartyId}">
             <!-- TODO: need lookup controller and maybe screen/form -->
             <lookup target-form-name="LookupPartyName" size="20" maxlength="20"/>
@@ -157,7 +178,7 @@
 
     <form name="createAcctgTransForm" type="single" target="createAcctgTrans"
         default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
-        <auto-fields-service service-name="createAcctgTrans"/>
+        <!--   <auto-fields-service service-name="createAcctgTrans"/>-->
         <field name="acctgTransTypeId" title="${uiLabelMap.FinancialsTransactionType}">
             <drop-down allow-empty="false" current="selected">
                 <entity-options description="${description}" entity-name="AcctgTransType">
@@ -165,8 +186,15 @@
                 </entity-options>
             </drop-down>
         </field>
+
         <field name="transactionDate" encode-output="false"><date-time default-value="${groovy:org.ofbiz.base.util.UtilDateTime.nowTimestamp()}"/></field>
-        <field name="partyId" title="${uiLabelMap.PartyPartyId}">
+          <field name="postedDate" title="${uiLabelMap.FinancialsTransactionPostedDate}"  encode-output="false"><date-time default-value="${groovy:org.ofbiz.base.util.UtilDateTime.nowTimestamp()}"/></field>
+         <field name="scheduledPostedDate" title="${uiLabelMap.FinancialsTransactionScheduledPostedDate}"  encode-output="false"><date-time default-value="${groovy:org.ofbiz.base.util.UtilDateTime.nowTimestamp()}"/></field>
+       <field name="parentAcctgTransId" title="${uiLabelMap.FinancialsTransactionParentAcctgTransId}"  encode-output="false"><text/></field>
+      <field name="postedAmount" title="${uiLabelMap.FinancialsTransactionPostedAmount}"  encode-output="false"><text/></field>
+       <field name="workEffortId" title="${uiLabelMap.FinancialsTransactionWorkEffortId}"  encode-output="false"><text/></field>
+       <field name="inventoryItemId" title="${uiLabelMap.FinancialsTransactionInventoryItemId}"   encode-output="false"><text/></field>
+        <field name="partyId" title="${uiLabelMap.FinancialsTransactionsPartyId}">
             <lookup target-form-name="LookupPartyName" size="20" maxlength="20"/>
         </field>
         <field name="glFiscalTypeId" title="${uiLabelMap.FinancialsGlFiscalType}">
@@ -227,7 +255,7 @@
 
     <form name="createAcctgTransEntryForm" type="single" target="createAcctgTransEntry"
         default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
-        <auto-fields-service service-name="createAcctgTransEntry"/>
+     <!--    <auto-fields-service service-name="createAcctgTransEntry"/>-->
         <field name="debitCreditFlag">
             <drop-down allow-empty="false">
                 <option key="D" description="Debit"/>
@@ -242,7 +270,31 @@
                 </entity-options>
             </drop-down>
         </field>
+		 <field name="acctgTransTypeId" title="${uiLabelMap.FinancialsTransactionType}">
+            <drop-down allow-empty="false" current="selected">
+                <entity-options description="${description}" entity-name="AcctgTransType">
+                    <entity-order-by field-name="description"/>
+                </entity-options>
+            </drop-down>
+        </field>
 
+        <field name="transactionDate" encode-output="false"><date-time default-value="${groovy:org.ofbiz.base.util.UtilDateTime.nowTimestamp()}"/></field>
+          <field name="postedDate" title="${uiLabelMap.FinancialsTransactionPostedDate}"  encode-output="false"><date-time default-value="${groovy:org.ofbiz.base.util.UtilDateTime.nowTimestamp()}"/></field>
+         <field name="scheduledPostedDate" title="${uiLabelMap.FinancialsTransactionScheduledPostedDate}"  encode-output="false"><date-time default-value="${groovy:org.ofbiz.base.util.UtilDateTime.nowTimestamp()}"/></field>
+       <field name="parentAcctgTransId" title="${uiLabelMap.FinancialsTransactionParentAcctgTransId}"  encode-output="false"><text/></field>
+      <field name="postedAmount" title="${uiLabelMap.FinancialsTransactionPostedAmount}"  encode-output="false"><text/></field>
+       <field name="workEffortId" title="${uiLabelMap.FinancialsTransactionWorkEffortId}"  encode-output="false"><text/></field>
+       <field name="inventoryItemId" title="${uiLabelMap.FinancialsTransactionInventoryItemId}"   encode-output="false"><text/></field>
+        <field name="partyId" title="${uiLabelMap.FinancialsTransactionsPartyId}">
+            <lookup target-form-name="LookupPartyName" size="20" maxlength="20"/>
+        </field>
+        <field name="glFiscalTypeId" title="${uiLabelMap.FinancialsGlFiscalType}">
+            <drop-down allow-empty="false" current="selected">
+                <entity-options description="${description}" entity-name="GlFiscalType">
+                    <entity-order-by field-name="description"/>
+                </entity-options>
+            </drop-down>
+        </field>
         <field name="submitButton" title="${uiLabelMap.CommonCreate}" widget-style="smallSubmit">
             <submit button-type="button"/>
         </field>
