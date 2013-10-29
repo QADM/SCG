@@ -121,5 +121,8 @@
     <ContextHelpResource contextHelpResourceId="FINCONFIG6" screenName="organizationTimePeriods" applicationName="financials" remotePageName="Time_Period_Screen" remotePageVersion="0" />
     <ContextHelpResource contextHelpResourceId="FINCONFIG7" screenName="configureOrganization" applicationName="financials" remotePageName="View_Configuration_Screen" remotePageVersion="0" />
     <ContextHelpResource contextHelpResourceId="FINCONFIG8" screenName="configurationMain" applicationName="financials" remotePageName="Chart_of_Accounts_Screen" remotePageVersion="0" />
+    <!-- Estructura de clasificaciones -->
+    <ContextHelpResource contextHelpResourceId="FINCONFIG9" screenName="classificationTagsUsage" applicationName="financials" remotePageName="Accounting_Tags_Usage_Screen" remotePageVersion="0" />
+    
     
 </entity-engine-xml>
