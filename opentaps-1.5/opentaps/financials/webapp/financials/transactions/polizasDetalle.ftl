@@ -43,6 +43,9 @@
 <#assign sec=""/>
 <#assign subsec=""/>
 <#assign ar=""/>
+
+
+
 <#list mapTransPresupPol?keys as poliza>
 		<#if mapTransPresupPol.get(poliza)??>
 						<#if poliza=="tipoPoliza">
@@ -137,15 +140,14 @@
 		</#if>
 </#list>
 	<#assign administrativa=ur+","+uo+","+ue+","/>
-	<#assign funcional=funcion+","+subfun+","+final+","/>
-	<#assign programatica=pp+","+ppl+","+spp+","+act+","/>
+	<#assign funcional=final+","+funcion+","+subfun+","/>
+	<#assign programatica=ppl+","+pp+","+spp+","+act+","/>
 	<#assign TOG=tg+","+cap+","+con+","+pg+","+pe+","/>
 	<#assign fuenteRecursos=fu+","+sfu+","+sfue+","/>
 	<#assign geografica=ef+","+reg+","+mun+","+loc+","/>
 	<#assign sectorial=sec+","+subsec+","+ar+","/>
 	<#assign catAux=ip+","+iph+","+ipd+","/>
 	<#assign rIngresos=rub+","+clas+","+conrub+","+n5+","+desc+","/>
-
 
 <!--
 	<#list mapTransPresupPol?keys as poliza>
@@ -157,7 +159,7 @@
 			</#if>
 			
 	</#list>
--->
+	-->
 
 <script type="text/javascript">
 	var administrativa='${administrativa}';
@@ -175,7 +177,7 @@
 		for(i=0;i<cadena.length;i++){
 			if(cadena.charAt(i)!=",")
 				cadenaTemp+=cadena.charAt(i);
-			if(cadena.charAt(i)==","){
+			if(cadena.charAt(i)==","&&cadena.charAt(i+1)!=","){
 				document.write("<br><font size=1 >"+cadenaTemp+"</font></br>");
 				cadenaTemp="";
 			}
@@ -185,7 +187,9 @@
 <table width=100%>
 			<tr><td align="center"><b>${poliza}</b></td></tr>
 			<tr><td colspan="2" ><table width=100%>
-							<tr><td><script type="text/javascript">
+							<th><font size=2>Información General</font></th>
+							<tr><td>
+							<script type="text/javascript">
 									imprime(rIngresos);
 								</script></td></tr>
 						</table width=100%></td>
@@ -257,8 +261,10 @@
 					<td >
 						<table width=100%>
 							<th><font size=2>Catálogos Auxiliares</font></th>
+							
 							<tr><td><script type="text/javascript">
-									imprime(catAUX);
+								
+									imprime(catAux);
 								</script></td></tr>
 						</table>
 					</td>

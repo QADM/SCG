@@ -4,12 +4,15 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 
 import javolution.util.FastList;
 import javolution.util.FastMap;
 
 import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
@@ -23,6 +26,7 @@ import org.ofbiz.service.ModelService;
 import org.ofbiz.service.ServiceUtil;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
+import org.opentaps.foundation.action.ActionContext;
 import org.opentaps.foundation.service.ServiceException;
 
 public class UtilOperacionDiariaServices {
@@ -1075,4 +1079,51 @@ public class UtilOperacionDiariaServices {
         return results;
     }
 
+    
+    /*
+	 * Generar automaticamente clave presupuestal
+	 * @param Map 
+	 * @param dispatcher
+	 * return String clave Presupuestal
+	 */
+	public static String getClavePresupuestal(Map context,
+			LocalDispatcher dispatcher) {
+		final ActionContext ac = new ActionContext(context);
+        final Locale locale = ac.getLocale();
+        final TimeZone timeZone = ac.getTimeZone();
+		String clavePresupuestal = null; 
+		
+		try {
+			Debug.log("Entro getClavePresupuestal ", MODULE);
+			
+			Timestamp fecContable = (Timestamp) context.get("Fecha_Contable");
+			
+			String ciclo = String.valueOf(UtilDateTime.getYear(fecContable, timeZone, locale)).substring(2);;
+			String UE = (String) context.get("Unidad_Ejecutora");
+			String subFuncion= (String) context.get("Subfuncion");
+			String actividad = (String) context.get("Actividad");
+			String PE = (String) context.get("Partida_Especifica");
+			String SubFuenteEspecifica = (String) context.get("Sub_Fuente_Especifica");
+			String Localidad = (String) context.get("Localidad");
+			String area = (String) context.get("Area");
+			String nivel5 = (String) context.get("N5");
+		
+			if(subFuncion == null)
+			{				
+				clavePresupuestal = ciclo + UE + nivel5 + SubFuenteEspecifica
+						+ Localidad;			
+			}
+			else
+			{
+				clavePresupuestal = ciclo + UE + subFuncion + actividad + PE
+						+ SubFuenteEspecifica + Localidad + area;
+			}
+			Debug.log("Entro getClavePresupuestal clave presupuestal" + clavePresupuestal, MODULE);
+			
+		} catch (Exception e) {
+			
+			Debug.log("Error al crear clave presupuestaria " + e, MODULE);			
+		}
+		return clavePresupuestal;
+	}
 }

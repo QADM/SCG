@@ -54,6 +54,8 @@ import org.opentaps.foundation.infrastructure.User;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.service.ServiceException;
 
+import com.opensourcestrategies.financials.util.UtilBudget;
+
 
 /**
  * TransactionActions - Java Actions for Transactions.
@@ -293,7 +295,7 @@ public class TransactionBudget {
 			String Localidad = (String) context.get("Localidad");
 			String fechaTransaccion = (String) context.get("fechaTransaccion");
 			String fechaContable = (String) context.get("fechaContable");
-			String clave = (String) context.get("clave");
+			String clave = UtilBudget.getClavePresupuestal(context, dispatcher); 
 			String monto = (String) context.get("monto");
 			String referencia = (String) context.get("referencia");
 			String descripcion = (String) context.get("description");
@@ -328,8 +330,8 @@ public class TransactionBudget {
 			Organization organization = organizationRepository
 					.getOrganizationById(organizationPartyId);
 
-			Date fechaTrasac = getDateTransaction(fechaTransaccion);
-			Date fechaConta = getDateTransaction(fechaContable);
+			Date fechaTrasac = UtilBudget.getDateTransaction(fechaTransaccion);
+			Date fechaConta = UtilBudget.getDateTransaction(fechaContable);
 			
 			// create the accounting transaction
 			String glFiscalType = getAcctgTransTypeId("TINGRESOESTIMADO", dispatcher);
@@ -451,6 +453,8 @@ public class TransactionBudget {
 			return UtilMessage.createAndLogServiceError(e, MODULE);
 		}
 	}
+
+	
 
 	private static void glOrganizationHistory(String debitGlAccountId,
 			String creditGlAccountId, DispatchContext dctx,
@@ -643,20 +647,7 @@ public class TransactionBudget {
 
 	}
 
-	private static Date getDateTransaction(String Fecha) {
-
-		// 21/08/13 12:49:00
-		Debug.log(Fecha);
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
-
-		try {
-			return sdf.parse(Fecha);
-		} catch (ParseException e) {
-			String msg = "Error al hacer el parse en la fecha " + e;
-			Debug.log(msg);
-			return null;
-		}
-	}
+	
 
 	private static Map<String, Object> createAcctgPresupuestal(Map context,
 			String acctgTransId, DispatchContext dctx) {
@@ -676,45 +667,45 @@ public class TransactionBudget {
 
 			String fechaContable = (String) context.get("fechaContable");
 			String UE = (String) context.get("unidadEjecutora");
-			String UO = getParentParty(UE, dispatcher);
-			String UR = getParentParty(UO, dispatcher);
+			String UO = UtilBudget.getParentParty(UE, dispatcher);
+			String UR = UtilBudget.getParentParty(UO, dispatcher);
 			
 			String nivel5 = (String) context.get("idN5");
-			String conceptoRUB = getParentProductCategory(nivel5, dispatcher);
-			String clase = getParentProductCategory(conceptoRUB, dispatcher);
-			String tipo = getParentProductCategory(clase, dispatcher);
-			String rubro = getParentProductCategory(tipo, dispatcher);
+			String conceptoRUB = UtilBudget.getParentProductCategory(nivel5, dispatcher);
+			String clase = UtilBudget.getParentProductCategory(conceptoRUB, dispatcher);
+			String tipo = UtilBudget.getParentProductCategory(clase, dispatcher);
+			String rubro = UtilBudget.getParentProductCategory(tipo, dispatcher);
 
 			String SubFuenteEspecifica = (String) context.get("subFuenteEsp");
-			String SubFuente = getParentEnumeration(SubFuenteEspecifica,
+			String SubFuente = UtilBudget.getParentEnumeration(SubFuenteEspecifica,
 					dispatcher);
-			String Fuente = getParentEnumeration(SubFuente, dispatcher);
+			String Fuente = UtilBudget.getParentEnumeration(SubFuente, dispatcher);
 			
 			String subFuncion = (String) context.get("subfuncion");
-			String funcion = getParentEnumeration(subFuncion, dispatcher);
-			String finalidad = getParentEnumeration(funcion, dispatcher);
+			String funcion = UtilBudget.getParentEnumeration(subFuncion, dispatcher);
+			String finalidad = UtilBudget.getParentEnumeration(funcion, dispatcher);
 			
 			String actividad = (String) context.get("actividad");
-			String subprogramap = getParentWorkEffort(actividad, dispatcher);
-			String programa = getParentWorkEffort(subprogramap, dispatcher);
-			String plan = getParentWorkEffort(programa, dispatcher);
+			String subprogramap = UtilBudget.getParentWorkEffort(actividad, dispatcher);
+			String programa = UtilBudget.getParentWorkEffort(subprogramap, dispatcher);
+			String plan = UtilBudget.getParentWorkEffort(programa, dispatcher);
 			
 			String PE = (String) context.get("partidaEspecifica");
-			String PG = getParentProductCategory(PE, dispatcher);
-			String conceptoPG = getParentProductCategory(PG, dispatcher);
-			String capitulo = getParentProductCategory(conceptoPG, dispatcher);
+			String PG = UtilBudget.getParentProductCategory(PE, dispatcher);
+			String conceptoPG = UtilBudget.getParentProductCategory(PG, dispatcher);
+			String capitulo = UtilBudget.getParentProductCategory(conceptoPG, dispatcher);
 			
 			String area = ((String) context.get("area"));
-			String subSector = getParentEnumeration(area, dispatcher);
-			String sector = getParentEnumeration(subSector, dispatcher);
+			String subSector = UtilBudget.getParentEnumeration(area, dispatcher);
+			String sector = UtilBudget.getParentEnumeration(subSector, dispatcher);
 			
 
 			AcctgTransPresupuestal presupuestal = new AcctgTransPresupuestal();
 			presupuestal.initRepository(ledgerRepository);
 
 			presupuestal.setAcctgTransId(acctgTransId);
-			presupuestal.setClavePres((String) context.get("clave"));
-			presupuestal.setCiclo(String.valueOf((getDateTransaction(
+			presupuestal.setClavePres(UtilBudget.getClavePresupuestal(context, dispatcher));
+			presupuestal.setCiclo(String.valueOf((UtilBudget.getDateTransaction(
 					fechaContable).getYear() + 1900)));
 			presupuestal.setUnidadResponsable(UR);
 			presupuestal.setUnidadOrganizacional(UO);
@@ -770,122 +761,9 @@ public class TransactionBudget {
 		}
 	}
 
-	private static String getParentProductCategory(String id,
-			LocalDispatcher dispatcher) {
-		String parentProduct = null;
-		try {
-			
-			EntityCondition condicion = EntityCondition.makeCondition("productCategoryId",
-					id);
-			List<GenericValue> workeffort = dispatcher.getDelegator()
-					.findByCondition("ProductCategory", condicion,
-							UtilMisc.toList("productCategoryId", "primaryParentCategoryId"), null);
-
-			for (GenericValue genericValue : workeffort) {
-				if(genericValue.get("primaryParentCategoryId") != null || !genericValue.get("primaryParentCategoryId").toString().equals(""))
-				{
-					Debug.log("productCategoryId" + genericValue.get("productCategoryId").toString());
-					Debug.log("primaryParentCategoryId"
-							+ genericValue.get("primaryParentCategoryId").toString());
-					
-					parentProduct = genericValue.get("primaryParentCategoryId").toString();
-				}
-				
-			}
-			
-		} catch (Exception e) {
-			Debug.log("Error al obtener Parent de ProductCategory Id ["
-					+ parentProduct + "] " + e);
-		}
-		return parentProduct;
-	}
-
-	private static String getParentWorkEffort(String id,
-			LocalDispatcher dispatcher) {
-		
-		String parentwork = null;
-		try {
-			
-			EntityCondition condicion = EntityCondition.makeCondition("workEffortId",
-					id);
-			List<GenericValue> workeffort = dispatcher.getDelegator()
-					.findByCondition("WorkEffort", condicion,
-							UtilMisc.toList("workEffortId", "workEffortParentId"), null);
-
-			for (GenericValue genericValue : workeffort) {
-				if(genericValue.get("workEffortParentId") != null || !genericValue.get("workEffortParentId").toString().equals(""))
-				{
-					Debug.log("workEffortId" + genericValue.get("workEffortId").toString());
-					Debug.log("workEffortParentId"
-							+ genericValue.get("workEffortParentId").toString());
-					
-					parentwork = genericValue.get("workEffortParentId").toString();
-				}
-				
-			}
-			
-		} catch (Exception e) {
-			Debug.log("Error al obtener Parent de WorkEffort Id ["
-					+ parentwork + "] " + e);
-		}
-		return parentwork;
-
-	}
-
-	private static String getParentEnumeration(String subFuenteEspecificaId,
-			LocalDispatcher dispatcher) {
-		String parentEnum = null;
-		try {
-
-			EntityCondition condicion = EntityCondition.makeCondition("enumId",
-					subFuenteEspecificaId);
-			List<GenericValue> enumeration = dispatcher.getDelegator()
-					.findByCondition("Enumeration", condicion,
-							UtilMisc.toList("enumId", "parentEnumId"), null);
-
-			for (GenericValue genericValue : enumeration) {
-				if(genericValue.get("parentEnumId") != null || !genericValue.get("parentEnumId").toString().equals(""))
-				{
-					Debug.log("enumId" + genericValue.get("enumId").toString());
-					Debug.log("parentEnumId"
-							+ genericValue.get("parentEnumId").toString());
-					
-					parentEnum = genericValue.get("parentEnumId").toString();
-				}
-				
-			}
-			
-		} catch (Exception e) {
-			Debug.log("Error al obtener Parent de Enumeration Id ["
-					+ subFuenteEspecificaId + "] " + e);
-		}
-		return parentEnum;
-	}
-
-	private static String getParentParty(String partyId,
-			LocalDispatcher dispatcher) {
-		String parentParty = null;
-		try {
-
-			EntityCondition condicion = EntityCondition.makeCondition(
-					"partyId", partyId);
-			List<GenericValue> partys = dispatcher.getDelegator()
-					.findByCondition("PartyGroup", condicion,
-							UtilMisc.toList("partyId", "Parent_id"), null);
-
-			for (GenericValue genericValue : partys) {
-				Debug.log("partyId" + genericValue.get("partyId").toString());
-				Debug.log("parentId" + genericValue.get("Parent_id").toString());
-				parentParty = genericValue.get("Parent_id").toString();
-			}
-
-		} catch (Exception e) {
-			Debug.log("Error al obtener Parent de Party Id [" + partyId + "] "
-					+ e);
-		}
-		return parentParty;
-	}
-
+	
+	
+	
 	public static Map createAcctgTransBugetManual(DispatchContext dctx,
 			Map context) throws GenericServiceException {
 
@@ -907,7 +785,7 @@ public class TransactionBudget {
 			AcctgTrans acctgTrans = new AcctgTrans();
 			acctgTrans.initRepository(ledgerRepository);
 			//acctgTrans.setAllFields(context);
-			Date fecha = getDateTransaction((String) context.get("transactionDate"));
+			Date fecha = UtilBudget.getDateTransaction((String) context.get("transactionDate"));
 			Timestamp timestamp = new Timestamp(fecha.getTime());
 			String acctgTransTypeId = (String) context.get("acctgTransTypeId");
 			BigDecimal postedAmount = new BigDecimal((Double) context.get("postedAmount"));
@@ -1045,7 +923,7 @@ public class TransactionBudget {
 			String Localidad = (String) context.get("Localidad");
 			String fechaTransaccion = (String) context.get("fechaTransaccion");
 			String fechaContable = (String) context.get("fechaContable");
-			String clave = (String) context.get("clave");
+			String clave = UtilBudget.getClavePresupuestal(context, dispatcher); 
 			//String monto = (String) context.get("amount");
 			String referencia = (String) context.get("referencia");
 			String descripcion = (String) context.get("description");
@@ -1080,8 +958,8 @@ public class TransactionBudget {
 			Organization organization = organizationRepository
 					.getOrganizationById(organizationPartyId);
 
-			Date fechaTrasac = getDateTransaction(fechaTransaccion);
-			Date fechaConta = getDateTransaction(fechaContable);
+			Date fechaTrasac = UtilBudget.getDateTransaction(fechaTransaccion);
+			Date fechaConta = UtilBudget.getDateTransaction(fechaContable);
 			// create the accounting transaction
 			
 			String glFiscalTypeId = getAcctgTransTypeId("TPRESUPAPROBADO", dispatcher);

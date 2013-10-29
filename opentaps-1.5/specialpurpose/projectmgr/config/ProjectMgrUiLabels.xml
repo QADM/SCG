@@ -221,7 +221,7 @@
     <property key="PageTitleAddPhase">
         <value xml:lang="de">Phase hinzufügen</value>
         <value xml:lang="en">Add Phase</value>
-         <value xml:lang="es">Crear fase</value>
+         <value xml:lang="es">Crear actividad</value>
         <value xml:lang="fr">Ajouter une phase</value>
         <value xml:lang="it">Aggiungi fase</value>
         <value xml:lang="nl">Fase toevoegen</value>
@@ -284,6 +284,7 @@
     <property key="PageTitleAddSubProject">
         <value xml:lang="de">Teilprojekt hinzufügen</value>
         <value xml:lang="en">Add Sub Project</value>
+        <value xml:lang="es">Agregar Sub-programa</value>
         <value xml:lang="fr">Ajouter un sous-projet</value>
         <value xml:lang="it">Aggiungi sotto-progetto</value>
         <value xml:lang="nl">Subproject toevoegen</value>
@@ -460,6 +461,7 @@
     <property key="PageTitleFindProject">
         <value xml:lang="de">Projekt suchen</value>
         <value xml:lang="en">Find Project</value>
+         <value xml:lang="es">Buscar proyecto</value>
         <value xml:lang="fr">Recherche de projet(s)</value>
         <value xml:lang="it">Ricerca progetto</value>
         <value xml:lang="nl">Project zoeken</value>
@@ -1277,7 +1279,7 @@
     <property key="ProjectMgrPhases">
         <value xml:lang="de">Phasen</value>
         <value xml:lang="en">Phases</value>
-        <value xml:lang="es">Fases</value>
+        <value xml:lang="es">Actividades</value>
         <value xml:lang="fr">Phases</value>
         <value xml:lang="it">Fasi</value>
         <value xml:lang="nl">Fases</value>

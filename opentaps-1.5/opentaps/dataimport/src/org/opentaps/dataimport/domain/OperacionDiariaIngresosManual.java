@@ -70,7 +70,7 @@ public class OperacionDiariaIngresosManual {
 			fecContable = (Timestamp) context.get("Fecha_Contable");
 	        String refDoc = (String) context.get("Referencia_Documento");
 	        String sec = (String) context.get("Secuencia");
-	        String cvePrespues = (String) context.get("Cve_Presupuestal");
+	        String cvePrespues = UtilOperacionDiariaServices.getClavePresupuestal(context, dispatcher); 
 	        String idProdAbono = (String) context.get("Id_Producto_Abono");
 	        String idProdCargo = (String) context.get("Id_Producto_Cargo");
 	        String n5 = (String) context.get("N5");
