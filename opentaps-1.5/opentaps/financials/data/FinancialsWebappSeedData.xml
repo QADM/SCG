@@ -219,6 +219,11 @@
                   linkUrl="accountingTagsUsage" securityModule="" securityAction=""/>
 <OpentapsShortcut shortcutId="configureOrganization" groupId="financialsConfiguration" sequenceNum="070" uiLabel="FinancialsViewConfiguration"
                   linkUrl="configureOrganization" securityModule="" securityAction=""/>
+                  
+<!-- Estructura de Clasificaciones -->
+
+<OpentapsShortcut shortcutId="classificationTagsUsage" groupId="financialsConfiguration" sequenceNum="080" uiLabel="FinancialsClassificationTagUsage"
+                  linkUrl="classificationTagsUsage" securityModule="" securityAction=""/>
 
 <!-- Reports shortcuts -->
 <OpentapsShortcutGroup applicationId="financials" tabId="reports" groupId="financialsReports" sequenceNum="010"/>
