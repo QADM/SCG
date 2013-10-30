@@ -166,8 +166,7 @@ public final class ExcelImportServices extends DomainService {
 			if (file.canRead()) {
 				return file;
 			} else {
-				Debug.logWarning("El archivo no se puede leer" + name,
-						MODULE);
+				Debug.logWarning("El archivo no se puede leer" + name, MODULE);
 				return null;
 			}
 		} else {
@@ -1017,12 +1016,21 @@ public final class ExcelImportServices extends DomainService {
 				ingreso.setIdPago(this.readStringCell(row, rowCount++));
 				ingreso.setIdProductoD(this.readStringCell(row, rowCount++));
 				ingreso.setIdProductoH(this.readStringCell(row, rowCount++));
-				ingreso.setCiclo(this.readStringCell(row, rowCount++));
-				ingreso.setUe(this.readStringCell(row, rowCount++));
-				ingreso.setN5(this.readStringCell(row, rowCount++));
-				ingreso.setSfe(this.readStringCell(row, rowCount++));
-				ingreso.setLoc(this.readStringCell(row, rowCount++));
-				ingreso.setClavePres(this.readStringCell(row, rowCount++));
+				ingreso.setClasificacion1(this.readStringCell(row, rowCount++));
+				ingreso.setClasificacion2(this.readStringCell(row, rowCount++));
+				ingreso.setClasificacion3(this.readStringCell(row, rowCount++));
+				ingreso.setClasificacion4(this.readStringCell(row, rowCount++));
+				ingreso.setClasificacion5(this.readStringCell(row, rowCount++));
+				ingreso.setClasificacion6(this.readStringCell(row, rowCount++));
+				ingreso.setClasificacion7(this.readStringCell(row, rowCount++));
+				ingreso.setClasificacion8(this.readStringCell(row, rowCount++));
+				ingreso.setClasificacion9(this.readStringCell(row, rowCount++));
+				ingreso.setClasificacion10(this.readStringCell(row, rowCount++));
+				ingreso.setClasificacion11(this.readStringCell(row, rowCount++));
+				ingreso.setClasificacion12(this.readStringCell(row, rowCount++));
+				ingreso.setClasificacion13(this.readStringCell(row, rowCount++));
+				ingreso.setClasificacion14(this.readStringCell(row, rowCount++));
+				ingreso.setClasificacion15(this.readStringCell(row, rowCount++));
 				ingresos.add(ingreso);
 			}
 		}
@@ -1076,16 +1084,21 @@ public final class ExcelImportServices extends DomainService {
 				egreso.setIdPago(this.readStringCell(row, rowCount++));
 				egreso.setIdProductoD(this.readStringCell(row, rowCount++));
 				egreso.setIdProductoH(this.readStringCell(row, rowCount++));
-				egreso.setCiclo(this.readStringCell(row, rowCount++));
-				egreso.setUe(this.readStringCell(row, rowCount++));
-				egreso.setSubf(this.readStringCell(row, rowCount++));
-				egreso.setAct(this.readStringCell(row, rowCount++));
-				egreso.setTg(this.readStringCell(row, rowCount++));
-				egreso.setPe(this.readStringCell(row, rowCount++));
-				egreso.setSfe(this.readStringCell(row, rowCount++));
-				egreso.setLoc(this.readStringCell(row, rowCount++));
-				egreso.setArea(this.readStringCell(row, rowCount++));
-				egreso.setClavePres(this.readStringCell(row, rowCount++));
+				egreso.setClasificacion1(this.readStringCell(row, rowCount++));
+				egreso.setClasificacion2(this.readStringCell(row, rowCount++));
+				egreso.setClasificacion3(this.readStringCell(row, rowCount++));
+				egreso.setClasificacion4(this.readStringCell(row, rowCount++));
+				egreso.setClasificacion5(this.readStringCell(row, rowCount++));
+				egreso.setClasificacion6(this.readStringCell(row, rowCount++));
+				egreso.setClasificacion7(this.readStringCell(row, rowCount++));
+				egreso.setClasificacion8(this.readStringCell(row, rowCount++));
+				egreso.setClasificacion9(this.readStringCell(row, rowCount++));
+				egreso.setClasificacion10(this.readStringCell(row, rowCount++));
+				egreso.setClasificacion11(this.readStringCell(row, rowCount++));
+				egreso.setClasificacion12(this.readStringCell(row, rowCount++));
+				egreso.setClasificacion13(this.readStringCell(row, rowCount++));
+				egreso.setClasificacion14(this.readStringCell(row, rowCount++));
+				egreso.setClasificacion15(this.readStringCell(row, rowCount++));
 				egresos.add(egreso);
 			}
 		}
@@ -1395,8 +1408,7 @@ public final class ExcelImportServices extends DomainService {
 				String ciclo = readStringCell(row, 0);
 
 				if (UtilValidate.isEmpty(ciclo) || ciclo.indexOf(" ") > -1
-						|| ciclo.equalsIgnoreCase("CICLO")
-						|| ciclo.equalsIgnoreCase("AÑO")) {
+						|| ciclo.equalsIgnoreCase("clasificacion1")) {
 					Debug.logWarning(
 							"Fila no. "
 									+ rowNum
@@ -1406,13 +1418,23 @@ public final class ExcelImportServices extends DomainService {
 				}
 
 				DataImportPresupuestoIngreso ingreso = new DataImportPresupuestoIngreso();
-				ingreso.setCiclo(ciclo);
 				int rowCount = 1; // keep track of the row
-				ingreso.setUe(this.readStringCell(row, rowCount++));
-				ingreso.setN5(this.readStringCell(row, rowCount++));
-				ingreso.setSfe(this.readStringCell(row, rowCount++));
-				ingreso.setLoc(this.readStringCell(row, rowCount++));
-				ingreso.setClavePres(this.readStringCell(row, rowCount++));
+				int id = 1;
+				ingreso.setClasificacion1(this.readStringCell(row, rowCount++));
+				ingreso.setClasificacion2(this.readStringCell(row, rowCount++));
+				ingreso.setClasificacion3(this.readStringCell(row, rowCount++));
+				ingreso.setClasificacion4(this.readStringCell(row, rowCount++));
+				ingreso.setClasificacion5(this.readStringCell(row, rowCount++));
+				ingreso.setClasificacion6(this.readStringCell(row, rowCount++));
+				ingreso.setClasificacion7(this.readStringCell(row, rowCount++));
+				ingreso.setClasificacion8(this.readStringCell(row, rowCount++));
+				ingreso.setClasificacion9(this.readStringCell(row, rowCount++));
+				ingreso.setClasificacion10(this.readStringCell(row, rowCount++));
+				ingreso.setClasificacion11(this.readStringCell(row, rowCount++));
+				ingreso.setClasificacion12(this.readStringCell(row, rowCount++));
+				ingreso.setClasificacion13(this.readStringCell(row, rowCount++));
+				ingreso.setClasificacion14(this.readStringCell(row, rowCount++));
+				ingreso.setClasificacion15(this.readStringCell(row, rowCount++));
 				ingreso.setUsuario(this.readStringCell(row, rowCount++));
 				ingreso.setEnero(this.readBigDecimalCell(row, rowCount++));
 				ingreso.setFebrero(this.readBigDecimalCell(row, rowCount++));
@@ -1427,7 +1449,9 @@ public final class ExcelImportServices extends DomainService {
 				ingreso.setNoviembre(this.readBigDecimalCell(row, rowCount++));
 				ingreso.setDiciembre(this.readBigDecimalCell(row, rowCount++));
 				ingreso.setAgrupador(this.readStringCell(row, rowCount++));
+				ingreso.setIdPresIng(ingreso.getAgrupador() + id);
 				ingresos.add(ingreso);
+				id++;
 			}
 		}
 
@@ -1468,17 +1492,23 @@ public final class ExcelImportServices extends DomainService {
 				}
 
 				DataImportPresupuestoEgreso egreso = new DataImportPresupuestoEgreso();
-				egreso.setCiclo(ciclo);
 				int rowCount = 1; // keep track of the row
-				egreso.setUe(this.readStringCell(row, rowCount++));
-				egreso.setSubf(this.readStringCell(row, rowCount++));
-				egreso.setAct(this.readStringCell(row, rowCount++));
-				egreso.setTg(this.readStringCell(row, rowCount++));
-				egreso.setPe(this.readStringCell(row, rowCount++));
-				egreso.setSfe(this.readStringCell(row, rowCount++));
-				egreso.setLoc(this.readStringCell(row, rowCount++));
-				egreso.setArea(this.readStringCell(row, rowCount++));
-				egreso.setClavePres(this.readStringCell(row, rowCount++));
+				int id = 1;
+				egreso.setClasificacion1(this.readStringCell(row, rowCount++));
+				egreso.setClasificacion2(this.readStringCell(row, rowCount++));
+				egreso.setClasificacion3(this.readStringCell(row, rowCount++));
+				egreso.setClasificacion4(this.readStringCell(row, rowCount++));
+				egreso.setClasificacion5(this.readStringCell(row, rowCount++));
+				egreso.setClasificacion6(this.readStringCell(row, rowCount++));
+				egreso.setClasificacion7(this.readStringCell(row, rowCount++));
+				egreso.setClasificacion8(this.readStringCell(row, rowCount++));
+				egreso.setClasificacion9(this.readStringCell(row, rowCount++));
+				egreso.setClasificacion10(this.readStringCell(row, rowCount++));
+				egreso.setClasificacion11(this.readStringCell(row, rowCount++));
+				egreso.setClasificacion12(this.readStringCell(row, rowCount++));
+				egreso.setClasificacion13(this.readStringCell(row, rowCount++));
+				egreso.setClasificacion14(this.readStringCell(row, rowCount++));
+				egreso.setClasificacion15(this.readStringCell(row, rowCount++));
 				egreso.setUsuario(this.readStringCell(row, rowCount++));
 				egreso.setEnero(this.readBigDecimalCell(row, rowCount++));
 				egreso.setFebrero(this.readBigDecimalCell(row, rowCount++));
@@ -1493,7 +1523,9 @@ public final class ExcelImportServices extends DomainService {
 				egreso.setNoviembre(this.readBigDecimalCell(row, rowCount++));
 				egreso.setDiciembre(this.readBigDecimalCell(row, rowCount++));
 				egreso.setAgrupador(this.readStringCell(row, rowCount++));
+				egreso.setIdPresEgr(egreso.getAgrupador() + id);
 				egresos.add(egreso);
+				id++;
 			}
 		}
 
@@ -1522,9 +1554,8 @@ public final class ExcelImportServices extends DomainService {
 			fs = new POIFSFileSystem(new FileInputStream(file));
 			wb = new HSSFWorkbook(fs);
 		} catch (IOException e) {
-			throw new ServiceException(
-					"No se puede leer el archivo ["
-							+ getUploadedFileName() + "] " + e.getMessage());
+			throw new ServiceException("No se puede leer el archivo ["
+					+ getUploadedFileName() + "] " + e.getMessage());
 		}
 
 		// loop through the tabs and import them one by one
@@ -1537,9 +1568,10 @@ public final class ExcelImportServices extends DomainService {
 			for (String excelTab : EXCEL_TABS) {
 				HSSFSheet sheet = wb.getSheet(excelTab);
 				if (sheet == null) {
-					Debug.logWarning("No se ha encontrado la hoja con el nombre " + excelTab
-							+ " en " + file.getName()
-							+ ". No se va a importar", MODULE);
+					Debug.logWarning(
+							"No se ha encontrado la hoja con el nombre "
+									+ excelTab + " en " + file.getName()
+									+ ". No se va a importar", MODULE);
 				} else {
 					if (EXCEL_PRODUCT_TAB.equals(excelTab)) {
 						deleteEntities("DataImportProduct");

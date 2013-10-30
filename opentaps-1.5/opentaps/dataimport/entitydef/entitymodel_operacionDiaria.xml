@@ -28,12 +28,21 @@
 		<field name="idPago" type="id-ne"></field>
 		<field name="idProductoD" type="id-ne"></field>
 		<field name="idProductoH" type="id-ne"></field>
-		<field name="ciclo" type="id-ne"></field>
-		<field name="ue" type="id-ne"></field>
-		<field name="n5" type="id-ne"></field>
-		<field name="sfe" type="id-ne"></field>
-		<field name="loc" type="id-ne"></field>
-		<field name="clavePres" type="name"></field>
+		<field name="clasificacion1" type="id-ne"></field>
+		<field name="clasificacion2" type="id-ne"></field>
+		<field name="clasificacion3" type="id-ne"></field>
+		<field name="clasificacion4" type="id-ne"></field>
+		<field name="clasificacion5" type="id-ne"></field>
+		<field name="clasificacion6" type="id-ne"></field>
+		<field name="clasificacion7" type="id-ne"></field>
+		<field name="clasificacion8" type="id-ne"></field>
+		<field name="clasificacion9" type="id-ne"></field>
+		<field name="clasificacion10" type="id-ne"></field>
+		<field name="clasificacion11" type="id-ne"></field>
+		<field name="clasificacion12" type="id-ne"></field>
+		<field name="clasificacion13" type="id-ne"></field>
+		<field name="clasificacion14" type="id-ne"></field>
+		<field name="clasificacion15" type="id-ne"></field>
 		<field name="importStatusId" type="id-ne">
 			<description>Status of record import.  Null is the same as DATAIMP_NOT_PROC.</description>
 		</field>
@@ -62,16 +71,21 @@
 		<field name="idPago" type="id-ne"></field>
 		<field name="idProductoD" type="id-ne"></field>
 		<field name="idProductoH" type="id-ne"></field>
-		<field name="ciclo" type="id-ne"></field>
-		<field name="ue" type="id-ne"></field>
-		<field name="subf" type="id-ne"></field>
-		<field name="act" type="name"></field>
-		<field name="tg" type="id-ne"></field>
-		<field name="pe" type="id-ne"></field>
-		<field name="sfe" type="id-ne"></field>
-		<field name="loc" type="id-ne"></field>
-		<field name="area" type="id-ne"></field>
-		<field name="clavePres" type="name"></field>
+		<field name="clasificacion1" type="id-ne"></field>
+		<field name="clasificacion2" type="id-ne"></field>
+		<field name="clasificacion3" type="id-ne"></field>
+		<field name="clasificacion4" type="id-ne"></field>
+		<field name="clasificacion5" type="id-ne"></field>
+		<field name="clasificacion6" type="id-ne"></field>
+		<field name="clasificacion7" type="id-ne"></field>
+		<field name="clasificacion8" type="id-ne"></field>
+		<field name="clasificacion9" type="id-ne"></field>
+		<field name="clasificacion10" type="id-ne"></field>
+		<field name="clasificacion11" type="id-ne"></field>
+		<field name="clasificacion12" type="id-ne"></field>
+		<field name="clasificacion13" type="id-ne"></field>
+		<field name="clasificacion14" type="id-ne"></field>
+		<field name="clasificacion15" type="id-ne"></field>
 		<field name="importStatusId" type="id-ne">
 			<description>Status of record import.  Null is the same as DATAIMP_NOT_PROC.</description>
 		</field>

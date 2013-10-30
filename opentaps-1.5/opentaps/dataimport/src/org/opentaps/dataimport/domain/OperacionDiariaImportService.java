@@ -176,7 +176,7 @@ public class OperacionDiariaImportService extends DomainService implements
 
 					// ACCTG_TRANS_PRESUPUESTAL
 					AcctgTransPresupuestal aux = new AcctgTransPresupuestal();
-					aux.setUnidadEjecutora(ue.getPartyId());
+//					aux.setUnidadEjecutora(ue.getPartyId());
 					aux.setAgrupador(rowdata.getRefDoc());
 					aux.setIdTipoDoc(rowdata.getIdTipoDoc());
 					aux.setSecuencia(rowdata.getSecuencia());
