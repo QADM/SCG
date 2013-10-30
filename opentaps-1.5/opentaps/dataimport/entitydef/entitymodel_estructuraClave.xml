@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<entitymodel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/entitymodel.xsd">
+    <!-- ========================================================= -->
+    <!-- ======================== Defaults ======================= -->
+    <!-- ========================================================= -->
+    <title>Structure Import Entities</title>
+    <description>Defines intermediate entities for importing structure data</description>
+    <copyright>Copyright (c) Open Source Strategies, Inc.</copyright>
+    <author>Castillo Nuñez Miguel</author>
+    <version>1.0</version>
+    
+    <!-- =========================== -->
+    <!-- org.opentaps.dataimport -->  
+    <!-- =========================== -->
+    
+    <entity entity-name="EstructuraClave" package-name="org.opentaps.dataimport"
+            title="Tabla para almacenar la estructura de la clave presupuestal dinamica">
+        <field name="organizationPartyId" type="id"/>
+        <field name="acctgTagUsageTypeId" type="id"/>
+        <field name="clasificacion1" type="id-ne"/>
+        <field name="clasificacion2" type="id-ne"/>
+        <field name="clasificacion3" type="id-ne"/>
+        <field name="clasificacion4" type="id-ne"/>
+        <field name="clasificacion5" type="id-ne"/>
+        <field name="clasificacion6" type="id-ne"/>
+        <field name="clasificacion7" type="id-ne"/>
+        <field name="clasificacion8" type="id-ne"/>
+        <field name="clasificacion9" type="id-ne"/>
+        <field name="clasificacion10" type="id-ne"/>   
+        <field name="clasificacion11" type="id-ne"/> 
+        <field name="clasificacion12" type="id-ne"/> 
+        <field name="clasificacion13" type="id-ne"/> 
+        <field name="clasificacion14" type="id-ne"/>
+        <field name="clasificacion15" type="id-ne"/>       
+        <prim-key field="organizationPartyId"/>
+        <prim-key field="acctgTagUsageTypeId"/>
+        <relation type="one" rel-entity-name="Party" fk-name="ATET_PTY">
+            <key-map field-name="organizationPartyId" rel-field-name="partyId"/>
+        </relation>
+        <relation type="one" rel-entity-name="AcctgTagUsageType" fk-name="ATET_USAGE">
+            <key-map field-name="acctgTagUsageTypeId" />
+        </relation>
+    </entity>
+    
+</entitymodel>
