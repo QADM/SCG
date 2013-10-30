@@ -139,7 +139,7 @@
                     <field-map field-name="partyId" value="${parameters.organizationPartyId}"/>
                 </entity-one>
                 <set field="targetNameToUse" value="createPaymentMethod"/>
-                <script location="component://financials/webapp/financials/WEB-INF/actions/configuration/listPaymentMethods.bsh"/>
+                <!--  <script location="component://financials/webapp/financials/WEB-INF/actions/configuration/listPaymentMethods.bsh"/>-->
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator">
@@ -326,6 +326,29 @@
                       </platform-specific>
                       <platform-specific>
                         <html><html-template location="component://financials/webapp/financials/configuration/accountingTagsUsage.ftl"/></html>
+                      </platform-specific>                      
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    
+    
+     <!-- Estructura de Clasificaciones -->
+    <screen name="classificationTagsUsage">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="FinancialsAccountingTagUsage"/>  
+                <script location="component://financials/webapp/financials/WEB-INF/actions/configuration/accountingTags.bsh"/>
+            </actions>            
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">                      
+                      <platform-specific>
+                        <html><html-template location="component://financials/webapp/financials/configuration/classificationTagsUsage.ftl"/></html>
+                      </platform-specific>
+                      <platform-specific>
+                        <html><html-template location="component://financials/webapp/financials/configuration/classificationTagsUsageEgress.ftl"/></html>
                       </platform-specific>
                     </decorator-section>
                 </decorator-screen>

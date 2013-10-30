@@ -701,4 +701,37 @@ public final class ConfigurationServices {
 			return UtilMessage.createAndLogServiceError(e, MODULE);
 		}
 	}
+	
+	
+	/**
+	 * Crea o actualiza la estructura de las clasificaciones
+	 * organization.
+	 * 
+	 * @param dctx
+	 *            a <code>DispatchContext</code> value
+	 * @param context
+	 *            a <code>Map</code> value
+	 * @return a service response <code>Map</code> value
+	 */
+	@SuppressWarnings("unchecked")
+	public static Map updateClassificationTag(DispatchContext dctx,
+			Map context) {
+		Delegator delegator = dctx.getDelegator();
+
+		try {
+			GenericValue pk = delegator.makeValue("AcctgTagEnumType");
+			pk.setPKFields(context);
+			GenericValue postingCheck = delegator.findByPrimaryKey(
+					"AcctgTagEnumType", pk);
+			if (postingCheck == null) {
+				postingCheck = pk;
+			}
+			postingCheck.setNonPKFields(context);
+			delegator.createOrStore(postingCheck);
+			return ServiceUtil.returnSuccess();
+
+		} catch (GeneralException e) {
+			return UtilMessage.createAndLogServiceError(e, MODULE);
+		}
+	}
 }

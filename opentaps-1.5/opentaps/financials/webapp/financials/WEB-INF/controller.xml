@@ -1598,8 +1598,9 @@
 	<request-map uri="createOperacionDiariaIngresos">
 		<security https="true" auth="true"/>
 		<event type="service" invoke="createOperacionDiariaIngresos"/>
-		<response name="success" type="request-redirect" value="viewGlFiscalType">
-          <redirect-parameter name="listTransId"/>
+		<!--<response name="success" type="request-redirect" value="viewGlFiscalType">-->
+		<response name="success" type="request-redirect" value="ODIngresos">
+          <redirect-parameter name="clavePresupuestal"/>
         </response>
         <response name="error" type="view" value="ODIngresos" />
 	</request-map>
@@ -1907,7 +1908,22 @@
         <response name="success" type="request-redirect-noparam" value="accountingTagsUsage"/>
         <response name="error" type="view" value="accountingTagsUsage"/>
     </request-map>
-
+	
+	<!-- Estructura de clasificaciones -->
+	
+	<request-map uri="classificationTagsUsage">
+        <description></description>
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="classificationTagsUsage"/>
+    </request-map>
+    
+    <request-map uri="updateClassificationTag">
+        <description>Update an accounting tag posting check configuration for the organization</description>
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updateClassificationTag"/>
+        <response name="success" type="request-redirect-noparam" value="classificationTagsUsage"/>
+        <response name="error" type="view" value="classificationTagsUsage"/>
+    </request-map>
     
     <!-- ===================== -->
     <!-- Payments Request Maps -->
@@ -2504,7 +2520,9 @@
     <view-map name="addExistingGlAccountScreen" type="screen" page="component://financials/widget/financials/screens/configuration/ConfigurationScreens.xml#addExistingGlAccount"/>
     <view-map name="addNewGlAccountScreen" type="screen" page="component://financials/widget/financials/screens/configuration/ConfigurationScreens.xml#addNewGlAccount"/>    
     <view-map name="addSubAccountScreen" type="screen" page="component://financials/widget/financials/screens/configuration/ConfigurationScreens.xml#addSubAccount"/>    
-
+	<!-- Estructura de Clasificaciones -->
+	<view-map name="classificationTagsUsage" type="screen" page="component://financials/widget/financials/screens/configuration/ConfigurationScreens.xml#classificationTagsUsage"/>
+	
     <!-- lookups -->
     <view-map name="LookupInvoice" type="screen" page="component://financials/widget/financials/screens/common/LookupScreens.xml#LookupInvoice"/>
     <view-map name="LookupClients" type="screen" page="component://crmsfa/widget/crmsfa/screens/common/LookupScreens.xml#LookupClients"/>

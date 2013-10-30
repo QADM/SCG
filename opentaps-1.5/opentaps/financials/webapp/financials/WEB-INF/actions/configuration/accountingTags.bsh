@@ -22,6 +22,7 @@ import org.opentaps.base.entities.AcctgTagEnumType;
 import org.opentaps.base.entities.AcctgTagPostingCheck;
 import org.opentaps.base.entities.AcctgTagUsageType;
 import org.opentaps.common.util.UtilCommon;
+import org.opentaps.base.entities.ClasifPresupuestal;
 
 organizationPartyId = UtilCommon.getOrganizationPartyId(request);
 context.put("organizationPartyId", organizationPartyId);
@@ -53,3 +54,9 @@ context.put("usageConfigurations", usageConfigurations);
 
 // get the posting check configuration, which could be null
 context.put("postingCheck", repository.findOne(AcctgTagPostingCheck.class, repository.map(AcctgTagPostingCheck.Fields.organizationPartyId, organizationPartyId)));
+
+// Obtener todas las clasificaciones
+
+tagClassification = repository.findAll(ClasifPresupuestal.class, UtilMisc.toList(ClasifPresupuestal.Fields.clasificacionId.asc()));
+//tagClassification repository.findList(ClasifPresupuestal.class, repository.map(ClasifPresupuestal.Fields., "ACCOUNTING_TAG"), Arrays.asList(ClasifPresupuestal.Fields.clasificacionId.asc()));
+context.put("tagClassification", tagClassification);
