@@ -59,7 +59,7 @@ import org.opentaps.foundation.action.ActionContext;
 
 
 /**
- * BuscarPolizas - Información de Pólizas Contables
+ * BuscarPolizas - Informaciï¿½n de Pï¿½lizas Contables
  */
 public class BuscarPolizas {
 
@@ -80,7 +80,7 @@ public class BuscarPolizas {
         String dateFormat = UtilDateTime.getDateFormat(locale);
 
          //String acctgTransId = ac.getParameter("findAcctgTransId");
-         String acctgTransTypeId = ac.getParameter("acctgTransTypeId");
+         //String acctgTransTypeId = ac.getParameter("acctgTransTypeId");
          String postedDate = ac.getParameter("postedDate");
          String agrupador = ac.getParameter("agrupador");          
          String tipoPoliza = ac.getParameter("tipoPoliza");
@@ -126,9 +126,9 @@ public class BuscarPolizas {
              if (UtilValidate.isNotEmpty(postedDate)) {
                  searchConditions.add(EntityCondition.makeCondition(AcctgPolizas.Fields.postedDate.name(), EntityOperator.GREATER_THAN_EQUAL_TO, UtilDateTime.getDayStart(UtilDateTime.stringToTimeStamp(postedDate, dateFormat, timeZone, locale), timeZone, locale)));
              }
-             if (UtilValidate.isNotEmpty(acctgTransTypeId)) {
+             /*if (UtilValidate.isNotEmpty(acctgTransTypeId)) {
             	 searchConditions.add(EntityCondition.makeCondition(AcctgPolizas.Fields.acctgTransTypeId.name(), EntityOperator.EQUALS, acctgTransTypeId));
-             }
+             }*/
              if (UtilValidate.isNotEmpty(organizationPartyId)) {
             	 searchConditions.add(EntityCondition.makeCondition(AcctgPolizas.Fields.organizationPartyId.name(), EntityOperator.EQUALS, organizationPartyId));
              }
