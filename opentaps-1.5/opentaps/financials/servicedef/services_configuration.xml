@@ -186,5 +186,18 @@
         <auto-attributes include="pk" mode="IN" optional="false"/>
         <auto-attributes include="nonpk" mode="IN" optional="true"/>
     </service>
+    
+    <!-- Servicios para la estructura de clasificaciones -->
+    
+     <service name="updateClassificationTag" default-entity-name="AcctgTagEnumType" engine="java"
+            location="com.opensourcestrategies.financials.configuration.ConfigurationServices" invoke="updateClassificationTag" auth="true">
+        <description>Updates or creates the classification tag for an organization</description>
+        <required-permissions join-type="AND">
+            <check-permission permission="FINANCIALS" action="_CONFIG"/>
+        </required-permissions>
+        <auto-attributes include="pk" mode="IN" optional="false"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+    </service>
+    
 </services>
 
