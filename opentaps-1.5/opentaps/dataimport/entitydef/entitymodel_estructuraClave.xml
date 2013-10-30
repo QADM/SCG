@@ -19,6 +19,7 @@
             title="Tabla para almacenar la estructura de la clave presupuestal dinamica">
         <field name="organizationPartyId" type="id"/>
         <field name="acctgTagUsageTypeId" type="id"/>
+        <field name="ciclo" type="id-ne"/>
         <field name="clasificacion1" type="id-ne"/>
         <field name="clasificacion2" type="id-ne"/>
         <field name="clasificacion3" type="id-ne"/>
