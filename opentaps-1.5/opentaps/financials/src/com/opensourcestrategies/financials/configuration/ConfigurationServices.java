@@ -30,14 +30,17 @@ import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
+import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.security.Security;
 import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
+import org.opentaps.base.constants.StatusItemConstants;
 import org.opentaps.base.entities.GlAccountCategoryRelation;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
+
 
 import java.util.StringTokenizer;
 
@@ -719,15 +722,19 @@ public final class ConfigurationServices {
 	@SuppressWarnings("unchecked")
 	public static Map updateClassificationTag(DispatchContext dctx,
 			Map context) {		
-		 Debug.log("Entro al servico updateClassificationTag");
+		
+		Debug.log("Entro al servico updateClassificationTag");
 		
 		Delegator delegator = dctx.getDelegator();
-		
 		Date date = new Date();
+		
+		String organizationPartyId =  (String) context.get("organizationPartyId");
+		String acctgTagUsageTypeId =  (String) context.get("acctgTagUsageTypeId");
+		Debug.log("organizationPartyId " + organizationPartyId);
+		Debug.log("acctgTagUsageTypeId " + acctgTagUsageTypeId);
 		int ciclo = date.getYear() + 1900;
 		try {
-			//context.put("idSecuencia", "1");
-			//context.put("ciclo", ciclo.getYear()+ 1990);
+			
 			
 			Debug.log("Se va a generar entidad");
 			
@@ -735,8 +742,13 @@ public final class ConfigurationServices {
 			
 			//buscar ciclo
 			
-			EntityCondition condicion = EntityCondition.makeCondition(
-					"ciclo",String.valueOf(ciclo));
+			/*EntityCondition condicion = EntityCondition.makeCondition(
+					"ciclo",String.valueOf(ciclo), "organizationPartyId", "", "acctgTagUsageTypeId", "");*/
+			
+			EntityCondition condicion = EntityCondition.makeCondition(EntityOperator.OR,
+            EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, organizationPartyId),
+            EntityCondition.makeCondition("acctgTagUsageTypeId", EntityOperator.EQUALS, acctgTagUsageTypeId),
+            EntityCondition.makeCondition("ciclo", EntityOperator.EQUALS, String.valueOf(ciclo)));
 			
 			Debug.log("buscar por ciclo" + ciclo);
 			
@@ -746,23 +758,26 @@ public final class ConfigurationServices {
 							condicion,
 							UtilMisc.toList("idSecuencia",
 									"organizationPartyId", "acctgTagUsageTypeId", "ciclo"), null);
-			for (GenericValue updateEstructura : listUpdateEstructura) {
+			
+			if(listUpdateEstructura.isEmpty())
+			{
+				Debug.log("No existe el ciclo, registro nuevo");
+				pk.setNextSeqId();
+				pk.put("ciclo", ciclo);
+				pk.setNonPKFields(context);
+				delegator.createOrStore(pk);
 				
-				if(updateEstructura.isEmpty())	
-				{
-					Debug.log("No existe ciclo ");
-					pk.setNextSeqId();
-					pk.put("ciclo", ciclo);
-					pk.setNonPKFields(context);
-					delegator.createOrStore(pk);
-				}
-				else
+			}
+			else
+			{
+				for (GenericValue updateEstructura : listUpdateEstructura) 
 				{
 					Debug.log("Existe ciclo");
 					updateEstructura.setNonPKFields(context);
-					delegator.createOrStore(updateEstructura);
+					delegator.createOrStore(updateEstructura);				
 				}
 			}
+			
 			
 			return ServiceUtil.returnSuccess();
 
