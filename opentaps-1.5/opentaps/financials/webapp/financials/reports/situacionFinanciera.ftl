@@ -26,7 +26,10 @@
     <#list accounts as account>
      <#if account?has_content>
       <tr>
-        <td class="tabletext">${account.accountCode?if_exists}: ${account.accountName?if_exists} (<a href="<@ofbizUrl>AccountActivitiesDetail?glAccountId=${account.glAccountId?if_exists}&organizationPartyId=${organizationPartyId}</@ofbizUrl>" class="buttontext">${account.glAccountId?if_exists}</a>) </td>
+      	<td class="tabletext">${account.parentGlAccountId}</td>
+      </tr>
+      <tr>
+        <td class="tableheadtext">${account.accountCode?if_exists}: ${account.accountName?if_exists} (<a href="<@ofbizUrl>AccountActivitiesDetail?glAccountId=${account.glAccountId?if_exists}&organizationPartyId=${organizationPartyId}</@ofbizUrl>" class="buttontext">${account.glAccountId?if_exists}</a>) </td>
         <td class="tabletext" align="right"><@ofbizCurrency amount=fromDateAccounts.get(account) isoCode=currencyUomId/></td>
         <td class="tabletext" align="right"><@ofbizCurrency amount=thruDateAccounts.get(account) isoCode=currencyUomId/></td>
         <td class="tabletext" align="right"><@ofbizCurrency amount=balances.get(account) isoCode=currencyUomId/></td>
@@ -58,6 +61,7 @@
        ${getLocalizedDate(thruDate, "DATE")}<br/>
      <td class="tableheadtext" align="right">${uiLabelMap.OpentapsDifference}</td>
    </tr>
+   <tr><td colspan="4"><hr/></td></tr>
    <tr><td class="tableheadtext" align="left">${uiLabelMap.FinancialsReportsAccountingAssets}</td></tr>
    <@listBalances type="assetAccountBalances" accounts=assetAccounts balances=assetAccountBalances/>
    
