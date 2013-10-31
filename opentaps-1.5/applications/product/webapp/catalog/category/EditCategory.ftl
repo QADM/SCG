@@ -83,6 +83,29 @@ function insertImageName(type,nameValue) {
 							</select>
                         </td>
                     </tr>
+                    <tr>
+                        <td align="right" class="label">Fecha de comienzo estimada</td>
+                        <td>&nbsp;</td>
+                        <td>
+                            <div>
+                        		<input type="text" name="fechaInicio" size="25" maxlength="40" value="" />
+                        		<a href="javascript:call_cal(document.productCategoryForm.fechaInicio, '${fechaInicio?default(nowTimestampString)}');"><img src="<@ofbizContentUrl>/images/cal.gif</@ofbizContentUrl>" width="16" height="16" border="0" alt="Calendar" /></a>
+                        		${uiLabelMap.CommonSetNowEmpty}
+                    		</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" class="label">Fecha de terminación estimada</td>
+                        <td>&nbsp;</td>
+                        <td>
+                            <div>
+                        		<input type="text" name="fechaFin" size="25" maxlength="40" value="" />
+                        		<a href="javascript:call_cal(document.productCategoryForm.fechaFin, '${fechaFin?default(nowTimestampString)}');"><img src="<@ofbizContentUrl>/images/cal.gif</@ofbizContentUrl>" width="16" height="16" border="0" alt="Calendar" /></a>
+                        		${uiLabelMap.CommonSetNowEmpty}
+                    		</div>
+                        </td>
+                    </tr>
+                    
 
     </#if>
 <#else>
@@ -132,6 +155,31 @@ function insertImageName(type,nameValue) {
                     <td>&nbsp;</td>
                     <td width="74%"><input type="text" value="${(productCategory.categoryName)?if_exists}" name="categoryName" size="60" maxlength="60"/></td>
                 </tr>
+                <#if productCategory?has_content>
+                <tr>
+                        <td align="right" class="label">Fecha de comienzo estimada</td>
+                        <td>&nbsp;</td>
+                        <td>
+                            <div>
+                        		<input type="text" name="fechaInicio" size="25" maxlength="40" value="${productCategory.fechaInicio?if_exists}" />
+                        		<a href="javascript:call_cal(document.productCategoryForm.fechaInicio, '${fechaInicio?default(nowTimestampString)}');"><img src="<@ofbizContentUrl>/images/cal.gif</@ofbizContentUrl>" width="16" height="16" border="0" alt="Calendar" /></a>
+                        		${uiLabelMap.CommonSetNowEmpty}
+                    		</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" class="label">Fecha de terminación estimada</td>
+                        <td>&nbsp;</td>
+                        <td>
+                            <div>
+                        		<input type="text" name="fechaFin" size="25" maxlength="40" value="${productCategory.fechaFin?if_exists}" />
+                        		<a href="javascript:call_cal(document.productCategoryForm.fechaFin, '${fechaFin?default(nowTimestampString)}');"><img src="<@ofbizContentUrl>/images/cal.gif</@ofbizContentUrl>" width="16" height="16" border="0" alt="Calendar" /></a>
+                        		${uiLabelMap.CommonSetNowEmpty}
+                    		</div>
+                        </td>
+                    </tr>
+                   </#if>s  
+                
                 <tr>
                     <td width="26%" align="right" class="label">${uiLabelMap.ProductProductCategoryDescription}</td>
                     <td>&nbsp;</td>

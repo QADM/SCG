@@ -191,6 +191,8 @@ under the License.
       <field name="detailScreen" type="long-varchar"></field>
       <field name="showInSelect" type="indicator"></field>
       <field name="node" type="indicator"/>
+      <field name="fechaInicio" type="date-time"></field>
+      <field name="fechaFin" type="date-time"></field>
       <prim-key field="productCategoryId"/>
       <relation type="one" fk-name="PROD_CTGRY_TYPE" rel-entity-name="ProductCategoryType">
         <key-map field-name="productCategoryTypeId"/>

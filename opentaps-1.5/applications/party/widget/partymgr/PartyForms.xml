@@ -119,8 +119,10 @@ under the License.
 	   <field name="groupNameLocal" ><text/></field>
        <field name="preferredCurrencyUomId" title="${uiLabelMap.CommonCurrency}"><display-entity entity-name="Uom" key-field-name="uomId" description="${description}"/></field>
 	   <field name="node" title="${uiLabelMap.Nodo}"><display-entity entity-name="Party" key-field-name="partyId" description="${node}"/></field>
+	   <field name="state" title="Estado"><display-entity entity-name="Party" key-field-name="partyId" description="${state}"/></field>
   
 	   <field name="Nivel_id" title="${uiLabelMap.Nivel}" ><display-entity entity-name="NivelPresupuestal" key-field-name="nivelId"  description="${descripcion}"/></field>
+	   
         
         
         
@@ -151,6 +153,13 @@ under the License.
                 <option key="H" description="Hoja"/>
             </drop-down>  
         </field> 
+        
+        <field name="state" title="Estado" >            
+            <drop-down>
+                <option key="A" description="Activo"/>
+                <option key="I" description="Inactivo"/>
+            </drop-down>  
+        </field>
 
 
   <field name="submitButton" title="${uiLabelMap.CommonSave}"><submit button-type="button"/></field>
@@ -176,8 +185,9 @@ under the License.
 
         <field name="preferredCurrencyUomId" title="${uiLabelMap.CommonCurrency}"><display-entity entity-name="Uom" key-field-name="uomId" description="${description}"/></field>
 	     <field name="node" title="${uiLabelMap.Nodo}"><display-entity entity-name="Party" key-field-name="partyId" description="${node}"/></field>
-  
+  		 <field name="state" title="Estado"><display-entity entity-name="Party" key-field-name="partyId" description="${state}"/></field>
 	   <field name="Nivel_id" title="${uiLabelMap.Nivel}" ><display-entity entity-name="NivelPresupuestal" key-field-name="nivelId"  description="${descripcion}"/></field>
+	   
     <!--  <field name="statusId"><display-entity entity-name="StatusItem" key-field-name="statusId" description="${description}"/></field>
     --></form>
 

@@ -117,6 +117,7 @@ under the License.
         <attribute name="externalId" type="String" mode="IN" optional="true"/>
         <attribute name="Nivel_id" type="String" mode="IN" optional="true"/>
         <attribute name="node" type="String" mode="IN" optional="true"/>
+        <attribute name="state" type="String" mode="IN" optional="true"/>
         <attribute name="statusId" type="String" mode="IN" optional="true"/>
         <override name="groupName" optional="false"/>
     </service>
@@ -136,6 +137,7 @@ under the License.
         <attribute name="Parent_id" type="String" mode="IN" optional="true" />
         <attribute name="Nivel_id" type="String" mode="IN" optional="true"/>
         <attribute name="node" type="String" mode="IN" optional="true"/>
+        <attribute name="state" type="String" mode="IN" optional="true"/>
         <attribute name="statusId" type="String" mode="IN" optional="true"/>
     </service>
 
