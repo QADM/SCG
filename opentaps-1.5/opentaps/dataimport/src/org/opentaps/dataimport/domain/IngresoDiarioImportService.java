@@ -87,6 +87,7 @@ public class IngresoDiarioImportService extends DomainService implements
 
 	/** {@inheritDoc} */
 	public void importIngresoDiario() throws ServiceException {
+		/*
 		try {
 			this.session = this.getInfrastructure().getSession();
 			IngresoDiarioDataImportRepositoryInterface imp_repo = this
@@ -680,5 +681,6 @@ public class IngresoDiarioImportService extends DomainService implements
 				session.close();
 			}
 		}
+		chubby */
 	}
 }

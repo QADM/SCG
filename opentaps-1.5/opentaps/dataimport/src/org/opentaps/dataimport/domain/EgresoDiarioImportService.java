@@ -39,6 +39,7 @@ import com.ibm.icu.util.Calendar;
 
 public class EgresoDiarioImportService extends DomainService implements
 		EgresoDiarioImportServiceInterface {
+	
 	private static final String MODULE = EgresoDiarioImportService.class
 			.getName();
 	// session object, using to store/search pojos.
@@ -87,6 +88,7 @@ public class EgresoDiarioImportService extends DomainService implements
 
 	/** {@inheritDoc} */
 	public void importEgresoDiario() throws ServiceException {
+		/*
 		try {
 			this.session = this.getInfrastructure().getSession();
 			EgresoDiarioDataImportRepositoryInterface imp_repo = this
@@ -800,5 +802,6 @@ public class EgresoDiarioImportService extends DomainService implements
 				session.close();
 			}
 		}
+		chubby */
 	}
 }
