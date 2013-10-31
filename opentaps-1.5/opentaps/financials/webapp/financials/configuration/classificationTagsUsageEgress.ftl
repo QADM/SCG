@@ -8,7 +8,7 @@
 
 <@frameSection title=uiLabelMap.ClassificationTagsPostingEgress>
   <form method="post" action="<@ofbizUrl>updateClassificationTag</@ofbizUrl>" name="updateClassificationTag">
-    <@inputHidden name="acctgTagUsageTypeId" value="EGRESS" />
+    <@inputHidden name="acctgTagUsageTypeId" value="EGRESO" />
     <@inputHidden name="organizationPartyId" value=organizationPartyId />
     <table class="listTable" style="border:0">
       <tr class="listTableHeader">
@@ -24,7 +24,7 @@
             <#if (i % 3) == 1>
               <tr class="${tableRowClass(i % 6)}">
             </#if>
-            <#assign classificationId = "clasificacionId" + i />
+            <#assign classificationId = "clasificacion" + i />
             <@displayTitleCell title=i />
             <@inputSelectCell name=classificationId default=(configuration.get(classificationId))! list=tagClassification key="clasificacionId" required=false ; type>
               ${type.descripcion}

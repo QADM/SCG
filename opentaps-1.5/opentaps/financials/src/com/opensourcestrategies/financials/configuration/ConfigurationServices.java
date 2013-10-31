@@ -23,11 +23,13 @@ import java.util.Map;
 import java.util.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+
 import org.ofbiz.base.util.*;
 import org.ofbiz.entity.GenericDataSourceException;
 import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.security.Security;
 import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.GenericServiceException;
@@ -36,6 +38,7 @@ import org.ofbiz.service.ServiceUtil;
 import org.opentaps.base.entities.GlAccountCategoryRelation;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
+
 import java.util.StringTokenizer;
 
 
@@ -715,23 +718,59 @@ public final class ConfigurationServices {
 	 */
 	@SuppressWarnings("unchecked")
 	public static Map updateClassificationTag(DispatchContext dctx,
-			Map context) {
+			Map context) {		
+		 Debug.log("Entro al servico updateClassificationTag");
+		
 		Delegator delegator = dctx.getDelegator();
-
+		
+		Date date = new Date();
+		int ciclo = date.getYear() + 1900;
 		try {
-			GenericValue pk = delegator.makeValue("AcctgTagEnumType");
-			pk.setPKFields(context);
-			GenericValue postingCheck = delegator.findByPrimaryKey(
-					"AcctgTagEnumType", pk);
-			if (postingCheck == null) {
-				postingCheck = pk;
+			//context.put("idSecuencia", "1");
+			//context.put("ciclo", ciclo.getYear()+ 1990);
+			
+			Debug.log("Se va a generar entidad");
+			
+			GenericValue pk = delegator.makeValue("EstructuraClave");
+			
+			//buscar ciclo
+			
+			EntityCondition condicion = EntityCondition.makeCondition(
+					"ciclo",String.valueOf(ciclo));
+			
+			Debug.log("buscar por ciclo" + ciclo);
+			
+			List<GenericValue> listUpdateEstructura = delegator
+					.findByCondition(
+							"EstructuraClave",
+							condicion,
+							UtilMisc.toList("idSecuencia",
+									"organizationPartyId", "acctgTagUsageTypeId", "ciclo"), null);
+			for (GenericValue updateEstructura : listUpdateEstructura) {
+				
+				if(updateEstructura.isEmpty())	
+				{
+					Debug.log("No existe ciclo ");
+					pk.setNextSeqId();
+					pk.put("ciclo", ciclo);
+					pk.setNonPKFields(context);
+					delegator.createOrStore(pk);
+				}
+				else
+				{
+					Debug.log("Existe ciclo");
+					updateEstructura.setNonPKFields(context);
+					delegator.createOrStore(updateEstructura);
+				}
 			}
-			postingCheck.setNonPKFields(context);
-			delegator.createOrStore(postingCheck);
+			
 			return ServiceUtil.returnSuccess();
 
 		} catch (GeneralException e) {
 			return UtilMessage.createAndLogServiceError(e, MODULE);
 		}
+		
+
+		
 	}
 }
