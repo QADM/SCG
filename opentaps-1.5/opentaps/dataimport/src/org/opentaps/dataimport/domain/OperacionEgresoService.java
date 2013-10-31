@@ -37,16 +37,21 @@ public class OperacionEgresoService extends DomainService{
 		String idPago= (String) context.get("idPago");
 		String idProductoD= (String) context.get("idProductoD");
 		String idProductoH= (String) context.get("idProductoH");
-		String ciclo= (String) context.get("ciclo");
-	    String ue_S= (String) context.get("ue");
-	    String subf_S= (String) context.get("subf");
-	    String act_S= (String) context.get("act");
-	    String tg_S= (String) context.get("tg");
-	    String pe_S= (String) context.get("pe");
-        String sfe_S= (String) context.get("sfe");
-        String loc_S= (String) context.get("loc");
-        String area_S= (String) context.get("area");
-        String concatenacion= (String) context.get("concatenacion");
+        String clasif1= (String) context.get("clasif1");
+        String clasif2 = (String) context.get("clasif2");
+        String clasif3 = (String) context.get("clasif3");
+        String clasif4 = (String) context.get("clasif4");
+        String clasif5 = (String) context.get("clasif5");
+        String clasif6 = (String) context.get("clasif6");
+        String clasif7 = (String) context.get("clasif7");
+        String clasif8 = (String) context.get("clasif8");
+        String clasif9 = (String) context.get("clasif9");
+        String clasif10 = (String) context.get("clasif10");
+        String clasif11 = (String) context.get("clasif11");
+        String clasif12 = (String) context.get("clasif12");
+        String clasif13 = (String) context.get("clasif13");
+        String clasif14 = (String) context.get("clasif14");
+        String clasif15 = (String) context.get("clasif15");
         
       //Crea un registro de la entidad
         GenericValue dataImportEgresoDiario = GenericValue.create(del.getModelEntity("DataImportEgresoDiario"));
@@ -61,16 +66,22 @@ public class OperacionEgresoService extends DomainService{
         dataImportEgresoDiario.set("idPago", idPago );
         dataImportEgresoDiario.set("idProductoD", idProductoD );
         dataImportEgresoDiario.set("idProductoH", idProductoH );
-        dataImportEgresoDiario.set("ciclo", ciclo);
-        dataImportEgresoDiario.set("ue", ue_S );
-        dataImportEgresoDiario.set("subf", subf_S);
-        dataImportEgresoDiario.set("act", act_S);
-        dataImportEgresoDiario.set("tg", tg_S);
-        dataImportEgresoDiario.set("pe", pe_S);
-        dataImportEgresoDiario.set("sfe", sfe_S);
-        dataImportEgresoDiario.set("loc", loc_S );
-        dataImportEgresoDiario.set("area", area_S);
-        dataImportEgresoDiario.set("clavePres", concatenacion);
+        dataImportEgresoDiario.set("clasificacion1", clasif1);
+        dataImportEgresoDiario.set("clasificacion2", clasif2 );
+        dataImportEgresoDiario.set("clasificacion3", clasif3);
+        dataImportEgresoDiario.set("clasificacion4", clasif4);
+        dataImportEgresoDiario.set("clasificacion5", clasif5 );
+        dataImportEgresoDiario.set("clasificacion6", clasif6 );
+        dataImportEgresoDiario.set("clasificacion7", clasif7 );
+        dataImportEgresoDiario.set("clasificacion8", clasif8 );
+        dataImportEgresoDiario.set("clasificacion9", clasif9 );
+        dataImportEgresoDiario.set("clasificacion10", clasif10 );
+        dataImportEgresoDiario.set("clasificacion11", clasif11 );
+        dataImportEgresoDiario.set("clasificacion12", clasif12 );
+        dataImportEgresoDiario.set("clasificacion13", clasif13 );
+        dataImportEgresoDiario.set("clasificacion14", clasif14 );
+        dataImportEgresoDiario.set("clasificacion15", clasif15 );
+        //dataImportEgresoDiario.set("clavePres", concatenacion);
         dataImportEgresoDiario.create();
         
         

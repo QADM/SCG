@@ -705,48 +705,49 @@ public class TransactionBudget {
 
 			presupuestal.setAcctgTransId(acctgTransId);
 			presupuestal.setClavePres(UtilBudget.getClavePresupuestal(context, dispatcher));
-			presupuestal.setCiclo(String.valueOf((UtilBudget.getDateTransaction(
-					fechaContable).getYear() + 1900)));
-			presupuestal.setUnidadResponsable(UR);
-			presupuestal.setUnidadOrganizacional(UO);
-			presupuestal.setUnidadEjecutora(UE);
-			
-			presupuestal.setRubro(rubro);
-			presupuestal.setTipo(tipo);
-			presupuestal.setClase(clase);
-			presupuestal.setConceptoRub(conceptoRUB);
-			presupuestal.setNivel5(nivel5);
-			
-			presupuestal.setFuente(Fuente);
-			presupuestal.setSubFuente(SubFuente);
-			presupuestal.setSubFuenteEspecifica(SubFuenteEspecifica);
-			
-			presupuestal.setEntidadFederativa((String) context
-					.get("EntidadFederativa"));
-			presupuestal.setRegion((String) context.get("Region"));
-			presupuestal.setMunicipio((String) context.get("Municipio"));
-			presupuestal.setLocalidad((String) context.get("Localidad"));
-			presupuestal.setAgrupador((String) context.get("referencia"));
-			
-			presupuestal.setFinalidad(finalidad);
-			presupuestal.setFuncion(funcion);
-			presupuestal.setSubFuncion(subFuncion);
-			
-			presupuestal.setProgramaPlan(plan);
-			presupuestal.setProgramaPresupuestario(programa);
-			presupuestal.setSubProgramaPresupuestario(subprogramap);			
-			presupuestal.setActividad(actividad);	
-			
-			presupuestal.setTipoGasto((String) context.get("tipoGasto"));
-			
-			presupuestal.setCapitulo(capitulo);
-			presupuestal.setConcepto(conceptoPG);
-			presupuestal.setPartidaGenerica(PG);
-			presupuestal.setPartidaEspecifica((String) context.get("partidaEspecifica"));
-			
-			presupuestal.setSector(sector);
-			presupuestal.setSubSector(subSector);
-			presupuestal.setArea(area);
+//			clasificadores
+//			presupuestal.setCiclo(String.valueOf((UtilBudget.getDateTransaction(
+//					fechaContable).getYear() + 1900)));
+//			presupuestal.setUnidadResponsable(UR);
+//			presupuestal.setUnidadOrganizacional(UO);
+//			presupuestal.setUnidadEjecutora(UE);
+//			
+//			presupuestal.setRubro(rubro);
+//			presupuestal.setTipo(tipo);
+//			presupuestal.setClase(clase);
+//			presupuestal.setConceptoRub(conceptoRUB);
+//			presupuestal.setNivel5(nivel5);
+//			
+//			presupuestal.setFuente(Fuente);
+//			presupuestal.setSubFuente(SubFuente);
+//			presupuestal.setSubFuenteEspecifica(SubFuenteEspecifica);
+//			
+//			presupuestal.setEntidadFederativa((String) context
+//					.get("EntidadFederativa"));
+//			presupuestal.setRegion((String) context.get("Region"));
+//			presupuestal.setMunicipio((String) context.get("Municipio"));
+//			presupuestal.setLocalidad((String) context.get("Localidad"));
+//			presupuestal.setAgrupador((String) context.get("referencia"));
+//			
+//			presupuestal.setFinalidad(finalidad);
+//			presupuestal.setFuncion(funcion);
+//			presupuestal.setSubFuncion(subFuncion);
+//			
+//			presupuestal.setProgramaPlan(plan);
+//			presupuestal.setProgramaPresupuestario(programa);
+//			presupuestal.setSubProgramaPresupuestario(subprogramap);			
+//			presupuestal.setActividad(actividad);	
+//			
+//			presupuestal.setTipoGasto((String) context.get("tipoGasto"));
+//			
+//			presupuestal.setCapitulo(capitulo);
+//			presupuestal.setConcepto(conceptoPG);
+//			presupuestal.setPartidaGenerica(PG);
+//			presupuestal.setPartidaEspecifica((String) context.get("partidaEspecifica"));
+//			
+//			presupuestal.setSector(sector);
+//			presupuestal.setSubSector(subSector);
+//			presupuestal.setArea(area);
 			
 			presupuestal.setAgrupador((String) context.get("referencia"));
 			// create

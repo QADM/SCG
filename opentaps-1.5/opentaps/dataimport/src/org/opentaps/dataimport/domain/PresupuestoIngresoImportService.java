@@ -89,7 +89,7 @@ public class PresupuestoIngresoImportService extends DomainService implements
 			Transaction imp_tx4 = null;
 
 			if (UtilImport.validaLote(ledger_repo, lote, "PresupuestoIngreso")) {
-				boolean loteValido=true;
+				boolean loteValido = true;
 				for (DataImportPresupuestoIngreso rowdata : dataforimp) {
 					// Empieza bloque de validaciones
 					Debug.log("Empieza bloque de validaciones");
@@ -127,20 +127,23 @@ public class PresupuestoIngresoImportService extends DomainService implements
 					// rowdata.getMun(), "MUN");
 					// mensaje = UtilImport.validaGeo(mensaje, ledger_repo,
 					// rowdata.getLoc(), "LOC");
-					mensaje = UtilImport.validaParty(mensaje, ledger_repo,
-							rowdata.getUe(), "ADMINISTRATIVA");
-					mensaje = UtilImport.validaProductCategory(mensaje,
-							ledger_repo, rowdata.getN5(), "NIVEL_5_ING",
-							"RUBRO DEL INGRESO");
-					mensaje = UtilImport.validaEnumeration(mensaje,
-							ledger_repo, rowdata.getSfe(),
-							"CL_FUENTE_RECURSOS", "FUENTE DE LOS RECURSOS");
-					mensaje = UtilImport.validaGeo(mensaje, ledger_repo,
-							rowdata.getLoc(), "GEOGRAFICA");
+
+					// clasificaciones
+					//
+					// mensaje = UtilImport.validaParty(mensaje, ledger_repo,
+					// rowdata.getUe(), "ADMINISTRATIVA");
+					// mensaje = UtilImport.validaProductCategory(mensaje,
+					// ledger_repo, rowdata.getN5(), "NIVEL_5_ING",
+					// "RUBRO DEL INGRESO");
+					// mensaje = UtilImport.validaEnumeration(mensaje,
+					// ledger_repo, rowdata.getSfe(),
+					// "CL_FUENTE_RECURSOS", "FUENTE DE LOS RECURSOS");
+					// mensaje = UtilImport.validaGeo(mensaje, ledger_repo,
+					// rowdata.getLoc(), "GEOGRAFICA");
 
 					if (!mensaje.isEmpty()) {
-						loteValido=false;
-						
+						loteValido = false;
+
 						storeImportPresupuestoIngresoError(rowdata, mensaje,
 								imp_repo);
 						continue;
@@ -181,14 +184,16 @@ public class PresupuestoIngresoImportService extends DomainService implements
 					// Geo loc = UtilImport.obtenGeo(ledger_repo,
 					// rowdata.getLoc());
 
-					Party ue = UtilImport.obtenParty(ledger_repo,
-							rowdata.getUe());
-					ProductCategory n5 = UtilImport.obtenProductCategory(
-							ledger_repo, rowdata.getN5(), "NIVEL_5_ING");
-					Enumeration sfe = UtilImport.obtenEnumeration(ledger_repo,
-							rowdata.getSfe(), "CL_FUENTE_RECURSOS");
-					Geo loc = UtilImport
-							.obtenGeo(ledger_repo, rowdata.getLoc());
+					// clasificaciones
+					// Party ue = UtilImport.obtenParty(ledger_repo,
+					// rowdata.getUe());
+					// ProductCategory n5 = UtilImport.obtenProductCategory(
+					// ledger_repo, rowdata.getN5(), "NIVEL_5_ING");
+					// Enumeration sfe =
+					// UtilImport.obtenEnumeration(ledger_repo,
+					// rowdata.getSfe(), "CL_FUENTE_RECURSOS");
+					// Geo loc = UtilImport
+					// .obtenGeo(ledger_repo, rowdata.getLoc());
 
 					// import Presupuestos Ingreso as many as possible
 					try {
@@ -197,8 +202,9 @@ public class PresupuestoIngresoImportService extends DomainService implements
 						String id = ledger_repo.getNextSeqId("AcctgTrans");
 						Calendar cal = Calendar.getInstance();
 						cal.set(Calendar.DAY_OF_MONTH, 1);
-						String anio = "20" + rowdata.getCiclo();
-						cal.set(Calendar.YEAR, Integer.parseInt(anio));
+						// clasificaciones
+						// String anio = "20" + rowdata.getCiclo();
+						// cal.set(Calendar.YEAR, Integer.parseInt(anio));
 
 						for (int mes = 1; mes < 13; mes++) {
 							imp_tx1 = null;
@@ -206,8 +212,9 @@ public class PresupuestoIngresoImportService extends DomainService implements
 							imp_tx3 = null;
 							imp_tx4 = null;
 							AcctgTrans presupuestoIngreso = new AcctgTrans();
-							presupuestoIngreso.setDescription(rowdata
-									.getClavePres() + "-" + mes);
+							// clasificaciones
+							// presupuestoIngreso.setDescription(rowdata
+							// .getClavePres() + "-" + mes);
 
 							// id Transaccion
 							List<AcctgTrans> trans = ledger_repo.findList(
@@ -218,15 +225,16 @@ public class PresupuestoIngresoImportService extends DomainService implements
 
 							if (trans.isEmpty()) {
 								Debug.log("Trans Nueva");
-								if (mes < 10) {
-									presupuestoIngreso.setAcctgTransId(id
-											+ " I" + rowdata.getCiclo() + "-0"
-											+ mes);
-								} else {
-									presupuestoIngreso.setAcctgTransId(id
-											+ " I" + rowdata.getCiclo() + "-"
-											+ mes);
-								}
+								// clasificaciones
+								// if (mes < 10) {
+								// presupuestoIngreso.setAcctgTransId(id
+								// + " I" + rowdata.getCiclo() + "-0"
+								// + mes);
+								// } else {
+								// presupuestoIngreso.setAcctgTransId(id
+								// + " I" + rowdata.getCiclo() + "-"
+								// + mes);
+								// }
 								presupuestoIngreso
 										.setCreatedByUserLogin(rowdata
 												.getUsuario());
@@ -241,13 +249,14 @@ public class PresupuestoIngresoImportService extends DomainService implements
 							cal.set(Calendar.MONTH, mes - 1);
 
 							// Vigencias
-							mensaje = UtilImport.validaVigencia(mensaje,
-									"FUENTE DE LOS RECURSOS NO VIGENTE", sfe,
-									cal.getTime());
+							// clasificaciones
+							// mensaje = UtilImport.validaVigencia(mensaje,
+							// "FUENTE DE LOS RECURSOS NO VIGENTE", sfe,
+							// cal.getTime());
 
 							if (!mensaje.isEmpty()) {
-								loteValido=false;
-								
+								loteValido = false;
+
 								storeImportPresupuestoIngresoError(rowdata,
 										mensaje, imp_repo);
 								continue;
@@ -264,7 +273,8 @@ public class PresupuestoIngresoImportService extends DomainService implements
 							presupuestoIngreso
 									.setLastModifiedByUserLogin(rowdata
 											.getUsuario());
-							presupuestoIngreso.setPartyId(ue.getPartyId());
+							// clasificaciones
+							// presupuestoIngreso.setPartyId(ue.getPartyId());
 							switch (mes) {
 							case 1:
 								presupuestoIngreso.setPostedAmount(rowdata
@@ -321,8 +331,8 @@ public class PresupuestoIngresoImportService extends DomainService implements
 									mensaje);
 
 							if (!mensaje.isEmpty()) {
-								loteValido=false;
-								
+								loteValido = false;
+
 								storeImportPresupuestoIngresoError(rowdata,
 										mensaje, imp_repo);
 								continue;
@@ -338,7 +348,7 @@ public class PresupuestoIngresoImportService extends DomainService implements
 																	.getAcctgTransTypeId()));
 
 							if (miniguia == null) {
-								loteValido=false;
+								loteValido = false;
 								String message = "Tipo de transaccion no registrada en MiniGuia";
 								storeImportPresupuestoIngresoError(rowdata,
 										message, imp_repo);
@@ -352,51 +362,62 @@ public class PresupuestoIngresoImportService extends DomainService implements
 							imp_tx1.commit();
 
 							// Obtenemos los padres de cada nivel.
-							String uo = UtilImport.obtenPadreParty(ledger_repo,
-									ue.getPartyId());
-							String ur = UtilImport.obtenPadreParty(ledger_repo,
-									uo);
-							String con = UtilImport.obtenPadreProductCategory(
-									ledger_repo, n5.getProductCategoryId());
-							String cla = UtilImport.obtenPadreProductCategory(
-									ledger_repo, con);
-							String tip = UtilImport.obtenPadreProductCategory(
-									ledger_repo, cla);
-							String rub = UtilImport.obtenPadreProductCategory(
-									ledger_repo, tip);
-							String sf = UtilImport.obtenPadreEnumeration(
-									ledger_repo, sfe.getEnumId());
-							String f = UtilImport.obtenPadreEnumeration(
-									ledger_repo, sf);
-							String mun = UtilImport.obtenPadreGeo(ledger_repo,
-									loc.getGeoId());
-							String reg = UtilImport.obtenPadreGeo(ledger_repo,
-									mun);
-							String ef = UtilImport.obtenPadreGeo(ledger_repo,
-									reg);
+							// clasificaciones
+							// String uo =
+							// UtilImport.obtenPadreParty(ledger_repo,
+							// ue.getPartyId());
+							// String ur =
+							// UtilImport.obtenPadreParty(ledger_repo,
+							// uo);
+							// String con =
+							// UtilImport.obtenPadreProductCategory(
+							// ledger_repo, n5.getProductCategoryId());
+							// String cla =
+							// UtilImport.obtenPadreProductCategory(
+							// ledger_repo, con);
+							// String tip =
+							// UtilImport.obtenPadreProductCategory(
+							// ledger_repo, cla);
+							// String rub =
+							// UtilImport.obtenPadreProductCategory(
+							// ledger_repo, tip);
+							// String sf = UtilImport.obtenPadreEnumeration(
+							// ledger_repo, sfe.getEnumId());
+							// String f = UtilImport.obtenPadreEnumeration(
+							// ledger_repo, sf);
+							// String mun =
+							// UtilImport.obtenPadreGeo(ledger_repo,
+							// loc.getGeoId());
+							// String reg =
+							// UtilImport.obtenPadreGeo(ledger_repo,
+							// mun);
+							// String ef = UtilImport.obtenPadreGeo(ledger_repo,
+							// reg);
 
 							// ACCTG_TRANS_PRESUPUESTAL
 							AcctgTransPresupuestal aux = new AcctgTransPresupuestal();
 							aux.setAcctgTransId(presupuestoIngreso
 									.getAcctgTransId());
-							aux.setCiclo(rowdata.getCiclo());
-							aux.setUnidadResponsable(ur);
-							aux.setUnidadOrganizacional(uo);
-							aux.setUnidadEjecutora(ue.getPartyId());
-							aux.setRubro(rub);
-							aux.setTipo(tip);
-							aux.setClase(cla);
-							aux.setConceptoRub(con);
-							aux.setNivel5(n5.getProductCategoryId());
-							aux.setFuente(f);
-							aux.setSubFuente(sf);
-							aux.setSubFuenteEspecifica(sfe.getEnumId());
-							aux.setEntidadFederativa(ef);
-							aux.setRegion(reg);
-							aux.setMunicipio(mun);
-							aux.setLocalidad(loc.getGeoId());
+							// clasificaciones
+							// aux.setCiclo(rowdata.getCiclo());
+							// aux.setUnidadResponsable(ur);
+							// aux.setUnidadOrganizacional(uo);
+							// aux.setUnidadEjecutora(ue.getPartyId());
+							// aux.setRubro(rub);
+							// aux.setTipo(tip);
+							// aux.setClase(cla);
+							// aux.setConceptoRub(con);
+							// aux.setNivel5(n5.getProductCategoryId());
+							// aux.setFuente(f);
+							// aux.setSubFuente(sf);
+							// aux.setSubFuenteEspecifica(sfe.getEnumId());
+							// aux.setEntidadFederativa(ef);
+							// aux.setRegion(reg);
+							// aux.setMunicipio(mun);
+							// aux.setLocalidad(loc.getGeoId());
 							aux.setAgrupador(rowdata.getAgrupador());
-							aux.setClavePres(rowdata.getClavePres());
+							// clasificaciones
+							// aux.setClavePres(rowdata.getClavePres());
 							aux.setLote(lote);
 							imp_tx2 = this.session.beginTransaction();
 							ledger_repo.createOrUpdate(aux);
@@ -426,7 +447,10 @@ public class PresupuestoIngresoImportService extends DomainService implements
 										.generaAcctgTransEntry(
 												presupuestoIngreso,
 												organizationPartyId, seqId,
-												flag, cuenta, sfe.getEnumId());
+												// clasificaciones
+												// flag, cuenta,
+												// sfe.getEnumId());
+												flag, cuenta, "chubby");
 
 								imp_tx3 = this.session.beginTransaction();
 								ledger_repo.createOrUpdate(acctgentry);
@@ -465,7 +489,9 @@ public class PresupuestoIngresoImportService extends DomainService implements
 
 						if (mensaje.isEmpty()) {
 							String message = "Se importo correctamente Presupuesto Egreso ["
-									+ rowdata.getClavePres() + "].";
+									+ "].";
+							// clasificaciones
+							// + rowdata.getClavePres() + "].";
 							this.storeImportPresupuestoIngresoSuccess(rowdata,
 									imp_repo);
 							Debug.logInfo(message, MODULE);
@@ -496,7 +522,7 @@ public class PresupuestoIngresoImportService extends DomainService implements
 					}
 				}
 				// Se inserta el Lote.
-				if (!lote.equalsIgnoreCase("X")&&loteValido) {
+				if (!lote.equalsIgnoreCase("X") && loteValido) {
 					LoteTransaccion loteTrans = new LoteTransaccion();
 					loteTrans.setIdLote(lote);
 					loteTrans.setTipoTransaccion("PresupuestoIngreso");

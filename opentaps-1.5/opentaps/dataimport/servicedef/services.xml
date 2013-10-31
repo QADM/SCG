@@ -461,12 +461,21 @@
         <attribute type="String" mode="IN" name="idPago" optional="true"/>
         <attribute type="String" mode="IN" name="idProductoD" optional="true"/>
         <attribute type="String" mode="IN" name="idProductoH" optional="true"/>
-        <attribute type="String" mode="IN" name="ciclo" optional="false"/>
-        <attribute type="String" mode="IN" name="ue" optional="false"/>
-        <attribute type="String" mode="IN" name="n5" optional="false"/>
-        <attribute type="String" mode="IN" name="sfe" optional="false"/>
-        <attribute type="String" mode="IN" name="loc" optional="false"/>
-        <attribute type="String" mode="IN" name="concatenacion" optional="false"/>
+        <attribute type="String" mode="IN" name="clasif1" optional="true"/>
+		<attribute type="String" mode="IN" name="clasif2" optional="true"/>
+		<attribute type="String" mode="IN" name="clasif3" optional="true"/>
+		<attribute type="String" mode="IN" name="clasif4" optional="true"/>
+		<attribute type="String" mode="IN" name="clasif5" optional="true"/>
+		<attribute type="String" mode="IN" name="clasif6" optional="true"/>
+		<attribute type="String" mode="IN" name="clasif7" optional="true"/>
+		<attribute type="String" mode="IN" name="clasif8" optional="true"/>
+		<attribute type="String" mode="IN" name="clasif9" optional="true"/>
+		<attribute type="String" mode="IN" name="clasif10" optional="true"/>
+		<attribute type="String" mode="IN" name="clasif11" optional="true"/>
+		<attribute type="String" mode="IN" name="clasif12" optional="true"/>
+		<attribute type="String" mode="IN" name="clasif13" optional="true"/>
+		<attribute type="String" mode="IN" name="clasif14" optional="true"/>
+		<attribute type="String" mode="IN" name="clasif15" optional="true"/>
         <attribute type="Integer" mode="OUT" name="messageOut" optional="true"/>
     </service>
       
@@ -484,15 +493,21 @@
         <attribute type="String" mode="IN" name="idPago" optional="true"/>
         <attribute type="String" mode="IN" name="idProductoD" optional="true"/>
         <attribute type="String" mode="IN" name="idProductoH" optional="true"/>
-        <attribute type="String" mode="IN" name="ciclo" optional="false"/>
-        <attribute type="String" mode="IN" name="ue" optional="false"/>
-        <attribute type="String" mode="IN" name="subf" optional="false"/>
-        <attribute type="String" mode="IN" name="act" optional="false"/>
-        <attribute type="String" mode="IN" name="tg" optional="false"/>
-        <attribute type="String" mode="IN" name="pe" optional="false"/>              
-        <attribute type="String" mode="IN" name="loc" optional="true"/>
-        <attribute type="String" mode="IN" name="area" optional="false"/>
-        <attribute type="String" mode="IN" name="concatenacion" optional="false"/>
+        <attribute type="String" mode="IN" name="clasif1" optional="true"/>
+		<attribute type="String" mode="IN" name="clasif2" optional="true"/>
+		<attribute type="String" mode="IN" name="clasif3" optional="true"/>
+		<attribute type="String" mode="IN" name="clasif4" optional="true"/>
+		<attribute type="String" mode="IN" name="clasif5" optional="true"/>
+		<attribute type="String" mode="IN" name="clasif6" optional="true"/>
+		<attribute type="String" mode="IN" name="clasif7" optional="true"/>
+		<attribute type="String" mode="IN" name="clasif8" optional="true"/>
+		<attribute type="String" mode="IN" name="clasif9" optional="true"/>
+		<attribute type="String" mode="IN" name="clasif10" optional="true"/>
+		<attribute type="String" mode="IN" name="clasif11" optional="true"/>
+		<attribute type="String" mode="IN" name="clasif12" optional="true"/>
+		<attribute type="String" mode="IN" name="clasif13" optional="true"/>
+		<attribute type="String" mode="IN" name="clasif14" optional="true"/>
+		<attribute type="String" mode="IN" name="clasif15" optional="true"/>
         <attribute type="Integer" mode="OUT" name="messageOut" optional="true"/>
     </service>  
     

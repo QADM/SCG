@@ -23,7 +23,9 @@
 	<entity entity-name="ClasifPresupuestal" package-name="org.opentaps.dataimport">
         <field name="clasificacionId" type="id"/>
         <field name="descripcion" type="id-long"/>
-		<field name="tieneNivel" type="indicator"/>		
+		<field name="tieneNivel" type="indicator"/>
+		<field name="tablaRelacion" type="id-long"/>	
+		<field name="status" type="indicator"/>			
 		<prim-key field="clasificacionId"/>
 	</entity>	
     
