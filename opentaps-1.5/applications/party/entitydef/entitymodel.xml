@@ -1528,6 +1528,7 @@ under the License.
       <field name="dataSourceId" type="id"></field>
       <field name="isUnread" type="indicator"></field>
       <field name="node" type="indicator"/>
+      <field name="state" type="indicator"/>
       <prim-key field="partyId"/>
       <relation type="one" fk-name="PARTY_PTY_TYP" rel-entity-name="PartyType">
         <key-map field-name="partyTypeId"/>
