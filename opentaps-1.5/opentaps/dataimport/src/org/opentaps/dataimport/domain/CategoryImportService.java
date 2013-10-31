@@ -16,6 +16,7 @@
  */
 package org.opentaps.dataimport.domain;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.ofbiz.base.util.Debug;
@@ -38,6 +39,8 @@ import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.infrastructure.User;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.service.ServiceException;
+
+import com.ibm.icu.util.Calendar;
 
 /**
  * Import Categories via intermediate DataImportCategory entity.
@@ -125,6 +128,13 @@ public class CategoryImportService extends DomainService implements
 					category.setCategoryName(rowdata.getCode());
 					category.setDescription(rowdata.getCategoryName());
 					category.setNode(rowdata.getNode());
+					Calendar cal = Calendar.getInstance();
+					cal.setTime(rowdata.getFechaInicio());
+					category.setFechaInicio(new Timestamp(cal
+							.getTimeInMillis()));
+					cal.setTime(rowdata.getFechaFin());
+					category.setFechaFin(new Timestamp(cal
+							.getTimeInMillis()));
 
 					imp_tx1 = this.session.beginTransaction();
 					ledger_repo.createOrUpdate(category);

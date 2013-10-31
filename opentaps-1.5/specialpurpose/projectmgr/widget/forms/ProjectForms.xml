@@ -99,9 +99,9 @@
                 </entity-options>
             </drop-down>
         </field>
-       <!--  <field use-when="projectId!=null" name="estimatedStartDate" title="Fecha de comienzo estimada"><display type="date"/></field>
-        <field use-when="projectId!=null" name="estimatedCompletionDate" title="Fecha de terminación estimada"><display type="date"/></field>
-        <field use-when="projectId!=null" name="actualStartDate" title="Fecha de comienzo real"><display type="date"/></field>
+        <field name="estimatedStartDate" title="Fecha de comienzo estimada" position="1"><date-time type="date"/></field>        
+        <field name="estimatedCompletionDate" title="Fecha de terminación estimada" position="1"><date-time type="date"/></field>
+       <!-- <field use-when="projectId!=null" name="actualStartDate" title="Fecha de comienzo real"><display type="date"/></field>
         <field use-when="projectId!=null" name="actualCompletionDate" title="Fecha de terminación real"><display type="date"/></field>
        <field name="emailAddress" title="Correo electronico"><text/></field>
         
@@ -290,10 +290,10 @@
                     <parameter param-name="projectId" from-field="workEffortId"/>
                 </sub-hyperlink>
             </display-entity>
-        </field>
+        </field>-->
         <field name="estimatedStartDate" title="${uiLabelMap.WorkEffortEstimatedStartDate}"><display type="date"/></field>
-        <field name="estimatedCompletionDate" title="${uiLabelMap.WorkEffortEstimatedCompletionDate}"><display type="date"/></field>
-        <field name="actualStartDate"><display type="date"/></field>
+        <field name="estimatedCompletionDate" title="Fecha de terminación estimada"><display type="date"/></field>
+        <!-- <field name="actualStartDate"><display type="date"/></field>
         <field name="actualCompletionDate"><display type="date"/></field>
         <field name="plannedHours"><display/></field>
         <field name="originalActualHours"><display/></field>

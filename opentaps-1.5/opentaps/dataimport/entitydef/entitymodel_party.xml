@@ -26,7 +26,8 @@
         <field name="rol" type="description"/>
         <field name="rfc" type="very-long"/>
         <field name="moneda" type="id"/>
-        <field name="node" type="indicator"/>    
+        <field name="node" type="indicator"/>
+        <field name="state" type="indicator"/>   
         <field name="importStatusId" type="id-ne"><description>Status of record import.  Null is the same as DATAIMP_NOT_PROC.</description></field>
         <field name="importError" type="very-long"><description>Error report for failed imports.</description></field>
         <field name="lastModifiedDate" type="date-time" />

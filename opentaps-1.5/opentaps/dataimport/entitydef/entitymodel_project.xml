@@ -26,6 +26,8 @@
         <field name="nivelId" type="id"><description>Nivel</description></field>
         <field name="externalId" type="id"><description>Code</description></field>
         <field name="node" type="indicator"/>
+        <field name="estimatedStartDate" type="date-time"/>
+        <field name="estimatedCompletionDate" type="date-time"/>
         <field name="importStatusId" type="id-ne"><description>Status of record import.  Null is the same as DATAIMP_NOT_PROC.</description></field>
         <field name="importError" type="very-long"><description>Error report for failed imports.</description></field>
         <field name="lastModifiedDate" type="date-time" />

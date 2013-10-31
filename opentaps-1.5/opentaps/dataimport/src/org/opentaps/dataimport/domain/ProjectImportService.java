@@ -16,6 +16,7 @@
  */
 package org.opentaps.dataimport.domain;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.ofbiz.base.util.Debug;
@@ -28,6 +29,7 @@ import org.opentaps.base.entities.DataImportProject;
 import org.opentaps.base.entities.PartyGroup;
 import org.opentaps.base.entities.WorkEffort;
 import org.opentaps.base.entities.WorkEffortPartyAssignment;
+import org.opentaps.dataimport.UtilImport;
 import org.opentaps.domain.DomainService;
 import org.opentaps.domain.dataimport.ProjectDataImportRepositoryInterface;
 import org.opentaps.domain.dataimport.ProjectImportServiceInterface;
@@ -39,6 +41,8 @@ import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.infrastructure.User;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.service.ServiceException;
+
+import com.ibm.icu.util.Calendar;
 
 /**
  * Import Projects via intermediate DataImportProject entity. Author: Jesus
@@ -89,68 +93,109 @@ public class ProjectImportService extends DomainService implements
 				try {
 					imp_tx1 = null;
 					imp_tx2 = null;
-					
-					if(rowdata.getWorkEffortName()!=null)
-					{
-						if(rowdata.getNivelId()!=null)
-						{
-							if(rowdata.getWorkEffortTypeId()!= null)
-							{
-								// begin importing row data item
-								WorkEffort project = new WorkEffort();
-								project.setWorkEffortTypeId(rowdata.getWorkEffortTypeId());
-								project.setWorkEffortId(rowdata.getWorkEffortName());
-								project.setWorkEffortName(rowdata.getWorkEffortName());
-								project.setDescription(rowdata.getDescription());
-								project.setNivelId(rowdata.getNivelId());
-								project.setExternalId(rowdata.getExternalId());
-								project.setWorkEffortParentId(rowdata.getWorkEffortParentId());
-								project.setNode(rowdata.getNode());
-								project.setCurrentStatusId("PRJ_ACTIVE");
-								project.setScopeEnumId("WES_PRIVATE");
-								
-								imp_tx1 = this.session.beginTransaction();
-								ledger_repo.createOrUpdate(project);
-								imp_tx1.commit();
 
-								// begin partyID
-								if(rowdata.getGroupName()!=null || rowdata.getGroupName().equalsIgnoreCase("0")){
-									/***********************************************************
-									 * Desde el Excel ya viene el Id de la organizacion y no el nombre
-									 * Se modifico para ya no obtener el id a partir del nombre
-									***********************************************************/
-									/*List<PartyGroup> parties = ledger_repo.findList(
-											PartyGroup.class, ledger_repo.map(
-													PartyGroup.Fields.groupName,
-													rowdata.getGroupName()));*/
-									WorkEffortPartyAssignment partyAssignment = new WorkEffortPartyAssignment();
-									partyAssignment.setWorkEffortId(rowdata
-											.getWorkEffortName());
-									partyAssignment.setPartyId(rowdata.getGroupName());
-									partyAssignment.setRoleTypeId("INTERNAL_ORGANIZATIO");
-									partyAssignment
-											.setFromDate(UtilDateTime.nowTimestamp());
-									imp_tx2 = this.session.beginTransaction();
-									ledger_repo.createOrUpdate(partyAssignment);
-									imp_tx2.commit();
-								}
+					if (rowdata.getWorkEffortName() != null) {
+						if (rowdata.getNivelId() != null) {
+							if (rowdata.getWorkEffortTypeId() != null) {
+								if (rowdata.getEstimatedStartDate() != null) {
+									if (rowdata.getEstimatedCompletionDate() != null) {
+										// begin importing row data item
+										WorkEffort project = new WorkEffort();
+										project.setWorkEffortTypeId(rowdata
+												.getWorkEffortTypeId());
+										project.setWorkEffortId(rowdata
+												.getWorkEffortName());
+										project.setWorkEffortName(rowdata
+												.getWorkEffortName());
+										project.setDescription(rowdata
+												.getDescription());
+										if (!UtilImport
+												.validaNivel(ledger_repo,
+														rowdata.getNivelId()))
+											throw new ServiceException(
+													String.format("Nivel no valido - No se encuentra registrado"));
+										
+										project.setNivelId(rowdata.getNivelId());
+										project.setExternalId(rowdata
+												.getExternalId());
+										project.setWorkEffortParentId(rowdata
+												.getWorkEffortParentId());
+										project.setNode(rowdata.getNode());
+										Calendar cal = Calendar.getInstance();
+										cal.setTime(rowdata.getEstimatedStartDate());
+										project.setEstimatedStartDate(new Timestamp(cal
+												.getTimeInMillis()));
+										cal.setTime(rowdata.getEstimatedCompletionDate());
+										project.setEstimatedCompletionDate(new Timestamp(cal
+												.getTimeInMillis()));
+										project.setCurrentStatusId("PRJ_ACTIVE");
+										project.setScopeEnumId("WES_PRIVATE");
 
-								String message = "Se ha importado correctamente, Proyecto Id ["
-										+ rowdata.getWorkEffortName() + "].";
-								this.storeImportProjectSuccess(rowdata, imp_repo);
-								Debug.logInfo(message, MODULE);
+										imp_tx1 = this.session
+												.beginTransaction();
+										ledger_repo.createOrUpdate(project);
+										imp_tx1.commit();
 
-								imported = imported + 1;
-							}
-							else
-								throw new ServiceException(String.format("Falta ingresar Tipo"));
-						}
-						else
-							throw new ServiceException(String.format("Falta Ingresar Nivel"));
-					}
-					else
-						throw new ServiceException(String.format("Falta Ingresar Id"));
-					
+										// begin partyID
+										if (rowdata.getGroupName() != null
+												|| rowdata.getGroupName()
+														.equalsIgnoreCase("0")) {
+											/***********************************************************
+											 * Desde el Excel ya viene el Id de
+											 * la organizacion y no el nombre Se
+											 * modifico para ya no obtener el id
+											 * a partir del nombre
+											 ***********************************************************/
+											/*
+											 * List<PartyGroup> parties =
+											 * ledger_repo.findList(
+											 * PartyGroup.class,
+											 * ledger_repo.map(
+											 * PartyGroup.Fields.groupName,
+											 * rowdata.getGroupName()));
+											 */
+											WorkEffortPartyAssignment partyAssignment = new WorkEffortPartyAssignment();
+											partyAssignment
+													.setWorkEffortId(rowdata
+															.getWorkEffortName());
+											partyAssignment.setPartyId(rowdata
+													.getGroupName());
+											partyAssignment
+													.setRoleTypeId("INTERNAL_ORGANIZATIO");
+											partyAssignment
+													.setFromDate(UtilDateTime
+															.nowTimestamp());
+											imp_tx2 = this.session
+													.beginTransaction();
+											ledger_repo
+													.createOrUpdate(partyAssignment);
+											imp_tx2.commit();
+										}
+
+										String message = "Se ha importado correctamente, Proyecto Id ["
+												+ rowdata.getWorkEffortName()
+												+ "].";
+										this.storeImportProjectSuccess(rowdata,
+												imp_repo);
+										Debug.logInfo(message, MODULE);
+
+										imported = imported + 1;
+									} else
+										throw new ServiceException(
+												String.format("Falta fecha fin"));
+								} else
+									throw new ServiceException(
+											String.format("Falta fecha inicio"));
+							} else
+								throw new ServiceException(
+										String.format("Falta ingresar Tipo"));
+						} else
+							throw new ServiceException(
+									String.format("Falta Ingresar Nivel"));
+					} else
+						throw new ServiceException(
+								String.format("Falta Ingresar Id"));
+
 				} catch (Exception ex) {
 					String message = ex.getMessage();
 					storeImportProjectError(rowdata, message, imp_repo);
@@ -159,7 +204,7 @@ public class ProjectImportService extends DomainService implements
 					if (imp_tx1 != null) {
 						imp_tx1.rollback();
 					}
-					
+
 					if (imp_tx2 != null) {
 						imp_tx2.rollback();
 					}
