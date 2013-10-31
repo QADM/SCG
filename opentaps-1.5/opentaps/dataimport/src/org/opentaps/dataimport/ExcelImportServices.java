@@ -1416,12 +1416,7 @@ public final class ExcelImportServices extends DomainService {
 				String ciclo = readStringCell(row, 0);
 
 				if (UtilValidate.isEmpty(ciclo) || ciclo.indexOf(" ") > -1
-<<<<<<< HEAD
-						|| ciclo.equalsIgnoreCase("CICLO")
-						|| ciclo.equalsIgnoreCase("A�O")) {
-=======
 						|| ciclo.equalsIgnoreCase("clasificacion1")) {
->>>>>>> a5084b235fe780191a9475e2170013a195527061
 					Debug.logWarning(
 							"Fila no. "
 									+ rowNum
