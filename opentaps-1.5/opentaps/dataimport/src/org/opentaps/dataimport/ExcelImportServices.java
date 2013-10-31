@@ -806,9 +806,10 @@ public final class ExcelImportServices extends DomainService {
 						rowCount++));
 				party.setNivel(this.readStringCell(row, rowCount++));
 				party.setRol(this.readStringCell(row, rowCount++));
-				party.setRfc(this.readStringCell(row, rowCount++));
+				party.setRfc(this.readStringCell(row, rowCount++)); 	
 				party.setMoneda(this.readStringCell(row, rowCount++));
 				party.setNode(this.readStringCell(row, rowCount++));
+				party.setState(this.readStringCell(row, rowCount++));
 				listparty.add(party);
 			}
 		}
@@ -845,7 +846,7 @@ public final class ExcelImportServices extends DomainService {
 					Debug.logWarning(
 							"Row number "
 									+ rowNum
-									+ " no se importo correctamente, tab Clasificación Programática. Id no valido ["
+									+ " no se importo correctamente, tab Clasificaciï¿½n Programï¿½tica. Id no valido ["
 									+ id + "].", MODULE);
 					continue;
 				}
@@ -862,7 +863,10 @@ public final class ExcelImportServices extends DomainService {
 				project.setNivelId(this.readStringCell(row, rowCount++));
 				project.setExternalId(this.readStringCell(row, rowCount++));
 				project.setNode(this.readStringCell(row, rowCount++));
-
+				project.setEstimatedStartDate(getFechaHHMMSS(row
+						.getCell(rowCount++)));
+				project.setEstimatedCompletionDate(getFechaHHMMSS(row
+						.getCell(rowCount++)));
 				projects.add(project);
 			}
 		}
@@ -899,7 +903,7 @@ public final class ExcelImportServices extends DomainService {
 					Debug.logWarning(
 							"Fila no. "
 									+ rowNum
-									+ " no se importo correctamente, tab Clasificación Geográfica. Id no valido ["
+									+ " no se importo correctamente, tab Clasificaciï¿½n Geogrï¿½fica. Id no valido ["
 									+ id + "].", MODULE);
 					continue;
 				}
@@ -963,6 +967,10 @@ public final class ExcelImportServices extends DomainService {
 				category.setPrimaryParentCategoryId(this.readStringCell(row,
 						rowCount++));
 				category.setNode(this.readStringCell(row, rowCount++));
+				category.setFechaInicio(getFechaHHMMSS(row
+						.getCell(rowCount++)));
+				category.setFechaFin(getFechaHHMMSS(row
+						.getCell(rowCount++)));
 				categories.add(category);
 			}
 		}
@@ -1300,7 +1308,7 @@ public final class ExcelImportServices extends DomainService {
 					Debug.logInfo(
 							"Fila no. "
 									+ rowNum
-									+ " no se importo correctamente, tab Matriz de conversión Egresos. Id no valido ["
+									+ " no se importo correctamente, tab Matriz de conversiï¿½n Egresos. Id no valido ["
 									+ id + "].", MODULE);
 					continue;
 				}
@@ -1357,7 +1365,7 @@ public final class ExcelImportServices extends DomainService {
 					Debug.logInfo(
 							"Row number "
 									+ rowNum
-									+ " no se importo correctamente, tab Matriz de conversión Ingresos. Id no valido ["
+									+ " no se importo correctamente, tab Matriz de conversiï¿½n Ingresos. Id no valido ["
 									+ id + "].", MODULE);
 					continue;
 				}
@@ -1408,7 +1416,12 @@ public final class ExcelImportServices extends DomainService {
 				String ciclo = readStringCell(row, 0);
 
 				if (UtilValidate.isEmpty(ciclo) || ciclo.indexOf(" ") > -1
+<<<<<<< HEAD
+						|| ciclo.equalsIgnoreCase("CICLO")
+						|| ciclo.equalsIgnoreCase("Aï¿½O")) {
+=======
 						|| ciclo.equalsIgnoreCase("clasificacion1")) {
+>>>>>>> a5084b235fe780191a9475e2170013a195527061
 					Debug.logWarning(
 							"Fila no. "
 									+ rowNum
@@ -1482,7 +1495,7 @@ public final class ExcelImportServices extends DomainService {
 
 				if (UtilValidate.isEmpty(ciclo) || ciclo.indexOf(" ") > -1
 						|| ciclo.equalsIgnoreCase("CICLO")
-						|| ciclo.equalsIgnoreCase("AÑO")) {
+						|| ciclo.equalsIgnoreCase("Aï¿½O")) {
 					Debug.logWarning(
 							"Fila no. "
 									+ rowNum

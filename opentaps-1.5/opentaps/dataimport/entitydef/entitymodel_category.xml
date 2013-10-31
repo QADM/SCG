@@ -24,6 +24,8 @@
         <field name="primaryParentCategoryId" type="id"><description>Primary Parent Category</description></field>
         <field name="code" type="id"><description>Product Category Type</description></field>
         <field name="node" type="indicator"/>
+        <field name="fechaInicio" type="date-time"/>
+        <field name="fechaFin" type="date-time"/>
         <field name="importStatusId" type="id-ne"><description>Status of record import.  Null is the same as DATAIMP_NOT_PROC.</description></field>
         <field name="importError" type="very-long"><description>Error report for failed imports.</description></field>
         <field name="lastModifiedDate" type="date-time" />
