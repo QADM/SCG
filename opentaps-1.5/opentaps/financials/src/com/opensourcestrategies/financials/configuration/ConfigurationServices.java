@@ -740,12 +740,9 @@ public final class ConfigurationServices {
 			
 			GenericValue pk = delegator.makeValue("EstructuraClave");
 			
-			//buscar ciclo
 			
-			/*EntityCondition condicion = EntityCondition.makeCondition(
-					"ciclo",String.valueOf(ciclo), "organizationPartyId", "", "acctgTagUsageTypeId", "");*/
 			
-			EntityCondition condicion = EntityCondition.makeCondition(EntityOperator.OR,
+			EntityCondition condicion = EntityCondition.makeCondition(EntityOperator.AND,
             EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, organizationPartyId),
             EntityCondition.makeCondition("acctgTagUsageTypeId", EntityOperator.EQUALS, acctgTagUsageTypeId),
             EntityCondition.makeCondition("ciclo", EntityOperator.EQUALS, String.valueOf(ciclo)));
