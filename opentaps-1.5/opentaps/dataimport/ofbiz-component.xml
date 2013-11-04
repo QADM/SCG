@@ -55,6 +55,7 @@
     <entity-resource type="model" reader-name="main" loader="main" location="entitydef/entitymodel_operacionDiaria.xml"/>
     <entity-resource type="model" reader-name="main" loader="main" location="entitydef/entitymodel_loteTransaccion.xml"/>
     <entity-resource type="model" reader-name="main" loader="main" location="entitydef/entitymodel_estructuraClave.xml"/>
+    <entity-resource type="model" reader-name="main" loader="main" location="entitydef/entitymodel_usoClave.xml"/>
     <!-- Import Entities to handle imports from other CRM systems -->
     <!-- <entity-resource type="model" reader-name="main" loader="main" location="entitydef/entitymodel_mscrm.xml"/>     -->
     <entity-resource type="model" reader-name="main" loader="main" location="entitydef/entitymodel_netsuite.xml"/>

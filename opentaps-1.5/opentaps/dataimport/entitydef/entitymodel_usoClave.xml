@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<entitymodel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/entitymodel.xsd">
+    <!-- ========================================================= -->
+    <!-- ======================== Defaults ======================= -->
+    <!-- ========================================================= -->
+    <title>Usage Import Entities</title>
+    <description>Defines intermediate entities for importing usage data</description>
+    <copyright>Copyright (c) Open Source Strategies, Inc.</copyright>
+    <author>Castillo Nuñez Miguel</author>
+    <version>1.0</version>
+    
+    <!-- =========================== -->
+    <!-- org.opentaps.dataimport -->  
+    <!-- =========================== -->
+    
+	<entity entity-name="UsoClave" package-name="org.opentaps.dataimport"
+		title="Uso para la configuración de la clave">
+		<field name="acctgTagUsageTypeId" type="id" />
+		<field name="description" type="description" />
+		<prim-key field="acctgTagUsageTypeId" />
+	</entity>
+    
+</entitymodel>

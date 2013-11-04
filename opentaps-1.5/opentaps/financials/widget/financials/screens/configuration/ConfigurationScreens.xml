@@ -338,17 +338,14 @@
     <screen name="classificationTagsUsage">
         <section>
             <actions>
-                <set field="pageTitleLabel" value="FinancialsAccountingTagUsage"/>  
-                <script location="component://financials/webapp/financials/WEB-INF/actions/configuration/accountingTags.bsh"/>
+                <set field="pageTitleLabel" value="FinancialsAccountingStructUsage"/>  
+                <script location="component://financials/webapp/financials/WEB-INF/actions/configuration/clasificacionPre.bsh"/>
             </actions>            
             <widgets>
                 <decorator-screen name="main-section-decorator">
                     <decorator-section name="section-body">                      
                       <platform-specific>
                         <html><html-template location="component://financials/webapp/financials/configuration/classificationTagsUsage.ftl"/></html>
-                      </platform-specific>
-                      <platform-specific>
-                        <html><html-template location="component://financials/webapp/financials/configuration/classificationTagsUsageEgress.ftl"/></html>
                       </platform-specific>
                     </decorator-section>
                 </decorator-screen>

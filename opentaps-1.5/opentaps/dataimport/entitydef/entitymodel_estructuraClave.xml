@@ -40,7 +40,7 @@
         <relation type="many" rel-entity-name="Party" fk-name="ATET_PTY">
             <key-map field-name="organizationPartyId" rel-field-name="partyId"/>
         </relation>
-        <relation type="many" rel-entity-name="AcctgTagUsageType" fk-name="ATET_USAGE">
+        <relation type="many" rel-entity-name="UsoClave" fk-name="ATET_USAGE2">
             <key-map field-name="acctgTagUsageTypeId" />
         </relation>
     </entity>
