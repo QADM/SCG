@@ -7,8 +7,13 @@
 <#assign mustBalanceSelectValues = {"Y": uiLabelMap.CommonYes, "N": uiLabelMap.CommonNo} />
 
 <@frameSection title=uiLabelMap.ClassificationTagsPostingEntry>
+ <#list usages as usage>
+    <#-- might be null if the usage is not configured yet -->
+    <#assign configuration = usageConfigurations.get(usage)! />
+    <div class="screenlet">
+      <div class="screenlet-header"><span class="boxhead">${usage.description}</span></div>
   <form method="post" action="<@ofbizUrl>updateClassificationTag</@ofbizUrl>" name="updateClassificationTag">
-    <@inputHidden name="acctgTagUsageTypeId" value="INGRESO" />
+    <@inputHidden name="acctgTagUsageTypeId" value=usage.acctgTagUsageTypeId />
     <@inputHidden name="organizationPartyId" value=organizationPartyId />
     <table class="listTable" style="border:0">
       <tr class="listTableHeader">
@@ -37,4 +42,6 @@
       <@inputSubmitRow title=uiLabelMap.CommonUpdate />
     </table>
   </form>
+  </div>
+  </#list>
 </@frameSection>

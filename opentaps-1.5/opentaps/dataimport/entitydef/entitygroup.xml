@@ -124,5 +124,6 @@
   <entity-group group="org.ofbiz" entity="DataImportOperacionDiaria"/>
   <entity-group group="org.ofbiz" entity="LoteTransaccion"/>
   <entity-group group="org.ofbiz" entity="EstructuraClave"/>
+  <entity-group group="org.ofbiz" entity="UsoClave"/>
 </entitygroup>
 
