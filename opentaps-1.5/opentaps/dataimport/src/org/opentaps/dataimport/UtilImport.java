@@ -27,6 +27,7 @@ import org.opentaps.base.entities.ProductCategory;
 import org.opentaps.base.entities.ProductCategoryType;
 import org.opentaps.base.entities.TipoDocumento;
 import org.opentaps.base.entities.WorkEffort;
+import org.opentaps.dataimport.domain.Clasificacion;
 import org.opentaps.domain.ledger.LedgerRepositoryInterface;
 import org.opentaps.foundation.repository.RepositoryException;
 
@@ -343,6 +344,15 @@ public class UtilImport {
 		}
 		return mensaje;
 	}
+	
+	public static String obtenerCiclo(Date fechaTrans)
+	{
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(fechaTrans);
+		String ciclo = Integer.toString(cal.get(Calendar.YEAR));
+		return ciclo;
+		
+	}
 
 	public static String validaParty(String mensaje,
 			LedgerRepositoryInterface ledger_repo, String id, String campo)
@@ -445,6 +455,7 @@ public class UtilImport {
 		}
 		return mensaje;
 	}
+	
 
 	public static Enumeration obtenEnumeration(
 			LedgerRepositoryInterface ledger_repo, String id, String tipo)
@@ -454,6 +465,60 @@ public class UtilImport {
 						Enumeration.Fields.enumTypeId, tipo));
 		return enums.get(0);
 	}
+	
+	public static String validaClasificaciones(List<Clasificacion> lista, LedgerRepositoryInterface ledger_repo, String tipo, Date fechaTrans){
+		String mensaje = null;
+		for(Clasificacion c : lista)
+		{
+			String tipoClasif = c.getTipoObjeto();
+			String valorClasif = c.getValor();
+			String tipoEnum = c.getTipoEnum();
+			try{
+			if(tipoClasif.equals("Party"))
+			{
+				mensaje += validaParty(mensaje, ledger_repo, valorClasif, "ADMINISTRATIVA");
+				Party p = obtenParty(ledger_repo, valorClasif);
+				mensaje += validaVigenciaParty(mensaje, "ADMINISTRATIVA", p);
+			}
+			else if(tipoClasif.equals("Geo"))
+			{
+				mensaje += validaGeo(mensaje, ledger_repo, valorClasif, "GEOGRAFICA");
+			}
+			else if(tipoClasif.equals("WorkEffort"))
+			{
+				mensaje += validaWorkEffort(mensaje, ledger_repo, valorClasif, "PROYECTO");
+				WorkEffort w = obtenWorkEffort(ledger_repo, valorClasif);
+				mensaje += validaVigenciaWorkEffort(mensaje, "PROYECTO", w, fechaTrans);
+			}
+			else if(tipoClasif.equals("ProductCategory"))
+			{
+				if(tipo.equals("I"))
+				{
+					mensaje += validaProductCategory(mensaje, ledger_repo, valorClasif, "NIVEL_5_ING", "RUBRO DEL INGRESO");
+					ProductCategory p = obtenProductCategory(ledger_repo, valorClasif, "NIVEL_5_ING");
+					mensaje += validaVigenciaProductCategory(mensaje, "RUBRO DEL INGRESO", p, fechaTrans);
+				}
+				else
+				{
+					mensaje += validaProductCategory(mensaje, ledger_repo, valorClasif, "PARTIDA ESPECIFICA", "PRODUCTO ESPECIFICO");
+					ProductCategory p = obtenProductCategory(ledger_repo, valorClasif, "PARTIDA ESPECIFICA");
+					mensaje += validaVigenciaProductCategory(mensaje, "PRODUCTO ESPECIFICO", p, fechaTrans);
+				}
+			}
+			else if(tipoClasif.equals("EnumerationType"))
+			{
+				mensaje += validaEnumeration(mensaje, ledger_repo, valorClasif, tipoEnum, valorClasif);
+				Enumeration e = obtenEnumeration(ledger_repo, valorClasif, tipoEnum);
+				mensaje += validaVigencia(mensaje, valorClasif, e, fechaTrans);
+			}
+			}
+			catch(Exception e)
+			{
+				//
+			}
+		}
+		return mensaje;
+	}
 
 	public static String validaVigencia(String mensaje, String campo,
 			Enumeration enumeration, Date fechaTrans)
@@ -461,6 +526,44 @@ public class UtilImport {
 
 		if (!enumeration.getFechaInicio().before(fechaTrans)
 				|| !enumeration.getFechaFin().after(fechaTrans)) {
+			Debug.log("Error, " + campo + " no vigente");
+			mensaje += campo + " no vigente";
+			Debug.log(mensaje);
+		}
+		return mensaje;
+	}
+	
+	public static String validaVigenciaProductCategory(String mensaje, String campo,
+			ProductCategory p, Date fechaTrans)
+			throws RepositoryException {
+
+		if (!p.getFechaInicio().before(fechaTrans)
+				|| !p.getFechaFin().after(fechaTrans)) {
+			Debug.log("Error, " + campo + " no vigente");
+			mensaje += campo + " no vigente";
+			Debug.log(mensaje);
+		}
+		return mensaje;
+	}
+	
+	public static String validaVigenciaWorkEffort(String mensaje, String campo,
+			WorkEffort w, Date fechaTrans)
+			throws RepositoryException {
+
+		if (!w.getEstimatedStartDate().before(fechaTrans)
+				|| !w.getEstimatedCompletionDate().after(fechaTrans)) {
+			Debug.log("Error, " + campo + " no vigente");
+			mensaje += campo + " no vigente";
+			Debug.log(mensaje);
+		}
+		return mensaje;
+	}
+	
+	public static String validaVigenciaParty(String mensaje, String campo,
+			Party party)
+			throws RepositoryException {
+
+		if (party.getState().equals("I")) {
 			Debug.log("Error, " + campo + " no vigente");
 			mensaje += campo + " no vigente";
 			Debug.log(mensaje);
