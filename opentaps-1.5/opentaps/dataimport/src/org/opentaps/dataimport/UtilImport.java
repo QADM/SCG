@@ -2,6 +2,7 @@ package org.opentaps.dataimport;
 
 import javolution.util.FastList;
 
+import org.hibernate.Query;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
@@ -29,6 +30,9 @@ import org.opentaps.base.entities.TipoDocumento;
 import org.opentaps.base.entities.WorkEffort;
 import org.opentaps.dataimport.domain.Clasificacion;
 import org.opentaps.domain.ledger.LedgerRepositoryInterface;
+import org.opentaps.financials.domain.ledger.LedgerRepository;
+import org.opentaps.foundation.entity.hibernate.Session;
+import org.opentaps.foundation.entity.hibernate.Transaction;
 import org.opentaps.foundation.repository.RepositoryException;
 
 import com.ibm.icu.util.Calendar;
@@ -344,14 +348,13 @@ public class UtilImport {
 		}
 		return mensaje;
 	}
-	
-	public static String obtenerCiclo(Date fechaTrans)
-	{
+
+	public static String obtenerCiclo(Date fechaTrans) {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(fechaTrans);
 		String ciclo = Integer.toString(cal.get(Calendar.YEAR));
 		return ciclo;
-		
+
 	}
 
 	public static String validaParty(String mensaje,
@@ -455,7 +458,6 @@ public class UtilImport {
 		}
 		return mensaje;
 	}
-	
 
 	public static Enumeration obtenEnumeration(
 			LedgerRepositoryInterface ledger_repo, String id, String tipo)
@@ -465,55 +467,55 @@ public class UtilImport {
 						Enumeration.Fields.enumTypeId, tipo));
 		return enums.get(0);
 	}
-	
-	public static String validaClasificaciones(List<Clasificacion> lista, LedgerRepositoryInterface ledger_repo, String tipo, Date fechaTrans){
+
+	public static String validaClasificaciones(List<Clasificacion> lista,
+			LedgerRepositoryInterface ledger_repo, String tipo, Date fechaTrans) {
 		String mensaje = null;
-		for(Clasificacion c : lista)
-		{
+		for (Clasificacion c : lista) {
 			String tipoClasif = c.getTipoObjeto();
 			String valorClasif = c.getValor();
 			String tipoEnum = c.getTipoEnum();
-			try{
-			if(tipoClasif.equals("Party"))
-			{
-				mensaje += validaParty(mensaje, ledger_repo, valorClasif, "ADMINISTRATIVA");
-				Party p = obtenParty(ledger_repo, valorClasif);
-				mensaje += validaVigenciaParty(mensaje, "ADMINISTRATIVA", p);
-			}
-			else if(tipoClasif.equals("Geo"))
-			{
-				mensaje += validaGeo(mensaje, ledger_repo, valorClasif, "GEOGRAFICA");
-			}
-			else if(tipoClasif.equals("WorkEffort"))
-			{
-				mensaje += validaWorkEffort(mensaje, ledger_repo, valorClasif, "PROYECTO");
-				WorkEffort w = obtenWorkEffort(ledger_repo, valorClasif);
-				mensaje += validaVigenciaWorkEffort(mensaje, "PROYECTO", w, fechaTrans);
-			}
-			else if(tipoClasif.equals("ProductCategory"))
-			{
-				if(tipo.equals("I"))
-				{
-					mensaje += validaProductCategory(mensaje, ledger_repo, valorClasif, "NIVEL_5_ING", "RUBRO DEL INGRESO");
-					ProductCategory p = obtenProductCategory(ledger_repo, valorClasif, "NIVEL_5_ING");
-					mensaje += validaVigenciaProductCategory(mensaje, "RUBRO DEL INGRESO", p, fechaTrans);
+			try {
+				if (tipoClasif.equals("Party")) {
+					mensaje += validaParty(mensaje, ledger_repo, valorClasif,
+							"ADMINISTRATIVA");
+					Party p = obtenParty(ledger_repo, valorClasif);
+					mensaje += validaVigenciaParty(mensaje, "ADMINISTRATIVA", p);
+				} else if (tipoClasif.equals("Geo")) {
+					mensaje += validaGeo(mensaje, ledger_repo, valorClasif,
+							"GEOGRAFICA");
+				} else if (tipoClasif.equals("WorkEffort")) {
+					mensaje += validaWorkEffort(mensaje, ledger_repo,
+							valorClasif, "PROYECTO");
+					WorkEffort w = obtenWorkEffort(ledger_repo, valorClasif);
+					mensaje += validaVigenciaWorkEffort(mensaje, "PROYECTO", w,
+							fechaTrans);
+				} else if (tipoClasif.equals("ProductCategory")) {
+					if (tipo.equals("I")) {
+						mensaje += validaProductCategory(mensaje, ledger_repo,
+								valorClasif, "NIVEL_5_ING", "RUBRO DEL INGRESO");
+						ProductCategory p = obtenProductCategory(ledger_repo,
+								valorClasif, "NIVEL_5_ING");
+						mensaje += validaVigenciaProductCategory(mensaje,
+								"RUBRO DEL INGRESO", p, fechaTrans);
+					} else {
+						mensaje += validaProductCategory(mensaje, ledger_repo,
+								valorClasif, "PARTIDA ESPECIFICA",
+								"PRODUCTO ESPECIFICO");
+						ProductCategory p = obtenProductCategory(ledger_repo,
+								valorClasif, "PARTIDA ESPECIFICA");
+						mensaje += validaVigenciaProductCategory(mensaje,
+								"PRODUCTO ESPECIFICO", p, fechaTrans);
+					}
+				} else if (tipoClasif.equals("EnumerationType")) {
+					mensaje += validaEnumeration(mensaje, ledger_repo,
+							valorClasif, tipoEnum, valorClasif);
+					Enumeration e = obtenEnumeration(ledger_repo, valorClasif,
+							tipoEnum);
+					mensaje += validaVigencia(mensaje, valorClasif, e,
+							fechaTrans);
 				}
-				else
-				{
-					mensaje += validaProductCategory(mensaje, ledger_repo, valorClasif, "PARTIDA ESPECIFICA", "PRODUCTO ESPECIFICO");
-					ProductCategory p = obtenProductCategory(ledger_repo, valorClasif, "PARTIDA ESPECIFICA");
-					mensaje += validaVigenciaProductCategory(mensaje, "PRODUCTO ESPECIFICO", p, fechaTrans);
-				}
-			}
-			else if(tipoClasif.equals("EnumerationType"))
-			{
-				mensaje += validaEnumeration(mensaje, ledger_repo, valorClasif, tipoEnum, valorClasif);
-				Enumeration e = obtenEnumeration(ledger_repo, valorClasif, tipoEnum);
-				mensaje += validaVigencia(mensaje, valorClasif, e, fechaTrans);
-			}
-			}
-			catch(Exception e)
-			{
+			} catch (Exception e) {
 				//
 			}
 		}
@@ -532,9 +534,9 @@ public class UtilImport {
 		}
 		return mensaje;
 	}
-	
-	public static String validaVigenciaProductCategory(String mensaje, String campo,
-			ProductCategory p, Date fechaTrans)
+
+	public static String validaVigenciaProductCategory(String mensaje,
+			String campo, ProductCategory p, Date fechaTrans)
 			throws RepositoryException {
 
 		if (!p.getFechaInicio().before(fechaTrans)
@@ -545,10 +547,9 @@ public class UtilImport {
 		}
 		return mensaje;
 	}
-	
+
 	public static String validaVigenciaWorkEffort(String mensaje, String campo,
-			WorkEffort w, Date fechaTrans)
-			throws RepositoryException {
+			WorkEffort w, Date fechaTrans) throws RepositoryException {
 
 		if (!w.getEstimatedStartDate().before(fechaTrans)
 				|| !w.getEstimatedCompletionDate().after(fechaTrans)) {
@@ -558,10 +559,9 @@ public class UtilImport {
 		}
 		return mensaje;
 	}
-	
+
 	public static String validaVigenciaParty(String mensaje, String campo,
-			Party party)
-			throws RepositoryException {
+			Party party) throws RepositoryException {
 
 		if (party.getState().equals("I")) {
 			Debug.log("Error, " + campo + " no vigente");
@@ -743,7 +743,7 @@ public class UtilImport {
 	public static List<CustomTimePeriod> obtenPeriodos(
 			LedgerRepositoryInterface ledger_repo, String organizacionPartyId,
 			Date fechaTrans) throws RepositoryException {
-		Debug.log("Fecha.- "+fechaTrans);
+		Debug.log("Fecha.- " + fechaTrans);
 		List<CustomTimePeriod> periodos = ledger_repo.findList(
 				CustomTimePeriod.class, ledger_repo.map(
 						CustomTimePeriod.Fields.organizationPartyId,
@@ -756,7 +756,7 @@ public class UtilImport {
 				periodosAplicables.add(periodo);
 			}
 		}
-		Debug.log("Periodos regresados.- "+periodosAplicables.size());
+		Debug.log("Periodos regresados.- " + periodosAplicables.size());
 		return periodosAplicables;
 	}
 
@@ -765,7 +765,7 @@ public class UtilImport {
 			List<CustomTimePeriod> periodos, String cuenta, BigDecimal monto,
 			String tipo) throws RepositoryException {
 		List<GlAccountHistory> glAccountHistories = new ArrayList<GlAccountHistory>();
-		
+
 		for (CustomTimePeriod periodo : periodos) {
 			GlAccountHistory glAccountHistory = ledger_repo.findOne(
 					GlAccountHistory.class, ledger_repo.map(
@@ -784,7 +784,7 @@ public class UtilImport {
 				glAccountHistory.setCustomTimePeriodId(periodo
 						.getCustomTimePeriodId());
 			}
-			
+
 			if (tipo.equalsIgnoreCase("Credit")) {
 				if (glAccountHistory.getPostedCredits() == null) {
 					glAccountHistory.setPostedCredits(monto);
@@ -801,13 +801,12 @@ public class UtilImport {
 							.getPostedDebits().add(monto));
 				}
 			}
-			
+
 			glAccountHistories.add(glAccountHistory);
 		}
 		return glAccountHistories;
 	}
-	
-	
+
 	/**
 	 * Autor: Esmeralda Cercas Ortiz
 	 * 
@@ -831,11 +830,10 @@ public class UtilImport {
 			return true;
 		}
 	}
-	
-	
+
 	/**
-	 * Autor: Esmeralda Cercas Ortiz
-	 * entitie GeoType 
+	 * Autor: Esmeralda Cercas Ortiz entitie GeoType
+	 * 
 	 * @param ledger_repo
 	 * @param Type
 	 * @return true = Tipo valido, false = Tipo no valido
@@ -844,8 +842,7 @@ public class UtilImport {
 			String Type) throws RepositoryException {
 
 		Debug.log("Buscando Tipo");
-		List<GeoType> type = ledger_repo.findList(
-				GeoType.class,
+		List<GeoType> type = ledger_repo.findList(GeoType.class,
 				ledger_repo.map(GeoType.Fields.geoTypeId, Type));
 
 		if (type.isEmpty()) {
@@ -856,21 +853,22 @@ public class UtilImport {
 			return true;
 		}
 	}
-	
+
 	/**
-	 * Autor: Esmeralda Cercas Ortiz
-	 * entitie ProductCategoryType
+	 * Autor: Esmeralda Cercas Ortiz entitie ProductCategoryType
+	 * 
 	 * @param ledger_repo
 	 * @param nivel
 	 * @return true = Tipo valido, false = tipo no valido
 	 */
-	public static boolean validaTipoProductCategory(LedgerRepositoryInterface ledger_repo,
-			String type) throws RepositoryException {
+	public static boolean validaTipoProductCategory(
+			LedgerRepositoryInterface ledger_repo, String type)
+			throws RepositoryException {
 
 		Debug.log("Buscando Tipo ProductCategory");
-		List<ProductCategoryType> nivelP = ledger_repo.findList(
-				ProductCategoryType.class,
-				ledger_repo.map(ProductCategoryType.Fields.productCategoryTypeId, type));
+		List<ProductCategoryType> nivelP = ledger_repo
+				.findList(ProductCategoryType.class, ledger_repo.map(
+						ProductCategoryType.Fields.productCategoryTypeId, type));
 
 		if (nivelP.isEmpty()) {
 			Debug.log("Tipo no valido");
@@ -880,7 +878,25 @@ public class UtilImport {
 			return true;
 		}
 	}
+
+	public static String buscaHojaNivelPresupuestal(String tipo, Session session)
+			throws RepositoryException {
+		return session
+				.createQuery(
+						"select NIVEL_ID from NIVEL_PRESUPUESTAL"
+								+ "where NIVEL_ID not in (select NIVEL_PADRE_ID from NIVEL_PRESUPUESTAL"
+								+ "where CLASIFICACION_ID = "
+								+ tipo
+								+ " and NIVEL_PADRE_ID is not null) and CLASIFICACION_ID = "
+								+ tipo).list().get(0).toString();
+	}
 	
-	
+	public static String buscaHojaGeo(LedgerRepositoryInterface ledger_repo){
+		boolean rama = true;
+		do{
+			
+		}while(rama);
+		return null;
+	}
 
 }

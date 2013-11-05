@@ -729,9 +729,52 @@ public final class ConfigurationServices {
 		Date date = new Date();
 		
 		String organizationPartyId =  (String) context.get("organizationPartyId");
-		String acctgTagUsageTypeId =  (String) context.get("acctgTagUsageTypeId");
+		String acctgTagUsageTypeId =  (String) context.get("acctgTagUsageTypeId");				
 		Debug.log("organizationPartyId " + organizationPartyId);
 		Debug.log("acctgTagUsageTypeId " + acctgTagUsageTypeId);
+		
+		
+		//Validación para verificar si esta repetido
+		String resultado1 = "";
+		String resultado2 = "";		
+		String cri = "CL_CRI";
+		String cog = "CL_COG";
+		boolean tieneCri = false;
+		boolean tieneCog = false;
+				for(int i=1; i<16; i++)
+				{	resultado1 = (String) context.get("clasificacion"+i);			
+					if(resultado1 != null)			
+					{	for(int j=i+1; j<16; j++)
+						{	resultado2 = (String) context.get("clasificacion"+j);					
+							if(resultado2 != null)
+							{	if(resultado1.equals(resultado2))
+								{	return ServiceUtil.returnError("Existen valores repetidos");
+								}						
+								else if(resultado2.equals(cog))
+								{	if(acctgTagUsageTypeId.equals("INGRESO"))
+									{	return ServiceUtil.returnError("La sección de Ingresos contiene una clasificación económica incorrecta (CRI/COG)");
+									}
+									else
+									{	tieneCog = true;						
+									}
+								}
+								else if(resultado2.trim().equals(cri))
+								{	if(acctgTagUsageTypeId.equals("EGRESO"))
+									{	return ServiceUtil.returnError("La sección de Egreso contiene una clasificación económica incorrecta (CRI/COG)");
+									}
+									else
+									{	tieneCri = true;						
+									}
+								}										
+							}
+						}
+					}
+				}		
+				if(!tieneCri && !tieneCog)
+				{	return ServiceUtil.returnError("No contiene clasificación económica");		
+				}
+		
+		
 		int ciclo = date.getYear() + 1900;
 		try {
 			
@@ -740,12 +783,9 @@ public final class ConfigurationServices {
 			
 			GenericValue pk = delegator.makeValue("EstructuraClave");
 			
-			//buscar ciclo
 			
-			/*EntityCondition condicion = EntityCondition.makeCondition(
-					"ciclo",String.valueOf(ciclo), "organizationPartyId", "", "acctgTagUsageTypeId", "");*/
 			
-			EntityCondition condicion = EntityCondition.makeCondition(EntityOperator.OR,
+			EntityCondition condicion = EntityCondition.makeCondition(EntityOperator.AND,
             EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, organizationPartyId),
             EntityCondition.makeCondition("acctgTagUsageTypeId", EntityOperator.EQUALS, acctgTagUsageTypeId),
             EntityCondition.makeCondition("ciclo", EntityOperator.EQUALS, String.valueOf(ciclo)));

@@ -17,6 +17,7 @@
     
     <entity entity-name="EstructuraClave" package-name="org.opentaps.dataimport"
             title="Tabla para almacenar la estructura de la clave presupuestal dinamica">   
+        <field name="idSecuencia" type="id"/>
         <field name="organizationPartyId" type="id-ne"/>
         <field name="acctgTagUsageTypeId" type="id-ne"/>
         <field name="ciclo" type="id-ne"/>
@@ -35,9 +36,7 @@
         <field name="clasificacion13" type="id-ne"/> 
         <field name="clasificacion14" type="id-ne"/>
         <field name="clasificacion15" type="id-ne"/>       
-        <prim-key field="organizationPartyId"/>    
-        <prim-key field="acctgTagUsageTypeId"/> 
-        <prim-key field="ciclo"/>     
+        <prim-key field="idSecuencia"/>
         <relation type="many" rel-entity-name="Party" fk-name="ATET_PTY">
             <key-map field-name="organizationPartyId" rel-field-name="partyId"/>
         </relation>
