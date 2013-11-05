@@ -890,13 +890,56 @@ public class UtilImport {
 								+ " and NIVEL_PADRE_ID is not null) and CLASIFICACION_ID = "
 								+ tipo).list().get(0).toString();
 	}
-	
-	public static String buscaHojaGeo(LedgerRepositoryInterface ledger_repo){
+
+	public static String buscaHojaGeo(LedgerRepositoryInterface ledger_repo)
+			throws RepositoryException {
 		boolean rama = true;
-		do{
-			
-		}while(rama);
-		return null;
+		String tipo = "COUNTRY";
+
+		do {
+			List<GeoType> geoTypes = ledger_repo.findList(GeoType.class,
+					ledger_repo.map(GeoType.Fields.parentTypeId, tipo));
+			if(!geoTypes.isEmpty()){
+				tipo = geoTypes.get(0).getGeoTypeId(); 
+			}else{
+				rama = false;
+			}
+		} while (rama);
+		return tipo;
+	}
+	
+	public static String buscaHojaCri(LedgerRepositoryInterface ledger_repo)
+			throws RepositoryException {
+		boolean rama = true;
+		String tipo = "CRI";
+
+		do {
+			List<ProductCategoryType> prodCatTypes = ledger_repo.findList(ProductCategoryType.class,
+					ledger_repo.map(ProductCategoryType.Fields.parentTypeId, tipo));
+			if(!prodCatTypes.isEmpty()){
+				tipo = prodCatTypes.get(0).getProductCategoryTypeId(); 
+			}else{
+				rama = false;
+			}
+		} while (rama);
+		return tipo;
+	}
+	
+	public static String buscaHojaCog(LedgerRepositoryInterface ledger_repo)
+			throws RepositoryException {
+		boolean rama = true;
+		String tipo = "COG";
+
+		do {
+			List<ProductCategoryType> prodCatTypes = ledger_repo.findList(ProductCategoryType.class,
+					ledger_repo.map(ProductCategoryType.Fields.parentTypeId, tipo));
+			if(!prodCatTypes.isEmpty()){
+				tipo = prodCatTypes.get(0).getProductCategoryTypeId(); 
+			}else{
+				rama = false;
+			}
+		} while (rama);
+		return tipo;
 	}
 
 }
