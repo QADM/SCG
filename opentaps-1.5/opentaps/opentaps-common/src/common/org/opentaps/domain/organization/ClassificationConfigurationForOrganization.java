@@ -10,6 +10,7 @@ import java.util.Map;
 import javolution.util.FastMap;
 
 import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.entity.GenericValue;
 import org.opentaps.common.util.UtilAccountingTags;
 import org.opentaps.base.entities.ClasifPresupuestal;
 import org.opentaps.base.entities.Enumeration;
@@ -47,7 +48,7 @@ public class ClassificationConfigurationForOrganization extends Entity {
     private String defaultValue;
     private ClasifPresupuestal defaultValueTag;
     private List<ClasifPresupuestal> tagValues;
-    private List<NivelPresupuestal> activeTagValues;
+    private List<GenericValue> activeTagValues;
     
 
     /**
@@ -85,7 +86,7 @@ public class ClassificationConfigurationForOrganization extends Entity {
         this.tagValues = tagValues;
     }
 
-    public void setActiveTagValues(List<NivelPresupuestal> activeTagValues) {
+    public void setActiveTagValues(List<GenericValue> activeTagValues) {
         this.activeTagValues = activeTagValues;
     }  
     
@@ -110,7 +111,7 @@ public class ClassificationConfigurationForOrganization extends Entity {
         return tagValues;
     }
 
-    public List<NivelPresupuestal> getActiveTagValues() {
+    public List<GenericValue> getActiveTagValues() {
         return activeTagValues;
     }
 
@@ -159,7 +160,7 @@ public class ClassificationConfigurationForOrganization extends Entity {
         setType((String) mapValue.get("type"));
         setDescription((String) mapValue.get("description"));
         setTagValues((List<ClasifPresupuestal>) mapValue.get("tagValues"));
-        setActiveTagValues((List<NivelPresupuestal>) mapValue.get("activeTagValues"));
+        setActiveTagValues((List<GenericValue>) mapValue.get("activeTagValues"));
         setIsRequired((String) mapValue.get("isRequired"));
         postInit();
     }
