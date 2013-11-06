@@ -874,8 +874,9 @@
                 <set field="pageTitleLabel" value="Ley de Ingresos"/>  
                 <set field="sectionHeaderUiLabel" value="Ley de Ingresos"/> 
                 <set field="createAcctgPresupuestoIngresoFormTarget" value="createAcctgTransPresupuestoIngreso"/>
-                <script location="component://financials/webapp/financials/WEB-INF/actions/transactions/getDatosOperacionDiariaIng.bsh"/> 
-                <java location="com.opensourcestrategies.financials.transactions.TransactionBudget" invoke="buscarCatalogos"/>             
+                <script location="component://financials/webapp/financials/WEB-INF/actions/transactions/getDatosOperacionDiariaIng.bsh"/>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/transactions/createTransactionCustom.bsh"/> 
+                <!--  <java location="com.opensourcestrategies.financials.transactions.TransactionBudget" invoke="buscarCatalogos"/>-->             
 	            <entity-condition list="listGeo" entity-name="Geo">
 	            	<order-by field-name="geoId"/>
 	            </entity-condition>

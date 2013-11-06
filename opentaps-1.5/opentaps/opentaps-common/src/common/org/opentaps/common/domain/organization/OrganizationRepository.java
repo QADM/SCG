@@ -20,6 +20,7 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -40,10 +41,13 @@ import org.opentaps.base.constants.PeriodTypeConstants;
 import org.opentaps.base.constants.RoleTypeConstants;
 import org.opentaps.base.entities.AcctgTagEnumType;
 import org.opentaps.base.entities.AgreementTermTypesByDocumentType;
+import org.opentaps.base.entities.ClasifPresupuestal;
 import org.opentaps.base.entities.CustomTimePeriod;
 import org.opentaps.base.entities.Enumeration;
 import org.opentaps.base.entities.EnumerationType;
+import org.opentaps.base.entities.EstructuraClave;
 import org.opentaps.base.entities.GlAccountTypeDefault;
+import org.opentaps.base.entities.NivelPresupuestal;
 import org.opentaps.base.entities.Party;
 import org.opentaps.base.entities.PartyAcctgPreference;
 import org.opentaps.base.entities.PartyGroup;
@@ -52,6 +56,7 @@ import org.opentaps.base.entities.PaymentMethod;
 import org.opentaps.base.entities.TermType;
 import org.opentaps.base.services.ConvertUomService;
 import org.opentaps.domain.organization.AccountingTagConfigurationForOrganizationAndUsage;
+import org.opentaps.domain.organization.ClassificationConfigurationForOrganization;
 import org.opentaps.domain.organization.Organization;
 import org.opentaps.domain.organization.OrganizationRepositoryInterface;
 import org.opentaps.foundation.entity.Entity;
@@ -69,6 +74,7 @@ import org.opentaps.foundation.service.ServiceException;
 public class OrganizationRepository extends PartyRepository implements OrganizationRepositoryInterface {
 
     private static final String MODULE = OrganizationRepositoryInterface.class.getName();
+    private Session session;
 
     /** List the available fiscal period types. */
     public static List<String> FISCAL_PERIOD_TYPES = Arrays.asList(PeriodTypeConstants.FISCAL_YEAR, PeriodTypeConstants.FISCAL_QUARTER, PeriodTypeConstants.FISCAL_MONTH, PeriodTypeConstants.FISCAL_WEEK, PeriodTypeConstants.FISCAL_BIWEEK);
@@ -369,4 +375,110 @@ public class OrganizationRepository extends PartyRepository implements Organizat
             }
         }       
     }
+    /*Metodos para mostrar la estructura de las clasificaciones en pantallas (Transacciones)
+     * */
+    
+    /** {@inheritDoc} */
+    public Map<Integer, String> getClassificationTagTypes(String organizationPartyId, String accountingTagUsageTypeId) throws RepositoryException {
+        Date date = new Date();
+    	Map<Integer, String> tagTypes = new TreeMap<Integer, String>();
+        List<EstructuraClave> conf = findList(EstructuraClave.class, map(EstructuraClave.Fields.organizationPartyId, organizationPartyId, EstructuraClave.Fields.acctgTagUsageTypeId, accountingTagUsageTypeId, EstructuraClave.Fields.ciclo, date.getYear() + 1900));
+        if (conf.isEmpty()) {
+            Debug.logInfo("No se encontro la configuracion de la clasificacion para la organizacion [" + organizationPartyId + "]", MODULE);
+            return tagTypes;
+        }
+
+        // find each non null configured tag type
+        for (EstructuraClave estructuraClave : conf) {
+        	for (int i = 1; i <= UtilAccountingTags.TAG_COUNT_CLASSI; i++) {
+                
+            	String type = estructuraClave.getString("clasificacion" + i);
+                if (type != null) {
+                    tagTypes.put(new Integer(i), type);
+                }
+            }
+		}
+        Debug.log("getClassificationTagTypes tagTypes size ( " + tagTypes.size());
+        return tagTypes;
+    }
+    
+    
+    /** {@inheritDoc} 
+     * @throws InfrastructureException */
+    public List<ClassificationConfigurationForOrganization> getClassificationTagConfiguration(String organizationPartyId, String accountingTagUsageTypeId) throws RepositoryException {
+
+    	//this.session = this.getInfrastructure().getSession();
+    	
+        Map<Integer, String> tagTypes = getClassificationTagTypes(organizationPartyId, accountingTagUsageTypeId);
+        //List<EstructuraClave> estructuraClave = findListCache(EstructuraClave.class, map(EstructuraClave.Fields.organizationPartyId, organizationPartyId, EstructuraClave.Fields.acctgTagUsageTypeId, accountingTagUsageTypeId));
+        List<ClassificationConfigurationForOrganization> tagTypesAndValues = new ArrayList<ClassificationConfigurationForOrganization>();
+       
+        Debug.log("getClassificationTagConfiguration tagTypes size" +  tagTypes.size());
+       
+        for (Integer index : tagTypes.keySet()) 
+        {
+        	Debug.log("getClassificationTagConfiguration list size" +  tagTypes.size());
+            
+        	String type = tagTypes.get(index);
+            Debug.log("getClassificationTagConfiguration type" + type);
+            
+            
+            ClassificationConfigurationForOrganization tag = null;
+            List<ClasifPresupuestal> listclas = findListCache(ClasifPresupuestal.class, map(ClasifPresupuestal.Fields.clasificacionId, type));
+            Debug.log("getClassificationTagConfiguration list size" +  listclas.size());
+            
+            if(!listclas.isEmpty())
+            {
+	            for (ClasifPresupuestal clasifPresupuestal : listclas) {
+	            	
+	            	tag = new ClassificationConfigurationForOrganization(this);
+	                tag.setIndex(index);
+	                tag.setType(type);
+	                tag.setDescription(clasifPresupuestal.getDescripcion());
+	                tag.setTagValues(findListCache(ClasifPresupuestal.class,
+	                                               Arrays.asList(
+	                                                   EntityCondition.makeCondition(ClasifPresupuestal.Fields.clasificacionId.name(), type)),
+	                                               Arrays.asList(ClasifPresupuestal.Fields.clasificacionId.asc())));
+	                //buscar hijo hoja
+	                
+	                                
+	                
+	                //buscar info tabla
+	                
+	                Debug.log("getClassificationTagConfiguration clasifPresupuestal.getTablaRelacion()" + clasifPresupuestal.getTablaRelacion());
+	                
+	                // filter out disabled tags
+	                tag.setActiveTagValues(findList(NivelPresupuestal.class,
+	                        Arrays.asList(
+	                                EntityCondition.makeCondition(NivelPresupuestal.Fields.clasificacionId.name(), type)),
+	                            Arrays.asList(NivelPresupuestal.Fields.clasificacionId.asc())));
+	                
+	                // add if required property for tag
+	                tag.setIsRequired("N");
+	                // add its default value
+	                tag.setDefaultValue(String.valueOf(index));
+	                if (UtilValidate.isNotEmpty(String.valueOf(index))) {
+	                    tag.setDefaultValueTag(clasifPresupuestal);
+	                }
+	
+	                tagTypesAndValues.add(tag);
+	            }
+            }
+		}
+        Debug.log("getClassificationTagConfiguration tagTypesAndValues size" +  tagTypesAndValues.size());
+        return tagTypesAndValues;
+    }
+
+	private void BuscarHijoHoja(String tipoClasificacion) {
+		try {
+			
+			
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+	}
+    
+   
 }

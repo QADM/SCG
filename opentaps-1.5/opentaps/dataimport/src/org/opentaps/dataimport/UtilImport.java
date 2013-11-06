@@ -16,7 +16,6 @@ import org.opentaps.base.entities.Enumeration;
 import org.opentaps.base.entities.Geo;
 import org.opentaps.base.entities.GeoType;
 import org.opentaps.base.entities.GlAccount;
-import org.opentaps.base.entities.GlAccountAndHistory;
 import org.opentaps.base.entities.GlAccountHistory;
 import org.opentaps.base.entities.GlAccountOrganization;
 import org.opentaps.base.entities.LoteTransaccion;
@@ -30,9 +29,7 @@ import org.opentaps.base.entities.TipoDocumento;
 import org.opentaps.base.entities.WorkEffort;
 import org.opentaps.dataimport.domain.Clasificacion;
 import org.opentaps.domain.ledger.LedgerRepositoryInterface;
-import org.opentaps.financials.domain.ledger.LedgerRepository;
 import org.opentaps.foundation.entity.hibernate.Session;
-import org.opentaps.foundation.entity.hibernate.Transaction;
 import org.opentaps.foundation.repository.RepositoryException;
 
 import com.ibm.icu.util.Calendar;

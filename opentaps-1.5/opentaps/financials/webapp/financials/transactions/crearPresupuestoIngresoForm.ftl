@@ -32,33 +32,22 @@
       <tr>
 			<@displayTitleCell title=uiLabelMap.FinancialsTransactionDateContable titleClass="requiredField"/>
 			<@inputDateTimeCell name="fechaContable" default=Static["org.ofbiz.base.util.UtilDateTime"].nowTimestamp() />
-      </tr>
-	  <tr>
-	  		<@inputSelectRow title=uiLabelMap.FinancialsBudgetUnidadE required=false list=listUnidadE key="partyId"  displayField="groupName" name="unidadEjecutora" default=partyId?if_exists titleClass="requiredField" />
-	  </tr>		  
-      <tr>
-        <@displayTitleCell title=uiLabelMap.FinancialsN5 titleClass="requiredField" />
-        <@inputSelectCell list=listN5?if_exists displayField="description" name="idN5" default=productCategoryId?if_exists key="productCategoryId"/>
-      </tr>
-      <tr>
-      	<@displayTitleCell title=uiLabelMap.FinancialsFederalEntity titleClass="requiredField" />
-      	<@padresGeo name="EntidadFederativa" geoCode="MEX" hijoName="Region"  nietos="Municipio,Localidad"/>
-      </tr>
-      <tr>
-      	<@displayTitleCell title=uiLabelMap.FinancialsRegion titleClass="requiredField" />
-      	<@padresGeo name="Region" hijoName="Municipio" nietos="Localidad"/>
-      </tr>
-      <tr>
-      	<@displayTitleCell title=uiLabelMap.FinancialsTown titleClass="requiredField" />
-      	<@padresGeo name="Municipio" hijoName="Localidad"/>
-      </tr>
-      <tr>
-      	<@displayTitleCell title=uiLabelMap.FinancialsLocality titleClass="requiredField" />
-      	<@padresGeo name="Localidad"/>
-      </tr>  
-      <tr>
-	  	<@inputSelectRow title=uiLabelMap.FinancialsBudgetSubfuenteE required=false list=listSubFuente  displayField="description" key="enumId"  name="subFuenteEsp" default=description?if_exists titleClass="requiredField" />
-	  </tr>	                         
+      </tr>	  
+	  
+	  <#list tagTypes as tag>
+        <#if tag.isRequired()>
+          <#assign titleClass="requiredField" />
+        <#else/>
+          <#assign titleClass="tableheadtext" />
+        </#if>
+        
+        <tr>
+          <@displayTitleCell title=tag.description titleClass=titleClass />
+          <@inputSelectCell name="debitTagEnumId${tag.index}" errorField="acctgTagEnumId${tag.index}" list=tag.activeTagValues key="clasificacionId" required=false default=tag.defaultValue! ; tagValue>
+            ${tagValue.descripcion}
+          </@inputSelectCell>
+        </tr>
+      </#list>                        
        
       <tr>
 	  	<@inputTextRow title=uiLabelMap.FinancialsBudgetReferencia name="referencia" titleClass="requiredField" />

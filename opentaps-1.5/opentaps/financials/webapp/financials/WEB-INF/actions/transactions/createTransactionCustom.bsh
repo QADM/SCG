@@ -1,0 +1,13 @@
+/*
+
+ */
+
+import org.opentaps.common.util.UtilAccountingTags;
+import org.opentaps.common.util.UtilCommon;
+
+
+organizationPartyId = UtilCommon.getOrganizationPartyId(request);
+context.put("organizationPartyId", organizationPartyId);
+
+// get the accounting tags
+context.put("tagTypes", UtilAccountingTags.getClassificationTagsForOrganization(organizationPartyId, UtilAccountingTags.INGRESO_TAG, delegator));
