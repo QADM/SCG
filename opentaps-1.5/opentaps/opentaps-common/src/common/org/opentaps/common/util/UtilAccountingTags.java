@@ -39,6 +39,7 @@ import org.opentaps.base.entities.Enumeration;
 import org.opentaps.base.entities.EnumerationType;
 import org.opentaps.common.domain.organization.OrganizationRepository;
 import org.opentaps.domain.organization.AccountingTagConfigurationForOrganizationAndUsage;
+import org.opentaps.domain.organization.ClassificationConfigurationForOrganization;
 import org.opentaps.foundation.entity.Entity;
 import org.opentaps.foundation.entity.EntityInterface;
 import org.opentaps.foundation.repository.RepositoryException;
@@ -53,6 +54,9 @@ public final class UtilAccountingTags {
 
     /** Number of tags defined in <code>AcctgTagEnumType</code>. */
     public static final int TAG_COUNT = 10;
+    
+    /** Number of tags defined in <code>AcctgTagEnumType</code>. */
+    public static final int TAG_COUNT_CLASSI = 15;
 
     /** The standard prefix used in to post tag values, eg: the value for enumTypeId1 is posted as ${TAG_PARAM_PREFIX}1. */
     public static final String TAG_PARAM_PREFIX = "tag";
@@ -92,7 +96,9 @@ public final class UtilAccountingTags {
     /** Tags for transaction entries. */
     public static final String TRANSACTION_ENTRY_TAG = "TRANSACTION_ENTRY";
     /** Tags for check run feature. */
-    public static final String CHECK_RUN_TAG = "CHECK_RUN";
+    public static final String CHECK_RUN_TAG = "CHECK_RUN";    
+    /** Tags for transaction entries. */
+    public static final String INGRESO_TAG = "INGRESO";
 
     private UtilAccountingTags() { }
 
@@ -710,5 +716,19 @@ public final class UtilAccountingTags {
         }
     	// return false when not found any tag was set
     	return false;
+    }
+    
+    /**
+     * Gets the configured Tag enums for the given organization, as a <code>List</code> of <code>Map</code> of
+     * {<code>index</code>: configuration field index, <code>type</code>: <code>enumTypeId</code>, <code>description</code>: enum type description, <code>tagValues</code>: list of possible <code>Enumeration</code> values}.
+     * @param organizationPartyId the organization party ID
+     * @param accountingTagUsageTypeId the usage type for the tags
+     * @param delegator a <code>Delegator</code> value
+     * @return the <code>List</code> of <code>Map</code> for the given organization
+     * @throws RepositoryException if an error occurs
+     */
+    public static List<ClassificationConfigurationForOrganization> getClassificationTagsForOrganization(String organizationPartyId, String accountingTagUsageTypeId, Delegator delegator) throws RepositoryException {
+        OrganizationRepository repository = new OrganizationRepository(delegator);
+        return repository.getClassificationTagConfiguration(organizationPartyId, accountingTagUsageTypeId);
     }
 }
