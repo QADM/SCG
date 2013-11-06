@@ -914,16 +914,20 @@ public class UtilImport {
 		}
 	}
 
-	public static String buscaHojaNivelPresupuestal(String tipo, Session session)
+	public static String buscaHojaNivelPresupuestal(LedgerRepositoryInterface ledger_repo, String tipo)
 			throws RepositoryException {
-		return session
-				.createQuery(
-						"select NIVEL_ID from NIVEL_PRESUPUESTAL"
-								+ "where NIVEL_ID not in (select NIVEL_PADRE_ID from NIVEL_PRESUPUESTAL"
-								+ "where CLASIFICACION_ID = "
-								+ tipo
-								+ " and NIVEL_PADRE_ID is not null) and CLASIFICACION_ID = "
-								+ tipo).list().get(0).toString();
+		boolean rama = true;
+
+		do {
+			List<NivelPresupuestal> niveles = ledger_repo.findList(NivelPresupuestal.class,
+					ledger_repo.map(NivelPresupuestal.Fields.nivelPadreId, tipo));
+			if(!niveles.isEmpty()){
+				tipo = niveles.get(0).getNivelId(); 
+			}else{
+				rama = false;
+			}
+		} while (rama);
+		return tipo;
 	}
 
 	public static String buscaHojaGeo(LedgerRepositoryInterface ledger_repo)
