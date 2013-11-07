@@ -4,6 +4,7 @@ public class ContenedorContable {
 	private String cri;
 	private String cog;
 	private String tipoGasto;
+	private String mensaje;
 	
 	public ContenedorContable(){
 		
@@ -31,6 +32,14 @@ public class ContenedorContable {
 
 	public void setTipoGasto(String tipoGasto) {
 		this.tipoGasto = tipoGasto;
+	}
+	
+	public String getMensaje() {
+		return mensaje;
+	}
+	
+	public void setMensaje(String mensaje) {
+		this.mensaje = mensaje;
 	}
 
 }
