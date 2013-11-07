@@ -365,7 +365,7 @@ public class IngresoDiarioImportService extends DomainService implements
 					
 					contenedor = UtilImport.validaClasificaciones(listaClasif,ledger_repo,"I",rowdata.getFechaContable());
 					mensaje = UtilImport.validaTipoDoc(mensaje, ledger_repo,
-							rowdata.getIdTipoDoc()).getMensaje();
+							rowdata.getIdTipoDoc());
 					//----------------------------------------
 					if (!contenedor.getMensaje().isEmpty() || !mensaje.isEmpty()) {
 						loteValido=false;
@@ -453,6 +453,7 @@ public class IngresoDiarioImportService extends DomainService implements
 							loc.getGeoId());
 					String reg = UtilImport.obtenPadreGeo(ledger_repo, mun);
 					String ef = UtilImport.obtenPadreGeo(ledger_repo, reg);*/
+					
 
 					Debug.log("Motor Contable");
 					MotorContable motor = new MotorContable(ledger_repo);
@@ -473,7 +474,7 @@ public class IngresoDiarioImportService extends DomainService implements
 					Map<String, String> cuentas = motor.cuentasIngresoDiario(
 							tipoDoc.getAcctgTransTypeId(),
 							rowdata.getOrganizationPartyId(),
-							rowdata.getIdPago(), rowdata.getN5(),
+							rowdata.getIdPago(), contenedor.getProduct().getCategoryName(),
 							rowdata.getIdProductoD(), rowdata.getIdProductoH());
 
 					if (cuentas.get("Mensaje") != null) {
@@ -512,29 +513,14 @@ public class IngresoDiarioImportService extends DomainService implements
 								.getAcctgTransTypeId());
 						ingresoDiario.setLastModifiedByUserLogin(rowdata
 								.getUsuario());
-						ingresoDiario.setPartyId(ue.getPartyId());
+						ingresoDiario.setPartyId(contenedor.getParty().getPartyId());
 						ingresoDiario.setPostedAmount(rowdata.getMonto());
 						ingresoDiario.setDescription(tipoDoc.getDescripcion()
 								+ "-" + rowdata.getRefDoc() + "-P");
 
 						// ACCTG_TRANS_PRESUPUESTAL
 						AcctgTransPresupuestal aux = new AcctgTransPresupuestal();
-						aux.setCiclo(rowdata.getCiclo());
-						aux.setUnidadResponsable(ur);
-						aux.setUnidadOrganizacional(uo);
-						aux.setUnidadEjecutora(ue.getPartyId());
-						aux.setRubro(rub);
-						aux.setTipo(tip);
-						aux.setClase(cla);
-						aux.setConceptoRub(con);
-						aux.setNivel5(n5.getProductCategoryId());
-						aux.setFuente(f);
-						aux.setSubFuente(sf);
-						aux.setSubFuenteEspecifica(sfe.getEnumId());
-						aux.setEntidadFederativa(ef);
-						aux.setRegion(reg);
-						aux.setMunicipio(mun);
-						aux.setLocalidad(loc.getGeoId());
+						
 						aux.setAgrupador(rowdata.getRefDoc());
 						aux.setIdPago(rowdata.getIdPago());
 						aux.setIdProductoD(rowdata.getIdProductoD());
@@ -542,7 +528,22 @@ public class IngresoDiarioImportService extends DomainService implements
 						aux.setIdTipoDoc(rowdata.getIdTipoDoc());
 						aux.setSecuencia(rowdata.getSecuencia());
 						aux.setLote(lote);
-						aux.setClavePres(rowdata.getClavePres());
+						aux.setClasificacion1(rowdata.getClasificacion1());
+						aux.setClasificacion2(rowdata.getClasificacion2());
+						aux.setClasificacion3(rowdata.getClasificacion3());
+						aux.setClasificacion4(rowdata.getClasificacion4());
+						aux.setClasificacion5(rowdata.getClasificacion5());
+						aux.setClasificacion6(rowdata.getClasificacion5());
+						aux.setClasificacion7(rowdata.getClasificacion6());
+						aux.setClasificacion8(rowdata.getClasificacion7());
+						aux.setClasificacion9(rowdata.getClasificacion8());
+						aux.setClasificacion10(rowdata.getClasificacion9());
+						aux.setClasificacion11(rowdata.getClasificacion10());
+						aux.setClasificacion12(rowdata.getClasificacion11());
+						aux.setClasificacion13(rowdata.getClasificacion12());
+						aux.setClasificacion14(rowdata.getClasificacion13());
+						aux.setClasificacion15(rowdata.getClasificacion14());
+						aux.setClavePres(contenedor.getClavePresupuestal());
 						
 						// History
 						Debug.log("Busca periodos");
@@ -602,7 +603,13 @@ public class IngresoDiarioImportService extends DomainService implements
 											"00001",
 											"D",
 											cuentas.get("Cuenta Cargo Presupuesto"),
-											sfe.getEnumId());
+											null);
+							for(int i = 0; i<contenedor.getEnumeration().size(); i++)
+							{
+								String indice = new Integer(i+1).toString();
+								String campo = "acctgTagEnumId" + indice;
+								acctgentry.set(campo, contenedor.getEnumeration().get(i).getEnumId());
+							}
 							imp_tx5 = this.session.beginTransaction();
 							ledger_repo.createOrUpdate(acctgentry);
 							imp_tx5.commit();
@@ -640,7 +647,13 @@ public class IngresoDiarioImportService extends DomainService implements
 									rowdata.getOrganizationPartyId(), "00002",
 									"C",
 									cuentas.get("Cuenta Abono Presupuesto"),
-									sfe.getEnumId());
+									null);
+							for(int i = 0; i<contenedor.getEnumeration().size(); i++)
+							{
+								String indice = new Integer(i+1).toString();
+								String campo = "acctgTagEnumId" + indice;
+								acctgentry.set(campo, contenedor.getEnumeration().get(i).getEnumId());
+							}
 							imp_tx9 = this.session.beginTransaction();
 							ledger_repo.createOrUpdate(acctgentry);
 							imp_tx9.commit();
@@ -725,7 +738,13 @@ public class IngresoDiarioImportService extends DomainService implements
 											"00001",
 											"D",
 											cuentas.get("Cuenta Cargo Contable"),
-											sfe.getEnumId());
+											null);
+							for(int i = 0; i<contenedor.getEnumeration().size(); i++)
+							{
+								String indice = new Integer(i+1).toString();
+								String campo = "acctgTagEnumId" + indice;
+								acctgentry.set(campo, contenedor.getEnumeration().get(i).getEnumId());
+							}
 							imp_tx6 = this.session.beginTransaction();
 							ledger_repo.createOrUpdate(acctgentry);
 							imp_tx6.commit();
@@ -762,7 +781,13 @@ public class IngresoDiarioImportService extends DomainService implements
 									ingresoDiario,
 									rowdata.getOrganizationPartyId(), "00002",
 									"C", cuentas.get("Cuenta Abono Contable"),
-									sfe.getEnumId());
+									null);
+							for(int i = 0; i<contenedor.getEnumeration().size(); i++)
+							{
+								String indice = new Integer(i+1).toString();
+								String campo = "acctgTagEnumId" + indice;
+								acctgentry.set(campo, contenedor.getEnumeration().get(i).getEnumId());
+							}
 							imp_tx10 = this.session.beginTransaction();
 							ledger_repo.createOrUpdate(acctgentry);
 							imp_tx10.commit();
@@ -798,7 +823,7 @@ public class IngresoDiarioImportService extends DomainService implements
 
 						if (mensaje.isEmpty()) {
 							String message = "Se importo correctamente Ingreso Diario ["
-									+ rowdata.getClavePres() + "].";
+									+ contenedor.getClavePresupuestal() + "].";
 							this.storeImportIngresoDiarioSuccess(rowdata,
 									imp_repo);
 							Debug.logInfo(message, MODULE);

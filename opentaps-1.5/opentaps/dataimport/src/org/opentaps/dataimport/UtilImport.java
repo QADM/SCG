@@ -13,6 +13,7 @@ import org.opentaps.base.entities.AcctgTrans;
 import org.opentaps.base.entities.AcctgTransEntry;
 import org.opentaps.base.entities.CustomTimePeriod;
 import org.opentaps.base.entities.Enumeration;
+import org.opentaps.base.entities.EnumerationType;
 import org.opentaps.base.entities.Geo;
 import org.opentaps.base.entities.GeoType;
 import org.opentaps.base.entities.GlAccount;
@@ -334,9 +335,8 @@ public class UtilImport {
 		}
 	}
 
-	public static ContenedorContable validaCiclo(String mensaje, String ciclo,
+	public static String validaCiclo(String mensaje, String ciclo,
 			Date fechaTrans) {
-		ContenedorContable c = new ContenedorContable();
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(fechaTrans);
 		ciclo = "20" + ciclo;
@@ -344,9 +344,8 @@ public class UtilImport {
 		if (cal.get(Calendar.YEAR) != Integer.parseInt(ciclo)) {
 			mensaje += "El ciclo no corresponde a la fecha contable de la transaccion, ";
 			Debug.log(mensaje);
-			c.setMensaje(mensaje);
 		}
-		return c;
+		return mensaje;
 	}
 
 	public static String obtenerCiclo(Date fechaTrans) {
@@ -357,19 +356,17 @@ public class UtilImport {
 
 	}
 
-	public static ContenedorContable validaParty(String mensaje,
+	public static String validaParty(String mensaje,
 			LedgerRepositoryInterface ledger_repo, String id, String campo)
 			throws RepositoryException {
-		ContenedorContable c = new ContenedorContable();
 		List<Party> parties = ledger_repo.findList(Party.class,
 				ledger_repo.map(Party.Fields.externalId, id));
 		if (parties.isEmpty()) {
 			Debug.log("Error, " + campo + " no existe");
 			mensaje += campo + " no existe, ";
 			Debug.log(mensaje);
-			c.setMensaje(mensaje);
 		}
-		return c;
+		return mensaje;
 	}
 
 	public static Party obtenParty(LedgerRepositoryInterface ledger_repo,
@@ -379,19 +376,17 @@ public class UtilImport {
 		return parties.get(0);
 	}
 
-	public static ContenedorContable validaWorkEffort(String mensaje,
+	public static String validaWorkEffort(String mensaje,
 			LedgerRepositoryInterface ledger_repo, String id, String campo)
 			throws RepositoryException {
-		ContenedorContable c = new ContenedorContable();
 		WorkEffort act = ledger_repo.findOne(WorkEffort.class,
 				ledger_repo.map(WorkEffort.Fields.workEffortId, id));
 		if (act == null) {
 			Debug.log("Error, " + campo + " no existe");
 			mensaje += campo + " no existe, ";
 			Debug.log(mensaje);
-			c.setMensaje(mensaje);
 		}
-		return c;
+		return mensaje;
 	}
 
 	public static WorkEffort obtenWorkEffort(
@@ -402,10 +397,9 @@ public class UtilImport {
 		return workEffort;
 	}
 
-	public static ContenedorContable validaProductCategory(String mensaje,
+	public static String validaProductCategory(String mensaje,
 			LedgerRepositoryInterface ledger_repo, String id, String tipo,
 			String campo) throws RepositoryException {
-		ContenedorContable c = new ContenedorContable();
 		List<ProductCategory> products = ledger_repo.findList(
 				ProductCategory.class, ledger_repo.map(
 						ProductCategory.Fields.categoryName, id,
@@ -414,10 +408,9 @@ public class UtilImport {
 			Debug.log("Error, " + campo + " no existe");
 			mensaje += campo + " no existe, ";
 			Debug.log(mensaje);
-			c.setMensaje(mensaje);
 		}
 
-		return c;
+		return mensaje;
 	}
 
 	public static ProductCategory obtenProductCategory(
@@ -430,19 +423,17 @@ public class UtilImport {
 		return products.get(0);
 	}
 
-	public static ContenedorContable validaGeo(String mensaje,
+	public static String validaGeo(String mensaje,
 			LedgerRepositoryInterface ledger_repo, String id, String campo)
 			throws RepositoryException {
-		ContenedorContable c = new ContenedorContable();
 		Geo loc = ledger_repo.findOne(Geo.class,
 				ledger_repo.map(Geo.Fields.geoId, id));
 		if (loc == null) {
 			Debug.log("Error, " + campo + " no existe");
 			mensaje += campo + " no existe, ";
 			Debug.log(mensaje);
-			c.setMensaje(mensaje);
 		}
-		return c;
+		return mensaje;
 	}
 
 	public static Geo obtenGeo(LedgerRepositoryInterface ledger_repo, String id)
@@ -452,10 +443,9 @@ public class UtilImport {
 		return geo;
 	}
 
-	public static ContenedorContable validaEnumeration(String mensaje,
+	public static String validaEnumeration(String mensaje,
 			LedgerRepositoryInterface ledger_repo, String id, String tipo,
 			String campo) throws RepositoryException {
-		ContenedorContable c = new ContenedorContable();
 		List<Enumeration> enums = ledger_repo.findList(Enumeration.class,
 				ledger_repo.map(Enumeration.Fields.sequenceId, id,
 						Enumeration.Fields.enumTypeId, tipo));
@@ -464,9 +454,8 @@ public class UtilImport {
 			Debug.log("Error, " + campo + " no existe");
 			mensaje += campo + " no existe, ";
 			Debug.log(mensaje);
-			c.setMensaje(mensaje);
 		}
-		return c;
+		return mensaje;
 	}
 
 	public static Enumeration obtenEnumeration(
@@ -481,138 +470,140 @@ public class UtilImport {
 	public static ContenedorContable validaClasificaciones(List<Clasificacion> lista,
 			LedgerRepositoryInterface ledger_repo, String tipo, Date fechaTrans) {
 		ContenedorContable contenedor = new ContenedorContable();
-		String mensaje = null;
+		String clavePresupuestal = "";
+		String mensaje = "";
 		for (Clasificacion c : lista) {
 			String tipoClasif = c.getTipoObjeto();
 			String valorClasif = c.getValor();
 			String tipoEnum = c.getTipoEnum();
+			List<Enumeration> listaEnum = new ArrayList<Enumeration>();
 			try {
 				if (tipoClasif.equals("Party")) {
 					mensaje += validaParty(mensaje, ledger_repo, valorClasif,
-							"ADMINISTRATIVA").getMensaje();
+							"ADMINISTRATIVA");
 					if(mensaje.equals(""))
 						{
 							Party p = obtenParty(ledger_repo, valorClasif);
-							mensaje += validaVigenciaParty(mensaje, "ADMINISTRATIVA", p).getMensaje();
+							mensaje += validaVigenciaParty(mensaje, "ADMINISTRATIVA", p);
+							contenedor.setParty(p);
 						}
 					
 				} else if (tipoClasif.equals("Geo")) {
 					mensaje += validaGeo(mensaje, ledger_repo, valorClasif,
-							"GEOGRAFICA").getMensaje();
+							"GEOGRAFICA");
+					contenedor.setGeo(obtenGeo(ledger_repo, valorClasif));
 				} else if (tipoClasif.equals("WorkEffort")) {
 					mensaje += validaWorkEffort(mensaje, ledger_repo,
-							valorClasif, "PROYECTO").getMensaje();
+							valorClasif, "PROYECTO");
 					if(mensaje.equals("")){
 						WorkEffort w = obtenWorkEffort(ledger_repo, valorClasif);
 						mensaje += validaVigenciaWorkEffort(mensaje, "PROYECTO", w,
-								fechaTrans).getMensaje();
+								fechaTrans);
+						contenedor.setWe(w);
 					}
 					
 				} else if (tipoClasif.equals("ProductCategory")) {
 					if (tipo.equals("I")) {
 						mensaje += validaProductCategory(mensaje, ledger_repo,
-								valorClasif, buscaHojaCri(ledger_repo), "RUBRO DEL INGRESO").getMensaje();
+								valorClasif, buscaHojaCri(ledger_repo), "RUBRO DEL INGRESO");
 						if(mensaje.equals(""))
 						{
 							ProductCategory p = obtenProductCategory(ledger_repo,
 								valorClasif, buscaHojaCri(ledger_repo));
 							mensaje += validaVigenciaProductCategory(mensaje,
-									"RUBRO DEL INGRESO", p, fechaTrans).getMensaje();
+									"RUBRO DEL INGRESO", p, fechaTrans);
+							contenedor.setProduct(p);
 						}
 						
 					} else {
 						mensaje += validaProductCategory(mensaje, ledger_repo,
 								valorClasif, buscaHojaCog(ledger_repo),
-								"PRODUCTO ESPECIFICO").getMensaje();
+								"PRODUCTO ESPECIFICO");
 						if(mensaje.equals("")){
 						ProductCategory p = obtenProductCategory(ledger_repo,
 								valorClasif, buscaHojaCog(ledger_repo));
 						mensaje += validaVigenciaProductCategory(mensaje,
-								"PRODUCTO ESPECIFICO", p, fechaTrans).getMensaje();
+								"PRODUCTO ESPECIFICO", p, fechaTrans);
+						contenedor.setProduct(p);
 						}
 					}
 				} else if (tipoClasif.equals("EnumerationType")) {
 					mensaje += validaEnumeration(mensaje, ledger_repo,
-							valorClasif, tipoEnum, valorClasif).getMensaje();
+							valorClasif, tipoEnum, valorClasif);
 					if(mensaje.equals("")){
 					Enumeration e = obtenEnumeration(ledger_repo, valorClasif,
 							tipoEnum);
 					mensaje += validaVigencia(mensaje, valorClasif, e,
-							fechaTrans).getMensaje();}
+							fechaTrans);
+					listaEnum.add(e);
+					}
 				}
 			} catch (Exception e) {
 				//
 			}
+			clavePresupuestal += valorClasif;
 		}
+		contenedor.setClavePresupuestal(clavePresupuestal);
+		contenedor.setMensaje(mensaje);
 		return contenedor;
 	}
 
-	public static ContenedorContable validaVigencia(String mensaje, String campo,
+	public static String validaVigencia(String mensaje, String campo,
 			Enumeration enumeration, Date fechaTrans)
 			throws RepositoryException {
-		ContenedorContable c = new ContenedorContable();
 		if (!enumeration.getFechaInicio().before(fechaTrans)
 				|| !enumeration.getFechaFin().after(fechaTrans)) {
 			Debug.log("Error, " + campo + " no vigente");
 			mensaje += campo + " no vigente";
 			Debug.log(mensaje);
-			c.setMensaje(mensaje);
 		}
-		return c;
+		return mensaje;
 	}
 
-	public static ContenedorContable validaVigenciaProductCategory(String mensaje,
+	public static String validaVigenciaProductCategory(String mensaje,
 			String campo, ProductCategory p, Date fechaTrans)
 			throws RepositoryException {
-		ContenedorContable c = new ContenedorContable();
 		if (!p.getFechaInicio().before(fechaTrans)
 				|| !p.getFechaFin().after(fechaTrans)) {
 			Debug.log("Error, " + campo + " no vigente");
 			mensaje += campo + " no vigente";
 			Debug.log(mensaje);
-			c.setMensaje(mensaje);
 		}
-		return c;
+		return mensaje;
 	}
 
-	public static ContenedorContable validaVigenciaWorkEffort(String mensaje, String campo,
+	public static String validaVigenciaWorkEffort(String mensaje, String campo,
 			WorkEffort w, Date fechaTrans) throws RepositoryException {
-		ContenedorContable c = new ContenedorContable();
 		if (!w.getEstimatedStartDate().before(fechaTrans)
 				|| !w.getEstimatedCompletionDate().after(fechaTrans)) {
 			Debug.log("Error, " + campo + " no vigente");
 			mensaje += campo + " no vigente";
 			Debug.log(mensaje);
-			c.setMensaje(mensaje);
 		}
-		return c;
+		return mensaje;
 	}
 
-	public static ContenedorContable validaVigenciaParty(String mensaje, String campo,
+	public static String validaVigenciaParty(String mensaje, String campo,
 			Party party) throws RepositoryException {
-		ContenedorContable c = new ContenedorContable();
 		if (party.getState().equals("I")) {
 			Debug.log("Error, " + campo + " no vigente");
 			mensaje += campo + " no vigente";
 			Debug.log(mensaje);
-			c.setMensaje(mensaje);
 		}
-		return c;
+		return mensaje;
 	}
 
-	public static ContenedorContable validaTipoDoc(String mensaje,
+	public static String validaTipoDoc(String mensaje,
 			LedgerRepositoryInterface ledger_repo, String tipo)
 			throws RepositoryException {
-		ContenedorContable c = new ContenedorContable();
 		TipoDocumento type = ledger_repo.findOne(TipoDocumento.class,
 				ledger_repo.map(TipoDocumento.Fields.idTipoDoc, tipo));
 		if (type == null) {
 			Debug.log("Error, tipoDoc no existe");
 			mensaje += "tipo documento no existe, ";
 			Debug.log(mensaje);
-			c.setMensaje(mensaje);
 		}
-		return c;
+		return mensaje;
 	}
 
 	public static TipoDocumento obtenTipoDocumento(
@@ -624,19 +615,17 @@ public class UtilImport {
 		return tipoDocumento;
 	}
 
-	public static ContenedorContable validaPago(String mensaje,
+	public static String validaPago(String mensaje,
 			LedgerRepositoryInterface ledger_repo, String tipo)
 			throws RepositoryException {
-		ContenedorContable c = new ContenedorContable();
 		PaymentMethod payment = ledger_repo.findOne(PaymentMethod.class,
 				ledger_repo.map(PaymentMethod.Fields.paymentMethodId, tipo));
 		if (payment == null) {
 			Debug.log("Error, idPago no existe");
 			mensaje += "idPago no existe, ";
 			Debug.log(mensaje);
-			c.setMensaje(mensaje);
 		}
-		return c;
+		return mensaje;
 	}
 
 	public static AcctgTransEntry generaAcctgTransEntry(AcctgTrans transaccion,
@@ -751,15 +740,13 @@ public class UtilImport {
 		return work.getWorkEffortParentId();
 	}
 
-	public static ContenedorContable validaMonto(BigDecimal monto, String mensaje) {
-		ContenedorContable c = new ContenedorContable();
+	public static String validaMonto(BigDecimal monto, String mensaje) {
 		if (monto.doubleValue() <= 0) {
 			Debug.log("Error, el monto debe ser mayor a 0");
 			mensaje += "el monto debe ser mayor a 0, ";
 			Debug.log(mensaje);
-			c.setMensaje(mensaje);
 		}
-		return c;
+		return mensaje;
 	}
 
 	public static boolean validaLote(LedgerRepositoryInterface ledger_repo,
