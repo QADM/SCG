@@ -904,9 +904,19 @@ public class UtilImport {
 	public static String buscaHojaNivelPresupuestal(LedgerRepositoryInterface ledger_repo, String tipo)
 			throws RepositoryException {
 		boolean rama = true;
+		
+		List<NivelPresupuestal> niveles = ledger_repo.findList(NivelPresupuestal.class,
+				ledger_repo.map(NivelPresupuestal.Fields.clasificacionId, tipo));
+		
+		for(NivelPresupuestal nivel : niveles){
+			if(nivel.getNivelPadreId()==null){
+				tipo= nivel.getNivelId();
+				break;
+			}
+		}
 
 		do {
-			List<NivelPresupuestal> niveles = ledger_repo.findList(NivelPresupuestal.class,
+			niveles = ledger_repo.findList(NivelPresupuestal.class,
 					ledger_repo.map(NivelPresupuestal.Fields.nivelPadreId, tipo));
 			if(!niveles.isEmpty()){
 				tipo = niveles.get(0).getNivelId(); 
