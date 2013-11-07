@@ -404,13 +404,13 @@ public class EgresoDiarioImportService extends DomainService implements
 					listaClasif.add(c);
 					}
 					//Bloque de Validacion de Clasificaciones
-					contenedor = UtilImport.validaClasificaciones(listaClasif,ledger_repo,"I",rowdata.getFechaContable());
+					contenedor = UtilImport.validaClasificaciones(listaClasif,ledger_repo,"E",rowdata.getFechaContable());
 					mensaje = UtilImport.validaTipoDoc(mensaje, ledger_repo,
-							rowdata.getIdTipoDoc()).getMensaje();
-					if (!contenedor.getMensaje().isEmpty()) {
+							rowdata.getIdTipoDoc());
+					if (!contenedor.getMensaje().isEmpty() || !mensaje.isEmpty()) {
 						loteValido = false;
 						
-						storeImportEgresoDiarioError(rowdata, mensaje, imp_repo);
+						storeImportEgresoDiarioError(rowdata, contenedor.getMensaje(), imp_repo);
 						continue;
 					}
 
@@ -561,10 +561,20 @@ public class EgresoDiarioImportService extends DomainService implements
 					// rowdata.getOrganizationPartyId(), rowdata.getTg(),
 					// rowdata.getIdPago(), rowdata.getIdProductoD(),
 					// rowdata.getIdProductoH());
+					
+					//Se obtiene el tipo de gasto
+					Enumeration tg = null;
+					for(Enumeration e : contenedor.getEnumeration())
+					{
+						if(e.getEnumTypeId().equals("TIPO_GASTO"))
+						{
+							tg = e;
+						}
+					}
 
 					Map<String, String> cuentas = motor.cuentasEgresoDiario(
-							tipoDoc.getAcctgTransTypeId(), rowdata.getPe(),
-							rowdata.getOrganizationPartyId(), rowdata.getTg(),
+							tipoDoc.getAcctgTransTypeId(), contenedor.getProduct().getCategoryName(),
+							rowdata.getOrganizationPartyId(), tg.getEnumId(),
 							rowdata.getIdPago(), rowdata.getIdProductoD(),
 							rowdata.getIdProductoH());
 
@@ -604,39 +614,14 @@ public class EgresoDiarioImportService extends DomainService implements
 								.getAcctgTransTypeId());
 						egresoDiario.setLastModifiedByUserLogin(rowdata
 								.getUsuario());
-						egresoDiario.setPartyId(ue.getPartyId());
+						egresoDiario.setPartyId(contenedor.getParty().getPartyId());
 						egresoDiario.setPostedAmount(rowdata.getMonto());
-						egresoDiario.setWorkEffortId(act.getWorkEffortId());
+						egresoDiario.setWorkEffortId(contenedor.getWe().getWorkEffortId());
 
 						// ACCTG_TRANS_PRESUPUESTAL
 						Debug.log("ACCTG_TRANS_PRESUPUESTAL");
 						AcctgTransPresupuestal aux = new AcctgTransPresupuestal();
-						aux.setCiclo(rowdata.getCiclo());
-						aux.setUnidadResponsable(ur);
-						aux.setUnidadOrganizacional(uo);
-						aux.setUnidadEjecutora(ue.getPartyId());
-						aux.setFinalidad(fin);
-						aux.setFuncion(fun);
-						aux.setSubFuncion(subf.getEnumId());
-						aux.setProgramaPlan(eje);
-						aux.setProgramaPresupuestario(pp);
-						aux.setSubProgramaPresupuestario(spp);
-						aux.setActividad(act.getWorkEffortId());
-						aux.setTipoGasto(tg.getEnumId());
-						aux.setCapitulo(cap);
-						aux.setConcepto(con);
-						aux.setPartidaGenerica(pg);
-						aux.setPartidaEspecifica(pe.getProductCategoryId());
-						aux.setFuente(f);
-						aux.setSubFuente(sf);
-						aux.setSubFuenteEspecifica(sfe.getEnumId());
-						aux.setEntidadFederativa(ef);
-						aux.setRegion(reg);
-						aux.setMunicipio(mun);
-						aux.setLocalidad(loc.getGeoId());
-						aux.setSector(sec);
-						aux.setSubSector(subsec);
-						aux.setArea(area.getEnumId());
+						
 						aux.setAgrupador(rowdata.getRefDoc());
 						aux.setIdPago(rowdata.getIdPago());
 						aux.setIdProductoD(rowdata.getIdProductoD());
@@ -644,7 +629,22 @@ public class EgresoDiarioImportService extends DomainService implements
 						aux.setIdTipoDoc(rowdata.getIdTipoDoc());
 						aux.setSecuencia(rowdata.getSecuencia());
 						aux.setLote(lote);
-						aux.setClavePres(rowdata.getClavePres());
+						aux.setClasificacion1(rowdata.getClasificacion1());
+						aux.setClasificacion2(rowdata.getClasificacion2());
+						aux.setClasificacion3(rowdata.getClasificacion3());
+						aux.setClasificacion4(rowdata.getClasificacion4());
+						aux.setClasificacion5(rowdata.getClasificacion5());
+						aux.setClasificacion6(rowdata.getClasificacion5());
+						aux.setClasificacion7(rowdata.getClasificacion6());
+						aux.setClasificacion8(rowdata.getClasificacion7());
+						aux.setClasificacion9(rowdata.getClasificacion8());
+						aux.setClasificacion10(rowdata.getClasificacion9());
+						aux.setClasificacion11(rowdata.getClasificacion10());
+						aux.setClasificacion12(rowdata.getClasificacion11());
+						aux.setClasificacion13(rowdata.getClasificacion12());
+						aux.setClasificacion14(rowdata.getClasificacion13());
+						aux.setClasificacion15(rowdata.getClasificacion14());
+						aux.setClavePres(contenedor.getClavePresupuestal());
 
 						// History
 						Debug.log("Busca periodos");
@@ -707,12 +707,14 @@ public class EgresoDiarioImportService extends DomainService implements
 											"00001",
 											"D",
 											cuentas.get("Cuenta Cargo Presupuesto"),
-											sfe.getEnumId());
+											null);
 							// Tags seteados.
-							acctgentry.setAcctgTagEnumId1(subf.getEnumId());
-							acctgentry.setAcctgTagEnumId2(tg.getEnumId());
-							acctgentry.setAcctgTagEnumId3(sfe.getEnumId());
-							acctgentry.setAcctgTagEnumId4(area.getEnumId());
+							for(int i = 0; i<contenedor.getEnumeration().size(); i++)
+							{
+								String indice = new Integer(i+1).toString();
+								String campo = "acctgTagEnumId" + indice;
+								acctgentry.set(campo, contenedor.getEnumeration().get(i).getEnumId());
+							}
 							imp_tx5 = this.session.beginTransaction();
 							ledger_repo.createOrUpdate(acctgentry);
 							imp_tx5.commit();
@@ -752,12 +754,14 @@ public class EgresoDiarioImportService extends DomainService implements
 									rowdata.getOrganizationPartyId(), "00002",
 									"C",
 									cuentas.get("Cuenta Abono Presupuesto"),
-									sfe.getEnumId());
+									null);
 							// Tags seteados.
-							acctgentry.setAcctgTagEnumId1(subf.getEnumId());
-							acctgentry.setAcctgTagEnumId2(tg.getEnumId());
-							acctgentry.setAcctgTagEnumId3(sfe.getEnumId());
-							acctgentry.setAcctgTagEnumId4(area.getEnumId());
+							for(int i = 0; i<contenedor.getEnumeration().size(); i++)
+							{
+								String indice = new Integer(i+1).toString();
+								String campo = "acctgTagEnumId" + indice;
+								acctgentry.set(campo, contenedor.getEnumeration().get(i).getEnumId());
+							}
 							imp_tx9 = this.session.beginTransaction();
 							ledger_repo.createOrUpdate(acctgentry);
 							imp_tx9.commit();
@@ -838,12 +842,14 @@ public class EgresoDiarioImportService extends DomainService implements
 											"00001",
 											"D",
 											cuentas.get("Cuenta Cargo Contable"),
-											sfe.getEnumId());
+											null);
 							// Tags seteados.
-							acctgentry.setAcctgTagEnumId1(subf.getEnumId());
-							acctgentry.setAcctgTagEnumId2(tg.getEnumId());
-							acctgentry.setAcctgTagEnumId3(sfe.getEnumId());
-							acctgentry.setAcctgTagEnumId4(area.getEnumId());
+							for(int i = 0; i<contenedor.getEnumeration().size(); i++)
+							{
+								String indice = new Integer(i+1).toString();
+								String campo = "acctgTagEnumId" + indice;
+								acctgentry.set(campo, contenedor.getEnumeration().get(i).getEnumId());
+							}
 							imp_tx6 = this.session.beginTransaction();
 							ledger_repo.createOrUpdate(acctgentry);
 							imp_tx6.commit();
@@ -879,12 +885,14 @@ public class EgresoDiarioImportService extends DomainService implements
 									egresoDiario,
 									rowdata.getOrganizationPartyId(), "00002",
 									"C", cuentas.get("Cuenta Abono Contable"),
-									sfe.getEnumId());
+									null);
 							// Tags seteados.
-							acctgentry.setAcctgTagEnumId1(subf.getEnumId());
-							acctgentry.setAcctgTagEnumId2(tg.getEnumId());
-							acctgentry.setAcctgTagEnumId3(sfe.getEnumId());
-							acctgentry.setAcctgTagEnumId4(area.getEnumId());
+							for(int i = 0; i<contenedor.getEnumeration().size(); i++)
+							{
+								String indice = new Integer(i+1).toString();
+								String campo = "acctgTagEnumId" + indice;
+								acctgentry.set(campo, contenedor.getEnumeration().get(i).getEnumId());
+							}
 							imp_tx10 = this.session.beginTransaction();
 							ledger_repo.createOrUpdate(acctgentry);
 							imp_tx10.commit();
@@ -917,7 +925,7 @@ public class EgresoDiarioImportService extends DomainService implements
 
 						if (mensaje.isEmpty()) {
 							String message = "Se importo correctamente Egreso Diario ["
-									+ rowdata.getClavePres() + "].";
+									+ contenedor.getClavePresupuestal() + "].";
 							this.storeImportEgresoDiarioSuccess(rowdata,
 									imp_repo);
 							Debug.logInfo(message, MODULE);
@@ -996,6 +1004,6 @@ public class EgresoDiarioImportService extends DomainService implements
 				session.close();
 			}
 		}
-		chubby */
+
 	}
 }
