@@ -173,18 +173,25 @@
 		<attribute name="glFiscalTypeId" mode="IN" type="String" optional="false"/>
         <attribute name="acctgTransTypeId" mode="IN" type="String" optional="false"/>
         <attribute name="description" mode="IN" type="String"/>        
-        <attribute name="idN5" mode="IN" type="String" optional="false"/>
-        <attribute name="EntidadFederativa" mode="IN" type="String" optional="false"/>
-        <attribute name="Region" mode="IN" type="String" optional="false"/>
-        <attribute name="Municipio" mode="IN" type="String" optional="false"/>
-        <attribute name="Localidad" mode="IN" type="String" optional="false"/>
         <attribute name="fechaTransaccion" mode="IN" type="String" optional="false"/>
         <attribute name="fechaContable" mode="IN" type="String" optional="false"/>        
         <attribute name="amount" mode="IN" type="Double" optional="false" />
         <attribute name="referencia" mode="IN" type="String" optional="false"/>
-        <attribute name="subFuenteEsp" mode="IN" type="String" optional="false"/>
-        <attribute name="unidadEjecutora" mode="IN" type="String" optional="false"/> 
-<!--         <attribute name="amount" mode="IN" type="Double" optional="false"/>  -->
+        <attribute name="clasificacion1" mode="IN" type="String" optional="true"/> 
+        <attribute name="clasificacion2" mode="IN" type="String" optional="true"/> 
+        <attribute name="clasificacion3" mode="IN" type="String" optional="true"/> 
+        <attribute name="clasificacion4" mode="IN" type="String" optional="true"/> 
+        <attribute name="clasificacion5" mode="IN" type="String" optional="true"/> 
+        <attribute name="clasificacion6" mode="IN" type="String" optional="true"/> 
+        <attribute name="clasificacion7" mode="IN" type="String" optional="true"/> 
+        <attribute name="clasificacion8" mode="IN" type="String" optional="true"/> 
+        <attribute name="clasificacion9" mode="IN" type="String" optional="true"/> 
+        <attribute name="clasificacion10" mode="IN" type="String" optional="true"/> 
+        <attribute name="clasificacion11" mode="IN" type="String" optional="true"/> 
+        <attribute name="clasificacion12" mode="IN" type="String" optional="true"/> 
+        <attribute name="clasificacion13" mode="IN" type="String" optional="true"/> 
+        <attribute name="clasificacion14" mode="IN" type="String" optional="true"/> 
+        <attribute name="clasificacion15" mode="IN" type="String" optional="true"/> 
     </service>
      <service name="createAcctgTransPresupuestalManual" default-entity-name="AcctgTransPresupuestal" engine="java"
             location="com.opensourcestrategies.financials.transactions.TransactionBudget" invoke="createAcctgTransPresupuestalManual" auth="true">
@@ -211,22 +218,25 @@
 		<attribute name="organizationPartyId" mode="IN" type="String" optional="false"/>	
         <attribute name="acctgTransTypeId" mode="IN" type="String" optional="false"/>
         <attribute name="description" mode="IN" type="String"/>
-        <attribute name="subfuncion" mode="IN" type="String"/>
-        <attribute name="actividad" mode="IN" type="String"/>
-        <attribute name="tipoGasto" mode="IN" type="String"/>
-        <attribute name="partidaEspecifica" mode="IN" type="String"/>
-        <attribute name="area" mode="IN" type="String"/>
-        <attribute name="EntidadFederativa" mode="IN" type="String"/>
-        <attribute name="Region" mode="IN" type="String"/>
-        <attribute name="Municipio" mode="IN" type="String"/>
-        <attribute name="Localidad" mode="IN" type="String"/>
         <attribute name="fechaTransaccion" mode="IN" type="String"/>
         <attribute name="fechaContable" mode="IN" type="String"/>        
         <attribute name="amount" mode="IN" type="Double" optional="false" />
         <attribute name="referencia" mode="IN" type="String"/>
-        <attribute name="subFuenteEsp" mode="IN" type="String"/>
-        <attribute name="unidadEjecutora" mode="IN" type="String"/> 
-<!--         <attribute name="amount" mode="IN" type="Double" optional="false"/>  -->
+        <attribute name="clasificacion1" mode="IN" type="String" optional="true"/> 
+        <attribute name="clasificacion2" mode="IN" type="String" optional="true"/> 
+        <attribute name="clasificacion3" mode="IN" type="String" optional="true"/> 
+        <attribute name="clasificacion4" mode="IN" type="String" optional="true"/> 
+        <attribute name="clasificacion5" mode="IN" type="String" optional="true"/> 
+        <attribute name="clasificacion6" mode="IN" type="String" optional="true"/> 
+        <attribute name="clasificacion7" mode="IN" type="String" optional="true"/> 
+        <attribute name="clasificacion8" mode="IN" type="String" optional="true"/> 
+        <attribute name="clasificacion9" mode="IN" type="String" optional="true"/> 
+        <attribute name="clasificacion10" mode="IN" type="String" optional="true"/> 
+        <attribute name="clasificacion11" mode="IN" type="String" optional="true"/> 
+        <attribute name="clasificacion12" mode="IN" type="String" optional="true"/> 
+        <attribute name="clasificacion13" mode="IN" type="String" optional="true"/> 
+        <attribute name="clasificacion14" mode="IN" type="String" optional="true"/> 
+        <attribute name="clasificacion15" mode="IN" type="String" optional="true"/> 
     </service>
     
      <service name="createAcctgTransBugetManual" default-entity-name="AcctgTrans" engine="java"
