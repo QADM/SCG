@@ -56,36 +56,17 @@ public final class UtilBudget {
 	public static String getClavePresupuestal(Map context,
 			LocalDispatcher dispatcher) {
 
-		String clavePresupuestal = null;
-		
+		String clasificaciones = "", clavePresupuestal = "";
 		
 		try {
-			Debug.log("Entro getClavePresupuestal ", MODULE);			
+			Debug.log("Entro getClavePresupuestal ", MODULE);		
 			
-				String fechaContable = (String) context.get("fechaContable");
-				
-				String ciclo = String.valueOf((getDateTransaction(fechaContable)
-						.getYear() + 1900)).substring(2);
-				String UE = (String) context.get("unidadEjecutora");
-				String nivel5 = (String) context.get("idN5");
-				String SubFuenteEspecifica = (String) context.get("subFuenteEsp");
-				String subFuncion = (String) context.get("subfuncion");
-				String actividad = (String) context.get("actividad");
-				String PE = (String) context.get("partidaEspecifica");
-				String area = ((String) context.get("area"));
-				String Localidad = (String) context.get("Localidad");
-			
-			if(subFuncion == null)
-			{				
-				clavePresupuestal = ciclo + UE + nivel5 + SubFuenteEspecifica
-						+ Localidad;
-
-			}
-			else
+			for(int i=1; i<16; i++)
 			{
-				clavePresupuestal = ciclo + UE + subFuncion + actividad + PE
-						+ SubFuenteEspecifica + Localidad + area;
+				clasificaciones = (String) context.get("clasificacion"+i);
+				clavePresupuestal = clavePresupuestal + clasificaciones;
 			}
+				
 			Debug.log("Entro getClavePresupuestal clave presupuestal" + clavePresupuestal, MODULE);
 			
 		} catch (Exception e) {
