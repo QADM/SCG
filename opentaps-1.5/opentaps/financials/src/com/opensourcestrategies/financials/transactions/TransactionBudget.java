@@ -345,10 +345,10 @@ public class TransactionBudget {
 					.get("fechaTransaccion"))) {
 				
 				createAcctgTransCtx.put("transactionDate", fechaTransaccion);
-				createAcctgTransCtx.put("description", clave + "-" +  getFormatMes (fechaConta.getMonth()));
+				createAcctgTransCtx.put("description", clave + "-" +  String.format("%02d",fechaConta.getMonth()+1));
 				createAcctgTransCtx.put("acctgTransTypeId", "TINGRESOESTIMADO");
 				createAcctgTransCtx.put("glFiscalTypeId" ,glFiscalType);
-				createAcctgTransCtx.put("partyId" ,unidadEjecutora);
+				createAcctgTransCtx.put("partyId" ,organizationPartyId);
 				//createAcctgTransCtx.put("createdByUserLogin" ,"admin");
 				createAcctgTransCtx.put("postedAmount", amount);
 				//createdByUserLogin
@@ -422,7 +422,7 @@ public class TransactionBudget {
 			debitCtx.put("debitCreditFlag", "D");
 			debitCtx.put("acctgTransEntryTypeId", "_NA_");
 			debitCtx.put("currencyUomId", currencyUomId);
-			debitCtx.put("description", clave + "-" +  getFormatMes (fechaConta.getMonth()));
+			debitCtx.put("description", clave + "-" +  String.format("%02d",fechaConta.getMonth()+1));
 			debitCtx.put("acctgTagEnumId3", (String) context.get("subFuenteEsp"));
 			results = dispatcher.runSync("createAcctgTransEntryManual",
 					debitCtx);
@@ -436,10 +436,12 @@ public class TransactionBudget {
 			creditCtx.put("debitCreditFlag", "C");
 			creditCtx.put("acctgTransEntryTypeId", "_NA_");
 			creditCtx.put("currencyUomId", currencyUomId);
-			creditCtx.put("description", clave + "-" +  getFormatMes (fechaConta.getMonth()));
+			creditCtx.put("description", clave + "-" +  String.format("%02d",fechaConta.getMonth()+1));
 			creditCtx.put("acctgTagEnumId3", (String) context.get("subFuenteEsp"));
 			results = dispatcher.runSync("createAcctgTransEntryManual",
 					creditCtx);
+			
+			
 
 			results = ServiceUtil.returnSuccess();
 			results.put("acctgTransId", acctgTransId);
@@ -705,6 +707,12 @@ public class TransactionBudget {
 
 			presupuestal.setAcctgTransId(acctgTransId);
 			presupuestal.setClavePres(UtilBudget.getClavePresupuestal(context, dispatcher));
+			
+			for (int i = 0; i < 15; i++) {
+				presupuestal.set("clasificacion" + i, ((String) context.get("clasificacion" + i)));
+			}
+			//presupuestal.setClasificacion1(clasificacion1);
+			
 //			clasificadores
 //			presupuestal.setCiclo(String.valueOf((UtilBudget.getDateTransaction(
 //					fechaContable).getYear() + 1900)));
@@ -785,7 +793,7 @@ public class TransactionBudget {
 			
 			AcctgTrans acctgTrans = new AcctgTrans();
 			acctgTrans.initRepository(ledgerRepository);
-			//acctgTrans.setAllFields(context);
+			
 			Date fecha = UtilBudget.getDateTransaction((String) context.get("transactionDate"));
 			Timestamp timestamp = new Timestamp(fecha.getTime());
 			String acctgTransTypeId = (String) context.get("acctgTransTypeId");
@@ -802,7 +810,7 @@ public class TransactionBudget {
 			
 			acctgTrans.setTransactionDate(timestamp);
 			
-			String mes =  getFormatMes(fecha.getMonth());
+			String mes =  String.format("%02d",fecha.getMonth()+1);
 			String annio = String.valueOf(fecha.getYear() + 1900).substring(2);
 			if(acctgTransTypeId.equals("TINGRESOESTIMADO"))
 			{
@@ -827,61 +835,7 @@ public class TransactionBudget {
 	}
 	
 	
-	private static String getFormatMes(int month) {
-		
-		String Mes = "";
-		try {
-			
-			switch (month) {
-			case 0:	
-				Mes = "01";
-				break;
-			case 1:
-				Mes = "02";
-				break;
-			case 2:	
-				Mes = "03";
-				break;
-			case 3:	
-				Mes = "04";
-				break;
-			case 4:		
-				Mes = "05";
-				break;
-			case 5:			
-				Mes = "06";
-				break;
-			case 6:		
-				Mes = "07";
-				break;
-			case 7:		
-				Mes = "08";
-				break;
-			case 8:		
-				Mes = "09";
-				break;
-			case 9:		
-				Mes = "10";
-				break;
-			case 10:	
-				Mes = "11";
-				break;
-			case 11:	
-				Mes = "12";
-				break;
-
-			default:
-				break;
-			}
-			
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-		
-		return Mes;
-		
-	}
-
+	
 	/**
 	 * Create a Quick <code>AcctgTrans</code> record. IsPosted is forced to "N".
 	 * Creates an Quick AcctgTrans and two offsetting AcctgTransEntry records.
@@ -973,10 +927,10 @@ public class TransactionBudget {
 				
 				
 				createAcctgTransCtx.put("transactionDate", fechaTransaccion);
-				createAcctgTransCtx.put("description", clave + "-" +  getFormatMes (fechaConta.getMonth()));
+				createAcctgTransCtx.put("description", clave + "-" +  String.format("%02d",fechaConta.getMonth()+1));
 				createAcctgTransCtx.put("acctgTransTypeId", "TPRESUPAPROBADO");
 				createAcctgTransCtx.put("glFiscalTypeId" ,glFiscalTypeId);
-				createAcctgTransCtx.put("partyId" ,unidadEjecutora);
+				createAcctgTransCtx.put("partyId" ,organizationPartyId);
 				//createAcctgTransCtx.put("createdByUserLogin" ,"admin");
 				createAcctgTransCtx.put("postedAmount", amount);
 			}

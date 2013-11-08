@@ -1,5 +1,4 @@
 /*
-
  */
 
 import org.opentaps.common.util.UtilAccountingTags;
@@ -8,18 +7,8 @@ import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.service.ServiceException;
 
-
 organizationPartyId = UtilCommon.getOrganizationPartyId(request);
 context.put("organizationPartyId", organizationPartyId);
 
 // get the accounting tags
-try
-{
-context.put("tagTypes", UtilAccountingTags.getClassificationTagsForOrganization(organizationPartyId, UtilAccountingTags.INGRESO_TAG, delegator));
-}
-catch (InfrastructureException e) {
-			
-			
-			
-		}
-
+context.put("tagTypes", UtilAccountingTags.getClassificationTagsForOrganization(organizationPartyId, "EGRESO", delegator));

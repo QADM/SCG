@@ -97,8 +97,11 @@ public final class UtilAccountingTags {
     public static final String TRANSACTION_ENTRY_TAG = "TRANSACTION_ENTRY";
     /** Tags for check run feature. */
     public static final String CHECK_RUN_TAG = "CHECK_RUN";    
-    /** Tags for transaction entries. */
+    /** Estructura de clasificaciones ingreso y egreso */
+    public static final String EGRESO_TAG = "EGRESO";
     public static final String INGRESO_TAG = "INGRESO";
+    
+    
 
     private UtilAccountingTags() { }
 
@@ -728,6 +731,11 @@ public final class UtilAccountingTags {
      * @throws RepositoryException if an error occurs
      */
     public static List<ClassificationConfigurationForOrganization> getClassificationTagsForOrganization(String organizationPartyId, String accountingTagUsageTypeId, Delegator delegator) throws RepositoryException {
+        OrganizationRepository repository = new OrganizationRepository(delegator);
+        return repository.getClassificationTagConfiguration(organizationPartyId, accountingTagUsageTypeId);
+    }
+    
+    public static List<ClassificationConfigurationForOrganization> getClassificationTagsForOrganizationEgresos(String organizationPartyId, String accountingTagUsageTypeId, Delegator delegator) throws RepositoryException {
         OrganizationRepository repository = new OrganizationRepository(delegator);
         return repository.getClassificationTagConfiguration(organizationPartyId, accountingTagUsageTypeId);
     }
