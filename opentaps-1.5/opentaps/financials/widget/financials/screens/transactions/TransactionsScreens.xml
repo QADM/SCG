@@ -789,7 +789,8 @@
                 <set field="pageTitleLabel" value="${uiLabelMap.FinancialsDailyOperIncome}"/>  
                 <set field="sectionHeaderUiLabel" value="${uiLabelMap.FinancialsDailyOperIncome}"/>
                 <set field="creaOpDiariaIngresos" value="createOperacionDiariaIngresos"/>
-				<script location="component://financials/webapp/financials/WEB-INF/actions/transactions/getDatosOperacionDiariaIng.bsh"/>                
+				<script location="component://financials/webapp/financials/WEB-INF/actions/transactions/getDatosOperacionDiariaIng.bsh"/>  
+				<script location="component://financials/webapp/financials/WEB-INF/actions/transactions/createTransactionCustom.bsh"/>              
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator">
@@ -810,7 +811,8 @@
                 <set field="pageTitleLabel" value="${uiLabelMap.FinancialsDailyOperIncome}"/>  
                 <set field="sectionHeaderUiLabel" value="${uiLabelMap.FinancialsDailyOperIncome}"/>
                 <set field="creaOpDiariaEgresos" value="createOperacionDiariaEgresos"/>
-				<script location="component://financials/webapp/financials/WEB-INF/actions/transactions/getDatosOperacionDiariaEgre.bsh"/>                
+				<script location="component://financials/webapp/financials/WEB-INF/actions/transactions/getDatosOperacionDiariaEgre.bsh"/>  
+				<script location="component://financials/webapp/financials/WEB-INF/actions/transactions/createTransactionCustom.bsh"/>              
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator">
@@ -933,11 +935,9 @@
                 <set field="pageTitleLabel" value="Ley de Egresos"/>  
                 <set field="sectionHeaderUiLabel" value="Ley de Egresos"/> 
                 <set field="createAcctgPresupuestoEgresoFormTarget" value="createAcctgTransPresupuestoEgreso"/>
-                <script location="component://financials/webapp/financials/WEB-INF/actions/transactions/getDatosOperacionDiariaIng.bsh"/> 
-                <java location="com.opensourcestrategies.financials.transactions.TransactionBudget" invoke="buscarCatalogos"/>             
-	            <entity-condition list="listGeo" entity-name="Geo">
-	            	<order-by field-name="geoId"/>
-	            </entity-condition>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/transactions/getDatosOperacionDiariaIng.bsh"/>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/transactions/createTransactionEgreso.bsh"/>
+                <!-- <java location="com.opensourcestrategies.financials.transactions.TransactionBudget" invoke="buscarCatalogos"/>-->  
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator">

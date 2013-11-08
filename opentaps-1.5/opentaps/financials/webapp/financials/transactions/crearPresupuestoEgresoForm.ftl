@@ -26,48 +26,43 @@
         <@displayTitleCell title=uiLabelMap.FinancialsTransactionDateContable titleClass="requiredField"/>
         <@inputDateTimeCell name="fechaContable" default=Static["org.ofbiz.base.util.UtilDateTime"].nowTimestamp() />
       </tr>
-      <tr>
-	  		<@inputSelectRow title=uiLabelMap.FinancialsBudgetUnidadE required=false list=listUnidadE key="partyId"  displayField="groupName" name="unidadEjecutora" default=partyId?if_exists titleClass="requiredField"/>
-	  </tr>	
-      <tr>
-      	<@inputSelectRow title=uiLabelMap.FinancialsBudgetSubfuenteE required=false list=listSubFuente  displayField="description" key="enumId"  name="subFuenteEsp" default=description?if_exists titleClass="requiredField"/>
-      </tr>
-      <tr>
-      	<@inputSelectRow title=uiLabelMap.FinancialsBudgetSubfuncion required=false list=listsubfuncion  displayField="description" key="enumId"  name="subfuncion" default=description?if_exists titleClass="requiredField"/>
-        
-      </tr>
-      <tr>
-      	<@inputSelectRow title=uiLabelMap.FinancialsBudgetActividad required=false list=listactividad  displayField="description" key="workEffortId"  name="actividad" default=workEffortId?if_exists titleClass="requiredField"/>
-        
-      </tr>   
-      <tr>
-      	<@inputSelectRow title=uiLabelMap.FinancialsBudgetTipoGasto required=false list=listtipoGasto  displayField="description" key="enumId"  name="tipoGasto" default=description?if_exists titleClass="requiredField"/>
-        
-      </tr>      
-      <tr>
-      	<@inputSelectRow title=uiLabelMap.FinancialsBudgetPE required=false list=listpartidaEspecifica  
-      		displayField="description" key="productCategoryId"  name="partidaEspecifica" default=productCategoryId?if_exists titleClass="requiredField" />
-        
-      </tr> 
-      <tr>
-      	<@displayTitleCell title=uiLabelMap.FinancialsFederalEntity titleClass="requiredField" />
-      	<@padresGeo name="EntidadFederativa" geoCode="MEX" hijoName="Region" nietos="Municipio,Localidad"/>
-      </tr>
-      <tr>
-      	<@displayTitleCell title=uiLabelMap.FinancialsRegion titleClass="requiredField" />
-      	<@padresGeo name="Region" hijoName="Municipio" nietos="Localidad"/>
-      </tr>
-      <tr>
-      	<@displayTitleCell title=uiLabelMap.FinancialsTown titleClass="requiredField" />
-      	<@padresGeo name="Municipio" hijoName="Localidad"/>
-      </tr>
-      <tr>
-      	<@displayTitleCell title=uiLabelMap.FinancialsLocality titleClass="requiredField" />
-      	<@padresGeo name="Localidad" />
-      </tr>    
-      <tr>
-      	<@inputSelectRow title=uiLabelMap.FinancialsBudgetArea required=false list=listarea  displayField="description" key="enumId"  name="area" default=description?if_exists titleClass="requiredField"/>        
-      </tr>                                                          
+      
+      <#list tagTypes as tag>
+        <#if tag.isRequired()>
+          <#assign titleClass="requiredField" />
+        <#else/>
+          <#assign titleClass="tableheadtext" />
+        </#if>        
+        <tr>
+          <@displayTitleCell title=tag.description titleClass=titleClass /> 
+          <#if tag.description?contains("Administrativa")>         
+	          <@inputSelectCell name="clasificacion${tag.index}" errorField="acctgTagEnumId${tag.index}" list=tag.activeTagValues key="externalId" required=false default=tag.defaultValue! ; tagValue>
+	            ${tagValue.groupName}
+	          </@inputSelectCell>            
+           <#elseif tag.description?contains("geo")>         
+	          <@inputSelectCell name="clasificacion${tag.index}" errorField="acctgTagEnumId${tag.index}" list=tag.activeTagValues key="geoId" required=false default=tag.defaultValue! ; tagValue>
+	            ${tagValue.geoName}
+	          </@inputSelectCell>  
+          <#elseif tag.description?contains("CRI") || tag.description?contains("COG") >         
+	          <@inputSelectCell name="clasificacion${tag.index}" errorField="acctgTagEnumId${tag.index}" list=tag.activeTagValues key="categoryName" required=false default=tag.defaultValue! ; tagValue>
+	            ${tagValue.description}
+	          </@inputSelectCell>  
+	      <#elseif tag.description?contains("Programatica") || tag.description?contains("COG") >         
+	          <@inputSelectCell name="clasificacion${tag.index}" errorField="acctgTagEnumId${tag.index}" list=tag.activeTagValues key="workEffortName" required=false default=tag.defaultValue! ; tagValue>
+	            ${tagValue.description}
+	          </@inputSelectCell>
+	      <#elseif tag.description?contains("Ciclo")>         
+	          <@inputSelectCell name="clasificacion${tag.index}" errorField="acctgTagEnumId${tag.index}" list=tag.activeTagValues key="nivelId" required=false default=tag.defaultValue! ; tagValue>
+	            ${tagValue.nivelId}
+	          </@inputSelectCell>
+	      <#else>         
+	          <@inputSelectCell name="clasificacion${tag.index}" errorField="acctgTagEnumId${tag.index}" list=tag.activeTagValues key="enumId" required=false default=tag.defaultValue! ; tagValue>
+	            ${tagValue.enumCode}
+	          </@inputSelectCell>
+          </#if>     
+        </tr>        
+      </#list>   
+                                      
       <tr>
         <@displayTitleCell title=uiLabelMap.FinancialsReferenceDocument titleClass="requiredField"/>
         <@inputTextCell name="referencia" maxlength=60   />

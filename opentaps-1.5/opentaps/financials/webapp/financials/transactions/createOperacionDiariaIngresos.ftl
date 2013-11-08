@@ -50,35 +50,42 @@
         <@displayTitleCell title=uiLabelMap.FinancialsProductDebit />
         <@inputSelectCell list=listProducts?if_exists displayField="description" name="Id_Producto_Cargo" default=productId?if_exists key="productId" required=false />
       </tr>      
-      <tr>
-        <@displayTitleCell title=uiLabelMap.FinancialsN5 titleClass="requiredField"/>
-        <@inputSelectCell list=listN5?if_exists displayField="description" name="N5" default=productCategoryId?if_exists key="productCategoryId" />
-      </tr>
-      <tr>
-      	<@displayTitleCell title=uiLabelMap.FinancialsFederalEntity titleClass="requiredField"/>
-      	<@padresGeo name="EntidadFederativa" geoCode="MEX" hijoName="Region" nietos="Municipio,Localidad"/>
-      </tr>
-      <tr>
-      	<@displayTitleCell title=uiLabelMap.FinancialsRegion titleClass="requiredField"/>
-      	<@padresGeo name="Region" hijoName="Municipio" nietos="Localidad"/>
-      </tr>
-      <tr>
-      	<@displayTitleCell title=uiLabelMap.FinancialsTown titleClass="requiredField"/>
-      	<@padresGeo name="Municipio" hijoName="Localidad"/>
-      </tr>
-      <tr>
-      	<@displayTitleCell title=uiLabelMap.FinancialsLocality titleClass="requiredField"/>
-      	<@padresGeo name="Localidad" />
-      </tr>  
-      </tr>
-      <tr>
-      	<@displayTitleCell title=uiLabelMap.FinancialsUnderSpecificSource titleClass="requiredField"/>
-        <@inputSelectCell list=listaSubfuente?if_exists displayField="description" name="Sub_Fuente_Especifica" default=enumId?if_exists key="enumId"/>
-      </tr>
-      <tr>
-      	<@displayTitleCell title=uiLabelMap.FinancialsExecutingUnit titleClass="requiredField"/>
-        <@inputSelectCell list=listaUnidades?if_exists displayField="groupName" name="Unidad_Ejecutora" default=partyId?if_exists key="partyId"/>
-      </tr>
+      
+      <#list tagTypes as tag>
+        <#if tag.isRequired()>
+          <#assign titleClass="requiredField" />
+        <#else/>
+          <#assign titleClass="tableheadtext" />
+        </#if>        
+        <tr>
+          <@displayTitleCell title=tag.description titleClass=titleClass /> 
+          <#if tag.description?contains("Administrativa")>         
+	          <@inputSelectCell name="clasificacion${tag.index}" errorField="acctgTagEnumId${tag.index}" list=tag.activeTagValues key="externalId" required=false default=tag.defaultValue! ; tagValue>
+	            ${tagValue.groupName}
+	          </@inputSelectCell>            
+           <#elseif tag.description?contains("geo")>         
+	          <@inputSelectCell name="clasificacion${tag.index}" errorField="acctgTagEnumId${tag.index}" list=tag.activeTagValues key="geoId" required=false default=tag.defaultValue! ; tagValue>
+	            ${tagValue.geoName}
+	          </@inputSelectCell>  
+          <#elseif tag.description?contains("CRI") || tag.description?contains("COG") >         
+	          <@inputSelectCell name="clasificacion${tag.index}" errorField="acctgTagEnumId${tag.index}" list=tag.activeTagValues key="categoryName" required=false default=tag.defaultValue! ; tagValue>
+	            ${tagValue.description}
+	          </@inputSelectCell>  
+	      <#elseif tag.description?contains("Programatica") || tag.description?contains("COG") >         
+	          <@inputSelectCell name="clasificacion${tag.index}" errorField="acctgTagEnumId${tag.index}" list=tag.activeTagValues key="workEffortName" required=false default=tag.defaultValue! ; tagValue>
+	            ${tagValue.description}
+	          </@inputSelectCell>
+	      <#elseif tag.description?contains("Ciclo")>         
+	          <@inputSelectCell name="clasificacion${tag.index}" errorField="acctgTagEnumId${tag.index}" list=tag.activeTagValues key="nivelId" required=false default=tag.defaultValue! ; tagValue>
+	            ${tagValue.nivelId}
+	          </@inputSelectCell>
+	      <#else>         
+	          <@inputSelectCell name="clasificacion${tag.index}" errorField="acctgTagEnumId${tag.index}" list=tag.activeTagValues key="enumId" required=false default=tag.defaultValue! ; tagValue>
+	            ${tagValue.enumCode}
+	          </@inputSelectCell>
+          </#if>     
+        </tr>        
+      </#list>   
      <tr>
       	<@displayTitleCell title=uiLabelMap.FinancialsIdLeviedD />
       	<@inputSelectCell list=listPayments?if_exists name="Id_RecaudadoH" displayField="description" default=paymentMethodId?if_exists key="paymentMethodId" required=false/>

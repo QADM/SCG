@@ -39,14 +39,35 @@
           <#assign titleClass="requiredField" />
         <#else/>
           <#assign titleClass="tableheadtext" />
-        </#if>
-        
+        </#if>        
         <tr>
-          <@displayTitleCell title=tag.description titleClass=titleClass />
-          <@inputSelectCell name="debitTagEnumId${tag.index}" errorField="acctgTagEnumId${tag.index}" list=tag.activeTagValues key="clasificacionId" required=false default=tag.defaultValue! ; tagValue>
-            ${tagValue.descripcion}
-          </@inputSelectCell>
-        </tr>
+          <@displayTitleCell title=tag.description titleClass=titleClass /> 
+          <#if tag.description?contains("Administrativa")>         
+	          <@inputSelectCell name="clasificacion${tag.index}" errorField="acctgTagEnumId${tag.index}" list=tag.activeTagValues key="externalId" required=false default=tag.defaultValue! ; tagValue>
+	            ${tagValue.groupName}
+	          </@inputSelectCell>            
+           <#elseif tag.description?contains("geo")>         
+	          <@inputSelectCell name="clasificacion${tag.index}" errorField="acctgTagEnumId${tag.index}" list=tag.activeTagValues key="geoId" required=false default=tag.defaultValue! ; tagValue>
+	            ${tagValue.geoName}
+	          </@inputSelectCell>  
+          <#elseif tag.description?contains("CRI") || tag.description?contains("COG") >         
+	          <@inputSelectCell name="clasificacion${tag.index}" errorField="acctgTagEnumId${tag.index}" list=tag.activeTagValues key="categoryName" required=false default=tag.defaultValue! ; tagValue>
+	            ${tagValue.description}
+	          </@inputSelectCell>  
+	      <#elseif tag.description?contains("Programatica") || tag.description?contains("COG") >         
+	          <@inputSelectCell name="clasificacion${tag.index}" errorField="acctgTagEnumId${tag.index}" list=tag.activeTagValues key="workEffortName" required=false default=tag.defaultValue! ; tagValue>
+	            ${tagValue.description}
+	          </@inputSelectCell>
+	      <#elseif tag.description?contains("Ciclo")>         
+	          <@inputSelectCell name="clasificacion${tag.index}" errorField="acctgTagEnumId${tag.index}" list=tag.activeTagValues key="nivelId" required=false default=tag.defaultValue! ; tagValue>
+	            ${tagValue.nivelId}
+	          </@inputSelectCell>
+	      <#else>         
+	          <@inputSelectCell name="clasificacion${tag.index}" errorField="acctgTagEnumId${tag.index}" list=tag.activeTagValues key="enumId" required=false default=tag.defaultValue! ; tagValue>
+	            ${tagValue.enumCode}
+	          </@inputSelectCell>
+          </#if>     
+        </tr>        
       </#list>                        
        
       <tr>

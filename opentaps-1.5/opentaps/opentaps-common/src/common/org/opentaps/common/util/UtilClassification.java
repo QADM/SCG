@@ -37,7 +37,7 @@ import org.opentaps.base.entities.AcctgPolizasDetalleListado;
 import org.opentaps.base.entities.AcctgTagEnumType;
 import org.opentaps.base.entities.Enumeration;
 import org.opentaps.base.entities.EnumerationType;
-import org.opentaps.base.entities.NivelesParty;
+
 import org.opentaps.base.entities.Party;
 import org.opentaps.base.entities.PartyGroup;
 import org.opentaps.base.entities.Geo;
@@ -62,7 +62,7 @@ public final class UtilClassification {
     public static final int TAG_COUNT = 10;
     
     
-    public static final String INGRESO_TAG = "INGRESO";
+    
 
     private UtilClassification() { }
 
@@ -87,7 +87,7 @@ public final class UtilClassification {
 
 		if(niveles.equals("CICLO"))
 		{	valorBusqueda = "clasificacionId";
-			valorId = "nivelId";
+			valorId = "nivelId";			
 			entidad = "NivelesCiclo";
 			try 
 			{	EntityCondition condicionCiclo = EntityCondition.makeCondition(EntityOperator.AND,
@@ -106,8 +106,8 @@ public final class UtilClassification {
 		}
 		
 		if(tabla.equals("Enumeration"))
-		{	valorBusqueda = "enumTypeId";
-			valorId="sequenceId";
+		{	valorBusqueda = "nivelId";
+			valorId="enumId";
 			valorDescripcion="enumCode";
 		}	
 		else if(tabla.equals("Geo"))
