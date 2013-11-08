@@ -308,6 +308,35 @@ under the License.
             <key-map field-name="agentPartyId" rel-field-name="partyId"/>
         </relation>
     </entity>
+    
+    <view-entity entity-name="NivelesParty"
+            package-name="org.opentaps.common.agreement"
+            title="Obtiene los niveles de Party y PartyGroup">
+        
+        <member-entity entity-alias="PAR" entity-name="Party"/>
+        <member-entity entity-alias="PAG" entity-name="PartyGroup"/>
+        
+        <alias entity-alias="PAR" name="externalId" group-by="true"/>
+        <alias entity-alias="PAR" name="Nivel_id" group-by="true"/>
+        <alias entity-alias="PAG" name="groupName" group-by="true"/>                             
+        <view-link entity-alias="PAG" rel-entity-alias="PAR">
+            <key-map field-name="partyId" rel-field-name="partyId"/>
+        </view-link>
+    </view-entity>
+    
+    <view-entity entity-name="NivelesCiclo"
+            package-name="org.opentaps.common.agreement"
+            title="Obtiene los ciclos de NivelPresupuestal y ClasifPresupuestal">
+        
+        <member-entity entity-alias="CLA" entity-name="ClasifPresupuestal"/>
+        <member-entity entity-alias="NIV" entity-name="NivelPresupuestal"/>
+        
+        <alias entity-alias="CLA" name="clasificacionId" group-by="true"/>
+        <alias entity-alias="NIV" name="nivelId" group-by="true"/>                                    
+        <view-link entity-alias="CLA" rel-entity-alias="NIV">
+            <key-map field-name="clasificacionId" rel-field-name="clasificacionId"/>
+        </view-link>
+    </view-entity>
 
     <view-entity entity-name="AgreementBillingAndInvoiceSum"
             package-name="org.opentaps.common.agreement"
