@@ -296,20 +296,24 @@
         <attribute name="Tipo_Catalogo" mode="IN" type="String" optional="true"/>
         <attribute name="Id_Producto_Abono" mode="IN" type="String" optional="true"/>
         <attribute name="Id_Producto_Cargo" mode="IN" type="String" optional="true"/>
-        <attribute name="Rubro" mode="IN" type="String" optional="true"/>
-        <attribute name="Tipo" mode="IN" type="String" optional="true" />
-		<attribute name="Clase" mode="IN" type="String" optional="true"/>
-        <attribute name="Concepto" mode="IN" type="String" optional="true"/>
-        <attribute name="N5" mode="IN" type="String" optional="true"/>
-        <attribute name="EntidadFederativa" mode="IN" type="String" optional="false"/>
-        <attribute name="Region" mode="IN" type="String" optional="false"/>
-        <attribute name="Municipio" mode="IN" type="String" optional="false"/>
-        <attribute name="Localidad" mode="IN" type="String" optional="false"/>
-        <attribute name="Sub_Fuente_Especifica" mode="IN" type="String" optional="true"/>
-        <attribute name="Unidad_Ejecutora" mode="IN" type="String" optional="true"/>
         <attribute name="Id_RecaudadoH" mode="IN" type="String" optional="true"/>  
         <attribute name="Monto" mode="IN" type="String" optional="false"/>
         <attribute name="listTransId" mode="OUT" type="java.util.List"/>
+        <attribute name="clasificacion1" mode="IN" type="String" optional="true"/> 
+        <attribute name="clasificacion2" mode="IN" type="String" optional="true"/> 
+        <attribute name="clasificacion3" mode="IN" type="String" optional="true"/> 
+        <attribute name="clasificacion4" mode="IN" type="String" optional="true"/> 
+        <attribute name="clasificacion5" mode="IN" type="String" optional="true"/> 
+        <attribute name="clasificacion6" mode="IN" type="String" optional="true"/> 
+        <attribute name="clasificacion7" mode="IN" type="String" optional="true"/> 
+        <attribute name="clasificacion8" mode="IN" type="String" optional="true"/> 
+        <attribute name="clasificacion9" mode="IN" type="String" optional="true"/> 
+        <attribute name="clasificacion10" mode="IN" type="String" optional="true"/> 
+        <attribute name="clasificacion11" mode="IN" type="String" optional="true"/> 
+        <attribute name="clasificacion12" mode="IN" type="String" optional="true"/> 
+        <attribute name="clasificacion13" mode="IN" type="String" optional="true"/> 
+        <attribute name="clasificacion14" mode="IN" type="String" optional="true"/> 
+        <attribute name="clasificacion15" mode="IN" type="String" optional="true"/>
     </service>
     
     <service name="createOperacionDiariaEgresos" engine="java"
@@ -326,20 +330,24 @@
         <attribute name="Secuencia" mode="IN" type="String" optional="false" />        
         <attribute name="Id_Producto_Abono" mode="IN" type="String" optional="true"/>
         <attribute name="Id_Producto_Cargo" mode="IN" type="String" optional="true"/>
-        <attribute name="EntidadFederativa" mode="IN" type="String" optional="false"/>
-        <attribute name="Region" mode="IN" type="String" optional="false"/>
-        <attribute name="Municipio" mode="IN" type="String" optional="false"/>
-        <attribute name="Localidad" mode="IN" type="String" optional="false"/>
-        <attribute name="Sub_Fuente_Especifica" mode="IN" type="String" optional="true"/>
-        <attribute name="Unidad_Ejecutora" mode="IN" type="String" optional="true"/>
-        <attribute name="Subfuncion" mode="IN" type="String" optional="true"/>
-        <attribute name="Tipo_Gasto" mode="IN" type="String" optional="true"/>
-        <attribute name="Partida_Especifica" mode="IN" type="String" optional="true"/>
-        <attribute name="Actividad" mode="IN" type="String" optional="true"/>
-        <attribute name="Area" mode="IN" type="String" optional="true"/>
         <attribute name="Id_RecaudadoH" mode="IN" type="String" optional="true"/>  
         <attribute name="Monto" mode="IN" type="String" optional="false"/>
         <attribute name="listTransId" mode="OUT" type="java.util.List"/>
+        <attribute name="clasificacion1" mode="IN" type="String" optional="true"/> 
+        <attribute name="clasificacion2" mode="IN" type="String" optional="true"/> 
+        <attribute name="clasificacion3" mode="IN" type="String" optional="true"/> 
+        <attribute name="clasificacion4" mode="IN" type="String" optional="true"/> 
+        <attribute name="clasificacion5" mode="IN" type="String" optional="true"/> 
+        <attribute name="clasificacion6" mode="IN" type="String" optional="true"/> 
+        <attribute name="clasificacion7" mode="IN" type="String" optional="true"/> 
+        <attribute name="clasificacion8" mode="IN" type="String" optional="true"/> 
+        <attribute name="clasificacion9" mode="IN" type="String" optional="true"/> 
+        <attribute name="clasificacion10" mode="IN" type="String" optional="true"/> 
+        <attribute name="clasificacion11" mode="IN" type="String" optional="true"/> 
+        <attribute name="clasificacion12" mode="IN" type="String" optional="true"/> 
+        <attribute name="clasificacion13" mode="IN" type="String" optional="true"/> 
+        <attribute name="clasificacion14" mode="IN" type="String" optional="true"/> 
+        <attribute name="clasificacion15" mode="IN" type="String" optional="true"/>
     </service>    
     
     <service name="obtenerCuentasOpDiaria" engine="java"

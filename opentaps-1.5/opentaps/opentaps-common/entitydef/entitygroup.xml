@@ -52,6 +52,7 @@ under the License.
 
     <entity-group group="org.ofbiz" entity="AgreementTermBilling"/>
     <entity-group group="org.ofbiz" entity="AgreementBillingAndInvoiceSum"/>
+    <entity-group group="org.ofbiz" entity="NivelesParty"/>
     <entity-group group="org.ofbiz" entity="AgreementToItemMap" />
     <entity-group group="org.ofbiz" entity="AgreementItemToTermMap" />
     <entity-group group="org.ofbiz" entity="TermTypeToEnumTypeMap" />
