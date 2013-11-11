@@ -1416,7 +1416,7 @@ public final class ExcelImportServices extends DomainService {
 				String ciclo = readStringCell(row, 0);
 
 				if (UtilValidate.isEmpty(ciclo) || ciclo.indexOf(" ") > -1
-						|| ciclo.equalsIgnoreCase("clasificacion1")) {
+						|| ciclo.equalsIgnoreCase("CICLO")) {
 					Debug.logWarning(
 							"Fila no. "
 									+ rowNum
@@ -1428,6 +1428,7 @@ public final class ExcelImportServices extends DomainService {
 				DataImportPresupuestoIngreso ingreso = new DataImportPresupuestoIngreso();
 				int rowCount = 1; // keep track of the row
 				int id = 1;
+				ingreso.setCiclo(this.readStringCell(row, rowCount++));
 				ingreso.setClasificacion1(this.readStringCell(row, rowCount++));
 				ingreso.setClasificacion2(this.readStringCell(row, rowCount++));
 				ingreso.setClasificacion3(this.readStringCell(row, rowCount++));
@@ -1489,8 +1490,7 @@ public final class ExcelImportServices extends DomainService {
 				String ciclo = readStringCell(row, 0);
 
 				if (UtilValidate.isEmpty(ciclo) || ciclo.indexOf(" ") > -1
-						|| ciclo.equalsIgnoreCase("CICLO")
-						|| ciclo.equalsIgnoreCase("A�O")) {
+						|| ciclo.equalsIgnoreCase("CICLO")) {
 					Debug.logWarning(
 							"Fila no. "
 									+ rowNum
@@ -1502,6 +1502,7 @@ public final class ExcelImportServices extends DomainService {
 				DataImportPresupuestoEgreso egreso = new DataImportPresupuestoEgreso();
 				int rowCount = 1; // keep track of the row
 				int id = 1;
+				egreso.setCiclo(this.readStringCell(row, rowCount++));
 				egreso.setClasificacion1(this.readStringCell(row, rowCount++));
 				egreso.setClasificacion2(this.readStringCell(row, rowCount++));
 				egreso.setClasificacion3(this.readStringCell(row, rowCount++));
