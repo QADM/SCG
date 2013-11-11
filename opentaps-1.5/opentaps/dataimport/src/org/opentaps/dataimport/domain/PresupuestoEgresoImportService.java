@@ -1,6 +1,7 @@
 package org.opentaps.dataimport.domain;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -11,9 +12,11 @@ import org.opentaps.base.constants.StatusItemConstants;
 import org.opentaps.base.entities.AcctgTrans;
 import org.opentaps.base.entities.AcctgTransEntry;
 import org.opentaps.base.entities.AcctgTransPresupuestal;
+import org.opentaps.base.entities.ClasifPresupuestal;
 import org.opentaps.base.entities.CustomTimePeriod;
 import org.opentaps.base.entities.DataImportPresupuestoEgreso;
 import org.opentaps.base.entities.Enumeration;
+import org.opentaps.base.entities.EstructuraClave;
 import org.opentaps.base.entities.Geo;
 import org.opentaps.base.entities.GlAccountHistory;
 import org.opentaps.base.entities.GlAccountOrganization;
@@ -94,6 +97,7 @@ public class PresupuestoEgresoImportService extends DomainService implements
 				boolean loteValido = true;
 				for (DataImportPresupuestoEgreso rowdata : dataforimp) {
 					// Validaciones
+					ContenedorContable contenedor = new ContenedorContable();
 					String mensaje = "";
 					Debug.log("Empieza bloque de validaciones");
 					// mensaje = UtilImport.validaParty(mensaje, ledger_repo,
@@ -184,17 +188,345 @@ public class PresupuestoEgresoImportService extends DomainService implements
 					// mensaje = UtilImport.validaEnumeration(mensaje,
 					// ledger_repo, rowdata.getArea(), "CL_SECTORIAL",
 					// "SECTORIAL");
-
-					if (!mensaje.isEmpty()) {
-						loteValido = false;
-						String message = "Failed to import Presupuesto Egreso ["
-								// clasificaciones
-								// + rowdata.getClavePres()
-								+ "], Error message : " + mensaje;
-						storeImportPresupuestoEgresoError(rowdata, message,
-								imp_repo);
-						continue;
+					// Se obtiene la estructura de la clave valida para el ciclo
+					EstructuraClave estructura = ledger_repo.findList(
+							EstructuraClave.class,
+							ledger_repo.map(EstructuraClave.Fields.ciclo,
+									rowdata.getCiclo(),
+									EstructuraClave.Fields.acctgTagUsageTypeId,
+									"Ingreso")).get(0);
+					// Se obtiene el tipo de clasficacion
+					List<Clasificacion> listaClasif = new ArrayList<Clasificacion>();
+					if (estructura.getClasificacion1() != null) {
+						Clasificacion c = new Clasificacion();
+						String tipoClasif1 = ledger_repo
+								.findList(
+										ClasifPresupuestal.class,
+										ledger_repo
+												.map(ClasifPresupuestal.Fields.clasificacionId,
+														estructura
+																.getClasificacion1()))
+								.get(0).getTablaRelacion();
+						c.setTipoObjeto(tipoClasif1);
+						c.setValor(rowdata.getClasificacion1());
+						c.setTipoEnum(ledger_repo
+								.findList(
+										ClasifPresupuestal.class,
+										ledger_repo
+												.map(ClasifPresupuestal.Fields.clasificacionId,
+														estructura
+																.getClasificacion1()))
+								.get(0).getClasificacionId());
+						listaClasif.add(c);
 					}
+					if (estructura.getClasificacion2() != null) {
+						Clasificacion c = new Clasificacion();
+						String tipoClasif2 = ledger_repo
+								.findList(
+										ClasifPresupuestal.class,
+										ledger_repo
+												.map(ClasifPresupuestal.Fields.clasificacionId,
+														estructura
+																.getClasificacion2()))
+								.get(0).getTablaRelacion();
+						c.setTipoObjeto(tipoClasif2);
+						c.setValor(rowdata.getClasificacion1());
+						c.setTipoEnum(ledger_repo
+								.findList(
+										ClasifPresupuestal.class,
+										ledger_repo
+												.map(ClasifPresupuestal.Fields.clasificacionId,
+														estructura
+																.getClasificacion2()))
+								.get(0).getClasificacionId());
+						listaClasif.add(c);
+					}
+					if (estructura.getClasificacion3() != null) {
+						Clasificacion c = new Clasificacion();
+						String tipoClasif3 = ledger_repo
+								.findList(
+										ClasifPresupuestal.class,
+										ledger_repo
+												.map(ClasifPresupuestal.Fields.clasificacionId,
+														estructura
+																.getClasificacion3()))
+								.get(0).getTablaRelacion();
+						c.setTipoObjeto(tipoClasif3);
+						c.setValor(rowdata.getClasificacion1());
+						c.setTipoEnum(ledger_repo
+								.findList(
+										ClasifPresupuestal.class,
+										ledger_repo
+												.map(ClasifPresupuestal.Fields.clasificacionId,
+														estructura
+																.getClasificacion3()))
+								.get(0).getClasificacionId());
+						listaClasif.add(c);
+					}
+					if (estructura.getClasificacion4() != null) {
+						Clasificacion c = new Clasificacion();
+						String tipoClasif4 = ledger_repo
+								.findList(
+										ClasifPresupuestal.class,
+										ledger_repo
+												.map(ClasifPresupuestal.Fields.clasificacionId,
+														estructura
+																.getClasificacion4()))
+								.get(0).getTablaRelacion();
+						c.setTipoObjeto(tipoClasif4);
+						c.setValor(rowdata.getClasificacion1());
+						c.setTipoEnum(ledger_repo
+								.findList(
+										ClasifPresupuestal.class,
+										ledger_repo
+												.map(ClasifPresupuestal.Fields.clasificacionId,
+														estructura
+																.getClasificacion4()))
+								.get(0).getClasificacionId());
+						listaClasif.add(c);
+					}
+					if (estructura.getClasificacion5() != null) {
+						Clasificacion c = new Clasificacion();
+						String tipoClasif5 = ledger_repo
+								.findList(
+										ClasifPresupuestal.class,
+										ledger_repo
+												.map(ClasifPresupuestal.Fields.clasificacionId,
+														estructura
+																.getClasificacion5()))
+								.get(0).getTablaRelacion();
+						c.setTipoObjeto(tipoClasif5);
+						c.setValor(rowdata.getClasificacion1());
+						c.setTipoEnum(ledger_repo
+								.findList(
+										ClasifPresupuestal.class,
+										ledger_repo
+												.map(ClasifPresupuestal.Fields.clasificacionId,
+														estructura
+																.getClasificacion5()))
+								.get(0).getClasificacionId());
+						listaClasif.add(c);
+					}
+					if (estructura.getClasificacion6() != null) {
+						Clasificacion c = new Clasificacion();
+						String tipoClasif6 = ledger_repo
+								.findList(
+										ClasifPresupuestal.class,
+										ledger_repo
+												.map(ClasifPresupuestal.Fields.clasificacionId,
+														estructura
+																.getClasificacion6()))
+								.get(0).getTablaRelacion();
+						c.setTipoObjeto(tipoClasif6);
+						c.setValor(rowdata.getClasificacion1());
+						c.setTipoEnum(ledger_repo
+								.findList(
+										ClasifPresupuestal.class,
+										ledger_repo
+												.map(ClasifPresupuestal.Fields.clasificacionId,
+														estructura
+																.getClasificacion6()))
+								.get(0).getClasificacionId());
+						listaClasif.add(c);
+					}
+					if (estructura.getClasificacion7() != null) {
+						Clasificacion c = new Clasificacion();
+						String tipoClasif7 = ledger_repo
+								.findList(
+										ClasifPresupuestal.class,
+										ledger_repo
+												.map(ClasifPresupuestal.Fields.clasificacionId,
+														estructura
+																.getClasificacion7()))
+								.get(0).getTablaRelacion();
+						c.setTipoObjeto(tipoClasif7);
+						c.setValor(rowdata.getClasificacion1());
+						c.setTipoEnum(ledger_repo
+								.findList(
+										ClasifPresupuestal.class,
+										ledger_repo
+												.map(ClasifPresupuestal.Fields.clasificacionId,
+														estructura
+																.getClasificacion7()))
+								.get(0).getClasificacionId());
+						listaClasif.add(c);
+					}
+					if (estructura.getClasificacion8() != null) {
+						Clasificacion c = new Clasificacion();
+						String tipoClasif8 = ledger_repo
+								.findList(
+										ClasifPresupuestal.class,
+										ledger_repo
+												.map(ClasifPresupuestal.Fields.clasificacionId,
+														estructura
+																.getClasificacion8()))
+								.get(0).getTablaRelacion();
+						c.setTipoObjeto(tipoClasif8);
+						c.setValor(rowdata.getClasificacion1());
+						c.setTipoEnum(ledger_repo
+								.findList(
+										ClasifPresupuestal.class,
+										ledger_repo
+												.map(ClasifPresupuestal.Fields.clasificacionId,
+														estructura
+																.getClasificacion8()))
+								.get(0).getClasificacionId());
+						listaClasif.add(c);
+					}
+					if (estructura.getClasificacion9() != null) {
+						Clasificacion c = new Clasificacion();
+						String tipoClasif9 = ledger_repo
+								.findList(
+										ClasifPresupuestal.class,
+										ledger_repo
+												.map(ClasifPresupuestal.Fields.clasificacionId,
+														estructura
+																.getClasificacion9()))
+								.get(0).getTablaRelacion();
+						c.setTipoObjeto(tipoClasif9);
+						c.setValor(rowdata.getClasificacion1());
+						c.setTipoEnum(ledger_repo
+								.findList(
+										ClasifPresupuestal.class,
+										ledger_repo
+												.map(ClasifPresupuestal.Fields.clasificacionId,
+														estructura
+																.getClasificacion9()))
+								.get(0).getClasificacionId());
+						listaClasif.add(c);
+					}
+					if (estructura.getClasificacion10() != null) {
+						Clasificacion c = new Clasificacion();
+						String tipoClasif10 = ledger_repo
+								.findList(
+										ClasifPresupuestal.class,
+										ledger_repo
+												.map(ClasifPresupuestal.Fields.clasificacionId,
+														estructura
+																.getClasificacion10()))
+								.get(0).getTablaRelacion();
+						c.setTipoObjeto(tipoClasif10);
+						c.setValor(rowdata.getClasificacion1());
+						c.setTipoEnum(ledger_repo
+								.findList(
+										ClasifPresupuestal.class,
+										ledger_repo
+												.map(ClasifPresupuestal.Fields.clasificacionId,
+														estructura
+																.getClasificacion10()))
+								.get(0).getClasificacionId());
+						listaClasif.add(c);
+					}
+					if (estructura.getClasificacion11() != null) {
+						Clasificacion c = new Clasificacion();
+						String tipoClasif11 = ledger_repo
+								.findList(
+										ClasifPresupuestal.class,
+										ledger_repo
+												.map(ClasifPresupuestal.Fields.clasificacionId,
+														estructura
+																.getClasificacion11()))
+								.get(0).getTablaRelacion();
+						c.setTipoObjeto(tipoClasif11);
+						c.setValor(rowdata.getClasificacion1());
+						c.setTipoEnum(ledger_repo
+								.findList(
+										ClasifPresupuestal.class,
+										ledger_repo
+												.map(ClasifPresupuestal.Fields.clasificacionId,
+														estructura
+																.getClasificacion11()))
+								.get(0).getClasificacionId());
+						listaClasif.add(c);
+					}
+					if (estructura.getClasificacion12() != null) {
+						Clasificacion c = new Clasificacion();
+						String tipoClasif12 = ledger_repo
+								.findList(
+										ClasifPresupuestal.class,
+										ledger_repo
+												.map(ClasifPresupuestal.Fields.clasificacionId,
+														estructura
+																.getClasificacion12()))
+								.get(0).getTablaRelacion();
+						c.setTipoObjeto(tipoClasif12);
+						c.setValor(rowdata.getClasificacion1());
+						c.setTipoEnum(ledger_repo
+								.findList(
+										ClasifPresupuestal.class,
+										ledger_repo
+												.map(ClasifPresupuestal.Fields.clasificacionId,
+														estructura
+																.getClasificacion12()))
+								.get(0).getClasificacionId());
+						listaClasif.add(c);
+					}
+					if (estructura.getClasificacion13() != null) {
+						Clasificacion c = new Clasificacion();
+						String tipoClasif13 = ledger_repo
+								.findList(
+										ClasifPresupuestal.class,
+										ledger_repo
+												.map(ClasifPresupuestal.Fields.clasificacionId,
+														estructura
+																.getClasificacion13()))
+								.get(0).getTablaRelacion();
+						c.setTipoObjeto(tipoClasif13);
+						c.setValor(rowdata.getClasificacion1());
+						c.setTipoEnum(ledger_repo
+								.findList(
+										ClasifPresupuestal.class,
+										ledger_repo
+												.map(ClasifPresupuestal.Fields.clasificacionId,
+														estructura
+																.getClasificacion13()))
+								.get(0).getClasificacionId());
+						listaClasif.add(c);
+					}
+					if (estructura.getClasificacion14() != null) {
+						Clasificacion c = new Clasificacion();
+						String tipoClasif14 = ledger_repo
+								.findList(
+										ClasifPresupuestal.class,
+										ledger_repo
+												.map(ClasifPresupuestal.Fields.clasificacionId,
+														estructura
+																.getClasificacion14()))
+								.get(0).getTablaRelacion();
+						c.setTipoObjeto(tipoClasif14);
+						c.setValor(rowdata.getClasificacion1());
+						c.setTipoEnum(ledger_repo
+								.findList(
+										ClasifPresupuestal.class,
+										ledger_repo
+												.map(ClasifPresupuestal.Fields.clasificacionId,
+														estructura
+																.getClasificacion14()))
+								.get(0).getClasificacionId());
+						listaClasif.add(c);
+					}
+					if (estructura.getClasificacion15() != null) {
+						Clasificacion c = new Clasificacion();
+						String tipoClasif15 = ledger_repo
+								.findList(
+										ClasifPresupuestal.class,
+										ledger_repo
+												.map(ClasifPresupuestal.Fields.clasificacionId,
+														estructura
+																.getClasificacion15()))
+								.get(0).getTablaRelacion();
+						c.setTipoObjeto(tipoClasif15);
+						c.setValor(rowdata.getClasificacion1());
+						c.setTipoEnum(ledger_repo
+								.findList(
+										ClasifPresupuestal.class,
+										ledger_repo
+												.map(ClasifPresupuestal.Fields.clasificacionId,
+														estructura
+																.getClasificacion15()))
+								.get(0).getClasificacionId());
+						listaClasif.add(c);
+					}					
 
 					// Creacion de objetos
 					Debug.log("Empieza creacion de objetos");
@@ -284,9 +616,8 @@ public class PresupuestoEgresoImportService extends DomainService implements
 						String id = ledger_repo.getNextSeqId("AcctgTrans");
 						Calendar cal = Calendar.getInstance();
 						cal.set(Calendar.DAY_OF_MONTH, 1);
-						// clasificaciones
-						// String anio = "20" + rowdata.getCiclo();
-						// cal.set(Calendar.YEAR, Integer.parseInt(anio));
+						String anio = "20" + rowdata.getCiclo();
+						cal.set(Calendar.YEAR, Integer.parseInt(anio));
 
 						for (int mes = 1; mes < 13; mes++) {
 							imp_tx1 = null;
@@ -308,13 +639,13 @@ public class PresupuestoEgresoImportService extends DomainService implements
 							if (trans.isEmpty()) {
 								Debug.log("Trans Nueva");
 								// clasificaciones
-								// if (mes < 10) {
-								// presupuestoEgreso.setAcctgTransId(id + " E"
-								// + rowdata.getCiclo() + "-0" + mes);
-								// } else {
-								// presupuestoEgreso.setAcctgTransId(id + " E"
-								// + rowdata.getCiclo() + "-" + mes);
-								// }
+								if (mes < 10) {
+									presupuestoEgreso.setAcctgTransId(id + " E"
+											+ rowdata.getCiclo() + "-0" + mes);
+								} else {
+									presupuestoEgreso.setAcctgTransId(id + " E"
+											+ rowdata.getCiclo() + "-" + mes);
+								}
 
 								presupuestoEgreso.setCreatedByUserLogin(rowdata
 										.getUsuario());
@@ -327,23 +658,26 @@ public class PresupuestoEgresoImportService extends DomainService implements
 
 							cal.set(Calendar.MONTH, mes - 1);
 
-							// Vigencias
-							// clasificaciones
-							// mensaje = UtilImport.validaVigencia(mensaje,
-							// "FUNCIONAL", subf, cal.getTime());
-							// mensaje = UtilImport.validaVigencia(mensaje,
-							// "TIPO GASTO", tg, cal.getTime());
-							// mensaje = UtilImport.validaVigencia(mensaje,
-							// "FUENTE DE LOS RECURSOS", sfe,
-							// cal.getTime());
-							// mensaje = UtilImport.validaVigencia(mensaje,
-							// "SECTORIAL", area, cal.getTime());
-
-							if (!mensaje.isEmpty()) {
+							// Bloque de Validacion de Clasificaciones
+							contenedor = UtilImport.validaClasificaciones(listaClasif,
+									ledger_repo, "E", cal.getTime());
+							if (!contenedor.getMensaje().isEmpty()
+									|| !mensaje.isEmpty()) {
 								loteValido = false;
 
 								storeImportPresupuestoEgresoError(rowdata,
-										mensaje, imp_repo);
+										contenedor.getMensaje(), imp_repo);
+								continue;
+							}
+
+							if (!mensaje.isEmpty()) {
+								loteValido = false;
+								String message = "Failed to import Presupuesto Egreso ["
+										// clasificaciones
+										// + rowdata.getClavePres()
+										+ "], Error message : " + mensaje;
+								storeImportPresupuestoEgresoError(rowdata, message,
+										imp_repo);
 								continue;
 							}
 
@@ -495,36 +829,24 @@ public class PresupuestoEgresoImportService extends DomainService implements
 							AcctgTransPresupuestal aux = new AcctgTransPresupuestal();
 							aux.setAcctgTransId(presupuestoEgreso
 									.getAcctgTransId());
-//							clasificaciones
-//							aux.setCiclo(rowdata.getCiclo());
-//							aux.setUnidadResponsable(ur);
-//							aux.setUnidadOrganizacional(uo);
-//							aux.setUnidadEjecutora(ue.getPartyId());
-//							aux.setFinalidad(fin);
-//							aux.setFuncion(fun);
-//							aux.setSubFuncion(subf.getEnumId());
-//							aux.setProgramaPlan(eje);
-//							aux.setProgramaPresupuestario(pp);
-//							aux.setSubProgramaPresupuestario(spp);
-//							aux.setActividad(act.getWorkEffortId());
-//							aux.setTipoGasto(tg.getEnumId());
-//							aux.setCapitulo(cap);
-//							aux.setConcepto(con);
-//							aux.setPartidaGenerica(pg);
-//							aux.setPartidaEspecifica(pe.getProductCategoryId());
-//							aux.setFuente(f);
-//							aux.setSubFuente(sf);
-//							aux.setSubFuenteEspecifica(sfe.getEnumId());
-//							aux.setEntidadFederativa(ef);
-//							aux.setRegion(reg);
-//							aux.setMunicipio(mun);
-//							aux.setLocalidad(loc.getGeoId());
-//							aux.setSector(sec);
-//							aux.setSubSector(subsec);
-//							aux.setArea(area.getEnumId());
+							// clasificacionesdata.getCiclo());
+							aux.setClasificacion1(rowdata.getClasificacion1());
+							aux.setClasificacion2(rowdata.getClasificacion2());
+							aux.setClasificacion3(rowdata.getClasificacion3());
+							aux.setClasificacion4(rowdata.getClasificacion4());
+							aux.setClasificacion5(rowdata.getClasificacion5());
+							aux.setClasificacion6(rowdata.getClasificacion5());
+							aux.setClasificacion7(rowdata.getClasificacion6());
+							aux.setClasificacion8(rowdata.getClasificacion7());
+							aux.setClasificacion9(rowdata.getClasificacion8());
+							aux.setClasificacion10(rowdata.getClasificacion9());
+							aux.setClasificacion11(rowdata.getClasificacion10());
+							aux.setClasificacion12(rowdata.getClasificacion11());
+							aux.setClasificacion13(rowdata.getClasificacion12());
+							aux.setClasificacion14(rowdata.getClasificacion13());
+							aux.setClasificacion15(rowdata.getClasificacion14());
+							aux.setClavePres(contenedor.getClavePresupuestal());
 							aux.setAgrupador(rowdata.getAgrupador());
-//							clasificaciones
-//							aux.setClavePres(rowdata.getClavePres());
 							aux.setLote(lote);
 							imp_tx2 = this.session.beginTransaction();
 							ledger_repo.createOrUpdate(aux);
@@ -555,14 +877,18 @@ public class PresupuestoEgresoImportService extends DomainService implements
 												presupuestoEgreso,
 												organizationPartyId, seqId,
 												flag, cuenta, "CHUBBY");
-//												clasificaciones
-//												flag, cuenta, sfe.getEnumId());
+								// clasificaciones
+								// flag, cuenta, sfe.getEnumId());
 								// Tags seteados.
-//								clasificaciones
-//								acctgentry.setAcctgTagEnumId1(subf.getEnumId());
-//								acctgentry.setAcctgTagEnumId2(tg.getEnumId());
-//								acctgentry.setAcctgTagEnumId3(sfe.getEnumId());
-//								acctgentry.setAcctgTagEnumId4(area.getEnumId());
+								for (int i = 0; i < contenedor.getEnumeration()
+										.size(); i++) {
+									String indice = new Integer(i + 1)
+											.toString();
+									String campo = "acctgTagEnumId" + indice;
+									acctgentry.set(campo, contenedor
+											.getEnumeration().get(i)
+											.getEnumId());
+								}
 								imp_tx3 = this.session.beginTransaction();
 								ledger_repo.createOrUpdate(acctgentry);
 								imp_tx3.commit();
@@ -602,7 +928,7 @@ public class PresupuestoEgresoImportService extends DomainService implements
 							String message = "Successfully imported Presupuesto Egreso ["
 									+ "].";
 							// clasificadores
-							//		+ rowdata.getClavePres() + "].";
+							// + rowdata.getClavePres() + "].";
 							this.storeImportPresupuestoEgresoSuccess(rowdata,
 									imp_repo);
 							Debug.logInfo(message, MODULE);

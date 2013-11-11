@@ -18,6 +18,7 @@
 	<entity entity-name="DataImportPresupuestoIngreso" package-name="org.opentaps.dataimport"
 		title="Intermediate import entity (i.e., the bridge table) for Presupuesto Ingreso data.">
 		<field name="idPresIng" type="id-ne"></field>
+		<field name="ciclo" type="id-ne"></field>
 		<field name="clasificacion1" type="id-ne"></field>
 		<field name="clasificacion2" type="id-ne"></field>
 		<field name="clasificacion3" type="id-ne"></field>
@@ -64,6 +65,7 @@
 	<entity entity-name="DataImportPresupuestoEgreso" package-name="org.opentaps.dataimport"
 		title="Intermediate import entity (i.e., the bridge table) for Presupuesto Egreso data.">
 		<field name="idPresEgr" type="id-ne"></field>
+		<field name="ciclo" type="id-ne"></field>
 		<field name="clasificacion1" type="id-ne"></field>
 		<field name="clasificacion2" type="id-ne"></field>
 		<field name="clasificacion3" type="id-ne"></field>
