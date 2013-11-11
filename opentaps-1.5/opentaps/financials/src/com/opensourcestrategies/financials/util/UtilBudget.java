@@ -64,7 +64,8 @@ public final class UtilBudget {
 			for(int i=1; i<16; i++)
 			{
 				clasificaciones = (String) context.get("clasificacion"+i);
-				clavePresupuestal = clavePresupuestal + clasificaciones;
+				if(clasificaciones != null)
+					clavePresupuestal = clavePresupuestal + clasificaciones;
 			}
 				
 			Debug.log("Entro getClavePresupuestal clave presupuestal" + clavePresupuestal, MODULE);
