@@ -84,20 +84,24 @@ public final class UtilClassification {
 		String valorId = "";
 		String valorDescripcion = "";
 		List<GenericValue> listGenericaNivelesResult = null;						
-
+		
+		Debug.log("Omar - Nivel: " + niveles);
+		Debug.log("Omar - Tabla: " + tabla);
+		
 		if(niveles.equals("2013") || niveles.equals("2014") || niveles.equals("2015") || niveles.equals("2016") || niveles.equals("2017") || niveles.equals("2018") || niveles.equals("2019") || niveles.equals("2020") || niveles.equals("CICLO"))
 		{	valorBusqueda = "clasificacionId";
 			valorId = "nivelId";			
 			entidad = "NivelesCiclo";
 			try 
 			{	EntityCondition condicionCiclo = EntityCondition.makeCondition(EntityOperator.AND,
-					EntityCondition.makeCondition(valorBusqueda, EntityOperator.EQUALS, niveles));
+					EntityCondition.makeCondition(valorBusqueda, EntityOperator.EQUALS, "CICLO"));
 			
 				listGenericaNivelesResult = delegator
 						.findByCondition(
 								entidad,
 								condicionCiclo,
-								UtilMisc.toList(valorId), null);				
+								UtilMisc.toList(valorId, valorId), null);
+				Debug.log("Omar - ListGenericaNivelesResult: " + listGenericaNivelesResult);
 				return listGenericaNivelesResult;				
 			}catch (GenericEntityException e) {			
 				e.printStackTrace();
@@ -133,8 +137,7 @@ public final class UtilClassification {
 		EntityCondition condicion = EntityCondition.makeCondition(EntityOperator.AND,
             EntityCondition.makeCondition(valorBusqueda, EntityOperator.EQUALS, niveles));
 			
-			Debug.log("Omar - Nivel: " + niveles);
-			Debug.log("Omar - Tabla: " + tabla);
+			
 			
 						
 			try 
