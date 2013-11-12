@@ -85,7 +85,7 @@ public final class UtilClassification {
 		String valorDescripcion = "";
 		List<GenericValue> listGenericaNivelesResult = null;						
 
-		if(niveles.equals("CICLO"))
+		if(niveles.equals("2013") || niveles.equals("2014") || niveles.equals("2015") || niveles.equals("2016") || niveles.equals("2017") || niveles.equals("2018") || niveles.equals("2019") || niveles.equals("2020") || niveles.equals("CICLO"))
 		{	valorBusqueda = "clasificacionId";
 			valorId = "nivelId";			
 			entidad = "NivelesCiclo";
