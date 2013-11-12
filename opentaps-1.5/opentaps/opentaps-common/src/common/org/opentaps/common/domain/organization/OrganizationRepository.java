@@ -29,6 +29,7 @@ import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.Delegator;
+import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityConditionList;
 import org.ofbiz.entity.condition.EntityOperator;
@@ -619,13 +620,10 @@ public class OrganizationRepository extends PartyRepository implements
 							+ clasifPresupuestal.getTablaRelacion());
 
 					// filter out disabled tags
-					if(UtilClassification.getListaNiveles(clasifPresupuestal.getTablaRelacion(), ultimoNivel, delegator).isEmpty())
-					{
-						Debug.log("getClassificationTagConfiguration - no se encontro lista");
-						tag.setActiveTagValues(UtilClassification.getListaNiveles(clasifPresupuestal.getTablaRelacion(), ultimoNivel, delegator));
-					}
-					 
-
+					
+					tag.setActiveTagValues(UtilClassification.getListaNiveles(clasifPresupuestal.getTablaRelacion(), ultimoNivel, delegator));
+					
+			
 					// add if required property for tag
 					tag.setIsRequired("Y");
 					// add its default value
