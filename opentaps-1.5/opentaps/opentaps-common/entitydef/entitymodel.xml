@@ -318,6 +318,7 @@ under the License.
         
         <alias entity-alias="PAR" name="externalId" group-by="true"/>
         <alias entity-alias="PAR" name="Nivel_id" group-by="true"/>
+        <alias entity-alias="PAR" name="state" group-by="true"/>
         <alias entity-alias="PAG" name="groupName" group-by="true"/>                             
         <view-link entity-alias="PAG" rel-entity-alias="PAR">
             <key-map field-name="partyId" rel-field-name="partyId"/>
