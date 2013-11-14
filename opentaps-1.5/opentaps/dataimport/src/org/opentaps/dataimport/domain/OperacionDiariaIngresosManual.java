@@ -73,15 +73,18 @@ public class OperacionDiariaIngresosManual {
 	        String cvePrespues = UtilOperacionDiariaServices.getClavePresupuestal(context, dispatcher); 
 	        String idProdAbono = (String) context.get("Id_Producto_Abono");
 	        String idProdCargo = (String) context.get("Id_Producto_Cargo");
-	        String n5 = (String) context.get("N5");
-	        String entFed = (String) context.get("EntidadFederativa");
-	        String region = (String) context.get("Region");
-	        String muni = (String) context.get("Municipio");
-	        String local = (String) context.get("Localidad");
-	        String suFuenteEsp = (String) context.get("Sub_Fuente_Especifica");
-	        String uniEjec = (String) context.get("Unidad_Ejecutora");
+	        
 	        String idPago = (String) context.get("Id_RecaudadoH");
 	        java.math.BigDecimal monto = java.math.BigDecimal.valueOf(Long.valueOf((String)context.get("Monto")));
+	        for (int i = 0; i < 15; i++) {
+	        	String clasificacion = (String) context.get("clasificacion" + i);	
+			}
+	        
+	        
+	        //Verificar en que posicion se encuentra la clasificacion Economica.
+	        Debug.log("createOperacionDiariaIngresos - ANTES DE ENTRAR ");
+	        String clasificacion = UtilOperacionDiariaServices.getClasificacionEconomica(dispatcher, "CL_CRI", organizationPartyId, "INGRESO", "2013");
+	        Debug.log("createOperacionDiariaIngresos - ANTES DE ENTRAR ");
 	        
 	        Debug.logWarning("userLog "+userLog, MODULE);
 	        Debug.logWarning("tipoDoc "+tipoDoc, MODULE);
@@ -92,13 +95,7 @@ public class OperacionDiariaIngresosManual {
 	        Debug.logWarning("cvePrespues "+cvePrespues, MODULE);
 	        Debug.logWarning("idProdAbono "+idProdAbono, MODULE);
 	        Debug.logWarning("idProdCargo "+idProdCargo, MODULE);
-	        Debug.logWarning("n5 "+n5, MODULE);
-	        Debug.logWarning("entFed "+entFed, MODULE);
-	        Debug.logWarning("region "+region, MODULE);
-	        Debug.logWarning("muni "+muni, MODULE);
-	        Debug.logWarning("local "+local, MODULE);
-	        Debug.logWarning("suFuente "+suFuenteEsp, MODULE);
-	        Debug.logWarning("uniEjec "+uniEjec, MODULE);
+	       
 	        Debug.logWarning("idPago "+idPago, MODULE);
 	        Debug.logWarning("monto "+monto, MODULE);
 	        
@@ -120,7 +117,7 @@ public class OperacionDiariaIngresosManual {
 		        
 		        //Obtiene el mapa que se utiliza para guardar las cuentas correspondientes y para validaciones
 		        Map<String,String> mapCuentas = UtilOperacionDiariaServices.regresaMapa(dctx, dispatcher, context, 
-		        										monto, fecContable, acctgTransTypeId, n5, 
+		        										monto, fecContable, acctgTransTypeId, (String) context.get(clasificacion), 
 		        										tipoFis, idProdAbono, idProdCargo, idPago, "CRI");
 		        
 		        String tipoAsiento = UtilOperacionDiariaServices.obtenTipoAsiento(mapCuentas);
@@ -139,49 +136,23 @@ public class OperacionDiariaIngresosManual {
 		        acctgtrans.set("isPosted", "Y");
 		        acctgtrans.set("postedDate", fecContable);
 		        acctgtrans.set("glFiscalTypeId", tipoFis);
-		        acctgtrans.set("partyId", uniEjec);
+		        acctgtrans.set("partyId", organizationPartyId);
 		        acctgtrans.set("createdByUserLogin", userLog);
-		        acctgtrans.set("postedAmount", monto);
-		        Debug.log("Esmeralda si entro ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ " );
+		        acctgtrans.set("postedAmount", monto);		        
 		        acctgtrans.create();
 		        
 	//	        acctgTransId = acctgtrans.getString("acctgTransId");
 		        //Se registra en AcctTransPresupuestal
 		        acctgtransPres = GenericValue.create(delegator.getModelEntity("AcctgTransPresupuestal"));
 		        acctgtransPres.set("acctgTransId", acctgTransId);
-		        acctgtransPres.set("ciclo", ciclo);
-		        acctgtransPres.set("unidadOrganizacional", organizationPartyId);
-		        acctgtransPres.set("unidadEjecutora", uniEjec);
-		        String unidadOr = UtilOperacionDiariaServices.obtenPadrePartyId(dctx, dispatcher, uniEjec);
-		        acctgtransPres.set("unidadOrganizacional", unidadOr);
-		        String unidadRes = UtilOperacionDiariaServices.obtenPadrePartyId(dctx, dispatcher, unidadOr);
-		        acctgtransPres.set("unidadResponsable", unidadRes);
+		        
+		        for (int i = 1; i < 16; i++) {
+		        	acctgtransPres.set("clasificacion" + i, (String) context.get("clasificacion" + i));
+				}
+		        
+		        //acctgtransPres.set("ciclo", ciclo);
+		       // acctgtransPres.set("unidadOrganizacional", organizationPartyId);
 		        acctgtransPres.set("clavePres", cvePrespues);
-		        acctgtransPres.set("nivel5", n5);
-		        Debug.logWarning("nivel5  enviado"+n5, MODULE);
-		        String concep = UtilOperacionDiariaServices.obtenPadreProductCate(dctx, dispatcher, n5);
-		        Debug.logWarning("concep  enviado"+concep, MODULE);
-		        acctgtransPres.set("conceptoRub", concep);
-		        String clas = UtilOperacionDiariaServices.obtenPadreProductCate(dctx, dispatcher, concep);
-		        Debug.logWarning("clas  enviado"+clas, MODULE);
-		        acctgtransPres.set("clase", clas);
-		        String tip = UtilOperacionDiariaServices.obtenPadreProductCate(dctx, dispatcher, clas);
-		        Debug.logWarning("tip  enviado"+tip, MODULE);
-		        acctgtransPres.set("tipo", tip);
-		        String rubr = UtilOperacionDiariaServices.obtenPadreProductCate(dctx, dispatcher, tip);
-		        Debug.logWarning("rubr  enviado"+rubr, MODULE);
-		        acctgtransPres.set("rubro", rubr);
-		        acctgtransPres.set("subFuenteEspecifica", suFuenteEsp);
-		        String subfuente = UtilOperacionDiariaServices.obtenPadreEnumeration(dctx, dispatcher, suFuenteEsp);
-		        Debug.logWarning("subfuente  enviado"+subfuente, MODULE);
-		        acctgtransPres.set("subFuente",subfuente);
-		        String fuente = UtilOperacionDiariaServices.obtenPadreEnumeration(dctx, dispatcher, subfuente);
-		        Debug.logWarning("fuente  enviado"+fuente, MODULE);
-		        acctgtransPres.set("fuente",fuente);	        
-		        acctgtransPres.set("entidadFederativa", entFed);
-		        acctgtransPres.set("region", region);
-		        acctgtransPres.set("municipio", muni);
-		        acctgtransPres.set("localidad", local);
 		        acctgtransPres.set("idTipoDoc", tipoDoc);
 		        acctgtransPres.set("secuencia", sec);
 		        acctgtransPres.set("idProductoD", idProdCargo);
@@ -191,7 +162,7 @@ public class OperacionDiariaIngresosManual {
 		        acctgtransPres.create();
 	
 		        Map<String,String> mapaAcctgEnums = FastMap.newInstance();
-		        mapaAcctgEnums.put("acctgTagEnumId3",suFuenteEsp);
+		        //mapaAcctgEnums.put("acctgTagEnumId3",suFuenteEsp);
 	
 		        //Se realiza el registro de trans entries
 		        UtilOperacionDiariaServices.registraEntries(dctx, dispatcher, context,
