@@ -701,7 +701,7 @@ public class UtilOperacionDiariaServices {
     
     /**
      * Metodo que valida las cuentas auxiliares de los productos a partir de una cuenta dada y regresa 
-     * la cuenta correspondiente al catálogo auxiliar si se encuentra ahí , si no regresa la misma cuenta
+     * la cuenta correspondiente al catï¿½logo auxiliar si se encuentra ahï¿½ , si no regresa la misma cuenta
      * @param dctx
      * @param dispatcher
      * @param glAccountId
@@ -754,7 +754,7 @@ public class UtilOperacionDiariaServices {
     
     /**
      * Metodo que valida las cuentas auxiliares de los productos a partir de una cuenta dada y regresa 
-     * la cuenta correspondiente al catálogo auxiliar si se encuentra ahí , si no regresa la misma cuenta
+     * la cuenta correspondiente al catï¿½logo auxiliar si se encuentra ahï¿½ , si no regresa la misma cuenta
      * @param dctx
      * @param dispatcher
      * @param glAccountId
@@ -817,7 +817,7 @@ public class UtilOperacionDiariaServices {
         		gTransEntryPreC.set("acctgTransId", acctgTransId);
         		gTransEntryPreC.set("acctgTransEntrySeqId", String.format("%05d",1));
         		gTransEntryPreC.set("acctgTransEntryTypeId", "_NA_");
-        		gTransEntryPreC.set("description", "Operación  diaria PRESUPUESTAL Abono"+acctgTransId);
+        		gTransEntryPreC.set("description", "Operaciï¿½n  diaria PRESUPUESTAL Abono"+acctgTransId);
         		gTransEntryPreC.set("glAccountId", cargoPres);
         		gTransEntryPreC.set("organizationPartyId", organizationPartyId);
         		gTransEntryPreC.set("amount", monto);
@@ -835,7 +835,7 @@ public class UtilOperacionDiariaServices {
         		gtransEntryPreA.set("acctgTransId", acctgTransId);
         		gtransEntryPreA.set("acctgTransEntrySeqId", String.format("%05d",2));
         		gtransEntryPreA.set("acctgTransEntryTypeId", "_NA_");
-        		gtransEntryPreA.set("description", "Operación  diaria PRESUPUESTAL Abono "+acctgTransId);
+        		gtransEntryPreA.set("description", "Operaciï¿½n  diaria PRESUPUESTAL Abono "+acctgTransId);
         		gtransEntryPreA.set("glAccountId", abonoPres);
         		gtransEntryPreA.set("organizationPartyId", organizationPartyId);
         		gtransEntryPreA.set("amount", monto);
@@ -859,7 +859,7 @@ public class UtilOperacionDiariaServices {
         		gTransEntryConC.set("acctgTransId", acctgTransId);
         		gTransEntryConC.set("acctgTransEntrySeqId", String.format("%05d",1));
         		gTransEntryConC.set("acctgTransEntryTypeId", "_NA_");
-        		gTransEntryConC.set("description", "Operación  diaria Contable Abono"+acctgTransId);
+        		gTransEntryConC.set("description", "Operaciï¿½n  diaria Contable Abono"+acctgTransId);
         		gTransEntryConC.set("glAccountId", cargoCont);
         		gTransEntryConC.set("organizationPartyId", organizationPartyId);
         		gTransEntryConC.set("amount", monto);
@@ -877,7 +877,7 @@ public class UtilOperacionDiariaServices {
         		gTransEntryConA.set("acctgTransId", acctgTransId);
         		gTransEntryConA.set("acctgTransEntrySeqId", String.format("%05d",2));
         		gTransEntryConA.set("acctgTransEntryTypeId", "_NA_");
-        		gTransEntryConA.set("description", "Operación  diaria Contable Abono"+acctgTransId);
+        		gTransEntryConA.set("description", "Operaciï¿½n  diaria Contable Abono"+acctgTransId);
         		gTransEntryConA.set("glAccountId", abonoCont);
         		gTransEntryConA.set("organizationPartyId", organizationPartyId);
         		gTransEntryConA.set("amount", monto);
@@ -1093,41 +1093,23 @@ public class UtilOperacionDiariaServices {
 	 */
 	public static String getClavePresupuestal(Map context,
 			LocalDispatcher dispatcher) {
-		final ActionContext ac = new ActionContext(context);
-        final Locale locale = ac.getLocale();
-        final TimeZone timeZone = ac.getTimeZone();
-		String clavePresupuestal = null; 
-		
+		String clasificaciones = "", clavePresupuestal = "";
+
 		try {
 			Debug.log("Entro getClavePresupuestal ", MODULE);
-			
-			Timestamp fecContable = (Timestamp) context.get("Fecha_Contable");
-			
-			String ciclo = String.valueOf(UtilDateTime.getYear(fecContable, timeZone, locale)).substring(2);;
-			String UE = (String) context.get("Unidad_Ejecutora");
-			String subFuncion= (String) context.get("Subfuncion");
-			String actividad = (String) context.get("Actividad");
-			String PE = (String) context.get("Partida_Especifica");
-			String SubFuenteEspecifica = (String) context.get("Sub_Fuente_Especifica");
-			String Localidad = (String) context.get("Localidad");
-			String area = (String) context.get("Area");
-			String nivel5 = (String) context.get("N5");
-		
-			if(subFuncion == null)
-			{				
-				clavePresupuestal = ciclo + UE + nivel5 + SubFuenteEspecifica
-						+ Localidad;			
+
+			for (int i = 1; i < 16; i++) {
+				clasificaciones = (String) context.get("clasificacion" + i);
+				if (clasificaciones != null)
+					clavePresupuestal = clavePresupuestal + clasificaciones;
 			}
-			else
-			{
-				clavePresupuestal = ciclo + UE + subFuncion + actividad + PE
-						+ SubFuenteEspecifica + Localidad + area;
-			}
-			Debug.log("Entro getClavePresupuestal clave presupuestal" + clavePresupuestal, MODULE);
-			
+
+			Debug.log("Entro getClavePresupuestal clave presupuestal"
+					+ clavePresupuestal, MODULE);
+
 		} catch (Exception e) {
-			
-			Debug.log("Error al crear clave presupuestaria " + e, MODULE);			
+
+			Debug.log("Error al crear clave presupuestaria " + e, MODULE);
 		}
 		return clavePresupuestal;
 	}
