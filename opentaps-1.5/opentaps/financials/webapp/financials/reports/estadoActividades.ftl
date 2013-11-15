@@ -35,8 +35,12 @@
         ${getLocalizedDate(fromDate2, "DATE")} - ${getLocalizedDate(thruDate2, "DATE")}<br/>
       <td class="tableheadtext" align="right">${uiLabelMap.OpentapsDifference}</td>
     </tr>
+    <tr><td colspan="4"><hr/></td></tr>
     <#list accounts as account>
       <#if account?has_content>
+      <tr>
+      	<td class="tableheadtext">${account.parentGlAccountId}</td>
+      </tr>
         <tr>
           <td class="tabletext">${account.accountCode?if_exists}: ${account.accountName?if_exists} (<a href="<@ofbizUrl>AccountActivitiesDetail?glAccountId=${account.glAccountId?if_exists}&organizationPartyId=${organizationPartyId}</@ofbizUrl>" class="buttontext">${account.glAccountId?if_exists}</a>) </td>
           <td class="tabletext" align="right"><@ofbizCurrency amount=set1Accounts.get(account) isoCode=currencyUomId/></td>
