@@ -3,6 +3,9 @@ package org.opentaps.dataimport.domain;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.ParseException;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -62,7 +65,9 @@ public class OperacionDiariaIngresosManual {
         
         Debug.logWarning("ENTRO AL SERVICIO PARA CREAR OPERACION DIARIA INGRESOS", MODULE);
         
-        try {
+        try {        	
+        	Calendar c = new GregorianCalendar();
+        	String anio = Integer.toString(c.get(Calendar.YEAR));
         	
 	        String userLog = userLogin.getString("userLoginId");
 	        String tipoDoc = (String) context.get("Tipo_Documento");
@@ -166,6 +171,15 @@ public class OperacionDiariaIngresosManual {
 		        acctgtransPres.create();
 	
 		        Map<String,String> mapaAcctgEnums = FastMap.newInstance();
+		        List<String> resultClasificaciones = new ArrayList<String>();		        
+		        resultClasificaciones= UtilOperacionDiariaServices.getClasificacionEnumeration(dispatcher, "ACCOUNTING_TAG", organizationPartyId, "EnumerationType", "INGRESO", anio);		        
+		        int tam = resultClasificaciones.size();
+		        for(int i=0; i<tam; i++)		        
+		        {	String id = "acctgTagEnumId"+String.valueOf(i+1);
+		        	String idValue = resultClasificaciones.get(i);		        	
+		        	mapaAcctgEnums.put(id,(String) context.get(idValue));		        	
+		        }
+		        Debug.log("Omar - mapaAcctgEnums: " + mapaAcctgEnums);
 		        //mapaAcctgEnums.put("acctgTagEnumId3",suFuenteEsp);
 	
 		        //Se realiza el registro de trans entries

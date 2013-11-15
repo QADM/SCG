@@ -2,6 +2,7 @@ package org.opentaps.dataimport.domain;
 
 import java.sql.Timestamp;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -161,6 +162,15 @@ public class OperacionDiariaEgresosManual {
 		        acctgtransPres.create();
 		        
 		        Map<String,String> mapaAcctgEnums = FastMap.newInstance();
+		        List<String> resultClasificaciones = new ArrayList<String>();		        
+		        resultClasificaciones= UtilOperacionDiariaServices.getClasificacionEnumeration(dispatcher, "ACCOUNTING_TAG", organizationPartyId, "EnumerationType", "EGRESO", anio);		        
+		        int tam = resultClasificaciones.size();
+		        for(int i=0; i<tam; i++)		        
+		        {	String id = "acctgTagEnumId"+String.valueOf(i+1);
+		        	String idValue = resultClasificaciones.get(i);		        	
+		        	mapaAcctgEnums.put(id,(String) context.get(idValue));		        	
+		        }
+		        Debug.log("Omar - mapaAcctgEnums: " + mapaAcctgEnums);
 		       
 		        //Se realiza el registro de trans entries
 		        UtilOperacionDiariaServices.registraEntries(dctx, dispatcher, context,
