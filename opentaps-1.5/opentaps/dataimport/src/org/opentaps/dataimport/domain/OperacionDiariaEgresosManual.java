@@ -91,7 +91,13 @@ public class OperacionDiariaEgresosManual {
 	        Debug.logWarning("idProdCargo "+idProdCargo, MODULE);
 	        Debug.logWarning("entFed "+entFed, MODULE);	      
 	        Debug.logWarning("idPago "+idPago, MODULE);
-	        Debug.logWarning("monto "+monto, MODULE);	 
+	        Debug.logWarning("monto "+monto, MODULE);	
+	        
+	        String clasif = UtilOperacionDiariaServices.getClasifNull(dispatcher,
+					organizationPartyId, context, "EGRESO");
+			
+			if(clasif.equals("Nok"))
+				throw new ServiceException(String.format("Deben de llenarse todas las clasificaciones"));
 	       
 			
 	        String clasificacion = UtilOperacionDiariaServices.getClasificacionEconomica(dispatcher, "CL_COG", organizationPartyId, "EGRESO", anio);

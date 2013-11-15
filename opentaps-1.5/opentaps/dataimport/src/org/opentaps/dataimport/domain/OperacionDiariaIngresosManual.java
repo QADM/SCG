@@ -96,6 +96,12 @@ public class OperacionDiariaIngresosManual {
 	        Debug.logWarning("idPago "+idPago, MODULE);
 	        Debug.logWarning("monto "+monto, MODULE);
 	        
+	        String clasif = UtilOperacionDiariaServices.getClasifNull(dispatcher,
+					organizationPartyId, context, "INGRESO");
+			
+			if(clasif.equals("Nok"))
+				throw new ServiceException(String.format("Deben de llenarse todas las clasificaciones"));
+	        
 	        //Buscamos el tipo documento seleccionado en pantalla para obtener el acctgTransTypeId
 			GenericValue tipoDocumento = delegator.findByPrimaryKeyCache("TipoDocumento",UtilMisc.<String, Object>toMap("idTipoDoc", tipoDoc));
 			String acctgTransTypeId = tipoDocumento.getString("acctgTransTypeId");

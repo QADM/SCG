@@ -4,6 +4,8 @@ import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -1215,6 +1217,82 @@ public class UtilOperacionDiariaServices {
 			lista.add("clasificacion"+ String.valueOf(j));
 		}
 		return lista;
+	}
+	
+	/*
+	 * Verificar que las clasificaciones vienen completas o hacen falta
+	 */
+	
+	public static String getClasifNull(LocalDispatcher dispatcher,
+			String Organizacion, Map context, String Tipo) {
+
+		String aviso = null;
+		Calendar c = new GregorianCalendar();
+		String anio = Integer.toString(c.get(Calendar.YEAR));
+		Delegator delegator = dispatcher.getDelegator();
+
+		try {
+
+			EntityCondition condicion = EntityCondition.makeCondition(
+					EntityOperator.AND, EntityCondition.makeCondition(
+							"organizationPartyId", EntityOperator.EQUALS,
+							Organizacion),
+					EntityCondition.makeCondition("acctgTagUsageTypeId",
+							EntityOperator.EQUALS, Tipo),
+					EntityCondition.makeCondition("ciclo",
+							EntityOperator.EQUALS, anio));
+
+			List<GenericValue> resultado = delegator.findByCondition(
+					"EstructuraClave", condicion,
+					UtilMisc.toList(getListColumnas()), null);
+
+			int tam = 0;
+
+			// Se verifica cuantas clasificaciones tiene el Ingreso o Egreso
+			// dentro de su clave
+			if (!resultado.isEmpty()) {
+				for (GenericValue genericValue : resultado) {
+					for (int j = 1; j < 16; j++) {
+						try {
+							if ((genericValue.get("clasificacion"
+									+ String.valueOf(j)) != null))
+								tam++;
+							else if (!(genericValue.get(
+									"clasificacion" + String.valueOf(j))
+									.toString().isEmpty()))
+								tam++;
+
+						} catch (NullPointerException e) {
+							continue;
+						}
+					}
+
+				}
+			}
+
+			int tam2 = 0;
+
+			// Se valida que se llenen todas las clasificaciones
+			if (tam != 0) {
+				for (int j = 1; j <= tam; j++) {
+					Debug.log("Clasificacion"
+							+ context.get("clasificacion" + String.valueOf(j)));
+					if (context.get("clasificacion" + String.valueOf(j)) != null)
+						tam2++;
+				}
+
+			}
+
+			if (tam == tam2)
+				aviso = "ok";
+			else
+				aviso = "Nok";
+
+		} catch (Exception e) {
+
+			Debug.log("Error en clasificaciones obligatorias " + e, MODULE);
+		}
+		return aviso;
 	}
 	
 }
