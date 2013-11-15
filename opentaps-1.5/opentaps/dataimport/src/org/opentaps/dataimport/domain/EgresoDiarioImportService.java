@@ -220,7 +220,7 @@ public class EgresoDiarioImportService extends DomainService implements
 					EstructuraClave estructura = ledger_repo.findList(EstructuraClave.class,
 							ledger_repo.map(EstructuraClave.Fields.ciclo, 
 									UtilImport.obtenerCiclo(rowdata.getFechaContable()),
-									EstructuraClave.Fields.acctgTagUsageTypeId,"Ingreso")).get(0);
+									EstructuraClave.Fields.acctgTagUsageTypeId,"Egreso")).get(0);
 					//Se obtiene el tipo de clasficacion
 					List<Clasificacion> listaClasif = new ArrayList<Clasificacion>();
 					if(estructura.getClasificacion1()!=null){
@@ -407,7 +407,7 @@ public class EgresoDiarioImportService extends DomainService implements
 					contenedor = UtilImport.validaClasificaciones(listaClasif,ledger_repo,"E",rowdata.getFechaContable());
 					mensaje = UtilImport.validaTipoDoc(mensaje, ledger_repo,
 							rowdata.getIdTipoDoc());
-					if (!contenedor.getMensaje().isEmpty() || !mensaje.isEmpty()) {
+					if (contenedor.getMensaje()!= "" || !mensaje.isEmpty()) {
 						loteValido = false;
 						
 						storeImportEgresoDiarioError(rowdata, contenedor.getMensaje(), imp_repo);
@@ -571,7 +571,6 @@ public class EgresoDiarioImportService extends DomainService implements
 							tg = e;
 						}
 					}
-
 					Map<String, String> cuentas = motor.cuentasEgresoDiario(
 							tipoDoc.getAcctgTransTypeId(), contenedor.getProduct().getCategoryName(),
 							rowdata.getOrganizationPartyId(), tg.getEnumId(),

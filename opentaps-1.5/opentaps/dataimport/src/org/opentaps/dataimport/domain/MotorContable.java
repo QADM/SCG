@@ -14,6 +14,7 @@ import org.opentaps.base.entities.PaymentMethod;
 import org.opentaps.base.entities.ProductCategoryMember;
 import org.opentaps.base.entities.ProductGlAccount;
 import org.opentaps.domain.ledger.LedgerRepositoryInterface;
+import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.repository.RepositoryException;
 
 public class MotorContable {
@@ -312,10 +313,11 @@ public class MotorContable {
 	public Map<String, String> cuentasIngresoDiario(String tipoTransaccion,
 			String organizationPartyId, String idPago, String cri,
 			String idProductD, String idProductH) throws RepositoryException {
-
+			Debug.log("Entro a cuentasIngresoDiario");
 		MiniGuiaContable miniGuia = ledger_repo.findOne(MiniGuiaContable.class,
 				ledger_repo.map(MiniGuiaContable.Fields.acctgTransTypeId,
 						tipoTransaccion));
+		Debug.log("Obtuvo Mini Guia");
 		cuentas.put("GlFiscalTypePresupuesto", miniGuia.getGlFiscalTypeIdPres());
 		cuentas.put("GlFiscalTypeContable", miniGuia.getGlFiscalTypeIdCont());
 		cuentas.put("Cuenta Cargo Presupuesto", miniGuia.getCuentaCargo());

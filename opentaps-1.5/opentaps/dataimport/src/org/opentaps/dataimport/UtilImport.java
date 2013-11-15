@@ -416,6 +416,9 @@ public class UtilImport {
 	public static ProductCategory obtenProductCategory(
 			LedgerRepositoryInterface ledger_repo, String id, String tipo)
 			throws RepositoryException {
+		Debug.log("id = "+id);
+		Debug.log("tipo = "+tipo);
+		
 		List<ProductCategory> products = ledger_repo.findList(
 				ProductCategory.class, ledger_repo.map(
 						ProductCategory.Fields.categoryName, id,
@@ -461,6 +464,8 @@ public class UtilImport {
 	public static Enumeration obtenEnumeration(
 			LedgerRepositoryInterface ledger_repo, String id, String tipo)
 			throws RepositoryException {
+		Debug.log("id: "+id);
+		Debug.log("tipo: "+tipo);
 		List<Enumeration> enums = ledger_repo.findList(Enumeration.class,
 				ledger_repo.map(Enumeration.Fields.sequenceId, id,
 						Enumeration.Fields.enumTypeId, tipo));
@@ -472,79 +477,90 @@ public class UtilImport {
 		ContenedorContable contenedor = new ContenedorContable();
 		String clavePresupuestal = "";
 		String mensaje = "";
+		List<Enumeration> listaEnum = new ArrayList<Enumeration>();
+		try{
 		for (Clasificacion c : lista) {
 			String tipoClasif = c.getTipoObjeto();
 			String valorClasif = c.getValor();
 			String tipoEnum = c.getTipoEnum();
-			List<Enumeration> listaEnum = new ArrayList<Enumeration>();
-			try {
+			
+			
 				if (tipoClasif.equals("Party")) {
-					mensaje += validaParty(mensaje, ledger_repo, valorClasif,
+					mensaje = validaParty(mensaje, ledger_repo, valorClasif,
 							"ADMINISTRATIVA");
-					if(mensaje.equals(""))
-						{
 							Party p = obtenParty(ledger_repo, valorClasif);
-							mensaje += validaVigenciaParty(mensaje, "ADMINISTRATIVA", p);
+							mensaje = validaVigenciaParty(mensaje, "ADMINISTRATIVA", p);
 							contenedor.setParty(p);
-						}
+						
 					
 				} else if (tipoClasif.equals("Geo")) {
-					mensaje += validaGeo(mensaje, ledger_repo, valorClasif,
+					mensaje = validaGeo(mensaje, ledger_repo, valorClasif,
 							"GEOGRAFICA");
 					contenedor.setGeo(obtenGeo(ledger_repo, valorClasif));
 				} else if (tipoClasif.equals("WorkEffort")) {
-					mensaje += validaWorkEffort(mensaje, ledger_repo,
+					mensaje = validaWorkEffort(mensaje, ledger_repo,
 							valorClasif, "PROYECTO");
-					if(mensaje.equals("")){
+					
 						WorkEffort w = obtenWorkEffort(ledger_repo, valorClasif);
-						mensaje += validaVigenciaWorkEffort(mensaje, "PROYECTO", w,
+						mensaje = validaVigenciaWorkEffort(mensaje, "PROYECTO", w,
 								fechaTrans);
 						contenedor.setWe(w);
-					}
+					
 					
 				} else if (tipoClasif.equals("ProductCategory")) {
 					if (tipo.equals("I")) {
-						mensaje += validaProductCategory(mensaje, ledger_repo,
+						mensaje = validaProductCategory(mensaje, ledger_repo,
 								valorClasif, buscaHojaCri(ledger_repo), "RUBRO DEL INGRESO");
-						if(mensaje.equals(""))
-						{
+						
 							ProductCategory p = obtenProductCategory(ledger_repo,
 								valorClasif, buscaHojaCri(ledger_repo));
-							mensaje += validaVigenciaProductCategory(mensaje,
+							mensaje = validaVigenciaProductCategory(mensaje,
 									"RUBRO DEL INGRESO", p, fechaTrans);
+							Debug.log("Obtuvo Cri: "+p.getCategoryName());
 							contenedor.setProduct(p);
-						}
+						
 						
 					} else {
-						mensaje += validaProductCategory(mensaje, ledger_repo,
+						mensaje = validaProductCategory(mensaje, ledger_repo,
 								valorClasif, buscaHojaCog(ledger_repo),
 								"PRODUCTO ESPECIFICO");
-						if(mensaje.equals("")){
+						
 						ProductCategory p = obtenProductCategory(ledger_repo,
 								valorClasif, buscaHojaCog(ledger_repo));
-						mensaje += validaVigenciaProductCategory(mensaje,
+						mensaje = validaVigenciaProductCategory(mensaje,
 								"PRODUCTO ESPECIFICO", p, fechaTrans);
 						contenedor.setProduct(p);
-						}
+						
 					}
-				} else if (tipoClasif.equals("EnumerationType")) {
-					mensaje += validaEnumeration(mensaje, ledger_repo,
+				} else if (tipoClasif.equals("Enumeration")) {
+					mensaje = validaEnumeration(mensaje, ledger_repo,
 							valorClasif, tipoEnum, valorClasif);
-					if(mensaje.equals("")){
+					
 					Enumeration e = obtenEnumeration(ledger_repo, valorClasif,
 							tipoEnum);
-					mensaje += validaVigencia(mensaje, valorClasif, e,
+					mensaje = validaVigencia(mensaje, valorClasif, e,
 							fechaTrans);
 					listaEnum.add(e);
-					}
+					
 				}
-			} catch (Exception e) {
-				//
-			}
+			
 			clavePresupuestal += valorClasif;
 		}
 		contenedor.setClavePresupuestal(clavePresupuestal);
-		contenedor.setMensaje(mensaje);
+		if(!mensaje.isEmpty())
+		{
+			contenedor.setMensaje(mensaje);
+		}
+		else
+		{
+			contenedor.setMensaje("");
+		}
+		contenedor.setEnumeration(listaEnum);
+	}
+	catch(Exception e)
+	{
+		e.printStackTrace();
+	}
 		return contenedor;
 	}
 
