@@ -154,6 +154,12 @@ public class TransactionBudget {
 				throw new ServiceException(String.format("El monto debe ser MAYOR A CERO"));
     			
     		}
+    		
+    		String clasif = getClasifNull(dispatcher,
+					organizationPartyId, context, "INGRESO");
+			
+			if(clasif.equals("Nok"))
+				throw new ServiceException(String.format("Deben de llenarse todas las clasificaciones"));
 
 			Organization organization = organizationRepository
 					.getOrganizationById(organizationPartyId);
@@ -185,12 +191,6 @@ public class TransactionBudget {
 				
 
 			}
-
-			String clasif = getClasifNull(dispatcher,
-					organizationPartyId, context, "INGRESO");
-			
-			if(clasif.equals("Nok"))
-				throw new ServiceException(String.format("Deben de llenarse todas las clasificaciones"));
 				
 			Map results = dispatcher.runSync("createAcctgTransBugetManual",
 					createAcctgTransCtx);
@@ -743,6 +743,12 @@ public class TransactionBudget {
 				throw new ServiceException(String.format("El monto debe ser MAYOR A CERO"));
     			
     		}
+    		
+			String clasif = getClasifNull(dispatcher,
+					organizationPartyId, context, "EGRESO");
+			
+			if(clasif.equals("Nok"))
+				throw new ServiceException(String.format("Deben de llenarse todas las clasificaciones"));
 
 			Organization organization = organizationRepository
 					.getOrganizationById(organizationPartyId);
@@ -768,12 +774,6 @@ public class TransactionBudget {
 				//createAcctgTransCtx.put("createdByUserLogin" ,"admin");
 				createAcctgTransCtx.put("postedAmount", amount);
 			}
-			
-			String clasif = getClasifNull(dispatcher,
-					organizationPartyId, context, "EGRESO");
-			
-			if(clasif.equals("Nok"))
-				throw new ServiceException(String.format("Deben de llenarse todas las clasificaciones"));
 
 			Map results = dispatcher.runSync("createAcctgTransBugetManual",
 					createAcctgTransCtx);
