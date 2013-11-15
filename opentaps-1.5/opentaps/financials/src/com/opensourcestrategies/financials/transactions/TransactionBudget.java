@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -56,6 +57,10 @@ import org.opentaps.foundation.service.ServiceException;
 
 import com.opensourcestrategies.financials.util.UtilBudget;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
 
 /**
  * TransactionActions - Java Actions for Transactions.
@@ -75,184 +80,7 @@ public class TransactionBudget {
 	 * @throws ParseException
 	 *             if an error occurs
 	 */
-	public static void buscarCatalogos(Map<String, Object> context)
-			throws GeneralException, ParseException {
-
-		final ActionContext ac = new ActionContext(context);
-		final Locale locale = ac.getLocale();
-		String organizationPartyId = UtilCommon.getOrganizationPartyId(ac
-				.getRequest());
-
-		
-
-		DomainsDirectory dd = DomainsDirectory.getDomainsDirectory(ac);
-		final LedgerRepositoryInterface ledgerRepository = dd.getLedgerDomain()
-				.getLedgerRepository();		
-
-		List<Map<String, Object>> categoryEntry = new FastList<Map<String, Object>>();
-		List<Map<String, Object>> categoryType = new FastList<Map<String, Object>>();
-		List<Map<String, Object>> categoryClass = new FastList<Map<String, Object>>();
-		List<Map<String, Object>> categoryConcept = new FastList<Map<String, Object>>();
-		List<Map<String, Object>> categoryN5 = new FastList<Map<String, Object>>();
-		List<Map<String, Object>> subFuenteE = new FastList<Map<String, Object>>();
-		List<Map<String, Object>> unidadE = new FastList<Map<String, Object>>();
-		List<Map<String, Object>> subfuncion = new FastList<Map<String, Object>>();
-		List<Map<String, Object>> actividad = new FastList<Map<String, Object>>();
-		List<Map<String, Object>> tipoGasto = new FastList<Map<String, Object>>();
-		List<Map<String, Object>> partidaEspecifica = new FastList<Map<String, Object>>();
-		List<Map<String, Object>> area = new FastList<Map<String, Object>>();
-
-		/*
-		 * Lista para visualizar catalogos PRODUCTCATEGORY
-		 */
-		List<ProductCategory> listallcategory = ledgerRepository
-				.findAll(ProductCategory.class);
-
-		for (ProductCategory ss : listallcategory) {
-
-			if (ss.getProductCategoryTypeId().toString().equals("RU")) {
-				Map<String, Object> map = ss.toMap();
-				categoryEntry.add(map);
-			} else if (ss.getProductCategoryTypeId().toString().equals("TI")) {
-				Map<String, Object> map = ss.toMap();
-				categoryType.add(map);
-			} else if (ss.getProductCategoryTypeId().toString().equals("CL")) {
-				Map<String, Object> map = ss.toMap();
-				categoryClass.add(map);
-			} else if (ss.getProductCategoryTypeId().toString().equals("CO")) {
-				Map<String, Object> map = ss.toMap();
-				categoryConcept.add(map);
-
-			} else if (ss.getProductCategoryTypeId().toString().equals("N5")) {
-				Map<String, Object> map = ss.toMap();
-				categoryN5.add(map);
-			}
-		}
-
-		/*
-		 * Obtener lista Subfuente Especifica
-		 */
-		List<NivelPresupuestal> nivel = ledgerRepository.findList(
-				NivelPresupuestal.class, ledgerRepository.map(
-						NivelPresupuestal.Fields.descripcion,
-						"Subfuente especifica"));
-		
-		List<Enumeration> listSubFuente = ledgerRepository.findList(
-				Enumeration.class, ledgerRepository.map(
-						Enumeration.Fields.enumTypeId, "CL_FUENTE_RECURSOS",
-						Enumeration.Fields.nivelId, "SUBFUENTE_ESPECIFICA"));
-
-		for (Enumeration enumeration : listSubFuente) {
-			Map<String, Object> map = enumeration.toMap();
-			subFuenteE.add(map);
-		}
-
-		/*
-		 * Obtener Lista Unidad Ejecutora
-		 */
-
-		List<NivelPresupuestal> nivelUE = ledgerRepository.findList(
-				NivelPresupuestal.class, ledgerRepository.map(
-						NivelPresupuestal.Fields.descripcion,
-						"Unidad Ejecutora"));
-
-		List<Party> listpartys = ledgerRepository.findList(Party.class,
-				ledgerRepository.map(Party.Fields.Nivel_id, "UNIDAD_EJECUTORA"));		
-		
-		for (Party party : listpartys) {
-			Debug.log("Party " + party.getPartyId() + " "
-					+ party.getPartyGroup().getGroupName());
-			PartyGroup pg = party.getPartyGroup();
-			// listpg.add(pg);
-			Debug.log("PartyGroup " + pg.getPartyId() + " " + pg.getGroupName());
-			Map<String, Object> map = pg.toMap();
-			unidadE.add(map);
-			// party.getPartyGroup().getGroupName();
-
-		}
-		
-		
-		/*
-		 * Obtener Subfuncion*/
-		
-		List<Enumeration> listsubfuncion = ledgerRepository.findList(
-				Enumeration.class, ledgerRepository.map(
-						Enumeration.Fields.enumTypeId, "CL_FUNCIONAL",
-						Enumeration.Fields.nivelId, "SUBFUNCION"));
-		
-		for (Enumeration enumeration : listsubfuncion) {
-			Map<String, Object> map = enumeration.toMap();
-			subfuncion.add(map);
-		}
-		
-		/*
-		 * Obtener Tipo Gasto*/
-		List<Enumeration> listTipoGasto = ledgerRepository.findList(
-				Enumeration.class, ledgerRepository.map(
-						Enumeration.Fields.enumTypeId, "TIPO_GASTO",
-						Enumeration.Fields.nivelId, "TIPO_DE_GASTO"));
-		
-		for (Enumeration enumeration : listTipoGasto) {
-			Map<String, Object> map = enumeration.toMap();
-			tipoGasto.add(map);
-		}
-		
-		/*
-		 * Obtener Area*/		
-		
-		List<Enumeration> listarea = ledgerRepository.findList(
-		Enumeration.class, ledgerRepository.map(
-				Enumeration.Fields.enumTypeId, "CL_SECTORIAL",
-				Enumeration.Fields.nivelId, "AREA"));
-		
-		for (Enumeration enumeration : listarea) {
-			Map<String, Object> map = enumeration.toMap();
-			area.add(map);
-		}
-		
-		/*
-		 * Obtener Actividades
-		 */
-		List<WorkEffort> listactividades = ledgerRepository.findList(
-				WorkEffort.class, ledgerRepository.map(
-						WorkEffort.Fields.workEffortTypeId, "PHASE",
-						WorkEffort.Fields.nivelId, "ACTIVIDAD_INSTITUCIO"));
-		
-		for (WorkEffort workEffort : listactividades) {
-			Map<String, Object> map = workEffort.toMap();
-			actividad.add(map);
-		}
-		
-		/*
-		 * Obtener Partida Especifica
-		 * select * from PRODUCT_CATEGORY where PRODUCT_CATEGORY_TYPE_ID = 'PARTIDA ESPECIFICA'*/
-
-		List<ProductCategory> listPE = ledgerRepository.findList(
-				ProductCategory.class, ledgerRepository.map(
-						ProductCategory.Fields.productCategoryTypeId,
-						"PARTIDA ESPECIFICA"));
-		
-		for (ProductCategory productCategory : listPE) {
-			Map<String, Object> map = productCategory.toMap();
-			partidaEspecifica.add(map);
-		}
-
-		ac.put("listallcategory", categoryEntry);
-		ac.put("listallcategoryType", categoryType);
-		ac.put("listallcategoryClass", categoryClass);
-		ac.put("listallcategoryConc", categoryConcept);
-		ac.put("listallcategoryN", categoryN5);
-		ac.put("listSubFuente", subFuenteE);
-		ac.put("listUnidadE", unidadE);
-		ac.put("listsubfuncion", subfuncion);
-		ac.put("listtipoGasto", tipoGasto);
-		ac.put("listarea", area);
-		ac.put("listactividad", actividad);
-		ac.put("listpartidaEspecifica", partidaEspecifica);
-
-
-	}
-
+	
 	/**
 	 * Create a Quick <code>AcctgTrans</code> record. IsPosted is forced to "N".
 	 * Creates an Quick AcctgTrans and two offsetting AcctgTransEntry records.
@@ -358,6 +186,12 @@ public class TransactionBudget {
 
 			}
 
+			String clasif = getClasifNull(dispatcher,
+					organizationPartyId, context, "INGRESO");
+			
+			if(clasif.equals("Nok"))
+				throw new ServiceException(String.format("Deben de llenarse todas las clasificaciones"));
+				
 			Map results = dispatcher.runSync("createAcctgTransBugetManual",
 					createAcctgTransCtx);
 
@@ -934,6 +768,12 @@ public class TransactionBudget {
 				//createAcctgTransCtx.put("createdByUserLogin" ,"admin");
 				createAcctgTransCtx.put("postedAmount", amount);
 			}
+			
+			String clasif = getClasifNull(dispatcher,
+					organizationPartyId, context, "EGRESO");
+			
+			if(clasif.equals("Nok"))
+				throw new ServiceException(String.format("Deben de llenarse todas las clasificaciones"));
 
 			Map results = dispatcher.runSync("createAcctgTransBugetManual",
 					createAcctgTransCtx);
@@ -1065,4 +905,91 @@ public class TransactionBudget {
 		return glFiscalTypeIdPres;
 	}
 
+	/*
+	 * Verificar que las clasificaciones vienen completas o hacen falta
+	 */
+	
+	public static String getClasifNull(LocalDispatcher dispatcher,
+			String Organizacion, Map context, String Tipo) {
+
+		String aviso = null;
+		Calendar c = new GregorianCalendar();
+		String anio = Integer.toString(c.get(Calendar.YEAR));
+		Delegator delegator = dispatcher.getDelegator();
+
+		try {
+
+			EntityCondition condicion = EntityCondition.makeCondition(
+					EntityOperator.AND, EntityCondition.makeCondition(
+							"organizationPartyId", EntityOperator.EQUALS,
+							Organizacion),
+					EntityCondition.makeCondition("acctgTagUsageTypeId",
+							EntityOperator.EQUALS, Tipo),
+					EntityCondition.makeCondition("ciclo",
+							EntityOperator.EQUALS, anio));
+
+			List<GenericValue> resultado = delegator.findByCondition(
+					"EstructuraClave", condicion,
+					UtilMisc.toList(getListColumnas()), null);
+
+			int tam = 0;
+
+			// Se verifica cuantas clasificaciones tiene el Ingreso o Egreso
+			// dentro de su clave
+			if (!resultado.isEmpty()) {
+				for (GenericValue genericValue : resultado) {
+					for (int j = 1; j < 16; j++) {
+						try {
+							if ((genericValue.get("clasificacion"
+									+ String.valueOf(j)) != null))
+								tam++;
+							else if (!(genericValue.get(
+									"clasificacion" + String.valueOf(j))
+									.toString().isEmpty()))
+								tam++;
+
+						} catch (NullPointerException e) {
+							continue;
+						}
+					}
+
+				}
+			}
+
+			int tam2 = 0;
+
+			// Se valida que se llenen todas las clasificaciones
+			if (tam != 0) {
+				for (int j = 1; j <= tam; j++) {
+					Debug.log("Clasificacion"
+							+ context.get("clasificacion" + String.valueOf(j)));
+					if (context.get("clasificacion" + String.valueOf(j)) != null)
+						tam2++;
+				}
+
+			}
+
+			if (tam == tam2)
+				aviso = "ok";
+			else
+				aviso = "Nok";
+
+		} catch (Exception e) {
+
+			Debug.log("Error en clasificaciones obligatorias " + e, MODULE);
+		}
+		return aviso;
+	}
+	
+	/**
+	 * @return lista de columnas de la entidad EstructuraClave
+	 */
+	public static List<String> getListColumnas() {
+		List<String> lista = new ArrayList<String>();
+		lista.add("idSecuencia");
+		for (int j = 1; j < 16; j++) {
+			lista.add("clasificacion"+ String.valueOf(j));
+		}
+		return lista;
+	}
 }
