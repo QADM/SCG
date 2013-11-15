@@ -451,7 +451,7 @@ public class UtilImport {
 			String campo) throws RepositoryException {
 		List<Enumeration> enums = ledger_repo.findList(Enumeration.class,
 				ledger_repo.map(Enumeration.Fields.sequenceId, id,
-						Enumeration.Fields.enumTypeId, tipo));
+						Enumeration.Fields.enumTypeId, obtenEnumerationType(ledger_repo, tipo).getEnumTypeId()));
 
 		if (enums.isEmpty()) {
 			Debug.log("Error, " + campo + " no existe");
@@ -468,7 +468,16 @@ public class UtilImport {
 		Debug.log("tipo: "+tipo);
 		List<Enumeration> enums = ledger_repo.findList(Enumeration.class,
 				ledger_repo.map(Enumeration.Fields.sequenceId, id,
-						Enumeration.Fields.enumTypeId, tipo));
+						Enumeration.Fields.enumTypeId, obtenEnumerationType(ledger_repo, tipo).getEnumTypeId()));
+		return enums.get(0);
+	}
+	
+	public static EnumerationType obtenEnumerationType(
+			LedgerRepositoryInterface ledger_repo, String tipo)
+			throws RepositoryException {
+		Debug.log("tipo: "+tipo);
+		List<EnumerationType> enums = ledger_repo.findList(EnumerationType.class,
+				ledger_repo.map(EnumerationType.Fields.clasificacionId, tipo));
 		return enums.get(0);
 	}
 

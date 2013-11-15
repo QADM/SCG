@@ -381,6 +381,7 @@ public class MotorContable {
 			Debug.log("Egreso");
 			Debug.log("COG " + cog);
 			Debug.log("TIPOGASTO " + tipoGasto);
+			Debug.log("TipoMatriz "+miniGuia.getTipoMatriz());
 			List<DataImportMatrizEgr> matriz = ledger_repo.findList(
 					DataImportMatrizEgr.class, ledger_repo.map(
 							DataImportMatrizEgr.Fields.cog, cog,
