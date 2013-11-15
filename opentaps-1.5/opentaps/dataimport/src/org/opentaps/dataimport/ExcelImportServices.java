@@ -1428,7 +1428,7 @@ public final class ExcelImportServices extends DomainService {
 				DataImportPresupuestoIngreso ingreso = new DataImportPresupuestoIngreso();
 				int rowCount = 1; // keep track of the row
 				int id = 1;
-				ingreso.setCiclo(this.readStringCell(row, rowCount++));
+				ingreso.setCiclo(this.readStringCell(row, rowCount));
 				ingreso.setClasificacion1(this.readStringCell(row, rowCount++));
 				ingreso.setClasificacion2(this.readStringCell(row, rowCount++));
 				ingreso.setClasificacion3(this.readStringCell(row, rowCount++));
@@ -1459,6 +1459,7 @@ public final class ExcelImportServices extends DomainService {
 				ingreso.setDiciembre(this.readBigDecimalCell(row, rowCount++));
 				ingreso.setAgrupador(this.readStringCell(row, rowCount++));
 				ingreso.setIdPresIng(ingreso.getAgrupador() + id);
+				Debug.log("idPresupuesto.- "+ingreso.getIdPresIng());
 				ingresos.add(ingreso);
 				id++;
 			}
@@ -1482,6 +1483,7 @@ public final class ExcelImportServices extends DomainService {
 
 		List<DataImportPresupuestoEgreso> egresos = FastList.newInstance();
 		int sheetLastRowNumber = sheet.getLastRowNum();
+		int id = 1;
 		for (int j = 1; j <= sheetLastRowNumber; j++) {
 			HSSFRow row = sheet.getRow(j);
 			if (isNotEmpty(row)) {
@@ -1501,9 +1503,8 @@ public final class ExcelImportServices extends DomainService {
 
 				DataImportPresupuestoEgreso egreso = new DataImportPresupuestoEgreso();
 				int rowCount = 1; // keep track of the row
-				int id = 1;
 				egreso.setCiclo(this.readStringCell(row, rowCount++));
-				egreso.setClasificacion1(this.readStringCell(row, rowCount++));
+				egreso.setClasificacion1(this.readStringCell(row, rowCount));
 				egreso.setClasificacion2(this.readStringCell(row, rowCount++));
 				egreso.setClasificacion3(this.readStringCell(row, rowCount++));
 				egreso.setClasificacion4(this.readStringCell(row, rowCount++));
@@ -1533,7 +1534,8 @@ public final class ExcelImportServices extends DomainService {
 				egreso.setDiciembre(this.readBigDecimalCell(row, rowCount++));
 				egreso.setAgrupador(this.readStringCell(row, rowCount++));
 				egreso.setIdPresEgr(egreso.getAgrupador() + id);
-				egresos.add(egreso);
+				Debug.log("idPresupuesto.- "+egreso.getIdPresEgr());
+				egresos.add(egreso);				
 				id++;
 			}
 		}

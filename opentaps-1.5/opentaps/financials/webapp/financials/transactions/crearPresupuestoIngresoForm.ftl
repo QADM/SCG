@@ -50,11 +50,11 @@
 	          <@inputSelectCell name="clasificacion${tag.index}" errorField="acctgTagEnumId${tag.index}" list=tag.activeTagValues key="geoId" required=false default=tag.defaultValue! ; tagValue>
 	            ${tagValue.geoName}
 	          </@inputSelectCell>  
-          <#elseif tag.description?contains("CRI") || tag.description?contains("COG") >         
+          <#elseif tag.description?contains("Ingresos")>         
 	          <@inputSelectCell name="clasificacion${tag.index}" errorField="acctgTagEnumId${tag.index}" list=tag.activeTagValues key="categoryName" required=false default=tag.defaultValue! ; tagValue>
 	            ${tagValue.description}
 	          </@inputSelectCell>  
-	      <#elseif tag.description?contains("Programatica") || tag.description?contains("COG") >         
+	      <#elseif tag.description?contains("Programatica")>         
 	          <@inputSelectCell name="clasificacion${tag.index}" errorField="acctgTagEnumId${tag.index}" list=tag.activeTagValues key="workEffortName" required=false default=tag.defaultValue! ; tagValue>
 	            ${tagValue.description}
 	          </@inputSelectCell>

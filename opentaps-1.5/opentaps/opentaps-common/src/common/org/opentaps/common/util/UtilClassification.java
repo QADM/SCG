@@ -3,9 +3,12 @@
 
 package org.opentaps.common.util;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Date;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
@@ -83,21 +86,36 @@ public final class UtilClassification {
 		String valorBusqueda = "";
 		String valorId = "";
 		String valorDescripcion = "";
+		String fechaInicio = "";
+		String fechaFin = "";
+		String state = "";		
+		Date fechaActual;		
+		Timestamp fechaActualStamp;
+		Calendar cal = Calendar.getInstance();
+		fechaActualStamp = new Timestamp(cal.getTimeInMillis());
+		fechaActual = (Date) cal.getTime();
+				/*(new Timestamp(
+				cal.getTimeInMillis()));*/
 		List<GenericValue> listGenericaNivelesResult = null;						
-
-		if(niveles.equals("CICLO"))
+		
+		Debug.log("Omar - Nivel: " + niveles);
+		Debug.log("Omar - Tabla: " + tabla);
+		Debug.log("Omar - fechaActual: " + fechaActual);		
+		
+		if(niveles.equals("2013") || niveles.equals("2014") || niveles.equals("2015") || niveles.equals("2016") || niveles.equals("2017") || niveles.equals("2018") || niveles.equals("2019") || niveles.equals("2020") || niveles.equals("CICLO"))
 		{	valorBusqueda = "clasificacionId";
 			valorId = "nivelId";			
 			entidad = "NivelesCiclo";
 			try 
 			{	EntityCondition condicionCiclo = EntityCondition.makeCondition(EntityOperator.AND,
-					EntityCondition.makeCondition(valorBusqueda, EntityOperator.EQUALS, niveles));
+					EntityCondition.makeCondition(valorBusqueda, EntityOperator.EQUALS, "CICLO"));
 			
 				listGenericaNivelesResult = delegator
 						.findByCondition(
 								entidad,
 								condicionCiclo,
-								UtilMisc.toList(valorId), null);				
+								UtilMisc.toList(valorId, valorId), null);
+				Debug.log("Omar - ListGenericaNivelesResult: " + listGenericaNivelesResult);
 				return listGenericaNivelesResult;				
 			}catch (GenericEntityException e) {			
 				e.printStackTrace();
@@ -109,6 +127,8 @@ public final class UtilClassification {
 		{	valorBusqueda = "nivelId";
 			valorId="enumId";
 			valorDescripcion="enumCode";
+			fechaInicio = "fechaInicio";
+			fechaFin = "fechaFin";
 		}	
 		else if(tabla.equals("Geo"))
 		{	valorBusqueda = "geoTypeId";
@@ -118,34 +138,55 @@ public final class UtilClassification {
 		else if(tabla.equals("WorkEffort"))
 		{	valorBusqueda = "nivelId";
 			valorId="workEffortName";
-			valorDescripcion="description";		
+			valorDescripcion="description";
+			fechaInicio = "estimatedStartDate";
+			fechaFin = "estimatedCompletionDate";			
 		}
 		else if(tabla.equals("Party"))
 		{	valorBusqueda = "Nivel_id";
 			valorId="externalId";
 			valorDescripcion="groupName";
+			state="state";
 		}
 		else if(tabla.equals("ProductCategory"))
 		{	valorBusqueda = "productCategoryTypeId";
 			valorId="categoryName";
 			valorDescripcion="description";
+			fechaInicio = "fechaInicio";
+			fechaFin = "fechaFin";
 		}
-		EntityCondition condicion = EntityCondition.makeCondition(EntityOperator.AND,
-            EntityCondition.makeCondition(valorBusqueda, EntityOperator.EQUALS, niveles));
-			
-			Debug.log("Omar - Nivel: " + niveles);
-			Debug.log("Omar - Tabla: " + tabla);
-			
+		
+		EntityCondition condicion = null;
+		if(tabla.equals("Geo"))
+		{	Debug.log("Omar - EntityCondition Geo");
+			condicion = EntityCondition.makeCondition(EntityOperator.AND,
+				EntityCondition.makeCondition(valorBusqueda, EntityOperator.EQUALS, niveles));
+		}
+		else if(tabla.equals("Party"))
+		{	Debug.log("Omar - EntityCondition Party");						
+			condicion = EntityCondition.makeCondition(EntityOperator.AND,
+		            EntityCondition.makeCondition(valorBusqueda, EntityOperator.EQUALS, niveles),
+		            EntityCondition.makeCondition(Party.Fields.partyId, EntityOperator.EQUALS, PartyGroup.Fields.partyId),
+		            EntityCondition.makeCondition(state, EntityOperator.EQUALS, "A"));
+			entidad = "NivelesParty";
+		}
+		else if(tabla.equals("WorkEffort"))
+		{	Debug.log("Omar - EntityCondition WorkEffort");
+			condicion = EntityCondition.makeCondition(EntityOperator.AND,
+				EntityCondition.makeCondition(valorBusqueda, EntityOperator.EQUALS, niveles),
+				EntityCondition.makeCondition(fechaFin, EntityOperator.GREATER_THAN, fechaActualStamp),
+				EntityCondition.makeCondition(fechaInicio, EntityOperator.LESS_THAN, fechaActualStamp));
+		}					
+		else
+		{	Debug.log("Omar - EntityCondition Else");
+			condicion = EntityCondition.makeCondition(EntityOperator.AND,
+				EntityCondition.makeCondition(valorBusqueda, EntityOperator.EQUALS, niveles),
+				EntityCondition.makeCondition(fechaFin, EntityOperator.GREATER_THAN, fechaActual),
+				EntityCondition.makeCondition(fechaInicio, EntityOperator.LESS_THAN, fechaActual));
+		}
 						
 			try 
-			{	if(tabla.equals("Party"))
-				{	condicion = EntityCondition.makeCondition(EntityOperator.AND,
-			            EntityCondition.makeCondition(valorBusqueda, EntityOperator.EQUALS, niveles),
-			            EntityCondition.makeCondition(Party.Fields.partyId, EntityOperator.EQUALS, PartyGroup.Fields.partyId));
-					entidad = "NivelesParty";
-		        }				
-				
-				listGenericaNivelesResult = delegator
+			{	listGenericaNivelesResult = delegator
 						.findByCondition(
 								entidad,
 								condicion,

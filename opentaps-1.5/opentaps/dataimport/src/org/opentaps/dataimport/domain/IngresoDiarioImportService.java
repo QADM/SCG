@@ -199,7 +199,7 @@ public class IngresoDiarioImportService extends DomainService implements
 							ledger_repo.map(ClasifPresupuestal.Fields.clasificacionId,
 									estructura.getClasificacion2())).get(0).getTablaRelacion();
 					c.setTipoObjeto(tipoClasif2);
-					c.setValor(rowdata.getClasificacion1());
+					c.setValor(rowdata.getClasificacion2());
 					c.setTipoEnum(ledger_repo.findList(ClasifPresupuestal.class, 
 							ledger_repo.map(ClasifPresupuestal.Fields.clasificacionId,
 									estructura.getClasificacion2())).get(0).getClasificacionId());
@@ -211,7 +211,7 @@ public class IngresoDiarioImportService extends DomainService implements
 							ledger_repo.map(ClasifPresupuestal.Fields.clasificacionId,
 									estructura.getClasificacion3())).get(0).getTablaRelacion();
 					c.setTipoObjeto(tipoClasif3);
-					c.setValor(rowdata.getClasificacion1());
+					c.setValor(rowdata.getClasificacion3());
 					c.setTipoEnum(ledger_repo.findList(ClasifPresupuestal.class, 
 							ledger_repo.map(ClasifPresupuestal.Fields.clasificacionId,
 									estructura.getClasificacion3())).get(0).getClasificacionId());
@@ -223,7 +223,7 @@ public class IngresoDiarioImportService extends DomainService implements
 							ledger_repo.map(ClasifPresupuestal.Fields.clasificacionId,
 									estructura.getClasificacion4())).get(0).getTablaRelacion();
 					c.setTipoObjeto(tipoClasif4);
-					c.setValor(rowdata.getClasificacion1());
+					c.setValor(rowdata.getClasificacion4());
 					c.setTipoEnum(ledger_repo.findList(ClasifPresupuestal.class, 
 							ledger_repo.map(ClasifPresupuestal.Fields.clasificacionId,
 									estructura.getClasificacion4())).get(0).getClasificacionId());
@@ -235,7 +235,7 @@ public class IngresoDiarioImportService extends DomainService implements
 							ledger_repo.map(ClasifPresupuestal.Fields.clasificacionId,
 									estructura.getClasificacion5())).get(0).getTablaRelacion();
 					c.setTipoObjeto(tipoClasif5);
-					c.setValor(rowdata.getClasificacion1());
+					c.setValor(rowdata.getClasificacion5());
 					c.setTipoEnum(ledger_repo.findList(ClasifPresupuestal.class, 
 							ledger_repo.map(ClasifPresupuestal.Fields.clasificacionId,
 									estructura.getClasificacion5())).get(0).getClasificacionId());
@@ -247,7 +247,7 @@ public class IngresoDiarioImportService extends DomainService implements
 							ledger_repo.map(ClasifPresupuestal.Fields.clasificacionId,
 									estructura.getClasificacion6())).get(0).getTablaRelacion();
 					c.setTipoObjeto(tipoClasif6);
-					c.setValor(rowdata.getClasificacion1());
+					c.setValor(rowdata.getClasificacion6());
 					c.setTipoEnum(ledger_repo.findList(ClasifPresupuestal.class, 
 							ledger_repo.map(ClasifPresupuestal.Fields.clasificacionId,
 									estructura.getClasificacion6())).get(0).getClasificacionId());
@@ -259,7 +259,7 @@ public class IngresoDiarioImportService extends DomainService implements
 							ledger_repo.map(ClasifPresupuestal.Fields.clasificacionId,
 									estructura.getClasificacion7())).get(0).getTablaRelacion();
 					c.setTipoObjeto(tipoClasif7);
-					c.setValor(rowdata.getClasificacion1());
+					c.setValor(rowdata.getClasificacion7());
 					c.setTipoEnum(ledger_repo.findList(ClasifPresupuestal.class, 
 							ledger_repo.map(ClasifPresupuestal.Fields.clasificacionId,
 									estructura.getClasificacion7())).get(0).getClasificacionId());
@@ -271,7 +271,7 @@ public class IngresoDiarioImportService extends DomainService implements
 							ledger_repo.map(ClasifPresupuestal.Fields.clasificacionId,
 									estructura.getClasificacion8())).get(0).getTablaRelacion();
 					c.setTipoObjeto(tipoClasif8);
-					c.setValor(rowdata.getClasificacion1());
+					c.setValor(rowdata.getClasificacion8());
 					c.setTipoEnum(ledger_repo.findList(ClasifPresupuestal.class, 
 							ledger_repo.map(ClasifPresupuestal.Fields.clasificacionId,
 									estructura.getClasificacion8())).get(0).getClasificacionId());
@@ -283,7 +283,7 @@ public class IngresoDiarioImportService extends DomainService implements
 							ledger_repo.map(ClasifPresupuestal.Fields.clasificacionId,
 									estructura.getClasificacion9())).get(0).getTablaRelacion();
 					c.setTipoObjeto(tipoClasif9);
-					c.setValor(rowdata.getClasificacion1());
+					c.setValor(rowdata.getClasificacion9());
 					c.setTipoEnum(ledger_repo.findList(ClasifPresupuestal.class, 
 							ledger_repo.map(ClasifPresupuestal.Fields.clasificacionId,
 									estructura.getClasificacion9())).get(0).getClasificacionId());
@@ -295,7 +295,7 @@ public class IngresoDiarioImportService extends DomainService implements
 							ledger_repo.map(ClasifPresupuestal.Fields.clasificacionId,
 									estructura.getClasificacion10())).get(0).getTablaRelacion();
 					c.setTipoObjeto(tipoClasif10);
-					c.setValor(rowdata.getClasificacion1());
+					c.setValor(rowdata.getClasificacion10());
 					c.setTipoEnum(ledger_repo.findList(ClasifPresupuestal.class, 
 							ledger_repo.map(ClasifPresupuestal.Fields.clasificacionId,
 									estructura.getClasificacion10())).get(0).getClasificacionId());
@@ -307,7 +307,7 @@ public class IngresoDiarioImportService extends DomainService implements
 							ledger_repo.map(ClasifPresupuestal.Fields.clasificacionId,
 									estructura.getClasificacion11())).get(0).getTablaRelacion();
 					c.setTipoObjeto(tipoClasif11);
-					c.setValor(rowdata.getClasificacion1());
+					c.setValor(rowdata.getClasificacion11());
 					c.setTipoEnum(ledger_repo.findList(ClasifPresupuestal.class, 
 							ledger_repo.map(ClasifPresupuestal.Fields.clasificacionId,
 									estructura.getClasificacion11())).get(0).getClasificacionId());
@@ -319,7 +319,7 @@ public class IngresoDiarioImportService extends DomainService implements
 							ledger_repo.map(ClasifPresupuestal.Fields.clasificacionId,
 									estructura.getClasificacion12())).get(0).getTablaRelacion();
 					c.setTipoObjeto(tipoClasif12);
-					c.setValor(rowdata.getClasificacion1());
+					c.setValor(rowdata.getClasificacion12());
 					c.setTipoEnum(ledger_repo.findList(ClasifPresupuestal.class, 
 							ledger_repo.map(ClasifPresupuestal.Fields.clasificacionId,
 									estructura.getClasificacion12())).get(0).getClasificacionId());
@@ -331,7 +331,7 @@ public class IngresoDiarioImportService extends DomainService implements
 							ledger_repo.map(ClasifPresupuestal.Fields.clasificacionId,
 									estructura.getClasificacion13())).get(0).getTablaRelacion();
 					c.setTipoObjeto(tipoClasif13);
-					c.setValor(rowdata.getClasificacion1());
+					c.setValor(rowdata.getClasificacion13());
 					c.setTipoEnum(ledger_repo.findList(ClasifPresupuestal.class, 
 							ledger_repo.map(ClasifPresupuestal.Fields.clasificacionId,
 									estructura.getClasificacion13())).get(0).getClasificacionId());
@@ -343,7 +343,7 @@ public class IngresoDiarioImportService extends DomainService implements
 							ledger_repo.map(ClasifPresupuestal.Fields.clasificacionId,
 									estructura.getClasificacion14())).get(0).getTablaRelacion();
 					c.setTipoObjeto(tipoClasif14);
-					c.setValor(rowdata.getClasificacion1());
+					c.setValor(rowdata.getClasificacion14());
 					c.setTipoEnum(ledger_repo.findList(ClasifPresupuestal.class, 
 							ledger_repo.map(ClasifPresupuestal.Fields.clasificacionId,
 									estructura.getClasificacion14())).get(0).getClasificacionId());
@@ -355,12 +355,19 @@ public class IngresoDiarioImportService extends DomainService implements
 							ledger_repo.map(ClasifPresupuestal.Fields.clasificacionId,
 									estructura.getClasificacion15())).get(0).getTablaRelacion();
 					c.setTipoObjeto(tipoClasif15);
-					c.setValor(rowdata.getClasificacion1());
+					c.setValor(rowdata.getClasificacion15());
 					c.setTipoEnum(ledger_repo.findList(ClasifPresupuestal.class, 
 							ledger_repo.map(ClasifPresupuestal.Fields.clasificacionId,
 									estructura.getClasificacion15())).get(0).getClasificacionId());
 					listaClasif.add(c);
 					}
+					//Validacion de la lista de clasificaciones
+					for(int i = 0; i<listaClasif.size(); i++)
+					{
+						Debug.log("Clasificaciones: ");
+						Debug.log(listaClasif.get(i).getValor().toString());
+					}
+					
 					//Bloque de Validacion de Clasificaciones
 					
 					contenedor = UtilImport.validaClasificaciones(listaClasif,ledger_repo,"I",rowdata.getFechaContable());
@@ -476,7 +483,8 @@ public class IngresoDiarioImportService extends DomainService implements
 							rowdata.getOrganizationPartyId(),
 							rowdata.getIdPago(), contenedor.getProduct().getCategoryName(),
 							rowdata.getIdProductoD(), rowdata.getIdProductoH());
-
+					
+					Debug.log("A huevo");
 					if (cuentas.get("Mensaje") != null) {
 						loteValido=false;
 						String message = cuentas.get("Mensaje");
@@ -517,7 +525,7 @@ public class IngresoDiarioImportService extends DomainService implements
 						ingresoDiario.setPostedAmount(rowdata.getMonto());
 						ingresoDiario.setDescription(tipoDoc.getDescripcion()
 								+ "-" + rowdata.getRefDoc() + "-P");
-
+						Debug.log("Antes de ACCTG_TRANS_PRESUPUESTAL");
 						// ACCTG_TRANS_PRESUPUESTAL
 						AcctgTransPresupuestal aux = new AcctgTransPresupuestal();
 						

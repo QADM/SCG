@@ -1,7 +1,9 @@
 package org.opentaps.dataimport;
 
+import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -11,6 +13,7 @@ import java.util.TimeZone;
 import javolution.util.FastList;
 import javolution.util.FastMap;
 
+import org.apache.xmlgraphics.image.codec.util.ForwardSeekableStream;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
@@ -24,6 +27,8 @@ import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ModelService;
 import org.ofbiz.service.ServiceUtil;
+import org.opentaps.base.entities.EnumerationType;
+import org.opentaps.base.entities.EstructuraClave;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
 import org.opentaps.foundation.action.ActionContext;
@@ -551,9 +556,9 @@ public class UtilOperacionDiariaServices {
         	
         	//Buscar identificador del clasificador economico para la matriz
         	GenericValue objectEconom = delegator.findByPrimaryKey("ProductCategory",UtilMisc.toMap("productCategoryId", clasificaEco));
-        	String idClasEconomico = new String();
-        	if(objectEconom != null && !objectEconom.isEmpty())
-        		idClasEconomico = objectEconom.getString("categoryName");
+        	//String idClasEconomico = new String();
+        	//if(objectEconom != null && !objectEconom.isEmpty())
+        		//idClasEconomico = objectEconom.getString("categoryName");
         	
 			GenericValue miniGuia = delegator.findByPrimaryKey("MiniGuiaContable", UtilMisc.toMap("acctgTransTypeId", acctgTransTypeId));
 
@@ -582,7 +587,7 @@ public class UtilOperacionDiariaServices {
 		    	if(referencia.equalsIgnoreCase("M")){
 		    		
 			        EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
-			                EntityCondition.makeCondition(campoClasi, EntityOperator.EQUALS,idClasEconomico),
+			                EntityCondition.makeCondition(campoClasi, EntityOperator.EQUALS,clasificaEco),
 			                EntityCondition.makeCondition("matrizId", EntityOperator.EQUALS,matrizId));
 			
 					List<GenericValue> listMatriz = delegator.findByCondition(tablaClasi, conditions, null, null);
@@ -1126,4 +1131,108 @@ public class UtilOperacionDiariaServices {
 		}
 		return clavePresupuestal;
 	}
+	
+	/*
+	 * Obtener posicion de la clasificacion a consultar
+	 * @param tipoClasificacion
+	 * @param Organizacion
+	 * @param Tipo
+	 * @param ciclo
+	 * @param dispatcher
+	 * return idClasificacion
+	 */
+	
+	public static String getClasificacionEconomica(LocalDispatcher dispatcher,
+			String tipoClasificacion, String Organizacion, String Tipo,
+			String ciclo) {		
+		String tipoclasificacion = null; 
+		Delegator delegator = dispatcher.getDelegator();
+		try {
+			
+			EntityCondition condicion = EntityCondition.makeCondition(EntityOperator.AND,
+					EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, Organizacion),
+					EntityCondition.makeCondition("acctgTagUsageTypeId", EntityOperator.EQUALS, Tipo),
+					EntityCondition.makeCondition("ciclo", EntityOperator.EQUALS, ciclo));	
+			
+			List<GenericValue> resultado = delegator.findByCondition(
+					"EstructuraClave", condicion, UtilMisc.toList(getListColumnas())
+							, null);
+			
+			if(!resultado.isEmpty()){
+				for (GenericValue genericValue : resultado) {
+					for (int j = 1; j < 16; j++) {
+	
+						if (!(genericValue.get("clasificacion" + String.valueOf(j))
+								.toString()).isEmpty()) {
+							Debug.log("entro a validar clasificacion "
+									+ genericValue.get(
+											"clasificacion" + String.valueOf(j))
+											.toString());
+							if (genericValue.get(
+											"clasificacion" + String.valueOf(j))
+											.equals(tipoClasificacion)
+									|| genericValue
+											.get("clasificacion"
+													+ String.valueOf(j)).toString()
+											.contains(tipoClasificacion)) {
+								Debug.log("Clasificacion Economica - Clasificacion"
+										+ String.valueOf(j));
+								
+								tipoclasificacion = "clasificacion" + String.valueOf(j);
+								break;
+							}
+						}
+	
+					}					
+			 }
+		}
+			
+		} catch (Exception e) {
+			
+			Debug.log("Error obtener clasificacion economica " + e, MODULE);			
+		}
+		return tipoclasificacion;
+	}
+
+	/*
+	 * Obttiene la posicion de la clasificacion en EnumerationType y EstructuraClave
+	 * @param tipoClasificacion
+	 * @param EnumerationType
+	 * @param Tipo
+	 * @param ciclo
+	 * @param dispatcher
+	 * return idClasificacion
+	 */
+	public static List<String> getClasificacionEnumeration(LocalDispatcher dispatcher, String tipoClasificacion, String Organizacion, String Entidad, String Tipo, String ciclo) 
+	{	Delegator delegator = dispatcher.getDelegator();
+		List<String> listaClasifEstrucResult = new ArrayList<String>();
+		List<GenericValue> enumtype = null;		
+		try 
+		{	EntityCondition condicion = EntityCondition.makeCondition("parentTypeId", EntityOperator.EQUALS, tipoClasificacion);
+			enumtype = delegator.findByCondition(Entidad, condicion, UtilMisc.toList("enumTypeId"), null);			
+			for(GenericValue genericValue : enumtype) 
+			{	String resultado = getClasificacionEconomica(dispatcher, genericValue.getString("enumTypeId"), Organizacion, Tipo, ciclo);
+				if(resultado != null)
+				{	listaClasifEstrucResult.add(resultado);				
+				}
+			}
+			Debug.log("Omar - Lista listaClasifEstrucResult FIN: " + listaClasifEstrucResult);
+		} catch (GenericEntityException e) 
+		{	e.printStackTrace();
+		}	
+		return listaClasifEstrucResult;			
+	}
+	
+	/**
+	 * @return lista de columnas de la entidad EstructuraClave
+	 */
+	public static List<String> getListColumnas() {
+		List<String> lista = new ArrayList<String>();
+		lista.add("idSecuencia");
+		for (int j = 1; j < 16; j++) {
+			lista.add("clasificacion"+ String.valueOf(j));
+		}
+		return lista;
+	}
+	
 }
