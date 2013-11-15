@@ -812,7 +812,7 @@
                 <set field="sectionHeaderUiLabel" value="${uiLabelMap.FinancialsDailyOperIncome}"/>
                 <set field="creaOpDiariaEgresos" value="createOperacionDiariaEgresos"/>
 				<script location="component://financials/webapp/financials/WEB-INF/actions/transactions/getDatosOperacionDiariaEgre.bsh"/>  
-				<script location="component://financials/webapp/financials/WEB-INF/actions/transactions/createTransactionCustom.bsh"/>              
+				<script location="component://financials/webapp/financials/WEB-INF/actions/transactions/createTransactionEgreso.bsh"/>              
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator">

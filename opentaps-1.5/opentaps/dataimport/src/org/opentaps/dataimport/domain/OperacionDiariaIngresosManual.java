@@ -72,13 +72,10 @@ public class OperacionDiariaIngresosManual {
 	        String sec = (String) context.get("Secuencia");
 	        String cvePrespues = UtilOperacionDiariaServices.getClavePresupuestal(context, dispatcher); 
 	        String idProdAbono = (String) context.get("Id_Producto_Abono");
-	        String idProdCargo = (String) context.get("Id_Producto_Cargo");
-	        
+	        String idProdCargo = (String) context.get("Id_Producto_Cargo");	        
 	        String idPago = (String) context.get("Id_RecaudadoH");
 	        java.math.BigDecimal monto = java.math.BigDecimal.valueOf(Long.valueOf((String)context.get("Monto")));
-	        for (int i = 0; i < 15; i++) {
-	        	String clasificacion = (String) context.get("clasificacion" + i);	
-			}
+	       
 	        
 	        
 	        //Verificar en que posicion se encuentra la clasificacion Economica.
@@ -126,6 +123,7 @@ public class OperacionDiariaIngresosManual {
 		        acctgTransId = (refDoc == null ? "" :refDoc)+"-"+(sec == null ? "" :sec)+"-"+(tipoAsiento == null ? "" :tipoAsiento);
 		        
 		        listTransId.add(acctgTransId);
+		        Debug.log("acctgTransId " + acctgTransId);
 		        
 		        acctgtrans = GenericValue.create(delegator.getModelEntity("AcctgTrans"));
 	//	        acctgtrans.setNextSeqId();
@@ -168,7 +166,7 @@ public class OperacionDiariaIngresosManual {
 		        UtilOperacionDiariaServices.registraEntries(dctx, dispatcher, context,
 		        						organizationPartyId, acctgTransId, monto,
 		        						fecContable, acctgTransTypeId, mapaAcctgEnums, mapCuentas);
-	        
+		        Debug.log("createOperacionDiariaIngresos -   UtilOperacionDiariaServices.registraEntries");
 			}
 	        
 		}catch (GenericServiceException e) {			
