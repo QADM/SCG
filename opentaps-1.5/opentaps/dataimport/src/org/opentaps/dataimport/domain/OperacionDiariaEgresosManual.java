@@ -2,6 +2,9 @@ package org.opentaps.dataimport.domain;
 
 import java.sql.Timestamp;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -61,7 +64,8 @@ public class OperacionDiariaEgresosManual {
         Debug.logWarning("ENTRO AL SERVICIO PARA CREAR OPERACION DIARIA EGRESOS", MODULE);
         
         try{
-        	
+        	Calendar c = new GregorianCalendar();
+        	String anio = Integer.toString(c.get(Calendar.YEAR));
 	        String userLog = userLogin.getString("userLoginId");
 	        String tipoDoc = (String) context.get("Tipo_Documento");
 	        fecTrans = (Timestamp) context.get("Fecha_Transaccion");
@@ -210,10 +214,19 @@ public class OperacionDiariaEgresosManual {
 		        acctgtransPres.create();
 		        
 		        Map<String,String> mapaAcctgEnums = FastMap.newInstance();
-		        mapaAcctgEnums.put("acctgTagEnumId1",subFun);
+		        List<String> resultClasificaciones = new ArrayList<String>();		        
+		        resultClasificaciones= UtilOperacionDiariaServices.getClasificacionEnumeration(dispatcher, "ACCOUNTING_TAG", organizationPartyId, "EnumerationType", "EGRESO", anio);		        
+		        int tam = resultClasificaciones.size();
+		        for(int i=0; i<tam; i++)		        
+		        {	String id = "acctgTagEnumId"+String.valueOf(i+1);
+		        	String idValue = resultClasificaciones.get(i);		        	
+		        	mapaAcctgEnums.put(id,(String) context.get(idValue));		        	
+		        }
+		        Debug.log("Omar - mapaAcctgEnums: " + mapaAcctgEnums);
+		        /*mapaAcctgEnums.put("acctgTagEnumId1",subFun);
 		        mapaAcctgEnums.put("acctgTagEnumId2",tipoGasto);
 		        mapaAcctgEnums.put("acctgTagEnumId3",suFuenteEsp);
-		        mapaAcctgEnums.put("acctgTagEnumId4",area);
+		        mapaAcctgEnums.put("acctgTagEnumId4",area);*/
 		        
 		        //Se realiza el registro de trans entries
 		        UtilOperacionDiariaServices.registraEntries(dctx, dispatcher, context,

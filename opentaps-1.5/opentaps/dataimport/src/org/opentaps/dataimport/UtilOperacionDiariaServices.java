@@ -1209,11 +1209,11 @@ public class UtilOperacionDiariaServices {
 		List<GenericValue> enumtype = null;		
 		try 
 		{	EntityCondition condicion = EntityCondition.makeCondition("parentTypeId", EntityOperator.EQUALS, tipoClasificacion);
-			enumtype = delegator.findByCondition(Entidad, condicion, UtilMisc.toList("enumTypeId"), null);			
+			enumtype = delegator.findByCondition(Entidad, condicion, UtilMisc.toList("clasificacionId"), null);			
 			for(GenericValue genericValue : enumtype) 
-			{	String resultado = getClasificacionEconomica(dispatcher, genericValue.getString("enumTypeId"), Organizacion, Tipo, ciclo);
+			{	String resultado = getClasificacionEconomica(dispatcher, genericValue.getString("clasificacionId"), Organizacion, Tipo, ciclo);				
 				if(resultado != null)
-				{	listaClasifEstrucResult.add(resultado);				
+				{	listaClasifEstrucResult.add(resultado);					
 				}
 			}
 			Debug.log("Omar - Lista listaClasifEstrucResult FIN: " + listaClasifEstrucResult);
