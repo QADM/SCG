@@ -189,12 +189,11 @@ public class PresupuestoEgresoImportService extends DomainService implements
 					// ledger_repo, rowdata.getArea(), "CL_SECTORIAL",
 					// "SECTORIAL");
 					String anio = "20" + rowdata.getCiclo();
-					
+
 					// Se obtiene la estructura de la clave valida para el ciclo
 					EstructuraClave estructura = ledger_repo.findList(
 							EstructuraClave.class,
-							ledger_repo.map(EstructuraClave.Fields.ciclo,
-									anio,
+							ledger_repo.map(EstructuraClave.Fields.ciclo, anio,
 									EstructuraClave.Fields.acctgTagUsageTypeId,
 									"EGRESO")).get(0);
 					// Se obtiene el tipo de clasficacion
@@ -528,7 +527,7 @@ public class PresupuestoEgresoImportService extends DomainService implements
 																.getClasificacion15()))
 								.get(0).getClasificacionId());
 						listaClasif.add(c);
-					}					
+					}
 
 					// Creacion de objetos
 					Debug.log("Empieza creacion de objetos");
@@ -618,7 +617,7 @@ public class PresupuestoEgresoImportService extends DomainService implements
 						String id = ledger_repo.getNextSeqId("AcctgTrans");
 						Calendar cal = Calendar.getInstance();
 						cal.set(Calendar.DAY_OF_MONTH, 1);
-//						String anio = "20" + rowdata.getCiclo();
+						// String anio = "20" + rowdata.getCiclo();
 						cal.set(Calendar.YEAR, Integer.parseInt(anio));
 
 						for (int mes = 1; mes < 13; mes++) {
@@ -661,8 +660,9 @@ public class PresupuestoEgresoImportService extends DomainService implements
 							cal.set(Calendar.MONTH, mes - 1);
 
 							// Bloque de Validacion de Clasificaciones
-							contenedor = UtilImport.validaClasificaciones(listaClasif,
-									ledger_repo, "E", cal.getTime());
+							contenedor = UtilImport.validaClasificaciones(
+									listaClasif, ledger_repo, "E",
+									cal.getTime());
 							if (!contenedor.getMensaje().isEmpty()
 									|| !mensaje.isEmpty()) {
 								loteValido = false;
@@ -678,8 +678,8 @@ public class PresupuestoEgresoImportService extends DomainService implements
 										// clasificaciones
 										// + rowdata.getClavePres()
 										+ "], Error message : " + mensaje;
-								storeImportPresupuestoEgresoError(rowdata, message,
-										imp_repo);
+								storeImportPresupuestoEgresoError(rowdata,
+										message, imp_repo);
 								continue;
 							}
 
@@ -697,6 +697,10 @@ public class PresupuestoEgresoImportService extends DomainService implements
 							// presupuestoEgreso.setWorkEffortId(act
 							// .getWorkEffortId());
 							// presupuestoEgreso.setPartyId(ue.getPartyId());
+							presupuestoEgreso = UtilImport
+									.setPartyWorkEffortEnAcctTrans(
+											presupuestoEgreso, contenedor);
+
 							switch (mes) {
 							case 1:
 								presupuestoEgreso.setPostedAmount(rowdata

@@ -977,5 +977,18 @@ public class UtilImport {
 		} while (rama);
 		return tipo;
 	}
+	
+	public static AcctgTrans setPartyWorkEffortEnAcctTrans(AcctgTrans acctgTrans, ContenedorContable contenedor){
+		
+		if(contenedor.getParty() != null){
+			acctgTrans.setPartyId(contenedor.getParty().getPartyId());
+		}
+		
+		if(contenedor.getWe() != null){
+			acctgTrans.setWorkEffortId(contenedor.getWe().getWorkEffortId());
+		}
+		
+		return acctgTrans;
+	}
 
 }
