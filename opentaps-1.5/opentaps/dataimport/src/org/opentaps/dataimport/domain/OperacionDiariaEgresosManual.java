@@ -116,6 +116,11 @@ public class OperacionDiariaEgresosManual {
 
 	        //Obtener los tipos fiscales que se encuentran en la miniguia
 	        List<String> tiposFiscales = UtilOperacionDiariaServices.obtenTiposFiscalDoc(dctx, dispatcher, tipoDoc);
+			String claProgramatica = UtilOperacionDiariaServices.getClasificacionEconomica(dispatcher,
+					"CL_PROGRAMATICA", organizationPartyId, "EGRESO", anio);
+			
+			String claAdministrativa = UtilOperacionDiariaServices.getClasificacionEconomica(dispatcher,
+					"CL_ADMINISTRATIVA", organizationPartyId, "EGRESO", anio);
 	        
 	        for (String tipoFis : tiposFiscales) {	        
 	        
@@ -142,6 +147,12 @@ public class OperacionDiariaEgresosManual {
 		        acctgtrans.set("glFiscalTypeId", tipoFis);		       
 		        acctgtrans.set("createdByUserLogin", userLog);
 		        acctgtrans.set("postedAmount", monto);
+				if(claAdministrativa != null)
+		        	acctgtrans.set("partyId", (String) context.get(claAdministrativa));
+		        else
+		        	acctgtrans.set("partyId", organizationPartyId);
+		        if(claProgramatica != null)
+		        	acctgtrans.set("workEffortId", (String) context.get(claProgramatica));		        
 		        acctgtrans.create();
 		        
 	//	        acctgTransId = acctgtrans.getString("acctgTransId");
