@@ -15,6 +15,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import javolution.util.FastList;
+import javolution.util.FastMap;
 
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
@@ -98,6 +99,8 @@ public class TransactionBudget {
 
 		LocalDispatcher dispatcher = dctx.getDispatcher();
 		GenericValue userLogin = (GenericValue) context.get("userLogin");
+		Calendar c = new GregorianCalendar();
+		String anio = Integer.toString(c.get(Calendar.YEAR));
 
 		try {
 			DomainsLoader dl = new DomainsLoader(
@@ -155,7 +158,7 @@ public class TransactionBudget {
     			
     		}
     		
-    		String clasif = getClasifNull(dispatcher,
+    		String clasif = UtilBudget.getClasifNull(dispatcher,
 					organizationPartyId, context, "INGRESO");
 			
 			if(clasif.equals("Nok"))
@@ -172,7 +175,13 @@ public class TransactionBudget {
 			
 			Debug.log("Tipo glFiscalType " + glFiscalType);
 			
+			String claProgramatica = UtilBudget.getClasificacion(dispatcher,
+					"CL_PROGRAMATICA", organizationPartyId, "INGRESO");
+			
+			String claAdministrativa = UtilBudget.getClasificacion(dispatcher,
+					"CL_ADMINISTRATIVA", organizationPartyId, "INGRESO");
 
+					
 			Map createAcctgTransCtx = dctx.getModelService("createAcctgTransBugetManual")
 					.makeValid(context, ModelService.IN_PARAM);
 			if (UtilValidate.isEmpty(createAcctgTransCtx
@@ -182,8 +191,13 @@ public class TransactionBudget {
 				createAcctgTransCtx.put("description", clave + "-" +  String.format("%02d",fechaConta.getMonth()+1));
 				createAcctgTransCtx.put("acctgTransTypeId", "TINGRESOESTIMADO");
 				createAcctgTransCtx.put("glFiscalTypeId" ,glFiscalType);
-				createAcctgTransCtx.put("partyId" ,organizationPartyId);
+				if(claAdministrativa != null)
+					createAcctgTransCtx.put("partyId" ,(String) context.get(claAdministrativa));
+				else
+					createAcctgTransCtx.put("partyId" ,organizationPartyId);
 				//createAcctgTransCtx.put("createdByUserLogin" ,"admin");
+				if(claProgramatica != null)
+					createAcctgTransCtx.put("workEffortId" ,(String) context.get(claProgramatica));
 				createAcctgTransCtx.put("postedAmount", amount);
 				//createdByUserLogin
 				//lastModifiedByUserLogin
@@ -239,6 +253,17 @@ public class TransactionBudget {
 				debitGlAccountId = genericValue.get("cuentaCargo").toString();
 				creditGlAccountId = genericValue.get("cuentaAbono").toString();
 			}
+			//Obtiene las clasificaciones que se encuentran en Enumeration
+			Map<String,String> mapaAcctgEnums = FastMap.newInstance();               
+            List<String> resultClasificaciones = new ArrayList<String>();               
+            resultClasificaciones= UtilBudget.getClasificacionEnumeration(dispatcher, "ACCOUNTING_TAG", organizationPartyId, "EnumerationType", "INGRESO", anio);                
+            int tam = resultClasificaciones.size();
+            /*for(int i=0; i<tam; i++)                 
+            {   String id = "acctgTagEnumId"+String.valueOf(i+1);
+                String idValue = resultClasificaciones.get(i);                   
+                mapaAcctgEnums.put(id,(String) context.get(idValue));                          
+            }
+            Debug.log("Omar - mapaAcctgEnums: " + mapaAcctgEnums);*/
 
 			String rubro = (String) context.get("idRubro");
 			Debug.log("idRubro" + rubro);
@@ -257,7 +282,14 @@ public class TransactionBudget {
 			debitCtx.put("acctgTransEntryTypeId", "_NA_");
 			debitCtx.put("currencyUomId", currencyUomId);
 			debitCtx.put("description", clave + "-" +  String.format("%02d",fechaConta.getMonth()+1));
-			debitCtx.put("acctgTagEnumId3", (String) context.get("subFuenteEsp"));
+			for(int i=0; i<tam; i++)                 
+            {   String id = "acctgTagEnumId"+String.valueOf(i+1);
+                String idValue = resultClasificaciones.get(i);                   
+                debitCtx.put(id,(String) context.get(idValue));                          
+            }
+			//debitCtx.put("acctgTagEnumId3", (String) context.get("subFuenteEsp"));
+			debitCtx.put("partyId", organizationPartyId);
+			debitCtx.put("organizationPartyId", organizationPartyId);
 			results = dispatcher.runSync("createAcctgTransEntryManual",
 					debitCtx);
 			
@@ -271,7 +303,14 @@ public class TransactionBudget {
 			creditCtx.put("acctgTransEntryTypeId", "_NA_");
 			creditCtx.put("currencyUomId", currencyUomId);
 			creditCtx.put("description", clave + "-" +  String.format("%02d",fechaConta.getMonth()+1));
-			creditCtx.put("acctgTagEnumId3", (String) context.get("subFuenteEsp"));
+			for(int i=0; i<tam; i++)                 
+            {   String id = "acctgTagEnumId"+String.valueOf(i+1);
+                String idValue = resultClasificaciones.get(i);                   
+                creditCtx.put(id,(String) context.get(idValue));                          
+            }
+			//creditCtx.put("acctgTagEnumId3", (String) context.get("subFuenteEsp"));
+			creditCtx.put("partyId", organizationPartyId);
+			creditCtx.put("organizationPartyId", organizationPartyId);
 			results = dispatcher.runSync("createAcctgTransEntryManual",
 					creditCtx);
 			
@@ -644,6 +683,7 @@ public class TransactionBudget {
 			
 			acctgTrans.setTransactionDate(timestamp);
 			
+			acctgTrans.setWorkEffortId((String) context.get("workEffortId"));
 			String mes =  String.format("%02d",fecha.getMonth()+1);
 			String annio = String.valueOf(fecha.getYear() + 1900).substring(2);
 			if(acctgTransTypeId.equals("TINGRESOESTIMADO"))
@@ -687,6 +727,8 @@ public class TransactionBudget {
 
 		LocalDispatcher dispatcher = dctx.getDispatcher();
 		GenericValue userLogin = (GenericValue) context.get("userLogin");
+		Calendar c = new GregorianCalendar();
+		String anio = Integer.toString(c.get(Calendar.YEAR));
 
 		try {
 			DomainsLoader dl = new DomainsLoader(
@@ -744,7 +786,7 @@ public class TransactionBudget {
     			
     		}
     		
-			String clasif = getClasifNull(dispatcher,
+			String clasif = UtilBudget.getClasifNull(dispatcher,
 					organizationPartyId, context, "EGRESO");
 			
 			if(clasif.equals("Nok"))
@@ -760,6 +802,11 @@ public class TransactionBudget {
 			String glFiscalTypeId = getAcctgTransTypeId("TPRESUPAPROBADO", dispatcher);
 			Debug.log("Tipo glFiscalTypeId" +  glFiscalTypeId);
 			
+			String claProgramatica = UtilBudget.getClasificacion(dispatcher,
+					"CL_PROGRAMATICA", organizationPartyId, "EGRESO");
+			
+			String claAdministrativa = UtilBudget.getClasificacion(dispatcher,
+					"CL_ADMINISTRATIVA", organizationPartyId, "EGRESO");
 			Map createAcctgTransCtx = dctx.getModelService("createAcctgTransBugetManual")
 					.makeValid(context, ModelService.IN_PARAM);
 			if (UtilValidate.isEmpty(createAcctgTransCtx
@@ -770,9 +817,14 @@ public class TransactionBudget {
 				createAcctgTransCtx.put("description", clave + "-" +  String.format("%02d",fechaConta.getMonth()+1));
 				createAcctgTransCtx.put("acctgTransTypeId", "TPRESUPAPROBADO");
 				createAcctgTransCtx.put("glFiscalTypeId" ,glFiscalTypeId);
-				createAcctgTransCtx.put("partyId" ,organizationPartyId);
+				if(claAdministrativa != null)
+					createAcctgTransCtx.put("partyId" ,(String) context.get(claAdministrativa));
+				else
+					createAcctgTransCtx.put("partyId" ,organizationPartyId);
 				//createAcctgTransCtx.put("createdByUserLogin" ,"admin");
-				createAcctgTransCtx.put("postedAmount", amount);
+				if(claProgramatica != null)
+					createAcctgTransCtx.put("workEffortId" ,(String) context.get(claProgramatica));
+				createAcctgTransCtx.put("postedAmount", amount);	
 			}
 
 			Map results = dispatcher.runSync("createAcctgTransBugetManual",
@@ -829,6 +881,11 @@ public class TransactionBudget {
 			Map createAcctgTransEntryCtx = dctx.getModelService(
 					"createAcctgTransEntryManual").makeValid(context,
 					ModelService.IN_PARAM);
+			//Obtiene las clasificaciones que se encuentran en Enumeration
+			Map<String,String> mapaAcctgEnums = FastMap.newInstance();               
+            List<String> resultClasificaciones = new ArrayList<String>();               
+            resultClasificaciones= UtilBudget.getClasificacionEnumeration(dispatcher, "ACCOUNTING_TAG", organizationPartyId, "EnumerationType", "EGRESO", anio);                
+            int tam = resultClasificaciones.size();
 
 			Map debitCtx = new HashMap(createAcctgTransEntryCtx);
 			UtilAccountingTags.addTagParameters(context, debitCtx,
@@ -838,10 +895,15 @@ public class TransactionBudget {
 			debitCtx.put("debitCreditFlag", "D");
 			debitCtx.put("acctgTransEntryTypeId", "_NA_");
 			debitCtx.put("currencyUomId", currencyUomId);
-			debitCtx.put("acctgTagEnumId1", subfuncion);
-			debitCtx.put("acctgTagEnumId2", tipoGasto);
-			debitCtx.put("acctgTagEnumId3", (String) context.get("subFuenteEsp"));
-			debitCtx.put("acctgTagEnumId4", area);
+			for(int i=0; i<tam; i++)                 
+            {   String id = "acctgTagEnumId"+String.valueOf(i+1);
+                String idValue = resultClasificaciones.get(i);                   
+                debitCtx.put(id,(String) context.get(idValue));                          
+            }
+//			debitCtx.put("acctgTagEnumId1", subfuncion);
+//			debitCtx.put("acctgTagEnumId2", tipoGasto);
+//			debitCtx.put("acctgTagEnumId3", (String) context.get("subFuenteEsp"));
+//			debitCtx.put("acctgTagEnumId4", area);
 			debitCtx.put("partyId", organizationPartyId);
 			debitCtx.put("organizationPartyId", organizationPartyId);
 
@@ -857,10 +919,15 @@ public class TransactionBudget {
 			creditCtx.put("debitCreditFlag", "C");
 			creditCtx.put("acctgTransEntryTypeId", "_NA_");
 			creditCtx.put("currencyUomId", currencyUomId);
-			creditCtx.put("acctgTagEnumId1", subfuncion);
-			creditCtx.put("acctgTagEnumId1", tipoGasto);
-			creditCtx.put("acctgTagEnumId3", (String) context.get("subFuenteEsp"));
-			creditCtx.put("acctgTagEnumId4", area);
+			for(int i=0; i<tam; i++)                 
+            {   String id = "acctgTagEnumId"+String.valueOf(i+1);
+                String idValue = resultClasificaciones.get(i);                   
+                creditCtx.put(id,(String) context.get(idValue));                          
+            }
+//			creditCtx.put("acctgTagEnumId1", subfuncion);
+//			creditCtx.put("acctgTagEnumId1", tipoGasto);
+//			creditCtx.put("acctgTagEnumId3", (String) context.get("subFuenteEsp"));
+//			creditCtx.put("acctgTagEnumId4", area);
 			creditCtx.put("partyId", organizationPartyId);
 			creditCtx.put("organizationPartyId", organizationPartyId);
 			results = dispatcher.runSync("createAcctgTransEntryManual",
@@ -903,93 +970,5 @@ public class TransactionBudget {
 			Debug.log("Error al obtener glFiscalTypeIdPres tipo [" + tipo + "]" + e);
 		}
 		return glFiscalTypeIdPres;
-	}
-
-	/*
-	 * Verificar que las clasificaciones vienen completas o hacen falta
-	 */
-	
-	public static String getClasifNull(LocalDispatcher dispatcher,
-			String Organizacion, Map context, String Tipo) {
-
-		String aviso = null;
-		Calendar c = new GregorianCalendar();
-		String anio = Integer.toString(c.get(Calendar.YEAR));
-		Delegator delegator = dispatcher.getDelegator();
-
-		try {
-
-			EntityCondition condicion = EntityCondition.makeCondition(
-					EntityOperator.AND, EntityCondition.makeCondition(
-							"organizationPartyId", EntityOperator.EQUALS,
-							Organizacion),
-					EntityCondition.makeCondition("acctgTagUsageTypeId",
-							EntityOperator.EQUALS, Tipo),
-					EntityCondition.makeCondition("ciclo",
-							EntityOperator.EQUALS, anio));
-
-			List<GenericValue> resultado = delegator.findByCondition(
-					"EstructuraClave", condicion,
-					UtilMisc.toList(getListColumnas()), null);
-
-			int tam = 0;
-
-			// Se verifica cuantas clasificaciones tiene el Ingreso o Egreso
-			// dentro de su clave
-			if (!resultado.isEmpty()) {
-				for (GenericValue genericValue : resultado) {
-					for (int j = 1; j < 16; j++) {
-						try {
-							if ((genericValue.get("clasificacion"
-									+ String.valueOf(j)) != null))
-								tam++;
-							else if (!(genericValue.get(
-									"clasificacion" + String.valueOf(j))
-									.toString().isEmpty()))
-								tam++;
-
-						} catch (NullPointerException e) {
-							continue;
-						}
-					}
-
-				}
-			}
-
-			int tam2 = 0;
-
-			// Se valida que se llenen todas las clasificaciones
-			if (tam != 0) {
-				for (int j = 1; j <= tam; j++) {
-					Debug.log("Clasificacion"
-							+ context.get("clasificacion" + String.valueOf(j)));
-					if (context.get("clasificacion" + String.valueOf(j)) != null)
-						tam2++;
-				}
-
-			}
-
-			if (tam == tam2)
-				aviso = "ok";
-			else
-				aviso = "Nok";
-
-		} catch (Exception e) {
-
-			Debug.log("Error en clasificaciones obligatorias " + e, MODULE);
-		}
-		return aviso;
-	}
-	
-	/**
-	 * @return lista de columnas de la entidad EstructuraClave
-	 */
-	public static List<String> getListColumnas() {
-		List<String> lista = new ArrayList<String>();
-		lista.add("idSecuencia");
-		for (int j = 1; j < 16; j++) {
-			lista.add("clasificacion"+ String.valueOf(j));
-		}
-		return lista;
 	}
 }
