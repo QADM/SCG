@@ -251,7 +251,8 @@
         <attribute name="description" mode="IN" type="String"/>        
         <attribute name="transactionDate" mode="IN" type="String"/>
         <attribute name="postedAmount" mode="IN" type="Double" optional="false" />
-        <attribute name="glFiscalTypeId" mode="IN" type="String"/>                
+        <attribute name="glFiscalTypeId" mode="IN" type="String"/>  
+        <attribute name="workEffortId" mode="IN" type="String" optional="true"/>               
     </service>
     
 </services>
