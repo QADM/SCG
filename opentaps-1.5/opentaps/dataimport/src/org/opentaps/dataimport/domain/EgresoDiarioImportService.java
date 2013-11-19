@@ -632,7 +632,7 @@ public class EgresoDiarioImportService extends DomainService implements
 						egresoDiario.setPartyId(contenedor.getParty().getPartyId());
 						egresoDiario.setPostedAmount(rowdata.getMonto());
 						egresoDiario.setWorkEffortId(contenedor.getWe().getWorkEffortId());
-
+						egresoDiario = UtilImport.setPartyWorkEffortEnAcctTrans(egresoDiario, contenedor);
 						// ACCTG_TRANS_PRESUPUESTAL
 						Debug.log("ACCTG_TRANS_PRESUPUESTAL");
 						AcctgTransPresupuestal aux = new AcctgTransPresupuestal();

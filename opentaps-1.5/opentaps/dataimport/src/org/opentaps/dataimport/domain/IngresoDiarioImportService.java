@@ -524,6 +524,7 @@ public class IngresoDiarioImportService extends DomainService implements
 						ingresoDiario.setPostedAmount(rowdata.getMonto());
 						ingresoDiario.setDescription(tipoDoc.getDescripcion()
 								+ "-" + rowdata.getRefDoc() + "-P");
+						ingresoDiario = UtilImport.setPartyWorkEffortEnAcctTrans(ingresoDiario, contenedor);
 						Debug.log("Antes de ACCTG_TRANS_PRESUPUESTAL");
 						// ACCTG_TRANS_PRESUPUESTAL
 						AcctgTransPresupuestal aux = new AcctgTransPresupuestal();
@@ -618,6 +619,7 @@ public class IngresoDiarioImportService extends DomainService implements
 								acctgentry.set(campo, contenedor.getEnumeration().get(i).getEnumId());
 							}
 							imp_tx5 = this.session.beginTransaction();
+							
 							ledger_repo.createOrUpdate(acctgentry);
 							imp_tx5.commit();
 
