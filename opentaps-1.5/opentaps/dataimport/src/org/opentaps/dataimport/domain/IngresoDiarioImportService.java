@@ -361,22 +361,16 @@ public class IngresoDiarioImportService extends DomainService implements
 									estructura.getClasificacion15())).get(0).getClasificacionId());
 					listaClasif.add(c);
 					}
-					//Validacion de la lista de clasificaciones
-					for(int i = 0; i<listaClasif.size(); i++)
-					{
-						Debug.log("Clasificaciones: ");
-						Debug.log(listaClasif.get(i).getValor().toString());
-					}
 					
 					//Bloque de Validacion de Clasificaciones
 					
 					contenedor = UtilImport.validaClasificaciones(listaClasif,ledger_repo,"I",rowdata.getFechaContable());
+					Debug.log("Clasificaciones validadas");
 					mensaje = UtilImport.validaTipoDoc(mensaje, ledger_repo,
 							rowdata.getIdTipoDoc());
 					//----------------------------------------
-					if (!contenedor.getMensaje().isEmpty() || !mensaje.isEmpty()) {
+					if (contenedor.getMensaje()!= "" || !mensaje.isEmpty()) {
 						loteValido=false;
-						
 						storeImportIngresoDiarioError(rowdata, contenedor.getMensaje(),
 								imp_repo);
 						continue;
@@ -477,7 +471,12 @@ public class IngresoDiarioImportService extends DomainService implements
 					// rowdata.getIdPago(), tip,
 					// rowdata.getIdProductoD(),
 					// rowdata.getIdProductoH());
-
+					Debug.log("Tipo de Transaccion: "+tipoDoc.getAcctgTransTypeId());
+					Debug.log("Organizacion: "+rowdata.getOrganizationPartyId());
+					Debug.log("IDPago: "+rowdata.getIdPago());
+					Debug.log("Cri: "+contenedor.getProduct().getCategoryName());
+					Debug.log("IDProductoD: "+rowdata.getIdProductoD());
+					Debug.log("IDProductoH: "+rowdata.getIdProductoH());
 					Map<String, String> cuentas = motor.cuentasIngresoDiario(
 							tipoDoc.getAcctgTransTypeId(),
 							rowdata.getOrganizationPartyId(),

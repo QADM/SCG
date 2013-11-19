@@ -616,8 +616,11 @@ public class PresupuestoIngresoImportService extends DomainService implements
 							presupuestoIngreso
 									.setLastModifiedByUserLogin(rowdata
 											.getUsuario());
-							// clasificaciones
-							// presupuestoIngreso.setPartyId(ue.getPartyId());
+							
+							presupuestoIngreso = UtilImport
+									.setPartyWorkEffortEnAcctTrans(
+											presupuestoIngreso, contenedor);
+							
 							switch (mes) {
 							case 1:
 								presupuestoIngreso.setPostedAmount(rowdata

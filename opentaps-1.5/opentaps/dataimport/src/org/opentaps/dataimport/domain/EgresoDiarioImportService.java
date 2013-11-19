@@ -220,7 +220,23 @@ public class EgresoDiarioImportService extends DomainService implements
 					EstructuraClave estructura = ledger_repo.findList(EstructuraClave.class,
 							ledger_repo.map(EstructuraClave.Fields.ciclo, 
 									UtilImport.obtenerCiclo(rowdata.getFechaContable()),
-									EstructuraClave.Fields.acctgTagUsageTypeId,"Ingreso")).get(0);
+									EstructuraClave.Fields.acctgTagUsageTypeId,"Egreso")).get(0);
+					Debug.log(estructura.getClasificacion1());
+					Debug.log(estructura.getClasificacion2());
+					Debug.log(estructura.getClasificacion3());
+					Debug.log(estructura.getClasificacion4());
+					Debug.log(estructura.getClasificacion5());
+					Debug.log(estructura.getClasificacion6());
+					Debug.log(estructura.getClasificacion7());
+					Debug.log(estructura.getClasificacion8());
+					Debug.log(estructura.getClasificacion9());
+					Debug.log(estructura.getClasificacion10());
+					Debug.log(estructura.getClasificacion11());
+					Debug.log(estructura.getClasificacion12());
+					Debug.log(estructura.getClasificacion13());
+					Debug.log(estructura.getClasificacion14());
+					Debug.log(estructura.getClasificacion15());
+					
 					//Se obtiene el tipo de clasficacion
 					List<Clasificacion> listaClasif = new ArrayList<Clasificacion>();
 					if(estructura.getClasificacion1()!=null){
@@ -407,7 +423,7 @@ public class EgresoDiarioImportService extends DomainService implements
 					contenedor = UtilImport.validaClasificaciones(listaClasif,ledger_repo,"E",rowdata.getFechaContable());
 					mensaje = UtilImport.validaTipoDoc(mensaje, ledger_repo,
 							rowdata.getIdTipoDoc());
-					if (!contenedor.getMensaje().isEmpty() || !mensaje.isEmpty()) {
+					if (contenedor.getMensaje()!= "" || !mensaje.isEmpty()) {
 						loteValido = false;
 						
 						storeImportEgresoDiarioError(rowdata, contenedor.getMensaje(), imp_repo);
@@ -571,10 +587,9 @@ public class EgresoDiarioImportService extends DomainService implements
 							tg = e;
 						}
 					}
-
 					Map<String, String> cuentas = motor.cuentasEgresoDiario(
 							tipoDoc.getAcctgTransTypeId(), contenedor.getProduct().getCategoryName(),
-							rowdata.getOrganizationPartyId(), tg.getEnumId(),
+							rowdata.getOrganizationPartyId(), tg.getSequenceId(),
 							rowdata.getIdPago(), rowdata.getIdProductoD(),
 							rowdata.getIdProductoH());
 
