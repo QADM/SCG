@@ -1599,8 +1599,8 @@
 		<security https="true" auth="true"/>
 		<event type="service" invoke="createOperacionDiariaIngresos"/>
 		<!--<response name="success" type="request-redirect" value="viewGlFiscalType">-->
-		<response name="success" type="request-redirect" value="ODIngresos">
-          <redirect-parameter name="clavePresupuestal"/>
+		<response name="success" type="request-redirect" value="viewGlFiscalType">
+          <redirect-parameter name="listTransId"/>
         </response>
         <response name="error" type="view" value="ODIngresos" />
 	</request-map>

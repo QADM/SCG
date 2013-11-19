@@ -4,6 +4,8 @@ import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -27,6 +29,7 @@ import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ModelService;
 import org.ofbiz.service.ServiceUtil;
+import org.opentaps.base.entities.EnumerationType;
 import org.opentaps.base.entities.EstructuraClave;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
@@ -555,9 +558,9 @@ public class UtilOperacionDiariaServices {
         	
         	//Buscar identificador del clasificador economico para la matriz
         	GenericValue objectEconom = delegator.findByPrimaryKey("ProductCategory",UtilMisc.toMap("productCategoryId", clasificaEco));
-        	String idClasEconomico = new String();
-        	if(objectEconom != null && !objectEconom.isEmpty())
-        		idClasEconomico = objectEconom.getString("categoryName");
+        	//String idClasEconomico = new String();
+        	//if(objectEconom != null && !objectEconom.isEmpty())
+        		//idClasEconomico = objectEconom.getString("categoryName");
         	
 			GenericValue miniGuia = delegator.findByPrimaryKey("MiniGuiaContable", UtilMisc.toMap("acctgTransTypeId", acctgTransTypeId));
 
@@ -586,7 +589,7 @@ public class UtilOperacionDiariaServices {
 		    	if(referencia.equalsIgnoreCase("M")){
 		    		
 			        EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
-			                EntityCondition.makeCondition(campoClasi, EntityOperator.EQUALS,idClasEconomico),
+			                EntityCondition.makeCondition(campoClasi, EntityOperator.EQUALS,clasificaEco),
 			                EntityCondition.makeCondition("matrizId", EntityOperator.EQUALS,matrizId));
 			
 					List<GenericValue> listMatriz = delegator.findByCondition(tablaClasi, conditions, null, null);
@@ -700,7 +703,7 @@ public class UtilOperacionDiariaServices {
     
     /**
      * Metodo que valida las cuentas auxiliares de los productos a partir de una cuenta dada y regresa 
-     * la cuenta correspondiente al catálogo auxiliar si se encuentra ahí , si no regresa la misma cuenta
+     * la cuenta correspondiente al catï¿½logo auxiliar si se encuentra ahï¿½ , si no regresa la misma cuenta
      * @param dctx
      * @param dispatcher
      * @param glAccountId
@@ -753,7 +756,7 @@ public class UtilOperacionDiariaServices {
     
     /**
      * Metodo que valida las cuentas auxiliares de los productos a partir de una cuenta dada y regresa 
-     * la cuenta correspondiente al catálogo auxiliar si se encuentra ahí , si no regresa la misma cuenta
+     * la cuenta correspondiente al catï¿½logo auxiliar si se encuentra ahï¿½ , si no regresa la misma cuenta
      * @param dctx
      * @param dispatcher
      * @param glAccountId
@@ -816,7 +819,7 @@ public class UtilOperacionDiariaServices {
         		gTransEntryPreC.set("acctgTransId", acctgTransId);
         		gTransEntryPreC.set("acctgTransEntrySeqId", String.format("%05d",1));
         		gTransEntryPreC.set("acctgTransEntryTypeId", "_NA_");
-        		gTransEntryPreC.set("description", "Operación  diaria PRESUPUESTAL Abono"+acctgTransId);
+        		gTransEntryPreC.set("description", "Operaciï¿½n  diaria PRESUPUESTAL Abono"+acctgTransId);
         		gTransEntryPreC.set("glAccountId", cargoPres);
         		gTransEntryPreC.set("organizationPartyId", organizationPartyId);
         		gTransEntryPreC.set("amount", monto);
@@ -834,7 +837,7 @@ public class UtilOperacionDiariaServices {
         		gtransEntryPreA.set("acctgTransId", acctgTransId);
         		gtransEntryPreA.set("acctgTransEntrySeqId", String.format("%05d",2));
         		gtransEntryPreA.set("acctgTransEntryTypeId", "_NA_");
-        		gtransEntryPreA.set("description", "Operación  diaria PRESUPUESTAL Abono "+acctgTransId);
+        		gtransEntryPreA.set("description", "Operaciï¿½n  diaria PRESUPUESTAL Abono "+acctgTransId);
         		gtransEntryPreA.set("glAccountId", abonoPres);
         		gtransEntryPreA.set("organizationPartyId", organizationPartyId);
         		gtransEntryPreA.set("amount", monto);
@@ -858,7 +861,7 @@ public class UtilOperacionDiariaServices {
         		gTransEntryConC.set("acctgTransId", acctgTransId);
         		gTransEntryConC.set("acctgTransEntrySeqId", String.format("%05d",1));
         		gTransEntryConC.set("acctgTransEntryTypeId", "_NA_");
-        		gTransEntryConC.set("description", "Operación  diaria Contable Abono"+acctgTransId);
+        		gTransEntryConC.set("description", "Operaciï¿½n  diaria Contable Abono"+acctgTransId);
         		gTransEntryConC.set("glAccountId", cargoCont);
         		gTransEntryConC.set("organizationPartyId", organizationPartyId);
         		gTransEntryConC.set("amount", monto);
@@ -876,7 +879,7 @@ public class UtilOperacionDiariaServices {
         		gTransEntryConA.set("acctgTransId", acctgTransId);
         		gTransEntryConA.set("acctgTransEntrySeqId", String.format("%05d",2));
         		gTransEntryConA.set("acctgTransEntryTypeId", "_NA_");
-        		gTransEntryConA.set("description", "Operación  diaria Contable Abono"+acctgTransId);
+        		gTransEntryConA.set("description", "Operaciï¿½n  diaria Contable Abono"+acctgTransId);
         		gTransEntryConA.set("glAccountId", abonoCont);
         		gTransEntryConA.set("organizationPartyId", organizationPartyId);
         		gTransEntryConA.set("amount", monto);
@@ -1092,41 +1095,23 @@ public class UtilOperacionDiariaServices {
 	 */
 	public static String getClavePresupuestal(Map context,
 			LocalDispatcher dispatcher) {
-		final ActionContext ac = new ActionContext(context);
-        final Locale locale = ac.getLocale();
-        final TimeZone timeZone = ac.getTimeZone();
-		String clavePresupuestal = null; 
-		
+		String clasificaciones = "", clavePresupuestal = "";
+
 		try {
 			Debug.log("Entro getClavePresupuestal ", MODULE);
-			
-			Timestamp fecContable = (Timestamp) context.get("Fecha_Contable");
-			
-			String ciclo = String.valueOf(UtilDateTime.getYear(fecContable, timeZone, locale)).substring(2);;
-			String UE = (String) context.get("Unidad_Ejecutora");
-			String subFuncion= (String) context.get("Subfuncion");
-			String actividad = (String) context.get("Actividad");
-			String PE = (String) context.get("Partida_Especifica");
-			String SubFuenteEspecifica = (String) context.get("Sub_Fuente_Especifica");
-			String Localidad = (String) context.get("Localidad");
-			String area = (String) context.get("Area");
-			String nivel5 = (String) context.get("N5");
-		
-			if(subFuncion == null)
-			{				
-				clavePresupuestal = ciclo + UE + nivel5 + SubFuenteEspecifica
-						+ Localidad;			
+
+			for (int i = 1; i < 16; i++) {
+				clasificaciones = (String) context.get("clasificacion" + i);
+				if (clasificaciones != null)
+					clavePresupuestal = clavePresupuestal + clasificaciones;
 			}
-			else
-			{
-				clavePresupuestal = ciclo + UE + subFuncion + actividad + PE
-						+ SubFuenteEspecifica + Localidad + area;
-			}
-			Debug.log("Entro getClavePresupuestal clave presupuestal" + clavePresupuestal, MODULE);
-			
+
+			Debug.log("Entro getClavePresupuestal clave presupuestal"
+					+ clavePresupuestal, MODULE);
+
 		} catch (Exception e) {
-			
-			Debug.log("Error al crear clave presupuestaria " + e, MODULE);			
+
+			Debug.log("Error al crear clave presupuestaria " + e, MODULE);
 		}
 		return clavePresupuestal;
 	}
@@ -1143,8 +1128,7 @@ public class UtilOperacionDiariaServices {
 	
 	public static String getClasificacionEconomica(LocalDispatcher dispatcher,
 			String tipoClasificacion, String Organizacion, String Tipo,
-			String ciclo) {
-		
+			String ciclo) {		
 		String tipoclasificacion = null; 
 		Delegator delegator = dispatcher.getDelegator();
 		try {
@@ -1158,33 +1142,41 @@ public class UtilOperacionDiariaServices {
 					"EstructuraClave", condicion, UtilMisc.toList(getListColumnas())
 							, null);
 			
-			if(!resultado.isEmpty()){
+			if (!resultado.isEmpty()) {
 				for (GenericValue genericValue : resultado) {
 					for (int j = 1; j < 16; j++) {
-	
-						if (!(genericValue.get("clasificacion" + String.valueOf(j))
-								.toString()).isEmpty()) {
-							Debug.log("entro a validar clasificacion "
-									+ genericValue.get(
-											"clasificacion" + String.valueOf(j))
-											.toString());
-							if (genericValue.get(
-											"clasificacion" + String.valueOf(j))
-											.equals(tipoClasificacion)
-									|| genericValue
-											.get("clasificacion"
-													+ String.valueOf(j)).toString()
-											.contains(tipoClasificacion)) {
-								Debug.log("Clasificacion Economica - Clasificacion"
-										+ String.valueOf(j));
-								
-								tipoclasificacion = "clasificacion" + String.valueOf(j);
-								break;
+
+						try {
+
+							if (!(genericValue.get("clasificacion"
+									+ String.valueOf(j)).toString()).isEmpty()) {
+								Debug.log("entro a validar clasificacion "
+										+ genericValue.get(
+												"clasificacion"
+														+ String.valueOf(j))
+												.toString());
+								if (genericValue.get(
+										"clasificacion" + String.valueOf(j))
+										.equals(tipoClasificacion)
+										|| genericValue
+												.get("clasificacion"
+														+ String.valueOf(j))
+												.toString()
+												.contains(tipoClasificacion)) {
+									Debug.log("Clasificacion Economica - Clasificacion"
+											+ String.valueOf(j));
+
+									tipoclasificacion = "clasificacion"
+											+ String.valueOf(j);
+									break;
+								}
 							}
+						} catch (NullPointerException e) {
+							continue;
 						}
-	
-					}					
-			 }
+
+					}
+				}
 		}
 			
 		} catch (Exception e) {
@@ -1194,6 +1186,35 @@ public class UtilOperacionDiariaServices {
 		return tipoclasificacion;
 	}
 
+	/*
+	 * Obttiene la posicion de la clasificacion en EnumerationType y EstructuraClave
+	 * @param tipoClasificacion
+	 * @param EnumerationType
+	 * @param Tipo
+	 * @param ciclo
+	 * @param dispatcher
+	 * return idClasificacion
+	 */
+	public static List<String> getClasificacionEnumeration(LocalDispatcher dispatcher, String tipoClasificacion, String Organizacion, String Entidad, String Tipo, String ciclo) 
+	{	Delegator delegator = dispatcher.getDelegator();
+		List<String> listaClasifEstrucResult = new ArrayList<String>();
+		List<GenericValue> enumtype = null;		
+		try 
+		{	EntityCondition condicion = EntityCondition.makeCondition("parentTypeId", EntityOperator.EQUALS, tipoClasificacion);
+			enumtype = delegator.findByCondition(Entidad, condicion, UtilMisc.toList("clasificacionId"), null);			
+			for(GenericValue genericValue : enumtype) 
+			{	String resultado = getClasificacionEconomica(dispatcher, genericValue.getString("clasificacionId"), Organizacion, Tipo, ciclo);
+				if(resultado != null)
+				{	listaClasifEstrucResult.add(resultado);				
+				}
+			}
+			Debug.log("Omar - Lista listaClasifEstrucResult FIN: " + listaClasifEstrucResult);
+		} catch (GenericEntityException e) 
+		{	e.printStackTrace();
+		}	
+		return listaClasifEstrucResult;			
+	}
+	
 	/**
 	 * @return lista de columnas de la entidad EstructuraClave
 	 */
@@ -1204,6 +1225,82 @@ public class UtilOperacionDiariaServices {
 			lista.add("clasificacion"+ String.valueOf(j));
 		}
 		return lista;
+	}
+	
+	/*
+	 * Verificar que las clasificaciones vienen completas o hacen falta
+	 */
+	
+	public static String getClasifNull(LocalDispatcher dispatcher,
+			String Organizacion, Map context, String Tipo) {
+
+		String aviso = null;
+		Calendar c = new GregorianCalendar();
+		String anio = Integer.toString(c.get(Calendar.YEAR));
+		Delegator delegator = dispatcher.getDelegator();
+
+		try {
+
+			EntityCondition condicion = EntityCondition.makeCondition(
+					EntityOperator.AND, EntityCondition.makeCondition(
+							"organizationPartyId", EntityOperator.EQUALS,
+							Organizacion),
+					EntityCondition.makeCondition("acctgTagUsageTypeId",
+							EntityOperator.EQUALS, Tipo),
+					EntityCondition.makeCondition("ciclo",
+							EntityOperator.EQUALS, anio));
+
+			List<GenericValue> resultado = delegator.findByCondition(
+					"EstructuraClave", condicion,
+					UtilMisc.toList(getListColumnas()), null);
+
+			int tam = 0;
+
+			// Se verifica cuantas clasificaciones tiene el Ingreso o Egreso
+			// dentro de su clave
+			if (!resultado.isEmpty()) {
+				for (GenericValue genericValue : resultado) {
+					for (int j = 1; j < 16; j++) {
+						try {
+							if ((genericValue.get("clasificacion"
+									+ String.valueOf(j)) != null))
+								tam++;
+							else if (!(genericValue.get(
+									"clasificacion" + String.valueOf(j))
+									.toString().isEmpty()))
+								tam++;
+
+						} catch (NullPointerException e) {
+							continue;
+						}
+					}
+
+				}
+			}
+
+			int tam2 = 0;
+
+			// Se valida que se llenen todas las clasificaciones
+			if (tam != 0) {
+				for (int j = 1; j <= tam; j++) {
+					Debug.log("Clasificacion"
+							+ context.get("clasificacion" + String.valueOf(j)));
+					if (context.get("clasificacion" + String.valueOf(j)) != null)
+						tam2++;
+				}
+
+			}
+
+			if (tam == tam2)
+				aviso = "ok";
+			else
+				aviso = "Nok";
+
+		} catch (Exception e) {
+
+			Debug.log("Error en clasificaciones obligatorias " + e, MODULE);
+		}
+		return aviso;
 	}
 	
 }

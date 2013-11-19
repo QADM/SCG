@@ -2,6 +2,10 @@ package org.opentaps.dataimport.domain;
 
 import java.sql.Timestamp;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -61,6 +65,8 @@ public class OperacionDiariaEgresosManual {
         Debug.logWarning("ENTRO AL SERVICIO PARA CREAR OPERACION DIARIA EGRESOS", MODULE);
         
         try{
+        	Calendar c = new GregorianCalendar();
+ 			String anio = Integer.toString(c.get(Calendar.YEAR));
         	
 	        String userLog = userLogin.getString("userLoginId");
 	        String tipoDoc = (String) context.get("Tipo_Documento");
@@ -71,17 +77,7 @@ public class OperacionDiariaEgresosManual {
 	        String cvePrespues = UtilOperacionDiariaServices.getClavePresupuestal(context, dispatcher); 
 	        String idProdAbono = (String) context.get("Id_Producto_Abono");
 	        String idProdCargo = (String) context.get("Id_Producto_Cargo");
-	        String entFed = (String) context.get("EntidadFederativa");
-	        String region = (String) context.get("Region");
-	        String muni = (String) context.get("Municipio");
-	        String local = (String) context.get("Localidad");
-	        String suFuenteEsp = (String) context.get("Sub_Fuente_Especifica");
-	        String uniEjec = (String) context.get("Unidad_Ejecutora");
-	        String subFun = (String) context.get("Subfuncion");
-	        String tipoGasto = (String) context.get("Tipo_Gasto");
-	        String partEspec = (String) context.get("Partida_Especifica");
-	        String actividad = (String) context.get("Actividad");
-	        String area = (String) context.get("Area");	        
+	        String entFed = (String) context.get("EntidadFederativa");	        
 	        String idPago = (String) context.get("Id_RecaudadoH");
 	        java.math.BigDecimal monto = java.math.BigDecimal.valueOf(Long.valueOf((String)context.get("Monto")));
 	        
@@ -94,19 +90,18 @@ public class OperacionDiariaEgresosManual {
 	        Debug.logWarning("cvePrespues "+cvePrespues, MODULE);
 	        Debug.logWarning("idProdAbono "+idProdAbono, MODULE);
 	        Debug.logWarning("idProdCargo "+idProdCargo, MODULE);
-	        Debug.logWarning("entFed "+entFed, MODULE);
-	        Debug.logWarning("region "+region, MODULE);
-	        Debug.logWarning("muni "+muni, MODULE);
-	        Debug.logWarning("local "+local, MODULE);
-	        Debug.logWarning("suFuente "+suFuenteEsp, MODULE);
-	        Debug.logWarning("uniEjec "+uniEjec, MODULE);
-	        Debug.logWarning("subFun "+subFun, MODULE);
-	        Debug.logWarning("tipoGasto "+tipoGasto, MODULE);
-	        Debug.logWarning("partEspec "+partEspec, MODULE);
-	        Debug.logWarning("actividad "+actividad, MODULE);
-	        Debug.logWarning("area "+area, MODULE);
+	        Debug.logWarning("entFed "+entFed, MODULE);	      
 	        Debug.logWarning("idPago "+idPago, MODULE);
-	        Debug.logWarning("monto "+monto, MODULE);	        
+	        Debug.logWarning("monto "+monto, MODULE);	
+	        
+	        String clasif = UtilOperacionDiariaServices.getClasifNull(dispatcher,
+					organizationPartyId, context, "EGRESO");
+			
+			if(clasif.equals("Nok"))
+				throw new ServiceException(String.format("Deben de llenarse todas las clasificaciones"));
+	       
+			
+	        String clasificacion = UtilOperacionDiariaServices.getClasificacionEconomica(dispatcher, "CL_COG", organizationPartyId, "EGRESO", anio);
 	        
 	        //Buscamos el tipo documento seleccionado en pantalla para obtener el acctgTransTypeId
 			GenericValue tipoDocumento = delegator.findByPrimaryKeyCache("TipoDocumento",UtilMisc.<String, Object>toMap("idTipoDoc", tipoDoc));
@@ -121,12 +116,17 @@ public class OperacionDiariaEgresosManual {
 
 	        //Obtener los tipos fiscales que se encuentran en la miniguia
 	        List<String> tiposFiscales = UtilOperacionDiariaServices.obtenTiposFiscalDoc(dctx, dispatcher, tipoDoc);
+			String claProgramatica = UtilOperacionDiariaServices.getClasificacionEconomica(dispatcher,
+					"CL_PROGRAMATICA", organizationPartyId, "EGRESO", anio);
+			
+			String claAdministrativa = UtilOperacionDiariaServices.getClasificacionEconomica(dispatcher,
+					"CL_ADMINISTRATIVA", organizationPartyId, "EGRESO", anio);
 	        
 	        for (String tipoFis : tiposFiscales) {	        
 	        
 		        //Obtiene el mapa que se utiliza para guardar las cuentas correspondientes y para validaciones
 		        Map<String,String> mapCuentas = UtilOperacionDiariaServices.regresaMapa(dctx, dispatcher, context, 
-		        										monto, fecContable, acctgTransTypeId, partEspec, 
+		        										monto, fecContable, acctgTransTypeId, (String) context.get(clasificacion), 
 		        										tipoFis, idProdAbono, idProdCargo, idPago, "COG");
 		        
 		        String tipoAsiento = UtilOperacionDiariaServices.obtenTipoAsiento(mapCuentas);
@@ -144,63 +144,26 @@ public class OperacionDiariaEgresosManual {
 		        acctgtrans.set("transactionDate", fecTrans);
 		        acctgtrans.set("isPosted", "Y");
 		        acctgtrans.set("postedDate", fecContable);
-		        acctgtrans.set("glFiscalTypeId", tipoFis);
-		        acctgtrans.set("workEffortId", actividad);
-		        acctgtrans.set("partyId", uniEjec);
+		        acctgtrans.set("glFiscalTypeId", tipoFis);		       
 		        acctgtrans.set("createdByUserLogin", userLog);
 		        acctgtrans.set("postedAmount", monto);
+				if(claAdministrativa != null)
+		        	acctgtrans.set("partyId", (String) context.get(claAdministrativa));
+		        else
+		        	acctgtrans.set("partyId", organizationPartyId);
+		        if(claProgramatica != null)
+		        	acctgtrans.set("workEffortId", (String) context.get(claProgramatica));		        
 		        acctgtrans.create();
 		        
 	//	        acctgTransId = acctgtrans.getString("acctgTransId");
 		        //Se registra en AcctTransPresupuestal
 		        acctgtransPres = GenericValue.create(delegator.getModelEntity("AcctgTransPresupuestal"));
-		        acctgtransPres.set("acctgTransId", acctgTransId);
-		        acctgtransPres.set("ciclo", ciclo);
-		        acctgtransPres.set("unidadOrganizacional", organizationPartyId);
-		        acctgtransPres.set("unidadEjecutora", uniEjec);
-		        String unidadOr = UtilOperacionDiariaServices.obtenPadrePartyId(dctx, dispatcher, uniEjec);
-		        acctgtransPres.set("unidadOrganizacional", unidadOr);
-		        String unidadRes = UtilOperacionDiariaServices.obtenPadrePartyId(dctx, dispatcher, unidadOr);
-		        acctgtransPres.set("unidadResponsable", unidadRes);
+		        acctgtransPres.set("acctgTransId", acctgTransId);		        
+		        
+		        for (int i = 1; i < 16; i++) {
+		        	acctgtransPres.set("clasificacion" + i, (String) context.get("clasificacion" + i));
+				}
 		        acctgtransPres.set("clavePres", cvePrespues);
-		        acctgtransPres.set("subFuenteEspecifica", suFuenteEsp);
-		        String subfuente = UtilOperacionDiariaServices.obtenPadreEnumeration(dctx, dispatcher, suFuenteEsp);
-		        acctgtransPres.set("subFuente",subfuente);
-		        String fuente = UtilOperacionDiariaServices.obtenPadreEnumeration(dctx, dispatcher, subfuente);
-		        acctgtransPres.set("fuente",fuente);	        
-		        acctgtransPres.set("entidadFederativa", entFed);
-		        acctgtransPres.set("region", region);
-		        acctgtransPres.set("municipio", muni);
-		        acctgtransPres.set("localidad", local);
-		        acctgtransPres.set("subFuncion", subFun);
-		        String funcion = UtilOperacionDiariaServices.obtenPadreEnumeration(dctx, dispatcher, subFun);
-		        acctgtransPres.set("funcion", funcion);
-		        String finalidad = UtilOperacionDiariaServices.obtenPadreEnumeration(dctx, dispatcher, funcion);
-		        acctgtransPres.set("finalidad", finalidad);
-		        acctgtransPres.set("tipoGasto", tipoGasto);
-		        acctgtransPres.set("partidaEspecifica", partEspec);
-		        String partGene = UtilOperacionDiariaServices.obtenPadreProductCate(dctx, dispatcher, partEspec);
-		        acctgtransPres.set("partidaGenerica", partGene);
-		        String concepto = UtilOperacionDiariaServices.obtenPadreProductCate(dctx, dispatcher, partGene);
-		        acctgtransPres.set("concepto", concepto);
-		        String capitulo = UtilOperacionDiariaServices.obtenPadreProductCate(dctx, dispatcher, concepto);
-		        acctgtransPres.set("capitulo", capitulo);
-		        acctgtransPres.set("actividad", actividad);
-		        Debug.logWarning("actividad  enviado"+actividad, MODULE);
-		        String subProg = UtilOperacionDiariaServices.obtenPadreWorkEffort(dctx, dispatcher, actividad);
-		        acctgtransPres.set("subProgramaPresupuestario", subProg);
-		        Debug.logWarning("subProg  enviado"+subProg, MODULE);
-		        String progPresu = UtilOperacionDiariaServices.obtenPadreWorkEffort(dctx, dispatcher, subProg);
-		        acctgtransPres.set("programaPresupuestario", progPresu);	      
-		        String progPlan = UtilOperacionDiariaServices.obtenPadreWorkEffort(dctx, dispatcher, progPresu);
-		        Debug.logWarning("progPresu  enviado"+progPresu, MODULE);
-		        acctgtransPres.set("programaPlan", progPlan);
-		        Debug.logWarning("progPlan  enviado"+progPlan, MODULE);
-		        acctgtransPres.set("area", area);
-		        String subSector = UtilOperacionDiariaServices.obtenPadreEnumeration(dctx, dispatcher, area);
-		        acctgtransPres.set("subSector", subSector); 
-		        String sector = UtilOperacionDiariaServices.obtenPadreEnumeration(dctx, dispatcher, subSector);
-		        acctgtransPres.set("sector", sector);	        
 		        acctgtransPres.set("idTipoDoc", tipoDoc);
 		        acctgtransPres.set("secuencia", sec);
 		        acctgtransPres.set("idProductoD", idProdCargo);
@@ -210,11 +173,16 @@ public class OperacionDiariaEgresosManual {
 		        acctgtransPres.create();
 		        
 		        Map<String,String> mapaAcctgEnums = FastMap.newInstance();
-		        mapaAcctgEnums.put("acctgTagEnumId1",subFun);
-		        mapaAcctgEnums.put("acctgTagEnumId2",tipoGasto);
-		        mapaAcctgEnums.put("acctgTagEnumId3",suFuenteEsp);
-		        mapaAcctgEnums.put("acctgTagEnumId4",area);
-		        
+		        List<String> resultClasificaciones = new ArrayList<String>();		        
+		        resultClasificaciones= UtilOperacionDiariaServices.getClasificacionEnumeration(dispatcher, "ACCOUNTING_TAG", organizationPartyId, "EnumerationType", "EGRESO", anio);		        
+		        int tam = resultClasificaciones.size();
+		        for(int i=0; i<tam; i++)		        
+		        {	String id = "acctgTagEnumId"+String.valueOf(i+1);
+		        	String idValue = resultClasificaciones.get(i);		        	
+		        	mapaAcctgEnums.put(id,(String) context.get(idValue));		        	
+		        }
+		        Debug.log("Omar - mapaAcctgEnums: " + mapaAcctgEnums);
+		       
 		        //Se realiza el registro de trans entries
 		        UtilOperacionDiariaServices.registraEntries(dctx, dispatcher, context,
 						organizationPartyId, acctgTransId, monto,
