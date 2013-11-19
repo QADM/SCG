@@ -121,6 +121,16 @@ public class OperacionDiariaIngresosManual {
 	        //Obtener los tipos fiscales que se encuentran en la miniguia
 	        List<String> tiposFiscales = UtilOperacionDiariaServices.obtenTiposFiscalDoc(dctx, dispatcher, tipoDoc);
 	        
+	        //Obtengo el año actual
+	        Calendar c = new GregorianCalendar();
+			String anio = Integer.toString(c.get(Calendar.YEAR));
+			
+			String claProgramatica = UtilOperacionDiariaServices.getClasificacionEconomica(dispatcher,
+					"CL_PROGRAMATICA", organizationPartyId, "INGRESO", anio);
+			
+			String claAdministrativa = UtilOperacionDiariaServices.getClasificacionEconomica(dispatcher,
+					"CL_ADMINISTRATIVA", organizationPartyId, "INGRESO", anio);
+	        
 	        for (String tipoFis : tiposFiscales) {
 		        
 		        //Obtiene el mapa que se utiliza para guardar las cuentas correspondientes y para validaciones
@@ -145,9 +155,14 @@ public class OperacionDiariaIngresosManual {
 		        acctgtrans.set("isPosted", "Y");
 		        acctgtrans.set("postedDate", fecContable);
 		        acctgtrans.set("glFiscalTypeId", tipoFis);
-		        acctgtrans.set("partyId", organizationPartyId);
+		        if(claAdministrativa != null)
+		        	acctgtrans.set("partyId", (String) context.get(claAdministrativa));
+		        else
+		        	acctgtrans.set("partyId", organizationPartyId);
 		        acctgtrans.set("createdByUserLogin", userLog);
-		        acctgtrans.set("postedAmount", monto);		        
+		        acctgtrans.set("postedAmount", monto);	
+		        if(claProgramatica != null)
+		        	acctgtrans.set("workEffortId", (String) context.get(claProgramatica));	
 		        acctgtrans.create();
 		        
 	//	        acctgTransId = acctgtrans.getString("acctgTransId");

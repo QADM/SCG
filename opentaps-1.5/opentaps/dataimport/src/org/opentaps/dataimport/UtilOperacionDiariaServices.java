@@ -1142,33 +1142,41 @@ public class UtilOperacionDiariaServices {
 					"EstructuraClave", condicion, UtilMisc.toList(getListColumnas())
 							, null);
 			
-			if(!resultado.isEmpty()){
+			if (!resultado.isEmpty()) {
 				for (GenericValue genericValue : resultado) {
 					for (int j = 1; j < 16; j++) {
-	
-						if (!(genericValue.get("clasificacion" + String.valueOf(j))
-								.toString()).isEmpty()) {
-							Debug.log("entro a validar clasificacion "
-									+ genericValue.get(
-											"clasificacion" + String.valueOf(j))
-											.toString());
-							if (genericValue.get(
-											"clasificacion" + String.valueOf(j))
-											.equals(tipoClasificacion)
-									|| genericValue
-											.get("clasificacion"
-													+ String.valueOf(j)).toString()
-											.contains(tipoClasificacion)) {
-								Debug.log("Clasificacion Economica - Clasificacion"
-										+ String.valueOf(j));
-								
-								tipoclasificacion = "clasificacion" + String.valueOf(j);
-								break;
+
+						try {
+
+							if (!(genericValue.get("clasificacion"
+									+ String.valueOf(j)).toString()).isEmpty()) {
+								Debug.log("entro a validar clasificacion "
+										+ genericValue.get(
+												"clasificacion"
+														+ String.valueOf(j))
+												.toString());
+								if (genericValue.get(
+										"clasificacion" + String.valueOf(j))
+										.equals(tipoClasificacion)
+										|| genericValue
+												.get("clasificacion"
+														+ String.valueOf(j))
+												.toString()
+												.contains(tipoClasificacion)) {
+									Debug.log("Clasificacion Economica - Clasificacion"
+											+ String.valueOf(j));
+
+									tipoclasificacion = "clasificacion"
+											+ String.valueOf(j);
+									break;
+								}
 							}
+						} catch (NullPointerException e) {
+							continue;
 						}
-	
-					}					
-			 }
+
+					}
+				}
 		}
 			
 		} catch (Exception e) {
@@ -1195,9 +1203,9 @@ public class UtilOperacionDiariaServices {
 		{	EntityCondition condicion = EntityCondition.makeCondition("parentTypeId", EntityOperator.EQUALS, tipoClasificacion);
 			enumtype = delegator.findByCondition(Entidad, condicion, UtilMisc.toList("clasificacionId"), null);			
 			for(GenericValue genericValue : enumtype) 
-			{	String resultado = getClasificacionEconomica(dispatcher, genericValue.getString("clasificacionId"), Organizacion, Tipo, ciclo);				
+			{	String resultado = getClasificacionEconomica(dispatcher, genericValue.getString("clasificacionId"), Organizacion, Tipo, ciclo);
 				if(resultado != null)
-				{	listaClasifEstrucResult.add(resultado);					
+				{	listaClasifEstrucResult.add(resultado);				
 				}
 			}
 			Debug.log("Omar - Lista listaClasifEstrucResult FIN: " + listaClasifEstrucResult);
