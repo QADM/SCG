@@ -29,6 +29,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -85,8 +86,10 @@ import org.ofbiz.service.ServiceUtil;
 import org.opentaps.base.constants.EnumerationConstants;
 import org.opentaps.base.constants.PaymentMethodTypeConstants;
 import org.opentaps.base.constants.StatusItemConstants;
+import org.opentaps.base.entities.GlAccount;
 import org.opentaps.base.entities.SalesInvoiceItemFact;
 import org.opentaps.base.entities.TaxInvoiceItemFact;
+import org.opentaps.base.entities.WorkEffort;
 import org.opentaps.common.jndi.DataSourceImpl;
 import org.opentaps.common.reporting.etl.UtilEtl;
 import org.opentaps.common.util.UtilAccountingTags;
@@ -94,6 +97,9 @@ import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilDate;
 import org.opentaps.common.util.UtilMessage;
 import org.opentaps.domain.billing.invoice.Invoice;
+import org.opentaps.domain.ledger.FinancialReportServicesInterface;
+import org.opentaps.domain.ledger.LedgerRepositoryInterface;
+import org.opentaps.domain.organization.OrganizationRepositoryInterface;
 import org.opentaps.foundation.entity.hibernate.Query;
 import org.opentaps.foundation.entity.hibernate.Session;
 import org.opentaps.foundation.infrastructure.Infrastructure;
@@ -1219,6 +1225,7 @@ public final class FinancialReports {
 
             List<Map<String, Object>> rows = FastList.newInstance();
             
+            
             //Se agregan estos campos para el calculo de los activos y los pasivos con patrimonio
             BigDecimal totalActivosTo = ZERO;
             BigDecimal totalActivosFrom = ZERO;
@@ -1228,6 +1235,7 @@ public final class FinancialReports {
             BigDecimal totalNoActivosComp = ZERO;
             
             BigDecimal mil = new BigDecimal(1000);
+            
 
             // create record set for report
             if (UtilValidate.isNotEmpty(assetAccounts)) {
@@ -1235,7 +1243,8 @@ public final class FinancialReports {
                 	BigDecimal montoComp = (assetAccountBalances.get(account) == null ? ZERO : assetAccountBalances.get(account));
                 	BigDecimal montoFrom = (fromAssetAccountBalances.get(account) == null ? ZERO : fromAssetAccountBalances.get(account));
                 	BigDecimal montoTo = (toAssetAccountBalances.get(account) == null ? ZERO : toAssetAccountBalances.get(account));
-                    Map<String, Object> row = FastMap.newInstance();
+                    String parentAccount = account.get("parentGlAccountId").toString();
+                	Map<String, Object> row = FastMap.newInstance();
                     row.put("accountCode", account.get("accountCode"));
                     row.put("accountName", account.get("accountName"));
                     row.put("accountBalance", (montoComp == null ? ZERO : montoComp.divide(mil)));
@@ -1243,8 +1252,29 @@ public final class FinancialReports {
                     row.put("accountBalanceRight", (montoTo == null ? ZERO : montoTo.divide(mil)));
                     row.put("accountType", uiLabelMap.get("AccountingAssets"));
                     row.put("accountTypeSeqNum", Integer.valueOf(1));
+                    row.put("parentGlAccountId", parentAccount);
                     rows.add(row);
                     
+                  //Metodo que agrega padres Asset como rows
+                    while(parentAccount != "")
+                    {
+                    	GenericValue ac = delegator.findByPrimaryKey("GlAccount", UtilMisc.toMap("glAccountId",parentAccount));
+                    	//Verifica que la cuenta no exista
+                    	Map<String, Object> fila = FastMap.newInstance();
+            			fila.put("accountCode", ac.get("accountCode"));
+            			fila.put("accountName", ac.get("accountName"));
+            			fila.put("accountTypeSeqNum", Integer.valueOf(1));
+            			rows.add(fila);
+                        if(ac.get("parentGlAccountId") == null)
+                        {
+                        	parentAccount = "";
+                        }
+                        else
+                        {
+                        	parentAccount = ac.get("parentGlAccountId").toString();
+                        }
+                    }
+
                     //Aqui se inician los calculos CUSTOM
                     totalActivosTo = totalActivosTo.add(montoTo.divide(mil));
                     totalActivosFrom = totalActivosFrom.add(montoFrom.divide(mil));
@@ -1253,13 +1283,14 @@ public final class FinancialReports {
             } else {
                 rows.add(UtilMisc.toMap("accountType", uiLabelMap.get("AccountingAssets"), "accountTypeSeqNum", Integer.valueOf(1)));
             }
-
+            
             if (UtilValidate.isNotEmpty(liabilityAccounts)) {
                 for (GenericValue account : liabilityAccounts) {
                 	BigDecimal montoComp = (liabilityAccountBalances.get(account) == null ? ZERO : liabilityAccountBalances.get(account));
                 	BigDecimal montoFrom = (fromLiabilityAccountBalances.get(account) == null ? ZERO : fromLiabilityAccountBalances.get(account));
                 	BigDecimal montoTo = (toLiabilityAccountBalances.get(account) == null ? ZERO : toLiabilityAccountBalances.get(account));
                     Map<String, Object> row = FastMap.newInstance();
+                    String parentAccount = account.get("parentGlAccountId").toString();
                     row.put("accountCode", account.get("accountCode"));
                     row.put("accountName", account.get("accountName"));
                     row.put("accountBalance",(montoComp == null ? ZERO : montoComp.divide(mil)));
@@ -1267,7 +1298,27 @@ public final class FinancialReports {
                     row.put("accountBalanceRight", (montoTo == null ? ZERO : montoTo.divide(mil)));
                     row.put("accountType", uiLabelMap.get("AccountingLiabilities"));
                     row.put("accountTypeSeqNum", Integer.valueOf(2));
+                    row.put("parentGlAccountId", parentAccount);
                     rows.add(row);
+
+                  //Metodo que agrega padres Liability como rows
+                    while(parentAccount != "")
+                    {
+                    	GenericValue ac = delegator.findByPrimaryKey("GlAccount", UtilMisc.toMap("glAccountId",parentAccount));
+                    	Map<String, Object> fila = FastMap.newInstance();
+            			fila.put("accountCode", ac.get("accountCode"));
+            			fila.put("accountName", ac.get("accountName"));
+            			fila.put("accountTypeSeqNum", Integer.valueOf(2));
+            			rows.add(fila);
+                        if(ac.get("parentGlAccountId") == null)
+                        {
+                        	parentAccount = "";
+                        }
+                        else
+                        {
+                        	parentAccount = ac.get("parentGlAccountId").toString();
+                        }
+                    }
                     
                     //Aqui se inician los calculos CUSTOM
                     totalNoActivosTo = totalNoActivosTo.add(montoTo.divide(mil));
@@ -1277,13 +1328,14 @@ public final class FinancialReports {
             } else {
                 rows.add(UtilMisc.toMap("accountType", uiLabelMap.get("AccountingLiabilities"), "accountTypeSeqNum", Integer.valueOf(2)));
             }
-
+            
             if (UtilValidate.isNotEmpty(equityAccounts)) {
                 for (GenericValue account : equityAccounts) {
                 	BigDecimal montoComp = (equityAccountBalances.get(account) == null ? ZERO : equityAccountBalances.get(account));
                 	BigDecimal montoFrom = (fromEquityAccountBalances.get(account) == null ? ZERO : fromEquityAccountBalances.get(account));
                 	BigDecimal montoTo = (toEquityAccountBalances.get(account) == null ? ZERO : toEquityAccountBalances.get(account));
                     Map<String, Object> row = FastMap.newInstance();
+                    String parentAccount = account.get("parentGlAccountId").toString();
                     row.put("accountCode", account.get("accountCode"));
                     row.put("accountName", account.get("accountName"));
                     row.put("accountBalance", (montoComp == null ? ZERO : montoComp.divide(mil)));
@@ -1291,7 +1343,27 @@ public final class FinancialReports {
                     row.put("accountBalanceRight", (montoTo == null ? ZERO : montoTo.divide(mil)));
                     row.put("accountType", uiLabelMap.get("AccountingEquities"));
                     row.put("accountTypeSeqNum", Integer.valueOf(3));
+                    row.put("parentGlAccountId", parentAccount);
                     rows.add(row);
+                    
+                  //Metodo que agrega padres Liability como rows
+                    while(parentAccount != "")
+                    {
+                    	GenericValue ac = delegator.findByPrimaryKey("GlAccount", UtilMisc.toMap("glAccountId",parentAccount));
+                    	Map<String, Object> fila = FastMap.newInstance();
+            			fila.put("accountCode", ac.get("accountCode"));
+            			fila.put("accountName", ac.get("accountName"));
+            			fila.put("accountTypeSeqNum", Integer.valueOf(3));
+            			rows.add(fila);
+                        if(ac.get("parentGlAccountId") == null)
+                        {
+                        	parentAccount = "";
+                        }
+                        else
+                        {
+                        	parentAccount = ac.get("parentGlAccountId").toString();
+                        }
+                    }
                     
                     //Aqui se inician los calculos CUSTOM
                     totalNoActivosTo = totalNoActivosTo.add(montoTo.divide(mil));
@@ -1301,30 +1373,17 @@ public final class FinancialReports {
             } else {
                 rows.add(UtilMisc.toMap("accountType", uiLabelMap.get("AccountingEquities"), "accountTypeSeqNum", Integer.valueOf(3)));
             }
-
-            // sort records by account code
-            Collections.sort(rows, new Comparator<Map<String, Object>>() {
-                public int compare(Map<String, Object> o1, Map<String, Object> o2) {
-                    Integer accountTypeSeqNum1 = (Integer) o1.get("accountTypeSeqNum");
-                    Integer accountTypeSeqNum2 = (Integer) o2.get("accountTypeSeqNum");
-                    int c = accountTypeSeqNum1.compareTo(accountTypeSeqNum2);
-                    if (c == 0) {
-                        String accountCode1 = (String) o1.get("accountCode");
-                        String accountCode2 = (String) o2.get("accountCode");
-                        if (accountCode1 == null && accountCode2 == null) {
-                            return 0;
-                        }
-                        if (accountCode1 == null && accountCode2 != null) {
-                            return -1;
-                        }
-                        if (accountCode1 != null && accountCode2 == null) {
-                            return 1;
-                        }
-                        return accountCode1.compareTo(accountCode2);
-                    }
-                    return c;
-                }
-            });
+            
+            //Se limpia el set
+            HashSet hs = new HashSet();
+            hs.addAll(rows);
+            rows.clear();
+            rows.addAll(hs);
+            
+            //Se ordena la lista final
+            rows = UtilFinancial.ordenaMapa(rows);
+            
+            
             request.setAttribute("jrDataSource", new JRMapCollectionDataSource(rows));
 
             // prepare report parameters

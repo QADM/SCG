@@ -22,6 +22,8 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -781,5 +783,32 @@ public final class UtilFinancial {
     public static boolean glAccountAndTransactionEntryInverted(GenericValue glAccount, GenericValue transactionEntry) throws GenericEntityException {
         return ((UtilAccounting.isDebitAccount(glAccount) && "C".equals(transactionEntry.get("debitCreditFlag")))
                 || (UtilAccounting.isCreditAccount(glAccount) && "D".equals(transactionEntry.get("debitCreditFlag"))));
+    }
+    
+    public static List<Map<String,Object>> ordenaMapa(List<Map<String,Object>> rows)
+    {
+    	Collections.sort(rows, new Comparator<Map<String, Object>>() {
+            public int compare(Map<String, Object> o1, Map<String, Object> o2) {
+                Integer accountTypeSeqNum1 = (Integer) o1.get("accountTypeSeqNum");
+                Integer accountTypeSeqNum2 = (Integer) o2.get("accountTypeSeqNum");
+                int c = accountTypeSeqNum1.compareTo(accountTypeSeqNum2);
+                if (c == 0) {
+                    String accountCode1 = (String) o1.get("accountCode");
+                    String accountCode2 = (String) o2.get("accountCode");
+                    if (accountCode1 == null && accountCode2 == null) {
+                        return 0;
+                    }
+                    if (accountCode1 == null && accountCode2 != null) {
+                        return -1;
+                    }
+                    if (accountCode1 != null && accountCode2 == null) {
+                        return 1;
+                    }
+                    return accountCode1.compareTo(accountCode2);
+                }
+                return c;
+            }
+        });
+    	return rows;
     }
 }
