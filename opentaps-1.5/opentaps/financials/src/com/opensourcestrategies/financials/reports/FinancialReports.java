@@ -106,6 +106,8 @@ import org.opentaps.foundation.infrastructure.Infrastructure;
 import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.repository.RepositoryException;
 
+import sun.awt.image.PixelConverter.Bgrx;
+
 import com.opensourcestrategies.financials.accounts.AccountsHelper;
 import com.opensourcestrategies.financials.financials.FinancialServices;
 import com.opensourcestrategies.financials.util.UtilFinancial;
@@ -900,14 +902,85 @@ public final class FinancialReports {
                 BigDecimal montoLeft = (set1Accounts.get(account) == null ? ZERO : set1Accounts.get(account));
                 BigDecimal montoRight = (set2Accounts.get(account) == null ? ZERO : set2Accounts.get(account));
                 BigDecimal montoDiff = (accountBalances.get(account) == null ? ZERO : accountBalances.get(account));
+                String parentAccount = account.get("parentGlAccountId").toString();
                 row.put("accountClass", account.get("glAccountClassId"));
+                Debug.log("Esta es la clase: "+account.get("glAccountClassId"));
                 row.put("accountCode", account.get("accountCode"));
                 row.put("accountName", account.get("accountName"));
                 row.put("accountSumLeft", montoLeft.divide(mil));
                 row.put("cumulativeIncomeName", obtenNombreCtaActiv(account.getString("glAccountClassId"),locale,delegator));
                 row.put("accountSumRight", montoRight.divide(mil));
                 row.put("accountSumDiff", montoDiff.divide(mil));
+                ///-parent
+                Debug.log("");
+                row.put("parentGlAccountId", parentAccount);
                 rows.add(row);
+                
+                
+                //Metodo que agrega padres Asset como rows
+                while(parentAccount != "")
+                {
+                	Debug.log("cuentaPadre: "+parentAccount);
+                	GenericValue ac = delegator.findByPrimaryKey("GlAccount", UtilMisc.toMap("glAccountId",parentAccount));
+                	//Verifica que la cuenta no exista
+                	Map<String, Object> fila = FastMap.newInstance();
+                	fila.put("accountCode", ac.get("accountCode"));
+        			fila.put("accountName", ac.get("accountName"));
+        			
+        			//Recorriendolo.
+        			boolean nuevo = true;
+        			for(Map<String, Object> mapa: rows){
+        				if(mapa.get("accountCode").toString().equalsIgnoreCase(ac.get("accountCode").toString())){            					
+        					Debug.log("Con mapa si sirve"+ac.get("accountName"));
+        					Debug.log("La cuenta del mapa es: "+mapa.get("accountName"));
+        					BigDecimal aux = mapa.get("accountSumDiff") == null ? ZERO : (BigDecimal)mapa.get("accountSumDiff");
+        					aux = montoDiff == null ? aux : aux.add(montoDiff.divide(mil));
+        					Debug.log("accountBalance"+mapa.get("accountSumDiff"));
+        					Debug.log("montoComp"+montoDiff);
+        					Debug.log("aux"+aux);
+        					mapa.put("accountSumDiff", aux);
+        					
+        					aux = mapa.get("accountSumLeft") == null ? ZERO : (BigDecimal)mapa.get("accountSumLeft");
+        					aux = montoLeft == null ? aux : aux.add(montoLeft.divide(mil));
+        					Debug.log("accountSumLeft"+mapa.get("accountSumLeft"));
+        					Debug.log("montoFrom"+montoLeft);
+        					Debug.log("aux"+aux);
+        					mapa.put("accountSumLeft", aux);
+        					
+        					aux = mapa.get("accountSumRight") == null ? ZERO : (BigDecimal)mapa.get("accountSumRight");
+        					aux = montoRight == null ? aux : aux.add(montoRight.divide(mil));
+        					Debug.log("accountSumRight"+mapa.get("accountSumRight"));
+        					Debug.log("montoTo"+montoRight);
+        					Debug.log("aux"+aux);
+        					mapa.put("accountSumRight", aux);
+        					
+//        					rows.add(mapa);
+        					nuevo = false;
+        					Debug.log("Modificacion");
+        					break;
+        				}
+        			}
+        			
+        		
+        			if(nuevo){
+        				Debug.log("Nuevo");
+        				fila.put("accountSumDiff", (montoDiff == null ? ZERO : montoDiff.divide(mil)));
+            			fila.put("accountSumLeft", (montoLeft == null ? ZERO : montoLeft.divide(mil)));
+            			fila.put("accountSumRight", (montoRight == null ? ZERO : montoRight.divide(mil)));
+            			rows.add(fila);
+        			}
+        			
+        			
+                    if(ac.get("parentGlAccountId") == null)
+                    {
+                    	parentAccount = "";
+                    }
+                    else
+                    {
+                    	parentAccount = ac.get("parentGlAccountId").toString();
+                    }
+                }               
+                
                 
                 totFec1 = totFec1.add(montoLeft.divide(mil));
                 totFec2 = totFec2.add(montoRight.divide(mil));
@@ -1254,17 +1327,74 @@ public final class FinancialReports {
                     row.put("accountTypeSeqNum", Integer.valueOf(1));
                     row.put("parentGlAccountId", parentAccount);
                     rows.add(row);
-                    
+                    Debug.log("antes del while");
+                    Debug.log("cuenta: "+account.get("accountName"));
                   //Metodo que agrega padres Asset como rows
                     while(parentAccount != "")
                     {
+                    	Debug.log("cuentaPadre: "+parentAccount);
                     	GenericValue ac = delegator.findByPrimaryKey("GlAccount", UtilMisc.toMap("glAccountId",parentAccount));
                     	//Verifica que la cuenta no exista
                     	Map<String, Object> fila = FastMap.newInstance();
             			fila.put("accountCode", ac.get("accountCode"));
             			fila.put("accountName", ac.get("accountName"));
             			fila.put("accountTypeSeqNum", Integer.valueOf(1));
-            			rows.add(fila);
+            			
+            			//Recorriendolo.
+            			boolean nuevo = true;
+            			for(Map<String, Object> mapa: rows){
+            				if(mapa.get("accountCode").toString().equalsIgnoreCase(ac.get("accountCode").toString())){            					
+            					Debug.log("Con mapa si sirve"+ac.get("accountName"));
+            					Debug.log("La cuenta del mapa es: "+mapa.get("accountName"));
+            					BigDecimal aux = mapa.get("accountBalance") == null ? ZERO : (BigDecimal)mapa.get("accountBalance");
+            					aux = montoComp == null ? aux : aux.add(montoComp.divide(mil));
+            					Debug.log("accountBalance"+mapa.get("accountBalance"));
+            					Debug.log("montoComp"+montoComp);
+            					Debug.log("aux"+aux);
+            					mapa.put("accountBalance", aux);
+            					
+            					aux = mapa.get("accountBalanceLeft") == null ? ZERO : (BigDecimal)mapa.get("accountBalanceLeft");
+            					aux = montoFrom == null ? aux : aux.add(montoFrom.divide(mil));
+            					Debug.log("accountBalanceLeft"+mapa.get("accountBalanceLeft"));
+            					Debug.log("montoFrom"+montoFrom);
+            					Debug.log("aux"+aux);
+            					mapa.put("accountBalanceLeft", aux);
+            					
+            					aux = mapa.get("accountBalanceRight") == null ? ZERO : (BigDecimal)mapa.get("accountBalanceRight");
+            					aux = montoTo == null ? aux : aux.add(montoTo.divide(mil));
+            					Debug.log("accountBalanceRight"+mapa.get("accountBalanceRight"));
+            					Debug.log("montoTo"+montoTo);
+            					Debug.log("aux"+aux);
+            					mapa.put("accountBalanceRight", aux);
+            					
+            					rows.add(mapa);
+            					nuevo = false;
+            					break;
+            				}
+            			}
+            			
+            			/*
+            			if(rows.contains(fila)){
+            				Debug.log("WTF?");
+            				Map<String, Object> aux = rows.get(rows.indexOf(fila));
+            				fila.put("accountBalance", ((montoComp.add((BigDecimal)aux.get("accountBalance"))) == null ? ZERO : montoComp.divide(mil)));
+                			fila.put("accountBalanceLeft", ((montoComp.add((BigDecimal)aux.get("accountBalanceLeft"))) == null ? ZERO : montoComp.divide(mil)));
+                			fila.put("accountBalanceRight", ((montoComp.add((BigDecimal)aux.get("accountBalanceRight"))) == null ? ZERO : montoComp.divide(mil)));
+            			}else{
+            				Debug.log("Nunca es igual");
+            				fila.put("accountBalance", (montoComp == null ? ZERO : montoComp.divide(mil)));
+                			fila.put("accountBalanceLeft", (montoFrom == null ? ZERO : montoFrom.divide(mil)));
+                			fila.put("accountBalanceRight", (montoTo == null ? ZERO : montoTo.divide(mil)));	
+            			}
+            			*/
+            			if(nuevo){
+            				fila.put("accountBalance", (montoComp == null ? ZERO : montoComp.divide(mil)));
+                			fila.put("accountBalanceLeft", (montoFrom == null ? ZERO : montoFrom.divide(mil)));
+                			fila.put("accountBalanceRight", (montoTo == null ? ZERO : montoTo.divide(mil)));
+                			rows.add(fila);
+            			}
+            			
+            			
                         if(ac.get("parentGlAccountId") == null)
                         {
                         	parentAccount = "";
@@ -1284,6 +1414,7 @@ public final class FinancialReports {
                 rows.add(UtilMisc.toMap("accountType", uiLabelMap.get("AccountingAssets"), "accountTypeSeqNum", Integer.valueOf(1)));
             }
             
+          
             if (UtilValidate.isNotEmpty(liabilityAccounts)) {
                 for (GenericValue account : liabilityAccounts) {
                 	BigDecimal montoComp = (liabilityAccountBalances.get(account) == null ? ZERO : liabilityAccountBalances.get(account));
@@ -1309,7 +1440,47 @@ public final class FinancialReports {
             			fila.put("accountCode", ac.get("accountCode"));
             			fila.put("accountName", ac.get("accountName"));
             			fila.put("accountTypeSeqNum", Integer.valueOf(2));
-            			rows.add(fila);
+            			
+            			//Recorriendolo.
+            			boolean nuevo = true;
+            			for(Map<String, Object> mapa: rows){
+            				if(mapa.get("accountCode").toString().equalsIgnoreCase(ac.get("accountCode").toString())){            					
+            					Debug.log("Con mapa si sirve"+ac.get("accountName"));
+            					Debug.log("La cuenta del mapa es: "+mapa.get("accountName"));
+            					BigDecimal aux = mapa.get("accountBalance") == null ? ZERO : (BigDecimal)mapa.get("accountBalance");
+            					aux = montoComp == null ? aux : aux.add(montoComp.divide(mil));
+            					Debug.log("accountBalance"+mapa.get("accountBalance"));
+            					Debug.log("montoComp"+montoComp);
+            					Debug.log("aux"+aux);
+            					mapa.put("accountBalance", aux);
+            					
+            					aux = mapa.get("accountBalanceLeft") == null ? ZERO : (BigDecimal)mapa.get("accountBalanceLeft");
+            					aux = montoFrom == null ? aux : aux.add(montoFrom.divide(mil));
+            					Debug.log("accountBalanceLeft"+mapa.get("accountBalanceLeft"));
+            					Debug.log("montoFrom"+montoFrom);
+            					Debug.log("aux"+aux);
+            					mapa.put("accountBalanceLeft", aux);
+            					
+            					aux = mapa.get("accountBalanceRight") == null ? ZERO : (BigDecimal)mapa.get("accountBalanceRight");
+            					aux = montoTo == null ? aux : aux.add(montoTo.divide(mil));
+            					Debug.log("accountBalanceRight"+mapa.get("accountBalanceRight"));
+            					Debug.log("montoTo"+montoTo);
+            					Debug.log("aux"+aux);
+            					mapa.put("accountBalanceRight", aux);
+            					
+            					rows.add(mapa);
+            					nuevo = false;
+            					break;
+            				}
+            			}
+            			
+            			if(nuevo){
+            				fila.put("accountBalance", (montoComp == null ? ZERO : montoComp.divide(mil)));
+                			fila.put("accountBalanceLeft", (montoFrom == null ? ZERO : montoFrom.divide(mil)));
+                			fila.put("accountBalanceRight", (montoTo == null ? ZERO : montoTo.divide(mil)));
+                			rows.add(fila);
+            			}
+            			
                         if(ac.get("parentGlAccountId") == null)
                         {
                         	parentAccount = "";
@@ -1354,7 +1525,50 @@ public final class FinancialReports {
             			fila.put("accountCode", ac.get("accountCode"));
             			fila.put("accountName", ac.get("accountName"));
             			fila.put("accountTypeSeqNum", Integer.valueOf(3));
-            			rows.add(fila);
+            			
+            			
+            			//Recorriendolo.
+            			boolean nuevo = true;
+            			for(Map<String, Object> mapa: rows){
+            				if(mapa.get("accountCode").toString().equalsIgnoreCase(ac.get("accountCode").toString())){            					
+            					Debug.log("Con mapa si sirve"+ac.get("accountName"));
+            					Debug.log("La cuenta del mapa es: "+mapa.get("accountName"));
+            					BigDecimal aux = mapa.get("accountBalance") == null ? ZERO : (BigDecimal)mapa.get("accountBalance");
+            					aux = montoComp == null ? aux : aux.add(montoComp.divide(mil));
+            					Debug.log("accountBalance"+mapa.get("accountBalance"));
+            					Debug.log("montoComp"+montoComp);
+            					Debug.log("aux"+aux);
+            					mapa.put("accountBalance", aux);
+            					
+            					aux = mapa.get("accountBalanceLeft") == null ? ZERO : (BigDecimal)mapa.get("accountBalanceLeft");
+            					aux = montoFrom == null ? aux : aux.add(montoFrom.divide(mil));
+            					Debug.log("accountBalanceLeft"+mapa.get("accountBalanceLeft"));
+            					Debug.log("montoFrom"+montoFrom);
+            					Debug.log("aux"+aux);
+            					mapa.put("accountBalanceLeft", aux);
+            					
+            					aux = mapa.get("accountBalanceRight") == null ? ZERO : (BigDecimal)mapa.get("accountBalanceRight");
+            					aux = montoTo == null ? aux : aux.add(montoTo.divide(mil));
+            					Debug.log("accountBalanceRight"+mapa.get("accountBalanceRight"));
+            					Debug.log("montoTo"+montoTo);
+            					Debug.log("aux"+aux);
+            					mapa.put("accountBalanceRight", aux);
+            					
+            					rows.add(mapa);
+            					nuevo = false;
+            					break;
+            				}
+            			}
+            			
+            			if(nuevo){
+            				fila.put("accountBalance", (montoComp == null ? ZERO : montoComp.divide(mil)));
+                			fila.put("accountBalanceLeft", (montoFrom == null ? ZERO : montoFrom.divide(mil)));
+                			fila.put("accountBalanceRight", (montoTo == null ? ZERO : montoTo.divide(mil)));
+                			rows.add(fila);
+            			}
+            			
+            			
+            			
                         if(ac.get("parentGlAccountId") == null)
                         {
                         	parentAccount = "";
@@ -1725,6 +1939,7 @@ public final class FinancialReports {
         ResourceBundleMapWrapper uiLabelMap = UtilMessage.getUiLabels(locale);
         String reportType = UtilCommon.getParameter(request, "type");
         
+        BigDecimal mil = new BigDecimal(1000);
         
         try {
         	
@@ -1777,6 +1992,7 @@ public final class FinancialReports {
                 	BigDecimal montoAbono = (accCredito.get(acctId) == null ? ZERO : accCredito.get(acctId));
                 	BigDecimal montoFinal = montoIni.add(montoCargo).subtract(montoAbono);
                 	BigDecimal montoFlujo = montoIni.subtract(montoFinal);
+                	String parentAccount = account.get("parentGlAccountId").toString();
                     Map<String, Object> row = FastMap.newInstance();
                     row.put("accountCode", account.get("accountCode"));
                     row.put("accountName", account.get("accountName"));
@@ -1786,8 +2002,97 @@ public final class FinancialReports {
                     row.put("accountFinal", (montoFinal == null ? ZERO : montoFinal.divide(MIL)));
                     row.put("flujo", (montoFlujo == null ? ZERO : montoFlujo.divide(MIL)));
                     row.put("accountType", uiLabelMap.get("AccountingAssets"));
+                    Debug.log("accountType " +  row.put("accountType", uiLabelMap.get("AccountingAssets")));
+                    
                     row.put("accountTypeSeqNum", Integer.valueOf(1));
                     rows.add(row);
+                    
+                    //Metodo que agrega padres Asset como rows
+                    while(parentAccount != "")
+                    {
+                    	Debug.log("cuentaPadre: "+parentAccount);
+                    	GenericValue ac = delegator.findByPrimaryKey("GlAccount", UtilMisc.toMap("glAccountId",parentAccount));
+                    	//Verifica que la cuenta no exista
+                    	Map<String, Object> fila = FastMap.newInstance();
+            			fila.put("accountCode", ac.get("accountCode"));
+            			fila.put("accountName", ac.get("accountName"));
+            			fila.put("accountTypeSeqNum", Integer.valueOf(1));
+            			fila.put("accountType", uiLabelMap.get("AccountingAssets"));
+            			Debug.log("accountType Parent" +  fila.put("accountType", uiLabelMap.get("AccountingAssets")));
+            			
+            			//Recorriendolo.
+            			boolean nuevo = true;
+            			for(Map<String, Object> mapa: rows){
+            				if(mapa.get("accountCode").toString().equalsIgnoreCase(ac.get("accountCode").toString())){            					
+            					Debug.log("Con mapa si sirve"+ac.get("accountName"));
+            					Debug.log("La cuenta del mapa es: "+mapa.get("accountName"));
+            					BigDecimal aux = mapa.get("accountInicial") == null ? ZERO : (BigDecimal)mapa.get("accountInicial");
+            					aux = montoIni == null ? aux : aux.add(montoIni.divide(mil));
+            					Debug.log("accountInicial"+mapa.get("accountInicial"));
+            					Debug.log("accountInicial"+montoIni);
+            					Debug.log("aux"+aux);
+            					mapa.put("accountInicial", aux);
+            					
+            					aux = mapa.get("accountCargo") == null ? ZERO : (BigDecimal)mapa.get("accountCargo");
+            					aux = montoCargo == null ? aux : aux.add(montoCargo.divide(mil));
+            					Debug.log("accountCargo"+mapa.get("accountCargo"));
+            					Debug.log("montoFrom"+montoCargo);
+            					Debug.log("aux"+aux);
+            					mapa.put("accountCargo", aux);
+            					
+            					aux = mapa.get("accountAbono") == null ? ZERO : (BigDecimal)mapa.get("accountAbono");
+            					aux = montoAbono == null ? aux : aux.add(montoAbono.divide(mil));
+            					Debug.log("accountAbono"+mapa.get("accountAbono"));
+            					Debug.log("montoTo"+montoAbono);
+            					Debug.log("aux"+aux);
+            					mapa.put("accountAbono", aux);            					
+            					
+            					//accountFinal
+            					
+            					aux = mapa.get("accountFinal") == null ? ZERO : (BigDecimal)mapa.get("accountFinal");
+            					aux = montoFinal == null ? aux : aux.add(montoFinal.divide(mil));
+            					Debug.log("accountFinal"+mapa.get("accountFinal"));
+            					Debug.log("montoTo"+montoFinal);
+            					Debug.log("aux"+aux);
+            					mapa.put("accountFinal", aux);
+            					
+            					aux = mapa.get("flujo") == null ? ZERO : (BigDecimal)mapa.get("flujo");
+            					aux = montoFlujo == null ? aux : aux.add(montoFlujo.divide(mil));
+            					Debug.log("flujo"+mapa.get("flujo"));
+            					Debug.log("montoTo"+montoFlujo);
+            					Debug.log("aux"+aux);
+            					mapa.put("flujo", aux);            					
+            					
+            					//rows.add(mapa);
+            					nuevo = false;
+            					break;
+            				}
+            			}
+            			
+            			
+            			if(nuevo){
+            				fila.put("accountInicial", (montoIni == null ? ZERO : montoIni.divide(mil)));
+                			fila.put("accountCargo", (montoCargo == null ? ZERO : montoCargo.divide(mil)));
+                			fila.put("accountAbono", (montoAbono == null ? ZERO : montoAbono.divide(mil)));
+                			fila.put("accountFinal", (montoFinal == null ? ZERO : montoFinal.divide(mil)));
+                			fila.put("flujo", (montoFlujo == null ? ZERO : montoFlujo.divide(mil)));
+                			rows.add(fila);
+            			}
+            			
+            			
+                        if(ac.get("parentGlAccountId") == null)
+                        {
+                        	parentAccount = "";
+                        }
+                        else
+                        {
+                        	parentAccount = ac.get("parentGlAccountId").toString();
+                        }
+                    }
+                    
+                    
+                    
+                    
 
                 }
             } else {
