@@ -49,7 +49,7 @@
 			<band/>
 		</groupHeader>
 		<groupFooter>
-			<band height="18">
+			<!--<band height="18">
 				<line>
 					<reportElement key="line" x="0" y="0" width="721" height="1"/>
 				</line>
@@ -95,7 +95,7 @@
 					</textElement>
 					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{flujo_1}]]></textFieldExpression>
 				</textField>
-			</band>
+			</band>-->
 		</groupFooter>
 	</group>
 	<background>

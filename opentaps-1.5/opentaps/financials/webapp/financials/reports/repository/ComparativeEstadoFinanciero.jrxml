@@ -43,7 +43,7 @@
 			<band/>
 		</groupHeader>
 		<groupFooter>
-			<band height="18">
+			<!--<band height="18">
 				<textField isBlankWhenNull="true">
 					<reportElement x="0" y="2" width="391" height="16"/>
 					<textElement lineSpacing="Single">
@@ -75,7 +75,7 @@
 					</textElement>
 					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{accountBalanceRight_1}]]></textFieldExpression>
 				</textField>
-			</band>
+			</band>-->
 		</groupFooter>
 	</group>
 	<background>

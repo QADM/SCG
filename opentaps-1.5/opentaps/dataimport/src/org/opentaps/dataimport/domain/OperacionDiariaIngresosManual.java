@@ -119,11 +119,7 @@ public class OperacionDiariaIngresosManual {
 		        ciclo = String.valueOf(UtilDateTime.getYear(fecContable, timeZone, locale)).substring(2);
 	        
 	        //Obtener los tipos fiscales que se encuentran en la miniguia
-	        List<String> tiposFiscales = UtilOperacionDiariaServices.obtenTiposFiscalDoc(dctx, dispatcher, tipoDoc);
-	        
-	        //Obtengo el año actual
-	        Calendar c = new GregorianCalendar();
-			String anio = Integer.toString(c.get(Calendar.YEAR));
+	        List<String> tiposFiscales = UtilOperacionDiariaServices.obtenTiposFiscalDoc(dctx, dispatcher, tipoDoc);	        	        	        
 			
 			String claProgramatica = UtilOperacionDiariaServices.getClasificacionEconomica(dispatcher,
 					"CL_PROGRAMATICA", organizationPartyId, "INGRESO", anio);
