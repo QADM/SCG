@@ -24,10 +24,7 @@
   <#assign fromDateAccounts = fromDateAccountBalances.get(type)/>
   <#assign thruDateAccounts = thruDateAccountBalances.get(type)/>
     <#list accounts as account>
-     <#if account?has_content>
-      <tr>
-      	<td class="tabletext">${account.parentGlAccountId}</td>
-      </tr>
+     <#if account?has_content>      
       <tr>
         <td class="tableheadtext">${account.accountCode?if_exists}: ${account.accountName?if_exists} (<a href="<@ofbizUrl>AccountActivitiesDetail?glAccountId=${account.glAccountId?if_exists}&organizationPartyId=${organizationPartyId}</@ofbizUrl>" class="buttontext">${account.glAccountId?if_exists}</a>) </td>
         <td class="tabletext" align="right"><@ofbizCurrency amount=fromDateAccounts.get(account) isoCode=currencyUomId/></td>
