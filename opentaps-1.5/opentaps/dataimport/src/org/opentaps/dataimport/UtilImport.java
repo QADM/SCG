@@ -9,6 +9,8 @@ import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
+import org.ofbiz.service.DispatchContext;
+import org.ofbiz.service.ModelService;
 import org.opentaps.base.entities.AcctgTrans;
 import org.opentaps.base.entities.AcctgTransEntry;
 import org.opentaps.base.entities.CustomTimePeriod;
@@ -40,6 +42,7 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -482,7 +485,7 @@ public class UtilImport {
 	}
 
 	public static ContenedorContable validaClasificaciones(List<Clasificacion> lista,
-			LedgerRepositoryInterface ledger_repo, String tipo, Date fechaTrans) {
+			LedgerRepositoryInterface ledger_repo, String tipo, Date fechaTrans, DispatchContext d) {
 		ContenedorContable contenedor = new ContenedorContable();
 		String clavePresupuestal = "";
 		String mensaje = "";
@@ -556,6 +559,17 @@ public class UtilImport {
 			clavePresupuestal += valorClasif;
 		}
 		contenedor.setClavePresupuestal(clavePresupuestal);
+		//Se valida la suficiencia presupuestaria
+		Map<String,Object> input = new HashMap<String,Object>();
+        input.put("login.username", "admin");
+        input.put("login.password", "opentaps");
+        input.put("organizacion", "x");
+        input = d.getModelService("suficienciaPresupuestaria").makeValid(input, ModelService.IN_PARAM);
+        Map<String, Object> tmpResult = d.getDispatcher().runSync("suficienciaPresupuestaria", input);
+		if(tmpResult.get("messageOut").toString().equals("N"))
+		{
+			mensaje = mensaje + tmpResult.get("messageOut").toString();
+		}
 		if(!mensaje.isEmpty())
 		{
 			contenedor.setMensaje(mensaje);

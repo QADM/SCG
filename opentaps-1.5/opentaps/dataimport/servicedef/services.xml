@@ -539,4 +539,11 @@
         <attribute type="String" mode="IN" name="idD" optional="true"/>
         <attribute type="Integer" mode="OUT" name="messageOut" optional="true"/>
     </service> 
+    
+    <service name="suficienciaPresupuestaria" engine="java" auth="true"
+            location="org.opentaps.dataimport.domain.ValidacionSuficienciaPresupuestaria" invoke="validaSuficiencia" export="true">
+        <description>Valida la suficiencia presupuestaria en el sistema externo</description>
+        <attribute type="String" mode="IN" name="organizacion" optional="false"/>
+        <attribute type="String" mode="OUT" name="messageOut" optional="true"/>
+        </service>
 </services>

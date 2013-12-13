@@ -420,7 +420,7 @@ public class EgresoDiarioImportService extends DomainService implements
 					listaClasif.add(c);
 					}
 					//Bloque de Validacion de Clasificaciones
-					contenedor = UtilImport.validaClasificaciones(listaClasif,ledger_repo,"E",rowdata.getFechaContable());
+					contenedor = UtilImport.validaClasificaciones(listaClasif,ledger_repo,"E",rowdata.getFechaContable(),this.getInfrastructure().getDispatcher().getDispatchContext());
 					mensaje = UtilImport.validaTipoDoc(mensaje, ledger_repo,
 							rowdata.getIdTipoDoc());
 					if (contenedor.getMensaje()!= "" || !mensaje.isEmpty()) {
@@ -703,6 +703,8 @@ public class EgresoDiarioImportService extends DomainService implements
 									.getUsuario());
 
 							egresoDiario.setGlFiscalTypeId(cuentas
+									.get("GlFiscalTypePresupuesto"));
+							Debug.log("Fiscal Type: "+cuentas
 									.get("GlFiscalTypePresupuesto"));
 							imp_tx1 = this.session.beginTransaction();
 							ledger_repo.createOrUpdate(egresoDiario);

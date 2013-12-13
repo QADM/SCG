@@ -364,7 +364,7 @@ public class IngresoDiarioImportService extends DomainService implements
 					
 					//Bloque de Validacion de Clasificaciones
 					
-					contenedor = UtilImport.validaClasificaciones(listaClasif,ledger_repo,"I",rowdata.getFechaContable());
+					contenedor = UtilImport.validaClasificaciones(listaClasif,ledger_repo,"I",rowdata.getFechaContable(),this.getInfrastructure().getDispatcher().getDispatchContext());
 					Debug.log("Clasificaciones validadas");
 					mensaje = UtilImport.validaTipoDoc(mensaje, ledger_repo,
 							rowdata.getIdTipoDoc());
