@@ -760,8 +760,10 @@ public final class ExcelImportServices extends DomainService {
 			default:
 
 				String cadFecha = celda.toString().trim();
+				Debug.log(cadFecha);
 				cal = Calendar.getInstance();
 				cal.setTime(formatoDelTexto.parse(cadFecha));
+				Debug.log("Hora Mal: "+cal.getTime());
 				break;
 			}
 		} catch (Exception e) {

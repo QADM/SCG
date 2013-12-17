@@ -2,6 +2,7 @@ package org.opentaps.dataimport.domain;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -15,6 +16,7 @@ import org.opentaps.base.entities.AcctgTransEntry;
 import org.opentaps.base.entities.AcctgTransPresupuestal;
 import org.opentaps.base.entities.ClasifPresupuestal;
 import org.opentaps.base.entities.CustomTimePeriod;
+import org.opentaps.base.entities.DataImportEgresoDiario;
 import org.opentaps.base.entities.DataImportIngresoDiario;
 import org.opentaps.base.entities.Enumeration;
 import org.opentaps.base.entities.EstructuraClave;
@@ -103,6 +105,18 @@ public class IngresoDiarioImportService extends DomainService implements
 			List<DataImportIngresoDiario> dataforimp = imp_repo
 					.findNotProcessesDataImportIngresoDiarioEntries();
 
+Map<String, List<DataImportIngresoDiario>> subs = new HashMap<String, List<DataImportIngresoDiario>>();
+			
+			//Se separa la lista importada en lista por documento
+			for(DataImportIngresoDiario o : dataforimp){
+			    List<DataImportIngresoDiario> temp = subs.get(o.getRefDoc());
+			    if(temp == null){
+			        temp = new ArrayList<DataImportIngresoDiario>();
+			        subs.put(o.getRefDoc(), temp);
+			    }
+			    temp.add(o);
+			}
+			
 			int imported = 0;
 			Transaction imp_tx1 = null;
 			Transaction imp_tx2 = null;
@@ -119,7 +133,8 @@ public class IngresoDiarioImportService extends DomainService implements
 
 			if (UtilImport.validaLote(ledger_repo, lote, "IngresoDiario")) {
 				boolean loteValido=true;
-				for (DataImportIngresoDiario rowdata : dataforimp) {
+				for(List<DataImportIngresoDiario> lista : subs.values()){
+				for (DataImportIngresoDiario rowdata : lista) {
 					// Empieza bloque de validaciones
 					String mensaje = "";
 					Debug.log("Empieza bloque de validaciones");
@@ -364,10 +379,15 @@ public class IngresoDiarioImportService extends DomainService implements
 					
 					//Bloque de Validacion de Clasificaciones
 					
-					contenedor = UtilImport.validaClasificaciones(listaClasif,ledger_repo,"I",rowdata.getFechaContable(),this.getInfrastructure().getDispatcher().getDispatchContext());
+					contenedor = UtilImport.validaClasificaciones(listaClasif,ledger_repo,"I",rowdata.getFechaContable());
 					Debug.log("Clasificaciones validadas");
 					mensaje = UtilImport.validaTipoDoc(mensaje, ledger_repo,
 							rowdata.getIdTipoDoc());
+					TipoDocumento tipo = ledger_repo.findOne(TipoDocumento.class,
+							ledger_repo.map(TipoDocumento.Fields.idTipoDoc, rowdata.getIdTipoDoc()));
+					if(tipo.getValidaSuf().equals("Y")){
+						//mensaje = UtilImport.validaSuficienciaPresupuestaria(mensaje, this.getInfrastructure().getDispatcher().getDispatchContext());
+					}
 					//----------------------------------------
 					if (contenedor.getMensaje()!= "" || !mensaje.isEmpty()) {
 						loteValido=false;
@@ -887,7 +907,7 @@ public class IngresoDiarioImportService extends DomainService implements
 						throw new ServiceException(ex.getMessage());
 					}
 				}
-
+				}
 				// Se inserta el Lote.
 				if (!lote.equalsIgnoreCase("X")&&loteValido) {
 					LoteTransaccion loteTrans = new LoteTransaccion();

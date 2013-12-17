@@ -485,7 +485,7 @@ public class UtilImport {
 	}
 
 	public static ContenedorContable validaClasificaciones(List<Clasificacion> lista,
-			LedgerRepositoryInterface ledger_repo, String tipo, Date fechaTrans, DispatchContext d) {
+			LedgerRepositoryInterface ledger_repo, String tipo, Date fechaTrans) {
 		ContenedorContable contenedor = new ContenedorContable();
 		String clavePresupuestal = "";
 		String mensaje = "";
@@ -559,17 +559,7 @@ public class UtilImport {
 			clavePresupuestal += valorClasif;
 		}
 		contenedor.setClavePresupuestal(clavePresupuestal);
-		//Se valida la suficiencia presupuestaria
-		Map<String,Object> input = new HashMap<String,Object>();
-        input.put("login.username", "admin");
-        input.put("login.password", "opentaps");
-        input.put("organizacion", "x");
-        input = d.getModelService("suficienciaPresupuestaria").makeValid(input, ModelService.IN_PARAM);
-        Map<String, Object> tmpResult = d.getDispatcher().runSync("suficienciaPresupuestaria", input);
-		if(tmpResult.get("messageOut").toString().equals("N"))
-		{
-			mensaje = mensaje + tmpResult.get("messageOut").toString();
-		}
+		
 		if(!mensaje.isEmpty())
 		{
 			contenedor.setMensaje(mensaje);
@@ -1028,6 +1018,27 @@ public class UtilImport {
 		}
 		
 		return acctgTrans;
+	}
+
+	public static String validaSuficienciaPresupuestaria(String mensaje,
+			DispatchContext d) {
+		Map<String,Object> input = new HashMap<String,Object>();
+        input.put("login.username", "admin");
+        input.put("login.password", "opentaps");
+        input.put("organizacion", "x");
+        try{
+        input = d.getModelService("suficienciaPresupuestaria").makeValid(input, ModelService.IN_PARAM);
+        Map<String, Object> tmpResult = d.getDispatcher().runSync("suficienciaPresupuestaria", input);
+		if(tmpResult.get("messageOut").toString().equals("N"))
+		{
+			mensaje = mensaje + tmpResult.get("messageOut").toString();
+		}
+        }
+        catch(Exception e)
+        {
+        	e.printStackTrace();
+        }
+		return mensaje;
 	}
 
 }

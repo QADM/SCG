@@ -2,6 +2,7 @@ package org.opentaps.dataimport.domain;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -102,6 +103,18 @@ public class EgresoDiarioImportService extends DomainService implements
 
 			List<DataImportEgresoDiario> dataforimp = imp_repo
 					.findNotProcessesDataImportEgresoDiarioEntries();
+			
+			Map<String, List<DataImportEgresoDiario>> subs = new HashMap<String, List<DataImportEgresoDiario>>();
+			
+			//Se separa la lista importada en lista por documento
+			for(DataImportEgresoDiario o : dataforimp){
+			    List<DataImportEgresoDiario> temp = subs.get(o.getRefDoc());
+			    if(temp == null){
+			        temp = new ArrayList<DataImportEgresoDiario>();
+			        subs.put(o.getRefDoc(), temp);
+			    }
+			    temp.add(o);
+			}
 
 			int imported = 0;
 			Transaction imp_tx1 = null;
@@ -119,7 +132,8 @@ public class EgresoDiarioImportService extends DomainService implements
 
 			if (UtilImport.validaLote(ledger_repo, lote, "EgresoDiario")) {
 				boolean loteValido = true;
-				for (DataImportEgresoDiario rowdata : dataforimp) {
+				for(List<DataImportEgresoDiario> lista : subs.values()){
+				for (DataImportEgresoDiario rowdata : lista) {
 					// Empieza bloque de validaciones
 					ContenedorContable contenedor = new ContenedorContable();
 					String mensaje = "";
@@ -420,9 +434,10 @@ public class EgresoDiarioImportService extends DomainService implements
 					listaClasif.add(c);
 					}
 					//Bloque de Validacion de Clasificaciones
-					contenedor = UtilImport.validaClasificaciones(listaClasif,ledger_repo,"E",rowdata.getFechaContable(),this.getInfrastructure().getDispatcher().getDispatchContext());
+					contenedor = UtilImport.validaClasificaciones(listaClasif,ledger_repo,"E",rowdata.getFechaContable());
 					mensaje = UtilImport.validaTipoDoc(mensaje, ledger_repo,
 							rowdata.getIdTipoDoc());
+					//mensaje = UtilImport.validaSuficienciaPresupuestaria(mensaje, this.getInfrastructure().getDispatcher().getDispatchContext());
 					if (contenedor.getMensaje()!= "" || !mensaje.isEmpty()) {
 						loteValido = false;
 						
@@ -995,8 +1010,8 @@ public class EgresoDiarioImportService extends DomainService implements
 						Debug.logError(ex, message, MODULE);
 						throw new ServiceException(ex.getMessage());
 					}
-				}
-
+				} //Fin de partida
+				} //Fin de Documento
 				// Se inserta el Lote.
 				if (!lote.equalsIgnoreCase("X") && loteValido) {
 					LoteTransaccion loteTrans = new LoteTransaccion();
