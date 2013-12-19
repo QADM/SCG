@@ -13,7 +13,9 @@ import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.ModelService;
 import org.opentaps.base.entities.AcctgTrans;
 import org.opentaps.base.entities.AcctgTransEntry;
+import org.opentaps.base.entities.ClasifPresupuestal;
 import org.opentaps.base.entities.CustomTimePeriod;
+import org.opentaps.base.entities.DataImportEgresoDiario;
 import org.opentaps.base.entities.Enumeration;
 import org.opentaps.base.entities.EnumerationType;
 import org.opentaps.base.entities.Geo;
@@ -31,6 +33,7 @@ import org.opentaps.base.entities.ProductCategoryType;
 import org.opentaps.base.entities.TipoDocumento;
 import org.opentaps.base.entities.WorkEffort;
 import org.opentaps.dataimport.domain.Clasificacion;
+import org.opentaps.dataimport.domain.Clave;
 import org.opentaps.dataimport.domain.ContenedorContable;
 import org.opentaps.domain.ledger.LedgerRepositoryInterface;
 import org.opentaps.foundation.entity.hibernate.Session;
@@ -810,6 +813,26 @@ public class UtilImport {
 		Debug.log("Periodos regresados.- " + periodosAplicables.size());
 		return periodosAplicables;
 	}
+	
+	public static CustomTimePeriod obtenPeriodoMensual(
+			LedgerRepositoryInterface ledger_repo, String organizacionPartyId,
+			Date fechaTrans) throws RepositoryException {
+		Debug.log("Fecha.- " + fechaTrans);
+		List<CustomTimePeriod> periodos = ledger_repo.findList(
+				CustomTimePeriod.class, ledger_repo.map(
+						CustomTimePeriod.Fields.organizationPartyId,
+						organizacionPartyId, CustomTimePeriod.Fields.isClosed,
+						"N"));
+		List<CustomTimePeriod> periodosAplicables = new ArrayList<CustomTimePeriod>();
+		for (CustomTimePeriod periodo : periodos) {
+			if (fechaTrans.after(periodo.getFromDate())
+					&& fechaTrans.before(periodo.getThruDate())&& periodo.getPeriodTypeId().equals("FISCAL_MONTH")) {
+				periodosAplicables.add(periodo);
+			}
+		}
+		Debug.log("Periodos regresados.- " + periodosAplicables.size());
+		return periodosAplicables.get(0);
+	}
 
 	public static List<GlAccountHistory> actualizaGlAccountHistories(
 			LedgerRepositoryInterface ledger_repo,
@@ -1020,25 +1043,30 @@ public class UtilImport {
 		return acctgTrans;
 	}
 
-	public static String validaSuficienciaPresupuestaria(String mensaje,
-			DispatchContext d) {
+	public static Map<String,Object> validaSuficienciaPresupuestaria(String ur, String ciclo, String periodo, String tipoDocumento,String refDoc,String usuario,Date fecha,
+			String clave,BigDecimal monto, DispatchContext d, String tipoOperacion) {
 		Map<String,Object> input = new HashMap<String,Object>();
+		Map<String, Object> output = new HashMap<String, Object>();
         input.put("login.username", "admin");
         input.put("login.password", "opentaps");
-        input.put("organizacion", "x");
+        input.put("unidadResponsable", ur);
+        input.put("clavePresupuestaria", clave);
+        input.put("monto", monto);
+        input.put("ciclo", ciclo);
+        input.put("periodo", periodo);
+        input.put("tipoDocumento", tipoDocumento);
+        input.put("referencia", refDoc);
+        input.put("usuario", usuario);
+        input.put("fechaSolicitud", fecha);
+        input.put("tipoOperacion", tipoOperacion);
         try{
         input = d.getModelService("suficienciaPresupuestaria").makeValid(input, ModelService.IN_PARAM);
-        Map<String, Object> tmpResult = d.getDispatcher().runSync("suficienciaPresupuestaria", input);
-		if(tmpResult.get("messageOut").toString().equals("N"))
-		{
-			mensaje = mensaje + tmpResult.get("messageOut").toString();
-		}
+        output = d.getDispatcher().runSync("suficienciaPresupuestaria", input);
         }
         catch(Exception e)
         {
         	e.printStackTrace();
         }
-		return mensaje;
+		return output;
 	}
-
 }

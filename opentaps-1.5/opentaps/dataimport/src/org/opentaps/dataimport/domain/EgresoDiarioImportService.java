@@ -1,5 +1,7 @@
 package org.opentaps.dataimport.domain;
 
+import java.util.Date;
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -132,7 +134,11 @@ public class EgresoDiarioImportService extends DomainService implements
 
 			if (UtilImport.validaLote(ledger_repo, lote, "EgresoDiario")) {
 				boolean loteValido = true;
+				boolean existeSuficiencia = true;
+				
 				for(List<DataImportEgresoDiario> lista : subs.values()){
+					boolean documentoValido = true;
+					List<ContenedorContable> contenedores = new ArrayList<ContenedorContable>();
 				for (DataImportEgresoDiario rowdata : lista) {
 					// Empieza bloque de validaciones
 					ContenedorContable contenedor = new ContenedorContable();
@@ -234,23 +240,7 @@ public class EgresoDiarioImportService extends DomainService implements
 					EstructuraClave estructura = ledger_repo.findList(EstructuraClave.class,
 							ledger_repo.map(EstructuraClave.Fields.ciclo, 
 									UtilImport.obtenerCiclo(rowdata.getFechaContable()),
-									EstructuraClave.Fields.acctgTagUsageTypeId,"Egreso")).get(0);
-					Debug.log(estructura.getClasificacion1());
-					Debug.log(estructura.getClasificacion2());
-					Debug.log(estructura.getClasificacion3());
-					Debug.log(estructura.getClasificacion4());
-					Debug.log(estructura.getClasificacion5());
-					Debug.log(estructura.getClasificacion6());
-					Debug.log(estructura.getClasificacion7());
-					Debug.log(estructura.getClasificacion8());
-					Debug.log(estructura.getClasificacion9());
-					Debug.log(estructura.getClasificacion10());
-					Debug.log(estructura.getClasificacion11());
-					Debug.log(estructura.getClasificacion12());
-					Debug.log(estructura.getClasificacion13());
-					Debug.log(estructura.getClasificacion14());
-					Debug.log(estructura.getClasificacion15());
-					
+									EstructuraClave.Fields.acctgTagUsageTypeId,"Egreso")).get(0);					
 					//Se obtiene el tipo de clasficacion
 					List<Clasificacion> listaClasif = new ArrayList<Clasificacion>();
 					if(estructura.getClasificacion1()!=null){
@@ -437,14 +427,48 @@ public class EgresoDiarioImportService extends DomainService implements
 					contenedor = UtilImport.validaClasificaciones(listaClasif,ledger_repo,"E",rowdata.getFechaContable());
 					mensaje = UtilImport.validaTipoDoc(mensaje, ledger_repo,
 							rowdata.getIdTipoDoc());
-					//mensaje = UtilImport.validaSuficienciaPresupuestaria(mensaje, this.getInfrastructure().getDispatcher().getDispatchContext());
-					if (contenedor.getMensaje()!= "" || !mensaje.isEmpty()) {
+					TipoDocumento tipoDoc = ledger_repo.findOne(TipoDocumento.class,
+							ledger_repo.map(TipoDocumento.Fields.idTipoDoc, rowdata.getIdTipoDoc()));
+					if(tipoDoc.getValidaSuf().equals("Y")){
+						//Se obtienen los datos de entrada
+						String ur = rowdata.getOrganizationPartyId();
+						String tipoDocumento = rowdata.getIdTipoDoc();
+						String refDoc = rowdata.getRefDoc();
+						String usuario = rowdata.getUsuario();
+						Date fecha = rowdata.getFechaRegistro();
+						String ciclo = rowdata.getClasificacion1();
+						String periodo = UtilImport.obtenPeriodoMensual(ledger_repo, ur, fecha).getCustomTimePeriodId();
+						BigDecimal monto = rowdata.getMonto();
+						//Se ejecuta el servicio de suficiencia
+						Map<String,Object>servicio = UtilImport.validaSuficienciaPresupuestaria(ur, ciclo,periodo, tipoDocumento, refDoc, usuario, fecha, contenedor.getClavePresupuestal(),monto, this.getInfrastructure().getDispatcher().getDispatchContext(),"Egreso");
+						if(servicio.get("existeSuficiencia").equals("N"))
+						{
+							existeSuficiencia = false;
+						}
+					}
+					if (contenedor.getMensaje()!= "" || !mensaje.isEmpty() || !existeSuficiencia || !documentoValido) {
 						loteValido = false;
-						
-						storeImportEgresoDiarioError(rowdata, contenedor.getMensaje(), imp_repo);
+						documentoValido = false;
+						if(!existeSuficiencia)
+						{
+							storeImportEgresoDiarioError(rowdata, "La clave "+contenedor.getClavePresupuestal()+" no tiene presupuesto suficiente", imp_repo);
+						}
+						else
+						{
+							storeImportEgresoDiarioError(rowdata, contenedor.getMensaje(), imp_repo);
+						}
 						continue;
 					}
-
+					contenedores.add(contenedor);
+				}//Fin de partida
+				
+				
+				if(documentoValido){
+					int index = 0;
+					for (DataImportEgresoDiario rowdata : lista) {
+						ContenedorContable contenedor = contenedores.get(index);
+						TipoDocumento tipoDoc = ledger_repo.findOne(TipoDocumento.class,
+								ledger_repo.map(TipoDocumento.Fields.idTipoDoc, rowdata.getIdTipoDoc()));
 					// Creacion de objetos
 					Debug.log("Empieza creacion de objetos");
 					// Party ur = UtilImport.obtenParty(ledger_repo,
@@ -504,9 +528,6 @@ public class EgresoDiarioImportService extends DomainService implements
 					// Enumeration area =
 					// UtilImport.obtenEnumeration(ledger_repo,
 					// rowdata.getArea(), "CLAS_SECT");
-					TipoDocumento tipoDoc = UtilImport.obtenTipoDocumento(
-							ledger_repo, rowdata.getIdTipoDoc());
-
 					/*Party ue = UtilImport.obtenParty(ledger_repo,
 							rowdata.getUe());
 					Enumeration subf = UtilImport.obtenEnumeration(ledger_repo,
@@ -955,14 +976,14 @@ public class EgresoDiarioImportService extends DomainService implements
 							}
 						}
 
-						if (mensaje.isEmpty()) {
+						//if (mensaje.isEmpty()) {
 							String message = "Se importo correctamente Egreso Diario ["
 									+ contenedor.getClavePresupuestal() + "].";
 							this.storeImportEgresoDiarioSuccess(rowdata,
 									imp_repo);
 							Debug.logInfo(message, MODULE);
 							imported = imported + 1;
-						}
+						//}
 
 					} catch (Exception ex) {
 						String message = ex.getMessage();
@@ -1010,7 +1031,9 @@ public class EgresoDiarioImportService extends DomainService implements
 						Debug.logError(ex, message, MODULE);
 						throw new ServiceException(ex.getMessage());
 					}
-				} //Fin de partida
+					index++;
+				}	
+				}//Documento Valido
 				} //Fin de Documento
 				// Se inserta el Lote.
 				if (!lote.equalsIgnoreCase("X") && loteValido) {

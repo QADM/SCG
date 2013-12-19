@@ -1,7 +1,9 @@
 package org.opentaps.dataimport.domain;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -133,7 +135,10 @@ Map<String, List<DataImportIngresoDiario>> subs = new HashMap<String, List<DataI
 
 			if (UtilImport.validaLote(ledger_repo, lote, "IngresoDiario")) {
 				boolean loteValido=true;
+				boolean existeSuficiencia = true;
 				for(List<DataImportIngresoDiario> lista : subs.values()){
+					boolean documentoValido = true;
+					List<ContenedorContable> contenedores = new ArrayList<ContenedorContable>();
 				for (DataImportIngresoDiario rowdata : lista) {
 					// Empieza bloque de validaciones
 					String mensaje = "";
@@ -386,16 +391,44 @@ Map<String, List<DataImportIngresoDiario>> subs = new HashMap<String, List<DataI
 					TipoDocumento tipo = ledger_repo.findOne(TipoDocumento.class,
 							ledger_repo.map(TipoDocumento.Fields.idTipoDoc, rowdata.getIdTipoDoc()));
 					if(tipo.getValidaSuf().equals("Y")){
-						//mensaje = UtilImport.validaSuficienciaPresupuestaria(mensaje, this.getInfrastructure().getDispatcher().getDispatchContext());
+						//Se obtienen los datos de entrada
+						String ur = rowdata.getOrganizationPartyId();
+						String tipoDocumento = rowdata.getIdTipoDoc();
+						String refDoc = rowdata.getRefDoc();
+						String usuario = rowdata.getUsuario();
+						Date fecha = rowdata.getFechaRegistro();
+						String ciclo = rowdata.getClasificacion1();
+						String periodo = UtilImport.obtenPeriodoMensual(ledger_repo, ur, fecha).getCustomTimePeriodId();
+						BigDecimal monto = rowdata.getMonto();
+						//Se ejecuta el servicio de suficiencia
+						Map<String,Object>servicio = UtilImport.validaSuficienciaPresupuestaria(ur, ciclo,periodo, tipoDocumento, refDoc, usuario, fecha, contenedor.getClavePresupuestal(),monto, this.getInfrastructure().getDispatcher().getDispatchContext(),"Ingreso");
+						if(servicio.get("existeSuficiencia").equals("N"))
+						{
+							existeSuficiencia = false;
+						}
 					}
 					//----------------------------------------
-					if (contenedor.getMensaje()!= "" || !mensaje.isEmpty()) {
+					if (contenedor.getMensaje()!= "" || !mensaje.isEmpty() || !existeSuficiencia || !documentoValido) {
 						loteValido=false;
-						storeImportIngresoDiarioError(rowdata, contenedor.getMensaje(),
+						documentoValido = false;
+						if(!existeSuficiencia)
+						{
+							storeImportIngresoDiarioError(rowdata, "La clave "+contenedor.getClavePresupuestal()+" no tiene presupuesto suficiente", imp_repo);
+						}
+						else
+							{storeImportIngresoDiarioError(rowdata, contenedor.getMensaje(),
 								imp_repo);
+							}
 						continue;
 					}
-
+					contenedores.add(contenedor);
+				}//Fin de partida
+				if(documentoValido){
+					int index = 0;
+					for (DataImportIngresoDiario rowdata : lista) {
+						ContenedorContable contenedor = contenedores.get(index);
+						TipoDocumento tipoDoc = ledger_repo.findOne(TipoDocumento.class,
+								ledger_repo.map(TipoDocumento.Fields.idTipoDoc, rowdata.getIdTipoDoc()));
 					// Creacion de objetos
 					Debug.log("Empieza creacion de objetos");
 					// Party ur = UtilImport.obtenParty(ledger_repo,
@@ -429,8 +462,6 @@ Map<String, List<DataImportIngresoDiario>> subs = new HashMap<String, List<DataI
 					// Enumeration sfe =
 					// UtilImport.obtenEnumeration(ledger_repo,
 					// rowdata.getSfe(), "CLAS_FR");
-					TipoDocumento tipoDoc = UtilImport.obtenTipoDocumento(
-							ledger_repo, rowdata.getIdTipoDoc());
 
 					/*Party ue = UtilImport.obtenParty(ledger_repo,
 							rowdata.getUe());
@@ -850,14 +881,14 @@ Map<String, List<DataImportIngresoDiario>> subs = new HashMap<String, List<DataI
 							}
 						}
 
-						if (mensaje.isEmpty()) {
+						//if (mensaje.isEmpty()) {
 							String message = "Se importo correctamente Ingreso Diario ["
 									+ contenedor.getClavePresupuestal() + "].";
 							this.storeImportIngresoDiarioSuccess(rowdata,
 									imp_repo);
 							Debug.logInfo(message, MODULE);
 							imported = imported + 1;
-						}
+						//}
 
 					} catch (Exception ex) {
 						String message =  ex.getMessage();
@@ -906,8 +937,10 @@ Map<String, List<DataImportIngresoDiario>> subs = new HashMap<String, List<DataI
 						Debug.logError(ex, message, MODULE);
 						throw new ServiceException(ex.getMessage());
 					}
-				}
-				}
+					index++;
+					}	
+				}//Documento Valido
+				} //Fin de Documento
 				// Se inserta el Lote.
 				if (!lote.equalsIgnoreCase("X")&&loteValido) {
 					LoteTransaccion loteTrans = new LoteTransaccion();

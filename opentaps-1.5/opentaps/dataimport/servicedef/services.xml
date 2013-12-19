@@ -544,15 +544,18 @@
             location="org.opentaps.dataimport.domain.ValidacionSuficienciaPresupuestaria" invoke="validaSuficiencia" export="true">
         <description>Valida la suficiencia presupuestaria en el sistema externo</description>
         <attribute type="String" mode="IN" name="unidadResponsable" optional="false"/>
-        <attribute type="List" mode="IN" name="clavesPresupuestarias" optional="false"/>
+        <attribute type="String" mode="IN" name="clavePresupuestaria" optional="false"/>
+        <attribute type="BigDecimal" mode="IN" name="monto" optional="false"/>
         <attribute type="String" mode="IN" name="ciclo" optional="false"/>
         <attribute type="String" mode="IN" name="periodo" optional="false"/>
         <attribute type="String" mode="IN" name="tipoDocumento" optional="false"/>
         <attribute type="String" mode="IN" name="referencia" optional="false"/>
         <attribute type="String" mode="IN" name="usuario" optional="false"/>
         <attribute type="String" mode="IN" name="fechaSolicitud" optional="false"/>
-        <attribute type="String" mode="OUT" name="existeSuficienciaDoc" optional="true"/>
-        <attribute type="List" mode="OUT" name="lineas" optional="true"/>
+        <attribute type="String" mode="IN" name="tipoOperacion" optional="false"/>
+        <attribute type="String" mode="OUT" name="existeSuficiencia" optional="true"/>
+        <attribute type="String" mode="OUT" name="linea" optional="true"/>
+        <attribute type="String" mode="OUT" name="saldo" optional="true"/>
         <attribute type="String" mode="OUT" name="usuario" optional="true"/>
         <attribute type="String" mode="OUT" name="fecha" optional="true"/>
         </service>
