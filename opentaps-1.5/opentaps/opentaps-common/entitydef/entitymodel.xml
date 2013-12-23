@@ -196,11 +196,7 @@ under the License.
         <field name="clasifTypeId3" type="id-ne"/>
         <field name="clasifTypeId4" type="id-ne"/>
         <field name="clasifTypeId5" type="id-ne"/>
-        <field name="clasifTypeId6" type="id-ne"/>
-        <field name="clasifTypeId7" type="id-ne"/>
-        <field name="clasifTypeId8" type="id-ne"/>
-        <field name="clasifTypeId9" type="id-ne"/>
-        <field name="clasifTypeId10" type="id-ne"/>                     
+        <field name="clasifTypeId6" type="id-ne"/>                           
         <prim-key field="organizationPartyId"/>
         <prim-key field="acctgTagUsageTypeId"/>
         <relation type="one" rel-entity-name="Party" fk-name="ATET_PTY">
@@ -220,11 +216,7 @@ under the License.
         <field name="clasifTypeId3" type="id-ne"/>
         <field name="clasifTypeId4" type="id-ne"/>
         <field name="clasifTypeId5" type="id-ne"/>
-        <field name="clasifTypeId6" type="id-ne"/>
-        <field name="clasifTypeId7" type="id-ne"/>
-        <field name="clasifTypeId8" type="id-ne"/>
-        <field name="clasifTypeId9" type="id-ne"/>
-        <field name="clasifTypeId10" type="id-ne"/>                     
+        <field name="clasifTypeId6" type="id-ne"/>                           
         <prim-key field="organizationPartyId"/>
         <prim-key field="acctgTagUsageTypeId"/>
         <relation type="one" rel-entity-name="Party" fk-name="ATET_PTY">

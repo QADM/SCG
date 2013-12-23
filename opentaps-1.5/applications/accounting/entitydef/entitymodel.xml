@@ -1161,6 +1161,7 @@ under the License.
       <field name="description" type="description"></field>
       <field name="currencyUomId" type="id"></field>
       <field name="recurrenceInfoId" type="id"></field>
+      <field name="tipoDoc" type="id"></field>
       <prim-key field="invoiceId"/>
       <relation type="one" fk-name="INVOICE_INVTYP" rel-entity-name="InvoiceType">
         <key-map field-name="invoiceTypeId"/>
@@ -1254,6 +1255,12 @@ under the License.
       <field name="taxAuthGeoId" type="id-ne"/>
       <field name="taxAuthorityRateSeqId" type="id-ne"></field>
       <field name="salesOpportunityId" type="id-ne"></field>
+      <field name="clasifTypeId1" type="id-ne"/>
+      <field name="clasifTypeId2" type="id-ne"/>
+      <field name="clasifTypeId3" type="id-ne"/>
+      <field name="clasifTypeId4" type="id-ne"/>
+      <field name="clasifTypeId5" type="id-ne"/>
+      <field name="clasifTypeId6" type="id-ne"/>                                      
       <prim-key field="invoiceId"/>
       <prim-key field="invoiceItemSeqId"/>
       <relation type="one" fk-name="INVOICE_ITMITYP" rel-entity-name="InvoiceItemType">
