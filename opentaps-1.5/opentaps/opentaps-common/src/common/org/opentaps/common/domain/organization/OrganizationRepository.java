@@ -42,6 +42,7 @@ import org.opentaps.base.constants.GlAccountTypeConstants;
 import org.opentaps.base.constants.PeriodTypeConstants;
 import org.opentaps.base.constants.RoleTypeConstants;
 import org.opentaps.base.entities.AcctgTagEnumType;
+import org.opentaps.base.entities.AcctgTagInvoiceType;
 import org.opentaps.base.entities.AgreementTermTypesByDocumentType;
 import org.opentaps.base.entities.ClasifPresupuestal;
 import org.opentaps.base.entities.CustomTimePeriod;
@@ -621,7 +622,9 @@ public class OrganizationRepository extends PartyRepository implements
 
 					// filter out disabled tags
 					
-					tag.setActiveTagValues(UtilClassification.getListaNiveles(clasifPresupuestal.getTablaRelacion(), ultimoNivel, delegator));
+					tag.setActiveTagValues(UtilClassification.getListaNiveles(
+							clasifPresupuestal.getTablaRelacion(), ultimoNivel,
+							delegator));
 					
 			
 					// add if required property for tag
@@ -645,8 +648,6 @@ public class OrganizationRepository extends PartyRepository implements
 		
 		String nivel = null;		
 		try {
-			
-			
 			if(tipoClasificacion.contains("CL_GEOGRAFICA"))
 				nivel = buscaHojaGeo();
 			else if(tipoClasificacion.contains("CL_CRI"))
@@ -752,6 +753,129 @@ public class OrganizationRepository extends PartyRepository implements
 		} while (rama);
 		return tipo;
 	}
+	
+	
+	/*
+	 * 
+	 * */
+	
+	/** {@inheritDoc} */
+	public List<ClassificationConfigurationForOrganization> getAccountingTagConfigurationCustom(
+			String organizationPartyId, String accountingTagUsageTypeId)
+			throws RepositoryException {
+		
+		Debug.log("Esme - - getAccountingTagConfigurationCustom si entro");
+		
+		Delegator delegator = getDelegator();
 
+		Map<Integer, String> tagTypes = getAccountingTagTypesPurchase(
+				organizationPartyId, accountingTagUsageTypeId);
+		AcctgTagInvoiceType acctgTagInvoiceType = findOneCache(
+				AcctgTagInvoiceType.class,
+				map(AcctgTagInvoiceType.Fields.organizationPartyId,
+						organizationPartyId,
+						AcctgTagInvoiceType.Fields.acctgTagUsageTypeId,
+						accountingTagUsageTypeId));
+		List<ClassificationConfigurationForOrganization> tagTypesAndValues = new ArrayList<ClassificationConfigurationForOrganization>();
+
+		Debug.log("getAccountingTagConfigurationCustom tagTypes" + tagTypes);
+		
+		for (Integer index : tagTypes.keySet()) {
+			String type = tagTypes.get(index);
+			
+			ClassificationConfigurationForOrganization tag = null;
+			List<ClasifPresupuestal> listclas = findListCache(
+					ClasifPresupuestal.class,
+					map(ClasifPresupuestal.Fields.clasificacionId, type));
+			Debug.log("getAccountingTagConfigurationCustom list "
+					+ listclas);
+
+			if (!listclas.isEmpty()) {
+				for (ClasifPresupuestal clasifPresupuestal : listclas) {
+					Debug.log("getAccountingTagConfigurationCustom type" + type);
+					tag = new ClassificationConfigurationForOrganization(this);
+					tag.setIndex(index);
+					tag.setType(type);
+					tag.setDescription(clasifPresupuestal.getDescripcion());
+					tag.setTagValues(findListCache(
+							ClasifPresupuestal.class,
+							Arrays.asList(EntityCondition.makeCondition(
+									ClasifPresupuestal.Fields.clasificacionId
+											.name(), type)),
+							Arrays.asList(ClasifPresupuestal.Fields.clasificacionId
+									.asc())));
+					// buscar ultimo nivel
+					
+					String ultimoNivel = buscaUltimoNivel(clasifPresupuestal.getClasificacionId());					
+					if(ultimoNivel.isEmpty())
+					{
+						Debug.log("getAccountingTagConfigurationCustom - No se encontro el ultimo nivel");
+						break;
+					}
+					if(clasifPresupuestal.getTablaRelacion().isEmpty() || clasifPresupuestal.getTablaRelacion()==null)
+					{Debug.log("getAccountingTagConfigurationCustom - No se encontro tabla relacion");
+					break;}
+					
+					// Metodo para obtener lista<genericValue> parametros ultimonivel, tablarelacion
+					
+
+					Debug.log("getClassificationTagConfiguration clasifPresupuestal.getTablaRelacion()"
+							+ clasifPresupuestal.getTablaRelacion());
+
+					// filter out disabled tags
+					
+					tag.setActiveTagValues(UtilClassification.getListaNiveles(
+							clasifPresupuestal.getTablaRelacion(), ultimoNivel,
+							delegator));
+					
+			
+					// add if required property for tag
+					tag.setIsRequired("Y");
+					// add its default value
+					tag.setDefaultValue(String.valueOf(index));
+					Debug.log("getAccountingTagConfigurationCustom String.valueOf(index) " + String.valueOf(index));
+					
+					if (UtilValidate.isNotEmpty(String.valueOf(index))) {
+						tag.setDefaultValueTag(clasifPresupuestal);
+					}
+
+					tagTypesAndValues.add(tag);
+					
+					Debug.log("tag " + tag);
+				}
+			}
+		}
+		Debug.log("getClassificationTagConfiguration tagTypesAndValues size"
+				+ tagTypesAndValues.size());
+		return tagTypesAndValues;
+	}
+	
+	
+	/** {@inheritDoc} */
+	public Map<Integer, String> getAccountingTagTypesPurchase(
+			String organizationPartyId, String accountingTagUsageTypeId)
+			throws RepositoryException {
+		Map<Integer, String> tagTypes = new TreeMap<Integer, String>();
+		AcctgTagInvoiceType conf = findOneCache(
+				AcctgTagInvoiceType.class,
+				map(AcctgTagInvoiceType.Fields.organizationPartyId,
+						organizationPartyId,
+						AcctgTagInvoiceType.Fields.acctgTagUsageTypeId,
+						accountingTagUsageTypeId));
+		if (conf == null) {
+			Debug.logInfo("No se encontro la configuracion de tag con la organizacion ["
+					+ organizationPartyId + "]", MODULE);
+			return tagTypes;
+		}
+
+		// find each non null configured tag type
+		for (int i = 1; i <= UtilAccountingTags.TAG_COUNT; i++) {
+			String type = conf.getString("clasifTypeId" + i);
+			if (type != null) {
+				tagTypes.put(new Integer(i), type);
+			}
+		}
+		return tagTypes;
+	}
 		
 }

@@ -320,6 +320,12 @@
         <attribute name="taxAuthGeoId" type="String" mode="IN" optional="true"/>
         <attribute name="taxAuthorityRateSeqId" type="String" mode="IN" optional="true"/>
         <attribute name="invoiceItemSeqId" type="String" mode="OUT" optional="false"/>
+        <attribute name="clasifTypeId1" type="String" mode="IN" optional="true"/>
+        <attribute name="clasifTypeId2" type="String" mode="IN" optional="true"/>
+        <attribute name="clasifTypeId3" type="String" mode="IN" optional="true"/>
+        <attribute name="clasifTypeId4" type="String" mode="IN" optional="true"/>
+        <attribute name="clasifTypeId5" type="String" mode="IN" optional="true"/>
+        <attribute name="clasifTypeId6" type="String" mode="IN" optional="true"/> 		
     </service>
     
     <service name="updateInvoiceItem" engine="pojo"
@@ -344,6 +350,12 @@
         <attribute name="taxAuthPartyId" type="String" mode="IN" optional="true"/>
         <attribute name="taxAuthGeoId" type="String" mode="IN" optional="true"/>
         <attribute name="taxAuthorityRateSeqId" type="String" mode="IN" optional="true"/>
+        <attribute name="clasifTypeId1" type="String" mode="IN" optional="true"/>
+        <attribute name="clasifTypeId2" type="String" mode="IN" optional="true"/>
+        <attribute name="clasifTypeId3" type="String" mode="IN" optional="true"/>
+        <attribute name="clasifTypeId4" type="String" mode="IN" optional="true"/>
+        <attribute name="clasifTypeId5" type="String" mode="IN" optional="true"/>
+        <attribute name="clasifTypeId6" type="String" mode="IN" optional="true"/> 
     </service>  
 
     <!-- redefines the ofbiz service to also allow update invoice when status is INVOICE_READY -->

@@ -52,7 +52,7 @@
         <@inputDateTimeRow name="dueDate" title=uiLabelMap.AccountingDueDate form="createInvoiceForm" />
         <@inputTextRow name="referenceNumber" title=uiLabelMap.FinancialsReferenceNumber size=60 />
         <@inputTextRow name="description" title=uiLabelMap.CommonDescription size=60 />
-        <@inputSelectRow title=uiLabelMap.FinancialsReferenceDocument required=false list=listTipoDoc  displayField="descripcion" name="tipoDocumento" />      	
+        <@inputSelectRow title=uiLabelMap.FinancialsReferenceDocument required=false list=listTipoDoc  displayField="descripcion" name="tipoDoc" key="idTipoDoc" />      	
         <@inputTextareaRow name="invoiceMessage" title=uiLabelMap.CommonMessage />        
         <@inputForceCompleteRow title=uiLabelMap.CommonCreate forceTitle=uiLabelMap.OpentapsForceCreate form="createInvoiceForm" /></td>      	
       </form>

@@ -19,17 +19,21 @@ package com.opensourcestrategies.financials.invoice;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
+
 import javax.servlet.http.HttpServletRequest;
 
 import javolution.util.FastList;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
+
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilDateTime;
@@ -41,8 +45,11 @@ import org.ofbiz.entity.condition.EntityFunction;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.party.party.PartyHelper;
+import org.omg.CORBA.PUBLIC_MEMBER;
 import org.opentaps.base.constants.ContactMechPurposeTypeConstants;
+import org.opentaps.base.entities.AcctgTagInvoiceType;
 import org.opentaps.base.entities.BillingAccountAndRole;
+import org.opentaps.base.entities.ClasifPresupuestal;
 import org.opentaps.base.entities.GlAccountOrganizationAndClass;
 import org.opentaps.base.entities.InvoiceAdjustmentType;
 import org.opentaps.base.entities.InvoiceAndInvoiceItem;
@@ -73,6 +80,7 @@ import org.opentaps.domain.party.PartyRepositoryInterface;
 import org.opentaps.foundation.action.ActionContext;
 import org.opentaps.foundation.entity.Entity;
 import org.opentaps.foundation.exception.FoundationException;
+import org.opentaps.foundation.repository.RepositoryException;
 
 /**
  * InvoiceActions - Java Actions for invoices.
@@ -206,7 +214,12 @@ public final class InvoiceActions {
         } else if (invoice.isSalesInvoice()) {
             ac.put("tagTypes", UtilAccountingTags.getAccountingTagsForOrganization(organizationPartyId, UtilAccountingTags.SALES_INVOICES_TAG, delegator));
         } else if (invoice.isPurchaseInvoice()) {
-            ac.put("tagTypes", UtilAccountingTags.getAccountingTagsForOrganization(organizationPartyId, UtilAccountingTags.PURCHASE_INVOICES_TAG, delegator));
+            //ac.put("tagTypes", UtilAccountingTags.getAccountingTagsForOrganization(organizationPartyId, UtilAccountingTags.PURCHASE_INVOICES_TAG, delegator));
+        	ac.put("tagTypes", UtilAccountingTags.getAccountingTagsForOrganizationCustom(organizationPartyId, UtilAccountingTags.PURCHASE_INVOICES_TAG, delegator));
+        	///Para encontrar 
+        	
+        	//ac.put("listEstructura", getClasificacion(organizationPartyId, UtilAccountingTags.PURCHASE_INVOICES_TAG, invoiceRepository, invoiceId));
+        	
         } else if (invoice.isReturnInvoice()) {
             ac.put("tagTypes", UtilAccountingTags.getAccountingTagsForOrganization(organizationPartyId, UtilAccountingTags.RETURN_INVOICES_TAG, delegator));
         }
@@ -372,7 +385,49 @@ public final class InvoiceActions {
         }
     }
 
-    /**
+    private static Object getClasificacion(String organizationPartyId,
+			String purchaseInvoicesTag, InvoiceRepositoryInterface invoiceRepository, String invoiceId) throws RepositoryException {
+    	
+    	Debug.log("Entro a getClasificacion organizationPartyId, purchaseInvoicesTag, invoiceId" + organizationPartyId + " " +  purchaseInvoicesTag + " " + invoiceId );
+    	
+    	EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
+                EntityCondition.makeCondition(AcctgTagInvoiceType.Fields.organizationPartyId.name(), EntityOperator.EQUALS, organizationPartyId),
+                EntityCondition.makeCondition(AcctgTagInvoiceType.Fields.acctgTagUsageTypeId.name(), EntityOperator.EQUALS, purchaseInvoicesTag));
+    	
+    	List<AcctgTagInvoiceType> estructura = invoiceRepository.findList(AcctgTagInvoiceType.class, conditions, UtilMisc.toList(AcctgTagInvoiceType.Fields.acctgTagUsageTypeId.name()));
+    	List<Map<String, Object>> statusList = new FastList<Map<String, Object>>();
+    	
+    	if(!estructura.isEmpty())
+    	{    
+    		Debug.log("getClasificacion si entro al if")	;
+			for (int i = 0; i < estructura.size(); i++) {
+				Debug.log("Entro a getClasificacion estructura " + estructura);
+				
+				Map<String, Object> status = new HashMap<String, Object>();
+				for (int j = 1; j < 7; j++) {
+					if(!estructura.get(i).get("clasifTypeId" + j).toString().isEmpty())
+					{
+						status.put("clasifTypeId", invoiceRepository.findOne(
+								ClasifPresupuestal.class, invoiceRepository.map(
+										ClasifPresupuestal.Fields.clasificacionId,
+										estructura.get(i).get("clasifTypeId" + j))));
+						
+						List<InvoiceItem> items = invoiceRepository.findList(InvoiceItem.class, invoiceRepository.map(InvoiceItem.Fields.invoiceId, invoiceId));
+						
+						
+					}
+					statusList.add(status);
+					
+				
+				}
+			}
+    	}
+    	
+    	Debug.log("getClasificacion statusList " + statusList);
+		return statusList;
+	}
+
+	/**
      * Action for the find / list invoices screen.
      * @param context the screen context
      * @throws GeneralException if an error occurs

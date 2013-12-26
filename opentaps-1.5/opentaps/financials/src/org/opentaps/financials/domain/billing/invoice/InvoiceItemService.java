@@ -32,6 +32,7 @@ import org.opentaps.domain.billing.invoice.Invoice;
 import org.opentaps.domain.billing.invoice.InvoiceItemServiceInterface;
 import org.opentaps.domain.billing.invoice.InvoiceRepositoryInterface;
 import org.opentaps.domain.organization.AccountingTagConfigurationForOrganizationAndUsage;
+import org.opentaps.domain.organization.ClassificationConfigurationForOrganization;
 import org.opentaps.domain.product.Product;
 import org.opentaps.domain.product.ProductRepositoryInterface;
 import org.opentaps.domain.purchasing.PurchasingRepositoryInterface;
@@ -76,8 +77,16 @@ public class InvoiceItemService extends DomainService implements InvoiceItemServ
     private String acctgTagEnumId8;
     private String acctgTagEnumId9;
     private String acctgTagEnumId10;
-
+    
+    private String clasifTypeId1;
+    private String clasifTypeId2;
+    private String clasifTypeId3;
+    private String clasifTypeId4;
+    private String clasifTypeId5;
+    private String clasifTypeId6;
+    
     private List<String> parametersAlreadySet = new ArrayList<String>();
+    
 
     /**
      * Default constructor.
@@ -258,18 +267,63 @@ public class InvoiceItemService extends DomainService implements InvoiceItemServ
         parametersAlreadySet.add("uomId");
     }
 
+    
+    /*Funcionalidad para agregar las clasificaciones custom 
+     * 
+     * */
+    /** {@inheritDoc} */
+    public void setClasifTypeId1(String clasifTypeId1) {
+        this.clasifTypeId1 = clasifTypeId1;
+        parametersAlreadySet.add("clasifTypeId1");
+    }
+
+      
+
+    /** {@inheritDoc} */
+    public void setClasifTypeId2(String clasifTypeId2) {
+        this.clasifTypeId2 = clasifTypeId2;
+        parametersAlreadySet.add("clasifTypeId2");
+    }
+
+    /** {@inheritDoc} */
+    public void setClasifTypeId3(String clasifTypeId3) {
+        this.clasifTypeId3 = clasifTypeId3;
+        parametersAlreadySet.add("clasifTypeId3");
+    }
+
+    /** {@inheritDoc} */
+    public void setClasifTypeId4(String clasifTypeId4) {
+        this.clasifTypeId4 = clasifTypeId4;
+        parametersAlreadySet.add("clasifTypeId4");
+    }
+
+    /** {@inheritDoc} */
+    public void setClasifTypeId5(String clasifTypeId5) {
+        this.clasifTypeId5 = clasifTypeId5;
+        parametersAlreadySet.add("clasifTypeId5");
+    }
+
+    /** {@inheritDoc} */
+    public void setClasifTypeId6(String clasifTypeId6) {
+        this.clasifTypeId6 = clasifTypeId6;
+        parametersAlreadySet.add("clasifTypeId6");
+    }  
+    
+    
     /** {@inheritDoc} */
     public void createInvoiceItem() throws ServiceException {
         try {
             if (productId != null) {
                 setInvoiceItemDefaultProperties();
             }
+            Debug.log("createInvoiceItem ");
             // create InvoiceItem by hibernate
             InvoiceRepositoryInterface invoiceRepository = getDomainsDirectory().getBillingDomain().getInvoiceRepository();
             Invoice invoice = invoiceRepository.getInvoiceById(invoiceId);
             InvoiceItem invoiceItem = new InvoiceItem();
             invoiceItem.initRepository(invoiceRepository);
             // write parameters of service to invoiceItem object
+            
             setParametersToInvoiceItem(invoiceItem);
             // validate tags parameters if necessary
             if (validateAccountingTags) {
@@ -298,11 +352,14 @@ public class InvoiceItemService extends DomainService implements InvoiceItemServ
         // Call the updateInvoiceItem service
         // search the InvoiceItem by hibernate
         try {
+        	Debug.log("updateInvoiceItem ");
+        	
             InvoiceRepositoryInterface invoiceRepository = getDomainsDirectory().getBillingDomain().getInvoiceRepository();
             Invoice invoice = invoiceRepository.getInvoiceById(invoiceId);
             InvoiceItem invoiceItem = invoiceRepository.getInvoiceItemById(invoiceId, invoiceItemSeqId);
             // check if the productNumber is updated, when yes retrieve product
             // description and price
+            
             if (!UtilObject.equalsHelper(invoiceItem.getProductId(), productId)) {
                 if (productId != null) {
                     setInvoiceItemDefaultProperties();
@@ -411,8 +468,27 @@ public class InvoiceItemService extends DomainService implements InvoiceItemServ
         if (parametersAlreadySet.contains("taxAuthorityRateSeqId")) {
             invoiceItem.setTaxAuthorityRateSeqId(taxAuthorityRateSeqId);
         }
+        
+        if (parametersAlreadySet.contains("clasifTypeId1")) {
+            invoiceItem.setClasifTypeId1(clasifTypeId1);
+        }
+        if (parametersAlreadySet.contains("clasifTypeId2")) {
+            invoiceItem.setClasifTypeId2(clasifTypeId2);
+        }
+        if (parametersAlreadySet.contains("clasifTypeId3")) {
+            invoiceItem.setClasifTypeId3(clasifTypeId3);
+        }
+        if (parametersAlreadySet.contains("clasifTypeId4")) {
+            invoiceItem.setClasifTypeId4(clasifTypeId4);
+        }
+        if (parametersAlreadySet.contains("clasifTypeId5")) {
+            invoiceItem.setClasifTypeId5(clasifTypeId5);
+        }
+        if (parametersAlreadySet.contains("clasifTypeId6")) {
+            invoiceItem.setClasifTypeId6(clasifTypeId6);
+        }        
     }
-
+    
     /**
      * Set default value to <code>InvoiceItem</code> .
      *

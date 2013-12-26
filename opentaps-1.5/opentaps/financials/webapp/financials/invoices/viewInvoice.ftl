@@ -142,6 +142,7 @@ function notifyInvoiceItemsCount(n) {
         </@inputSelectRow>
         <@inputTextRow name="referenceNumber" title=uiLabelMap.FinancialsReferenceNumber size=60 default=invoice.referenceNumber />
         <@displayRow title="${uiLabelMap.OpentapsOrders}" text=ordersList?if_exists />
+        <@displayRow title="${uiLabelMap.OpentapsOrders}" text=invoice.invoiceMessage />
         <@inputTextRow name="description" title=uiLabelMap.CommonDescription size=60 default=invoice.description />
         <@inputTextareaRow name="invoiceMessage" title=uiLabelMap.CommonMessage default=invoice.invoiceMessage />
         <@inputForceCompleteRow title=uiLabelMap.CommonUpdate forceTitle=uiLabelMap.OpentapsForceUpdate form="updateInvoice" />
@@ -341,11 +342,35 @@ function notifyInvoiceItemsCount(n) {
               </#if>
             </tr>
             <#-- display accounting tags associated with this invoice item -->
-            <#if tagTypes?has_content>
-              <tr class="${tableRowClass(item_index)}">
-                <td colspan="2">&nbsp;</td>
-                <td colspan="<#if hasUpdatePermission>8<#else>6</#if>">
-                  <i><@accountingTagsDisplay tags=tagTypes entity=item /></i>
+        <#if tagTypes?has_content>
+          <tr class="${tableRowClass(item_index)}">
+            <td colspan="2">&nbsp;</td>
+            <td colspan="<#if hasUpdatePermission>8<#else>6</#if>">
+            	 <#list tagTypes as tag>
+				    <#if tag.isRequired()>
+				      <#assign titleClass="requiredField" />
+				    <#else/>
+				      <#assign titleClass="tableheadtext" />
+				    </#if>        
+				    <tr>
+				      <@displayTitleCell title=tag.description titleClass=titleClass /> 
+				      <#--><#if tag.description?contains("geo")>         
+				          <@inputSelectCell name="clasifTypeId${tag.index}" list=tag.activeTagValues key="geoId" required=false default=tag.defaultValue! ; tagValue>
+				            ${tagValue.geoName}
+				          </@inputSelectCell>             
+				      <#elseif tag.description?contains("Programatica")>         
+				          <@inputSelectCell name="clasifTypeId${tag.index}" list=tag.activeTagValues key="workEffortName" required=false default=tag.defaultValue! ; tagValue>
+				            ${tagValue.description}
+				          </@inputSelectCell>	     
+				      <#else>         
+				          <@inputSelectCell name="clasifTypeId${tag.index}" list=tag.activeTagValues key="enumId" required=false default=tag.defaultValue! ; tagValue>
+				            ${tagValue.enumCode}
+				          </@inputSelectCell>	  
+				                
+				      </#if>  -->   
+				    </tr>        
+				  </#list>               
+                  <#--<i><@accountingTagsDisplay tags=tagTypes entity=item /></i>-->
                 </td>
               </tr>
             </#if>

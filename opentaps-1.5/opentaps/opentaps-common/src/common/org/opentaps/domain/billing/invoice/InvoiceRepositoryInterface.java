@@ -29,6 +29,7 @@ import org.opentaps.base.entities.OrderItem;
 import org.opentaps.base.entities.PaymentAndApplication;
 import org.opentaps.base.entities.PostalAddress;
 import org.opentaps.domain.organization.AccountingTagConfigurationForOrganizationAndUsage;
+import org.opentaps.domain.organization.ClassificationConfigurationForOrganization;
 import org.opentaps.domain.organization.Organization;
 import org.opentaps.domain.product.Product;
 import org.opentaps.foundation.entity.EntityNotFoundException;
@@ -224,4 +225,7 @@ public interface InvoiceRepositoryInterface extends RepositoryInterface {
      * @throws RepositoryException if an exception occurs
      */
     public List<InvoiceAdjustmentType> getInvoiceAdjustmentTypes(Organization organization, Invoice invoice) throws RepositoryException;
+    
+    
+    public List<ClassificationConfigurationForOrganization> validateTagParametersClasification(Invoice invoice, InvoiceItem item) throws RepositoryException;
 }
