@@ -52,7 +52,36 @@
         </td>
       </tr>
       <#if tagTypes?has_content && allocatePaymentTagsToApplications>
-        <@accountingTagsInputCells tags=tagTypes prefix="acctgTagEnumId" tagColSpan="2" entity=row!/>
+      	<tr class="${tableRowClass(item_index)}">
+            <td colspan="2">&nbsp;</td>
+            <td colspan="<#if hasUpdatePermission>8<#else>6</#if>">
+            	 <#list tagTypes as tag>
+				    <#if tag.isRequired()>
+				      <#assign titleClass="requiredField" />
+				    <#else/>
+				      <#assign titleClass="tableheadtext" />
+				    </#if>        
+				    <tr>
+				      <@displayTitleCell title=tag.description titleClass=titleClass /> 
+				      <#if tag.description?contains("geo")>         
+				          <@inputSelectCell name="clasifTypeId${tag.index}" list=tag.activeTagValues key="geoId" required=false default=tag.defaultValue! ; tagValue>
+				            ${tagValue.geoName}
+				          </@inputSelectCell>             
+				      <#elseif tag.description?contains("Programatica")>         
+				          <@inputSelectCell name="clasifTypeId${tag.index}" list=tag.activeTagValues key="workEffortName" required=false default=tag.defaultValue! ; tagValue>
+				            ${tagValue.description}
+				          </@inputSelectCell>	     
+				      <#else>         
+				          <@inputSelectCell name="clasifTypeId${tag.index}" list=tag.activeTagValues key="enumId" required=false default=tag.defaultValue! ; tagValue>
+				            ${tagValue.enumCode}
+				          </@inputSelectCell>	  
+				                
+				      </#if>  
+				    </tr>        
+				  </#list>
+                </td>
+              </tr>
+        <#--<@accountingTagsInputCells tags=tagTypes prefix="acctgTagEnumId" tagColSpan="2" entity=row!/>-->
       </#if>
     </form>
   </#list>

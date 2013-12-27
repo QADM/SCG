@@ -112,7 +112,7 @@ if (isDisbursement) {
     partyNameTo = PartyHelper.getPartyName(delegator, payment.getPartyIdTo(), false);
     context.put("partyNameTo", partyNameTo);
     // get the tags
-    context.put("tagTypes", UtilAccountingTags.getAccountingTagsForOrganization(payment.getOrganizationPartyId(), UtilAccountingTags.DISBURSEMENT_PAYMENT_TAG, delegator));
+    context.put("tagTypes", UtilAccountingTags.getAccountingTagsForOrganizationCustom(payment.getOrganizationPartyId(), UtilAccountingTags.DISBURSEMENT_PAYMENT_TAG, delegator));
 } else {
     partyNameFrom = PartyHelper.getPartyName(delegator, payment.getPartyIdFrom(), false);
     context.put("partyNameFrom", partyNameFrom);
