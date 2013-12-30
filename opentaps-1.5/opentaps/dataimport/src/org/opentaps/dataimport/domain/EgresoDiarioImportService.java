@@ -25,11 +25,15 @@ import org.opentaps.base.entities.GlAccountHistory;
 import org.opentaps.base.entities.GlAccountOrganization;
 import org.opentaps.base.entities.LoteTransaccion;
 import org.opentaps.base.entities.Party;
+import org.opentaps.base.entities.Payment;
+import org.opentaps.base.entities.PaymentApplication;
+import org.opentaps.base.entities.PaymentMethodType;
 import org.opentaps.base.entities.ProductCategory;
 import org.opentaps.base.entities.TipoDocumento;
 import org.opentaps.base.entities.WorkEffort;
 import org.opentaps.dataimport.UtilImport;
 import org.opentaps.domain.DomainService;
+import org.opentaps.domain.billing.payment.PaymentRepositoryInterface;
 import org.opentaps.domain.dataimport.EgresoDiarioDataImportRepositoryInterface;
 import org.opentaps.domain.dataimport.EgresoDiarioImportServiceInterface;
 import org.opentaps.domain.ledger.LedgerRepositoryInterface;
@@ -102,6 +106,7 @@ public class EgresoDiarioImportService extends DomainService implements
 					.getEgresoDiarioDataImportRepository();
 			LedgerRepositoryInterface ledger_repo = this.getDomainsDirectory()
 					.getLedgerDomain().getLedgerRepository();
+			PaymentRepositoryInterface payment_repo = this.getDomainsDirectory().getBillingDomain().getPaymentRepository();
 
 			List<DataImportEgresoDiario> dataforimp = imp_repo
 					.findNotProcessesDataImportEgresoDiarioEntries();
@@ -131,6 +136,8 @@ public class EgresoDiarioImportService extends DomainService implements
 			Transaction imp_tx10 = null;
 			Transaction imp_tx11 = null;
 			Transaction imp_tx12 = null;
+			Transaction imp_tx13 = null;
+			Transaction imp_tx14 = null;
 
 			if (UtilImport.validaLote(ledger_repo, lote, "EgresoDiario")) {
 				boolean loteValido = true;
@@ -614,13 +621,32 @@ public class EgresoDiarioImportService extends DomainService implements
 					// rowdata.getIdPago(), rowdata.getIdProductoD(),
 					// rowdata.getIdProductoH());
 					
-					//Se obtiene el tipo de gasto
+					//Se obtienen los enum
 					Enumeration tg = null;
+					Enumeration fr = null;
+					Enumeration f = null;
+					Enumeration s = null;
 					for(Enumeration e : contenedor.getEnumeration())
 					{
 						if(e.getEnumTypeId().equals("TIPO_GASTO"))
 						{
 							tg = e;
+							
+						}
+						if(e.getEnumTypeId().equals("CL_FUENTE_RECURSOS"))
+						{
+							fr = e;
+							
+						}
+						if(e.getEnumTypeId().equals("CL_SECTORIAL"))
+						{
+							s = e;
+							
+						}
+						if(e.getEnumTypeId().equals("CL_FUNCIONAL"))
+						{
+							f = e;
+							
 						}
 					}
 					Map<String, String> cuentas = motor.cuentasEgresoDiario(
@@ -650,6 +676,8 @@ public class EgresoDiarioImportService extends DomainService implements
 						imp_tx10 = null;
 						imp_tx11 = null;
 						imp_tx12 = null;
+						imp_tx13 = null;
+						imp_tx14 = null;
 
 						AcctgTrans egresoDiario = new AcctgTrans();
 
@@ -976,6 +1004,46 @@ public class EgresoDiarioImportService extends DomainService implements
 							}
 						}
 
+						//Creacion de pago (TEGRESOPAGADO)
+						if(tipoDoc.getAcctgTransTypeId().equals("TEGRESOPAGADO")){
+						Payment pago = new Payment();
+						PaymentApplication aplicacion = new PaymentApplication();
+						pago.setPaymentId(rowdata.getIdPago());
+						pago.setPaymentTypeId("VENDOR_PAYMENT");
+						PaymentMethodType metodo = payment_repo.findOne(PaymentMethodType.class, payment_repo.map(PaymentMethodType.Fields.paymentMethodTypeId, "CASH"));
+						pago.setPaymentMethodTypeId(metodo.getPaymentMethodTypeId());
+						//Aqui esta el 0 por default pero tiene que recibirse el metodo de pago de data import
+						pago.setPaymentMethodId(metodo.getPaymentMethods().get(0).getPaymentMethodId());
+						pago.setPartyIdFrom(rowdata.getOrganizationPartyId());
+						pago.setPartyIdTo(rowdata.getOrganizationPartyId());
+						pago.setStatusId("PMNT_CONFIRMED");
+						pago.setEffectiveDate(rowdata.getFechaContable());
+						pago.setPaymentRefNum(rowdata.getRefDoc());
+						pago.setAmount(rowdata.getMonto());
+						pago.setCurrencyUomId(contenedor.getParty().getPreferredCurrencyUomId());
+						pago.setAppliedAmount(rowdata.getMonto());
+						
+						aplicacion.setPaymentApplicationId(rowdata.getIdPago()+"A");
+						aplicacion.setPaymentId(pago.getPaymentId());
+						aplicacion.setOverrideGlAccountId(cuentas.get("Cuenta Abono Presupuesto"));
+						aplicacion.setAmountApplied(pago.getAppliedAmount());
+						aplicacion.setAcctgTagEnumId1(fr.getEnumId());
+						aplicacion.setAcctgTagEnumId2(f.getEnumId());
+						aplicacion.setAcctgTagEnumId3(s.getEnumId());
+						aplicacion.setAcctgTagEnumId4(tg.getEnumId());
+						aplicacion.setGeoId(contenedor.getGeo().getGeoId());
+						aplicacion.setWorkEffortId(contenedor.getWe().getWorkEffortId());
+						
+						imp_tx13 = this.session.beginTransaction();
+						payment_repo.createOrUpdate(pago);
+						imp_tx13.commit();
+						
+						imp_tx14 = this.session.beginTransaction();
+						payment_repo.createOrUpdate(aplicacion);
+						imp_tx14.commit();
+						
+						}
+						
 						//if (mensaje.isEmpty()) {
 							String message = "Se importo correctamente Egreso Diario ["
 									+ contenedor.getClavePresupuestal() + "].";
@@ -1026,6 +1094,12 @@ public class EgresoDiarioImportService extends DomainService implements
 						}
 						if (imp_tx12 != null) {
 							imp_tx12.rollback();
+						}
+						if (imp_tx13 != null) {
+							imp_tx13.rollback();
+						}
+						if (imp_tx14 != null) {
+							imp_tx14.rollback();
 						}
 
 						Debug.logError(ex, message, MODULE);
