@@ -27,6 +27,8 @@ import org.opentaps.base.entities.LoteTransaccion;
 import org.opentaps.base.entities.NivelPresupuestal;
 import org.opentaps.base.entities.Party;
 import org.opentaps.base.entities.PartyGroup;
+import org.opentaps.base.entities.Payment;
+import org.opentaps.base.entities.PaymentApplication;
 import org.opentaps.base.entities.PaymentMethod;
 import org.opentaps.base.entities.ProductCategory;
 import org.opentaps.base.entities.ProductCategoryType;
@@ -35,6 +37,7 @@ import org.opentaps.base.entities.WorkEffort;
 import org.opentaps.dataimport.domain.Clasificacion;
 import org.opentaps.dataimport.domain.Clave;
 import org.opentaps.dataimport.domain.ContenedorContable;
+import org.opentaps.domain.billing.payment.PaymentRepositoryInterface;
 import org.opentaps.domain.ledger.LedgerRepositoryInterface;
 import org.opentaps.foundation.entity.hibernate.Session;
 import org.opentaps.foundation.repository.RepositoryException;
@@ -1068,5 +1071,29 @@ public class UtilImport {
         	e.printStackTrace();
         }
 		return output;
+	}
+
+	public static Payment obtenerPago(String idPago, PaymentRepositoryInterface payment_repo) throws RepositoryException {
+		Payment p = null;
+		
+			p = payment_repo.findOne(Payment.class,
+					payment_repo.map(Payment.Fields.paymentId, idPago));
+			if(p == null)
+			{
+				p = new Payment();
+			}
+		
+		return p;
+	}
+
+	public static PaymentApplication obtenerAplicacionPago(String idPago, PaymentRepositoryInterface payment_repo) throws RepositoryException {
+		PaymentApplication a = null;
+			a = payment_repo.findOne(PaymentApplication.class,
+					payment_repo.map(PaymentApplication.Fields.paymentApplicationId, idPago));
+			if(a == null)
+			{
+				a = new PaymentApplication();
+			}
+		return a;
 	}
 }

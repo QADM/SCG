@@ -1006,8 +1006,8 @@ public class EgresoDiarioImportService extends DomainService implements
 
 						//Creacion de pago (TEGRESOPAGADO)
 						if(tipoDoc.getAcctgTransTypeId().equals("TEGRESOPAGADO")){
-						Payment pago = new Payment();
-						PaymentApplication aplicacion = new PaymentApplication();
+						Payment pago = UtilImport.obtenerPago(rowdata.getIdPago(),payment_repo);					
+						PaymentApplication aplicacion = UtilImport.obtenerAplicacionPago(rowdata.getIdPago(),payment_repo);
 						pago.setPaymentId(rowdata.getIdPago());
 						pago.setPaymentTypeId("VENDOR_PAYMENT");
 						PaymentMethodType metodo = payment_repo.findOne(PaymentMethodType.class, payment_repo.map(PaymentMethodType.Fields.paymentMethodTypeId, "CASH"));
