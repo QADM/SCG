@@ -18,8 +18,15 @@
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.entity.util.EntityUtil;
 import org.opentaps.common.util.UtilCommon;
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.condition.*;
+import org.opentaps.base.entities.AcctgTransType;
+import org.opentaps.common.domain.organization.OrganizationRepository;
 
 organizationPartyId = UtilCommon.getOrganizationPartyId(request);
+
+OrganizationRepository repository = new OrganizationRepository(delegator);
+
 if (organizationPartyId == null) {
     return;
 }
@@ -56,3 +63,16 @@ itemTypeMap = delegator.findByAndCache("InvoiceItemTypeMap", UtilMisc.toMap("inv
 itemTypes = EntityUtil.getRelatedCache("InvoiceItemType", itemTypeMap);
 context.put("invoiceItemTypes", itemTypes);
 context.put("currencies", delegator.findByAndCache("Uom", UtilMisc.toMap("uomTypeId", "CURRENCY_MEASURE"), UtilMisc.toList("abbreviation")));
+
+
+/// Buscar Tipo de Documento y tipo de Transaccion Contable (TipoDocumento, AcctgTransType)
+
+orderByDoc = org.ofbiz.base.util.UtilMisc.toList("descripcion");
+condicionDoc = EntityCondition.makeCondition("tipoPoliza","EGRESO");
+tipodocumento = delegator.findByCondition("TipoDocumento", condicionDoc , UtilMisc.toList("idTipoDoc", "descripcion", "acctgTransTypeId"), orderByDoc);
+	 System.out.print("Hola Esmeralda tipodocumento " + tipodocumento);
+context.put("listTipoDoc", tipodocumento);
+
+
+
+
