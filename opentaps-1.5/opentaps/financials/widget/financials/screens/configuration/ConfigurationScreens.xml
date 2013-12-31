@@ -317,6 +317,7 @@
             <actions>
                 <set field="pageTitleLabel" value="FinancialsAccountingTagUsage"/>  
                 <script location="component://financials/webapp/financials/WEB-INF/actions/configuration/accountingTags.bsh"/>
+ 				<script location="component://financials/webapp/financials/WEB-INF/actions/configuration/classificationInvoice.bsh"/>               
             </actions>            
             <widgets>
                 <decorator-screen name="main-section-decorator">
@@ -326,7 +327,10 @@
                       </platform-specific>
                       <platform-specific>
                         <html><html-template location="component://financials/webapp/financials/configuration/accountingTagsUsage.ftl"/></html>
-                      </platform-specific>                      
+                      </platform-specific> 
+                       <platform-specific>
+                        <html><html-template location="component://financials/webapp/financials/configuration/classificationInvoice.ftl"/></html>
+                      </platform-specific>                    
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -352,5 +356,24 @@
             </widgets>
         </section>
     </screen>
-
+    
+	<!-- Estructura de Clasificaciones para la Factura de Compra (Purchase Invoice)-->
+    <screen name="classificationInvoiceUsage">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="FinancialsAccountingStructUsage"/>  
+                <script location="component://financials/webapp/financials/WEB-INF/actions/configuration/classificationInvoice.bsh"/>
+            </actions>            
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">                      
+                      <platform-specific>
+                        <html><html-template location="component://financials/webapp/financials/configuration/classificationInvoice.ftl"/></html>
+                      </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    
 </screens>

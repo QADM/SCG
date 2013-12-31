@@ -41,9 +41,7 @@ import org.opentaps.base.entities.GlAccountCategoryRelation;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
 
-
 import java.util.StringTokenizer;
-
 
 /**
  * ConfigurationServices - Services for configuring GL Accounts.
@@ -79,8 +77,6 @@ public final class ConfigurationServices {
 		String organizationPartyId = (String) context
 				.get("organizationPartyId");
 		List value = null;
-		
-
 
 		Map fields = UtilMisc.toMap("glAccountId", glAccountId,
 				"organizationPartyId", organizationPartyId);
@@ -252,7 +248,7 @@ public final class ConfigurationServices {
 			Map addNewGlAccountOrganizationResult = dispatcher.runSync(
 					"createGlAccountOrganization",
 					addNewGlAccountOrganizationContext, -1, false);
-			
+
 			if (ServiceUtil.isError(addNewGlAccountOrganizationResult)) {
 				return addNewGlAccountOrganizationResult;
 			}
@@ -290,7 +286,7 @@ public final class ConfigurationServices {
 		LocalDispatcher dispatcher = dctx.getDispatcher();
 		String glAccountClassTypeKey = (String) context
 				.get("glAccountClassTypeKey");
-    	String accountCode = (String) context.get("glAccount");
+		String accountCode = (String) context.get("glAccount");
 		context.remove("glAccountClassTypeKey");
 		String categoria = (String) context.get("productCategoryId");
 		GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -309,25 +305,24 @@ public final class ConfigurationServices {
 
 			context.put("glAccountTypeId", glAccountTypeId);
 			context.put("glAccountClassId", glAccountClassId);
-			
+
 			Map addNewRelationContext = UtilMisc.toMap("productCategoryId",
-					categoria, "glAccountId", glAccountId,"fromDate",fecha,
+					categoria, "glAccountId", glAccountId, "fromDate", fecha,
 					"userLogin", userLogin);
-			
-			
+
 			GenericValue gv1 = delegator.findByPrimaryKeyCache(
-					"GlAccountCategoryRelation", UtilMisc.toMap(
-							"glAccountId", glAccountClassTypeKey));
-			if(gv1==null){
+					"GlAccountCategoryRelation",
+					UtilMisc.toMap("glAccountId", glAccountClassTypeKey));
+			if (gv1 == null) {
 
 				Map addNewRelationResult = dispatcher.runSync(
-						"createGlAccountCategoryRelation", addNewRelationContext,
-						-1, false);
-			}else{
+						"createGlAccountCategoryRelation",
+						addNewRelationContext, -1, false);
+			} else {
 				String productId = gv1.getString("productCategoryId");
 				Map addNewRelationResult = dispatcher.runSync(
-						"updateGlAccountCategoryRelation", addNewRelationContext,
-						-1, false);
+						"updateGlAccountCategoryRelation",
+						addNewRelationContext, -1, false);
 			}
 
 			// forward to the original updateGlAccount service
@@ -438,15 +433,16 @@ public final class ConfigurationServices {
 	 * @param context
 	 *            a <code>Map</code> value
 	 * @return a service response <code>Map</code> value
-	 * @throws ParseException 
+	 * @throws ParseException
 	 */
 	@SuppressWarnings("unchecked")
-	public static Map createAccountingTag(DispatchContext dctx, Map context) throws ParseException {
+	public static Map createAccountingTag(DispatchContext dctx, Map context)
+			throws ParseException {
 		Delegator delegator = dctx.getDelegator();
 		String nivelId = (String) context.get("nivelId");
-		String glAccountTypeId =(String) context.get("enumTypeId");
-		String fechaIn =(String) context.get("fechaIni");
-		String fechaF =(String) context.get("fechaFi");
+		String glAccountTypeId = (String) context.get("enumTypeId");
+		String fechaIn = (String) context.get("fechaIni");
+		String fechaF = (String) context.get("fechaFi");
 		SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yy");
 		Date fecInicio;
 		Date fecFinal;
@@ -456,11 +452,11 @@ public final class ConfigurationServices {
 		context.put("fechaInicio", fecInicio);
 
 		try {
-			if(glAccountTypeId.equals(" ")){
+			if (glAccountTypeId.equals(" ")) {
 				return UtilMessage.createAndLogServiceError(
 						"El parametro Tipo  no puede estar vacio", MODULE);
 			}
-			if(nivelId.equals(" ")){
+			if (nivelId.equals(" ")) {
 				return UtilMessage.createAndLogServiceError(
 						"El parametro Nivel no puede estar vacio", MODULE);
 			}
@@ -532,26 +528,25 @@ public final class ConfigurationServices {
 	 * @param context
 	 *            a <code>Map</code> value
 	 * @return a service response <code>Map</code> value
-	 * @throws ParseException 
+	 * @throws ParseException
 	 */
 	@SuppressWarnings("unchecked")
-	public static Map updateAccountingTag(DispatchContext dctx, Map context) throws ParseException {
+	public static Map updateAccountingTag(DispatchContext dctx, Map context)
+			throws ParseException {
 		Delegator delegator = dctx.getDelegator();
 		String nivelId = (String) context.get("niv");
 		String inicio = (String) context.get("fechaIn");
 		String fin = (String) context.get("fechaF");
-		String nivel="";
-		String  sCadenaSinBlancos="";
-		String cadena1="";
-		String cadena2="";
-
-		
+		String nivel = "";
+		String sCadenaSinBlancos = "";
+		String cadena1 = "";
+		String cadena2 = "";
 
 		try {
 			SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yy");
 			Date fecInicio;
 			Date fecFinal;
-			
+
 			GenericValue pk = delegator.makeValue("Enumeration");
 			pk.setPKFields(context);
 			GenericValue enumeration = delegator.findByPrimaryKey(
@@ -561,42 +556,43 @@ public final class ConfigurationServices {
 						"Did not find Accounting tag Enumeration value for PK ["
 								+ pk.getPrimaryKey() + "]", MODULE);
 			}
-			for (int x=0; x < nivelId.length(); x++) {
-				  if ((nivelId.charAt(x) != ' ')&&(nivelId.charAt(x) != '[')&&(nivelId.charAt(x) != ']'))
-				    sCadenaSinBlancos += nivelId.charAt(x);
-				}
-			
+			for (int x = 0; x < nivelId.length(); x++) {
+				if ((nivelId.charAt(x) != ' ') && (nivelId.charAt(x) != '[')
+						&& (nivelId.charAt(x) != ']'))
+					sCadenaSinBlancos += nivelId.charAt(x);
+			}
+
 			StringTokenizer st = new StringTokenizer(sCadenaSinBlancos, ",");
-			 while(st.hasMoreTokens()) {
-				   String Nivel1 = st.nextToken();
-				   String Nivel2 = st.nextToken();
-				   if(!(Nivel1.equals(Nivel2)))
-					   nivel=Nivel1;
-			 }
-			if(!(nivel.equals("")))
+			while (st.hasMoreTokens()) {
+				String Nivel1 = st.nextToken();
+				String Nivel2 = st.nextToken();
+				if (!(Nivel1.equals(Nivel2)))
+					nivel = Nivel1;
+			}
+			if (!(nivel.equals("")))
 				context.put("nivelId", nivel);
-			inicio=inicio.replace("[","").replace("]","").replace(" ","");
-			
+			inicio = inicio.replace("[", "").replace("]", "").replace(" ", "");
+
 			StringTokenizer st1 = new StringTokenizer(inicio, ",");
-			while(st1.hasMoreTokens()) {
-				   String FI1 = st1.nextToken();
-				   String FI2 = st1.nextToken();
-				   if(!(FI1.equals(FI2)))
-					   cadena1=FI1;
-			 }
-			if(!(cadena1.isEmpty())){
+			while (st1.hasMoreTokens()) {
+				String FI1 = st1.nextToken();
+				String FI2 = st1.nextToken();
+				if (!(FI1.equals(FI2)))
+					cadena1 = FI1;
+			}
+			if (!(cadena1.isEmpty())) {
 				fecInicio = formatoFecha.parse(cadena1);
-				context.put("fechaInicio",fecInicio);
+				context.put("fechaInicio", fecInicio);
 			}
-			fin=fin.replace("[","").replace("]","").replace(" ","");
+			fin = fin.replace("[", "").replace("]", "").replace(" ", "");
 			StringTokenizer st2 = new StringTokenizer(fin, ",");
-			while(st2.hasMoreTokens()) {
-				   String FF1 = st2.nextToken();
-				   String FF2 = st2.nextToken();
-				   if(!(FF1.equals(FF2)))
-					   cadena2=FF1;
+			while (st2.hasMoreTokens()) {
+				String FF1 = st2.nextToken();
+				String FF2 = st2.nextToken();
+				if (!(FF1.equals(FF2)))
+					cadena2 = FF1;
 			}
-			if(!(cadena2.isEmpty())){
+			if (!(cadena2.isEmpty())) {
 				fecFinal = formatoFecha.parse(cadena2);
 				context.put("fechaFin", fecFinal);
 			}
@@ -707,11 +703,9 @@ public final class ConfigurationServices {
 			return UtilMessage.createAndLogServiceError(e, MODULE);
 		}
 	}
-	
-	
+
 	/**
-	 * Crea o actualiza la estructura de las clasificaciones
-	 * organization.
+	 * Crea o actualiza la estructura de las clasificaciones organization.
 	 * 
 	 * @param dctx
 	 *            a <code>DispatchContext</code> value
@@ -720,112 +714,136 @@ public final class ConfigurationServices {
 	 * @return a service response <code>Map</code> value
 	 */
 	@SuppressWarnings("unchecked")
-	public static Map updateClassificationTag(DispatchContext dctx,
-			Map context) {		
-		
+	public static Map updateClassificationTag(DispatchContext dctx, Map context) {
+
 		Debug.log("Entro al servico updateClassificationTag");
-		
+
 		Delegator delegator = dctx.getDelegator();
 		Date date = new Date();
-		
-		String organizationPartyId =  (String) context.get("organizationPartyId");
-		String acctgTagUsageTypeId =  (String) context.get("acctgTagUsageTypeId");				
+
+		String organizationPartyId = (String) context
+				.get("organizationPartyId");
+		String acctgTagUsageTypeId = (String) context
+				.get("acctgTagUsageTypeId");
 		Debug.log("organizationPartyId " + organizationPartyId);
 		Debug.log("acctgTagUsageTypeId " + acctgTagUsageTypeId);
-		
-		
-		//Validación para verificar si esta repetido
+
+		// Validación para verificar si esta repetido
 		String resultado1 = "";
-		String resultado2 = "";		
+		String resultado2 = "";
 		String cri = "CL_CRI";
 		String cog = "CL_COG";
 		boolean tieneCri = false;
 		boolean tieneCog = false;
-				for(int i=1; i<16; i++)
-				{	resultado1 = (String) context.get("clasificacion"+i);			
-					if(resultado1 != null)			
-					{	for(int j=i+1; j<16; j++)
-						{	resultado2 = (String) context.get("clasificacion"+j);					
-							if(resultado2 != null)
-							{	if(resultado1.equals(resultado2))
-								{	return ServiceUtil.returnError("Existen valores repetidos");
-								}						
-								else if(resultado2.equals(cog))
-								{	if(acctgTagUsageTypeId.equals("INGRESO"))
-									{	return ServiceUtil.returnError("La sección de Ingresos contiene una clasificación económica incorrecta (CRI/COG)");
-									}
-									else
-									{	tieneCog = true;						
-									}
-								}
-								else if(resultado2.trim().equals(cri))
-								{	if(acctgTagUsageTypeId.equals("EGRESO"))
-									{	return ServiceUtil.returnError("La sección de Egreso contiene una clasificación económica incorrecta (CRI/COG)");
-									}
-									else
-									{	tieneCri = true;						
-									}
-								}										
+		for (int i = 1; i < 16; i++) {
+			resultado1 = (String) context.get("clasificacion" + i);
+			if (resultado1 != null) {
+				for (int j = i + 1; j < 16; j++) {
+					resultado2 = (String) context.get("clasificacion" + j);
+					if (resultado2 != null) {
+						if (resultado1.equals(resultado2)) {
+							return ServiceUtil
+									.returnError("Existen valores repetidos");
+						} else if (resultado2.equals(cog)) {
+							if (acctgTagUsageTypeId.equals("INGRESO")) {
+								return ServiceUtil
+										.returnError("La sección de Ingresos contiene una clasificación económica incorrecta (CRI/COG)");
+							} else {
+								tieneCog = true;
+							}
+						} else if (resultado2.trim().equals(cri)) {
+							if (acctgTagUsageTypeId.equals("EGRESO")) {
+								return ServiceUtil
+										.returnError("La sección de Egreso contiene una clasificación económica incorrecta (CRI/COG)");
+							} else {
+								tieneCri = true;
 							}
 						}
 					}
-				}		
-				if(!tieneCri && !tieneCog)
-				{	return ServiceUtil.returnError("No contiene clasificación económica");		
 				}
-		
-		
+			}
+		}
+		if (!tieneCri && !tieneCog) {
+			return ServiceUtil
+					.returnError("No contiene clasificación económica");
+		}
+
 		int ciclo = date.getYear() + 1900;
 		try {
-			
-			
+
 			Debug.log("Se va a generar entidad");
-			
+
 			GenericValue pk = delegator.makeValue("EstructuraClave");
-			
-			
-			
-			EntityCondition condicion = EntityCondition.makeCondition(EntityOperator.AND,
-            EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, organizationPartyId),
-            EntityCondition.makeCondition("acctgTagUsageTypeId", EntityOperator.EQUALS, acctgTagUsageTypeId),
-            EntityCondition.makeCondition("ciclo", EntityOperator.EQUALS, String.valueOf(ciclo)));
-			
+
+			EntityCondition condicion = EntityCondition.makeCondition(
+					EntityOperator.AND, EntityCondition.makeCondition(
+							"organizationPartyId", EntityOperator.EQUALS,
+							organizationPartyId),
+					EntityCondition.makeCondition("acctgTagUsageTypeId",
+							EntityOperator.EQUALS, acctgTagUsageTypeId),
+					EntityCondition.makeCondition("ciclo",
+							EntityOperator.EQUALS, String.valueOf(ciclo)));
+
 			Debug.log("buscar por ciclo" + ciclo);
-			
+
 			List<GenericValue> listUpdateEstructura = delegator
-					.findByCondition(
-							"EstructuraClave",
-							condicion,
-							UtilMisc.toList("idSecuencia",
-									"organizationPartyId", "acctgTagUsageTypeId", "ciclo"), null);
-			
-			if(listUpdateEstructura.isEmpty())
-			{
+					.findByCondition("EstructuraClave", condicion, UtilMisc
+							.toList("idSecuencia", "organizationPartyId",
+									"acctgTagUsageTypeId", "ciclo"), null);
+
+			if (listUpdateEstructura.isEmpty()) {
 				Debug.log("No existe el ciclo, registro nuevo");
 				pk.setNextSeqId();
 				pk.put("ciclo", ciclo);
 				pk.setNonPKFields(context);
 				delegator.createOrStore(pk);
-				
-			}
-			else
-			{
-				for (GenericValue updateEstructura : listUpdateEstructura) 
-				{
+
+			} else {
+				for (GenericValue updateEstructura : listUpdateEstructura) {
 					Debug.log("Existe ciclo");
 					updateEstructura.setNonPKFields(context);
-					delegator.createOrStore(updateEstructura);				
+					delegator.createOrStore(updateEstructura);
 				}
 			}
-			
-			
+
 			return ServiceUtil.returnSuccess();
 
 		} catch (GeneralException e) {
 			return UtilMessage.createAndLogServiceError(e, MODULE);
 		}
-		
 
-		
+	}
+	
+	/**
+	 * Crea o actualiza la estructura de las clasificaciones para la Factura de compra
+	 * 
+	 * @param dctx
+	 *            a <code>DispatchContext</code> value
+	 * @param context
+	 *            a <code>Map</code> value
+	 * @return a service response <code>Map</code> value
+	 */
+	@SuppressWarnings("unchecked")
+	public static Map updateClassificationInvoice(DispatchContext dctx, Map context) {
+
+		Debug.log("Entro al servico updateClassificationInvoice");
+
+		Delegator delegator = dctx.getDelegator();
+
+		try {
+			GenericValue pk = delegator.makeValue("AcctgTagInvoiceType");
+			pk.setPKFields(context);
+			GenericValue usage = delegator.findByPrimaryKey("AcctgTagInvoiceType",
+					pk);
+			if (usage == null) {
+				usage = pk;
+			}
+			usage.setNonPKFields(context);
+			delegator.createOrStore(usage);
+			return ServiceUtil.returnSuccess();
+
+		} catch (GeneralException e) {
+			return UtilMessage.createAndLogServiceError(e, MODULE);
+		}
 	}
 }

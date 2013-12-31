@@ -1925,6 +1925,14 @@
         <response name="error" type="view" value="classificationTagsUsage"/>
     </request-map>
     
+    <request-map uri="updateClassificationInvoice">
+        <description>Update an accounting tag posting check configuration for the organization</description>
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updateClassificationInvoice"/>
+        <response name="success" type="request-redirect-noparam" value="accountingTagsUsage"/>
+        <response name="error" type="view" value="accountingTagsUsage"/>
+    </request-map>
+    
     <!-- ===================== -->
     <!-- Payments Request Maps -->
     <!-- ===================== -->

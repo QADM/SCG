@@ -198,5 +198,17 @@
         <auto-attributes include="nonpk" mode="IN" optional="true"/>
     </service>
     
+
+     <!-- Servicios para la estructura de clasificaciones Facturas de compra (Purchase Invoice) -->
+    
+     <service name="updateClassificationInvoice" default-entity-name="AcctgTagInvoiceType" engine="java"
+            location="com.opensourcestrategies.financials.configuration.ConfigurationServices" invoke="updateClassificationInvoice" auth="true">
+        <description>Actualiza clasificaciones para la factura de compra</description>
+        <required-permissions join-type="AND">
+            <check-permission permission="FINANCIALS" action="_CONFIG"/>
+        </required-permissions>        
+        <auto-attributes include="pk" mode="IN" optional="false"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+    </service>   
 </services>
 
