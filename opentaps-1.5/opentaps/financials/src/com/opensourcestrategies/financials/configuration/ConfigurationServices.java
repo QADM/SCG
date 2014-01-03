@@ -846,4 +846,37 @@ public final class ConfigurationServices {
 			return UtilMessage.createAndLogServiceError(e, MODULE);
 		}
 	}
+	
+	/**
+	 * Crea o actualiza la estructura de las clasificaciones para el pago
+	 * 
+	 * @param dctx
+	 *            a <code>DispatchContext</code> value
+	 * @param context
+	 *            a <code>Map</code> value
+	 * @return a service response <code>Map</code> value
+	 */
+	@SuppressWarnings("unchecked")
+	public static Map updateClassificationPayment(DispatchContext dctx, Map context) {
+
+		Debug.log("Entro al servico updateClassificationPayment");
+
+		Delegator delegator = dctx.getDelegator();
+
+		try {
+			GenericValue pk = delegator.makeValue("AcctgTagPaymentType");
+			pk.setPKFields(context);
+			GenericValue usage = delegator.findByPrimaryKey("AcctgTagPaymentType",
+					pk);
+			if (usage == null) {
+				usage = pk;
+			}
+			usage.setNonPKFields(context);
+			delegator.createOrStore(usage);
+			return ServiceUtil.returnSuccess();
+
+		} catch (GeneralException e) {
+			return UtilMessage.createAndLogServiceError(e, MODULE);
+		}
+	}
 }

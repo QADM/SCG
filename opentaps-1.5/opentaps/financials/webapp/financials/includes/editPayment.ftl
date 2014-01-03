@@ -230,6 +230,10 @@
     <td nowrap="nowrap"><input type="text" class="inputBox" name="paymentRefNum" value="<#if paymentValue?has_content>${paymentValue.paymentRefNum?if_exists}</#if>"/></td>
   </tr>
 
+  <tr>
+  	<@inputSelectRow title=uiLabelMap.FinancialsReferenceDocument required=false list=listTipoDoc  displayField="descripcion" name="tipoDocumento" />
+  </tr>
+  
   <#if tagTypes?has_content>
     <#if limitiedUpdate>
       <@accountingTagsDisplayRows tags=tagTypes entity=paymentValue! />

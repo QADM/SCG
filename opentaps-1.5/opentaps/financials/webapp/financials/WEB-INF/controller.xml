@@ -1933,6 +1933,15 @@
         <response name="error" type="view" value="accountingTagsUsage"/>
     </request-map>
     
+    <request-map uri="updateClassificationPayment">
+        <description>Update an accounting tag posting check configuration for the organization</description>
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updateClassificationPayment"/>
+        <response name="success" type="request-redirect-noparam" value="accountingTagsUsage"/>
+        <response name="error" type="view" value="accountingTagsUsage"/>
+    </request-map>
+    
+    
     <!-- ===================== -->
     <!-- Payments Request Maps -->
     <!-- ===================== -->

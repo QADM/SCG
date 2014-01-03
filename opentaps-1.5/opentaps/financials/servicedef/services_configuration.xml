@@ -209,6 +209,18 @@
         </required-permissions>        
         <auto-attributes include="pk" mode="IN" optional="false"/>
         <auto-attributes include="nonpk" mode="IN" optional="true"/>
+    </service>
+     
+    <!-- Servicios para la estructura de clasificaciones Pagos (Payment) -->
+    
+     <service name="updateClassificationPayment" default-entity-name="AcctgTagPaymentType" engine="java"
+            location="com.opensourcestrategies.financials.configuration.ConfigurationServices" invoke="updateClassificationPayment" auth="true">
+        <description>Actualiza clasificaciones para el pago</description>
+        <required-permissions join-type="AND">
+            <check-permission permission="FINANCIALS" action="_CONFIG"/>
+        </required-permissions>        
+        <auto-attributes include="pk" mode="IN" optional="false"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
     </service>   
 </services>
 

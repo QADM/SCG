@@ -211,6 +211,30 @@ under the License.
         </relation>             
     </entity>
     
+    <entity entity-name="AcctgTagPaymentType" package-name="org.opentaps.common.accounting"
+            title="Entity to setup the accounting tags used by organization">
+        <field name="organizationPartyId" type="id"/>
+        <field name="acctgTagUsageTypeId" type="id"/>
+        <field name="clasifTypeId1" type="id-ne"/>
+        <field name="clasifTypeId2" type="id-ne"/>
+        <field name="clasifTypeId3" type="id-ne"/>
+        <field name="clasifTypeId4" type="id-ne"/>
+        <field name="clasifTypeId5" type="id-ne"/>
+        <field name="clasifTypeId6" type="id-ne"/>
+        <field name="clasifTypeId7" type="id-ne"/>
+        <field name="clasifTypeId8" type="id-ne"/>
+        <field name="clasifTypeId9" type="id-ne"/>
+        <field name="clasifTypeId10" type="id-ne"/>                     
+        <prim-key field="organizationPartyId"/>
+        <prim-key field="acctgTagUsageTypeId"/>
+        <relation type="one" rel-entity-name="Party" fk-name="ATET_PTY">
+            <key-map field-name="organizationPartyId" rel-field-name="partyId"/>
+        </relation>
+        <relation type="one" rel-entity-name="AcctgTagUsageType" fk-name="ATET_USAGE">
+            <key-map field-name="acctgTagUsageTypeId" />
+        </relation>             
+    </entity>
+    
 
     <!-- ============================== -->
     <!-- org.opentaps.common.agreement  -->
