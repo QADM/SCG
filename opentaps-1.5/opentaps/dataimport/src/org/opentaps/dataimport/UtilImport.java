@@ -23,6 +23,8 @@ import org.opentaps.base.entities.GeoType;
 import org.opentaps.base.entities.GlAccount;
 import org.opentaps.base.entities.GlAccountHistory;
 import org.opentaps.base.entities.GlAccountOrganization;
+import org.opentaps.base.entities.Invoice;
+import org.opentaps.base.entities.InvoiceItem;
 import org.opentaps.base.entities.LoteTransaccion;
 import org.opentaps.base.entities.NivelPresupuestal;
 import org.opentaps.base.entities.Party;
@@ -37,6 +39,7 @@ import org.opentaps.base.entities.WorkEffort;
 import org.opentaps.dataimport.domain.Clasificacion;
 import org.opentaps.dataimport.domain.Clave;
 import org.opentaps.dataimport.domain.ContenedorContable;
+import org.opentaps.domain.billing.invoice.InvoiceRepositoryInterface;
 import org.opentaps.domain.billing.payment.PaymentRepositoryInterface;
 import org.opentaps.domain.ledger.LedgerRepositoryInterface;
 import org.opentaps.foundation.entity.hibernate.Session;
@@ -1095,5 +1098,31 @@ public class UtilImport {
 				a = new PaymentApplication();
 			}
 		return a;
+	}
+	
+	public static Invoice obtenerFactura(String idFactura, InvoiceRepositoryInterface invoice_repo) throws RepositoryException {
+		Invoice i = null;
+		
+			i = invoice_repo.findOne(Invoice.class,
+					invoice_repo.map(Invoice.Fields.invoiceId, idFactura));
+			if(i == null)
+			{
+				i = new Invoice();
+			}
+		
+		return i;
+	}
+	
+	public static InvoiceItem obtenerLineaFactura(String idFactura, InvoiceRepositoryInterface invoice_repo, String secuencia) throws RepositoryException {
+		InvoiceItem i = null;
+		
+			i = invoice_repo.findOne(InvoiceItem.class,
+					invoice_repo.map(InvoiceItem.Fields.invoiceId, idFactura, InvoiceItem.Fields.invoiceItemSeqId,secuencia));
+			if(i == null)
+			{
+				i = new InvoiceItem();
+			}
+		
+		return i;
 	}
 }

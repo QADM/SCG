@@ -23,6 +23,9 @@ import org.opentaps.base.entities.EstructuraClave;
 import org.opentaps.base.entities.Geo;
 import org.opentaps.base.entities.GlAccountHistory;
 import org.opentaps.base.entities.GlAccountOrganization;
+import org.opentaps.base.entities.Invoice;
+import org.opentaps.base.entities.InvoiceItem;
+import org.opentaps.base.entities.InvoiceType;
 import org.opentaps.base.entities.LoteTransaccion;
 import org.opentaps.base.entities.Party;
 import org.opentaps.base.entities.Payment;
@@ -33,6 +36,7 @@ import org.opentaps.base.entities.TipoDocumento;
 import org.opentaps.base.entities.WorkEffort;
 import org.opentaps.dataimport.UtilImport;
 import org.opentaps.domain.DomainService;
+import org.opentaps.domain.billing.invoice.InvoiceRepositoryInterface;
 import org.opentaps.domain.billing.payment.PaymentRepositoryInterface;
 import org.opentaps.domain.dataimport.EgresoDiarioDataImportRepositoryInterface;
 import org.opentaps.domain.dataimport.EgresoDiarioImportServiceInterface;
@@ -46,6 +50,7 @@ import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.service.ServiceException;
 
 import com.ibm.icu.util.Calendar;
+import com.sun.media.sound.SF2GlobalRegion;
 
 public class EgresoDiarioImportService extends DomainService implements
 		EgresoDiarioImportServiceInterface {
@@ -107,6 +112,7 @@ public class EgresoDiarioImportService extends DomainService implements
 			LedgerRepositoryInterface ledger_repo = this.getDomainsDirectory()
 					.getLedgerDomain().getLedgerRepository();
 			PaymentRepositoryInterface payment_repo = this.getDomainsDirectory().getBillingDomain().getPaymentRepository();
+			InvoiceRepositoryInterface invoice_repo = this.getDomainsDirectory().getBillingDomain().getInvoiceRepository();
 
 			List<DataImportEgresoDiario> dataforimp = imp_repo
 					.findNotProcessesDataImportEgresoDiarioEntries();
@@ -138,6 +144,8 @@ public class EgresoDiarioImportService extends DomainService implements
 			Transaction imp_tx12 = null;
 			Transaction imp_tx13 = null;
 			Transaction imp_tx14 = null;
+			Transaction imp_tx15 = null;
+			Transaction imp_tx16 = null;
 
 			if (UtilImport.validaLote(ledger_repo, lote, "EgresoDiario")) {
 				boolean loteValido = true;
@@ -146,6 +154,10 @@ public class EgresoDiarioImportService extends DomainService implements
 				for(List<DataImportEgresoDiario> lista : subs.values()){
 					boolean documentoValido = true;
 					List<ContenedorContable> contenedores = new ArrayList<ContenedorContable>();
+					boolean facturaCreada = false;
+					String idFactura = null;
+					Integer secFactura = 1;
+					BigDecimal totalFactura = BigDecimal.ZERO;
 				for (DataImportEgresoDiario rowdata : lista) {
 					// Empieza bloque de validaciones
 					ContenedorContable contenedor = new ContenedorContable();
@@ -623,29 +635,11 @@ public class EgresoDiarioImportService extends DomainService implements
 					
 					//Se obtienen los enum
 					Enumeration tg = null;
-					Enumeration fr = null;
-					Enumeration f = null;
-					Enumeration s = null;
 					for(Enumeration e : contenedor.getEnumeration())
 					{
 						if(e.getEnumTypeId().equals("TIPO_GASTO"))
 						{
 							tg = e;
-							
-						}
-						if(e.getEnumTypeId().equals("CL_FUENTE_RECURSOS"))
-						{
-							fr = e;
-							
-						}
-						if(e.getEnumTypeId().equals("CL_SECTORIAL"))
-						{
-							s = e;
-							
-						}
-						if(e.getEnumTypeId().equals("CL_FUNCIONAL"))
-						{
-							f = e;
 							
 						}
 					}
@@ -678,6 +672,8 @@ public class EgresoDiarioImportService extends DomainService implements
 						imp_tx12 = null;
 						imp_tx13 = null;
 						imp_tx14 = null;
+						imp_tx15 = null;
+						imp_tx16 = null;
 
 						AcctgTrans egresoDiario = new AcctgTrans();
 
@@ -1008,7 +1004,7 @@ public class EgresoDiarioImportService extends DomainService implements
 						if(tipoDoc.getAcctgTransTypeId().equals("TEGRESOPAGADO")){
 						Payment pago = UtilImport.obtenerPago(rowdata.getIdPago(),payment_repo);					
 						PaymentApplication aplicacion = UtilImport.obtenerAplicacionPago(rowdata.getIdPago(),payment_repo);
-						pago.setPaymentId(rowdata.getIdPago());
+						if(pago.getPaymentId() == null){pago.setPaymentId(rowdata.getIdPago());}
 						pago.setPaymentTypeId("VENDOR_PAYMENT");
 						PaymentMethodType metodo = payment_repo.findOne(PaymentMethodType.class, payment_repo.map(PaymentMethodType.Fields.paymentMethodTypeId, "CASH"));
 						pago.setPaymentMethodTypeId(metodo.getPaymentMethodTypeId());
@@ -1023,16 +1019,18 @@ public class EgresoDiarioImportService extends DomainService implements
 						pago.setCurrencyUomId(contenedor.getParty().getPreferredCurrencyUomId());
 						pago.setAppliedAmount(rowdata.getMonto());
 						
-						aplicacion.setPaymentApplicationId(rowdata.getIdPago()+"A");
-						aplicacion.setPaymentId(pago.getPaymentId());
+						if(aplicacion.getPaymentApplicationId()  == null){aplicacion.setPaymentApplicationId(rowdata.getIdPago()+"A");
+						aplicacion.setPaymentId(pago.getPaymentId());}
 						aplicacion.setOverrideGlAccountId(cuentas.get("Cuenta Abono Presupuesto"));
 						aplicacion.setAmountApplied(pago.getAppliedAmount());
-						aplicacion.setAcctgTagEnumId1(fr.getEnumId());
-						aplicacion.setAcctgTagEnumId2(f.getEnumId());
-						aplicacion.setAcctgTagEnumId3(s.getEnumId());
-						aplicacion.setAcctgTagEnumId4(tg.getEnumId());
-						aplicacion.setGeoId(contenedor.getGeo().getGeoId());
-						aplicacion.setWorkEffortId(contenedor.getWe().getWorkEffortId());
+						aplicacion.setClasifTypeId1(contenedor.getEnumeration().get(0).getEnumId());
+						aplicacion.setClasifTypeId2(contenedor.getEnumeration().get(1).getEnumId());
+						aplicacion.setClasifTypeId3(contenedor.getEnumeration().get(2).getEnumId());
+						aplicacion.setClasifTypeId4(contenedor.getEnumeration().get(3).getEnumId());
+						aplicacion.setClasifTypeId5(contenedor.getGeo().getGeoId());
+						aplicacion.setClasifTypeId6(contenedor.getWe().getWorkEffortId());
+						List<PaymentApplication> listaApp = new ArrayList<PaymentApplication>();
+						listaApp.add(aplicacion);
 						
 						imp_tx13 = this.session.beginTransaction();
 						payment_repo.createOrUpdate(pago);
@@ -1042,7 +1040,65 @@ public class EgresoDiarioImportService extends DomainService implements
 						payment_repo.createOrUpdate(aplicacion);
 						imp_tx14.commit();
 						
+						//Aqui hay que modificar excel import services para recibir como opcional el id de factura
+						Invoice f = invoice_repo.findOne(Invoice.class, invoice_repo.map(Invoice.Fields.invoiceId,idFactura));
+						f.setStatusId("INVOICE_PAID");
+						f.setPaymentApplications(listaApp);
+						f.setPaidDate(rowdata.getFechaContable());
+						f.setAppliedAmount(rowdata.getMonto());
+						f.setOpenAmount(f.getOpenAmount().subtract(rowdata.getMonto()));
+						imp_tx16 = this.session.beginTransaction();
+						invoice_repo.createOrUpdate(f);
+						imp_tx16.commit();
+						
 						}
+						
+						//Creacion de factura
+						if(tipoDoc.getAcctgTransTypeId().equals("TEGRESODEVENGADO")){
+							if(facturaCreada == false){
+								Invoice factura = UtilImport.obtenerFactura(idFactura, invoice_repo);
+								if(factura.getInvoiceId() == null){factura.setInvoiceId(rowdata.getRefDoc());}
+								InvoiceType tipoFactura = invoice_repo.findOne(InvoiceType.class, invoice_repo.map(InvoiceType.Fields.invoiceTypeId, "PURCHASE_INVOICE"));
+								factura.setInvoiceType(tipoFactura);
+								factura.setPartyIdFrom(rowdata.getOrganizationPartyId());
+								factura.setPartyId(rowdata.getOrganizationPartyId());
+								factura.setStatusId("INVOICE_SENT");
+								factura.setInvoiceDate(rowdata.getFechaContable());
+								factura.setReferenceNumber(rowdata.getRefDoc());
+								factura.setCurrencyUomId(contenedor.getParty().getPreferredCurrencyUomId());
+								factura.setInvoiceTotal(BigDecimal.ZERO);
+								factura.setOpenAmount(BigDecimal.ZERO);
+								facturaCreada = true;
+								idFactura = factura.getInvoiceId();
+								imp_tx13 = this.session.beginTransaction();
+								invoice_repo.createOrUpdate(factura);
+								imp_tx13.commit();
+							}
+							//Creacion de Linea
+							InvoiceItem linea = UtilImport.obtenerLineaFactura(idFactura, invoice_repo,secFactura.toString());
+							if(linea.getInvoiceId() == null){linea.setInvoiceId(idFactura);
+							linea.setInvoiceItemSeqId(secFactura.toString());
+							secFactura++;}
+							linea.setOverrideGlAccountId(cuentas.get("Cuenta Abono Presupuesto"));
+							linea.setProductId(rowdata.getIdProductoH());
+							linea.setTaxableFlag("N");
+							linea.setQuantity(new BigDecimal(1));
+							linea.setAmount(rowdata.getMonto());
+							totalFactura.add(rowdata.getMonto());
+							linea.setClasifTypeId1(contenedor.getEnumeration().get(0).getEnumId());
+							linea.setClasifTypeId2(contenedor.getEnumeration().get(1).getEnumId());
+							linea.setClasifTypeId3(contenedor.getEnumeration().get(2).getEnumId());
+							linea.setClasifTypeId4(contenedor.getEnumeration().get(3).getEnumId());
+							linea.setClasifTypeId5(contenedor.getGeo().getGeoId());
+							linea.setClasifTypeId6(contenedor.getWe().getWorkEffortId());
+							
+							imp_tx14 = this.session.beginTransaction();
+							invoice_repo.createOrUpdate(linea);
+							imp_tx14.commit();
+							
+						}
+						
+						
 						
 						//if (mensaje.isEmpty()) {
 							String message = "Se importo correctamente Egreso Diario ["
@@ -1108,6 +1164,25 @@ public class EgresoDiarioImportService extends DomainService implements
 					index++;
 				}	
 				}//Documento Valido
+				//Se obtiene la factura de nuevo
+				if(!totalFactura.equals(BigDecimal.ZERO))
+				{
+					try{
+					Invoice f = invoice_repo.findOne(Invoice.class, invoice_repo.map(Invoice.Fields.invoiceId,idFactura));
+					f.setInvoiceTotal(totalFactura);
+					f.setOpenAmount(totalFactura);
+					imp_tx15 = this.session.beginTransaction();
+					invoice_repo.createOrUpdate(f);
+					imp_tx15.commit();
+					}
+					catch(Exception e)
+					{
+						if(imp_tx15 != null)
+						{
+							imp_tx15.rollback();
+						}
+					}
+				}
 				} //Fin de Documento
 				// Se inserta el Lote.
 				if (!lote.equalsIgnoreCase("X") && loteValido) {
