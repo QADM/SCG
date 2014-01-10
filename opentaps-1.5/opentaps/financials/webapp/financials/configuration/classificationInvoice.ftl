@@ -6,7 +6,7 @@
 
 <#assign mustBalanceSelectValues = {"Y": uiLabelMap.CommonYes, "N": uiLabelMap.CommonNo} />
 
-<@frameSection title=uiLabelMap.ClassificationTagsPostingEntry>
+<@frameSection title=uiLabelMap.ClassificationTagsInvoice>
  
     <#-- might be null if the usage is not configured yet -->
     <#assign configuration = configurations.get(usage)! />

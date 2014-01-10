@@ -6,14 +6,14 @@
 
 <#assign mustBalanceSelectValues = {"Y": uiLabelMap.CommonYes, "N": uiLabelMap.CommonNo} />
 
-<@frameSection title=uiLabelMap.ClassificationTagsPostingEntry>
+<@frameSection title=uiLabelMap.ClassificationTagsPayment>
  
     <#-- might be null if the usage is not configured yet -->
-    <#assign configuration = configurationsType.get(usage)! />
+    <#assign configuracion = configurationsType.get(typePayment)! />
     <div class="screenlet">
-      <div class="screenlet-header"><span class="boxhead">${usage.description}</span></div>
+      <div class="screenlet-header"><span class="boxhead">${typePayment.description}</span></div>
   <form method="post" action="<@ofbizUrl>updateClassificationPayment</@ofbizUrl>" name="updateClassificationPayment">
-    <@inputHidden name="acctgTagUsageTypeId" value=usage.acctgTagUsageTypeId />
+    <@inputHidden name="acctgTagUsageTypeId" value=typePayment.acctgTagUsageTypeId />
     <@inputHidden name="organizationPartyId" value=organizationPartyId />
     <table class="listTable" style="border:0">
       <tr class="listTableHeader">
@@ -32,7 +32,7 @@
             </#if>
             <#assign classificationId = "clasifTypeId" + i />
             <@displayTitleCell title=i />
-            <@inputSelectCell name=classificationId default=(configuration.get(classificationId))! list=listClassification key="clasificacionId" required=false ; type>
+            <@inputSelectCell name=classificationId default=(configuracion.get(classificationId))! list=listClassification key="clasificacionId" required=false ; type>
               ${type.descripcion}
             </@inputSelectCell>
             

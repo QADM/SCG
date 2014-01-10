@@ -90,9 +90,31 @@
           <@inputSelectTaxAuthorityCell list=taxAuthorities required=false/>
         </tr>
 
-        <#if !disableTags?exists && tagTypes?has_content>
-          <@accountingTagsSelectRows tags=tagTypes prefix="acctgTagEnumId" entity=lastItem! />
-        </#if>
+	     <#if !disableTags?exists && tagTypes?has_content>
+	          <#list tagTypes as tag>
+	        <#if tag.isRequired()>
+	          <#assign titleClass="requiredField" />
+	        <#else/>
+	          <#assign titleClass="tableheadtext" />
+	        </#if>        
+	        <tr>
+	          <@displayTitleCell title=tag.description titleClass=titleClass /> 
+	          <#if tag.description?contains("geo")>         
+		          <@inputSelectCell name="clasifTypeId${tag.index}" errorField="acctgTagEnumId${tag.index}" list=tag.activeTagValues key="geoId" required=false default=tag.defaultValue! ; tagValue>
+		            ${tagValue.geoName}
+		          </@inputSelectCell>
+		      <#elseif tag.description?contains("Programatica")>         
+		          <@inputSelectCell name="clasifTypeId${tag.index}" errorField="acctgTagEnumId${tag.index}" list=tag.activeTagValues key="workEffortName" required=false default=tag.defaultValue! ; tagValue>
+		            ${tagValue.description}
+		          </@inputSelectCell>	      
+		      <#else>         
+		          <@inputSelectCell name="clasifTypeId${tag.index}" errorField="acctgTagEnumId${tag.index}" list=tag.activeTagValues key="enumId" required=false default=tag.defaultValue! ; tagValue>
+		            ${tagValue.enumCode}
+		          </@inputSelectCell>
+	          </#if>     
+	        </tr>        
+	      </#list>               
+        </#if>        
         <@inputSubmitRow title=uiLabelMap.CommonAdd/>
       </table>
     </div>

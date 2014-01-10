@@ -22,7 +22,7 @@ OrganizationRepository repository = new OrganizationRepository(delegator);
 typePayment = repository.findOne(AcctgTagUsageType.class, repository.map(AcctgTagUsageType.Fields.acctgTagUsageTypeId, "DISBURSEMENT"));
 
 context.put("typePayment", typePayment);
-
+System.out.print("typePayment " + typePayment );
 // Obtener todas las clasificaciones
 /// Lista para las clasificaciones
 
@@ -46,8 +46,8 @@ System.out.print("listClassification " + listClassification);
 // note that a configuration might not exist yet, so it could be null
 configurationsType = new HashMap();
 
-    configurations.put(usage, repository.getFirst(repository.findList(AcctgTagPaymentType.class, repository.map(
+configurationsType.put(typePayment, repository.getFirst(repository.findList(AcctgTagPaymentType.class, repository.map(
           AcctgTagPaymentType.Fields.organizationPartyId, organizationPartyId,
-          AcctgTagPaymentType.Fields.acctgTagUsageTypeId, usage.getAcctgTagUsageTypeId()))));
+          AcctgTagPaymentType.Fields.acctgTagUsageTypeId, typePayment.getAcctgTagUsageTypeId()))));
 
 context.put("configurationsType", configurationsType);
