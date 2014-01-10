@@ -231,7 +231,7 @@
   </tr>
 
   <tr>
-  	<@inputSelectRow title=uiLabelMap.FinancialsReferenceDocument required=false list=listTipoDoc  displayField="descripcion" name="tipoDocumento" />
+  	<@inputSelectRow title=uiLabelMap.FinancialsReferenceDocument required=false list=listTipoDoc  displayField="descripcion" name="tipoDocumento" key="idTipoDoc" />
   </tr>
   
   <#if tagTypes?has_content>

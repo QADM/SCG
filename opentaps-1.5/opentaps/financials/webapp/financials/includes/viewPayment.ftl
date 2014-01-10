@@ -98,7 +98,7 @@ If you have come this far, payment should be a valid Payment Object.
 
       <@displayRow title=uiLabelMap.CommonComments text=payment.comments?if_exists />
       <@displayRow title=uiLabelMap.FinancialsPaymentRefNum text=payment.paymentRefNum?if_exists />
-
+	  <@displayRow title=uiLabelMap.FinancialsReferenceDocument text=payment.tipoDocumento?if_exists />
       <#if tagTypes?has_content>
         <@accountingTagsDisplayRows tags=tagTypes entity=payment />
       </#if>
