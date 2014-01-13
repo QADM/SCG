@@ -97,7 +97,7 @@ public final class InvoiceActions {
      * @throws GeneralException if an error occurs
      */
     public static void viewInvoice(Map<String, Object> context) throws GeneralException {
-
+    	Debug.log("Entro a viewInvoice");
         ActionContext ac = new ActionContext(context);
 
         HttpServletRequest request = ac.getRequest();
@@ -218,7 +218,12 @@ public final class InvoiceActions {
         	ac.put("tagTypes", UtilAccountingTags.getAccountingTagsForOrganizationCustom(organizationPartyId, UtilAccountingTags.PURCHASE_INVOICES_TAG, delegator));
         	///Para encontrar 
         	
-        	//ac.put("listEstructura", getClasificacion(organizationPartyId, UtilAccountingTags.PURCHASE_INVOICES_TAG, invoiceRepository, invoiceId));
+          //Buscar Estructura 
+        	
+        		 Debug.log("viewInvoice a punto de entrar a UtilAccountingTags.getReadInvoiceItemClasification ");        		 
+                 ac.put("invoiceItemsRead", UtilAccountingTags.getReadInvoiceItemClasification(organizationPartyId, UtilAccountingTags.PURCHASE_INVOICES_TAG, delegator, invoice.getInvoiceItems()));
+			
+           
         	
         } else if (invoice.isReturnInvoice()) {
             ac.put("tagTypes", UtilAccountingTags.getAccountingTagsForOrganization(organizationPartyId, UtilAccountingTags.RETURN_INVOICES_TAG, delegator));
