@@ -37,6 +37,7 @@ import org.ofbiz.entity.condition.EntityOperator;
 import org.opentaps.base.entities.AcctgTagEnumType;
 import org.opentaps.base.entities.Enumeration;
 import org.opentaps.base.entities.EnumerationType;
+import org.opentaps.base.entities.InvoiceItem;
 import org.opentaps.common.domain.organization.OrganizationRepository;
 import org.opentaps.domain.organization.AccountingTagConfigurationForOrganizationAndUsage;
 import org.opentaps.domain.organization.ClassificationConfigurationForOrganization;
@@ -739,4 +740,20 @@ public final class UtilAccountingTags {
         OrganizationRepository repository = new OrganizationRepository(delegator);
         return repository.getClassificationTagConfiguration(organizationPartyId, accountingTagUsageTypeId);
     }
+    
+    public static Object getAccountingTagsForOrganizationCustom(
+			String organizationPartyId, String purchaseInvoicesTag,
+			Delegator delegator) throws RepositoryException {
+		 OrganizationRepository repository = new OrganizationRepository(delegator);
+	        return repository.getAccountingTagConfigurationCustom(organizationPartyId, purchaseInvoicesTag);
+		
+	}
+
+	public static Object getReadInvoiceItemClasification(
+			String organizationPartyId, String purchaseInvoicesTag,
+			Delegator delegator, List<? extends InvoiceItem> invoiceItems) throws RepositoryException {
+		OrganizationRepository repository = new OrganizationRepository(delegator);
+        return repository.getItemRead(organizationPartyId, purchaseInvoicesTag,invoiceItems);
+		
+	}
 }

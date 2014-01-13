@@ -227,5 +227,5 @@ public interface InvoiceRepositoryInterface extends RepositoryInterface {
     public List<InvoiceAdjustmentType> getInvoiceAdjustmentTypes(Organization organization, Invoice invoice) throws RepositoryException;
     
     
-    public List<ClassificationConfigurationForOrganization> validateTagParametersClasification(Invoice invoice, InvoiceItem item) throws RepositoryException;
+    //public List<ClassificationConfigurationForOrganization> validateTagParametersClasification(Invoice invoice, InvoiceItem item) throws RepositoryException;
 }

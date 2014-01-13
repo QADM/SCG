@@ -49,8 +49,10 @@ import org.opentaps.base.entities.CustomTimePeriod;
 import org.opentaps.base.entities.Enumeration;
 import org.opentaps.base.entities.EnumerationType;
 import org.opentaps.base.entities.EstructuraClave;
+import org.opentaps.base.entities.Geo;
 import org.opentaps.base.entities.GeoType;
 import org.opentaps.base.entities.GlAccountTypeDefault;
+import org.opentaps.base.entities.InvoiceItem;
 import org.opentaps.base.entities.NivelPresupuestal;
 import org.opentaps.base.entities.Party;
 import org.opentaps.base.entities.PartyAcctgPreference;
@@ -59,6 +61,7 @@ import org.opentaps.base.entities.PartyRole;
 import org.opentaps.base.entities.PaymentMethod;
 import org.opentaps.base.entities.ProductCategoryType;
 import org.opentaps.base.entities.TermType;
+import org.opentaps.base.entities.WorkEffort;
 import org.opentaps.base.services.ConvertUomService;
 import org.opentaps.domain.DomainsDirectory;
 import org.opentaps.domain.ledger.LedgerRepositoryInterface;
@@ -66,6 +69,7 @@ import org.opentaps.domain.organization.AccountingTagConfigurationForOrganizatio
 import org.opentaps.domain.organization.ClassificationConfigurationForOrganization;
 import org.opentaps.domain.organization.Organization;
 import org.opentaps.domain.organization.OrganizationRepositoryInterface;
+import org.opentaps.domain.organization.ReadConfigurationForOrganization;
 import org.opentaps.domain.party.PartyRepositoryInterface;
 import org.opentaps.foundation.entity.Entity;
 import org.opentaps.foundation.entity.EntityInterface;
@@ -876,6 +880,112 @@ public class OrganizationRepository extends PartyRepository implements
 			}
 		}
 		return tagTypes;
+	}
+	
+	
+	public List<ReadConfigurationForOrganization> getItemRead(String organizationPartyId,
+			String TagTypeId, List<? extends InvoiceItem> invoiceItems) throws RepositoryException {
+		
+		
+		Debug.log("Entro getItemRead invoiceItems.size() " + invoiceItems.size());
+		Delegator delegator = getDelegator();
+		String descripcion = null;
+		//Regresa mapa de la estructura de las clasificaciones para el Item	
+		Map<Integer, String> tagTypes = getAccountingTagTypesPurchase(
+				organizationPartyId, TagTypeId);
+		
+		
+		Debug.log("getItemRead tagTypes.size() " + tagTypes.size());
+		
+		List<ReadConfigurationForOrganization> tagTypesAndValues = new ArrayList<ReadConfigurationForOrganization>();	
+		
+		if (invoiceItems.size()!=0 && tagTypes.size()!=0)
+		{	
+			
+			for (InvoiceItem elementInvoice : invoiceItems) {
+				Debug.log("getItemRead elementInvoice " + elementInvoice.getInvoiceItemSeqId());
+				int i= 1;
+			if(elementInvoice.get("clasifTypeId" +i) != null)
+			{
+				for (Integer index : tagTypes.keySet()) {
+					String type = tagTypes.get(index);
+					
+					ReadConfigurationForOrganization tag = null;
+					List<ClasifPresupuestal> listclas = findListCache(
+							ClasifPresupuestal.class,
+							map(ClasifPresupuestal.Fields.clasificacionId, type));
+					Debug.log("getItemRead listclas "
+							+ listclas);			
+					
+						if (!listclas.isEmpty()) {
+							for (ClasifPresupuestal clasifPresupuestal : listclas) {
+								descripcion = "";
+								
+								tag = new ReadConfigurationForOrganization(this);
+								tag.setIndex(index);
+								tag.setType(clasifPresupuestal.getDescripcion());
+								tag.setInvoiceItem(elementInvoice.getInvoiceItemSeqId());
+								
+								
+								Debug.log("elementInvoice.get(clasifTypeId +i) " + elementInvoice.get("clasifTypeId" +i));
+								
+								try {
+									
+									Debug.log("getItemRead elementInvoice " + elementInvoice.getInvoiceItemSeqId() + "; " + clasifPresupuestal.getDescripcion());
+									
+									if(clasifPresupuestal.getTablaRelacion().contains("Enumeration"))
+									{
+										Debug.log("Entro a Enumeration ");								
+										
+										descripcion = findOne(Enumeration.class, map(Enumeration.Fields.enumId, elementInvoice.get("clasifTypeId" +i).toString())).getDescription();
+										//getClasifTypeId1
+										Debug.log("getItemRead Enumeration descripcion " + descripcion); 
+									}
+									else if(clasifPresupuestal.getTablaRelacion().contains("Geo"))
+									{
+										Debug.log("Entro a Geo ");
+										descripcion = findOne(Geo.class, map(Geo.Fields.geoId, elementInvoice.get("clasifTypeId" +i).toString())).getGeoName();
+										//getClasifTypeId1
+										Debug.log("getItemRead Geo descripcion " + descripcion);
+									}
+									else
+									{
+										Debug.log("Entro a WorkEffort ");
+										
+											descripcion = findOne(
+													WorkEffort.class,
+													map(WorkEffort.Fields.workEffortId,
+															elementInvoice.get(
+																	"clasifTypeId"
+																			+ i)
+																	.toString()))
+													.getDescription();
+										
+										
+										//getClasifTypeId1
+										Debug.log("getItemRead WorkEffort descripcion " + descripcion);
+									}
+								} catch (Exception e) {
+									descripcion = "";
+								}
+								Debug.log("descripcion " + descripcion);
+								
+								tag.setDescription(descripcion);
+								tagTypesAndValues.add(tag);						
+								Debug.log("tag " + tag);
+								i=i+1;
+								
+								
+							}
+						}
+					}
+			}
+		}
+	}
+		Debug.log("getItemRead tagTypesAndValues size"
+				+ tagTypesAndValues.size());
+
+		return tagTypesAndValues;
 	}
 		
 }
