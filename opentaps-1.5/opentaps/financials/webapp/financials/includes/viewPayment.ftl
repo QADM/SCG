@@ -31,10 +31,15 @@ If you have come this far, payment should be a valid Payment Object.
   <#if payment.isNotPaid() || payment.isSent() || payment.isReceived()>
     <#assign paymentStatusChangeAction>${paymentStatusChangeAction}<a class="subMenuButton" href="<@ofbizUrl>editPayment?paymentId=${payment.paymentId}</@ofbizUrl>">${uiLabelMap.CommonEdit}</a></#assign>
   </#if>
+  
+  <#--
+  	Servicio de creacion de transacciones de egresos
+  -->
   <#if isDisbursement && payment.isNotPaid() && payment.isReadyToPost()>
-    <@form name="paymentSentAction" url="setPaymentStatus" paymentId=payment.paymentId statusId="PMNT_SENT" />
+    <@form name="paymentSentAction" url="aplicaPago" paymentId=payment.paymentId fecha=payment.effectiveDate monto=payment.amount party=payment.partyIdTo tipoDocumento=payment.tipoDocumento refNum=payment.paymentRefNum />
     <#assign paymentStatusChangeAction>${paymentStatusChangeAction}<@submitFormLink form="paymentSentAction" text=uiLabelMap.FinancialsPaymentStatusToSent class="subMenuButton" /></#assign>
   </#if>
+  
   <#if !isDisbursement && payment.isNotPaid() && payment.isReadyToPost()>
     <@form name="paymentReceivedAction" url="setPaymentStatus" paymentId=payment.paymentId statusId="PMNT_RECEIVED" />
     <#assign paymentStatusChangeAction>${paymentStatusChangeAction}<@submitFormLink form="paymentReceivedAction" text=uiLabelMap.FinancialsPaymentStatusToReceived class="subMenuButton" /></#assign>
