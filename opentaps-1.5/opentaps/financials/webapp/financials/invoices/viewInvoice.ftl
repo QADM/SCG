@@ -68,7 +68,9 @@ function notifyInvoiceItemsCount(n) {
 
 <#if hasUpdatePermission>
 
-  <@form name="markInvoiceReadyAction" url="setInvoiceReady" invoiceId=invoice.invoiceId />
+	<!-- Aqui tienes que poner como parametros de entrada al servicio lo que tiene que generar el registro de data import -->
+  <@form name="markInvoiceReadyAction" url="creaFactura" invoiceId=invoice.invoiceId />
+  
   <@form name="cancelInvoiceReadyAction" url="setInvoiceStatus" invoiceId=invoice.invoiceId statusId="INVOICE_CANCELLED" />
 
   <#assign stateChangeLinks><@submitFormLink form="markInvoiceReadyAction" text=uiLabelMap.FinancialsPaymentStatusToReady id="markAsReadyButton" class="subMenuButton" style=(invoiceItems.size() == 0)?string("visibility:hidden", "")/></#assign>

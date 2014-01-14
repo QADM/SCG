@@ -54,6 +54,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 
+import com.ibm.icu.text.SimpleDateFormat;
 import com.opensourcestrategies.financials.accounts.AccountsHelper;
 import com.opensourcestrategies.financials.security.FinancialsSecurity;
 import com.opensourcestrategies.financials.util.UtilFinancial;
@@ -3326,5 +3327,83 @@ public final class InvoiceServices {
             return defaultValue;
         }
     }
+    
+    public static Map<String, Object> creaFactura(DispatchContext dctx, Map<String, Object> context) 
+    {
+    	//Se reciben los parametros de entrada desde la pantalla de Invoice
+    	String invoiceId = (String)context.get("invoiceId");
+    	String fecha = (String)context.get("fecha");
+    	BigDecimal monto = (BigDecimal)context.get("monto");
+    	String party = (String)context.get("party");
+    	String tipoDocumento = (String)context.get("tipoDocumento");
+    	String refNum = (String)context.get("refNum");
+    	
+        //Rutina para crear n registros en data import con la informacion recibida
+    	GenericValue dataImportEgresoDiario = GenericValue.create(dctx.getDelegator().getModelEntity("DataImportEgresoDiario"));
+        dataImportEgresoDiario.set("idTipoDoc", tipoDocumento );
+        dataImportEgresoDiario.set("fechaRegistro", getFechaHHMMSS(fecha));
+        dataImportEgresoDiario.set("fechaContable", getFechaHHMMSS(fecha));
+        dataImportEgresoDiario.set("monto", monto);
+        dataImportEgresoDiario.set("organizationPartyId", party);
+        dataImportEgresoDiario.set("refDoc", refNum);
+        dataImportEgresoDiario.set("secuencia", "1");
+        //dataImportEgresoDiario.set("usuario", usuario );
+        //dataImportEgresoDiario.set("idPago", paymentId );
+        //dataImportEgresoDiario.set("idProductoD", idProductoD );
+        //dataImportEgresoDiario.set("idProductoH", idProductoH );
+        //dataImportEgresoDiario.set("clasificacion1", clasif1);
+        //dataImportEgresoDiario.set("clasificacion2", clasif2 );
+        //dataImportEgresoDiario.set("clasificacion3", clasif3);
+        //dataImportEgresoDiario.set("clasificacion4", clasif4);
+        //dataImportEgresoDiario.set("clasificacion5", clasif5 );
+        //dataImportEgresoDiario.set("clasificacion6", clasif6 );
+        //dataImportEgresoDiario.set("clasificacion7", clasif7 );
+        //dataImportEgresoDiario.set("clasificacion8", clasif8 );
+        //dataImportEgresoDiario.set("clasificacion9", clasif9 );
+        //dataImportEgresoDiario.set("clasificacion10", clasif10 );
+        //dataImportEgresoDiario.set("clasificacion11", clasif11 );
+        //dataImportEgresoDiario.set("clasificacion12", clasif12 );
+        //dataImportEgresoDiario.set("clasificacion13", clasif13 );
+        //dataImportEgresoDiario.set("clasificacion14", clasif14 );
+        //dataImportEgresoDiario.set("clasificacion15", clasif15 );
+        //dataImportEgresoDiario.create();
+        
+        
+        //Llamada al servicio de import
+        try {
+        	 Map<String,Object> input = new HashMap<String,Object>();
+             input.put("login.username", "admin");
+             input.put("login.password", "opentaps");
+			input = dctx.getModelService("importEgresoDiario").makeValid(input, ModelService.IN_PARAM);
+		} catch (GenericServiceException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	
+    	Map<String,Object> output = new HashMap<String,Object>();
+    	output.put("messageOut", invoiceId);
+    	return output;
+    
+	}
+    
+    private static Timestamp getFechaHHMMSS(String fecha) {
+
+		SimpleDateFormat formatoDelTexto = new SimpleDateFormat(
+				"dd-MM-yyyy hh:mm:ss");
+
+		Calendar cal = null;
+
+		try {
+				String cadFecha = fecha.trim();
+				cal = Calendar.getInstance();
+				cal.setTime(formatoDelTexto.parse(cadFecha));
+			
+		} catch (Exception e) {
+			Debug.log("No se pudo hacer el parser de la fecha: " + e);
+		}
+
+		return new Timestamp(cal.getTimeInMillis());
+
+	}
 
 }

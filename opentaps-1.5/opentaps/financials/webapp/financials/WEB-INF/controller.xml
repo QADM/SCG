@@ -2025,6 +2025,15 @@
         </response>
         <response name="error" type="view" value="viewPayment"/>
     </request-map>
+    
+    <request-map uri="creaFactura">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="creaFactura"/>
+        <response name="success" type="request-redirect" value="viewInvoice">
+          <redirect-parameter name="InvoiceId"/>
+        </response>
+        <response name="error" type="view" value="viewInvoice"/>
+    </request-map>
 
     <request-map uri="findPayment">
         <security https="true" auth="true"/>
