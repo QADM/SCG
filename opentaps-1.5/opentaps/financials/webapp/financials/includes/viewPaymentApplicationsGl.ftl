@@ -33,8 +33,8 @@
    			    <td></td>
   			    <@displayCurrencyCell amount=row.amountApplied currencyUomId=row.currencyUomId />
             </tr>
-            <#if tagTypes?has_content && allocatePaymentTagsToApplications>
+            <#--<#if tagTypes?has_content && allocatePaymentTagsToApplications>
 			    <@accountingTagsInputCells tags=tagTypes prefix="acctgTagEnumId" tagColSpan="1" entity=row! readonly="true"/>
-			</#if> 
+			</#if> -->
             </#list>
         </table>

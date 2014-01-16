@@ -53,6 +53,15 @@ under the License.
         <attribute name="acctgTagEnumId8" type="String" mode="IN" optional="true"/>
         <attribute name="acctgTagEnumId9" type="String" mode="IN" optional="true"/>
         <attribute name="acctgTagEnumId10" type="String" mode="IN" optional="true"/>
+    </service>   
+    <service name="clasificationTagsEntityInterface" engine="interface">
+        <description>Interface for the accounting tags in an entity.</description>
+        <attribute name="clasifTypeId1" type="String" mode="IN" optional="true"/>
+        <attribute name="clasifTypeId2" type="String" mode="IN" optional="true"/>
+        <attribute name="clasifTypeId3" type="String" mode="IN" optional="true"/>
+        <attribute name="clasifTypeId4" type="String" mode="IN" optional="true"/>
+        <attribute name="clasifTypeId5" type="String" mode="IN" optional="true"/>
+        <attribute name="clasifTypeId6" type="String" mode="IN" optional="true"/>        
     </service>     
     <service name="createPaymentApplication" engine="java" 
             location="com.opensourcestrategies.financials.payment.PaymentServices" invoke="createPaymentApplication" auth="true">
@@ -63,7 +72,8 @@ under the License.
           If the amount to apply is greater than what is required for an invoice, it will apply only the required amount.  If you
           want to return an error instead, use parameter checkForOverApplication with value true.
         </description>
-        <implements service="accountingTagsEntityInterface"/>
+        <!--  <implements service="accountingTagsEntityInterface"/>-->
+        <implements service="clasificationTagsEntityInterface"/>        
         <attribute name="paymentId" type="String" mode="IN" optional="false"/>
         <attribute name="invoiceId" type="String" mode="IN" optional="true"/>
         <attribute name="invoiceItemSeqId" type="String" mode="IN" optional="true"/>
@@ -74,6 +84,7 @@ under the License.
         <attribute name="checkForOverApplication" type="Boolean" mode="IN" optional="true"/>
         <attribute name="note" type="String" mode="IN" optional="true"/>
         <attribute name="paymentApplicationId" type="String" mode="OUT" optional="false"/>
+        <auto-attributes mode="IN" include="nonpk" optional="true"/> 
     </service>
 
     <service name="updatePaymentApplication" default-entity-name="PaymentApplication" engine="java"
@@ -107,13 +118,16 @@ under the License.
         <attribute name="paymentId" type="String" mode="IN" optional="false"/>
     </service>
 
-    <service name="setPaymentStatus" engine="java" default-entity-name="Payment"
-        location="com.opensourcestrategies.financials.payment.PaymentServices" invoke="setPaymentStatus" auth="true">
-        <description>Change the status of a Payment.  Overrrides legacy so that we can skip the check on payment applications when payment is confirmed.</description>
-        <auto-attributes include="pk" mode="IN" optional="false"/>
-        <attribute name="statusId" type="String" mode="IN" optional="false"/>
-        <attribute name="oldStatusId" type="String" mode="OUT" optional="true"/>
-    </service>
+	<service name="setPaymentStatus" engine="java" default-entity-name="Payment" location="com.opensourcestrategies.financials.payment.PaymentServices"
+		invoke="setPaymentStatus" auth="true">
+		<description>
+			Change the status of a Payment. Overrrides legacy so that we can skip the check on
+			payment applications when payment is confirmed.
+		</description>
+		<auto-attributes include="pk" mode="IN" optional="false"/>
+		<attribute name="statusId" type="String" mode="IN" optional="false"/>
+		<attribute name="oldStatusId" type="String" mode="OUT" optional="true"/>
+	</service>
 
 
     <service name="recalcPaymentAmounts" engine="pojo" default-entity-name="Payment"
