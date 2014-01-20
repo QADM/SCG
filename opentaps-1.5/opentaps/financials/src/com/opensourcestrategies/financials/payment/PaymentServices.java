@@ -47,6 +47,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import org.apache.axis.types.Entities;
 import org.ofbiz.accounting.invoice.InvoiceWorker;
 import org.ofbiz.accounting.payment.PaymentWorker;
 import org.ofbiz.base.util.Debug;
@@ -59,6 +60,9 @@ import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
+import org.ofbiz.entity.condition.EntityCondition;
+import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.security.Security;
 import org.ofbiz.service.DispatchContext;
@@ -2401,49 +2405,95 @@ public final class PaymentServices {
         return paymentApplied;
     }
     
-    public static Map<String, Object> aplicaPago(DispatchContext dctx, Map<String, Object> context) 
+    public static void aplicaPago(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException 
     {
-    	//Se reciben los parametros de entrada desde la pantalla de Pagos
-    	String paymentId = (String)context.get("paymentId");
-    	String fecha = (String)context.get("fecha");
-    	BigDecimal monto = (BigDecimal)context.get("monto");
-    	String party = (String)context.get("party");
-    	String tipoDocumento = (String)context.get("tipoDocumento");
-    	String refNum = (String)context.get("refNum");
+    	Debug.log("Entro al servicio aplicaPago");
+    	Debug.log("aplicaPago context " + context);
     	
-        //Rutina para crear n registros en data import con la informacion recibida
-    	GenericValue dataImportEgresoDiario = GenericValue.create(dctx.getDelegator().getModelEntity("DataImportEgresoDiario"));
-        dataImportEgresoDiario.set("idTipoDoc", tipoDocumento );
-        dataImportEgresoDiario.set("fechaRegistro", getFechaHHMMSS(fecha));
-        dataImportEgresoDiario.set("fechaContable", getFechaHHMMSS(fecha));
-        dataImportEgresoDiario.set("monto", monto);
-        dataImportEgresoDiario.set("organizationPartyId", party);
-        dataImportEgresoDiario.set("refDoc", refNum);
-        dataImportEgresoDiario.set("secuencia", "1");
-        //dataImportEgresoDiario.set("usuario", usuario );
-        dataImportEgresoDiario.set("idPago", paymentId );
-        //dataImportEgresoDiario.set("idProductoD", idProductoD );
-        //dataImportEgresoDiario.set("idProductoH", idProductoH );
-        //dataImportEgresoDiario.set("clasificacion1", clasif1);
-        //dataImportEgresoDiario.set("clasificacion2", clasif2 );
-        //dataImportEgresoDiario.set("clasificacion3", clasif3);
-        //dataImportEgresoDiario.set("clasificacion4", clasif4);
-        //dataImportEgresoDiario.set("clasificacion5", clasif5 );
-        //dataImportEgresoDiario.set("clasificacion6", clasif6 );
-        //dataImportEgresoDiario.set("clasificacion7", clasif7 );
-        //dataImportEgresoDiario.set("clasificacion8", clasif8 );
-        //dataImportEgresoDiario.set("clasificacion9", clasif9 );
-        //dataImportEgresoDiario.set("clasificacion10", clasif10 );
-        //dataImportEgresoDiario.set("clasificacion11", clasif11 );
-        //dataImportEgresoDiario.set("clasificacion12", clasif12 );
-        //dataImportEgresoDiario.set("clasificacion13", clasif13 );
-        //dataImportEgresoDiario.set("clasificacion14", clasif14 );
-        //dataImportEgresoDiario.set("clasificacion15", clasif15 );
-        //dataImportEgresoDiario.create();
+    	Delegator delegator = dctx.getDelegator();
+    	LocalDispatcher dispatcher = dctx.getDispatcher();  	  	
+        String paymentId = (String) context.get("paymentId");
+        Map<String, Object> createAccountResult = null;
+        //buscar Payment Applications
+        
+        List<GenericValue> paymentApplications = getPaymentApplications(paymentId, delegator);        
+        Debug.log("aplicaPago paymentApplications" + paymentApplications);
+    	
+        GenericValue payment = delegator.findByPrimaryKey("Payment", UtilMisc.toMap("paymentId", paymentId));
+    	Debug.log("aplicaPago payment " + payment);
+        //Se reciben los parametros de entrada desde la pantalla de Pagos
+    	
+    	String fecha = payment.getString("effectiveDate").toString();
+    	Debug.log("aplicaPago fecha " + fecha);
+    	
+    	BigDecimal monto =  (BigDecimal)payment.get("amount");
+    	String party = (String)context.get("partyId");
+    	String tipoDocumento = payment.get("tipoDocumento").toString();
+    	String refNum = payment.get("paymentRefNum").toString();
+    	///Obtener fecha
+    	
+    	
+    	if(paymentApplications.size()!=0)
+    	{
+    		int j=1;
+    		for (GenericValue paymentApplication : paymentApplications) {
+				//Buscar Registros duplicados 
+    			 String secuencia = String.valueOf(j);
+                 GenericValue payemntAppduplicado = delegator.findByPrimaryKey("DataImportEgresoDiario", UtilMisc.toMap("refDoc", refNum, "secuencia", secuencia));	
+    			
+                 Debug.log("aplicaPago payemntAppduplicado " + j + "; " +  payemntAppduplicado);
+    			if(payemntAppduplicado == null)
+    			{
+	    			//Rutina para crear n registros en data import con la informacion recibida
+	    	    	GenericValue dataImportEgresoDiario = GenericValue.create(dctx.getDelegator().getModelEntity("DataImportEgresoDiario"));
+	    	    	
+	    	        dataImportEgresoDiario.set("idTipoDoc", tipoDocumento );
+	    	        dataImportEgresoDiario.set("fechaRegistro", getFechaHHMMSS(fecha));
+	    	        dataImportEgresoDiario.set("fechaContable", getFechaHHMMSS(fecha));
+	    	        dataImportEgresoDiario.set("monto", (BigDecimal)paymentApplication.get("amountApplied"));
+	    	        dataImportEgresoDiario.set("organizationPartyId", "10001");
+	    	        dataImportEgresoDiario.set("refDoc", refNum);
+	    	        dataImportEgresoDiario.set("secuencia", j);
+	    	        dataImportEgresoDiario.set("usuario", "admin");
+	    	        dataImportEgresoDiario.set("idPago", paymentId );
+	    	        //dataImportEgresoDiario.set("idProductoD", idProductoD );
+	    	        //dataImportEgresoDiario.set("idProductoH", idProductoH );
+	    	        for (int i = 1; i < 7; i++) {
+	    	        	if(paymentApplication.get("clasifTypeId" + i)!=null)
+	    	        	dataImportEgresoDiario.set("clasificacion" + i, paymentApplication.get("clasifTypeId" + i));
+					}
+	    	        
+	    	        dataImportEgresoDiario.create();
+	    	        j++;
+    			}
+			}
+    	}
+    	
+    	 // automatically set the parameters
+    	try {
+    		
+    		String createPaymentServiceName = "importEgresoDiario";
+        	
+            ModelService createPaymentService = dctx.getModelService(createPaymentServiceName);
+            Map<String, Object> createPaymentContext = createPaymentService.makeValid(context, ModelService.IN_PARAM);
+            createPaymentContext.put("lote", refNum);
+           
+
+            createAccountResult = dispatcher.runSync(createPaymentServiceName, createPaymentContext);
+            Debug.log("aplicaPago createAccountResult "  + createAccountResult);
+            if (ServiceUtil.isError(createAccountResult) || ServiceUtil.isFailure(createAccountResult)) {
+               //return createAccountResult;
+            }
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+    	
         
         
         //Llamada al servicio de import
-        try {
+        /*try {
         	 Map<String,Object> input = new HashMap<String,Object>();
              input.put("login.username", "admin");
              input.put("login.password", "opentaps");
@@ -2455,14 +2505,29 @@ public final class PaymentServices {
     	
     	Map<String,Object> output = new HashMap<String,Object>();
     	output.put("messageOut", paymentId);
-    	return output;
+    	return output;*/
     
 	}
     
-    private static Timestamp getFechaHHMMSS(String fecha) {
+    private static List<GenericValue> getPaymentApplications(String paymentId, Delegator delegator) {
+    	List<GenericValue> itemsPaymentApplications = null;
+    	
+    	try {
+			EntityCondition condicion = EntityCondition.makeCondition("paymentId", EntityOperator.EQUALS, paymentId);    		
+    		itemsPaymentApplications = delegator.findList("PaymentApplication", EntityCondition.makeCondition(condicion), null, null, null, false);
+			
+		} catch (Exception e) {
+			Debug.log("No se pudo consultar PaymentApplication, paymentId[" + paymentId + "]");
+		}
+		return itemsPaymentApplications;
+	}
 
+	private static Timestamp getFechaHHMMSS(String fecha) {
+		
+		//2014-01-24 00:00:00.0
+		
 		SimpleDateFormat formatoDelTexto = new SimpleDateFormat(
-				"dd-MM-yyyy hh:mm:ss");
+				"yyyy-MM-dd hh:mm:ss");
 
 		Calendar cal = null;
 

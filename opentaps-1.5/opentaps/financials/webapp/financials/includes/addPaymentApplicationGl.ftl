@@ -41,20 +41,31 @@
 				    </#if>        
 				    <tr>
 				      <@displayTitleCell title=tag.description titleClass=titleClass /> 
-				      <#if tag.description?contains("geo")>         
-				          <@inputSelectCell name="clasifTypeId${tag.index}" list=tag.activeTagValues key="geoId" required=false default=tag.defaultValue! ; tagValue>
+				       <#if tag.description?contains("Administrativa")>
+				          <@inputSelectCell name="clasifTypeId${tag.index}"  list=tag.activeTagValues key="externalId" required=false default=tag.defaultValue! ; tagValue>
+				            ${tagValue.groupName}
+				          </@inputSelectCell>            
+			           <#elseif tag.description?contains("geo")>
+				          <@inputSelectCell name="clasifTypeId${tag.index}"  list=tag.activeTagValues key="geoId" required=false default=tag.defaultValue! ; tagValue>
 				            ${tagValue.geoName}
-				          </@inputSelectCell>             
-				      <#elseif tag.description?contains("Programatica")>         
-				          <@inputSelectCell name="clasifTypeId${tag.index}" list=tag.activeTagValues key="workEffortName" required=false default=tag.defaultValue! ; tagValue>
+				          </@inputSelectCell>  
+			          <#elseif tag.description?contains("Gasto")>
+				          <@inputSelectCell name="clasifTypeId${tag.index}"  list=tag.activeTagValues key="categoryName" required=false default=tag.defaultValue! ; tagValue>
 				            ${tagValue.description}
-				          </@inputSelectCell>	     
-				      <#else>         
-				          <@inputSelectCell name="clasifTypeId${tag.index}" list=tag.activeTagValues key="enumId" required=false default=tag.defaultValue! ; tagValue>
+				          </@inputSelectCell>  
+				      <#elseif tag.description?contains("Programatica")>
+				          <@inputSelectCell name="clasifTypeId${tag.index}"  list=tag.activeTagValues key="workEffortName" required=false default=tag.defaultValue! ; tagValue>
+				            ${tagValue.description}
+				          </@inputSelectCell>
+				      <#elseif tag.description?contains("Ciclo")>
+				          <@inputSelectCell name="clasifTypeId${tag.index}"  list=tag.activeTagValues key="nivelId" required=false default=tag.defaultValue! ; tagValue>
+				            ${tagValue.nivelId}
+				          </@inputSelectCell>
+				      <#else>
+				          <@inputSelectCell name="clasifTypeId${tag.index}"  list=tag.activeTagValues key="enumId" required=false default=tag.defaultValue! ; tagValue>
 				            ${tagValue.enumCode}
-				          </@inputSelectCell>	  
-				                
-				      </#if>  
+				          </@inputSelectCell>
+      				 </#if>  
 				    </tr>        
 				  </#list>               
                   

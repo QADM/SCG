@@ -36,7 +36,7 @@ If you have come this far, payment should be a valid Payment Object.
   	Servicio de creacion de transacciones de egresos
   -->
   <#if isDisbursement && payment.isNotPaid() && payment.isReadyToPost()>
-    <@form name="paymentSentAction" url="aplicaPago" paymentId=payment.paymentId fecha=payment.effectiveDate monto=payment.amount party=payment.partyIdTo tipoDocumento=payment.tipoDocumento refNum=payment.paymentRefNum />
+    <@form name="paymentSentAction" url="aplicaPago" paymentId=payment.paymentId/>
     <#assign paymentStatusChangeAction>${paymentStatusChangeAction}<@submitFormLink form="paymentSentAction" text=uiLabelMap.FinancialsPaymentStatusToSent class="subMenuButton" /></#assign>
   </#if>
   
@@ -104,39 +104,9 @@ If you have come this far, payment should be a valid Payment Object.
       <@displayRow title=uiLabelMap.CommonComments text=payment.comments?if_exists />
       <@displayRow title=uiLabelMap.FinancialsPaymentRefNum text=payment.paymentRefNum?if_exists />
 	  <@displayRow title=uiLabelMap.FinancialsReferenceDocument text=payment.tipoDocumento?if_exists />
-      <#if tagTypes?has_content>
-      	<tr class="${tableRowClass(item_index)}">
-            <td colspan="2">&nbsp;</td>
-            <td colspan="<#if hasUpdatePermission>8<#else>6</#if>">
-            	 <#list tagTypes as tag>
-				    <#if tag.isRequired()>
-				      <#assign titleClass="requiredField" />
-				    <#else/>
-				      <#assign titleClass="tableheadtext" />
-				    </#if>        
-				    <tr>
-				      <@displayTitleCell title=tag.description titleClass=titleClass /> 
-				      <#if tag.description?contains("geo")>         
-				          <@inputSelectCell name="clasifTypeId${tag.index}" list=tag.activeTagValues key="geoId" required=false default=tag.defaultValue! ; tagValue>
-				            ${tagValue.geoName}
-				          </@inputSelectCell>             
-				      <#elseif tag.description?contains("Programatica")>         
-				          <@inputSelectCell name="clasifTypeId${tag.index}" list=tag.activeTagValues key="workEffortName" required=false default=tag.defaultValue! ; tagValue>
-				            ${tagValue.description}
-				          </@inputSelectCell>	     
-				      <#else>         
-				          <@inputSelectCell name="clasifTypeId${tag.index}" list=tag.activeTagValues key="enumId" required=false default=tag.defaultValue! ; tagValue>
-				            ${tagValue.enumCode}
-				          </@inputSelectCell>	  
-				                
-				      </#if>  
-				    </tr>        
-				  </#list>               
-                  
-                </td>
-              </tr>
-        <#--<@accountingTagsDisplayRows tags=tagTypes entity=payment />-->
-      </#if>
+      <#--<#if tagTypes?has_content>      	
+        <@accountingTagsDisplayRows tags=tagTypes entity=payment />
+      </#if>-->
     </table>
 </@frameSection>
 

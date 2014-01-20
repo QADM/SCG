@@ -146,12 +146,7 @@ under the License.
     <service name="aplicaPago" engine="java"
         location="com.opensourcestrategies.financials.payment.PaymentServices" invoke="aplicaPago" auth="true">
         <description>Servicio de Prueba</description>
-        <attribute name="paymentId" type="String" mode="IN" optional="false"/>
-        <attribute name="fecha" type="String" mode="IN" optional="false"/>
-        <attribute name="monto" type="BigDecimal" mode="IN" optional="false"/>
-        <attribute name="party" type="String" mode="IN" optional="false"/>
-        <attribute name="tipoDocumento" type="String" mode="IN" optional="false"/>
-        <attribute name="refNum" type="String" mode="IN" optional="false"/>
+        <attribute name="paymentId" type="String" mode="IN" optional="false"/>        
         <attribute name="messageOut" type="String" mode="OUT" optional="true"/>
     </service>
 </services>
