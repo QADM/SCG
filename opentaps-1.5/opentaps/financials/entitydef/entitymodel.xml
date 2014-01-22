@@ -224,7 +224,16 @@ under the License.
       	<field name="clasifTypeId3" type="id-ne"/>
       	<field name="clasifTypeId4" type="id-ne"/>
       	<field name="clasifTypeId5" type="id-ne"/>
-      	<field name="clasifTypeId6" type="id-ne"/>  
+      	<field name="clasifTypeId6" type="id-ne"/> 
+      	<field name="clasifTypeId7" type="id-ne"/>
+      	<field name="clasifTypeId8" type="id-ne"/>
+      	<field name="clasifTypeId9" type="id-ne"/>
+      	<field name="clasifTypeId10" type="id-ne"/>
+      	<field name="clasifTypeId11" type="id-ne"/>
+      	<field name="clasifTypeId12" type="id-ne"/>  
+      	<field name="clasifTypeId13" type="id-ne"/>
+      	<field name="clasifTypeId14" type="id-ne"/>
+      	<field name="clasifTypeId15" type="id-ne"/>  
         <relation type="one" rel-entity-name="Enumeration" fk-name="PAYMENT_APP_TAG1" title="tag1">
             <key-map field-name="acctgTagEnumId1" rel-field-name="enumId"/>
         </relation>

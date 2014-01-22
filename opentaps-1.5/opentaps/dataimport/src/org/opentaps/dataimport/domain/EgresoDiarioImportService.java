@@ -103,7 +103,7 @@ public class EgresoDiarioImportService extends DomainService implements
 
 	/** {@inheritDoc} */
 	public void importEgresoDiario() throws ServiceException {
-		
+		Debug.log("Entro importEgresoDiario por pantalla");
 		try {
 			this.session = this.getInfrastructure().getSession();
 			EgresoDiarioDataImportRepositoryInterface imp_repo = this
@@ -162,104 +162,16 @@ public class EgresoDiarioImportService extends DomainService implements
 					// Empieza bloque de validaciones
 					ContenedorContable contenedor = new ContenedorContable();
 					String mensaje = "";
-					Debug.log("Empieza bloque de validaciones");
-					// mensaje = UtilImport.validaParty(mensaje, ledger_repo,
-					// rowdata.getUr(), "UR");
-					// mensaje = UtilImport.validaParty(mensaje, ledger_repo,
-					// rowdata.getUo(), "UO");
-					// mensaje = UtilImport.validaParty(mensaje, ledger_repo,
-					// rowdata.getUe(), "UE");
-					// mensaje = UtilImport.validaEnumeration(mensaje,
-					// ledger_repo,
-					// rowdata.getFin(), "CLAS_FUN", "FIN");
-					// mensaje = UtilImport.validaEnumeration(mensaje,
-					// ledger_repo,
-					// rowdata.getFun(), "CLAS_FUN", "FUN");
-					// mensaje = UtilImport.validaEnumeration(mensaje,
-					// ledger_repo,
-					// rowdata.getSubf(), "CLAS_FUN", "SUBF");
-					// mensaje = UtilImport.validaWorkEffort(mensaje,
-					// ledger_repo,
-					// rowdata.getEje(), "EJE");
-					// mensaje = UtilImport.validaWorkEffort(mensaje,
-					// ledger_repo,
-					// rowdata.getPp(), "PP");
-					// mensaje = UtilImport.validaWorkEffort(mensaje,
-					// ledger_repo,
-					// rowdata.getSpp(), "SPP");
-					// mensaje = UtilImport.validaWorkEffort(mensaje,
-					// ledger_repo,
-					// rowdata.getAct(), "ACT");
-					// mensaje = UtilImport.validaEnumeration(mensaje,
-					// ledger_repo,
-					// rowdata.getTg(), "TIPO_GASTO", "tg");
-					// mensaje = UtilImport.validaProductCategory(mensaje,
-					// ledger_repo, rowdata.getCap(), "CA", "CAP");
-					// mensaje = UtilImport.validaProductCategory(mensaje,
-					// ledger_repo, rowdata.getCon(), "CON", "CON");
-					// mensaje = UtilImport.validaProductCategory(mensaje,
-					// ledger_repo, rowdata.getPg(), "PG", "PG");
-					// mensaje = UtilImport.validaProductCategory(mensaje,
-					// ledger_repo, rowdata.getPe(), "PE", "PE");
-					// mensaje = UtilImport.validaGeo(mensaje, ledger_repo,
-					// rowdata.getEf(), "EF");
-					// mensaje = UtilImport.validaGeo(mensaje, ledger_repo,
-					// rowdata.getReg(), "REG");
-					// mensaje = UtilImport.validaGeo(mensaje, ledger_repo,
-					// rowdata.getMun(), "MUN");
-					// mensaje = UtilImport.validaGeo(mensaje, ledger_repo,
-					// rowdata.getLoc(), "LOC");
-					// mensaje = UtilImport.validaEnumeration(mensaje,
-					// ledger_repo,
-					// rowdata.getF(), "CLAS_FR", "F");
-					// mensaje = UtilImport.validaEnumeration(mensaje,
-					// ledger_repo,
-					// rowdata.getSf(), "CLAS_FR", "SF");
-					// mensaje = UtilImport.validaEnumeration(mensaje,
-					// ledger_repo,
-					// rowdata.getSfe(), "CLAS_FR", "SFE");
-					// mensaje = UtilImport.validaEnumeration(mensaje,
-					// ledger_repo,
-					// rowdata.getSec(), "CLAS_SECT", "SEC");
-					// mensaje = UtilImport.validaEnumeration(mensaje,
-					// ledger_repo,
-					// rowdata.getSubsec(), "CLAS_SECT", "SUBSEC");
-					// mensaje = UtilImport.validaEnumeration(mensaje,
-					// ledger_repo,
-					// rowdata.getArea(), "CLAS_SECT", "AREA");
-					
-					/*mensaje = UtilImport.validaCiclo(mensaje,
-							rowdata.getCiclo(), rowdata.getFechaContable());
-
-					mensaje = UtilImport.validaParty(mensaje, ledger_repo,
-							rowdata.getUe(), "ADMINISTRATIVA");
-					mensaje = UtilImport.validaEnumeration(mensaje,
-							ledger_repo, rowdata.getSubf(), "CL_FUNCIONAL",
-							"FUNCIONAL");
-					mensaje = UtilImport.validaWorkEffort(mensaje, ledger_repo,
-							rowdata.getAct(), "ACTIVIDAD");
-					mensaje = UtilImport.validaEnumeration(mensaje,
-							ledger_repo, rowdata.getTg(), "TIPO_GASTO",
-							"TIPO GASTO");
-					mensaje = UtilImport.validaProductCategory(mensaje,
-							ledger_repo, rowdata.getPe(), "PARTIDA ESPECIFICA",
-							"PRODUCTO ESPECIFICO");
-					mensaje = UtilImport.validaEnumeration(mensaje,
-							ledger_repo, rowdata.getSfe(),
-							"CL_FUENTE_RECURSOS", "FUENTE DE LOS RECURSOS");
-					mensaje = UtilImport.validaGeo(mensaje, ledger_repo,
-							rowdata.getLoc(), "GEOGRAFICA");
-					mensaje = UtilImport.validaEnumeration(mensaje,
-							ledger_repo, rowdata.getArea(), "CL_SECTORIAL",
-							"SECTORIAL");
-					mensaje = UtilImport.validaMonto(rowdata.getMonto(),
-							mensaje);*/
+					Debug.log("Empieza bloque de validaciones");					
 
 					//Se obtiene la estructura de la clave valida para el ciclo
 					EstructuraClave estructura = ledger_repo.findList(EstructuraClave.class,
 							ledger_repo.map(EstructuraClave.Fields.ciclo, 
 									UtilImport.obtenerCiclo(rowdata.getFechaContable()),
-									EstructuraClave.Fields.acctgTagUsageTypeId,"Egreso")).get(0);					
+									EstructuraClave.Fields.acctgTagUsageTypeId,"Egreso", EstructuraClave.Fields.organizationPartyId , "10001")).get(0);	
+					
+					Debug.log("estructura " + estructura);
+					
 					//Se obtiene el tipo de clasficacion
 					List<Clasificacion> listaClasif = new ArrayList<Clasificacion>();
 					if(estructura.getClasificacion1()!=null){
@@ -348,11 +260,18 @@ public class EgresoDiarioImportService extends DomainService implements
 					}
 					if(estructura.getClasificacion8()!=null){
 						Clasificacion c = new Clasificacion();
+						
 					String tipoClasif8 = ledger_repo.findList(ClasifPresupuestal.class, 
 							ledger_repo.map(ClasifPresupuestal.Fields.clasificacionId,
 									estructura.getClasificacion8())).get(0).getTablaRelacion();
+					Debug.log("tipoClasif8 " + tipoClasif8);
+					Debug.log("rowdata.getClasificacion8() " + rowdata.getClasificacion8());
 					c.setTipoObjeto(tipoClasif8);
 					c.setValor(rowdata.getClasificacion8());
+					Debug.log("setTipoEnum " + ledger_repo.findList(ClasifPresupuestal.class, 
+							ledger_repo.map(ClasifPresupuestal.Fields.clasificacionId,
+									estructura.getClasificacion8())).get(0).getClasificacionId());
+					
 					c.setTipoEnum(ledger_repo.findList(ClasifPresupuestal.class, 
 							ledger_repo.map(ClasifPresupuestal.Fields.clasificacionId,
 									estructura.getClasificacion8())).get(0).getClasificacionId());
@@ -363,8 +282,13 @@ public class EgresoDiarioImportService extends DomainService implements
 					String tipoClasif9 = ledger_repo.findList(ClasifPresupuestal.class, 
 							ledger_repo.map(ClasifPresupuestal.Fields.clasificacionId,
 									estructura.getClasificacion9())).get(0).getTablaRelacion();
+					Debug.log("tipoClasif9 " + tipoClasif9);
+					Debug.log("rowdata.getClasificacion9() " + rowdata.getClasificacion9());
 					c.setTipoObjeto(tipoClasif9);
 					c.setValor(rowdata.getClasificacion9());
+					Debug.log("setTipoEnum " + ledger_repo.findList(ClasifPresupuestal.class, 
+							ledger_repo.map(ClasifPresupuestal.Fields.clasificacionId,
+									estructura.getClasificacion9())).get(0).getClasificacionId());
 					c.setTipoEnum(ledger_repo.findList(ClasifPresupuestal.class, 
 							ledger_repo.map(ClasifPresupuestal.Fields.clasificacionId,
 									estructura.getClasificacion9())).get(0).getClasificacionId());
@@ -448,7 +372,7 @@ public class EgresoDiarioImportService extends DomainService implements
 							rowdata.getIdTipoDoc());
 					TipoDocumento tipoDoc = ledger_repo.findOne(TipoDocumento.class,
 							ledger_repo.map(TipoDocumento.Fields.idTipoDoc, rowdata.getIdTipoDoc()));
-					if(tipoDoc.getValidaSuf().equals("Y")){
+					/*if(tipoDoc.getValidaSuf().equals("Y")){
 						//Se obtienen los datos de entrada
 						String ur = rowdata.getOrganizationPartyId();
 						String tipoDocumento = rowdata.getIdTipoDoc();
@@ -464,7 +388,7 @@ public class EgresoDiarioImportService extends DomainService implements
 						{
 							existeSuficiencia = false;
 						}
-					}
+					}*/
 					if (contenedor.getMensaje()!= "" || !mensaje.isEmpty() || !existeSuficiencia || !documentoValido) {
 						loteValido = false;
 						documentoValido = false;
@@ -485,6 +409,7 @@ public class EgresoDiarioImportService extends DomainService implements
 				if(documentoValido){
 					int index = 0;
 					for (DataImportEgresoDiario rowdata : lista) {
+						Debug.log("contenedores " +contenedores);
 						ContenedorContable contenedor = contenedores.get(index);
 						TipoDocumento tipoDoc = ledger_repo.findOne(TipoDocumento.class,
 								ledger_repo.map(TipoDocumento.Fields.idTipoDoc, rowdata.getIdTipoDoc()));
@@ -619,21 +544,9 @@ public class EgresoDiarioImportService extends DomainService implements
 */
 					Debug.log("Motor Contable");
 					MotorContable motor = new MotorContable(ledger_repo);
-					// Map<String, String> cuentas = motor.cuentasDiarias(
-					// tipoDoc.getAcctgTransTypeId(), pg,
-					// pe.getProductCategoryId(),
-					// rowdata.getOrganizationPartyId(), rowdata.getTg(),
-					// null, rowdata.getIdTipoCatalogo(), rowdata.getIdPago(),
-					// null, null, null, true, null, null,
-					// rowdata.getIdProducto());
-
-					// Map<String, String> cuentas = motor.cuentasEgresoDiario(
-					// tipoDoc.getAcctgTransTypeId(), pg,
-					// rowdata.getOrganizationPartyId(), rowdata.getTg(),
-					// rowdata.getIdPago(), rowdata.getIdProductoD(),
-					// rowdata.getIdProductoH());
-					
+										
 					//Se obtienen los enum
+					
 					Enumeration tg = null;
 					for(Enumeration e : contenedor.getEnumeration())
 					{
@@ -643,6 +556,15 @@ public class EgresoDiarioImportService extends DomainService implements
 							
 						}
 					}
+					Debug.log("obtener cuentas");
+					Debug.log("tipoDoc.getAcctgTransTypeId()" + tipoDoc.getAcctgTransTypeId());
+					Debug.log("contenedor.getProduct().getCategoryName()" + contenedor.getProduct().getCategoryName());
+					Debug.log("rowdata.getOrganizationPartyId() " +rowdata.getOrganizationPartyId());
+					Debug.log("tg.getSequenceId() " + tg.getSequenceId());
+					Debug.log("rowdata.getIdPago()" + rowdata.getIdPago());
+					Debug.log("rowdata.getIdProductoD()" + rowdata.getIdProductoD());
+					Debug.log("rowdata.getIdProductoH()" + rowdata.getIdProductoH());
+					
 					Map<String, String> cuentas = motor.cuentasEgresoDiario(
 							tipoDoc.getAcctgTransTypeId(), contenedor.getProduct().getCategoryName(),
 							rowdata.getOrganizationPartyId(), tg.getSequenceId(),
@@ -727,6 +649,9 @@ public class EgresoDiarioImportService extends DomainService implements
 								.obtenPeriodos(ledger_repo,
 										rowdata.getOrganizationPartyId(),
 										egresoDiario.getPostedDate());
+						Debug.log("egresoDiario.getPostedDate() " + egresoDiario.getPostedDate());
+						Debug.log("periodos.size( " + periodos.size());
+						Debug.log("periodos " + periodos);
 
 						if (cuentas.get("Cuenta Cargo Presupuesto") != null) {
 							Debug.log("Cuenta Presupuestal");
@@ -999,59 +924,71 @@ public class EgresoDiarioImportService extends DomainService implements
 								txHistory.commit();
 							}
 						}
-
+						Debug.log("Hasta aqui mi reporte joaquin");
 						//Creacion de pago (TEGRESOPAGADO)
 						if(tipoDoc.getAcctgTransTypeId().equals("TEGRESOPAGADO")){
-						Payment pago = UtilImport.obtenerPago(rowdata.getIdPago(),payment_repo);					
+						
+						Payment pago = UtilImport.obtenerPago(rowdata.getIdPago(),payment_repo);	
+						Debug.log("pago " + pago);
 						PaymentApplication aplicacion = UtilImport.obtenerAplicacionPago(rowdata.getIdPago(),payment_repo);
-						if(pago.getPaymentId() == null){pago.setPaymentId(rowdata.getIdPago());}
-						pago.setPaymentTypeId("VENDOR_PAYMENT");
-						PaymentMethodType metodo = payment_repo.findOne(PaymentMethodType.class, payment_repo.map(PaymentMethodType.Fields.paymentMethodTypeId, "CASH"));
-						pago.setPaymentMethodTypeId(metodo.getPaymentMethodTypeId());
-						//Aqui esta el 0 por default pero tiene que recibirse el metodo de pago de data import
-						pago.setPaymentMethodId(metodo.getPaymentMethods().get(0).getPaymentMethodId());
-						pago.setPartyIdFrom(rowdata.getOrganizationPartyId());
-						pago.setPartyIdTo(rowdata.getOrganizationPartyId());
-						pago.setStatusId("PMNT_CONFIRMED");
-						pago.setEffectiveDate(rowdata.getFechaContable());
-						pago.setPaymentRefNum(rowdata.getRefDoc());
-						pago.setAmount(rowdata.getMonto());
-						pago.setCurrencyUomId(contenedor.getParty().getPreferredCurrencyUomId());
-						pago.setAppliedAmount(rowdata.getMonto());
+						Debug.log("aplicacion " + aplicacion);
+						if(pago.getPaymentId().isEmpty() && aplicacion.getPaymentApplicationId().isEmpty())
+						{
+							Debug.log("entro if");
+							pago.setPaymentId(rowdata.getIdPago());
+							pago.setPaymentTypeId("VENDOR_PAYMENT");
+							PaymentMethodType metodo = payment_repo.findOne(PaymentMethodType.class, payment_repo.map(PaymentMethodType.Fields.paymentMethodTypeId, "CASH"));
+							pago.setPaymentMethodTypeId(metodo.getPaymentMethodTypeId());
+							Debug.log("Hasta aqui mi reporte joaquin2");
+							//Aqui esta el 0 por default pero tiene que recibirse el metodo de pago de data import
+							pago.setPaymentMethodId(metodo.getPaymentMethods().get(0).getPaymentMethodId());
+							pago.setPartyIdFrom(rowdata.getOrganizationPartyId());
+							pago.setPartyIdTo(rowdata.getOrganizationPartyId());
+							pago.setStatusId("PMNT_CONFIRMED");
+							pago.setEffectiveDate(rowdata.getFechaContable());
+							pago.setPaymentRefNum(rowdata.getRefDoc());
+							pago.setAmount(rowdata.getMonto());
+							pago.setCurrencyUomId(contenedor.getParty().getPreferredCurrencyUomId());
+							pago.setAppliedAmount(rowdata.getMonto());
+							
+							aplicacion.setPaymentApplicationId(rowdata.getIdPago()+"A");
+							aplicacion.setPaymentId(pago.getPaymentId());
+							aplicacion.setOverrideGlAccountId(cuentas.get("Cuenta Abono Presupuesto"));
+							aplicacion.setAmountApplied(pago.getAppliedAmount());
+							aplicacion.setClasifTypeId1(rowdata.getClasificacion1());
+							aplicacion.setClasifTypeId2(rowdata.getClasificacion2());
+							aplicacion.setClasifTypeId3(rowdata.getClasificacion3());
+							aplicacion.setClasifTypeId4(rowdata.getClasificacion4());
+							aplicacion.setClasifTypeId5(rowdata.getClasificacion5());
+							aplicacion.setClasifTypeId6(rowdata.getClasificacion6());
+							
+							List<PaymentApplication> listaApp = new ArrayList<PaymentApplication>();
+							listaApp.add(aplicacion);
+							Debug.log("Hasta aqui mi reporte joaquin3555");
+							imp_tx13 = this.session.beginTransaction();
+							payment_repo.createOrUpdate(pago);
+							imp_tx13.commit();
+							
+							imp_tx14 = this.session.beginTransaction();
+							payment_repo.createOrUpdate(aplicacion);
+							imp_tx14.commit();
+							
+							//Aqui hay que modificar excel import services para recibir como opcional el id de factura
+							idFactura = aplicacion.getInvoiceId();
+							Invoice f = invoice_repo.findOne(Invoice.class, invoice_repo.map(Invoice.Fields.invoiceId,idFactura));
+							f.setStatusId("INVOICE_PAID");
+							f.setPaymentApplications(listaApp);
+							f.setPaidDate(rowdata.getFechaContable());
+							f.setAppliedAmount(rowdata.getMonto());
+							f.setOpenAmount(f.getOpenAmount().subtract(rowdata.getMonto()));
+							imp_tx16 = this.session.beginTransaction();
+							invoice_repo.createOrUpdate(f);
+							imp_tx16.commit();
+						}				
 						
-						if(aplicacion.getPaymentApplicationId()  == null){aplicacion.setPaymentApplicationId(rowdata.getIdPago()+"A");
-						aplicacion.setPaymentId(pago.getPaymentId());}
-						aplicacion.setOverrideGlAccountId(cuentas.get("Cuenta Abono Presupuesto"));
-						aplicacion.setAmountApplied(pago.getAppliedAmount());
-						aplicacion.setClasifTypeId1(contenedor.getEnumeration().get(0).getEnumId());
-						aplicacion.setClasifTypeId2(contenedor.getEnumeration().get(1).getEnumId());
-						aplicacion.setClasifTypeId3(contenedor.getEnumeration().get(2).getEnumId());
-						aplicacion.setClasifTypeId4(contenedor.getEnumeration().get(3).getEnumId());
-						aplicacion.setClasifTypeId5(contenedor.getGeo().getGeoId());
-						aplicacion.setClasifTypeId6(contenedor.getWe().getWorkEffortId());
-						List<PaymentApplication> listaApp = new ArrayList<PaymentApplication>();
-						listaApp.add(aplicacion);
 						
-						imp_tx13 = this.session.beginTransaction();
-						payment_repo.createOrUpdate(pago);
-						imp_tx13.commit();
 						
-						imp_tx14 = this.session.beginTransaction();
-						payment_repo.createOrUpdate(aplicacion);
-						imp_tx14.commit();
-						
-						//Aqui hay que modificar excel import services para recibir como opcional el id de factura
-						Invoice f = invoice_repo.findOne(Invoice.class, invoice_repo.map(Invoice.Fields.invoiceId,idFactura));
-						f.setStatusId("INVOICE_PAID");
-						f.setPaymentApplications(listaApp);
-						f.setPaidDate(rowdata.getFechaContable());
-						f.setAppliedAmount(rowdata.getMonto());
-						f.setOpenAmount(f.getOpenAmount().subtract(rowdata.getMonto()));
-						imp_tx16 = this.session.beginTransaction();
-						invoice_repo.createOrUpdate(f);
-						imp_tx16.commit();
-						
-						}
+						Debug.log("Hasta aqui mi reporte joaquin4");
 						
 						//Creacion de factura
 						if(tipoDoc.getAcctgTransTypeId().equals("TEGRESODEVENGADO")){
@@ -1085,13 +1022,25 @@ public class EgresoDiarioImportService extends DomainService implements
 							linea.setQuantity(new BigDecimal(1));
 							linea.setAmount(rowdata.getMonto());
 							totalFactura.add(rowdata.getMonto());
-							linea.setClasifTypeId1(contenedor.getEnumeration().get(0).getEnumId());
-							linea.setClasifTypeId2(contenedor.getEnumeration().get(1).getEnumId());
-							linea.setClasifTypeId3(contenedor.getEnumeration().get(2).getEnumId());
-							linea.setClasifTypeId4(contenedor.getEnumeration().get(3).getEnumId());
-							linea.setClasifTypeId5(contenedor.getGeo().getGeoId());
-							linea.setClasifTypeId6(contenedor.getWe().getWorkEffortId());
-							
+							linea.setClasifTypeId1(rowdata.getClasificacion1());
+							linea.setClasifTypeId2(rowdata.getClasificacion2());
+							linea.setClasifTypeId3(rowdata.getClasificacion3());
+							linea.setClasifTypeId4(rowdata.getClasificacion4());
+							linea.setClasifTypeId5(rowdata.getClasificacion5());
+							linea.setClasifTypeId6(rowdata.getClasificacion6());
+							/*linea.setClasifTypeId7(rowdata.getClasificacion1());
+							linea.setClasifTypeId8(rowdata.getClasificacion1());
+							linea.setClasifTypeId9(rowdata.getClasificacion1());
+							linea.setClasifTypeId(rowdata.getClasificacion1());
+							linea.setClasifTypeId5(rowdata.getClasificacion1());
+							linea.setClasifTypeId6(rowdata.getClasificacion1());
+							linea.setClasifTypeId1(rowdata.getClasificacion1());
+							linea.setClasifTypeId2(rowdata.getClasificacion1());
+							linea.setClasifTypeId3(rowdata.getClasificacion1());
+							linea.setClasifTypeId4(rowdata.getClasificacion1());
+							linea.setClasifTypeId5(rowdata.getClasificacion1());
+							linea.setClasifTypeId6(rowdata.getClasificacion1());*/
+						
 							imp_tx14 = this.session.beginTransaction();
 							invoice_repo.createOrUpdate(linea);
 							imp_tx14.commit();
@@ -1107,7 +1056,7 @@ public class EgresoDiarioImportService extends DomainService implements
 									imp_repo);
 							Debug.logInfo(message, MODULE);
 							imported = imported + 1;
-						//}
+						}
 
 					} catch (Exception ex) {
 						String message = ex.getMessage();

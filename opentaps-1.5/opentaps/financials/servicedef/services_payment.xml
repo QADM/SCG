@@ -61,7 +61,16 @@ under the License.
         <attribute name="clasifTypeId3" type="String" mode="IN" optional="true"/>
         <attribute name="clasifTypeId4" type="String" mode="IN" optional="true"/>
         <attribute name="clasifTypeId5" type="String" mode="IN" optional="true"/>
-        <attribute name="clasifTypeId6" type="String" mode="IN" optional="true"/>        
+        <attribute name="clasifTypeId6" type="String" mode="IN" optional="true"/>
+        <attribute name="clasifTypeId7" type="String" mode="IN" optional="true"/> 
+        <attribute name="clasifTypeId8" type="String" mode="IN" optional="true"/>
+        <attribute name="clasifTypeId9" type="String" mode="IN" optional="true"/>
+        <attribute name="clasifTypeId10" type="String" mode="IN" optional="true"/>
+        <attribute name="clasifTypeId11" type="String" mode="IN" optional="true"/>
+        <attribute name="clasifTypeId12" type="String" mode="IN" optional="true"/>
+        <attribute name="clasifTypeId13" type="String" mode="IN" optional="true"/>
+        <attribute name="clasifTypeId14" type="String" mode="IN" optional="true"/>
+        <attribute name="clasifTypeId15" type="String" mode="IN" optional="true"/>       
     </service>     
     <service name="createPaymentApplication" engine="java" 
             location="com.opensourcestrategies.financials.payment.PaymentServices" invoke="createPaymentApplication" auth="true">
@@ -93,9 +102,11 @@ under the License.
             Apply a payment to a Invoice or other payment or Billing account or  Taxauthority,
             create/update paymentApplication records.
         </description>
+        <implements service="clasificationTagsEntityInterface"/> 
         <auto-attributes mode="IN" include="pk" optional="true"/>
         <auto-attributes mode="IN" include="nonpk" optional="true"/>
         <attribute name="invoiceProcessing" type="String" mode="IN" optional="true"/>
+        <attribute name="clasifTypeId1" type="String" mode="IN" optional="true"/>
         <override name="paymentId" optional="false"/>        
     </service>
     <service name="updatePaymentApplicationDef" default-entity-name="PaymentApplication" engine="java"

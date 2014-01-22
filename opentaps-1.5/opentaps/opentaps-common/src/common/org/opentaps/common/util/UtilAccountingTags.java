@@ -63,6 +63,7 @@ public final class UtilAccountingTags {
     public static final String TAG_PARAM_PREFIX = "tag";
     /** Prefix for accounting tags on all the entities. */
     public static final String ENTITY_TAG_PREFIX = "acctgTagEnumId";
+    public static final String CLASIFICATION_TAG_PREFIX = "clasifTypeId";
 
     /** Tags for financial reports. */
     public static final String FINANCIALS_REPORTS_TAG = "FINANCIALS_REPORTS";

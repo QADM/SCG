@@ -488,6 +488,12 @@ public class UtilImport {
 			LedgerRepositoryInterface ledger_repo, String tipo)
 			throws RepositoryException {
 		Debug.log("tipo: "+tipo);
+		if(tipo.contains("CL_FUENTE_RECURSOS"))
+		{
+			tipo = "CL_FUENTE_FINANCIAMI";
+		}
+		
+		Debug.log("tipo: " +tipo);
 		List<EnumerationType> enums = ledger_repo.findList(EnumerationType.class,
 				ledger_repo.map(EnumerationType.Fields.clasificacionId, tipo));
 		return enums.get(0);
@@ -499,12 +505,17 @@ public class UtilImport {
 		String clavePresupuestal = "";
 		String mensaje = "";
 		List<Enumeration> listaEnum = new ArrayList<Enumeration>();
+		
+		Debug.log("validaClasificaciones lista " + lista.size());
 		try{
 		for (Clasificacion c : lista) {
 			String tipoClasif = c.getTipoObjeto();
 			String valorClasif = c.getValor();
 			String tipoEnum = c.getTipoEnum();
 			
+			Debug.log("tipoClasif " + tipoClasif);
+			Debug.log("valorClasif " + valorClasif);
+			Debug.log("tipoEnum " + tipoEnum);
 			
 				if (tipoClasif.equals("Party")) {
 					mensaje = validaParty(mensaje, ledger_repo, valorClasif,
@@ -554,6 +565,11 @@ public class UtilImport {
 						
 					}
 				} else if (tipoClasif.equals("Enumeration")) {
+					if(tipoEnum.contains("CL_FUENTE_FINANCIAMI"))
+						tipoEnum = "CL_FUENTE_RECURSOS";
+						
+					Debug.log("tipoEnum " + tipoEnum);
+					Debug.log("valorClasif " + valorClasif);
 					mensaje = validaEnumeration(mensaje, ledger_repo,
 							valorClasif, tipoEnum, valorClasif);
 					
@@ -846,7 +862,13 @@ public class UtilImport {
 			String tipo) throws RepositoryException {
 		List<GlAccountHistory> glAccountHistories = new ArrayList<GlAccountHistory>();
 
+		Debug.log("tipo " + tipo);
+		Debug.log("monto " + monto);
 		for (CustomTimePeriod periodo : periodos) {
+			Debug.log("cuenta " + cuenta);
+			Debug.log("periodo.getOrganizationPartyId() " + periodo.getOrganizationPartyId());
+			Debug.log("periodo.getCustomTimePeriodId() " + periodo.getCustomTimePeriodId());
+			
 			GlAccountHistory glAccountHistory = ledger_repo.findOne(
 					GlAccountHistory.class, ledger_repo.map(
 							GlAccountHistory.Fields.glAccountId, cuenta,
@@ -854,7 +876,8 @@ public class UtilImport {
 							periodo.getOrganizationPartyId(),
 							GlAccountHistory.Fields.customTimePeriodId,
 							periodo.getCustomTimePeriodId()));
-
+			Debug.log("glAccountHistory " +glAccountHistory);
+			
 			if (glAccountHistory == null) {
 				Debug.log("No existe History");
 				glAccountHistory = new GlAccountHistory();
@@ -881,9 +904,11 @@ public class UtilImport {
 							.getPostedDebits().add(monto));
 				}
 			}
-
+			Debug.log("glAccountHistory " + glAccountHistory);
 			glAccountHistories.add(glAccountHistory);
 		}
+		Debug.log("glAccountHistories " + glAccountHistories);
+		Debug.log("glAccountHistories.size() " + glAccountHistories.size());
 		return glAccountHistories;
 	}
 
